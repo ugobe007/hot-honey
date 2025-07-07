@@ -1,6 +1,7 @@
 {
   "name": "hot-money-honey",
   "version": "0.1.0",
+  "type": "module",
   "dependencies": {
     "axios": "^1.7.7",
     "lucide-react": "^0.525.0",
@@ -10,6 +11,7 @@
   "devDependencies": {
     "typescript": "^5.5.3",
     "vite": "^6.3.5",
+    "@vitejs/plugin-react",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.0"
   },
@@ -19,4 +21,4 @@
     "preview": "vite preview",
     "test": "echo \"Error: no test specified\" && exit 1"
   }
-}  
+}
