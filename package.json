@@ -1,0 +1,7 @@
+npm install
+ls -a
+cat package.json
+npm install
+mkdir -p src/components
+touch src/main.tsx src/App.tsx
+
