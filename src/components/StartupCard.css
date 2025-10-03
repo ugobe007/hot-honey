@@ -1,0 +1,180 @@
+.change-vote-button {
+  background: #fbbf24;
+  color: #fff;
+  font-weight: bold;
+  border-radius: 9999px;
+  padding: 0.5rem 1.2rem;
+  border: none;
+  box-shadow: 0 1px 4px #fbbf2444;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-left: 0.5rem;
+  transition: background 0.18s;
+}
+.change-vote-button:hover {
+  background: #f59e42;
+}
+.voted-button {
+  background: #22c55e;
+  color: #fff;
+  font-weight: bold;
+  border-radius: 9999px;
+  padding: 0.5rem 1.2rem;
+  border: none;
+  box-shadow: 0 1px 4px #22c55e44;
+  cursor: default;
+  opacity: 0.85;
+  font-size: 1rem;
+  margin: 0 auto;
+}
+/* Reuse navigation button style for Dashboard page */
+.startup-nav-btn {
+  background: linear-gradient(to bottom right, #FFA500, #FF7F50);
+  color: #fff;
+  font-weight: 600;
+  padding: 0.4rem 1.1rem;
+  border-radius: 0.6rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  font-size: 0.98rem;
+  transition: background 0.18s, transform 0.18s;
+  text-shadow: none;
+  border: none;
+  outline: none;
+  margin: 0 0.15rem;
+  display: inline-block;
+  letter-spacing: 0.01em;
+}
+.startup-nav-btn:hover, .startup-nav-btn:focus {
+  background: linear-gradient(to bottom right, #FF7F50, #FFA500);
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 6px 24px rgba(255,127,80,0.18);
+}
+/* Vote ticker for StartupCard */
+.vote-ticker {
+  position: absolute;
+  top: 0.7rem;
+  right: 1.1rem;
+  z-index: 2;
+}
+.vote-count {
+  background: #fff7;
+  color: #c2410c;
+  font-weight: bold;
+  font-size: 1rem;
+  padding: 0.2rem 0.8rem;
+  border-radius: 9999px;
+  box-shadow: 0 1px 4px #0001;
+}
+/* Navigation button style to match StartupCard gradient */
+.startup-nav-btn {
+  background: linear-gradient(to bottom right, #FFA500, #FF7F50);
+  color: #fff;
+  font-weight: bold;
+  padding: 0.75rem 2.2rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.13);
+  font-size: 1.1rem;
+  transition: background 0.2s, transform 0.2s;
+  text-shadow: 0 1px 2px #0002;
+  border: none;
+  outline: none;
+  margin: 0 0.2rem;
+  display: inline-block;
+}
+.startup-nav-btn:hover, .startup-nav-btn:focus {
+  background: linear-gradient(to bottom right, #FF7F50, #FFA500);
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 6px 24px rgba(255,127,80,0.18);
+}
+.startup-card p.startup-description {
+  font-size: 1.08rem;
+  font-weight: 600;
+  color: #c2410c;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  margin: 0.5rem 0 0.75rem 0;
+  box-shadow: 0 2px 8px 0 rgba(248, 161, 209, 0.13);
+  letter-spacing: 0.01em;
+  text-shadow: 0 1px 2px #fff8, 0 0px 8px #fbbf24aa;
+}
+.startup-card {
+  background: linear-gradient(to bottom right, #FFA500, #FF7F50);
+  border-radius: 1rem;
+  padding: 1rem;
+  width: 280px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease-in-out;
+  position: relative;
+  min-height: 370px;
+}
+
+.startup-card:hover {
+  transform: translateY(-4px);
+}
+
+.startup-card h3 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #fff;
+}
+
+.startup-card p {
+  font-size: 0.9rem;
+  color: #fefefe;
+  margin-top: 0.25rem;
+}
+
+.startup-card .team-logos {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.startup-card img {
+  width: 24px;
+  height: 24px;
+  border-radius: 9999px;
+}
+
+.startup-card .button-group {
+  display: flex;
+  justify-content: space-between;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 1rem;
+  padding: 0 1.5rem;
+}
+
+.startup-card button {
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+
+.startup-card .yes-button {
+  background-color: #bae6fd;
+  color: #0369a1;
+  border: none;
+  box-shadow: none;
+}
+
+.startup-card .no-button {
+  background: #ff0000;
+  color: #fff;
+  box-shadow: 0 0 10px 2px #ff000088;
+  border: none;
+}
+
+.startup-card .details-button {
+  margin-top: 1rem;
+  background-color: #ea580c;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  font-weight: bold;
+}
