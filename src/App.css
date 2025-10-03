@@ -1,0 +1,154 @@
+/* App.css */
+
+/* Global background and font */
+body, html {
+  margin: 0;
+  padding: 0;
+  background: #FFF8EC; /* Warm cream background */
+  font-family: 'Inter', sans-serif;
+  color: #1F2937;
+}
+
+/* Navbar container */
+nav {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  background: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  margin: 1rem auto;
+  max-width: 600px;
+}
+
+/* Navbar links/buttons */
+nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  background: #FFC107;
+  color: #1F2937;
+  font-weight: 600;
+  border-radius: 9999px;
+  text-decoration: none;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: background 0.2s;
+}
+nav a:hover {
+  background: #FFB300;
+}
+
+/* Header section */
+.header {
+  text-align: center;
+  padding: 2rem 1rem;
+}
+.header h1 {
+  font-size: 3rem;
+  color: #F97316;
+  margin: 0;
+}
+.header p.subtitle {
+  font-size: 1rem;
+  color: #F97316;
+  margin-top: 0.25rem;
+}
+.header h2 {
+  font-size: 2.5rem;
+  color: #111827;
+  margin-top: 1.5rem;
+}
+
+/* CTA buttons */
+.cta-group {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+.cta-group .btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-vote {
+  background: #F97316;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+.btn-vote:hover {
+  background: #EA580C;
+}
+.btn-submit {
+  background: transparent;
+  color: #F97316;
+  border: 2px solid #F97316;
+}
+.btn-submit:hover {
+  background: #F97316;
+  color: #fff;
+}
+
+/* Featured heading */
+.featured {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 3rem 0 1.5rem;
+}
+
+/* Featured cards container */
+.featured-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  padding: 0 1rem;
+  max-width: 1200px;
+  margin: 0 auto 3rem;
+}
+
+/* Card styles */
+.card {
+  background: linear-gradient(135deg, #FED7AA, #FDBA74);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+  position: relative;
+}
+.card h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #F97316;
+}
+.card .emoji {
+  font-size: 1.25rem;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+.card .progress {
+  margin-top: 1rem;
+}
+.card .progress-bar {
+  height: 0.5rem;
+  background: #111827;
+  border-radius: 0.25rem;
+  overflow: hidden;
+}
+.card .progress-fill {
+  height: 100%;
+  background: #FFD54F;
+}
+.card .progress-text {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: #111827;
+  display: flex;
+  justify-content: space-between;
+}
