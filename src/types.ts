@@ -24,6 +24,22 @@ export interface Startup {
   tech?: string;
   teamLogos?: string[];
   yesVotes?: number;
+  noVotes?: number;
   rating?: number;
+  stage?: number; // 0-5 for stage progression
+  tagline?: string; // Short tagline like "AI-powered HR"
+  pitch?: string; // Main pitch description
+  fivePoints?: string[]; // The 5 key points for the card
+  comments?: Comment[];
+  hotness?: number; // Calculated hotness score out of 5.0
+  answersCount?: number; // Number of answers (questions answered)
+}
+
+export interface Comment {
+  id: string;
+  userId: string;
+  userName: string;
+  text: string;
+  timestamp: Date;
 }
 
