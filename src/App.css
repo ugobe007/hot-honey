@@ -4,22 +4,8 @@
 body, html {
   margin: 0;
   padding: 0;
-  background: #FFF8EC; /* Warm cream background */
   font-family: 'Inter', sans-serif;
   color: #1F2937;
-}
-
-/* Navbar container */
-nav {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  background: #fff;
-  padding: 0.5rem 1rem;
-  border-radius: 9999px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-  margin: 1rem auto;
-  max-width: 600px;
 }
 
 /* Navbar links/buttons */
