@@ -33,6 +33,7 @@ export interface Startup {
   comments?: Comment[];
   hotness?: number; // Calculated hotness score out of 5.0
   answersCount?: number; // Number of answers (questions answered)
+  industries?: string[]; // Industry tags: fintech, ai, saas, deeptech, robotics, healthtech, edtech, cleantech, ecommerce, crypto, consumer, enterprise
 }
 
 export interface Comment {

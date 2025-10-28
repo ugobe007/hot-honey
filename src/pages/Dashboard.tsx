@@ -1,168 +1,144 @@
-import React, { useState } from 'react';
-import { usePortfolioStore } from '../store/portfolioStore';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
-interface StartupProfile {
-  id: string;
+interface YesVote {
+  id: number;
   name: string;
-  description: string;
-  foundedYear: number;
-  industry: string;
-  teamSize: number;
-  funding: string;
-  stage: string;
-  pitchDeck?: string;
-  website?: string;
-  contacts: {
-    founder: string;
-    email: string;
-    phone?: string;
-  };
-  metrics: {
-    totalVotes: number;
-    popularityScore: number;
-    currentStage: string;
-  };
+  pitch?: string;
+  tagline?: string;
+  stage?: number;
+  votedAt: string;
 }
 
 const Dashboard: React.FC = () => {
-  const { startups, calculatePopularityScore } = usePortfolioStore();
-  
-  const [selectedStartup, setSelectedStartup] = useState<string | null>(null);
-  
-  // Convert portfolio startups to startup profiles
-  const startupProfiles: StartupProfile[] = startups.map(startup => ({
-    id: startup.id,
-    name: startup.name,
-    description: startup.description,
-    foundedYear: 2024,
-    industry: startup.name.includes('AI') || startup.name.includes('Neural') ? 'AI/ML' :
-              startup.name.includes('Green') ? 'CleanTech' :
-              startup.name.includes('Fin') ? 'FinTech' : 'Technology',
-    teamSize: Math.floor(Math.random() * 50) + 5,
-    funding: ['Pre-Seed', 'Seed', 'Series A'][Math.floor(Math.random() * 3)],
-    stage: startup.stage,
-    website: `https://${startup.name.toLowerCase()}.com`,
-    contacts: {
-      founder: `${startup.name} Founder`,
-      email: `founder@${startup.name.toLowerCase()}.com`,
-      phone: '+1 (555) 123-4567'
-    },
-    metrics: {
-      totalVotes: startup.yesVotes,
-      popularityScore: calculatePopularityScore(startup.id),
-      currentStage: startup.stage
+  const [myYesVotes, setMyYesVotes] = useState<YesVote[]>([]);
+
+  useEffect(() => {
+    // Load YES votes from localStorage
+    const votes = localStorage.getItem('myYesVotes');
+    if (votes) {
+      setMyYesVotes(JSON.parse(votes));
     }
-  }));
+  }, []);
+
+  const clearAllVotes = () => {
+    if (confirm('⚠️ Are you sure you want to clear ALL your votes? This cannot be undone.')) {
+      localStorage.removeItem('myYesVotes');
+      localStorage.removeItem('votedStartups');
+      setMyYesVotes([]);
+      alert('✅ All votes cleared! You can start voting again.');
+      window.location.href = '/vote';
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-yellow-50 p-8">
-      <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-orange-600 mb-4">
-            🚀 Startup Profiles 🚀
-          </h1>
-          <p className="text-lg text-gray-600">
-            Detailed profiles of startups in the Hot Money Honey ecosystem
-          </p>
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-yellow-50">
+      <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50">
+        <div className="flex gap-1">
+          <Link to="/signup" className="px-4 py-1.5 bg-yellow-400 text-black rounded-full font-medium text-sm shadow-lg hover:bg-yellow-500 transition-colors">
+            👤 Sign Up
+          </Link>
+          <Link to="/" className="px-4 py-1.5 bg-orange-500 text-white rounded-full font-medium text-sm shadow-lg hover:bg-orange-600 transition-colors">
+            🏠 Home
+          </Link>
+          <Link to="/vote" className="px-4 py-1.5 bg-orange-500 text-white rounded-full font-medium text-sm shadow-lg hover:bg-orange-600 transition-colors">
+            📊 Vote
+          </Link>
+          <Link to="/dashboard" className="px-4 py-1.5 bg-orange-600 text-white rounded-full font-medium text-sm shadow-lg">
+            👤 Dashboard
+          </Link>
         </div>
+      </div>
 
-        {/* Startup Profiles Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {startupProfiles.map((profile) => (
-            <div 
-              key={profile.id} 
-              className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-orange-200"
-            >
-              {/* Header */}
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-2xl font-bold text-gray-800">{profile.name}</h3>
-                <div className="text-2xl">🚀</div>
-              </div>
-
-              {/* Basic Info */}
-              <div className="mb-4">
-                <p className="text-gray-600 text-sm mb-2">{profile.description}</p>
-                <div className="flex flex-wrap gap-2 mb-3">
-                  <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">
-                    {profile.industry}
-                  </span>
-                  <span className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">
-                    {profile.funding}
-                  </span>
-                  <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded text-xs">
-                    Team: {profile.teamSize}
-                  </span>
-                </div>
-              </div>
-
-              {/* Stage Badge */}
-              <div className="mb-3">
-                <span className="bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-medium">
-                  {profile.stage}
-                </span>
-              </div>
-
-              {/* Metrics */}
-              <div className="grid grid-cols-2 gap-4 mb-4 text-center">
-                <div className="bg-gray-50 rounded-lg p-3">
-                  <div className="text-lg font-bold text-orange-600">
-                    {profile.metrics.totalVotes}
-                  </div>
-                  <div className="text-xs text-gray-500">Total Votes</div>
-                </div>
-                <div className="bg-gray-50 rounded-lg p-3">
-                  <div className="text-lg font-bold text-purple-600">
-                    {profile.metrics.popularityScore}
-                  </div>
-                  <div className="text-xs text-gray-500">Popularity Score</div>
-                </div>
-              </div>
-
-              {/* Contact Info */}
-              <div className="mb-4">
-                <h4 className="font-semibold text-gray-700 mb-2">Contact:</h4>
-                <div className="text-sm text-gray-600">
-                  <p><span className="font-medium">Founder:</span> {profile.contacts.founder}</p>
-                  <p><span className="font-medium">Email:</span> {profile.contacts.email}</p>
-                  {profile.website && (
-                    <p>
-                      <span className="font-medium">Website:</span> 
-                      <a href={profile.website} className="text-blue-500 hover:underline ml-1">
-                        {profile.website}
-                      </a>
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex gap-2">
-                <button className="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-2 px-3 rounded-lg text-sm font-medium">
-                  View Details
-                </button>
-                <button className="flex-1 bg-teal-500 hover:bg-teal-600 text-white py-2 px-3 rounded-lg text-sm font-medium">
-                  Contact
-                </button>
-              </div>
+      <div className="pt-28 px-8 max-w-7xl mx-auto">
+        <div className="mb-8">
+          <div className="flex justify-between items-center mb-4">
+            <div>
+              <h1 className="text-5xl font-bold text-gray-800 mb-2">
+                🔥 My Hot Picks
+              </h1>
+              <p className="text-lg text-gray-600">
+                You've voted YES on <span className="font-bold text-orange-600">{myYesVotes.length}</span> {myYesVotes.length === 1 ? 'startup' : 'startups'}
+              </p>
             </div>
-          ))}
-        </div>
-
-        {/* Call to Action for Startups */}
-        <div className="mt-16 text-center bg-gradient-to-r from-orange-500 to-yellow-500 rounded-xl p-8 text-white">
-          <h2 className="text-3xl font-bold mb-4">Are you a Startup?</h2>
-          <p className="text-lg mb-6">
-            Join Hot Money Honey and get your startup in front of engaged investors!
-          </p>
-          <div className="flex gap-4 justify-center">
-            <button className="bg-white text-orange-600 px-6 py-3 rounded-lg font-medium hover:bg-gray-100">
-              📝 Create Profile
-            </button>
-            <button className="bg-orange-700 text-white px-6 py-3 rounded-lg font-medium hover:bg-orange-800">
-              📧 Contact Us
-            </button>
+            {myYesVotes.length > 0 && (
+              <button
+                onClick={clearAllVotes}
+                className="px-6 py-3 bg-red-500 text-white rounded-lg font-medium text-sm hover:bg-red-600 transition-colors shadow-lg"
+              >
+                🗑️ Clear All Votes
+              </button>
+            )}
           </div>
         </div>
+
+        {myYesVotes.length === 0 ? (
+          <div className="text-center py-16">
+            <div className="text-8xl mb-6">🤷‍♂️</div>
+            <p className="text-3xl font-bold text-gray-800 mb-4">
+              No hot picks yet!
+            </p>
+            <p className="text-xl text-gray-600 mb-8">
+              Start voting YES on startups you're interested in
+            </p>
+            <Link to="/vote" className="px-8 py-4 bg-orange-500 text-white rounded-xl font-bold text-lg hover:bg-orange-600 transition-colors shadow-lg inline-block">
+              🔥 Start Voting Now
+            </Link>
+          </div>
+        ) : (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {myYesVotes.map((vote) => (
+              <div
+                key={vote.id}
+                className="bg-gradient-to-br from-amber-300 via-orange-400 to-yellow-500 rounded-2xl p-6 shadow-[0_20px_50px_rgba(0,0,0,0.35)] border-4 border-orange-500 relative hover:scale-105 transition-transform"
+              >
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/20 to-transparent pointer-events-none"></div>
+                
+                <div className="relative">
+                  {/* Header */}
+                  <div className="flex justify-between items-start mb-3">
+                    <div className="flex-1">
+                      <h3 className="text-2xl font-black text-gray-900 leading-tight mb-1">
+                        {vote.name}
+                      </h3>
+                      {vote.stage && (
+                        <p className="text-blue-700 font-bold text-xs">
+                          stage #{vote.stage}
+                        </p>
+                      )}
+                    </div>
+                    <div className="text-3xl">🔥</div>
+                  </div>
+
+                  {/* Pitch */}
+                  {vote.pitch && (
+                    <p className="text-sm font-black text-gray-900 leading-tight mb-2">
+                      "{vote.pitch}"
+                    </p>
+                  )}
+
+                  {/* Tagline */}
+                  {vote.tagline && (
+                    <p className="text-xs font-bold text-gray-800 leading-tight mb-3">
+                      {vote.tagline}
+                    </p>
+                  )}
+
+                  {/* Vote Badge */}
+                  <div className="flex items-center justify-between mt-4 pt-4 border-t-2 border-orange-500">
+                    <div className="flex items-center gap-2">
+                      <span className="text-2xl">👍</span>
+                      <span className="text-sm font-bold text-gray-800">Voted YES</span>
+                    </div>
+                    <span className="text-xs text-gray-700 font-semibold">
+                      {new Date(vote.votedAt).toLocaleDateString()}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

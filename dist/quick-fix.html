@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quick Admin Fix</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      background: linear-gradient(135deg, #6b21a8, #86efac);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .box {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 500px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    h1 { color: #6b21a8; margin-bottom: 20px; }
+    button {
+      background: linear-gradient(135deg, #f97316, #ef4444);
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      width: 100%;
+      margin: 10px 0;
+    }
+    button:hover { transform: scale(1.02); }
+    .success { background: #86efac; color: #166534; padding: 15px; border-radius: 10px; margin: 10px 0; }
+    .info { background: #e0e7ff; padding: 15px; border-radius: 10px; margin: 10px 0; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h1>🔧 Quick Fix</h1>
+    
+    <div class="info">
+      <strong>Issue 1:</strong> Private info popup is from browser autofill<br>
+      <strong>Issue 2:</strong> Bulk Upload button not showing
+    </div>
+    
+    <button onclick="fixAdmin()">✨ Make Me Admin & Go to Dashboard</button>
+    
+    <button onclick="window.location.href='/admin/bulk-upload'" style="background: linear-gradient(135deg, #ec4899, #ef4444);">
+      📊 Go Directly to Bulk Upload
+    </button>
+    
+    <div id="result"></div>
+    
+    <div class="info" style="margin-top: 20px;">
+      <strong>About the profile popup:</strong><br>
+      That's Apple/browser autofill trying to help. You can:
+      <ul style="margin: 10px 0; padding-left: 20px;">
+        <li>Ignore it (it won't affect the site)</li>
+        <li>Turn off autofill in browser settings</li>
+        <li>Click outside the popup to dismiss</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    function fixAdmin() {
+      const profile = localStorage.getItem('userProfile');
+      
+      if (!profile) {
+        document.getElementById('result').innerHTML = 
+          '<div style="background: #fecaca; color: #991b1b; padding: 15px; border-radius: 10px; margin: 10px 0;">❌ No profile found. Please <a href="/signup" style="color: #991b1b; text-decoration: underline;">sign up first</a>.</div>';
+        return;
+      }
+      
+      const user = JSON.parse(profile);
+      user.isAdmin = true;
+      localStorage.setItem('userProfile', JSON.stringify(user));
+      
+      document.getElementById('result').innerHTML = 
+        '<div class="success">✅ Admin access granted! Redirecting to dashboard...</div>';
+      
+      setTimeout(() => {
+        window.location.href = '/dashboard';
+      }, 1000);
+    }
+    
+    // Auto-check on load
+    window.onload = () => {
+      const profile = localStorage.getItem('userProfile');
+      if (profile) {
+        const user = JSON.parse(profile);
+        if (user.isAdmin) {
+          document.getElementById('result').innerHTML = 
+            '<div class="success">✅ You already have admin access!</div>';
+        }
+      }
+    };
+  </script>
+</body>
+</html>

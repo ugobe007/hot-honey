@@ -1,44 +1,89 @@
-// App.tsx
-import React from 'react';
+import React, { useState } from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
-import Home from './pages/Home';
-import Vote from './pages/Vote';
+import VotePage from './components/VotePage';
 import Portfolio from './pages/Portfolio';
 import Submit from './pages/Submit';
 import StartupDetail from './pages/StartupDetail';
 import Deals from './pages/Deals';
-import Dashboard from './pages/Dashboard';
-import HoneyPot from './pages/Dashboard';
+import OldDashboard from './pages/Dashboard'; // ✅ Renamed to avoid conflict
+import NewDashboard from './components/Dashboard'; // ✅ This is the new one
 import FrontPageNew from './components/FrontPageNew';
 import VoteDemo from './pages/VoteDemo';
+import SignUpPage from './components/signup-page';
+import About from './pages/About';
+import Privacy from './pages/Privacy';
+import Contact from './pages/Contact';
+import Settings from './pages/Settings';
+import SharedPortfolio from './pages/SharedPortfolio';
+import BulkUpload from './pages/BulkUpload';
+import DocumentUpload from './pages/DocumentUpload';
+import Login from './pages/Login';
+import WelcomeModal from './components/WelcomeModal';
 import './App.css';
 
 const App: React.FC = () => {
+  const [showHowItWorks, setShowHowItWorks] = useState(false);
+
   return (
     <div className="min-h-screen">
+      <WelcomeModal />
+      {showHowItWorks && (
+        <WelcomeModal 
+          forceOpen={true} 
+          onClose={() => setShowHowItWorks(false)} 
+        />
+      )}
       <main>
         <Routes>
           <Route path="/" element={<FrontPageNew />} />
           <Route path="/home" element={<FrontPageNew />} />
-          <Route path="/signup" element={<Submit />} />
-          <Route path="/vote" element={<Vote />} />
+          <Route path="/signup" element={<SignUpPage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/vote" element={<VotePage />} />
           <Route path="/vote-demo" element={<VoteDemo />} />
           <Route path="/investors" element={<Portfolio />} />
           <Route path="/portfolio" element={<Portfolio />} />
           <Route path="/submit" element={<Submit />} />
           <Route path="/startup/:id" element={<StartupDetail />} />
           <Route path="/deals" element={<Deals />} />
-          <Route path="/startups" element={<Dashboard />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/startups" element={<OldDashboard />} /> {/* Old page */}
+          <Route path="/dashboard" element={<NewDashboard />} /> {/* ✅ NEW DASHBOARD */}
+          <Route path="/about" element={<About />} />
+          <Route path="/privacy" element={<Privacy />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/shared-portfolio/:shareId" element={<SharedPortfolio />} />
+          <Route path="/admin/bulk-upload" element={<BulkUpload />} />
+          <Route path="/admin/document-upload" element={<DocumentUpload />} />
         </Routes>
       </main>
 
-      <footer className="bg-gray-200 text-center text-sm text-gray-600 py-2">
-        <Link to="/startups" className="text-blue-500 hover:text-blue-700 font-semibold">
-          Startups Click Here
-        </Link>
-        <br />
-        &copy; {new Date().getFullYear()} Hot Money Honey. All rights reserved.
+      <footer className="bg-gradient-to-r from-purple-900 via-purple-700 to-green-400 text-center text-sm py-4">
+        <div className="flex justify-center items-center gap-6 mb-2">
+          <button 
+            onClick={() => setShowHowItWorks(true)}
+            className="text-yellow-300 hover:text-yellow-400 font-semibold hover:underline cursor-pointer bg-transparent border-none"
+          >
+            🔥 How It Works
+          </button>
+          <span className="text-purple-300">•</span>
+          <Link to="/about" className="text-yellow-300 hover:text-yellow-400 font-semibold hover:underline">
+            About Us
+          </Link>
+          <span className="text-purple-300">•</span>
+          <Link to="/contact" className="text-yellow-300 hover:text-yellow-400 font-semibold hover:underline">
+            Contact Us
+          </Link>
+          <span className="text-purple-300">•</span>
+          <Link to="/privacy" className="text-yellow-300 hover:text-yellow-400 font-semibold hover:underline">
+            Privacy Policy
+          </Link>
+          <span className="text-purple-300">•</span>
+          <Link to="/startups" className="text-yellow-300 hover:text-yellow-400 font-semibold hover:underline">
+            For Startups
+          </Link>
+        </div>
+        <p className="text-purple-200">&copy; {new Date().getFullYear()} Hot Money Honey. All rights reserved.</p>
       </footer>
     </div>
   );
