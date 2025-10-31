@@ -30,6 +30,7 @@ export interface Startup {
   tagline?: string; // Short tagline like "AI-powered HR"
   pitch?: string; // Main pitch description
   fivePoints?: string[]; // The 5 key points for the card
+  secretFact?: string; // Fun fact revealed when honeypot is clicked
   comments?: Comment[];
   hotness?: number; // Calculated hotness score out of 5.0
   answersCount?: number; // Number of answers (questions answered)
