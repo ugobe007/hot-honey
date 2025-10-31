@@ -117,7 +117,7 @@ export default function Settings() {
           <Link to="/vote" className="px-4 py-1.5 bg-orange-500 text-white rounded-full font-medium text-sm shadow-lg hover:bg-orange-600 transition-colors">
             📊 Vote
           </Link>
-          <Link to="/dashboard" className="px-4 py-1.5 bg-orange-500 text-white rounded-full font-medium text-sm shadow-lg hover:bg-orange-600 transition-colors">
+          <Link to="/dashboard" className="px-4 py-1.5 bg-gradient-to-r from-amber-400 via-orange-500 to-yellow-500 text-white rounded-full font-medium text-sm shadow-lg hover:from-amber-500 hover:via-orange-600 hover:to-yellow-600 transition-all">
             👤 Dashboard
           </Link>
           <Link to="/settings" className="px-4 py-1.5 bg-orange-600 text-white rounded-full font-medium text-sm shadow-lg">

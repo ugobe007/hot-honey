@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import SharePortfolioModal from './SharePortfolioModal';
+import StartupCardOfficial from './StartupCardOfficial';
+import startupData from '../data/startupData';
 
 interface YesVote {
   id: number;
@@ -8,6 +10,7 @@ interface YesVote {
   pitch?: string;
   tagline?: string;
   stage?: number;
+  fivePoints?: string[];
   votedAt: string;
 }
 
@@ -20,7 +23,23 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     const votes = localStorage.getItem('myYesVotes');
     if (votes) {
-      setMyYesVotes(JSON.parse(votes));
+      const parsedVotes = JSON.parse(votes);
+      
+      // Migrate old votes that don't have fivePoints
+      const enrichedVotes = parsedVotes.map((vote: any) => {
+        if (!vote.fivePoints) {
+          // Find the startup in startupData and add missing fields
+          const fullStartup = startupData.find(s => s.id === vote.id);
+          if (fullStartup) {
+            return { ...vote, fivePoints: fullStartup.fivePoints };
+          }
+        }
+        return vote;
+      });
+      
+      // Save enriched data back to localStorage
+      localStorage.setItem('myYesVotes', JSON.stringify(enrichedVotes));
+      setMyYesVotes(enrichedVotes);
     }
 
     // Check admin status
@@ -49,7 +68,41 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-green-400 to-purple-950" style={{ backgroundImage: 'radial-gradient(ellipse 800px 600px at 20% 40%, rgba(134, 239, 172, 0.4), transparent), linear-gradient(to bottom right, rgb(88, 28, 135), rgb(59, 7, 100))' }}>
-      {/* New Navigation Bar */}
+      
+      {/* User Profile Section - Upper Right Corner */}
+      <div className="fixed top-4 right-4 z-50">
+        <div className="bg-white/10 backdrop-blur-md rounded-2xl px-6 py-3 flex items-center gap-4 shadow-xl border border-white/20">
+          <div className="text-right">
+            <p className="text-sm text-purple-200">Logged in as</p>
+            <p className="text-white font-bold">
+              {(() => {
+                const profile = localStorage.getItem('userProfile');
+                return profile ? JSON.parse(profile).name : 'User';
+              })()}
+            </p>
+          </div>
+          <Link 
+            to="/settings"
+            className="px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white rounded-full text-sm font-semibold transition-all flex items-center gap-2"
+          >
+            ⚙️ Settings
+          </Link>
+          <button
+            onClick={() => {
+              if (confirm('Are you sure you want to log out?')) {
+                localStorage.removeItem('isLoggedIn');
+                alert('✅ Logged out successfully!');
+                window.location.href = '/';
+              }
+            }}
+            className="px-4 py-2 bg-gradient-to-r from-gray-300 to-gray-400 hover:from-gray-400 hover:to-gray-500 text-gray-800 rounded-full text-sm font-semibold transition-all flex items-center gap-2"
+          >
+            🚪 Log Out
+          </button>
+        </div>
+      </div>
+      
+      {/* Navigation Bar */}
       <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50">
         <div className="flex gap-3 items-center">
           <Link to="/signup" className="text-4xl hover:scale-110 transition-transform cursor-pointer" title="Hot Money Honey">
@@ -67,15 +120,15 @@ const Dashboard: React.FC = () => {
             🏠 Home
           </Link>
 
-          {/* Dashboard Button - Slightly Larger with Light Blue Gradient */}
+          {/* Dashboard Button - Same Orange Gradient as StartupCard */}
           <Link 
             to="/dashboard" 
             className={`font-bold rounded-2xl transition-all ${
               isActive('/dashboard') ? 'text-lg py-3 px-7' : 'text-base py-2.5 px-5'
             } ${
               isActive('/dashboard')
-                ? 'bg-gradient-to-r from-cyan-400 to-blue-500 text-white shadow-xl scale-110'
-                : 'bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-500 hover:to-blue-600 text-white shadow-lg'
+                ? 'bg-gradient-to-r from-amber-400 via-orange-500 to-yellow-500 text-white shadow-xl scale-110'
+                : 'bg-gradient-to-r from-amber-400 via-orange-500 to-yellow-500 hover:from-amber-500 hover:via-orange-600 hover:to-yellow-600 text-white shadow-lg'
             }`}
           >
             📊 Dashboard
@@ -121,38 +174,6 @@ const Dashboard: React.FC = () => {
       </div>
 
       <div className="pt-28 px-8 max-w-7xl mx-auto">
-        {/* User Profile Section */}
-        <div className="mb-6 flex justify-end">
-          <div className="bg-white/10 backdrop-blur-md rounded-2xl px-6 py-3 flex items-center gap-4 shadow-xl border border-white/20">
-            <div className="text-right">
-              <p className="text-sm text-purple-200">Logged in as</p>
-              <p className="text-white font-bold">
-                {(() => {
-                  const profile = localStorage.getItem('userProfile');
-                  return profile ? JSON.parse(profile).name : 'User';
-                })()}
-              </p>
-            </div>
-            <Link 
-              to="/settings"
-              className="px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white rounded-full text-sm font-semibold transition-all flex items-center gap-2"
-            >
-              ⚙️ Settings
-            </Link>
-            <button
-              onClick={() => {
-                if (confirm('Are you sure you want to log out?')) {
-                  localStorage.removeItem('isLoggedIn');
-                  alert('✅ Logged out successfully!');
-                  window.location.href = '/';
-                }
-              }}
-              className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-full text-sm font-semibold transition-all flex items-center gap-2"
-            >
-              🚪 Log Out
-            </button>
-          </div>
-        </div>
 
         {/* ✅ CENTERED HEADER */}
         <div className="mb-8 text-center">
@@ -178,12 +199,6 @@ const Dashboard: React.FC = () => {
               >
                 📈 View Analytics
               </Link>
-              <button
-                onClick={clearAllVotes}
-                className="px-6 py-3 bg-red-500 text-white rounded-lg font-medium text-sm hover:bg-red-600 transition-colors shadow-lg"
-              >
-                🗑️ Clear All Votes
-              </button>
             </div>
           )}
         </div>
@@ -202,65 +217,17 @@ const Dashboard: React.FC = () => {
             </Link>
           </div>
         ) : (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {myYesVotes.map((vote) => (
-              <div
-                key={vote.id}
-                className="bg-gradient-to-br from-amber-300 via-orange-400 to-yellow-500 rounded-2xl p-6 shadow-2xl border-4 border-orange-500 relative hover:scale-105 transition-transform"
-              >
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/20 to-transparent pointer-events-none"></div>
-                
-                <div className="relative">
-                  <div className="flex justify-between items-start mb-3">
-                    <div className="flex-1">
-                      <h3 className="text-2xl font-black text-gray-900 leading-tight mb-1">
-                        {vote.name}
-                      </h3>
-                      {vote.stage && (
-                        <p className="text-blue-700 font-bold text-xs">
-                          stage #{vote.stage}
-                        </p>
-                      )}
-                    </div>
-                    <div className="text-3xl">🔥</div>
-                  </div>
-
-                  {vote.pitch && (
-                    <p className="text-sm font-black text-gray-900 leading-tight mb-2">
-                      "{vote.pitch}"
-                    </p>
-                  )}
-
-                  {vote.tagline && (
-                    <p className="text-xs font-bold text-gray-800 leading-tight mb-3">
-                      {vote.tagline}
-                    </p>
-                  )}
-
-                  <div className="flex items-center justify-between mt-4 pt-4 border-t-2 border-orange-500">
-                    <div className="flex items-center gap-2">
-                      <span className="text-2xl">👍</span>
-                      <span className="text-sm font-bold text-gray-800">Voted YES</span>
-                    </div>
-                    <span className="text-xs text-gray-700 font-semibold">
-                      {new Date(vote.votedAt).toLocaleDateString()}
-                    </span>
-                  </div>
-                </div>
+              <div key={vote.id} className="transform scale-90">
+                <StartupCardOfficial
+                  startup={vote}
+                  onVote={(voteType) => console.log(`Voted ${voteType}`)}
+                />
               </div>
             ))}
           </div>
         )}
-      </div>
-
-      {/* Settings Link at Bottom */}
-      <div className="fixed bottom-8 right-8 z-50">
-        <Link 
-          to="/settings" 
-          className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-full font-semibold shadow-2xl hover:from-purple-600 hover:to-purple-700 transition-all hover:scale-105"
-        >
-          ⚙️ Settings
-        </Link>
       </div>
 
       {/* Share Portfolio Modal */}
