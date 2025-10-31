@@ -1,4 +1,5 @@
 // --- FILE: server/index.js ---
+require('dotenv').config();
 const express = require('express');
 const multer = require('multer');
 const cors = require('cors');
@@ -6,9 +7,21 @@ const fs = require('fs');
 const path = require('path');
 const axios = require('axios');
 const cheerio = require('cheerio');
+const OpenAI = require('openai');
 
 const app = express();
 const PORT = 3001;
+
+// Initialize OpenAI - API key from environment variable
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY
+});
+
+if (!process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY === 'your-api-key-here') {
+  console.warn('⚠️  WARNING: OPENAI_API_KEY not set in .env file!');
+  console.warn('   Get your key from: https://platform.openai.com/api-keys');
+  console.warn('   Add it to server/.env as: OPENAI_API_KEY=sk-...');
+}
 
 // Enable CORS
 app.use(cors());
@@ -33,7 +46,7 @@ app.post('/syndicate', (req, res) => {
   res.json({ success: true });
 });
 
-// Web scraping endpoint for startup data
+// AI-powered web scraping endpoint for startup data
 app.post('/scrape', async (req, res) => {
   const { url } = req.body;
   
@@ -42,7 +55,7 @@ app.post('/scrape', async (req, res) => {
   }
 
   try {
-    console.log(`🔍 Scraping URL: ${url}`);
+    console.log(`🤖 AI Scraping URL: ${url}`);
     
     // Fetch the HTML
     const response = await axios.get(url, {
@@ -50,7 +63,7 @@ app.post('/scrape', async (req, res) => {
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
       },
-      timeout: 10000 // 10 second timeout
+      timeout: 15000
     });
 
     const html = response.data;
@@ -58,65 +71,75 @@ app.post('/scrape', async (req, res) => {
 
     // Extract company name
     const domain = new URL(url).hostname.replace('www.', '').split('.')[0];
-    const companyName = $('h1').first().text().trim() || 
-                       $('title').text().split('-')[0].trim() || 
-                       domain.charAt(0).toUpperCase() + domain.slice(1);
-
-    // Extract all text content for analysis
-    const bodyText = $('body').text().replace(/\s+/g, ' ').trim();
+    const title = $('title').text().trim();
+    const h1 = $('h1').first().text().trim();
+    
+    // Remove non-content elements
+    $('script, style, nav, footer, header, aside, .cookie, .banner, [class*="nav"]').remove();
+    
+    // Get clean text content
+    const bodyText = $('body').text().replace(/\s+/g, ' ').trim().substring(0, 8000); // Limit to 8k chars
     const metaDescription = $('meta[name="description"]').attr('content') || '';
     const ogDescription = $('meta[property="og:description"]').attr('content') || '';
 
-    // Helper function to find relevant text near keywords
-    const findNearText = (keywords, context = 200) => {
-      for (const keyword of keywords) {
-        const regex = new RegExp(`(.{0,${context}}${keyword}.{0,${context}})`, 'i');
-        const match = bodyText.match(regex);
-        if (match) {
-          return match[1].trim().substring(0, 150) + '...';
-        }
-      }
-      return null;
-    };
+    // Use OpenAI to extract the 5 points intelligently
+    console.log(`🧠 Using AI to analyze content...`);
+    
+    const aiResponse = await openai.chat.completions.create({
+      model: "gpt-4o-mini", // Fast and cheap model
+      messages: [
+        {
+          role: "system",
+          content: `You are an expert startup analyst. Extract key information from startup websites.
+          
+Return ONLY a valid JSON object with these exact fields (no markdown, no explanation):
+{
+  "companyName": "Official company name",
+  "valueProp": "One clear sentence describing what the company does and its unique value (50-150 chars)",
+  "marketProblem": "The specific problem or pain point they're solving (50-150 chars)",
+  "solution": "How their product/platform solves the problem (50-150 chars)",
+  "team": "Founder names and their previous companies (e.g., 'John Smith (ex-Google), Jane Doe (ex-Meta)') or 'Team background not available'",
+  "investment": "Funding info (e.g., 'Raised $5M Seed Round') or 'Investment details not available'"
+}
 
-    // Extract the 5 points
-    const fivePoints = {
-      valueProp: metaDescription || ogDescription || 
-                 findNearText(['value proposition', 'we help', 'we enable', 'we provide']) ||
-                 'Value proposition to be researched',
-      
-      marketProblem: findNearText(['problem', 'challenge', 'pain point', 'struggle', 'difficulty']) ||
-                     'Market problem to be researched',
-      
-      solution: findNearText(['solution', 'how it works', 'our approach', 'we solve', 'platform']) ||
-                'Solution details to be researched',
-      
-      team: (() => {
-        // Look for team member names and companies
-        const teamText = findNearText(['team', 'founded by', 'founders', 'leadership', 'about us']);
-        if (teamText) {
-          // Try to extract company names (common patterns)
-          const companies = teamText.match(/\b(Google|Apple|Microsoft|Amazon|Meta|Facebook|Tesla|Netflix|Uber|Airbnb|Stripe|Y Combinator|Stanford|MIT|Harvard)\b/gi);
-          if (companies && companies.length > 0) {
-            return `Team: Former employees from ${[...new Set(companies)].join(', ')}`;
-          }
+Be concise, factual, and professional. If info is missing, use the 'not available' defaults.`
+        },
+        {
+          role: "user",
+          content: `Website: ${url}
+Title: ${title}
+Headline: ${h1}
+Meta Description: ${metaDescription || ogDescription}
+
+Content excerpt:
+${bodyText.substring(0, 4000)}
+
+Extract the 5 key points as JSON.`
         }
-        return 'Team background to be researched';
-      })(),
-      
-      investment: (() => {
-        // Look for funding information
-        const fundingText = findNearText(['raising', 'funding', 'seed', 'series', 'investment', 'million', 'valuation']);
-        if (fundingText) {
-          const amountMatch = fundingText.match(/\$[\d.]+[MBK]?/i);
-          const roundMatch = fundingText.match(/\b(seed|series [A-Z]|pre-seed)\b/i);
-          if (amountMatch || roundMatch) {
-            return fundingText.substring(0, 100);
-          }
-        }
-        return 'Investment details to be researched';
-      })()
-    };
+      ],
+      temperature: 0.3,
+      max_tokens: 500
+    });
+
+    const aiContent = aiResponse.choices[0].message.content.trim();
+    console.log(`✅ AI Response:`, aiContent.substring(0, 200));
+    
+    // Parse AI response
+    let aiData;
+    try {
+      // Remove markdown code blocks if present
+      const jsonMatch = aiContent.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        aiData = JSON.parse(jsonMatch[0]);
+      } else {
+        aiData = JSON.parse(aiContent);
+      }
+    } catch (parseError) {
+      console.error('❌ Failed to parse AI response:', parseError);
+      throw new Error('AI returned invalid JSON');
+    }
+
+    const companyName = aiData.companyName || domain.charAt(0).toUpperCase() + domain.slice(1);
 
     // Extract additional data
     const additionalData = {
@@ -141,7 +164,7 @@ app.post('/scrape', async (req, res) => {
       }
     });
 
-    console.log(`✅ Successfully scraped: ${companyName}`);
+    console.log(`✅ Successfully scraped with AI: ${companyName}`);
 
     res.json({
       success: true,
@@ -149,21 +172,22 @@ app.post('/scrape', async (req, res) => {
         companyName,
         url,
         fivePoints: [
-          fivePoints.valueProp,
-          fivePoints.marketProblem,
-          fivePoints.solution,
-          fivePoints.team,
-          fivePoints.investment
+          aiData.valueProp || 'Value proposition needs manual research',
+          aiData.marketProblem || 'Market problem needs manual research',
+          aiData.solution || 'Solution details need manual research',
+          aiData.team || 'Team background needs manual research',
+          aiData.investment || 'Investment details need manual research'
         ],
         additionalData,
-        scrapedAt: new Date().toISOString()
+        scrapedAt: new Date().toISOString(),
+        aiPowered: true
       }
     });
 
   } catch (error) {
     console.error(`❌ Error scraping ${url}:`, error.message);
     
-    // Return partial data on error
+    // Return fallback data on error
     const domain = new URL(url).hostname.replace('www.', '').split('.')[0];
     const companyName = domain.charAt(0).toUpperCase() + domain.slice(1);
     
@@ -174,7 +198,7 @@ app.post('/scrape', async (req, res) => {
         companyName,
         url,
         fivePoints: [
-          `${companyName} - Value proposition needs manual research`,
+          `${companyName} - Manual research required`,
           'Market problem needs manual research',
           'Solution details need manual research',
           'Team background needs manual research',
