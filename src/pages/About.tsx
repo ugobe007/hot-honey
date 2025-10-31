@@ -25,7 +25,7 @@ export default function About() {
         <div className="text-center mb-12">
           <div className="text-8xl mb-4">🍯</div>
           <h1 className="text-5xl font-bold bg-gradient-to-r from-yellow-300 via-orange-400 to-red-500 bg-clip-text text-transparent mb-4">
-            About Hot Money Honey
+            About Hot Honey
           </h1>
           <p className="text-2xl text-yellow-300 font-semibold mb-2">
             "Get Them While They're Hot."
@@ -41,7 +41,7 @@ export default function About() {
           <section className="mb-8">
             <h2 className="text-3xl font-bold text-orange-600 mb-4">Our Approach</h2>
             <p className="text-lg text-gray-700 leading-relaxed mb-4">
-              Hot Money Honey is a <strong>social discovery platform</strong> that transforms how early-stage investors and startups connect. We've created a <strong>courtship process</strong> for investment—where chemistry develops before capital flows.
+              Hot Honey is a <strong>social discovery platform</strong> that transforms how early-stage investors and startups connect. We've created a <strong>courtship process</strong> for investment—where chemistry develops before capital flows.
             </p>
             
             <div className="bg-gradient-to-br from-orange-50 to-yellow-50 rounded-2xl p-6 mb-4">
@@ -138,7 +138,7 @@ export default function About() {
               </ul>
             </div>
             <p className="text-lg text-gray-700 leading-relaxed font-semibold">
-              Hot Money Honey fills the gap by combining both worlds—trust and excitement.
+              Hot Honey fills the gap by combining both worlds—trust and excitement.
             </p>
           </section>
 
@@ -195,10 +195,10 @@ export default function About() {
           <section className="mb-8">
             <h2 className="text-3xl font-bold text-orange-600 mb-4">The 5-Point Format</h2>
             <p className="text-lg text-gray-700 leading-relaxed mb-4">
-              At the heart of Hot Money Honey is our <strong>5-point StartupCard format</strong>—a precisely designed data structure that condenses each startup's elevator pitch into a bite-size card that reveals just enough of what is important.
+              At the heart of Hot Honey is our <strong>5-point StartupCard format</strong>—a precisely designed data structure that condenses each startup's elevator pitch into a bite-size card that reveals just enough of what is important.
             </p>
             <p className="text-lg text-gray-700 leading-relaxed mb-6">
-              <strong>Hot Money Honey helps identify quality investment candidates faster and with more precision.</strong> The Hot Money Process enables quick discovery without all the overhead and utilizes crowd and market intelligence to identify the winners.
+              <strong>Hot Honey helps identify quality investment candidates faster and with more precision.</strong> The Hot Money Process enables quick discovery without all the overhead and utilizes crowd and market intelligence to identify the winners.
             </p>
             
             <div className="bg-gradient-to-br from-orange-50 to-yellow-50 rounded-2xl p-6 mb-6">
@@ -285,7 +285,7 @@ export default function About() {
               </div>
             </div>
             <p className="text-lg text-gray-700 leading-relaxed">
-              Hot Money Honey is positioned as the <strong>social-trust layer for global venture capital</strong>—where credibility meets virality.
+              Hot Honey is positioned as the <strong>social-trust layer for global venture capital</strong>—where credibility meets virality.
             </p>
           </section>
 
@@ -400,7 +400,7 @@ export default function About() {
           <section>
             <h2 className="text-3xl font-bold text-orange-600 mb-4">The Vision</h2>
             <p className="text-lg text-gray-700 leading-relaxed mb-4">
-              Within five years, Hot Money Honey will become the <strong>global social layer for venture capital</strong>—a daily habit for investors and founders alike.
+              Within five years, Hot Honey will become the <strong>global social layer for venture capital</strong>—a daily habit for investors and founders alike.
             </p>
             <div className="bg-gradient-to-r from-orange-400 to-orange-500 rounded-2xl p-6 text-white">
               <p className="text-xl font-semibold mb-3">
@@ -420,7 +420,7 @@ export default function About() {
         <div className="bg-gradient-to-br from-orange-300 via-orange-400 to-orange-500 rounded-3xl p-8 shadow-2xl text-center">
           <h2 className="text-3xl font-bold text-white mb-4">Ready to Join the Movement?</h2>
           <p className="text-xl text-white mb-6">
-            Whether you're an investor seeking the next big thing or a startup ready to build momentum—Hot Money Honey is your platform.
+            Whether you're an investor seeking the next big thing or a startup ready to build momentum—Hot Honey is your platform.
           </p>
           <div className="flex gap-4 justify-center">
             <button

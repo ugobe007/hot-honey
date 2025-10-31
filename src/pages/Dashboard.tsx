@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import StartupCardOfficial from '../components/StartupCardOfficial';
+import startupData from '../data/startupData';
 
 interface YesVote {
   id: number;
@@ -7,6 +9,7 @@ interface YesVote {
   pitch?: string;
   tagline?: string;
   stage?: number;
+  fivePoints?: string[];
   votedAt: string;
 }
 
@@ -17,7 +20,23 @@ const Dashboard: React.FC = () => {
     // Load YES votes from localStorage
     const votes = localStorage.getItem('myYesVotes');
     if (votes) {
-      setMyYesVotes(JSON.parse(votes));
+      const parsedVotes = JSON.parse(votes);
+      
+      // Migrate old votes that don't have fivePoints
+      const enrichedVotes = parsedVotes.map((vote: any) => {
+        if (!vote.fivePoints) {
+          // Find the startup in startupData and add missing fields
+          const fullStartup = startupData.find(s => s.id === vote.id);
+          if (fullStartup) {
+            return { ...vote, fivePoints: fullStartup.fivePoints };
+          }
+        }
+        return vote;
+      });
+      
+      // Save enriched data back to localStorage
+      localStorage.setItem('myYesVotes', JSON.stringify(enrichedVotes));
+      setMyYesVotes(enrichedVotes);
     }
   }, []);
 
@@ -29,6 +48,11 @@ const Dashboard: React.FC = () => {
       alert('✅ All votes cleared! You can start voting again.');
       window.location.href = '/vote';
     }
+  };
+
+  const handleVote = (vote: 'yes' | 'no') => {
+    console.log(`Voted ${vote}`);
+    // Vote handling can be added here if needed
   };
 
   return (
@@ -86,55 +110,13 @@ const Dashboard: React.FC = () => {
             </Link>
           </div>
         ) : (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="space-y-8">
             {myYesVotes.map((vote) => (
-              <div
-                key={vote.id}
-                className="bg-gradient-to-br from-amber-300 via-orange-400 to-yellow-500 rounded-2xl p-6 shadow-[0_20px_50px_rgba(0,0,0,0.35)] border-4 border-orange-500 relative hover:scale-105 transition-transform"
-              >
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/20 to-transparent pointer-events-none"></div>
-                
-                <div className="relative">
-                  {/* Header */}
-                  <div className="flex justify-between items-start mb-3">
-                    <div className="flex-1">
-                      <h3 className="text-2xl font-black text-gray-900 leading-tight mb-1">
-                        {vote.name}
-                      </h3>
-                      {vote.stage && (
-                        <p className="text-blue-700 font-bold text-xs">
-                          stage #{vote.stage}
-                        </p>
-                      )}
-                    </div>
-                    <div className="text-3xl">🔥</div>
-                  </div>
-
-                  {/* Pitch */}
-                  {vote.pitch && (
-                    <p className="text-sm font-black text-gray-900 leading-tight mb-2">
-                      "{vote.pitch}"
-                    </p>
-                  )}
-
-                  {/* Tagline */}
-                  {vote.tagline && (
-                    <p className="text-xs font-bold text-gray-800 leading-tight mb-3">
-                      {vote.tagline}
-                    </p>
-                  )}
-
-                  {/* Vote Badge */}
-                  <div className="flex items-center justify-between mt-4 pt-4 border-t-2 border-orange-500">
-                    <div className="flex items-center gap-2">
-                      <span className="text-2xl">👍</span>
-                      <span className="text-sm font-bold text-gray-800">Voted YES</span>
-                    </div>
-                    <span className="text-xs text-gray-700 font-semibold">
-                      {new Date(vote.votedAt).toLocaleDateString()}
-                    </span>
-                  </div>
-                </div>
+              <div key={vote.id}>
+                <StartupCardOfficial
+                  startup={vote}
+                  onVote={handleVote}
+                />
               </div>
             ))}
           </div>

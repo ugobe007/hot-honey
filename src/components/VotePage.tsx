@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import StartupCardOfficial from './StartupCardOfficial';
+import VCFirmCard from './VCFirmCard';
 import startupData from '../data/startupData';
 
 const VotePage: React.FC = () => {
   const [votedStartupIds, setVotedStartupIds] = useState<number[]>([]);
   const [unvotedStartups, setUnvotedStartups] = useState(startupData);
+  const [totalStartupCount, setTotalStartupCount] = useState(startupData.length);
   const [showFiltered, setShowFiltered] = useState(false);
 
   // Load voted startup IDs from localStorage on mount
@@ -21,6 +23,9 @@ const VotePage: React.FC = () => {
       const uploaded = JSON.parse(uploadedStartups);
       allStartups = [...allStartups, ...uploaded];
     }
+    
+    // Set total count for tracking
+    setTotalStartupCount(allStartups.length);
     
     let filteredStartups = allStartups;
 
@@ -56,19 +61,26 @@ const VotePage: React.FC = () => {
     setVotedStartupIds(newVotedIds);
     localStorage.setItem('votedStartups', JSON.stringify(newVotedIds));
 
-    // Save YES votes to localStorage for dashboard
+    // Save YES votes to localStorage for dashboard and portfolio
     if (vote === 'yes') {
       const yesVotes = localStorage.getItem('myYesVotes');
       const yesVotesList = yesVotes ? JSON.parse(yesVotes) : [];
-      const startup = startupData.find(s => s.id === startupId);
+      
+      // Find the full startup object (check both startupData and uploaded startups)
+      let startup = startupData.find(s => s.id === startupId);
+      
+      if (!startup) {
+        const uploadedStartups = localStorage.getItem('uploadedStartups');
+        if (uploadedStartups) {
+          const uploaded = JSON.parse(uploadedStartups);
+          startup = uploaded.find((s: any) => s.id === startupId);
+        }
+      }
       
       if (startup) {
+        // Save the FULL startup object with all 5 points
         yesVotesList.push({
-          id: startupId,
-          name: startup.name,
-          pitch: startup.pitch,
-          tagline: startup.tagline,
-          stage: startup.stage,
+          ...startup, // Include ALL startup data (fivePoints, industries, website, etc.)
           votedAt: new Date().toISOString()
         });
         localStorage.setItem('myYesVotes', JSON.stringify(yesVotesList));
@@ -120,7 +132,7 @@ const VotePage: React.FC = () => {
           <div className="text-center">
             <h2 className="text-6xl font-bold text-white mb-4">🎉</h2>
             <h3 className="text-4xl font-bold text-white mb-4">All Done!</h3>
-            <p className="text-xl text-purple-200 mb-8">You've voted on all {startupData.length} startups!</p>
+            <p className="text-xl text-purple-200 mb-8">You've voted on all {totalStartupCount} startups!</p>
             <div className="flex gap-4 justify-center">
               <Link to="/dashboard" className="px-8 py-3 bg-orange-500 text-white rounded-lg font-medium text-lg hover:bg-orange-600 transition-colors shadow-lg">
                 View My Hot Picks 🔥
@@ -172,7 +184,7 @@ const VotePage: React.FC = () => {
                 🔥 Vote on Startups
               </h1>
               <p className="text-xl text-purple-200">
-                <span className="font-bold text-yellow-300">{unvotedStartups.length}</span> of {startupData.length} {unvotedStartups.length === 1 ? 'startup' : 'startups'} remaining
+                <span className="font-bold text-yellow-300">{unvotedStartups.length}</span> of {totalStartupCount} {unvotedStartups.length === 1 ? 'startup' : 'startups'} remaining
               </p>
               {showFiltered && (
                 <div className="mt-2 inline-block bg-purple-500 text-white px-4 py-2 rounded-full text-sm font-semibold">
@@ -192,13 +204,33 @@ const VotePage: React.FC = () => {
         {/* SHOW ALL UNVOTED CARDS IN A GRID */}
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
-            {unvotedStartups.map((startup) => (
-              <StartupCardOfficial
-                key={startup.id}
-                startup={startup}
-                onVote={(vote) => handleVote(startup.id, vote)}
-              />
-            ))}
+            {unvotedStartups.map((startup) => {
+              const entityType = (startup as any).entityType;
+              
+              // Render VCFirmCard for VC firms and accelerators
+              if (entityType === 'vc_firm' || entityType === 'accelerator') {
+                return (
+                  <VCFirmCard
+                    key={startup.id}
+                    id={startup.id}
+                    name={startup.name}
+                    pitch={startup.pitch || startup.tagline || ''}
+                    fivePoints={(startup as any).fivePoints || []}
+                    entityType={entityType}
+                    website={(startup as any).website}
+                  />
+                );
+              }
+              
+              // Render StartupCardOfficial for startups
+              return (
+                <StartupCardOfficial
+                  key={startup.id}
+                  startup={startup}
+                  onVote={(vote) => handleVote(startup.id, vote)}
+                />
+              );
+            })}
           </div>
         </div>
       </div>

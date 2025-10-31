@@ -89,9 +89,11 @@ export default function StartupCard({ startup, onVote }: Props) {
             <p 
               key={i} 
               className={`leading-tight tracking-tight ${
-                i === 0 || i === 1 || i === 2
+                i === 0
                   ? 'text-xs font-black text-gray-900'
-                  : 'text-[11px] font-bold text-gray-800'
+                  : i === 1 || i === 2
+                  ? 'text-sm font-black text-gray-900'
+                  : 'text-xs font-bold text-gray-800'
               }`}
             >
               {point}

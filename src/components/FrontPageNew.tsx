@@ -35,6 +35,7 @@ const FrontPageNew: React.FC = () => {
           pitch: startup.pitch,
           tagline: startup.tagline,
           stage: startup.stage,
+          fivePoints: startup.fivePoints, // Include full fivePoints array
           votedAt: new Date().toISOString()
         });
         localStorage.setItem('myYesVotes', JSON.stringify(yesVotesList));
@@ -77,7 +78,10 @@ const FrontPageNew: React.FC = () => {
             🏠 Home
           </Link>
           <Link to="/vote" className="px-4 py-1.5 bg-orange-500 text-white rounded-full font-medium text-sm shadow-lg hover:bg-orange-600 transition-colors">
-            📊 Vote
+            <span className="blink-text">📊 Vote</span>
+          </Link>
+          <Link to="/analytics" className="px-4 py-1.5 bg-gradient-to-r from-purple-700 to-purple-900 text-yellow-400 rounded-full font-bold text-sm shadow-lg hover:from-purple-800 hover:to-purple-950 transition-all">
+            📈 Analytics
           </Link>
           <Link to="/dashboard" className="px-4 py-1.5 bg-orange-500 text-white rounded-full font-medium text-sm shadow-lg hover:bg-orange-600 transition-colors">
             👤 Dashboard
@@ -99,7 +103,7 @@ const FrontPageNew: React.FC = () => {
         <div className="text-center mb-8">
           <div className="relative inline-block">
             <h1 className="text-8xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-orange-400 to-red-500 mb-2">
-              Hot Money Honey
+              Hot Honey
             </h1>
             {/* Mr. Bee leaning on Honey */}
             <img 
@@ -111,11 +115,8 @@ const FrontPageNew: React.FC = () => {
               }}
             />
           </div>
-          <p className="text-2xl font-semibold text-yellow-300 mb-4 tracking-tight">
-            Start Collecting Hot Deals
-          </p>
           
-          <div className="mb-4">
+          <div className="mt-6 mb-4">
             <h2 className="text-3xl font-bold text-white mb-3">
               🔥 Start Collecting Hot Deals 🔥
             </h2>

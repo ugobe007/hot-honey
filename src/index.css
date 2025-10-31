@@ -34,4 +34,17 @@ body {
   .drop-shadow-glow {
     text-shadow: 0 0 10px rgba(255, 165, 0, 0.8), 0 0 20px rgba(255, 100, 0, 0.7);
   }
+  
+  .blink-text {
+    animation: blinkText 2s ease-in-out infinite;
+  }
+}
+
+@keyframes blinkText {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
 }

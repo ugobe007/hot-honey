@@ -41,7 +41,7 @@ export default function SignUpPage() {
     console.log('User profile created:', userProfile);
     
     // Show success message and redirect
-    alert(`Welcome to Hot Money Honey! 🍯\n\nSigned up as: ${userType}\n\n✅ Your account has been created!`);
+    alert(`Welcome to Hot Honey! 🍯\n\nSigned up as: ${userType}\n\n✅ Your account has been created!`);
     
     // Redirect based on user type
     if (userType === 'investor') {
@@ -107,12 +107,12 @@ export default function SignUpPage() {
         <div className="text-center mb-12">
           <div className="text-8xl mb-4 animate-pulse">🍯</div>
           <h1 className="text-5xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent mb-4">
-            {authMode === 'signup' ? 'Join Hot Money Honey' : 'Welcome Back!'}
+            {authMode === 'signup' ? 'Join Hot Honey' : 'Welcome Back!'}
           </h1>
           <p className="text-xl text-white font-bold drop-shadow-lg">
             {authMode === 'signup' 
               ? 'Connect startups with investors who share your vision'
-              : 'Log in to Hot Money Honey'}
+              : 'Log in to Hot Honey'}
           </p>
           <div className="mt-4 flex justify-center gap-4 text-4xl">
             <span className="animate-pulse" style={{ animationDelay: '0s' }}>🔥</span>

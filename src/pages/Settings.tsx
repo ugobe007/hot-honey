@@ -136,7 +136,7 @@ export default function Settings() {
               Investor Preferences
             </h1>
             <p className="text-lg text-gray-700">
-              Customize your Hot Money Honey experience
+              Customize your Hot Honey experience
             </p>
           </div>
 

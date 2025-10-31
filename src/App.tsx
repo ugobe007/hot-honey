@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
 import VotePage from './components/VotePage';
-import Portfolio from './pages/Portfolio';
+import PortfolioPage from './pages/PortfolioPage'; // ✅ FIXED - was pointing to non-existent Portfolio
 import Submit from './pages/Submit';
 import StartupDetail from './pages/StartupDetail';
 import Deals from './pages/Deals';
@@ -16,7 +16,9 @@ import Contact from './pages/Contact';
 import Settings from './pages/Settings';
 import SharedPortfolio from './pages/SharedPortfolio';
 import BulkUpload from './pages/BulkUpload';
+import BulkImport from './pages/BulkImport';
 import DocumentUpload from './pages/DocumentUpload';
+import Analytics from './pages/Analytics';
 import Login from './pages/Login';
 import WelcomeModal from './components/WelcomeModal';
 import './App.css';
@@ -41,8 +43,8 @@ const App: React.FC = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/vote" element={<VotePage />} />
           <Route path="/vote-demo" element={<VoteDemo />} />
-          <Route path="/investors" element={<Portfolio />} />
-          <Route path="/portfolio" element={<Portfolio />} />
+          <Route path="/investors" element={<PortfolioPage />} /> {/* ✅ FIXED */}
+          <Route path="/portfolio" element={<PortfolioPage />} /> {/* ✅ FIXED */}
           <Route path="/submit" element={<Submit />} />
           <Route path="/startup/:id" element={<StartupDetail />} />
           <Route path="/deals" element={<Deals />} />
@@ -54,7 +56,9 @@ const App: React.FC = () => {
           <Route path="/settings" element={<Settings />} />
           <Route path="/shared-portfolio/:shareId" element={<SharedPortfolio />} />
           <Route path="/admin/bulk-upload" element={<BulkUpload />} />
+          <Route path="/admin/bulk-import" element={<BulkImport />} />
           <Route path="/admin/document-upload" element={<DocumentUpload />} />
+          <Route path="/analytics" element={<Analytics />} />
         </Routes>
       </main>
 
@@ -83,7 +87,7 @@ const App: React.FC = () => {
             For Startups
           </Link>
         </div>
-        <p className="text-purple-200">&copy; {new Date().getFullYear()} Hot Money Honey. All rights reserved.</p>
+        <p className="text-purple-200">&copy; {new Date().getFullYear()} Hot Honey. All rights reserved.</p>
       </footer>
     </div>
   );

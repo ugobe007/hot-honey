@@ -1,4 +1,4 @@
-# Hot Money Honey - Official Design System
+# Hot Honey - Official Design System
 
 **LAST UPDATED:** October 27, 2025
 

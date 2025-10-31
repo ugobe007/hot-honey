@@ -328,5 +328,5 @@ async function analyzeWithAI(text: string) {
 
 ---
 
-**Built for Hot Money Honey 🍯**  
+**Built for Hot Honey 🍯**  
 Making startup onboarding effortless with AI document scanning!

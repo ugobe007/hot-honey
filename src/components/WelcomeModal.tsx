@@ -42,7 +42,7 @@ export default function WelcomeModal({ forceOpen = false, onClose }: WelcomeModa
           <div className="text-center mb-6">
             <div className="text-7xl mb-4 animate-bounce">🍯</div>
             <h2 className="text-4xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent mb-2">
-              Welcome to Hot Money Honey!
+              Welcome to Hot Honey!
             </h2>
             <p className="text-xl text-orange-600 font-semibold">
               Get Them While They're Hot.
@@ -57,7 +57,7 @@ export default function WelcomeModal({ forceOpen = false, onClose }: WelcomeModa
             <div className="mb-4">
               <h4 className="text-lg font-bold text-gray-800 mb-2">💰 For Investors:</h4>
               <p className="text-sm text-gray-700 mb-3 leading-relaxed">
-                Hot Money Honey helps identify quality investment candidates faster and with more precision. The Hot Money Process enables quick discovery without all the overhead and utilizes crowd and market intelligence to identify the winners.
+                Hot Honey helps identify quality investment candidates faster and with more precision. The Hot Money Process enables quick discovery without all the overhead and utilizes crowd and market intelligence to identify the winners.
               </p>
               
               {/* 5-Point Format Highlight */}
@@ -111,7 +111,7 @@ export default function WelcomeModal({ forceOpen = false, onClose }: WelcomeModa
             <div>
               <h4 className="text-lg font-bold text-gray-800 mb-2">🚀 For Startups:</h4>
               <p className="text-sm text-gray-700 mb-3 leading-relaxed">
-                <strong>Connect with investors faster and build syndicates through the Hot Money Honey discovery process.</strong> Our gamified approach helps you fine-tune your pitch and attract more interested investors than traditional platforms.
+                <strong>Connect with investors faster and build syndicates through the Hot Honey discovery process.</strong> Our gamified approach helps you fine-tune your pitch and attract more interested investors than traditional platforms.
               </p>
 
               {/* Game Play & Progressive Reveal */}
@@ -170,7 +170,7 @@ export default function WelcomeModal({ forceOpen = false, onClose }: WelcomeModa
               <strong>Investing in early-stage startups is highly risky.</strong> You may lose all of your investment. Only invest what you can afford to lose. Past performance is not indicative of future results.
             </p>
             <p className="text-sm text-gray-700 leading-relaxed">
-              By using Hot Money Honey, you acknowledge that you understand these risks and are making your own investment decisions. We are not financial advisors. Always do your own research and consult with licensed professionals.
+              By using Hot Honey, you acknowledge that you understand these risks and are making your own investment decisions. We are not financial advisors. Always do your own research and consult with licensed professionals.
             </p>
           </div>
 
