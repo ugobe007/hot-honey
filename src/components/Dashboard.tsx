@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import SharePortfolioModal from './SharePortfolioModal';
 import StartupCardOfficial from './StartupCardOfficial';
 import startupData from '../data/startupData';
+import { useStore } from '../store';
 
 interface YesVote {
   id: number;
@@ -19,6 +20,9 @@ const Dashboard: React.FC = () => {
   const [myYesVotes, setMyYesVotes] = useState<YesVote[]>([]);
   const [showShareModal, setShowShareModal] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const voteYes = useStore((state) => state.voteYes);
+  const voteNo = useStore((state) => state.voteNo);
+  const unvote = useStore((state) => state.unvote);
 
   useEffect(() => {
     const votes = localStorage.getItem('myYesVotes');
@@ -222,7 +226,14 @@ const Dashboard: React.FC = () => {
               <div key={vote.id} className="transform scale-90">
                 <StartupCardOfficial
                   startup={vote}
-                  onVote={(voteType) => console.log(`Voted ${voteType}`)}
+                  onVote={(voteType) => {
+                    if (voteType === 'yes') {
+                      voteYes(vote);
+                    } else {
+                      // If voting no from dashboard, remove from portfolio
+                      unvote(vote);
+                    }
+                  }}
                 />
               </div>
             ))}
