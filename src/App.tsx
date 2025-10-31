@@ -27,6 +27,7 @@ import ActivityTracker from './pages/ActivityTracker';
 import UserManagement from './pages/UserManagement';
 import InviteAccept from './pages/InviteAccept';
 import StartupReview from './pages/StartupReview';
+import AdminPanel from './pages/AdminPanel';
 import WelcomeModal from './components/WelcomeModal';
 import './App.css';
 
@@ -62,6 +63,7 @@ const App: React.FC = () => {
           <Route path="/contact" element={<Contact />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/shared-portfolio/:shareId" element={<SharedPortfolio />} />
+          <Route path="/admin" element={<AdminPanel />} />
           <Route path="/admin/bulk-upload" element={<BulkUpload />} />
           <Route path="/admin/bulk-import" element={<BulkImport />} />
           <Route path="/admin/document-upload" element={<DocumentUpload />} />

@@ -78,42 +78,47 @@ const StartupReview: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-pink-900 to-red-900 text-white p-8">
+    <div 
+      className="min-h-screen bg-gradient-to-br from-purple-900 via-green-400 to-purple-950 text-white p-8"
+      style={{ 
+        backgroundImage: 'radial-gradient(ellipse 800px 600px at 20% 40%, rgba(134, 239, 172, 0.4), transparent), linear-gradient(to bottom right, rgb(88, 28, 135), rgb(59, 7, 100))' 
+      }}
+    >
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <Link to="/admin/startup-processor" className="text-pink-300 hover:text-pink-100 mb-4 inline-block">
+          <Link to="/admin/startup-processor" className="text-green-300 hover:text-green-100 mb-4 inline-block">
             ← Back to Processor
           </Link>
-          <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-yellow-300 to-pink-300 text-transparent bg-clip-text">
+          <h1 className="text-5xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-orange-400 to-red-500">
             🎯 Startup Review Dashboard
           </h1>
-          <p className="text-xl text-pink-200">
+          <p className="text-xl text-green-200">
             Review all processed startups before adding them to your site
           </p>
         </div>
 
         {/* Stats Cards */}
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
-          <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
+          <div className="bg-purple-800/30 backdrop-blur-sm rounded-xl p-6 border border-green-400/30">
             <div className="text-4xl font-bold text-yellow-300">{stats.total}</div>
-            <div className="text-sm text-pink-200">Total Startups</div>
+            <div className="text-sm text-green-200">Total Startups</div>
           </div>
-          <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
+          <div className="bg-purple-800/30 backdrop-blur-sm rounded-xl p-6 border border-green-400/30">
             <div className="text-4xl font-bold text-green-300">{stats.validated}</div>
-            <div className="text-sm text-pink-200">Validated</div>
+            <div className="text-sm text-green-200">Validated</div>
           </div>
-          <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
+          <div className="bg-purple-800/30 backdrop-blur-sm rounded-xl p-6 border border-green-400/30">
             <div className="text-4xl font-bold text-orange-300">{stats.pending}</div>
-            <div className="text-sm text-pink-200">Pending</div>
+            <div className="text-sm text-green-200">Pending</div>
           </div>
-          <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
+          <div className="bg-purple-800/30 backdrop-blur-sm rounded-xl p-6 border border-green-400/30">
             <div className="text-4xl font-bold text-blue-300">{stats.withTeamInfo}</div>
-            <div className="text-sm text-pink-200">With Team Data</div>
+            <div className="text-sm text-green-200">With Team Data</div>
           </div>
-          <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
+          <div className="bg-purple-800/30 backdrop-blur-sm rounded-xl p-6 border border-green-400/30">
             <div className="text-4xl font-bold text-purple-300">{stats.withFunding}</div>
-            <div className="text-sm text-pink-200">With Funding</div>
+            <div className="text-sm text-green-200">With Funding</div>
           </div>
         </div>
 
@@ -123,8 +128,8 @@ const StartupReview: React.FC = () => {
             onClick={() => setFilter('all')}
             className={`px-6 py-3 rounded-xl font-semibold transition-all ${
               filter === 'all'
-                ? 'bg-gradient-to-r from-yellow-400 to-pink-400 text-black'
-                : 'bg-white/10 hover:bg-white/20 border border-white/20'
+                ? 'bg-gradient-to-r from-amber-400 via-orange-500 to-yellow-500 text-white shadow-lg'
+                : 'bg-purple-800/30 hover:bg-purple-700/40 border border-green-400/30'
             }`}
           >
             All ({startups.length})
@@ -133,8 +138,8 @@ const StartupReview: React.FC = () => {
             onClick={() => setFilter('validated')}
             className={`px-6 py-3 rounded-xl font-semibold transition-all ${
               filter === 'validated'
-                ? 'bg-gradient-to-r from-yellow-400 to-pink-400 text-black'
-                : 'bg-white/10 hover:bg-white/20 border border-white/20'
+                ? 'bg-gradient-to-r from-amber-400 via-orange-500 to-yellow-500 text-white shadow-lg'
+                : 'bg-purple-800/30 hover:bg-purple-700/40 border border-green-400/30'
             }`}
           >
             ✅ Validated ({stats.validated})
@@ -143,49 +148,49 @@ const StartupReview: React.FC = () => {
             onClick={() => setFilter('pending')}
             className={`px-6 py-3 rounded-xl font-semibold transition-all ${
               filter === 'pending'
-                ? 'bg-gradient-to-r from-yellow-400 to-pink-400 text-black'
-                : 'bg-white/10 hover:bg-white/20 border border-white/20'
+                ? 'bg-gradient-to-r from-amber-400 via-orange-500 to-yellow-500 text-white shadow-lg'
+                : 'bg-purple-800/30 hover:bg-purple-700/40 border border-green-400/30'
             }`}
           >
             ⏳ Pending ({stats.pending})
           </button>
           <button
             onClick={generateStartupCode}
-            className="ml-auto px-8 py-3 rounded-xl font-bold bg-gradient-to-r from-green-400 to-blue-400 text-black hover:scale-105 transition-transform"
+            className="ml-auto px-8 py-3 rounded-xl font-bold bg-gradient-to-r from-green-400 to-emerald-500 text-purple-900 hover:scale-105 transition-transform shadow-lg"
           >
-            📦 Export to Code
+            📦 Export to StartupCard
           </button>
         </div>
 
-        {/* Export Code Modal */}
+        {/* Export StartupCard Modal */}
         {showExport && (
           <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
-            <div className="bg-gray-900 rounded-2xl p-8 max-w-4xl w-full max-h-[80vh] overflow-auto border-4 border-yellow-400">
+            <div className="bg-purple-900 rounded-2xl p-8 max-w-4xl w-full max-h-[80vh] overflow-auto border-4 border-yellow-400 shadow-2xl">
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-3xl font-bold text-yellow-300">📦 Export Code</h2>
+                <h2 className="text-3xl font-bold text-yellow-300">📦 Export StartupCards</h2>
                 <button
                   onClick={() => setShowExport(false)}
-                  className="text-4xl text-pink-300 hover:text-pink-100"
+                  className="text-4xl text-green-300 hover:text-green-100"
                 >
                   ×
                 </button>
               </div>
-              <p className="text-pink-200 mb-4">
-                Copy this code and paste it into <code className="bg-white/10 px-2 py-1 rounded">src/data/startupData.ts</code>
+              <p className="text-green-200 mb-4">
+                Copy this code and paste it into <code className="bg-purple-800/50 px-2 py-1 rounded text-yellow-300">src/data/startupData.ts</code>
               </p>
-              <pre className="bg-black/50 p-6 rounded-xl overflow-auto text-sm border border-white/20 mb-4">
+              <pre className="bg-black/50 p-6 rounded-xl overflow-auto text-sm border border-green-400/30 mb-4">
                 <code className="text-green-300">{exportCode}</code>
               </pre>
               <div className="flex gap-4">
                 <button
                   onClick={copyToClipboard}
-                  className="flex-1 px-6 py-3 rounded-xl font-bold bg-gradient-to-r from-green-400 to-blue-400 text-black hover:scale-105 transition-transform"
+                  className="flex-1 px-6 py-3 rounded-xl font-bold bg-gradient-to-r from-amber-400 via-orange-500 to-yellow-500 text-white hover:scale-105 transition-transform shadow-lg"
                 >
                   📋 Copy to Clipboard
                 </button>
                 <button
                   onClick={() => setShowExport(false)}
-                  className="px-6 py-3 rounded-xl font-semibold bg-white/10 hover:bg-white/20 border border-white/20"
+                  className="px-6 py-3 rounded-xl font-semibold bg-purple-800/50 hover:bg-purple-700/60 border border-green-400/30"
                 >
                   Close
                 </button>
@@ -199,7 +204,7 @@ const StartupReview: React.FC = () => {
           {filteredStartups.map((startup, index) => (
             <div
               key={startup.id}
-              className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 hover:border-yellow-400 transition-all hover:scale-105"
+              className="bg-purple-800/30 backdrop-blur-sm rounded-2xl p-6 border border-green-400/30 hover:border-yellow-400 transition-all hover:scale-105"
             >
               {/* Header */}
               <div className="flex items-start justify-between mb-4">
@@ -211,7 +216,7 @@ const StartupReview: React.FC = () => {
                     href={startup.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm text-pink-300 hover:text-pink-100 break-all"
+                    className="text-sm text-green-300 hover:text-green-100 break-all"
                   >
                     {startup.url}
                   </a>
@@ -226,25 +231,25 @@ const StartupReview: React.FC = () => {
               {/* 5 Points */}
               <div className="space-y-3 mb-4">
                 <div>
-                  <div className="text-xs text-pink-300 font-semibold mb-1">💎 VALUE PROP</div>
+                  <div className="text-xs text-yellow-300 font-semibold mb-1">💎 VALUE PROP</div>
                   <div className="text-sm text-white/90">{startup.fivePoints[0]}</div>
                 </div>
                 <div>
-                  <div className="text-xs text-pink-300 font-semibold mb-1">⚠️ MARKET PROBLEM</div>
+                  <div className="text-xs text-yellow-300 font-semibold mb-1">⚠️ MARKET PROBLEM</div>
                   <div className="text-sm text-white/90">{startup.fivePoints[1]}</div>
                 </div>
                 <div>
-                  <div className="text-xs text-pink-300 font-semibold mb-1">💡 SOLUTION</div>
+                  <div className="text-xs text-yellow-300 font-semibold mb-1">💡 SOLUTION</div>
                   <div className="text-sm text-white/90">{startup.fivePoints[2]}</div>
                 </div>
                 <div>
-                  <div className="text-xs text-pink-300 font-semibold mb-1">👥 TEAM</div>
+                  <div className="text-xs text-yellow-300 font-semibold mb-1">👥 TEAM</div>
                   <div className={`text-sm ${startup.fivePoints[3].includes('not available') ? 'text-orange-300 italic' : 'text-white/90'}`}>
                     {startup.fivePoints[3]}
                   </div>
                 </div>
                 <div>
-                  <div className="text-xs text-pink-300 font-semibold mb-1">💰 INVESTMENT</div>
+                  <div className="text-xs text-yellow-300 font-semibold mb-1">💰 INVESTMENT</div>
                   <div className={`text-sm ${startup.fivePoints[4].includes('not available') ? 'text-orange-300 italic' : 'text-white/90'}`}>
                     {startup.fivePoints[4]}
                   </div>
@@ -252,7 +257,7 @@ const StartupReview: React.FC = () => {
               </div>
 
               {/* Meta */}
-              <div className="text-xs text-pink-200 pt-3 border-t border-white/10">
+              <div className="text-xs text-green-200 pt-3 border-t border-green-400/20">
                 Scraped: {new Date(startup.scrapedAt).toLocaleDateString()}
               </div>
             </div>
@@ -262,7 +267,7 @@ const StartupReview: React.FC = () => {
         {filteredStartups.length === 0 && (
           <div className="text-center py-20">
             <div className="text-6xl mb-4">📭</div>
-            <p className="text-xl text-pink-200">No startups found with this filter</p>
+            <p className="text-xl text-green-200">No startups found with this filter</p>
           </div>
         )}
       </div>
