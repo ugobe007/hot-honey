@@ -16,6 +16,7 @@ export default function ProcessUploads() {
   const [processing, setProcessing] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [generatedCards, setGeneratedCards] = useState<any[]>([]);
+  const [showDebug, setShowDebug] = useState(false);
 
   useEffect(() => {
     // Load uploaded startups from localStorage
@@ -24,6 +25,9 @@ export default function ProcessUploads() {
       const parsed = JSON.parse(stored);
       setUploads(parsed);
       console.log(`Found ${parsed.length} uploaded startups:`, parsed);
+    } else {
+      console.log('No uploadedStartups found in localStorage');
+      console.log('All localStorage keys:', Object.keys(localStorage));
     }
   }, []);
 
@@ -148,30 +152,51 @@ export default function ProcessUploads() {
       <div className="max-w-6xl mx-auto">
         <div className="bg-white rounded-3xl p-8 shadow-2xl">
           <div className="flex justify-between items-center mb-8">
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-orange-500 to-yellow-500 bg-clip-text text-transparent">
+            <h1 className="text-5xl font-black bg-gradient-to-r from-orange-600 to-yellow-600 bg-clip-text text-transparent">
               🍯 Process Uploaded Startups
             </h1>
             <button
               onClick={() => navigate('/dashboard')}
-              className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors"
+              className="px-6 py-3 bg-gray-800 text-white rounded-xl hover:bg-gray-900 transition-colors font-bold text-lg"
             >
               ← Back
             </button>
           </div>
 
-          <div className="mb-8 p-6 bg-blue-50 rounded-xl border-2 border-blue-200">
-            <h2 className="text-2xl font-bold text-blue-900 mb-4">
+          <div className="mb-8 p-6 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl shadow-lg">
+            <h2 className="text-3xl font-black text-white mb-4">
               📊 Status
             </h2>
-            <div className="space-y-2 text-lg">
-              <p><strong>Uploaded Startups:</strong> {uploads.length}</p>
-              <p><strong>Generated Cards:</strong> {generatedCards.length}</p>
+            <div className="space-y-3 text-xl">
+              <p className="text-white"><strong className="font-black">Uploaded Startups:</strong> <span className="text-yellow-300 font-bold text-2xl">{uploads.length}</span></p>
+              <p className="text-white"><strong className="font-black">Generated Cards:</strong> <span className="text-green-300 font-bold text-2xl">{generatedCards.length}</span></p>
               {processing && (
-                <p className="text-orange-600 font-semibold animate-pulse">
-                  Processing {currentIndex + 1} of {uploads.length}...
+                <p className="text-yellow-300 font-black animate-pulse text-xl">
+                  ⚙️ Processing {currentIndex + 1} of {uploads.length}...
                 </p>
               )}
             </div>
+            
+            {/* Debug Toggle */}
+            <button
+              onClick={() => setShowDebug(!showDebug)}
+              className="mt-4 px-4 py-2 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-colors font-bold text-sm"
+            >
+              {showDebug ? '🔼 Hide Debug Info' : '🔽 Show Debug Info'}
+            </button>
+            
+            {showDebug && (
+              <div className="mt-4 p-4 bg-white/10 rounded-lg text-white text-sm">
+                <p className="font-bold mb-2">localStorage Keys:</p>
+                <ul className="list-disc list-inside space-y-1">
+                  {Object.keys(localStorage).map(key => (
+                    <li key={key} className="font-mono">
+                      {key} {key.includes('upload') && '← 👀'}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
 
           {/* Action Buttons */}
@@ -179,7 +204,7 @@ export default function ProcessUploads() {
             <button
               onClick={processAll}
               disabled={processing || uploads.length === 0}
-              className="flex-1 px-6 py-4 bg-gradient-to-r from-orange-500 to-yellow-500 text-white rounded-xl font-bold text-lg hover:from-orange-600 hover:to-yellow-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 px-8 py-6 bg-gradient-to-r from-orange-600 to-yellow-600 text-white rounded-2xl font-black text-xl hover:from-orange-700 hover:to-yellow-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-xl hover:shadow-2xl hover:scale-105"
             >
               {processing ? '⚙️ Processing...' : '🚀 Generate All StartupCards'}
             </button>
@@ -187,7 +212,7 @@ export default function ProcessUploads() {
             <button
               onClick={exportToCode}
               disabled={generatedCards.length === 0}
-              className="px-6 py-4 bg-green-500 text-white rounded-xl font-bold text-lg hover:bg-green-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-8 py-6 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-2xl font-black text-xl hover:from-green-700 hover:to-emerald-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-xl hover:shadow-2xl hover:scale-105"
             >
               📋 Export Code
             </button>
@@ -195,40 +220,46 @@ export default function ProcessUploads() {
 
           {/* Uploaded Startups List */}
           <div className="space-y-4">
-            <h2 className="text-2xl font-bold mb-4">Uploaded Startups</h2>
+            <h2 className="text-3xl font-black text-gray-900 mb-6">📦 Uploaded Startups</h2>
             {uploads.length === 0 ? (
-              <div className="text-center py-12 text-gray-500">
-                <p className="text-xl">No uploaded startups found in localStorage</p>
-                <p className="mt-2">Go to Bulk Upload page to upload startups</p>
+              <div className="text-center py-16 bg-gradient-to-r from-gray-100 to-gray-200 rounded-2xl">
+                <p className="text-2xl font-bold text-gray-800 mb-3">No uploaded startups found in localStorage</p>
+                <p className="text-lg text-gray-700 mb-6">Go to Bulk Upload page to upload startups</p>
+                <button
+                  onClick={() => navigate('/admin/bulk-upload')}
+                  className="px-6 py-3 bg-gradient-to-r from-orange-600 to-yellow-600 text-white rounded-xl font-bold hover:from-orange-700 hover:to-yellow-700 transition-all"
+                >
+                  📊 Go to Bulk Upload
+                </button>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {uploads.map((startup, index) => (
                   <div
                     key={startup.id}
-                    className={`p-4 rounded-xl border-2 transition-all ${
+                    className={`p-6 rounded-2xl border-4 transition-all shadow-lg ${
                       processing && index === currentIndex
-                        ? 'border-orange-500 bg-orange-50 scale-105'
+                        ? 'border-orange-600 bg-gradient-to-br from-orange-100 to-yellow-100 scale-105 shadow-2xl'
                         : index < currentIndex && processing
-                        ? 'border-green-500 bg-green-50'
-                        : 'border-gray-200 bg-gray-50'
+                        ? 'border-green-600 bg-gradient-to-br from-green-100 to-emerald-100'
+                        : 'border-gray-300 bg-gradient-to-br from-white to-gray-50 hover:border-purple-400 hover:shadow-xl'
                     }`}
                   >
-                    <div className="flex items-start justify-between mb-2">
-                      <h3 className="font-bold text-lg">{startup.name}</h3>
+                    <div className="flex items-start justify-between mb-3">
+                      <h3 className="font-black text-xl text-gray-900">{startup.name}</h3>
                       {generatedCards[index] && (
-                        <span className="text-green-500 text-2xl">✓</span>
+                        <span className="text-green-600 text-3xl">✓</span>
                       )}
                     </div>
-                    <p className="text-sm text-gray-600 mb-2">{startup.tagline}</p>
+                    <p className="text-base text-gray-800 mb-3 font-semibold">{startup.tagline}</p>
                     {startup.url && (
                       <a
                         href={startup.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-xs text-blue-500 hover:underline"
+                        className="text-sm text-blue-700 hover:text-blue-900 hover:underline font-bold break-all"
                       >
-                        🔗 {startup.url.substring(0, 40)}...
+                        🔗 {startup.url.substring(0, 50)}...
                       </a>
                     )}
                   </div>
@@ -240,8 +271,8 @@ export default function ProcessUploads() {
           {/* Generated Cards Preview */}
           {generatedCards.length > 0 && (
             <div className="mt-12">
-              <h2 className="text-2xl font-bold mb-4">✨ Generated StartupCards</h2>
-              <div className="bg-gray-900 text-green-400 p-6 rounded-xl overflow-auto max-h-96 font-mono text-sm">
+              <h2 className="text-3xl font-black text-gray-900 mb-6">✨ Generated StartupCards</h2>
+              <div className="bg-gray-900 text-green-400 p-6 rounded-2xl overflow-auto max-h-96 font-mono text-sm shadow-2xl border-4 border-green-500">
                 <pre>{JSON.stringify(generatedCards, null, 2)}</pre>
               </div>
             </div>
