@@ -212,12 +212,14 @@ const VotePage: React.FC = () => {
                 return (
                   <VCFirmCard
                     key={startup.id}
-                    id={startup.id}
-                    name={startup.name}
-                    pitch={startup.pitch || startup.tagline || ''}
-                    fivePoints={(startup as any).fivePoints || []}
-                    entityType={entityType}
-                    website={(startup as any).website}
+                    company={{
+                      id: startup.id,
+                      name: startup.name,
+                      pitch: startup.pitch || startup.tagline || '',
+                      fivePoints: (startup as any).fivePoints || [],
+                      entityType: entityType,
+                      website: (startup as any).website
+                    }}
                   />
                 );
               }
