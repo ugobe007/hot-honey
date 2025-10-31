@@ -22,6 +22,7 @@ import Analytics from './pages/Analytics';
 import Login from './pages/Login';
 import ProcessUploads from './pages/ProcessUploads';
 import StartupProcessor from './pages/StartupProcessor';
+import LocalStorageViewer from './pages/LocalStorageViewer';
 import WelcomeModal from './components/WelcomeModal';
 import './App.css';
 
@@ -62,6 +63,7 @@ const App: React.FC = () => {
           <Route path="/admin/document-upload" element={<DocumentUpload />} />
           <Route path="/admin/process-uploads" element={<ProcessUploads />} />
           <Route path="/admin/startup-processor" element={<StartupProcessor />} />
+          <Route path="/admin/localstorage" element={<LocalStorageViewer />} />
           <Route path="/analytics" element={<Analytics />} />
         </Routes>
       </main>
