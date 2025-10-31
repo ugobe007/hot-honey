@@ -1,0 +1,2 @@
+[dotenv@17.2.3] injecting env (1) from server/.env -- tip: 🗂️ backup and recover secrets: https://dotenvx.com/ops
+Server is running on http://localhost:3001
