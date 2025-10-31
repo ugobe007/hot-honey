@@ -46,13 +46,18 @@ export default function StartupProcessor() {
     const domain = new URL(url).hostname.replace('www.', '').split('.')[0];
     const companyName = domain.charAt(0).toUpperCase() + domain.slice(1);
 
-    // Simulated scraping results
+    // HOT HONEY 5 POINTS STRUCTURE:
+    // 1. Value Prop
+    // 2. Market Problem
+    // 3. Solution
+    // 4. Team (former employers)
+    // 5. Investment Amount
     const fivePoints = [
-      `${companyName} addresses a major market gap`,
-      'Strong founding team with industry experience',
-      'Proven traction with early customers',
-      'Scalable business model',
-      'Clear competitive advantage'
+      `${companyName}'s unique value proposition in the market`,
+      'Addressing a significant market problem or gap',
+      'Innovative solution with clear competitive advantage',
+      'Team: Former employees from [Top Companies]',
+      'Raising $2M Seed Round'
     ];
 
     const additionalData = {
@@ -268,10 +273,39 @@ https://hot-honey.fly.dev`);
           {/* Step 3: Review & Validate */}
           {currentStep === 'review' && (
             <div className="space-y-6">
+              {/* Workflow Guide */}
+              <div className="bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl p-6 text-white">
+                <h3 className="text-2xl font-black mb-4">🎯 Hot Honey Workflow Decision Points:</h3>
+                <div className="space-y-3">
+                  <div className="flex items-start gap-3">
+                    <span className="text-3xl">1️⃣</span>
+                    <div>
+                      <strong className="text-xl">VALIDATE Each Startup:</strong>
+                      <p className="text-lg">Click "📧 Send Validation Email" to reach out to each company and build direct connections. Email will be tracked.</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <span className="text-3xl">2️⃣</span>
+                    <div>
+                      <strong className="text-xl">EXPORT to Code:</strong>
+                      <p className="text-lg">Click "📋 Export All to Code" to generate StartupCards code. Then paste into startupData.ts to publish them live!</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <span className="text-3xl">3️⃣</span>
+                    <div>
+                      <strong className="text-xl">PROCESS More URLs:</strong>
+                      <p className="text-lg">Click "➕ Add More URLs" below to upload another batch (these will be saved separately).</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               <div className="bg-gradient-to-r from-green-600 to-emerald-600 rounded-2xl p-6 text-white flex justify-between items-center">
                 <div>
                   <h2 className="text-3xl font-black mb-2">✅ Review Startup Files</h2>
                   <p className="text-lg">Total Files Created: <span className="text-2xl font-black">{startupFiles.length}</span></p>
+                  <p className="text-sm mt-2">5 Points Structure: 1️⃣ Value Prop | 2️⃣ Market Problem | 3️⃣ Solution | 4️⃣ Team | 5️⃣ Investment</p>
                 </div>
                 <button
                   onClick={exportToStartupData}
@@ -313,15 +347,18 @@ https://hot-honey.fly.dev`);
 
                     {/* 5 Points */}
                     <div className="mb-4">
-                      <h4 className="text-xl font-black text-gray-900 mb-3">🔥 5 Key Points:</h4>
-                      <ol className="space-y-2">
-                        {startup.fivePoints.map((point, i) => (
-                          <li key={i} className="flex items-start">
-                            <span className="font-black text-orange-600 mr-3 text-lg">{i + 1}.</span>
-                            <span className="text-gray-800 font-semibold text-lg">{point}</span>
-                          </li>
-                        ))}
-                      </ol>
+                      <h4 className="text-xl font-black text-gray-900 mb-3">🔥 Hot Honey 5 Points:</h4>
+                      <div className="space-y-3">
+                        {startup.fivePoints.map((point, i) => {
+                          const labels = ['💎 Value Prop', '⚠️ Market Problem', '💡 Solution', '👥 Team', '💰 Investment'];
+                          return (
+                            <div key={i} className="flex items-start">
+                              <span className="font-black text-orange-600 mr-3 text-lg min-w-[140px]">{labels[i]}:</span>
+                              <span className="text-gray-800 font-semibold text-lg">{point}</span>
+                            </div>
+                          );
+                        })}
+                      </div>
                     </div>
 
                     {/* Additional Data */}
@@ -374,16 +411,28 @@ https://hot-honey.fly.dev`);
                 ))}
               </div>
 
-              <button
-                onClick={() => {
-                  setCurrentStep('input');
-                  setUrls('');
-                  setStartupFiles([]);
-                }}
-                className="w-full px-8 py-4 bg-gray-200 text-gray-800 rounded-xl font-bold text-lg hover:bg-gray-300 transition-colors"
-              >
-                ← Process More URLs
-              </button>
+              {/* Bottom Action Buttons */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <button
+                  onClick={() => {
+                    setCurrentStep('input');
+                    setUrls('');
+                    // Don't clear startupFiles - keep them saved
+                  }}
+                  className="px-8 py-6 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-2xl font-black text-xl hover:from-blue-700 hover:to-purple-700 transition-all shadow-xl"
+                >
+                  ➕ Add More URLs
+                  <p className="text-sm font-normal mt-1">Process another batch (previous saves kept)</p>
+                </button>
+                
+                <button
+                  onClick={() => navigate('/admin/tracker')}
+                  className="px-8 py-6 bg-gradient-to-r from-teal-600 to-cyan-600 text-white rounded-2xl font-black text-xl hover:from-teal-700 hover:to-cyan-700 transition-all shadow-xl"
+                >
+                  📊 View Activity Tracker
+                  <p className="text-sm font-normal mt-1">See all uploads, votes & validations</p>
+                </button>
+              </div>
             </div>
           )}
         </div>
