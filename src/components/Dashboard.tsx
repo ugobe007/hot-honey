@@ -17,35 +17,16 @@ interface YesVote {
 
 const Dashboard: React.FC = () => {
   const location = useLocation();
-  const [myYesVotes, setMyYesVotes] = useState<YesVote[]>([]);
   const [showShareModal, setShowShareModal] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  
+  // Get portfolio from Zustand store instead of localStorage
+  const portfolio = useStore((state) => state.portfolio);
   const voteYes = useStore((state) => state.voteYes);
   const voteNo = useStore((state) => state.voteNo);
   const unvote = useStore((state) => state.unvote);
 
   useEffect(() => {
-    const votes = localStorage.getItem('myYesVotes');
-    if (votes) {
-      const parsedVotes = JSON.parse(votes);
-      
-      // Migrate old votes that don't have fivePoints
-      const enrichedVotes = parsedVotes.map((vote: any) => {
-        if (!vote.fivePoints) {
-          // Find the startup in startupData and add missing fields
-          const fullStartup = startupData.find(s => s.id === vote.id);
-          if (fullStartup) {
-            return { ...vote, fivePoints: fullStartup.fivePoints };
-          }
-        }
-        return vote;
-      });
-      
-      // Save enriched data back to localStorage
-      localStorage.setItem('myYesVotes', JSON.stringify(enrichedVotes));
-      setMyYesVotes(enrichedVotes);
-    }
-
     // Check admin status
     const userProfile = localStorage.getItem('userProfile');
     if (userProfile) {
@@ -54,13 +35,12 @@ const Dashboard: React.FC = () => {
     }
   }, []);
 
-  const clearAllVotes = () => {
+    const clearAllVotes = () => {
     if (confirm('⚠️ Are you sure you want to clear ALL your votes? This cannot be undone.')) {
+      // Clear from localStorage and Zustand store
       localStorage.removeItem('myYesVotes');
       localStorage.removeItem('votedStartups');
-      setMyYesVotes([]);
-      alert('✅ All votes cleared! You can start voting again.');
-      window.location.href = '/vote';
+      window.location.reload();
     }
   };
 
@@ -213,6 +193,19 @@ const Dashboard: React.FC = () => {
               🔍 localStorage
             </Link>
           )}
+
+          {isAdmin && (
+            <Link 
+              to="/admin/tracker" 
+              className={`font-bold rounded-2xl transition-all ${getButtonSize('/admin/tracker')} ${
+                isActive('/admin/tracker')
+                  ? 'bg-gradient-to-r from-teal-500 to-cyan-700 text-white shadow-lg scale-110'
+                  : 'bg-gradient-to-r from-teal-400 to-cyan-600 hover:from-teal-500 hover:to-cyan-700 text-white'
+              }`}
+            >
+              📊 Activity Tracker
+            </Link>
+          )}
         </div>
       </div>
 
@@ -224,11 +217,11 @@ const Dashboard: React.FC = () => {
             🔥 My Hot Picks
           </h1>
           <p className="text-lg text-purple-200">
-            You've voted YES on <span className="font-bold text-yellow-300">{myYesVotes.length}</span> {myYesVotes.length === 1 ? 'startup' : 'startups'}
+            You've voted YES on <span className="font-bold text-yellow-300">{portfolio.length}</span> {portfolio.length === 1 ? 'startup' : 'startups'}
           </p>
           
           {/* Action buttons when there are votes */}
-          {myYesVotes.length > 0 && (
+          {portfolio.length > 0 && (
             <div className="mt-4 flex gap-3 justify-center">
               <button
                 onClick={() => setShowShareModal(true)}
@@ -246,7 +239,7 @@ const Dashboard: React.FC = () => {
           )}
         </div>
 
-        {myYesVotes.length === 0 ? (
+        {portfolio.length === 0 ? (
           <div className="text-center py-16">
             <div className="text-8xl mb-6">🤷‍♂️</div>
             <p className="text-3xl font-bold text-white mb-4">
@@ -261,16 +254,16 @@ const Dashboard: React.FC = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {myYesVotes.map((vote) => (
-              <div key={vote.id} className="transform scale-90">
+            {portfolio.map((startup) => (
+              <div key={startup.id} className="transform scale-90">
                 <StartupCardOfficial
-                  startup={vote}
+                  startup={startup}
                   onVote={(voteType) => {
                     if (voteType === 'yes') {
-                      voteYes(vote);
+                      voteYes(startup);
                     } else {
                       // If voting no from dashboard, remove from portfolio
-                      unvote(vote);
+                      unvote(startup);
                     }
                   }}
                 />
@@ -284,7 +277,7 @@ const Dashboard: React.FC = () => {
       <SharePortfolioModal 
         isOpen={showShareModal}
         onClose={() => setShowShareModal(false)}
-        yesVotes={myYesVotes}
+        yesVotes={portfolio}
       />
     </div>
   );
