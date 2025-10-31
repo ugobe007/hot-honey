@@ -1,5 +1,5 @@
 // --- FILE: server/index.js ---
-require('dotenv').config();
+require('dotenv').config({ path: __dirname + '/.env' });
 const express = require('express');
 const multer = require('multer');
 const cors = require('cors');
@@ -57,7 +57,11 @@ app.post('/scrape', async (req, res) => {
   try {
     console.log(`🤖 AI Scraping URL: ${url}`);
     
-    // Fetch the HTML
+    // Extract company name from URL for research
+    const domain = new URL(url).hostname.replace('www.', '').split('.')[0];
+    const companyNameGuess = domain.charAt(0).toUpperCase() + domain.slice(1);
+
+    // Fetch the main website HTML
     const response = await axios.get(url, {
       headers: {
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
@@ -69,8 +73,6 @@ app.post('/scrape', async (req, res) => {
     const html = response.data;
     const $ = cheerio.load(html);
 
-    // Extract company name
-    const domain = new URL(url).hostname.replace('www.', '').split('.')[0];
     const title = $('title').text().trim();
     const h1 = $('h1').first().text().trim();
     
@@ -78,19 +80,35 @@ app.post('/scrape', async (req, res) => {
     $('script, style, nav, footer, header, aside, .cookie, .banner, [class*="nav"]').remove();
     
     // Get clean text content
-    const bodyText = $('body').text().replace(/\s+/g, ' ').trim().substring(0, 8000); // Limit to 8k chars
+    const bodyText = $('body').text().replace(/\s+/g, ' ').trim().substring(0, 8000);
     const metaDescription = $('meta[name="description"]').attr('content') || '';
     const ogDescription = $('meta[property="og:description"]').attr('content') || '';
 
-    // Use OpenAI to extract the 5 points intelligently
-    console.log(`🧠 Using AI to analyze content...`);
+    // Try to fetch additional context from Crunchbase (public data)
+    let crunchbaseData = '';
+    try {
+      const crunchbaseUrl = `https://www.crunchbase.com/organization/${domain}`;
+      console.log(`🔍 Checking Crunchbase: ${crunchbaseUrl}`);
+      const cbResponse = await axios.get(crunchbaseUrl, {
+        headers: { 'User-Agent': 'Mozilla/5.0' },
+        timeout: 10000
+      });
+      const $cb = cheerio.load(cbResponse.data);
+      crunchbaseData = $cb('body').text().replace(/\s+/g, ' ').trim().substring(0, 3000);
+      console.log(`✅ Found Crunchbase data`);
+    } catch (cbError) {
+      console.log(`⚠️ Crunchbase not available for ${domain}`);
+    }
+
+    // Use OpenAI to extract the 5 points intelligently with enhanced research
+    console.log(`🧠 Using AI to analyze content from multiple sources...`);
     
     const aiResponse = await openai.chat.completions.create({
-      model: "gpt-4o-mini", // Fast and cheap model
+      model: "gpt-4o-mini",
       messages: [
         {
           role: "system",
-          content: `You are an expert startup analyst. Extract key information from startup websites.
+          content: `You are an expert startup analyst with access to company websites and funding databases. Extract key information and cross-reference multiple sources.
           
 Return ONLY a valid JSON object with these exact fields (no markdown, no explanation):
 {
@@ -98,27 +116,34 @@ Return ONLY a valid JSON object with these exact fields (no markdown, no explana
   "valueProp": "One clear sentence describing what the company does and its unique value (50-150 chars)",
   "marketProblem": "The specific problem or pain point they're solving (50-150 chars)",
   "solution": "How their product/platform solves the problem (50-150 chars)",
-  "team": "Founder names and their previous companies (e.g., 'John Smith (ex-Google), Jane Doe (ex-Meta)') or 'Team background not available'",
-  "investment": "Funding info (e.g., 'Raised $5M Seed Round') or 'Investment details not available'"
+  "team": "Founder names and their previous companies/schools (e.g., 'John Smith (ex-Google, Stanford), Jane Doe (ex-Meta)') or 'Team background not available'. Extract from any source including Crunchbase data.",
+  "investment": "Specific funding info (e.g., 'Raised $5M Seed Round from a16z in 2024' or 'Series A: $15M led by Sequoia') or 'Investment details not available'. Extract from any source including Crunchbase data."
 }
+
+IMPORTANT: For team and investment, search ALL provided sources (website, Crunchbase, news). Look for:
+- Team: Founder names, previous employers (Google, Meta, Amazon, etc.), universities (Stanford, MIT, Harvard)
+- Investment: Funding amounts, round types (Seed, Series A/B/C), investor names, dates
 
 Be concise, factual, and professional. If info is missing, use the 'not available' defaults.`
         },
         {
           role: "user",
-          content: `Website: ${url}
+          content: `Company: ${companyNameGuess}
+Website URL: ${url}
 Title: ${title}
 Headline: ${h1}
 Meta Description: ${metaDescription || ogDescription}
 
-Content excerpt:
+=== MAIN WEBSITE CONTENT ===
 ${bodyText.substring(0, 4000)}
 
-Extract the 5 key points as JSON.`
+${crunchbaseData ? `\n=== CRUNCHBASE DATA ===\n${crunchbaseData.substring(0, 2000)}` : ''}
+
+Extract the 5 key points as JSON. Pay special attention to team backgrounds and funding details from all sources.`
         }
       ],
       temperature: 0.3,
-      max_tokens: 500
+      max_tokens: 600
     });
 
     const aiContent = aiResponse.choices[0].message.content.trim();
@@ -127,7 +152,6 @@ Extract the 5 key points as JSON.`
     // Parse AI response
     let aiData;
     try {
-      // Remove markdown code blocks if present
       const jsonMatch = aiContent.match(/\{[\s\S]*\}/);
       if (jsonMatch) {
         aiData = JSON.parse(jsonMatch[0]);
@@ -139,7 +163,7 @@ Extract the 5 key points as JSON.`
       throw new Error('AI returned invalid JSON');
     }
 
-    const companyName = aiData.companyName || domain.charAt(0).toUpperCase() + domain.slice(1);
+    const companyName = aiData.companyName || companyNameGuess;
 
     // Extract additional data
     const additionalData = {
@@ -178,9 +202,13 @@ Extract the 5 key points as JSON.`
           aiData.team || 'Team background needs manual research',
           aiData.investment || 'Investment details need manual research'
         ],
-        additionalData,
+        additionalData: {
+          ...additionalData,
+          sourcesUsed: ['Company Website', crunchbaseData ? 'Crunchbase' : null].filter(Boolean)
+        },
         scrapedAt: new Date().toISOString(),
-        aiPowered: true
+        aiPowered: true,
+        multiSourceResearch: !!crunchbaseData
       }
     });
 
