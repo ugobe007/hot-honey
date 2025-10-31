@@ -39,55 +39,61 @@ export default function StartupProcessor() {
   };
 
   const scrapeUrl = async (url: string): Promise<StartupFile> => {
-    // Simulate scraping - in production, this would call a backend API
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    // Call backend API for real web scraping
+    try {
+      const response = await fetch('http://localhost:3001/scrape', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ url })
+      });
 
-    // Extract domain name as company name (simplified)
-    const domain = new URL(url).hostname.replace('www.', '').split('.')[0];
-    const companyName = domain.charAt(0).toUpperCase() + domain.slice(1);
+      const result = await response.json();
+      
+      if (!result.success) {
+        console.warn(`⚠️ Scraping encountered issues for ${url}:`, result.error);
+      }
 
-    // HOT HONEY 5 POINTS STRUCTURE:
-    // 1. Value Prop
-    // 2. Market Problem
-    // 3. Solution
-    // 4. Team (former employers)
-    // 5. Investment Amount
-    const fivePoints = [
-      `${companyName}'s unique value proposition in the market`,
-      'Addressing a significant market problem or gap',
-      'Innovative solution with clear competitive advantage',
-      'Team: Former employees from [Top Companies]',
-      'Raising $2M Seed Round'
-    ];
-
-    const additionalData = {
-      videos: [
-        `${url}/demo-video`,
-        `${url}/pitch-deck-video`
-      ],
-      presentations: [
-        `${url}/pitch-deck.pdf`,
-        `${url}/investor-presentation.pdf`
-      ],
-      socialMedia: {
-        linkedin: `https://linkedin.com/company/${domain}`,
-        twitter: `https://twitter.com/${domain}`
-      },
-      foundedYear: '2024',
-      founders: ['Founder A', 'Founder B'],
-      funding: 'Raising $2M Seed'
-    };
-
-    return {
-      id: `startup-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-      companyName,
-      url,
-      fivePoints,
-      additionalData,
-      scrapedAt: new Date().toISOString(),
-      validated: false,
-      validationEmailSent: false
-    };
+      return {
+        id: `startup-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        companyName: result.data.companyName,
+        url: result.data.url,
+        fivePoints: result.data.fivePoints,
+        additionalData: result.data.additionalData,
+        scrapedAt: result.data.scrapedAt,
+        validated: false,
+        validationEmailSent: false
+      };
+    } catch (error) {
+      console.error(`❌ Failed to scrape ${url}:`, error);
+      
+      // Fallback: Create a manual entry with placeholders
+      const domain = new URL(url).hostname.replace('www.', '').split('.')[0];
+      const companyName = domain.charAt(0).toUpperCase() + domain.slice(1);
+      
+      return {
+        id: `startup-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        companyName,
+        url,
+        fivePoints: [
+          `${companyName} - VALUE PROP NEEDS MANUAL RESEARCH`,
+          'MARKET PROBLEM NEEDS MANUAL RESEARCH',
+          'SOLUTION NEEDS MANUAL RESEARCH',
+          'TEAM BACKGROUND NEEDS MANUAL RESEARCH',
+          'INVESTMENT DETAILS NEED MANUAL RESEARCH'
+        ],
+        additionalData: {
+          videos: [],
+          presentations: [],
+          socialMedia: {},
+          error: 'Backend scraping failed - manual research required'
+        },
+        scrapedAt: new Date().toISOString(),
+        validated: false,
+        validationEmailSent: false
+      };
+    }
   };
 
   const processUrls = async () => {
