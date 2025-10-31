@@ -1,4 +1,6 @@
 {
+  "installCommand": "rm -rf node_modules && npm install",
+  "buildCommand": "npm run build",
   "rewrites": [
     {
       "source": "/(.*)",
