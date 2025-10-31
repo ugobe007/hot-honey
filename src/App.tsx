@@ -20,6 +20,7 @@ import BulkImport from './pages/BulkImport';
 import DocumentUpload from './pages/DocumentUpload';
 import Analytics from './pages/Analytics';
 import Login from './pages/Login';
+import ProcessUploads from './pages/ProcessUploads';
 import WelcomeModal from './components/WelcomeModal';
 import './App.css';
 
@@ -58,6 +59,7 @@ const App: React.FC = () => {
           <Route path="/admin/bulk-upload" element={<BulkUpload />} />
           <Route path="/admin/bulk-import" element={<BulkImport />} />
           <Route path="/admin/document-upload" element={<DocumentUpload />} />
+          <Route path="/admin/process-uploads" element={<ProcessUploads />} />
           <Route path="/analytics" element={<Analytics />} />
         </Routes>
       </main>

@@ -104,6 +104,7 @@ const startupData: Startup[] = [
     tech: 'Blockchain APIs + real-time currency conversion',
   },
   {
+    id: 9,
     name: 'BarkPark',
     description: 'A social network and meetup app for dog owners.',
     pitch: 'Connect dog owners and their furry friends in your neighborhood',
@@ -132,6 +133,7 @@ const startupData: Startup[] = [
     tech: 'Built with Flutter and Firebase',
   },
   {
+    id: 10,
     name: 'Chefie',
     description: 'AI-powered cooking assistant with voice and visual guides.',
     pitch: 'Your personal AI chef that helps you cook like a pro',

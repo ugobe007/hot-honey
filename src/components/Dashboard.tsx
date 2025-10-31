@@ -164,6 +164,19 @@ const Dashboard: React.FC = () => {
 
           {isAdmin && (
             <Link 
+              to="/admin/process-uploads" 
+              className={`font-bold rounded-2xl transition-all ${getButtonSize('/admin/process-uploads')} ${
+                isActive('/admin/process-uploads')
+                  ? 'bg-gradient-to-r from-orange-500 to-yellow-700 text-white shadow-lg scale-110'
+                  : 'bg-gradient-to-r from-orange-400 to-yellow-600 hover:from-orange-500 hover:to-yellow-700 text-white'
+              }`}
+            >
+              🍯 Process Uploads
+            </Link>
+          )}
+
+          {isAdmin && (
+            <Link 
               to="/admin/document-upload" 
               className={`font-bold rounded-2xl transition-all ${getButtonSize('/admin/document-upload')} ${
                 isActive('/admin/document-upload')
