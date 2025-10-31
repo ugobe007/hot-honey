@@ -11,6 +11,11 @@ export interface Admin {
 
 export const AUTHORIZED_ADMINS: Admin[] = [
   {
+    name: 'Bob Christopher',
+    email: 'ugobe07@gmail.com',
+    role: 'super-admin'
+  },
+  {
     name: 'Andy Abramson',
     email: 'aabramson@comunicano.com',
     role: 'admin'
@@ -20,12 +25,11 @@ export const AUTHORIZED_ADMINS: Admin[] = [
     email: 'jonathan.parra@codingscape.com',
     role: 'admin'
   },
-  // TODO: Add 2 more administrators
-  // {
-  //   name: 'Admin Name',
-  //   email: 'email@example.com',
-  //   role: 'admin'
-  // }
+  {
+    name: 'Darius Roberts',
+    email: 'daruis.roberts@gmail.com',
+    role: 'admin'
+  }
 ];
 
 /**
