@@ -8,6 +8,7 @@ const path = require('path');
 const axios = require('axios');
 const cheerio = require('cheerio');
 const OpenAI = require('openai');
+const { saveStartupToSupabase, startupExists } = require('./supabaseClient');
 
 const app = express();
 const PORT = 3001;
@@ -221,25 +222,44 @@ Extract the 5 key points as JSON. Pay special attention to team backgrounds and 
 
     console.log(`✅ Successfully scraped with AI: ${companyName}`);
 
+    // Prepare startup data for response and Supabase
+    const startupData = {
+      id: `startup-${Date.now()}`,
+      name: companyName,
+      tagline: aiData.valueProp || `${companyName} - Manual research required`,
+      pitch: aiData.marketProblem || 'Market problem needs manual research',
+      fivePoints: [
+        aiData.valueProp || 'Value proposition needs manual research',
+        aiData.marketProblem || 'Market problem needs manual research',
+        aiData.solution || 'Solution details need manual research',
+        aiData.team || 'Team background needs manual research',
+        aiData.investment || 'Investment details need manual research'
+      ],
+      secretFact: 'AI-researched startup from Hot Money Honey',
+      logo: `${url}/favicon.ico`,
+      website: url,
+      scrapedAt: new Date().toISOString()
+    };
+
+    // 🔥 AUTO-SAVE TO SUPABASE
+    const saveResult = await saveStartupToSupabase(startupData);
+    if (saveResult.success) {
+      console.log(`💾 Saved to Supabase database!`);
+    } else {
+      console.log(`⚠️ Could not save to Supabase (check env vars): ${saveResult.error}`);
+    }
+
     res.json({
       success: true,
       data: {
-        companyName,
-        url,
-        fivePoints: [
-          aiData.valueProp || 'Value proposition needs manual research',
-          aiData.marketProblem || 'Market problem needs manual research',
-          aiData.solution || 'Solution details need manual research',
-          aiData.team || 'Team background needs manual research',
-          aiData.investment || 'Investment details need manual research'
-        ],
+        ...startupData,
         additionalData: {
           ...additionalData,
           sourcesUsed: ['Company Website', crunchbaseData ? 'Crunchbase' : null, newsData ? 'News Sources' : null].filter(Boolean)
         },
-        scrapedAt: new Date().toISOString(),
         aiPowered: true,
-        multiSourceResearch: !!(crunchbaseData || newsData)
+        multiSourceResearch: !!(crunchbaseData || newsData),
+        savedToDatabase: saveResult.success
       }
     });
 
