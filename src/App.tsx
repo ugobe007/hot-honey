@@ -21,6 +21,7 @@ import DocumentUpload from './pages/DocumentUpload';
 import Analytics from './pages/Analytics';
 import Login from './pages/Login';
 import ProcessUploads from './pages/ProcessUploads';
+import StartupProcessor from './pages/StartupProcessor';
 import WelcomeModal from './components/WelcomeModal';
 import './App.css';
 
@@ -60,6 +61,7 @@ const App: React.FC = () => {
           <Route path="/admin/bulk-import" element={<BulkImport />} />
           <Route path="/admin/document-upload" element={<DocumentUpload />} />
           <Route path="/admin/process-uploads" element={<ProcessUploads />} />
+          <Route path="/admin/startup-processor" element={<StartupProcessor />} />
           <Route path="/analytics" element={<Analytics />} />
         </Routes>
       </main>

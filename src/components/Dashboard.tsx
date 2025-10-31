@@ -151,6 +151,19 @@ const Dashboard: React.FC = () => {
 
           {isAdmin && (
             <Link 
+              to="/admin/startup-processor" 
+              className={`font-bold rounded-2xl transition-all ${getButtonSize('/admin/startup-processor')} ${
+                isActive('/admin/startup-processor')
+                  ? 'bg-gradient-to-r from-pink-500 to-rose-700 text-white shadow-lg scale-110'
+                  : 'bg-gradient-to-r from-pink-400 to-rose-600 hover:from-pink-500 hover:to-rose-700 text-white'
+              }`}
+            >
+              🚀 Startup Processor
+            </Link>
+          )}
+
+          {isAdmin && (
+            <Link 
               to="/admin/bulk-upload" 
               className={`font-bold rounded-2xl transition-all ${getButtonSize('/admin/bulk-upload')} ${
                 isActive('/admin/bulk-upload')
