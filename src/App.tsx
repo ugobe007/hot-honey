@@ -26,6 +26,7 @@ import LocalStorageViewer from './pages/LocalStorageViewer';
 import ActivityTracker from './pages/ActivityTracker';
 import UserManagement from './pages/UserManagement';
 import InviteAccept from './pages/InviteAccept';
+import StartupReview from './pages/StartupReview';
 import WelcomeModal from './components/WelcomeModal';
 import './App.css';
 
@@ -66,6 +67,7 @@ const App: React.FC = () => {
           <Route path="/admin/document-upload" element={<DocumentUpload />} />
           <Route path="/admin/process-uploads" element={<ProcessUploads />} />
           <Route path="/admin/startup-processor" element={<StartupProcessor />} />
+          <Route path="/admin/startup-review" element={<StartupReview />} />
           <Route path="/admin/localstorage" element={<LocalStorageViewer />} />
           <Route path="/admin/tracker" element={<ActivityTracker />} />
           <Route path="/admin/users" element={<UserManagement />} />

@@ -100,6 +100,35 @@ app.post('/scrape', async (req, res) => {
       console.log(`⚠️ Crunchbase not available for ${domain}`);
     }
 
+    // Try to fetch funding news from multiple sources
+    let newsData = '';
+    const newsSources = [
+      `https://vcnewsdaily.com/?s=${companyNameGuess}`,
+      `https://techcrunch.com/?s=${companyNameGuess}`,
+      `https://www.geekwire.com/?s=${companyNameGuess}`
+    ];
+
+    for (const newsUrl of newsSources) {
+      try {
+        console.log(`📰 Checking news: ${newsUrl}`);
+        const newsResponse = await axios.get(newsUrl, {
+          headers: { 'User-Agent': 'Mozilla/5.0' },
+          timeout: 8000
+        });
+        const $news = cheerio.load(newsResponse.data);
+        // Extract article headlines and snippets
+        $news('script, style, nav, footer, header, aside').remove();
+        const newsText = $news('body').text().replace(/\s+/g, ' ').trim().substring(0, 1500);
+        if (newsText.toLowerCase().includes('funding') || newsText.toLowerCase().includes('raised') || newsText.toLowerCase().includes('million')) {
+          newsData += newsText + ' ';
+          console.log(`✅ Found relevant news data`);
+          break; // Stop after first relevant result
+        }
+      } catch (newsError) {
+        console.log(`⚠️ News source unavailable: ${newsUrl}`);
+      }
+    }
+
     // Use OpenAI to extract the 5 points intelligently with enhanced research
     console.log(`🧠 Using AI to analyze content from multiple sources...`);
     
@@ -138,6 +167,8 @@ Meta Description: ${metaDescription || ogDescription}
 ${bodyText.substring(0, 4000)}
 
 ${crunchbaseData ? `\n=== CRUNCHBASE DATA ===\n${crunchbaseData.substring(0, 2000)}` : ''}
+
+${newsData ? `\n=== NEWS & FUNDING ANNOUNCEMENTS ===\n${newsData.substring(0, 1500)}` : ''}
 
 Extract the 5 key points as JSON. Pay special attention to team backgrounds and funding details from all sources.`
         }
@@ -204,11 +235,11 @@ Extract the 5 key points as JSON. Pay special attention to team backgrounds and 
         ],
         additionalData: {
           ...additionalData,
-          sourcesUsed: ['Company Website', crunchbaseData ? 'Crunchbase' : null].filter(Boolean)
+          sourcesUsed: ['Company Website', crunchbaseData ? 'Crunchbase' : null, newsData ? 'News Sources' : null].filter(Boolean)
         },
         scrapedAt: new Date().toISOString(),
         aiPowered: true,
-        multiSourceResearch: !!crunchbaseData
+        multiSourceResearch: !!(crunchbaseData || newsData)
       }
     });
 
