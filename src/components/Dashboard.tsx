@@ -31,7 +31,12 @@ const Dashboard: React.FC = () => {
     const userProfile = localStorage.getItem('userProfile');
     if (userProfile) {
       const profile = JSON.parse(userProfile);
-      setIsAdmin(profile.email === 'admin@hotmoneyhoney.com' || profile.isAdmin);
+      const hasAdminAccess = profile.email === 'admin@hotmoneyhoney.com' || 
+                             profile.isAdmin || 
+                             profile.role === 'admin' || 
+                             profile.role === 'reviewer' ||
+                             profile.isReviewer;
+      setIsAdmin(hasAdminAccess);
     }
   }, []);
 
@@ -204,6 +209,19 @@ const Dashboard: React.FC = () => {
               }`}
             >
               📊 Activity Tracker
+            </Link>
+          )}
+
+          {isAdmin && (
+            <Link 
+              to="/admin/users" 
+              className={`font-bold rounded-2xl transition-all ${getButtonSize('/admin/users')} ${
+                isActive('/admin/users')
+                  ? 'bg-gradient-to-r from-violet-500 to-fuchsia-700 text-white shadow-lg scale-110'
+                  : 'bg-gradient-to-r from-violet-400 to-fuchsia-600 hover:from-violet-500 hover:to-fuchsia-700 text-white'
+              }`}
+            >
+              👥 User Management
             </Link>
           )}
         </div>
