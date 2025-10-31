@@ -418,7 +418,15 @@ https://hot-honey.fly.dev`);
               </div>
 
               {/* Bottom Action Buttons */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <button
+                  onClick={() => navigate('/admin/startup-review')}
+                  className="px-8 py-6 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-2xl font-black text-xl hover:from-green-700 hover:to-emerald-700 transition-all shadow-xl"
+                >
+                  🎯 Review & Export
+                  <p className="text-sm font-normal mt-1">See all StartupCards & export code</p>
+                </button>
+
                 <button
                   onClick={() => {
                     setCurrentStep('input');
