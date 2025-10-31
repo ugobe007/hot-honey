@@ -151,10 +151,14 @@ export default function ProcessUploads() {
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-green-400 to-purple-950 p-8">
       <div className="max-w-6xl mx-auto">
         <div className="bg-white rounded-3xl p-8 shadow-2xl">
+                    {/* Header */}
           <div className="flex justify-between items-center mb-8">
-            <h1 className="text-5xl font-black bg-gradient-to-r from-orange-600 to-yellow-600 bg-clip-text text-transparent">
-              🍯 Process Uploaded Startups
-            </h1>
+            <div className="flex items-center gap-4">
+              <img src="/images/logo.png" alt="Hot Honey" className="h-20 w-20" />
+              <h1 className="text-5xl font-black bg-gradient-to-r from-orange-600 to-yellow-600 bg-clip-text text-transparent">
+                Process Uploaded Startups
+              </h1>
+            </div>
             <button
               onClick={() => navigate('/dashboard')}
               className="px-6 py-3 bg-gray-800 text-white rounded-xl hover:bg-gray-900 transition-colors font-bold text-lg"

@@ -200,13 +200,16 @@ https://hot-honey.fly.dev`);
         <div className="bg-white rounded-3xl p-8 shadow-2xl">
           {/* Header */}
           <div className="flex justify-between items-center mb-8">
-            <div>
-              <h1 className="text-5xl font-black bg-gradient-to-r from-orange-600 to-yellow-600 bg-clip-text text-transparent">
-                🍯 Hot Honey Startup Processor
-              </h1>
-              <p className="text-xl text-gray-700 mt-2 font-semibold">
-                Load URLs → Scrape Data → Create Files → Validate Startups
-              </p>
+            <div className="flex items-center gap-4">
+              <img src="/images/logo.png" alt="Hot Honey" className="h-20 w-20" />
+              <div>
+                <h1 className="text-5xl font-black bg-gradient-to-r from-orange-600 to-yellow-600 bg-clip-text text-transparent">
+                  Hot Honey Startup Processor
+                </h1>
+                <p className="text-xl text-gray-700 mt-2 font-semibold">
+                  Load URLs → Scrape Data → Create Files → Validate Startups
+                </p>
+              </div>
             </div>
             <button
               onClick={() => navigate('/dashboard')}

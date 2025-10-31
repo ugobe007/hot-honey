@@ -200,6 +200,19 @@ const Dashboard: React.FC = () => {
               📄 Scan Docs
             </Link>
           )}
+
+          {isAdmin && (
+            <Link 
+              to="/admin/localstorage" 
+              className={`font-bold rounded-2xl transition-all ${getButtonSize('/admin/localstorage')} ${
+                isActive('/admin/localstorage')
+                  ? 'bg-gradient-to-r from-indigo-500 to-blue-700 text-white shadow-lg scale-110'
+                  : 'bg-gradient-to-r from-indigo-400 to-blue-600 hover:from-indigo-500 hover:to-blue-700 text-white'
+              }`}
+            >
+              🔍 localStorage
+            </Link>
+          )}
         </div>
       </div>
 
