@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import SharePortfolioModal from './SharePortfolioModal';
 
 interface YesVote {
@@ -12,6 +12,7 @@ interface YesVote {
 }
 
 const Dashboard: React.FC = () => {
+  const location = useLocation();
   const [myYesVotes, setMyYesVotes] = useState<YesVote[]>([]);
   const [showShareModal, setShowShareModal] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -40,32 +41,79 @@ const Dashboard: React.FC = () => {
     }
   };
 
+  const isActive = (path: string) => location.pathname === path;
+  const getButtonSize = (path: string) => {
+    if (isActive(path)) return 'text-lg py-3 px-6'; // Active - moderately larger
+    return 'text-sm py-2 px-4'; // Normal size
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-green-400 to-purple-950" style={{ backgroundImage: 'radial-gradient(ellipse 800px 600px at 20% 40%, rgba(134, 239, 172, 0.4), transparent), linear-gradient(to bottom right, rgb(88, 28, 135), rgb(59, 7, 100))' }}>
+      {/* New Navigation Bar */}
       <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50">
-        <div className="flex gap-2 items-center">
-          <Link to="/signup" className="text-3xl hover:scale-110 transition-transform cursor-pointer" title="Sign Up/In">
+        <div className="flex gap-3 items-center">
+          <Link to="/signup" className="text-4xl hover:scale-110 transition-transform cursor-pointer" title="Hot Money Honey">
             🍯
           </Link>
-          <Link to="/signup" className="px-4 py-1.5 bg-yellow-400 text-black rounded-full font-semibold text-xs shadow-lg hover:bg-yellow-500 transition-all">
-            👤 Sign Up/In
-          </Link>
-          <Link to="/" className="px-4 py-1.5 bg-orange-500 text-white rounded-full font-semibold text-xs shadow-lg hover:bg-orange-600 transition-all">
+          
+          <Link 
+            to="/" 
+            className={`font-bold rounded-2xl transition-all ${getButtonSize('/')} ${
+              isActive('/')
+                ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg scale-110'
+                : 'bg-purple-700 hover:bg-purple-600 text-white'
+            }`}
+          >
             🏠 Home
           </Link>
-          <Link to="/vote" className="px-4 py-1.5 bg-orange-500 text-white rounded-full font-semibold text-xs shadow-lg hover:bg-orange-600 transition-all">
-            📊 Vote
+
+          {/* Dashboard Button - Slightly Larger with Light Blue Gradient */}
+          <Link 
+            to="/dashboard" 
+            className={`font-bold rounded-2xl transition-all ${
+              isActive('/dashboard') ? 'text-lg py-3 px-7' : 'text-base py-2.5 px-5'
+            } ${
+              isActive('/dashboard')
+                ? 'bg-gradient-to-r from-cyan-400 to-blue-500 text-white shadow-xl scale-110'
+                : 'bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-500 hover:to-blue-600 text-white shadow-lg'
+            }`}
+          >
+            📊 Dashboard
           </Link>
-          <Link to="/dashboard" className="px-4 py-1.5 bg-orange-600 text-white rounded-full font-semibold text-xs shadow-lg">
-            👤 Dashboard
+
+          <Link 
+            to="/vote" 
+            className={`font-bold rounded-2xl transition-all ${getButtonSize('/vote')} ${
+              isActive('/vote')
+                ? 'bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg scale-110'
+                : 'bg-purple-700 hover:bg-purple-600 text-white'
+            }`}
+          >
+            🗳️ Vote
           </Link>
+
           {isAdmin && (
-            <Link to="/admin/bulk-upload" className="px-4 py-1.5 bg-gradient-to-r from-gray-400 via-gray-500 to-gray-600 text-white rounded-full font-semibold text-xs shadow-lg hover:from-gray-500 hover:via-gray-600 hover:to-gray-700 transition-all">
+            <Link 
+              to="/admin/bulk-upload" 
+              className={`font-bold rounded-2xl transition-all ${getButtonSize('/admin/bulk-upload')} ${
+                isActive('/admin/bulk-upload')
+                  ? 'bg-gradient-to-r from-gray-500 to-gray-700 text-white shadow-lg scale-110'
+                  : 'bg-gradient-to-r from-gray-400 to-gray-600 hover:from-gray-500 hover:to-gray-700 text-white'
+              }`}
+            >
               📊 Bulk Upload
             </Link>
           )}
+
           {isAdmin && (
-            <Link to="/admin/document-upload" className="px-4 py-1.5 bg-gradient-to-r from-green-400 via-purple-500 to-purple-700 text-white rounded-full font-semibold text-xs shadow-lg hover:from-green-500 hover:via-purple-600 hover:to-purple-800 transition-all">
+            <Link 
+              to="/admin/document-upload" 
+              className={`font-bold rounded-2xl transition-all ${getButtonSize('/admin/document-upload')} ${
+                isActive('/admin/document-upload')
+                  ? 'bg-gradient-to-r from-green-500 to-purple-700 text-white shadow-lg scale-110'
+                  : 'bg-gradient-to-r from-green-400 to-purple-600 hover:from-green-500 hover:to-purple-700 text-white'
+              }`}
+            >
               📄 Scan Docs
             </Link>
           )}
@@ -124,6 +172,12 @@ const Dashboard: React.FC = () => {
               >
                 📤 Share Portfolio
               </button>
+              <Link
+                to="/analytics"
+                className="px-6 py-3 bg-gradient-to-r from-purple-700 to-purple-900 hover:from-purple-800 hover:to-purple-950 text-yellow-400 rounded-lg font-bold text-sm transition-all shadow-lg"
+              >
+                📈 View Analytics
+              </Link>
               <button
                 onClick={clearAllVotes}
                 className="px-6 py-3 bg-red-500 text-white rounded-lg font-medium text-sm hover:bg-red-600 transition-colors shadow-lg"

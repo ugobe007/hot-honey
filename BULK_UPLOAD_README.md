@@ -1,4 +1,4 @@
-# Bulk Upload System - Hot Money Honey
+# Bulk Upload System - Hot Honey
 
 ## Overview
 Upload multiple startups at once using CSV files. AI automatically fills in missing data to save time!

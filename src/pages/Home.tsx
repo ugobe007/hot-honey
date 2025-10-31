@@ -249,7 +249,7 @@ export default function Home() {
       <div className="relative overflow-hidden bg-gradient-to-r from-orange-500 via-orange-600 to-red-600 text-white py-20 px-8">
         <div className="max-w-6xl mx-auto text-center relative z-10">
           <h1 className="text-6xl md:text-7xl font-bold mb-6 drop-shadow-lg">
-            🍯 Hot Money Honey
+            🍯 Hot Honey
           </h1>
           <p className="text-3xl md:text-4xl font-semibold mb-4">
             "Get Them While They're Hot."

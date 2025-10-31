@@ -157,32 +157,28 @@ export default function StartupCardOfficial({ startup, onVote, onSwipeAway }: Pr
           )}
 
           {startup.pitch && (
-            <p className="text-sm font-black text-gray-900 leading-tight tracking-tight mb-1">
+            <p className="text-sm font-black text-gray-900 leading-tight tracking-tight mb-3">
               "{startup.pitch}"
             </p>
           )}
 
-          {startup.tagline && (
-            <p className="text-xs font-bold text-gray-800 leading-tight tracking-tight mb-2">
-              {startup.tagline}
-            </p>
-          )}
-
-          <div className="mb-3 space-y-1">
+          <div className="mb-3 space-y-1.5">
             {(startup.fivePoints || []).slice(0, 4).map((point, i) => (
               <p 
                 key={i} 
                 className={`leading-tight tracking-tight ${
-                  i === 0 || i === 1 || i === 2
+                  i === 0
                     ? 'text-xs font-black text-gray-900'
-                    : 'text-[11px] font-bold text-gray-800'
+                    : i === 1 || i === 2
+                    ? 'text-sm font-black text-gray-900'
+                    : 'text-xs font-bold text-gray-800'
                 }`}
               >
                 {point}
               </p>
             ))}
             {startup.raise && (
-              <p className="text-[11px] font-black text-gray-900 leading-tight tracking-tight">
+              <p className="text-xs font-black text-gray-900 leading-tight tracking-tight">
                 💰 {startup.raise}
               </p>
             )}

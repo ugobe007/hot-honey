@@ -284,5 +284,5 @@ Questions? Check:
 
 ---
 
-**Built for Hot Money Honey 🍯**  
+**Built for Hot Honey 🍯**  
 Making startup data entry fast and easy with AI assistance!

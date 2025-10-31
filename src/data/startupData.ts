@@ -5,8 +5,8 @@ const startupData: Startup[] = [
     id: 0,
     name: 'GreenTech',
     description: 'Sustainable energy solutions for smart cities.',
-    pitch: 'Sustainable energy for smart cities',
-    tagline: 'Tesla for home solar',
+    pitch: 'Sustainable energy solutions for smart cities',
+    tagline: 'Tesla for home solar systems',
     marketSize: '$180B renewable energy',
     unique: 'Self-installing smart panels',
     raise: '$5M Series B',
@@ -15,7 +15,6 @@ const startupData: Startup[] = [
     noVotes: 2,
     hotness: 3.4,
     answersCount: 5,
-    industries: ['cleantech', 'deeptech'],
     comments: [
       {
         id: '1',
@@ -33,12 +32,12 @@ const startupData: Startup[] = [
       }
     ],
     fivePoints: [
-      'Solar install is expensive & slow',
-      'Plug-and-play panels with AI optimization',
-      '$180B market growing 25%/year',
-      'Tesla, SolarCity',
-      '500 units sold, $2M revenue, TechCrunch featured'
-    ],
+      'Tesla for home solar systems',           // 1. Value prop
+      '$180B renewable energy market',          // 2. Market size
+      'Self-installing smart panels',           // 3. Unique value
+      'Ex-Tesla, SolarCity engineers',          // 4. Team
+      'Raising $5M Series B'                    // 5. Investment
+    ], // 👈 MISSING COMMA WAS HERE
     teamLogos: ['/logos/tesla.png', '/logos/solarcity.png', '/logos/apple.png'],
     video: 'https://www.youtube.com/watch?v=greentech',
     deck: 'https://example.com/greentech-deck.pdf',
@@ -49,8 +48,8 @@ const startupData: Startup[] = [
     id: 1,
     name: 'NeuralNest',
     description: 'AI-powered mental health therapy platform.',
-    pitch: 'AI therapy that works 24/7',
-    tagline: 'ChatGPT for mental health',
+    pitch: 'AI-powered mental health therapy',
+    tagline: 'ChatGPT for mental health therapy',
     marketSize: '$240B mental health market',
     unique: 'AI learns patient patterns',
     raise: '$2M Series A',
@@ -59,14 +58,13 @@ const startupData: Startup[] = [
     noVotes: 3,
     hotness: 3.2,
     answersCount: 5,
-    industries: ['ai', 'healthtech'],
     comments: [],
     fivePoints: [
-      'Mental healthcare is inaccessible',
-      'AI therapist via text, trained on CBT',
-      '$280B market, 1 in 5 adults need care',
-      'Stanford',
-      '10K users, 4.8★, 3 university partnerships'
+      'ChatGPT for mental health therapy',
+      '$280B mental health market',
+      'AI therapist available 24/7',
+      'Stanford psychologists + AI researchers',
+      'Raising $2M Series A'
     ],
     teamLogos: ['/logos/google.png', '/logos/meta.png', '/logos/openai.png'],
     video: 'https://www.youtube.com/watch?v=neuralnest',
@@ -78,8 +76,8 @@ const startupData: Startup[] = [
     id: 2,
     name: 'FinFlow',
     description: 'Instant crypto-to-fiat conversion for payments.',
-    pitch: 'Crypto checkout in one click',
-    tagline: 'Stripe for crypto',
+    pitch: 'Instant crypto-to-fiat conversion',
+    tagline: 'Stripe for cryptocurrency payments',
     marketSize: '$125B crypto payments',
     unique: 'Instant crypto-to-fiat conversion',
     raise: '$3M Seed',
@@ -88,14 +86,13 @@ const startupData: Startup[] = [
     noVotes: 1,
     hotness: 3.8,
     answersCount: 5,
-    industries: ['fintech', 'crypto'],
     comments: [],
     fivePoints: [
-      'Crypto payments are slow & complex',
-      'One-click checkout for any site',
-      '$1T+ crypto market growing fast',
-      'Stripe, Coinbase',
-      '200 merchants, $5M processed'
+      'Stripe for cryptocurrency payments',
+      '$1T+ crypto market',
+      'One-click crypto checkout',
+      'Ex-Stripe, Coinbase engineers',
+      'Raising $3M Seed'
     ],
     teamLogos: ['/logos/stripe.png', '/logos/coinbase.png', '/logos/paypal.png'],
     video: 'https://www.youtube.com/watch?v=finflow',
@@ -107,7 +104,7 @@ const startupData: Startup[] = [
     id: 3,
     name: 'BarkPark',
     description: 'A social network and meetup app for dog owners.',
-    pitch: 'Tinder for dog playdates',
+    pitch: 'Connect dog owners and their furry friends in your neighborhood',
     tagline: 'Social network for dogs',
     marketSize: '$2B+ pet care market',
     unique: 'Gamified pet profiles and dog park rewards',
@@ -119,11 +116,11 @@ const startupData: Startup[] = [
     answersCount: 5,
     comments: [],
     fivePoints: [
-      'Dog owners can\'t find safe socialization',
-      'Verified park reviews + playdate scheduling',
+      'Tinder for dog playdates',
       '$2B pet care market',
-      'Airbnb',
-      '5K users, 500 daily meetups, 4.9★'
+      'Verified dog park reviews + scheduling',
+      'Ex-Airbnb, Google product managers',
+      'Raising $1.2M SAFE'
     ],
     teamLogos: ['/logos/google.png', '/logos/meta.png', '/logos/airbnb.png'],
     video: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
@@ -135,7 +132,7 @@ const startupData: Startup[] = [
     id: 4,
     name: 'Chefie',
     description: 'AI-powered cooking assistant with voice and visual guides.',
-    pitch: 'Your AI sous chef',
+    pitch: 'Your personal AI chef that helps you cook like a pro',
     tagline: 'AI cooking assistant',
     marketSize: '$15B home cooking tech',
     unique: 'Real-time cooking help and meal personalization',
@@ -147,11 +144,11 @@ const startupData: Startup[] = [
     answersCount: 5,
     comments: [],
     fivePoints: [
-      'Home cooking is intimidating',
-      'Step-by-step voice + recipe adaptation',
-      '$15B market, smart kitchen adoption growing',
-      'YouTube, TikTok',
-      '2K users, 85% weekly retention'
+      'AI sous chef in your kitchen',
+      '$15B home cooking tech market',
+      'Step-by-step voice + video guidance',
+      'Ex-YouTube, TikTok engineers + pro chefs',
+      'Raising $1M SAFE'
     ],
     teamLogos: ['/logos/apple.png', '/logos/youtube.png', '/logos/tiktok.png'],
     video: 'https://www.youtube.com/watch?v=chefie-demo',
@@ -163,8 +160,8 @@ const startupData: Startup[] = [
     id: 5,
     name: 'HushRoom',
     description: 'Portable soundproof work pods for remote workers.',
-    pitch: 'Private workspace for your home',
-    tagline: 'WeWork pods for WFH',
+    pitch: 'Work from anywhere with total privacy and quiet',
+    tagline: 'Soundproof pods for WFH',
     marketSize: '$2.5B workspace innovation market',
     unique: 'No-permit setup, acoustic-grade privacy design',
     raise: '$2M Series A',
@@ -175,11 +172,11 @@ const startupData: Startup[] = [
     answersCount: 5,
     comments: [],
     fivePoints: [
-      'Remote workers lack quiet space',
-      'Soundproof pod, 2-hour install, no permits',
-      '$2.5B market, post-pandemic growth',
-      'WeWork, Microsoft',
-      '150 pods sold, $400K revenue'
+      'WeWork for your home',
+      '$2.5B workspace innovation market',
+      'Modular pods, 2-hour installation',
+      'Ex-WeWork, Microsoft designers',
+      'Raising $2M Series A'
     ],
     teamLogos: ['/logos/wework.png', '/logos/microsoft.png', '/logos/ikea.png'],
     video: 'https://www.youtube.com/watch?v=hushroom',
@@ -191,7 +188,7 @@ const startupData: Startup[] = [
     id: 6,
     name: 'PetPulse',
     description: 'Wearable health trackers for pets.',
-    pitch: 'Real-time pet health monitoring',
+    pitch: 'Monitor your pet\'s health in real-time',
     tagline: 'Fitbit for pets',
     marketSize: '$9B pet tech industry',
     unique: 'Vitals, mood, and fitness tracking for animals',
@@ -203,11 +200,11 @@ const startupData: Startup[] = [
     answersCount: 5,
     comments: [],
     fivePoints: [
-      'Pet health issues go undetected',
-      'Wearable with real-time vitals monitoring',
-      '$9B pet tech, preventive care trending',
-      'Fitbit',
-      '1K devices sold, 20 vet partnerships, 4.7★'
+      'Fitbit for pets',
+      '$9B pet tech industry',
+      'Real-time vitals + activity tracking',
+      'Ex-Fitbit engineers + vets',
+      'Raising $800K seed'
     ],
     teamLogos: ['/logos/fitbit.png', '/logos/apple.png', '/logos/vetmed.png'],
     video: 'https://www.youtube.com/watch?v=petpulse',
@@ -219,8 +216,8 @@ const startupData: Startup[] = [
     id: 7,
     name: 'Droply',
     description: 'Scheduled water deliveries for off-grid homes.',
-    pitch: 'Smart water delivery',
-    tagline: 'Uber for water',
+    pitch: 'Never run out of water with smart delivery',
+    tagline: 'Smart water delivery',
     marketSize: '$1.8B off-grid utilities',
     unique: 'IoT tank sensors + ML-based route planning',
     raise: '$1.5M pre-seed',
@@ -231,11 +228,11 @@ const startupData: Startup[] = [
     answersCount: 5,
     comments: [],
     fivePoints: [
-      'Rural homes run out of water unexpectedly',
-      'IoT sensors auto-schedule deliveries',
-      '$1.8B market, 15M US households',
-      'UPS, SmartThings',
-      '300 homes, 95% on-time delivery'
+      'Uber for water delivery',
+      '$1.8B off-grid utilities market',
+      'IoT sensors predict refill needs',
+      'Ex-UPS logistics + SmartThings engineers',
+      'Raising $1.5M pre-seed'
     ],
     teamLogos: ['/logos/ups.png', '/logos/smartthings.png', '/logos/tesla.png'],
     video: 'https://www.youtube.com/watch?v=droply',
@@ -247,8 +244,8 @@ const startupData: Startup[] = [
     id: 8,
     name: 'MuseNet',
     description: 'AI-generated ambient music for focus and sleep.',
-    pitch: 'AI music that adapts to your mood',
-    tagline: 'Spotify for wellness',
+    pitch: 'Personalized AI music that adapts to your mood',
+    tagline: 'AI music for wellness',
     marketSize: '$3B wellness audio space',
     unique: 'Realtime adaptive music based on biometrics',
     raise: '$600K angel round',
@@ -259,11 +256,11 @@ const startupData: Startup[] = [
     answersCount: 5,
     comments: [],
     fivePoints: [
-      'Playlists don\'t adapt to mental state',
+      'Spotify meets meditation',
+      '$3B wellness audio market',
       'AI generates music from heart rate',
-      '$3B wellness audio, sleep/focus apps proven',
-      'Spotify',
-      '15K subscribers, 75% daily active'
+      'Ex-Spotify engineers + neuroscientists',
+      'Raising $600K angel'
     ],
     teamLogos: ['/logos/spotify.png', '/logos/deezer.png', '/logos/apple.png'],
     video: 'https://www.youtube.com/watch?v=muse-net',
@@ -275,8 +272,8 @@ const startupData: Startup[] = [
     id: 9,
     name: 'ByteSize',
     description: 'Snackable coding lessons in under 60 seconds.',
-    pitch: 'Learn code in 60 seconds',
-    tagline: 'TikTok for coding',
+    pitch: 'Learn to code in 60-second videos',
+    tagline: 'TikTok for coding education',
     marketSize: '$5B+ online learning market',
     unique: 'TikTok-style swipe interface with live code previews',
     raise: '$500K pre-seed round',
@@ -287,11 +284,11 @@ const startupData: Startup[] = [
     answersCount: 5,
     comments: [],
     fivePoints: [
-      'Coding tutorials are too long & boring',
+      'TikTok for coding tutorials',
+      '$5B+ online learning market',
       '60-second lessons with instant practice',
-      '$5B+ market, Gen Z prefers short-form',
-      'Google, Meta',
-      '50K users, 2M lessons, 60% daily retention'
+      'Ex-Google, Meta engineers',
+      'Raising $500K pre-seed'
     ],
     teamLogos: ['/logos/amazon.png', '/logos/google.png', '/logos/meta.png'],
     video: 'https://www.youtube.com/watch?v=abc123',
@@ -303,8 +300,8 @@ const startupData: Startup[] = [
     id: 10,
     name: 'SolarSync',
     description: 'Smart solar optimization for small homes.',
-    pitch: 'AI solar energy optimizer',
-    tagline: 'Nest for solar',
+    pitch: 'AI-powered solar energy optimization',
+    tagline: 'Smart solar for homes',
     marketSize: '$10B+ residential solar market',
     unique: 'Uses AI to shift energy loads for savings',
     raise: '$750K seed round at $5M valuation',
@@ -315,11 +312,11 @@ const startupData: Startup[] = [
     answersCount: 5,
     comments: [],
     fivePoints: [
-      'Solar owners don\'t optimize usage',
-      'AI shifts tasks to sunny hours automatically',
-      '$10B+ solar market, smart home adoption',
-      'Tesla Energy, NASA',
-      '200 homes, 30% cost savings avg'
+      'Nest for solar panels',
+      '$10B+ residential solar market',
+      'AI shifts energy to sunny hours',
+      'Ex-Tesla Energy, NASA engineers',
+      'Raising $750K seed'
     ],
     teamLogos: ['/logos/tesla.png', '/logos/nasa.png', '/logos/solarcity.png'],
     video: 'https://www.youtube.com/watch?v=xyz789',

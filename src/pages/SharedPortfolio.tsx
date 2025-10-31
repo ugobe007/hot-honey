@@ -71,7 +71,7 @@ export default function SharedPortfolio() {
             onClick={() => navigate('/')}
             className="px-8 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold rounded-2xl transition-all"
           >
-            Go to Hot Money Honey
+            Go to Hot Honey
           </button>
         </div>
       </div>
@@ -145,14 +145,14 @@ export default function SharedPortfolio() {
             Want to Discover Hot Startups Too?
           </h2>
           <p className="text-xl text-gray-700 mb-6 max-w-2xl mx-auto">
-            Join Hot Money Honey to discover, vote on, and track the hottest startup deals. Build your own portfolio and share it with your network!
+            Join Hot Honey to discover, vote on, and track the hottest startup deals. Build your own portfolio and share it with your network!
           </p>
           <div className="flex gap-4 justify-center">
             <button
               onClick={() => navigate('/signup')}
               className="px-8 py-4 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold rounded-2xl shadow-lg transition-all text-lg"
             >
-              🚀 Join Hot Money Honey
+              🚀 Join Hot Honey
             </button>
             <button
               onClick={() => navigate('/vote')}
@@ -191,7 +191,7 @@ export default function SharedPortfolio() {
         {/* Branding Footer */}
         <div className="text-center mt-8">
           <p className="text-purple-200 text-sm">
-            Powered by <span className="font-bold text-yellow-300">Hot Money Honey</span> 🍯
+            Powered by <span className="font-bold text-yellow-300">Hot Honey</span> 🍯
           </p>
         </div>
       </div>

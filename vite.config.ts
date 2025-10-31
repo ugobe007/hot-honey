@@ -10,4 +10,10 @@ export default defineConfig({
     // Ensure no HMR in production
     sourcemap: false, // Disable sourcemaps for production
   },
+  optimizeDeps: {
+    exclude: ['pdfjs-dist']
+  },
+  worker: {
+    format: 'es'
+  }
 });

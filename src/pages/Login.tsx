@@ -68,7 +68,7 @@ export default function Login() {
             Welcome Back!
           </h1>
           <p className="text-xl text-white font-bold drop-shadow-lg">
-            Log in to Hot Money Honey
+            Log in to Hot Honey
           </p>
         </div>
 
@@ -155,7 +155,7 @@ export default function Login() {
 
         {/* Features */}
         <div className="mt-8 bg-white/10 backdrop-blur-md rounded-2xl p-6 text-white">
-          <h3 className="font-bold text-lg mb-4">What you get with Hot Money Honey:</h3>
+          <h3 className="font-bold text-lg mb-4">What you get with Hot Honey:</h3>
           <ul className="space-y-2 text-sm">
             <li>🔥 Vote on hot startups</li>
             <li>💼 Build your investment portfolio</li>
