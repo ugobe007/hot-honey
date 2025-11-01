@@ -1,286 +1,295 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import StartupCardOfficial from '../components/StartupCard';
 
-interface UploadedStartup {
-  id: number;
+interface PendingStartup {
+  id: string;
   name: string;
-  tagline?: string;
-  pitch?: string;
-  url?: string;
-  [key: string]: any;
+  tagline: string;
+  pitch: string;
+  fivePoints: string[];
+  website?: string;
+  funding?: string;
+  stage?: number;
+  industry?: string;
+  uploadedAt: string;
+  uploadedBy?: string;
+  status: 'pending' | 'approved' | 'rejected';
+  source?: string;
 }
 
 export default function ProcessUploads() {
   const navigate = useNavigate();
-  const [uploads, setUploads] = useState<UploadedStartup[]>([]);
-  const [processing, setProcessing] = useState(false);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [generatedCards, setGeneratedCards] = useState<any[]>([]);
-  const [showDebug, setShowDebug] = useState(false);
+  const [pendingStartups, setPendingStartups] = useState<PendingStartup[]>([]);
+  const [filter, setFilter] = useState<'all' | 'pending' | 'approved' | 'rejected'>('pending');
+  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    // Load uploaded startups from localStorage
-    const stored = localStorage.getItem('uploadedStartups');
-    if (stored) {
-      const parsed = JSON.parse(stored);
-      setUploads(parsed);
-      console.log(`Found ${parsed.length} uploaded startups:`, parsed);
-    } else {
-      console.log('No uploadedStartups found in localStorage');
-      console.log('All localStorage keys:', Object.keys(localStorage));
+  // Check admin access
+  const isAdmin = () => {
+    const userProfile = localStorage.getItem('userProfile');
+    if (userProfile) {
+      const profile = JSON.parse(userProfile);
+      return profile.email === 'admin@hotmoneyhoney.com' || profile.isAdmin;
     }
-  }, []);
+    return false;
+  };
 
-  const generateFullStartupCard = async (upload: UploadedStartup, index: number) => {
-    // Generate a full StartupCard with all required fields
-    const card = {
-      id: 11 + index, // Start after existing 11 startups
-      name: upload.name || `Startup ${index + 1}`,
-      tagline: upload.tagline || 'Revolutionary startup',
-      pitch: upload.pitch || `${upload.name} is building the future`,
-      description: upload.pitch || `${upload.name} is transforming the industry`,
-      marketSize: upload.marketSize || '$10B+ market opportunity',
-      unique: upload.unique || 'Unique value proposition',
-      raise: upload.raise || '$2M Seed',
-      stage: 1,
-      yesVotes: 0,
-      noVotes: 0,
-      hotness: 3.5,
-      answersCount: 5,
-      industries: upload.industries || ['tech', 'saas'],
-      
-      // Five key points for the card
-      fivePoints: upload.fivePoints || [
-        upload.pitch || 'Innovative solution',
-        upload.marketSize || '$10B+ market',
-        'Strong founding team',
-        'Early traction',
-        upload.raise || 'Raising $2M'
-      ],
-      
-      // Secret fact for honeypot
-      secretFact: generateSecretFact(upload),
-      
-      comments: [],
-      url: upload.url || '',
-      uploadedAt: upload.uploadedAt
+  // Load pending uploads from localStorage (will be replaced with MongoDB)
+  useEffect(() => {
+    if (!isAdmin()) {
+      alert('⛔ Admin access required');
+      navigate('/');
+      return;
+    }
+
+    // For now, load from localStorage
+    const uploads = localStorage.getItem('pendingUploads');
+    if (uploads) {
+      setPendingStartups(JSON.parse(uploads));
+    }
+    setLoading(false);
+  }, [navigate]);
+
+  const handleApprove = (startupId: string) => {
+    const startup = pendingStartups.find(s => s.id === startupId);
+    if (!startup) return;
+
+    // Update status
+    const updated = pendingStartups.map(s => 
+      s.id === startupId ? { ...s, status: 'approved' as const } : s
+    );
+    setPendingStartups(updated);
+    localStorage.setItem('pendingUploads', JSON.stringify(updated));
+
+    // Add to main startupData
+    const existingData = localStorage.getItem('startupData');
+    const startupData = existingData ? JSON.parse(existingData) : [];
+    
+    // Create startup card data
+    const newStartup = {
+      id: Date.now(),
+      name: startup.name,
+      tagline: startup.tagline,
+      pitch: startup.pitch,
+      fivePoints: startup.fivePoints,
+      website: startup.website || '',
+      funding: startup.funding || 'Undisclosed',
+      stage: startup.stage || 1,
+      industry: startup.industry || 'Technology',
+      logo: '🚀',
+      votes: 0,
+      trending: false
     };
 
-    return card;
+    startupData.push(newStartup);
+    localStorage.setItem('startupData', JSON.stringify(startupData));
+
+    alert('✅ Startup approved and added to database!');
   };
 
-  const generateSecretFact = (upload: UploadedStartup): string => {
-    const facts = [
-      '🤫 Founders met at Y Combinator',
-      '🤫 First 100 customers came from Product Hunt',
-      '🤫 Started in a coffee shop',
-      '🤫 Rejected by 20 VCs before finding product-market fit',
-      '🤫 CEO previously built a unicorn',
-      '🤫 Early investor from Sequoia',
-      '🤫 Built by ex-Google engineers',
-      '🤫 Launched during pandemic and 10x\'d revenue',
-      '🤫 Turned down acquisition offer from Facebook',
-      '🤫 Secretly backed by a Fortune 500 company',
-      '🤫 Already profitable with zero marketing spend',
-      '🤫 First prototype built in 48 hours'
-    ];
-    
-    return facts[Math.floor(Math.random() * facts.length)];
+  const handleReject = (startupId: string) => {
+    if (!confirm('Are you sure you want to reject this startup?')) return;
+
+    const updated = pendingStartups.map(s => 
+      s.id === startupId ? { ...s, status: 'rejected' as const } : s
+    );
+    setPendingStartups(updated);
+    localStorage.setItem('pendingUploads', JSON.stringify(updated));
+
+    alert('❌ Startup rejected');
   };
 
-  const processAll = async () => {
-    setProcessing(true);
-    const cards = [];
-    
-    for (let i = 0; i < uploads.length; i++) {
-      setCurrentIndex(i);
-      const card = await generateFullStartupCard(uploads[i], i);
-      cards.push(card);
-      
-      // Small delay to show progress
-      await new Promise(resolve => setTimeout(resolve, 200));
-    }
-    
-    setGeneratedCards(cards);
-    setProcessing(false);
-    
-    console.log('Generated cards:', cards);
+  const handleDelete = (startupId: string) => {
+    if (!confirm('Permanently delete this entry?')) return;
+
+    const updated = pendingStartups.filter(s => s.id !== startupId);
+    setPendingStartups(updated);
+    localStorage.setItem('pendingUploads', JSON.stringify(updated));
+
+    alert('🗑️ Deleted');
   };
 
-  const exportToCode = () => {
-    if (generatedCards.length === 0) return;
-    
-    const code = generatedCards.map(card => {
-      return `  {
-    id: ${card.id},
-    name: '${card.name}',
-    tagline: '${card.tagline}',
-    pitch: '${card.pitch}',
-    description: '${card.description}',
-    marketSize: '${card.marketSize}',
-    unique: '${card.unique}',
-    raise: '${card.raise}',
-    stage: ${card.stage},
-    yesVotes: ${card.yesVotes},
-    noVotes: ${card.noVotes},
-    hotness: ${card.hotness},
-    answersCount: ${card.answersCount},
-    secretFact: '${card.secretFact}',
-    comments: [],
-    fivePoints: [
-      '${card.fivePoints[0]}',
-      '${card.fivePoints[1]}',
-      '${card.fivePoints[2]}',
-      '${card.fivePoints[3]}',
-      '${card.fivePoints[4]}'
-    ]
-  }`;
-    }).join(',\n');
-    
-    // Copy to clipboard
-    navigator.clipboard.writeText(code);
-    alert(`✅ Copied ${generatedCards.length} startup cards to clipboard!\n\nPaste them into src/data/startupData.ts`);
-  };
+  const filteredStartups = filter === 'all' 
+    ? pendingStartups 
+    : pendingStartups.filter(s => s.status === filter);
 
-  const saveToStartupData = () => {
-    // This would save to the actual startupData.ts file
-    alert('💡 For now, use "Export Code" button and manually paste into startupData.ts\n\nNext iteration: automatic file updates!');
-  };
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-purple-800 to-indigo-900 flex items-center justify-center">
+        <div className="text-white text-2xl">Loading...</div>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-green-400 to-purple-950 p-8">
-      <div className="max-w-6xl mx-auto">
-        <div className="bg-white rounded-3xl p-8 shadow-2xl">
-                    {/* Header */}
-          <div className="flex justify-between items-center mb-8">
-            <div className="flex items-center gap-4">
-              <img src="/images/logo.png" alt="Hot Honey" className="h-20 w-20" />
-              <h1 className="text-5xl font-black bg-gradient-to-r from-orange-600 to-yellow-600 bg-clip-text text-transparent">
-                Process Uploaded Startups
-              </h1>
-            </div>
-            <button
-              onClick={() => navigate('/dashboard')}
-              className="px-6 py-3 bg-gray-800 text-white rounded-xl hover:bg-gray-900 transition-colors font-bold text-lg"
-            >
-              ← Back
-            </button>
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-purple-800 to-indigo-900 py-12 px-4">
+      {/* Header */}
+      <div className="max-w-7xl mx-auto mb-8">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h1 className="text-4xl font-bold text-white mb-2">
+              🍯 Process Uploads
+            </h1>
+            <p className="text-purple-200">
+              Review and approve startup submissions
+            </p>
           </div>
+          <button
+            onClick={() => navigate('/dashboard')}
+            className="px-6 py-3 bg-white text-purple-700 font-semibold rounded-lg hover:bg-purple-50 transition"
+          >
+            ← Back to Dashboard
+          </button>
+        </div>
 
-          <div className="mb-8 p-6 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl shadow-lg">
-            <h2 className="text-3xl font-black text-white mb-4">
-              📊 Status
-            </h2>
-            <div className="space-y-3 text-xl">
-              <p className="text-white"><strong className="font-black">Uploaded Startups:</strong> <span className="text-yellow-300 font-bold text-2xl">{uploads.length}</span></p>
-              <p className="text-white"><strong className="font-black">Generated Cards:</strong> <span className="text-green-300 font-bold text-2xl">{generatedCards.length}</span></p>
-              {processing && (
-                <p className="text-yellow-300 font-black animate-pulse text-xl">
-                  ⚙️ Processing {currentIndex + 1} of {uploads.length}...
-                </p>
+        {/* Filter Tabs */}
+        <div className="flex gap-2 mb-6">
+          {(['all', 'pending', 'approved', 'rejected'] as const).map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setFilter(tab)}
+              className={`px-6 py-2 rounded-lg font-semibold transition ${
+                filter === tab
+                  ? 'bg-white text-purple-700'
+                  : 'bg-purple-700/50 text-white hover:bg-purple-700'
+              }`}
+            >
+              {tab.charAt(0).toUpperCase() + tab.slice(1)}
+              {tab !== 'all' && (
+                <span className="ml-2 px-2 py-1 bg-purple-900/50 rounded-full text-xs">
+                  {pendingStartups.filter(s => s.status === tab).length}
+                </span>
               )}
-            </div>
-            
-            {/* Debug Toggle */}
-            <button
-              onClick={() => setShowDebug(!showDebug)}
-              className="mt-4 px-4 py-2 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-colors font-bold text-sm"
-            >
-              {showDebug ? '🔼 Hide Debug Info' : '🔽 Show Debug Info'}
             </button>
-            
-            {showDebug && (
-              <div className="mt-4 p-4 bg-white/10 rounded-lg text-white text-sm">
-                <p className="font-bold mb-2">localStorage Keys:</p>
-                <ul className="list-disc list-inside space-y-1">
-                  {Object.keys(localStorage).map(key => (
-                    <li key={key} className="font-mono">
-                      {key} {key.includes('upload') && '← 👀'}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
+          ))}
+        </div>
+      </div>
 
-          {/* Action Buttons */}
-          <div className="flex gap-4 mb-8">
-            <button
-              onClick={processAll}
-              disabled={processing || uploads.length === 0}
-              className="flex-1 px-8 py-6 bg-gradient-to-r from-orange-600 to-yellow-600 text-white rounded-2xl font-black text-xl hover:from-orange-700 hover:to-yellow-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-xl hover:shadow-2xl hover:scale-105"
-            >
-              {processing ? '⚙️ Processing...' : '🚀 Generate All StartupCards'}
-            </button>
-            
-            <button
-              onClick={exportToCode}
-              disabled={generatedCards.length === 0}
-              className="px-8 py-6 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-2xl font-black text-xl hover:from-green-700 hover:to-emerald-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-xl hover:shadow-2xl hover:scale-105"
-            >
-              📋 Export Code
-            </button>
+      {/* Startups Grid */}
+      <div className="max-w-7xl mx-auto">
+        {filteredStartups.length === 0 ? (
+          <div className="text-center py-20">
+            <div className="text-8xl mb-4">🍯</div>
+            <h2 className="text-3xl font-bold text-white mb-2">
+              No {filter !== 'all' ? filter : ''} uploads
+            </h2>
+            <p className="text-purple-200">
+              {filter === 'pending' 
+                ? 'All caught up! No startups waiting for review.'
+                : 'No startups found with this status.'
+              }
+            </p>
           </div>
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+            {filteredStartups.map((startup) => (
+              <div key={startup.id} className="relative">
+                {/* Status Badge */}
+                <div className="absolute top-4 right-4 z-10">
+                  <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                    startup.status === 'pending' ? 'bg-yellow-400 text-yellow-900' :
+                    startup.status === 'approved' ? 'bg-green-400 text-green-900' :
+                    'bg-red-400 text-red-900'
+                  }`}>
+                    {startup.status.toUpperCase()}
+                  </span>
+                </div>
 
-          {/* Uploaded Startups List */}
-          <div className="space-y-4">
-            <h2 className="text-3xl font-black text-gray-900 mb-6">📦 Uploaded Startups</h2>
-            {uploads.length === 0 ? (
-              <div className="text-center py-16 bg-gradient-to-r from-gray-100 to-gray-200 rounded-2xl">
-                <p className="text-2xl font-bold text-gray-800 mb-3">No uploaded startups found in localStorage</p>
-                <p className="text-lg text-gray-700 mb-6">Go to Bulk Upload page to upload startups</p>
-                <button
-                  onClick={() => navigate('/admin/bulk-upload')}
-                  className="px-6 py-3 bg-gradient-to-r from-orange-600 to-yellow-600 text-white rounded-xl font-bold hover:from-orange-700 hover:to-yellow-700 transition-all"
-                >
-                  📊 Go to Bulk Upload
-                </button>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {uploads.map((startup, index) => (
-                  <div
-                    key={startup.id}
-                    className={`p-6 rounded-2xl border-4 transition-all shadow-lg ${
-                      processing && index === currentIndex
-                        ? 'border-orange-600 bg-gradient-to-br from-orange-100 to-yellow-100 scale-105 shadow-2xl'
-                        : index < currentIndex && processing
-                        ? 'border-green-600 bg-gradient-to-br from-green-100 to-emerald-100'
-                        : 'border-gray-300 bg-gradient-to-br from-white to-gray-50 hover:border-purple-400 hover:shadow-xl'
-                    }`}
-                  >
-                    <div className="flex items-start justify-between mb-3">
-                      <h3 className="font-black text-xl text-gray-900">{startup.name}</h3>
-                      {generatedCards[index] && (
-                        <span className="text-green-600 text-3xl">✓</span>
-                      )}
+                {/* Startup Card */}
+                <div className="bg-white rounded-xl p-6 shadow-lg">
+                  <div className="mb-4">
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                      {startup.name}
+                    </h3>
+                    <p className="text-sm text-gray-600 mb-2">
+                      {startup.tagline}
+                    </p>
+                    <p className="text-sm text-gray-700 mb-4">
+                      {startup.pitch}
+                    </p>
+                    
+                    {/* Five Points */}
+                    <div className="space-y-2 mb-4">
+                      {startup.fivePoints.map((point, idx) => (
+                        <div key={idx} className="flex items-start gap-2">
+                          <span className="text-purple-600 font-bold">{idx + 1}.</span>
+                          <span className="text-sm text-gray-700">{point}</span>
+                        </div>
+                      ))}
                     </div>
-                    <p className="text-base text-gray-800 mb-3 font-semibold">{startup.tagline}</p>
-                    {startup.url && (
-                      <a
-                        href={startup.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-sm text-blue-700 hover:text-blue-900 hover:underline font-bold break-all"
-                      >
-                        🔗 {startup.url.substring(0, 50)}...
-                      </a>
-                    )}
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
 
-          {/* Generated Cards Preview */}
-          {generatedCards.length > 0 && (
-            <div className="mt-12">
-              <h2 className="text-3xl font-black text-gray-900 mb-6">✨ Generated StartupCards</h2>
-              <div className="bg-gray-900 text-green-400 p-6 rounded-2xl overflow-auto max-h-96 font-mono text-sm shadow-2xl border-4 border-green-500">
-                <pre>{JSON.stringify(generatedCards, null, 2)}</pre>
+                    {/* Metadata */}
+                    <div className="text-xs text-gray-500 space-y-1">
+                      {startup.website && (
+                        <div>🔗 <a href={startup.website} target="_blank" rel="noopener noreferrer" className="hover:underline">{startup.website}</a></div>
+                      )}
+                      {startup.industry && <div>🏢 {startup.industry}</div>}
+                      {startup.funding && <div>💰 {startup.funding}</div>}
+                      <div>📅 Uploaded: {new Date(startup.uploadedAt).toLocaleDateString()}</div>
+                      {startup.source && <div>📥 Source: {startup.source}</div>}
+                    </div>
+                  </div>
+
+                  {/* Action Buttons */}
+                  {startup.status === 'pending' && (
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => handleApprove(startup.id)}
+                        className="flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition"
+                      >
+                        ✅ Approve
+                      </button>
+                      <button
+                        onClick={() => handleReject(startup.id)}
+                        className="flex-1 bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg transition"
+                      >
+                        ❌ Reject
+                      </button>
+                    </div>
+                  )}
+
+                  {startup.status !== 'pending' && (
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => handleDelete(startup.id)}
+                        className="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg transition"
+                      >
+                        🗑️ Delete
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
-          )}
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Admin Tools */}
+      <div className="max-w-7xl mx-auto mt-12 p-6 bg-purple-800/50 rounded-xl">
+        <h3 className="text-xl font-bold text-white mb-4">📊 Admin Tools</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <button
+            onClick={() => navigate('/admin/document-upload')}
+            className="p-4 bg-purple-700 hover:bg-purple-600 text-white rounded-lg transition"
+          >
+            📄 Document Upload
+          </button>
+          <button
+            onClick={() => navigate('/admin/bulk-import')}
+            className="p-4 bg-purple-700 hover:bg-purple-600 text-white rounded-lg transition"
+          >
+            🔗 Bulk Import
+          </button>
+          <button
+            onClick={() => {
+              const count = pendingStartups.filter(s => s.status === 'pending').length;
+              alert(`📊 Stats:\n\nPending: ${pendingStartups.filter(s => s.status === 'pending').length}\nApproved: ${pendingStartups.filter(s => s.status === 'approved').length}\nRejected: ${pendingStartups.filter(s => s.status === 'rejected').length}\nTotal: ${pendingStartups.length}`);
+            }}
+            className="p-4 bg-purple-700 hover:bg-purple-600 text-white rounded-lg transition"
+          >
+            📈 View Stats
+          </button>
         </div>
       </div>
     </div>

@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useState, useRef } from 'react';
-import { supabase } from '../lib/supabase';
 import * as pdfjsLib from 'pdfjs-dist';
+import { getCollection, COLLECTIONS, type PendingUploadDocument } from '../lib/mongodb';
 
 // Configure PDF.js worker - use file from public directory
 pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
@@ -344,24 +344,11 @@ Return valid JSON with: name, pitch, fivePoints (array of 5 strings), industry, 
     setError('');
 
     try {
-      // Always use localStorage for now (Supabase needs proper schema configuration)
-      const newStartup = {
-        id: Date.now(),
+      // Create pending upload document for MongoDB
+      const newUpload: PendingUploadDocument = {
         name: formData.name,
         tagline: formData.valueProp,
         pitch: formData.valueProp || `${formData.problem} | ${formData.solution}`,
-        stage: formData.stage === 'Pre-Seed' ? 1 : formData.stage === 'Seed' ? 1 : formData.stage === 'Series A' ? 2 : 1,
-        team: formData.team,
-        funding: formData.funding,
-        raise: formData.funding,
-        website: formData.website,
-        industries: formData.industry ? [formData.industry] : [],
-        problem: formData.problem,
-        solution: formData.solution,
-        founderName: formData.founderName,
-        founderEmail: formData.founderEmail,
-        presentationUrl: formData.presentationUrl,
-        videoUrl: formData.videoUrl,
         fivePoints: formData.fivePoints.length > 0 ? formData.fivePoints : [
           formData.problem,
           formData.solution,
@@ -369,18 +356,44 @@ Return valid JSON with: name, pitch, fivePoints (array of 5 strings), industry, 
           formData.team,
           formData.funding
         ],
-        yesVotes: 0,
-        noVotes: 0,
-        hotness: 0,
+        website: formData.website,
+        funding: formData.funding,
+        stage: formData.stage === 'Pre-Seed' ? 1 : formData.stage === 'Seed' ? 1 : formData.stage === 'Series A' ? 2 : 1,
+        industry: formData.industry || 'Technology',
+        uploadedAt: new Date(),
+        uploadedBy: formData.founderEmail || 'anonymous',
+        status: 'pending',
+        source: 'startup_submission_form'
       };
 
-      // Save to localStorage
-      const uploadedStartups = localStorage.getItem('uploadedStartups');
-      const startups = uploadedStartups ? JSON.parse(uploadedStartups) : [];
-      startups.push(newStartup);
-      localStorage.setItem('uploadedStartups', JSON.stringify(startups));
+      try {
+        // Save to MongoDB
+        const collection = await getCollection<PendingUploadDocument>(COLLECTIONS.PENDING_UPLOADS);
+        const result = await collection.insertOne(newUpload);
+        console.log('✅ Saved to MongoDB:', result.insertedId);
+      } catch (dbError) {
+        console.error('❌ MongoDB error, falling back to localStorage:', dbError);
+        
+        // Fallback to localStorage if MongoDB fails
+        const uploadedStartups = localStorage.getItem('uploadedStartups');
+        const startups = uploadedStartups ? JSON.parse(uploadedStartups) : [];
+        startups.push({
+          id: Date.now(),
+          ...newUpload,
+          uploadedAt: newUpload.uploadedAt.toISOString()
+        });
+        localStorage.setItem('uploadedStartups', JSON.stringify(startups));
+      }
       
-      console.log('Startup saved successfully:', newStartup);
+      // Also save to pendingUploads for ProcessUploads page
+      const pendingUploads = localStorage.getItem('pendingUploads');
+      const uploads = pendingUploads ? JSON.parse(pendingUploads) : [];
+      uploads.push({
+        id: Date.now().toString(),
+        ...newUpload,
+        uploadedAt: newUpload.uploadedAt.toISOString()
+      });
+      localStorage.setItem('pendingUploads', JSON.stringify(uploads));
 
       setSubmitted(true);
       

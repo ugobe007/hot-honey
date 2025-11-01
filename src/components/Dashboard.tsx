@@ -3,7 +3,6 @@ import { Link, useLocation } from 'react-router-dom';
 import SharePortfolioModal from './SharePortfolioModal';
 import StartupCardOfficial from './StartupCardOfficial';
 import startupData from '../data/startupData';
-import { useStore } from '../store';
 
 interface YesVote {
   id: number;
@@ -17,35 +16,47 @@ interface YesVote {
 
 const Dashboard: React.FC = () => {
   const location = useLocation();
+  const [myYesVotes, setMyYesVotes] = useState<YesVote[]>([]);
   const [showShareModal, setShowShareModal] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
-  
-  // Get portfolio from Zustand store instead of localStorage
-  const portfolio = useStore((state) => state.portfolio);
-  const voteYes = useStore((state) => state.voteYes);
-  const voteNo = useStore((state) => state.voteNo);
-  const unvote = useStore((state) => state.unvote);
 
   useEffect(() => {
+    const votes = localStorage.getItem('myYesVotes');
+    if (votes) {
+      const parsedVotes = JSON.parse(votes);
+      
+      // Migrate old votes that don't have fivePoints
+      const enrichedVotes = parsedVotes.map((vote: any) => {
+        if (!vote.fivePoints) {
+          // Find the startup in startupData and add missing fields
+          const fullStartup = startupData.find(s => s.id === vote.id);
+          if (fullStartup) {
+            return { ...vote, fivePoints: fullStartup.fivePoints };
+          }
+        }
+        return vote;
+      });
+      
+      // Save enriched data back to localStorage
+      localStorage.setItem('myYesVotes', JSON.stringify(enrichedVotes));
+      setMyYesVotes(enrichedVotes);
+    }
+
     // Check admin status
     const userProfile = localStorage.getItem('userProfile');
     if (userProfile) {
       const profile = JSON.parse(userProfile);
-      const hasAdminAccess = profile.email === 'admin@hotmoneyhoney.com' || 
-                             profile.isAdmin || 
-                             profile.role === 'admin' || 
-                             profile.role === 'reviewer' ||
-                             profile.isReviewer;
-      setIsAdmin(hasAdminAccess);
+      setIsAdmin(profile.email === 'admin@hotmoneyhoney.com' || profile.isAdmin);
     }
   }, []);
 
-    const clearAllVotes = () => {
+  const clearAllVotes = () => {
     if (confirm('⚠️ Are you sure you want to clear ALL your votes? This cannot be undone.')) {
-      // Clear from localStorage and Zustand store
       localStorage.removeItem('myYesVotes');
       localStorage.removeItem('votedStartups');
-      window.location.reload();
+      setMyYesVotes([]);
+      alert('✅ All votes cleared! You can start voting again.');
+      window.location.href = '/vote';
     }
   };
 
@@ -57,41 +68,7 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-green-400 to-purple-950" style={{ backgroundImage: 'radial-gradient(ellipse 800px 600px at 20% 40%, rgba(134, 239, 172, 0.4), transparent), linear-gradient(to bottom right, rgb(88, 28, 135), rgb(59, 7, 100))' }}>
-      
-      {/* User Profile Section - Upper Right Corner */}
-      <div className="fixed top-4 right-4 z-50">
-        <div className="bg-white/10 backdrop-blur-md rounded-2xl px-6 py-3 flex items-center gap-4 shadow-xl border border-white/20">
-          <div className="text-right">
-            <p className="text-sm text-purple-200">Logged in as</p>
-            <p className="text-white font-bold">
-              {(() => {
-                const profile = localStorage.getItem('userProfile');
-                return profile ? JSON.parse(profile).name : 'User';
-              })()}
-            </p>
-          </div>
-          <Link 
-            to="/settings"
-            className="px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white rounded-full text-sm font-semibold transition-all flex items-center gap-2"
-          >
-            ⚙️ Settings
-          </Link>
-          <button
-            onClick={() => {
-              if (confirm('Are you sure you want to log out?')) {
-                localStorage.removeItem('isLoggedIn');
-                alert('✅ Logged out successfully!');
-                window.location.href = '/';
-              }
-            }}
-            className="px-4 py-2 bg-gradient-to-r from-gray-300 to-gray-400 hover:from-gray-400 hover:to-gray-500 text-gray-800 rounded-full text-sm font-semibold transition-all flex items-center gap-2"
-          >
-            🚪 Log Out
-          </button>
-        </div>
-      </div>
-      
-      {/* Navigation Bar */}
+      {/* New Navigation Bar */}
       <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50">
         <div className="flex gap-3 items-center">
           <Link to="/signup" className="text-4xl hover:scale-110 transition-transform cursor-pointer" title="Hot Money Honey">
@@ -109,15 +86,15 @@ const Dashboard: React.FC = () => {
             🏠 Home
           </Link>
 
-          {/* Dashboard Button - Same Orange Gradient as StartupCard */}
+          {/* Dashboard Button - Slightly Larger with Light Blue Gradient */}
           <Link 
             to="/dashboard" 
             className={`font-bold rounded-2xl transition-all ${
               isActive('/dashboard') ? 'text-lg py-3 px-7' : 'text-base py-2.5 px-5'
             } ${
               isActive('/dashboard')
-                ? 'bg-gradient-to-r from-amber-400 via-orange-500 to-yellow-500 text-white shadow-xl scale-110'
-                : 'bg-gradient-to-r from-amber-400 via-orange-500 to-yellow-500 hover:from-amber-500 hover:via-orange-600 hover:to-yellow-600 text-white shadow-lg'
+                ? 'bg-gradient-to-r from-cyan-400 to-blue-500 text-white shadow-xl scale-110'
+                : 'bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-500 hover:to-blue-600 text-white shadow-lg'
             }`}
           >
             📊 Dashboard
@@ -127,25 +104,23 @@ const Dashboard: React.FC = () => {
             to="/vote" 
             className={`font-bold rounded-2xl transition-all ${getButtonSize('/vote')} ${
               isActive('/vote')
-                ? 'bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg scale-110'
+                ? 'bg-gradient-to-r from-purple-500 to-purple-600 text-white shadow-lg scale-110'
                 : 'bg-purple-700 hover:bg-purple-600 text-white'
             }`}
           >
             🗳️ Vote
           </Link>
 
-          {isAdmin && (
-            <Link 
-              to="/admin/startup-processor" 
-              className={`font-bold rounded-2xl transition-all ${getButtonSize('/admin/startup-processor')} ${
-                isActive('/admin/startup-processor')
-                  ? 'bg-gradient-to-r from-pink-500 to-rose-700 text-white shadow-lg scale-110'
-                  : 'bg-gradient-to-r from-pink-400 to-rose-600 hover:from-pink-500 hover:to-rose-700 text-white'
-              }`}
-            >
-              🚀 Startup Processor
-            </Link>
-          )}
+          <Link 
+            to="/portfolio" 
+            className={`font-bold rounded-2xl transition-all ${getButtonSize('/portfolio')} ${
+              isActive('/portfolio')
+                ? 'bg-gradient-to-r from-yellow-500 to-orange-500 text-white shadow-lg scale-110'
+                : 'bg-purple-700 hover:bg-purple-600 text-white'
+            }`}
+          >
+            ⭐ Portfolio
+          </Link>
 
           {isAdmin && (
             <Link 
@@ -159,87 +134,49 @@ const Dashboard: React.FC = () => {
               📊 Bulk Upload
             </Link>
           )}
+        </div>
+      </div>
 
-          {isAdmin && (
-            <Link 
-              to="/admin/process-uploads" 
-              className={`font-bold rounded-2xl transition-all ${getButtonSize('/admin/process-uploads')} ${
-                isActive('/admin/process-uploads')
-                  ? 'bg-gradient-to-r from-orange-500 to-yellow-700 text-white shadow-lg scale-110'
-                  : 'bg-gradient-to-r from-orange-400 to-yellow-600 hover:from-orange-500 hover:to-yellow-700 text-white'
-              }`}
-            >
-              🍯 Process Uploads
-            </Link>
-          )}
-
-          {isAdmin && (
-            <Link 
-              to="/admin/document-upload" 
-              className={`font-bold rounded-2xl transition-all ${getButtonSize('/admin/document-upload')} ${
-                isActive('/admin/document-upload')
-                  ? 'bg-gradient-to-r from-green-500 to-purple-700 text-white shadow-lg scale-110'
-                  : 'bg-gradient-to-r from-green-400 to-purple-600 hover:from-green-500 hover:to-purple-700 text-white'
-              }`}
-            >
-              📄 Scan Docs
-            </Link>
-          )}
-
-          {isAdmin && (
-            <Link 
-              to="/admin/localstorage" 
-              className={`font-bold rounded-2xl transition-all ${getButtonSize('/admin/localstorage')} ${
-                isActive('/admin/localstorage')
-                  ? 'bg-gradient-to-r from-indigo-500 to-blue-700 text-white shadow-lg scale-110'
-                  : 'bg-gradient-to-r from-indigo-400 to-blue-600 hover:from-indigo-500 hover:to-blue-700 text-white'
-              }`}
-            >
-              🔍 localStorage
-            </Link>
-          )}
-
-          {isAdmin && (
-            <Link 
-              to="/admin/tracker" 
-              className={`font-bold rounded-2xl transition-all ${getButtonSize('/admin/tracker')} ${
-                isActive('/admin/tracker')
-                  ? 'bg-gradient-to-r from-teal-500 to-cyan-700 text-white shadow-lg scale-110'
-                  : 'bg-gradient-to-r from-teal-400 to-cyan-600 hover:from-teal-500 hover:to-cyan-700 text-white'
-              }`}
-            >
-              📊 Activity Tracker
-            </Link>
-          )}
-
-          {isAdmin && (
-            <Link 
-              to="/admin/users" 
-              className={`font-bold rounded-2xl transition-all ${getButtonSize('/admin/users')} ${
-                isActive('/admin/users')
-                  ? 'bg-gradient-to-r from-violet-500 to-fuchsia-700 text-white shadow-lg scale-110'
-                  : 'bg-gradient-to-r from-violet-400 to-fuchsia-600 hover:from-violet-500 hover:to-fuchsia-700 text-white'
-              }`}
-            >
-              👥 User Management
-            </Link>
-          )}
+      {/* User Profile Section - Upper Right, Compact */}
+      <div className="fixed top-4 right-4 z-50">
+        <div className="bg-white/10 backdrop-blur-md rounded-xl px-4 py-2 flex items-center gap-2 shadow-lg border border-white/20">
+          <div className="text-right">
+            <p className="text-xs text-purple-200">Logged in as</p>
+            <p className="text-white font-bold text-sm">Admin User</p>
+          </div>
+          <Link 
+            to="/settings"
+            className="px-3 py-1 bg-purple-500 hover:bg-purple-600 text-white rounded-full text-xs font-semibold transition-all"
+          >
+            ⚙️ Settings
+          </Link>
+          <button
+            onClick={() => {
+              if (confirm('Are you sure you want to log out?')) {
+                localStorage.removeItem('isLoggedIn');
+                alert('✅ Logged out successfully!');
+                window.location.href = '/';
+              }
+            }}
+            className="px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded-full text-xs font-semibold transition-all"
+          >
+            🚪 Log Out
+          </button>
         </div>
       </div>
 
       <div className="pt-28 px-8 max-w-7xl mx-auto">
-
         {/* ✅ CENTERED HEADER */}
         <div className="mb-8 text-center">
           <h1 className="text-5xl font-bold text-white mb-2">
             🔥 My Hot Picks
           </h1>
           <p className="text-lg text-purple-200">
-            You've voted YES on <span className="font-bold text-yellow-300">{portfolio.length}</span> {portfolio.length === 1 ? 'startup' : 'startups'}
+            You've voted YES on <span className="font-bold text-yellow-300">{myYesVotes.length}</span> {myYesVotes.length === 1 ? 'startup' : 'startups'}
           </p>
           
           {/* Action buttons when there are votes */}
-          {portfolio.length > 0 && (
+          {myYesVotes.length > 0 && (
             <div className="mt-4 flex gap-3 justify-center">
               <button
                 onClick={() => setShowShareModal(true)}
@@ -257,7 +194,7 @@ const Dashboard: React.FC = () => {
           )}
         </div>
 
-        {portfolio.length === 0 ? (
+        {myYesVotes.length === 0 ? (
           <div className="text-center py-16">
             <div className="text-8xl mb-6">🤷‍♂️</div>
             <p className="text-3xl font-bold text-white mb-4">
@@ -271,19 +208,12 @@ const Dashboard: React.FC = () => {
             </Link>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {portfolio.map((startup) => (
-              <div key={startup.id} className="transform scale-90">
+          <div className="space-y-8">
+            {myYesVotes.map((vote) => (
+              <div key={vote.id}>
                 <StartupCardOfficial
-                  startup={startup}
-                  onVote={(voteType) => {
-                    if (voteType === 'yes') {
-                      voteYes(startup);
-                    } else {
-                      // If voting no from dashboard, remove from portfolio
-                      unvote(startup);
-                    }
-                  }}
+                  startup={vote}
+                  onVote={(voteType) => console.log(`Voted ${voteType} on ${vote.name}`)}
                 />
               </div>
             ))}
@@ -295,7 +225,7 @@ const Dashboard: React.FC = () => {
       <SharePortfolioModal 
         isOpen={showShareModal}
         onClose={() => setShowShareModal(false)}
-        yesVotes={portfolio}
+        yesVotes={myYesVotes}
       />
     </div>
   );

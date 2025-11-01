@@ -18,16 +18,9 @@ import SharedPortfolio from './pages/SharedPortfolio';
 import BulkUpload from './pages/BulkUpload';
 import BulkImport from './pages/BulkImport';
 import DocumentUpload from './pages/DocumentUpload';
+import ProcessUploads from './pages/ProcessUploads';
 import Analytics from './pages/Analytics';
 import Login from './pages/Login';
-import ProcessUploads from './pages/ProcessUploads';
-import StartupProcessor from './pages/StartupProcessor';
-import LocalStorageViewer from './pages/LocalStorageViewer';
-import ActivityTracker from './pages/ActivityTracker';
-import UserManagement from './pages/UserManagement';
-import InviteAccept from './pages/InviteAccept';
-import StartupReview from './pages/StartupReview';
-import AdminPanel from './pages/AdminPanel';
 import WelcomeModal from './components/WelcomeModal';
 import './App.css';
 
@@ -63,17 +56,10 @@ const App: React.FC = () => {
           <Route path="/contact" element={<Contact />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/shared-portfolio/:shareId" element={<SharedPortfolio />} />
-          <Route path="/admin" element={<AdminPanel />} />
-          <Route path="/admin/bulk-upload" element={<BulkUpload />} />
+          <Route path="/admin/bulk-upload" element={<BulkImport />} />
           <Route path="/admin/bulk-import" element={<BulkImport />} />
           <Route path="/admin/document-upload" element={<DocumentUpload />} />
           <Route path="/admin/process-uploads" element={<ProcessUploads />} />
-          <Route path="/admin/startup-processor" element={<StartupProcessor />} />
-          <Route path="/admin/startup-review" element={<StartupReview />} />
-          <Route path="/admin/localstorage" element={<LocalStorageViewer />} />
-          <Route path="/admin/tracker" element={<ActivityTracker />} />
-          <Route path="/admin/users" element={<UserManagement />} />
-          <Route path="/invite/:token" element={<InviteAccept />} />
           <Route path="/analytics" element={<Analytics />} />
         </Routes>
       </main>
