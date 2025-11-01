@@ -22,15 +22,20 @@ export default function PortfolioPage() {
           // Find the startup in startupData and add missing fields
           const fullStartup = startupData.find(s => s.id === vote.id);
           if (fullStartup) {
-            return { ...vote, fivePoints: fullStartup.fivePoints };
+            return { ...vote, fivePoints: fullStartup.fivePoints, stage: fullStartup.stage };
           }
         }
         return vote;
       });
       
+      // Filter for Stage 3 & 4 only (active investments / deal room access)
+      const portfolioStartups = enrichedVotes.filter((vote: any) => 
+        vote.stage === 3 || vote.stage === 4
+      );
+      
       // Save enriched data back to localStorage
       localStorage.setItem('myYesVotes', JSON.stringify(enrichedVotes));
-      setMyYesVotes(enrichedVotes);
+      setMyYesVotes(portfolioStartups);
     }
 
     // Check admin status
@@ -108,7 +113,7 @@ export default function PortfolioPage() {
             to="/vote" 
             className={`font-bold rounded-2xl transition-all ${getButtonSize('/vote')} ${
               isActive('/vote')
-                ? 'bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg scale-110'
+                ? 'bg-gradient-to-r from-purple-500 to-purple-600 text-white shadow-lg scale-110'
                 : 'bg-purple-700 hover:bg-purple-600 text-white'
             }`}
           >
@@ -138,138 +143,71 @@ export default function PortfolioPage() {
               📊 Bulk Upload
             </Link>
           )}
-
-          {isAdmin && (
-            <Link 
-              to="/admin/document-upload" 
-              className={`font-bold rounded-2xl transition-all ${getButtonSize('/admin/document-upload')} ${
-                isActive('/admin/document-upload')
-                  ? 'bg-gradient-to-r from-green-500 to-purple-700 text-white shadow-lg scale-110'
-                  : 'bg-gradient-to-r from-green-400 to-purple-600 hover:from-green-500 hover:to-purple-700 text-white'
-              }`}
-            >
-              📄 Scan Docs
-            </Link>
-          )}
         </div>
       </div>
 
       <div className="max-w-4xl mx-auto pt-28">
         {/* Header */}
         <div className="text-center mb-12">
-          <div className="text-8xl mb-4">💼</div>
+          <div className="text-8xl mb-4">⭐</div>
           <h1 className="text-5xl font-bold bg-gradient-to-r from-yellow-300 via-orange-400 to-red-500 bg-clip-text text-transparent mb-4">
-            Investment Portfolio
+            Your Portfolio
           </h1>
-          <p className="text-xl text-white font-bold drop-shadow-lg">
-            Track your committed investments, startup progress, and ROI
+          <p className="text-xl text-white font-bold drop-shadow-lg mb-2">
+            Stage 3 & 4 Startups - Active Investments
           </p>
-        </div>
-
-        {/* Portfolio Stats */}
-        <div className="grid grid-cols-3 gap-4 mb-8">
-          <div className="bg-purple-800/50 backdrop-blur-sm rounded-xl p-6 border border-green-400/30 text-center">
-            <div className="text-3xl font-bold text-yellow-300">{myYesVotes.length}</div>
-            <div className="text-sm text-green-200">Investments</div>
-          </div>
-          <div className="bg-purple-800/50 backdrop-blur-sm rounded-xl p-6 border border-green-400/30 text-center">
-            <div className="text-3xl font-bold text-green-300">$125K</div>
-            <div className="text-sm text-green-200">Total Committed</div>
-          </div>
-          <div className="bg-purple-800/50 backdrop-blur-sm rounded-xl p-6 border border-green-400/30 text-center">
-            <div className="text-3xl font-bold text-orange-300">+34%</div>
-            <div className="text-sm text-green-200">Avg ROI</div>
-          </div>
+          <p className="text-md text-purple-200 max-w-2xl mx-auto">
+            Your portfolio shows startups that have advanced to Stage 3 (Due Diligence) or Stage 4 (Deal Room). 
+            These are companies ready for investment consideration.
+          </p>
         </div>
 
         {/* Portfolio Content */}
         {myYesVotes.length === 0 ? (
-          <div className="bg-purple-800/30 backdrop-blur-sm rounded-3xl p-12 text-center border border-green-400/30">
-            <div className="text-6xl mb-4">📭</div>
-            <h2 className="text-3xl font-bold text-yellow-300 mb-4">No investments yet!</h2>
-            <p className="text-lg text-green-200 mb-8">
-              Start voting YES on startups to build your investment portfolio
+          <div className="bg-white rounded-3xl p-12 text-center shadow-2xl">
+            <div className="text-8xl mb-4">🍯</div>
+            <h2 className="text-3xl font-bold text-gray-800 mb-4">No portfolio companies yet!</h2>
+            <p className="text-lg text-gray-600 mb-4">
+              Your portfolio will show startups you've voted YES on that reach Stage 3 or Stage 4.
+            </p>
+            <p className="text-md text-gray-500 mb-8">
+              <strong>Stage 3:</strong> Due diligence & materials review<br />
+              <strong>Stage 4:</strong> Deal room access for final investment decisions
             </p>
             <button
-              onClick={() => navigate('/vote')}
-              className="bg-gradient-to-r from-amber-400 via-orange-500 to-yellow-500 hover:scale-105 text-white font-bold py-4 px-8 rounded-2xl shadow-lg transition-all text-lg"
+              onClick={() => navigate('/dashboard')}
+              className="bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-500 hover:to-blue-600 text-white font-bold py-4 px-8 rounded-2xl shadow-lg transition-all text-lg"
             >
-              🗳️ Go to Voting
+              � View All Your Votes
             </button>
           </div>
         ) : (
           <div className="space-y-8">
-            <div className="bg-purple-800/50 backdrop-blur-md rounded-3xl p-6 border-2 border-yellow-400">
-              <h2 className="text-2xl font-bold text-yellow-300 mb-2">
-                💼 {myYesVotes.length} Investment{myYesVotes.length !== 1 ? 's' : ''} in Portfolio
+            <div className="bg-white/10 backdrop-blur-md rounded-3xl p-6 border-2 border-orange-400">
+              <h2 className="text-2xl font-bold text-white mb-2">
+                ✨ {myYesVotes.length} Portfolio Compan{myYesVotes.length !== 1 ? 'ies' : 'y'}
               </h2>
-              <p className="text-green-200">
-                Track performance, monitor milestones, and manage your startup investments
+              <p className="text-purple-200">
+                These startups have reached Stage 3 (Due Diligence) or Stage 4 (Deal Room)
               </p>
             </div>
 
-            {/* Investment Cards with Progress Tracking */}
-            <div className="space-y-6">
+            {/* Full Startup Cards */}
+            <div className="space-y-8">
               {myYesVotes.map((startup) => (
-                <div key={startup.id} className="bg-purple-800/30 backdrop-blur-sm rounded-2xl p-6 border border-green-400/30 hover:border-yellow-400 transition-all">
-                  <div className="flex justify-between items-start mb-4">
-                    <div className="flex-1">
-                      <h3 className="text-2xl font-bold text-yellow-300 mb-2">{startup.name}</h3>
-                      {startup.tagline && (
-                        <p className="text-green-200 mb-3">{startup.tagline}</p>
-                      )}
-                      <div className="flex gap-3 flex-wrap">
-                        <span className="px-3 py-1 bg-green-500/20 border border-green-400/30 rounded-full text-green-300 text-sm font-semibold">
-                          💰 $25K invested
-                        </span>
-                        <span className="px-3 py-1 bg-orange-500/20 border border-orange-400/30 rounded-full text-orange-300 text-sm font-semibold">
-                          📈 +42% ROI
-                        </span>
-                        <span className="px-3 py-1 bg-blue-500/20 border border-blue-400/30 rounded-full text-blue-300 text-sm font-semibold">
-                          📅 6 months
-                        </span>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-3xl font-bold text-green-300">$35.5K</div>
-                      <div className="text-sm text-green-200">Current Value</div>
-                    </div>
-                  </div>
-
-                  {/* Progress Bar */}
-                  <div className="mb-4">
-                    <div className="flex justify-between text-sm text-green-200 mb-2">
-                      <span>Investment Progress</span>
-                      <span>Series A Target: $15M</span>
-                    </div>
-                    <div className="w-full bg-purple-900/50 rounded-full h-3">
-                      <div className="bg-gradient-to-r from-green-400 to-emerald-500 h-3 rounded-full" style={{width: '68%'}}></div>
-                    </div>
-                  </div>
-
-                  {/* Recent Milestones */}
-                  <div className="mb-4">
-                    <h4 className="text-sm font-semibold text-yellow-300 mb-2">🎯 Recent Milestones</h4>
-                    <ul className="space-y-1 text-sm text-white/90">
-                      <li>• Reached 10,000 active users</li>
-                      <li>• Signed partnership with major enterprise client</li>
-                      <li>• Revenue increased 3x quarter-over-quarter</li>
-                    </ul>
-                  </div>
-
-                  {/* Action Buttons */}
-                  <div className="flex gap-3">
-                    <button
-                      onClick={() => navigate(`/startup/${startup.id}`)}
-                      className="flex-1 px-4 py-2 rounded-xl font-semibold bg-gradient-to-r from-amber-400 via-orange-500 to-yellow-500 text-white hover:scale-105 transition-transform"
-                    >
-                      View Details
-                    </button>
+                <div key={startup.id} className="relative">
+                  <StartupCardOfficial
+                    startup={startup}
+                    onVote={handleVote}
+                  />
+                  
+                  {/* Remove from Portfolio Button */}
+                  <div className="mt-4 text-center">
                     <button
                       onClick={() => handleRemoveFavorite(startup.id)}
-                      className="px-4 py-2 rounded-xl font-semibold bg-red-500/20 border border-red-400/30 text-red-300 hover:bg-red-500/30 transition-all"
+                      className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded-xl transition-all"
                     >
-                      Remove
+                      ❌ Remove from Portfolio
                     </button>
                   </div>
                 </div>
@@ -280,7 +218,7 @@ export default function PortfolioPage() {
             <div className="flex gap-4 justify-center mt-8">
               <button
                 onClick={() => navigate('/vote')}
-                className="bg-gradient-to-r from-green-400 to-emerald-500 hover:scale-105 text-purple-900 font-bold py-3 px-8 rounded-2xl shadow-lg transition-all"
+                className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-3 px-8 rounded-2xl shadow-lg transition-all"
               >
                 🗳️ Continue Voting
               </button>

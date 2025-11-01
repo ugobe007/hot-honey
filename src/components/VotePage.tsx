@@ -116,10 +116,13 @@ const VotePage: React.FC = () => {
             <Link to="/" className="px-4 py-1.5 bg-orange-500 text-white rounded-full font-medium text-sm shadow-lg hover:bg-orange-600 transition-colors">
               🏠 Home
             </Link>
-            <Link to="/vote" className="px-4 py-1.5 bg-orange-600 text-white rounded-full font-medium text-sm shadow-lg">
-              📊 Vote
+            <Link to="/vote" className="px-4 py-1.5 bg-purple-700 text-white rounded-full font-medium text-sm shadow-lg">
+              🗳️ Vote
             </Link>
-            <Link to="/dashboard" className="px-4 py-1.5 bg-gradient-to-r from-amber-400 via-orange-500 to-yellow-500 text-white rounded-full font-medium text-sm shadow-lg hover:from-amber-500 hover:via-orange-600 hover:to-yellow-600 transition-all">
+            <Link to="/portfolio" className="px-4 py-1.5 bg-purple-700 text-white rounded-full font-medium text-sm shadow-lg hover:bg-purple-600 transition-colors">
+              ⭐ Portfolio
+            </Link>
+            <Link to="/dashboard" className="px-4 py-1.5 bg-orange-500 text-white rounded-full font-medium text-sm shadow-lg hover:bg-orange-600 transition-colors">
               👤 Dashboard
             </Link>
             <Link to="/settings" className="px-4 py-1.5 bg-purple-500 text-white rounded-full font-medium text-sm shadow-lg hover:bg-purple-600 transition-colors">
@@ -134,7 +137,7 @@ const VotePage: React.FC = () => {
             <h3 className="text-4xl font-bold text-white mb-4">All Done!</h3>
             <p className="text-xl text-purple-200 mb-8">You've voted on all {totalStartupCount} startups!</p>
             <div className="flex gap-4 justify-center">
-              <Link to="/dashboard" className="px-8 py-3 bg-gradient-to-r from-amber-400 via-orange-500 to-yellow-500 text-white rounded-lg font-bold text-lg hover:from-amber-500 hover:via-orange-600 hover:to-yellow-600 transition-all shadow-lg">
+              <Link to="/dashboard" className="px-8 py-3 bg-orange-500 text-white rounded-lg font-medium text-lg hover:bg-orange-600 transition-colors shadow-lg">
                 View My Hot Picks 🔥
               </Link>
               <button
@@ -164,10 +167,13 @@ const VotePage: React.FC = () => {
           <Link to="/" className="px-4 py-1.5 bg-orange-500 text-white rounded-full font-medium text-sm shadow-lg hover:bg-orange-600 transition-colors">
             🏠 Home
           </Link>
-          <Link to="/vote" className="px-4 py-1.5 bg-orange-600 text-white rounded-full font-medium text-sm shadow-lg">
-            📊 Vote
+          <Link to="/vote" className="px-4 py-1.5 bg-purple-700 text-white rounded-full font-medium text-sm shadow-lg">
+            🗳️ Vote
           </Link>
-          <Link to="/dashboard" className="px-4 py-1.5 bg-gradient-to-r from-amber-400 via-orange-500 to-yellow-500 text-white rounded-full font-medium text-sm shadow-lg hover:from-amber-500 hover:via-orange-600 hover:to-yellow-600 transition-all">
+          <Link to="/portfolio" className="px-4 py-1.5 bg-purple-700 text-white rounded-full font-medium text-sm shadow-lg hover:bg-purple-600 transition-colors">
+            ⭐ Portfolio
+          </Link>
+          <Link to="/dashboard" className="px-4 py-1.5 bg-orange-500 text-white rounded-full font-medium text-sm shadow-lg hover:bg-orange-600 transition-colors">
             👤 Dashboard
           </Link>
           <Link to="/settings" className="px-4 py-1.5 bg-purple-500 text-white rounded-full font-medium text-sm shadow-lg hover:bg-purple-600 transition-colors">

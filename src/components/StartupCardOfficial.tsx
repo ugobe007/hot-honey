@@ -7,7 +7,6 @@ interface Startup {
   tagline?: string;
   pitch?: string;
   fivePoints?: string[];
-  secretFact?: string;
   raise?: string;
   yesVotes?: number;
   noVotes?: number;
@@ -152,7 +151,7 @@ export default function StartupCardOfficial({ startup, onVote, onSwipeAway }: Pr
           {showSecret && (
             <div className="bg-yellow-200 border-2 border-yellow-400 rounded-lg p-1.5 mb-2">
               <p className="text-[10px] font-bold text-gray-900 leading-tight">
-                {startup.secretFact || '🤫 Secret fact coming soon!'}
+                🤫 {startup.fivePoints && startup.fivePoints[4] ? startup.fivePoints[4] : 'Traction data available'}
               </p>
             </div>
           )}

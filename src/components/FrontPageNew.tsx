@@ -77,13 +77,16 @@ const FrontPageNew: React.FC = () => {
           <Link to="/" className="px-4 py-1.5 bg-orange-500 text-white rounded-full font-medium text-sm shadow-lg hover:bg-orange-600 transition-colors">
             🏠 Home
           </Link>
-          <Link to="/vote" className="px-4 py-1.5 bg-orange-500 text-white rounded-full font-medium text-sm shadow-lg hover:bg-orange-600 transition-colors">
-            <span className="blink-text">📊 Vote</span>
+          <Link to="/vote" className="px-4 py-1.5 bg-purple-700 text-white rounded-full font-medium text-sm shadow-lg hover:bg-purple-600 transition-colors">
+            <span className="blink-text">�️ Vote</span>
+          </Link>
+          <Link to="/portfolio" className="px-4 py-1.5 bg-purple-700 text-white rounded-full font-medium text-sm shadow-lg hover:bg-purple-600 transition-colors">
+            ⭐ Portfolio
           </Link>
           <Link to="/analytics" className="px-4 py-1.5 bg-gradient-to-r from-purple-700 to-purple-900 text-yellow-400 rounded-full font-bold text-sm shadow-lg hover:from-purple-800 hover:to-purple-950 transition-all">
             📈 Analytics
           </Link>
-          <Link to="/dashboard" className="px-5 py-2 bg-gradient-to-r from-amber-400 via-orange-500 to-yellow-500 text-white rounded-full font-bold text-base shadow-lg hover:from-amber-500 hover:via-orange-600 hover:to-yellow-600 transition-all">
+          <Link to="/dashboard" className="px-4 py-1.5 bg-orange-500 text-white rounded-full font-medium text-sm shadow-lg hover:bg-orange-600 transition-colors">
             👤 Dashboard
           </Link>
         </div>
