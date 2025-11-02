@@ -26,6 +26,7 @@ export default function EditStartups() {
   const [editData, setEditData] = useState<any>(null);
   const [saving, setSaving] = useState(false);
   const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [debugInfo, setDebugInfo] = useState<any>(null);
 
   useEffect(() => {
     loadStartups();
@@ -33,6 +34,24 @@ export default function EditStartups() {
 
   const loadStartups = async () => {
     setLoading(true);
+    
+    // First, try to get ALL startups without any filter to debug
+    const { data: allData, error: allError } = await supabase
+      .from('startup_uploads')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    console.log('🔍 DEBUG - All startups in database:', allData);
+    console.log('🔍 DEBUG - Error if any:', allError);
+    console.log('🔍 DEBUG - Total count:', allData?.length);
+
+    // Store debug info
+    setDebugInfo({
+      totalInDatabase: allData?.length || 0,
+      names: allData?.map(s => s.name) || [],
+      statuses: allData?.map(s => ({ name: s.name, status: s.status })) || []
+    });
+
     let query = supabase
       .from('startup_uploads')
       .select('*')
@@ -47,8 +66,9 @@ export default function EditStartups() {
 
     if (error) {
       console.error('Error loading startups:', error);
-      alert('Failed to load startups');
+      alert(`Failed to load startups: ${error.message}`);
     } else {
+      console.log('🔍 DEBUG - Filtered startups:', data);
       setStartups(data || []);
     }
     setLoading(false);
@@ -198,6 +218,35 @@ export default function EditStartups() {
             </button>
           </div>
         </div>
+
+        {/* Debug Panel */}
+        {debugInfo && (
+          <div className="bg-yellow-500/20 border-2 border-yellow-400 rounded-xl p-4 mb-6">
+            <h3 className="text-yellow-300 font-bold mb-2">🔍 Debug Info:</h3>
+            <p className="text-white">
+              <strong>Total in database:</strong> {debugInfo.totalInDatabase} startups
+            </p>
+            <p className="text-white">
+              <strong>Showing filtered:</strong> {startups.length} startups
+            </p>
+            {debugInfo.statuses.length > 0 && (
+              <div className="mt-2">
+                <p className="text-white font-bold">All startups in DB:</p>
+                <ul className="text-white text-sm">
+                  {debugInfo.statuses.map((item: any, i: number) => (
+                    <li key={i}>
+                      • {item.name} - <span className={`font-bold ${
+                        item.status === 'approved' ? 'text-green-400' :
+                        item.status === 'pending' ? 'text-yellow-400' :
+                        'text-red-400'
+                      }`}>{item.status}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        )}
 
         <div className="grid gap-6">
           {startups.map((startup) => (
