@@ -598,12 +598,10 @@ Fill ONLY the EMPTY fields with your research. Return JSON.`
             <button
               type="button"
               onClick={handleAIResearch}
-              disabled={researchingWithAI || (!formData.website && !formData.name)}
+              disabled={researchingWithAI}
               className={`w-full py-6 rounded-2xl font-bold text-lg transition-all shadow-lg ${
                 researchingWithAI
                   ? 'bg-yellow-400 text-gray-900 cursor-wait'
-                  : (!formData.website && !formData.name)
-                  ? 'bg-gray-500 text-gray-300 cursor-not-allowed'
                   : 'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white'
               }`}
             >
