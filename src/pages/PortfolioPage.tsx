@@ -2,41 +2,38 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import StartupCardOfficial from '../components/StartupCardOfficial';
+import { NotificationBell } from '../components/NotificationBell';
 import startupData from '../data/startupData';
+import { useAuth } from '../hooks/useAuth';
+import { useVotes } from '../hooks/useVotes';
 
 export default function PortfolioPage() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { userId, isLoading: authLoading } = useAuth();
+  const { votes, isLoading: votesLoading, getYesVotes, removeVote } = useVotes(userId);
   const [myYesVotes, setMyYesVotes] = useState<any[]>([]);
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    // Load YES votes from localStorage (same as Dashboard)
-    const votes = localStorage.getItem('myYesVotes');
-    if (votes) {
-      const parsedVotes = JSON.parse(votes);
-      
-      // Migrate old votes that don't have fivePoints
-      const enrichedVotes = parsedVotes.map((vote: any) => {
-        if (!vote.fivePoints) {
-          // Find the startup in startupData and add missing fields
-          const fullStartup = startupData.find(s => s.id === vote.id);
-          if (fullStartup) {
-            return { ...vote, fivePoints: fullStartup.fivePoints, stage: fullStartup.stage };
-          }
-        }
-        return vote;
-      });
-      
-      // Filter for Stage 3 & 4 only (active investments / deal room access)
-      const portfolioStartups = enrichedVotes.filter((vote: any) => 
-        vote.stage === 3 || vote.stage === 4
-      );
-      
-      // Save enriched data back to localStorage
-      localStorage.setItem('myYesVotes', JSON.stringify(enrichedVotes));
-      setMyYesVotes(portfolioStartups);
-    }
+    if (authLoading || votesLoading) return;
+
+    // Get YES vote startup IDs from Supabase
+    const yesVoteIds = getYesVotes();
+    
+    // Enrich with full startup data
+    const enrichedVotes = yesVoteIds.map(id => {
+      const startup = startupData.find(s => s.id.toString() === id);
+      if (startup) {
+        return {
+          ...startup,
+          votedAt: votes.find(v => v.startup_id === id)?.created_at || new Date().toISOString(),
+        };
+      }
+      return null;
+    }).filter(Boolean);
+    
+    setMyYesVotes(enrichedVotes);
 
     // Check admin status
     const userProfile = localStorage.getItem('userProfile');
@@ -44,31 +41,28 @@ export default function PortfolioPage() {
       const profile = JSON.parse(userProfile);
       setIsAdmin(profile.email === 'admin@hotmoneyhoney.com' || profile.isAdmin);
     }
-  }, []);
+  }, [authLoading, votesLoading, votes]); // FIXED: Removed getYesVotes from dependencies
 
   const handleVote = (vote: 'yes' | 'no') => {
     console.log(`Voted ${vote}`);
-    // You can add vote handling logic here if needed
   };
 
-  const handleRemoveFavorite = (startupId: number) => {
-    // Remove from myYesVotes
-    const votes = localStorage.getItem('myYesVotes');
-    if (votes) {
-      const parsedVotes = JSON.parse(votes);
-      const updated = parsedVotes.filter((v: any) => v.id !== startupId);
-      localStorage.setItem('myYesVotes', JSON.stringify(updated));
-      setMyYesVotes(updated);
-      
-      // Also remove from votedStartups
-      const votedStartups = localStorage.getItem('votedStartups');
-      if (votedStartups) {
-        const voted = JSON.parse(votedStartups);
-        delete voted[startupId];
-        localStorage.setItem('votedStartups', JSON.stringify(voted));
-      }
+  const handleRemoveFavorite = async (startupId: number) => {
+    const success = await removeVote(startupId.toString());
+    if (success) {
+      setMyYesVotes(prev => prev.filter(v => v.id !== startupId));
+    } else {
+      alert('❌ Failed to remove favorite. Please try again.');
     }
   };
+
+  if (authLoading || votesLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-purple-800 to-indigo-900 flex items-center justify-center">
+        <div className="text-white text-2xl">Loading portfolio...</div>
+      </div>
+    );
+  }
 
   const isActive = (path: string) => location.pathname === path;
   const getButtonSize = (path: string) => {
@@ -77,10 +71,10 @@ export default function PortfolioPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-green-400 to-purple-950 p-8" style={{ backgroundImage: 'radial-gradient(ellipse 800px 600px at 20% 40%, rgba(134, 239, 172, 0.4), transparent), linear-gradient(to bottom right, rgb(88, 28, 135), rgb(59, 7, 100))' }}>
-      {/* Navigation Bar */}
-      <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50">
-        <div className="flex gap-3 items-center">
+    <>
+      {/* Navigation Bar - OUTSIDE main container */}
+      <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-[200] pointer-events-auto">
+        <div className="flex gap-3 items-center pointer-events-auto">
           <Link to="/signup" className="text-4xl hover:scale-110 transition-transform cursor-pointer" title="Hot Money Honey">
             🍯
           </Link>
@@ -113,7 +107,7 @@ export default function PortfolioPage() {
             to="/vote" 
             className={`font-bold rounded-2xl transition-all ${getButtonSize('/vote')} ${
               isActive('/vote')
-                ? 'bg-gradient-to-r from-purple-500 to-purple-600 text-white shadow-lg scale-110'
+                ? 'bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg scale-110'
                 : 'bg-purple-700 hover:bg-purple-600 text-white'
             }`}
           >
@@ -131,6 +125,17 @@ export default function PortfolioPage() {
             ⭐ Portfolio
           </Link>
 
+          <Link 
+            to="/settings" 
+            className={`font-bold rounded-2xl transition-all ${getButtonSize('/settings')} ${
+              isActive('/settings')
+                ? 'bg-gradient-to-r from-gray-500 to-gray-700 text-white shadow-lg scale-110'
+                : 'bg-purple-700 hover:bg-purple-600 text-white'
+            }`}
+          >
+            ⚙️ Settings
+          </Link>
+
           {isAdmin && (
             <Link 
               to="/admin/bulk-upload" 
@@ -143,52 +148,48 @@ export default function PortfolioPage() {
               📊 Bulk Upload
             </Link>
           )}
+
+          <NotificationBell />
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto pt-28">
+      {/* Main content container */}
+      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-green-400 to-purple-950 p-8" style={{ backgroundImage: 'radial-gradient(ellipse 800px 600px at 20% 40%, rgba(134, 239, 172, 0.4), transparent), linear-gradient(to bottom right, rgb(88, 28, 135), rgb(59, 7, 100))' }}>
+        <div className="max-w-4xl mx-auto pt-28">
         {/* Header */}
         <div className="text-center mb-12">
           <div className="text-8xl mb-4">⭐</div>
           <h1 className="text-5xl font-bold bg-gradient-to-r from-yellow-300 via-orange-400 to-red-500 bg-clip-text text-transparent mb-4">
             Your Portfolio
           </h1>
-          <p className="text-xl text-white font-bold drop-shadow-lg mb-2">
-            Stage 3 & 4 Startups - Active Investments
-          </p>
-          <p className="text-md text-purple-200 max-w-2xl mx-auto">
-            Your portfolio shows startups that have advanced to Stage 3 (Due Diligence) or Stage 4 (Deal Room). 
-            These are companies ready for investment consideration.
+          <p className="text-xl text-white font-bold drop-shadow-lg">
+            Startups you've voted YES on
           </p>
         </div>
 
         {/* Portfolio Content */}
         {myYesVotes.length === 0 ? (
           <div className="bg-white rounded-3xl p-12 text-center shadow-2xl">
-            <div className="text-8xl mb-4">🍯</div>
-            <h2 className="text-3xl font-bold text-gray-800 mb-4">No portfolio companies yet!</h2>
-            <p className="text-lg text-gray-600 mb-4">
-              Your portfolio will show startups you've voted YES on that reach Stage 3 or Stage 4.
-            </p>
-            <p className="text-md text-gray-500 mb-8">
-              <strong>Stage 3:</strong> Due diligence & materials review<br />
-              <strong>Stage 4:</strong> Deal room access for final investment decisions
+            <div className="text-6xl mb-4">📭</div>
+            <h2 className="text-3xl font-bold text-gray-800 mb-4">No picks yet!</h2>
+            <p className="text-lg text-gray-600 mb-8">
+              Start voting YES on startups to build your portfolio
             </p>
             <button
-              onClick={() => navigate('/dashboard')}
-              className="bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-500 hover:to-blue-600 text-white font-bold py-4 px-8 rounded-2xl shadow-lg transition-all text-lg"
+              onClick={() => navigate('/vote')}
+              className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-4 px-8 rounded-2xl shadow-lg transition-all text-lg"
             >
-              � View All Your Votes
+              🗳️ Go to Voting
             </button>
           </div>
         ) : (
           <div className="space-y-8">
             <div className="bg-white/10 backdrop-blur-md rounded-3xl p-6 border-2 border-orange-400">
               <h2 className="text-2xl font-bold text-white mb-2">
-                ✨ {myYesVotes.length} Portfolio Compan{myYesVotes.length !== 1 ? 'ies' : 'y'}
+                ✨ {myYesVotes.length} Startup{myYesVotes.length !== 1 ? 's' : ''} in Your Portfolio
               </h2>
               <p className="text-purple-200">
-                These startups have reached Stage 3 (Due Diligence) or Stage 4 (Deal Room)
+                These are the startups you've voted YES on!
               </p>
             </div>
 
@@ -231,7 +232,8 @@ export default function PortfolioPage() {
             </div>
           </div>
         )}
+        </div>
       </div>
-    </div>
+    </>
   );
 }

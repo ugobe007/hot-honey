@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useReactions } from '../hooks/useReactions';
+import { useAuth } from '../hooks/useAuth';
 
 interface Startup {
   id: number;
@@ -28,11 +30,136 @@ export default function StartupCardOfficial({ startup, onVote, onSwipeAway }: Pr
   const [showCommentBox, setShowCommentBox] = useState(false);
   const [isSwipingAway, setIsSwipingAway] = useState(false);
   const [showPuff, setShowPuff] = useState(false);
+  const [showSignUpPrompt, setShowSignUpPrompt] = useState(false);
+  const [showThumbsUpFloat, setShowThumbsUpFloat] = useState(false);
+  const [voteMessage, setVoteMessage] = useState<string>('');
+  const [showVoteMessage, setShowVoteMessage] = useState(false);
+  const [hasReactedUp, setHasReactedUp] = useState(false);
+  const [hasReactedDown, setHasReactedDown] = useState(false);
+  
+  // Local state for anonymous reactions
+  const [localReaction, setLocalReaction] = useState<'thumbs_up' | 'thumbs_down' | null>(null);
+  const [localThumbsUpCount, setLocalThumbsUpCount] = useState(0);
+  const [localThumbsDownCount, setLocalThumbsDownCount] = useState(0);
+
+  // Get user ID for reactions
+  const { userId } = useAuth();
+
+  // Use reactions hook for authenticated users
+  const { castReaction, getCounts, hasReacted, fetchUserReactions } = useReactions(startup.id.toString());
+  const supabaseReactionCounts = getCounts(startup.id.toString());
+  const supabaseUserReaction = hasReacted(startup.id.toString());
+
+  // Load user's reactions on mount
+  useEffect(() => {
+    if (userId && !userId.startsWith('anon_')) {
+      fetchUserReactions(userId);
+    } else {
+      // Load local reactions for anonymous users
+      const localReactions = JSON.parse(localStorage.getItem('localReactions') || '{}');
+      const localCounts = JSON.parse(localStorage.getItem('localReactionCounts') || '{}');
+      
+      if (localReactions[startup.id]) {
+        setLocalReaction(localReactions[startup.id]);
+      }
+      
+      if (localCounts[startup.id]) {
+        setLocalThumbsUpCount(localCounts[startup.id].thumbs_up || 0);
+        setLocalThumbsDownCount(localCounts[startup.id].thumbs_down || 0);
+      }
+
+      // Check if user has already reacted (limit 1 click per startup)
+      const userReactedStartups = JSON.parse(localStorage.getItem('userReactedStartups') || '{}');
+      if (userReactedStartups[startup.id]) {
+        if (userReactedStartups[startup.id] === 'thumbs_up') setHasReactedUp(true);
+        if (userReactedStartups[startup.id] === 'thumbs_down') setHasReactedDown(true);
+      }
+    }
+  }, [userId]);
+
+  // Determine which reaction/counts to display
+  const isAnonymous = !userId || userId.startsWith('anon_');
+  const displayReaction = isAnonymous ? localReaction : supabaseUserReaction;
+  const displayThumbsUpCount = isAnonymous ? localThumbsUpCount : supabaseReactionCounts.thumbs_up_count;
+  const displayThumbsDownCount = isAnonymous ? localThumbsDownCount : supabaseReactionCounts.thumbs_down_count;
 
   const getVotesNeeded = (stage: number) => (stage === 4 ? 1 : 5);
   const votesNeeded = getVotesNeeded(startup.stage || 1);
   const currentVotes = startup.yesVotes || 0;
   const progress = Math.min((currentVotes / votesNeeded) * 100, 100);
+
+  const handleReaction = async (reactionType: 'thumbs_up' | 'thumbs_down') => {
+    const isAnonymous = !userId || userId.startsWith('anon_');
+
+    // Check if user already reacted
+    if (reactionType === 'thumbs_up' && hasReactedUp) {
+      alert('You already gave this a thumbs up! 👍');
+      return;
+    }
+    if (reactionType === 'thumbs_down' && hasReactedDown) {
+      alert('You already gave this a thumbs down! 👎');
+      return;
+    }
+
+    // Check limits before reacting
+    const maxThumbsUp = 100;
+    const maxThumbsDown = 75;
+
+    if (reactionType === 'thumbs_up' && displayThumbsUpCount >= maxThumbsUp) {
+      alert('👍 Max thumbs up reached (100)!');
+      return;
+    }
+
+    if (reactionType === 'thumbs_down' && displayThumbsDownCount >= maxThumbsDown) {
+      alert('👎 Max thumbs down reached (75)!');
+      return;
+    }
+
+    // Show floating animation only for thumbs up
+    if (reactionType === 'thumbs_up') {
+      setShowThumbsUpFloat(true);
+      setTimeout(() => setShowThumbsUpFloat(false), 800);
+      setHasReactedUp(true);
+    } else {
+      // No animation for thumbs down, just register the click
+      setHasReactedDown(true);
+    }
+
+    try {
+      if (isAnonymous) {
+        // Track that user reacted (limit 1 per startup)
+        const userReactedStartups = JSON.parse(localStorage.getItem('userReactedStartups') || '{}');
+        userReactedStartups[startup.id] = reactionType;
+        localStorage.setItem('userReactedStartups', JSON.stringify(userReactedStartups));
+
+        // For anonymous: just increment the count (no toggle)
+        const localCounts = JSON.parse(localStorage.getItem('localReactionCounts') || '{}');
+        if (!localCounts[startup.id]) {
+          localCounts[startup.id] = { thumbs_up: 0, thumbs_down: 0 };
+        }
+        
+        // Increment the count
+        if (reactionType === 'thumbs_up') {
+          localCounts[startup.id].thumbs_up = Math.min(localCounts[startup.id].thumbs_up + 1, maxThumbsUp);
+        } else {
+          localCounts[startup.id].thumbs_down = Math.min(localCounts[startup.id].thumbs_down + 1, maxThumbsDown);
+        }
+        
+        localStorage.setItem('localReactionCounts', JSON.stringify(localCounts));
+        
+        // Update local state immediately
+        setLocalThumbsUpCount(localCounts[startup.id].thumbs_up);
+        setLocalThumbsDownCount(localCounts[startup.id].thumbs_down);
+        
+        console.log('Anonymous reaction saved:', reactionType);
+      } else {
+        // Authenticated users: save to Supabase
+        await castReaction(userId, startup.id.toString(), reactionType);
+      }
+    } catch (err) {
+      console.error('Failed to cast reaction:', err);
+    }
+  };
 
   const handleVote = (vote: 'yes' | 'no') => {
     if (hasVoted) return;
@@ -40,12 +167,30 @@ export default function StartupCardOfficial({ startup, onVote, onSwipeAway }: Pr
     setVoteType(vote);
     setHasVoted(true);
 
+    // Show vote message
     if (vote === 'yes') {
+      setVoteMessage(`✅ ${startup.name} added to your portfolio!`);
       setShowBubbles(true);
       setTimeout(() => setShowBubbles(false), 800);
+    } else {
+      setVoteMessage(`❌ ${startup.name} removed from voting`);
+      // No animation for NO votes, just show button depressed
     }
 
+    // Display vote message
+    setShowVoteMessage(true);
+    setTimeout(() => setShowVoteMessage(false), 3000);
+
     onVote(vote);
+
+    // Show sign-up prompt for anonymous users after voting
+    const isAnonymous = !userId || userId.startsWith('anon_');
+    if (isAnonymous) {
+      setTimeout(() => {
+        setShowSignUpPrompt(true);
+        setTimeout(() => setShowSignUpPrompt(false), 4000);
+      }, 600);
+    }
 
     setTimeout(() => {
       setShowPuff(true);
@@ -72,7 +217,24 @@ export default function StartupCardOfficial({ startup, onVote, onSwipeAway }: Pr
       return;
     }
 
-    alert('💬 Comment posted!');
+    const isAnonymous = !userId || userId.startsWith('anon_');
+    
+    // Store comment locally
+    const localComments = JSON.parse(localStorage.getItem('localComments') || '{}');
+    if (!localComments[startup.id]) localComments[startup.id] = [];
+    localComments[startup.id].push({
+      text: comment,
+      timestamp: new Date().toISOString(),
+      anonymous: isAnonymous
+    });
+    localStorage.setItem('localComments', JSON.stringify(localComments));
+
+    if (isAnonymous) {
+      alert('💬 Comment saved locally! Sign up to save permanently across devices.');
+    } else {
+      alert('💬 Comment posted!');
+    }
+    
     setComment('');
     setShowCommentBox(false);
   };
@@ -89,6 +251,37 @@ export default function StartupCardOfficial({ startup, onVote, onSwipeAway }: Pr
 
   return (
     <div className={`relative transition-all duration-250 ease-out ${isSwipingAway ? 'transform -translate-x-full opacity-0' : ''} ${showPuff ? 'animate-puff' : ''}`}>
+      {showVoteMessage && (
+        <div className="absolute -top-20 left-1/2 transform -translate-x-1/2 z-[60] bg-white border-4 border-orange-500 px-6 py-3 rounded-2xl shadow-2xl animate-bounce">
+          <p className="text-base font-black text-gray-900 whitespace-nowrap">{voteMessage}</p>
+        </div>
+      )}
+
+      {showSignUpPrompt && (
+        <div className="absolute -top-16 left-1/2 transform -translate-x-1/2 z-50 bg-yellow-400 text-black px-4 py-2 rounded-lg shadow-xl animate-bounce">
+          <p className="text-sm font-bold">💾 Sign up to save your votes!</p>
+        </div>
+      )}
+
+      {showThumbsUpFloat && (
+        <div className="absolute inset-0 pointer-events-none z-50 overflow-hidden">
+          {[...Array(8)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute text-3xl animate-float-up"
+              style={{
+                left: `${Math.random() * 80 + 10}%`,
+                bottom: '0%',
+                animationDelay: `${i * 0.08}s`,
+                animationDuration: '1s'
+              }}
+            >
+              👍
+            </div>
+          ))}
+        </div>
+      )}
+
       {showBubbles && (
         <div className="absolute inset-0 pointer-events-none z-50 overflow-hidden">
           {[...Array(12)].map((_, i) => (
@@ -124,7 +317,7 @@ export default function StartupCardOfficial({ startup, onVote, onSwipeAway }: Pr
         </div>
       )}
 
-      <div className="bg-gradient-to-br from-amber-300 via-orange-400 to-yellow-500 rounded-2xl p-5 shadow-2xl border-4 border-orange-500 relative w-[360px] h-[400px] flex flex-col">
+      <div className="bg-gradient-to-br from-amber-300 via-orange-400 to-yellow-500 rounded-2xl p-5 shadow-2xl border-4 border-orange-500 relative w-[360px] h-[420px] flex flex-col">
         <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/20 to-transparent pointer-events-none"></div>
         
         <div className="relative flex flex-col h-full">
@@ -133,11 +326,8 @@ export default function StartupCardOfficial({ startup, onVote, onSwipeAway }: Pr
               <h2 className="text-2xl font-black text-gray-900 tracking-tight leading-none">
                 {startup.name}
               </h2>
-              <p className="text-blue-700 font-bold text-xs mt-0.5">
+              <p className="text-blue-700 font-bold text-base mt-0.5">
                 stage #{startup.stage || 1}
-              </p>
-              <p className="text-[10px] text-gray-700 italic leading-tight mt-0.5">
-                {getStageDescription(startup.stage || 1)}
               </p>
             </div>
             <button
@@ -157,7 +347,7 @@ export default function StartupCardOfficial({ startup, onVote, onSwipeAway }: Pr
           )}
 
           {startup.pitch && (
-            <p className="text-sm font-black text-gray-900 leading-tight tracking-tight mb-3">
+            <p className="text-lg font-black text-gray-900 leading-tight tracking-tight mb-3">
               "{startup.pitch}"
             </p>
           )}
@@ -166,19 +356,13 @@ export default function StartupCardOfficial({ startup, onVote, onSwipeAway }: Pr
             {(startup.fivePoints || []).slice(0, 4).map((point, i) => (
               <p 
                 key={i} 
-                className={`leading-tight tracking-tight ${
-                  i === 0
-                    ? 'text-xs font-black text-gray-900'
-                    : i === 1 || i === 2
-                    ? 'text-sm font-black text-gray-900'
-                    : 'text-xs font-bold text-gray-800'
-                }`}
+                className="text-base font-black text-gray-900 leading-tight tracking-tight"
               >
                 {point}
               </p>
             ))}
             {startup.raise && (
-              <p className="text-xs font-black text-gray-900 leading-tight tracking-tight">
+              <p className="text-base font-black text-gray-900 leading-tight tracking-tight">
                 💰 {startup.raise}
               </p>
             )}
@@ -186,32 +370,31 @@ export default function StartupCardOfficial({ startup, onVote, onSwipeAway }: Pr
 
           <div className="flex-1"></div>
 
-          <div className="mb-2">
-            <div className="flex justify-between text-[10px] text-gray-700 mb-1">
-              <span className="font-bold">Stage {(startup.stage || 1) + 1}</span>
-              <span className="font-black">{currentVotes}/{votesNeeded} votes</span>
-            </div>
-            <div className="w-full bg-gray-300 rounded-full h-1.5">
-              <div 
-                className="bg-green-500 h-1.5 rounded-full transition-all duration-300"
-                style={{ width: `${progress}%` }}
-              />
-            </div>
-          </div>
-
           <div className="flex gap-3 mb-2">
-            <div className="flex items-center gap-1">
-              <span className="text-base">👍</span>
-              <span className="font-black text-gray-900 text-sm">{startup.yesVotes || 0}</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <span className="text-base">👎</span>
-              <span className="font-black text-gray-900 text-sm">{startup.noVotes || 0}</span>
-            </div>
+            <button
+              onClick={() => handleReaction('thumbs_up')}
+              className="flex items-center gap-1 transition-all"
+            >
+              <span className={displayThumbsUpCount >= 10 ? "text-3xl" : "text-2xl"}>👍</span>
+              <span className="font-black text-gray-900 text-lg">{displayThumbsUpCount}</span>
+            </button>
+            
+            <button
+              onClick={() => handleReaction('thumbs_down')}
+              className="flex items-center gap-1 transition-all"
+            >
+              <span className="text-2xl">👎</span>
+              <span className="font-black text-gray-900 text-lg">{displayThumbsDownCount}</span>
+            </button>
           </div>
 
           <div className="flex items-center gap-2 mb-2">
-            <div className="text-xl">🔥</div>
+            <div className={
+              startup.stage === 1 ? "text-xl" :
+              startup.stage === 2 ? "text-2xl" :
+              startup.stage === 3 ? "text-3xl" :
+              "text-4xl"
+            }>🔥</div>
             <button
               onClick={() => handleVote('yes')}
               disabled={hasVoted}

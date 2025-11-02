@@ -1,0 +1,66 @@
+#!/bin/bash
+
+# ============================================================================
+# HOT MONEY HONEY - QUICK DEPLOYMENT GUIDE
+# ============================================================================
+# Run this to see step-by-step deployment instructions
+# ============================================================================
+
+echo "🍯 HOT MONEY HONEY - Deployment Instructions"
+echo "=============================================="
+echo ""
+echo "📋 WHAT WE BUILT:"
+echo "  ✅ Social Reactions (👍👎) - Casual engagement, NO stage advancement"
+echo "  ✅ Official Voting (✅❌) - Investment decisions, TRIGGERS stage advancement"
+echo "  ✅ Notification System - Alerts YES voters when startup advances"
+echo "  ✅ StartupCard now uses reactions (not votes)"
+echo "  ✅ StartupDetail uses official voting"
+echo ""
+echo "🚀 TO DEPLOY:"
+echo ""
+echo "Step 1: Deploy Reactions System"
+echo "  → Open: https://supabase.com/dashboard/project/unkpogyhhjbvxxjvmxlt/sql/new"
+echo "  → Copy contents of: supabase-reactions.sql"
+echo "  → Paste into SQL Editor"
+echo "  → Click RUN"
+echo "  → Wait for success ✅"
+echo ""
+echo "Step 2: Deploy Stage Advancement System"
+echo "  → Click 'New Query' in Supabase SQL Editor"
+echo "  → Copy contents of: supabase-stage-advancement.sql"
+echo "  → Paste into SQL Editor"
+echo "  → Click RUN"
+echo "  → Wait for success ✅"
+echo ""
+echo "Step 3: Verify Deployment"
+echo "  → Go to Table Editor"
+echo "  → Confirm 'reactions' table exists"
+echo "  → Confirm 'notifications' table exists"
+echo "  → Go to Database → Functions"
+echo "  → Confirm 'check_and_advance_stage' exists"
+echo ""
+echo "Step 4: Start Dev Server & Test"
+echo "  → Run: npm run dev"
+echo "  → Test social reactions on StartupCard"
+echo "  → Test official voting on StartupDetail page"
+echo "  → Cast 5 YES votes → verify stage advances"
+echo "  → Check notification bell for alerts"
+echo ""
+echo "📚 DOCUMENTATION:"
+echo "  • DEPLOYMENT_SUMMARY.md - Complete system overview"
+echo "  • DEPLOYMENT_GUIDE.md - Detailed deployment steps"
+echo "  • VOTING_SYSTEM_CLARIFICATION.md - Reactions vs Voting explained"
+echo ""
+echo "⚠️  CRITICAL:"
+echo "  • Thumbs (👍👎) = Social reactions, NOT official votes"
+echo "  • Only YES/NO on StartupDetail page counts toward stage advancement"
+echo "  • Deploy BOTH SQL files before testing"
+echo ""
+echo "🎯 READY TO DEPLOY? Follow steps above!"
+echo ""
+
+# Open the deployment page (macOS only)
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  echo "🌐 Opening Supabase SQL Editor..."
+  open "https://supabase.com/dashboard/project/unkpogyhhjbvxxjvmxlt/sql/new"
+fi

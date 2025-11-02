@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useState, useRef } from 'react';
+import { supabase } from '../lib/supabase';
 import * as pdfjsLib from 'pdfjs-dist';
-import { getCollection, COLLECTIONS, type PendingUploadDocument } from '../lib/mongodb';
 
 // Configure PDF.js worker - use file from public directory
 pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
@@ -344,11 +344,24 @@ Return valid JSON with: name, pitch, fivePoints (array of 5 strings), industry, 
     setError('');
 
     try {
-      // Create pending upload document for MongoDB
-      const newUpload: PendingUploadDocument = {
+      // Always use localStorage for now (Supabase needs proper schema configuration)
+      const newStartup = {
+        id: Date.now(),
         name: formData.name,
         tagline: formData.valueProp,
         pitch: formData.valueProp || `${formData.problem} | ${formData.solution}`,
+        stage: formData.stage === 'Pre-Seed' ? 1 : formData.stage === 'Seed' ? 1 : formData.stage === 'Series A' ? 2 : 1,
+        team: formData.team,
+        funding: formData.funding,
+        raise: formData.funding,
+        website: formData.website,
+        industries: formData.industry ? [formData.industry] : [],
+        problem: formData.problem,
+        solution: formData.solution,
+        founderName: formData.founderName,
+        founderEmail: formData.founderEmail,
+        presentationUrl: formData.presentationUrl,
+        videoUrl: formData.videoUrl,
         fivePoints: formData.fivePoints.length > 0 ? formData.fivePoints : [
           formData.problem,
           formData.solution,
@@ -356,44 +369,18 @@ Return valid JSON with: name, pitch, fivePoints (array of 5 strings), industry, 
           formData.team,
           formData.funding
         ],
-        website: formData.website,
-        funding: formData.funding,
-        stage: formData.stage === 'Pre-Seed' ? 1 : formData.stage === 'Seed' ? 1 : formData.stage === 'Series A' ? 2 : 1,
-        industry: formData.industry || 'Technology',
-        uploadedAt: new Date(),
-        uploadedBy: formData.founderEmail || 'anonymous',
-        status: 'pending',
-        source: 'startup_submission_form'
+        yesVotes: 0,
+        noVotes: 0,
+        hotness: 0,
       };
 
-      try {
-        // Save to MongoDB
-        const collection = await getCollection<PendingUploadDocument>(COLLECTIONS.PENDING_UPLOADS);
-        const result = await collection.insertOne(newUpload);
-        console.log('✅ Saved to MongoDB:', result.insertedId);
-      } catch (dbError) {
-        console.error('❌ MongoDB error, falling back to localStorage:', dbError);
-        
-        // Fallback to localStorage if MongoDB fails
-        const uploadedStartups = localStorage.getItem('uploadedStartups');
-        const startups = uploadedStartups ? JSON.parse(uploadedStartups) : [];
-        startups.push({
-          id: Date.now(),
-          ...newUpload,
-          uploadedAt: newUpload.uploadedAt.toISOString()
-        });
-        localStorage.setItem('uploadedStartups', JSON.stringify(startups));
-      }
+      // Save to localStorage
+      const uploadedStartups = localStorage.getItem('uploadedStartups');
+      const startups = uploadedStartups ? JSON.parse(uploadedStartups) : [];
+      startups.push(newStartup);
+      localStorage.setItem('uploadedStartups', JSON.stringify(startups));
       
-      // Also save to pendingUploads for ProcessUploads page
-      const pendingUploads = localStorage.getItem('pendingUploads');
-      const uploads = pendingUploads ? JSON.parse(pendingUploads) : [];
-      uploads.push({
-        id: Date.now().toString(),
-        ...newUpload,
-        uploadedAt: newUpload.uploadedAt.toISOString()
-      });
-      localStorage.setItem('pendingUploads', JSON.stringify(uploads));
+      console.log('Startup saved successfully:', newStartup);
 
       setSubmitted(true);
       
@@ -410,7 +397,7 @@ Return valid JSON with: name, pitch, fivePoints (array of 5 strings), industry, 
 
   if (submitted) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-orange-100 via-orange-50 to-yellow-50 flex items-center justify-center p-8">
+      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-purple-800 to-indigo-900 flex items-center justify-center p-8">
         <div className="bg-white rounded-3xl p-12 shadow-2xl text-center max-w-2xl">
           <div className="text-8xl mb-6">🎉</div>
           <h1 className="text-4xl font-bold text-orange-600 mb-4">
@@ -434,7 +421,7 @@ Return valid JSON with: name, pitch, fivePoints (array of 5 strings), industry, 
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-100 via-orange-50 to-yellow-50 p-8">
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-purple-800 to-indigo-900 p-8">
       <div className="max-w-4xl mx-auto">
         {/* Navigation */}
         <div className="flex justify-between items-center mb-8">
@@ -469,23 +456,23 @@ Return valid JSON with: name, pitch, fivePoints (array of 5 strings), industry, 
         {/* Header */}
         <div className="text-center mb-12">
           <div className="text-8xl mb-4">🚀</div>
-          <h1 className="text-5xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent mb-4">
+          <h1 className="text-5xl font-bold text-white mb-4">
             Submit Your Startup
           </h1>
-          <p className="text-xl text-gray-700 font-medium mb-2">
+          <p className="text-xl text-purple-200 font-medium mb-2">
             Get discovered by investors who want to find you
           </p>
-          <p className="text-lg text-gray-600">
+          <p className="text-lg text-purple-300">
             Fill out the form below to join Hot Honey 🍯
           </p>
         </div>
 
         {/* Quick Upload Option */}
-        <div className="bg-gradient-to-r from-green-400 via-purple-500 to-purple-700 rounded-3xl p-8 mb-8 text-white shadow-2xl">
+        <div className="bg-white/20 backdrop-blur-sm rounded-3xl p-8 mb-8 border border-white/30 shadow-2xl">
           <div className="text-center mb-6">
             <div className="text-6xl mb-3">📄</div>
-            <h2 className="text-3xl font-bold mb-2">Upload Your Pitch Deck</h2>
-            <p className="text-lg">AI will auto-fill the form below from your presentation!</p>
+            <h2 className="text-3xl font-bold mb-2 text-white">Upload Your Pitch Deck</h2>
+            <p className="text-lg text-purple-100">AI will auto-fill the form below from your presentation!</p>
           </div>
 
           <div className="flex justify-center">
@@ -517,23 +504,23 @@ Return valid JSON with: name, pitch, fivePoints (array of 5 strings), industry, 
 
         {/* Error Message */}
         {error && (
-          <div className="bg-red-100 border-2 border-red-400 text-red-700 px-4 py-3 rounded-xl mb-6">
+          <div className="bg-red-500/20 border-2 border-red-400 text-white px-4 py-3 rounded-xl mb-6 backdrop-blur-sm">
             <strong>Error:</strong> {error}
           </div>
         )}
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="bg-white rounded-3xl p-8 shadow-2xl mb-8">
+        <form onSubmit={handleSubmit} className="bg-white/10 backdrop-blur-sm rounded-3xl p-8 shadow-2xl mb-8 border border-white/20">
           {/* Basic Information */}
           <section className="mb-8">
-            <h2 className="text-2xl font-bold text-orange-600 mb-6 flex items-center gap-2">
+            <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
               <span>📋</span> Basic Information
             </h2>
             
             <div className="space-y-4">
               <div>
-                <label className="block text-gray-700 font-semibold mb-2">
-                  Startup Name <span className="text-red-500">*</span>
+                <label className="block text-white font-semibold mb-2">
+                  Startup Name <span className="text-red-400">*</span>
                 </label>
                 <input
                   type="text"
@@ -541,14 +528,14 @@ Return valid JSON with: name, pitch, fivePoints (array of 5 strings), industry, 
                   value={formData.name}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 border-2 border-orange-200 rounded-xl focus:border-orange-500 focus:outline-none transition-colors"
+                  className="w-full px-4 py-3 bg-white/20 backdrop-blur-sm border-2 border-white/30 rounded-xl focus:border-purple-400 focus:outline-none transition-colors text-white placeholder-purple-200"
                   placeholder="e.g., HyperLoop"
                 />
               </div>
 
               <div>
-                <label className="block text-gray-700 font-semibold mb-2">
-                  Value Proposition <span className="text-red-500">*</span>
+                <label className="block text-white font-semibold mb-2">
+                  Value Proposition <span className="text-red-400">*</span>
                 </label>
                 <input
                   type="text"
@@ -556,7 +543,7 @@ Return valid JSON with: name, pitch, fivePoints (array of 5 strings), industry, 
                   value={formData.valueProp}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 border-2 border-orange-200 rounded-xl focus:border-orange-500 focus:outline-none transition-colors"
+                  className="w-full px-4 py-3 bg-white/20 backdrop-blur-sm border-2 border-white/30 rounded-xl focus:border-purple-400 focus:outline-none transition-colors text-white placeholder-purple-200"
                   placeholder="One sentence that describes what you do"
                 />
               </div>

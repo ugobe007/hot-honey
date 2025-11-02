@@ -1,5 +1,6 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { NotificationBell } from './NotificationBell';
 
 export default function NavBar() {
   const navigate = useNavigate();
@@ -123,6 +124,9 @@ export default function NavBar() {
                 >
                   📄 Scanned Docs
                 </button>
+
+                {/* Notification Bell */}
+                <NotificationBell />
 
                 {userProfile && (
                   <div className="ml-4 flex items-center gap-3 bg-purple-800/50 rounded-2xl px-4 py-2 border-2 border-purple-600">
