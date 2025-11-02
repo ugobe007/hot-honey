@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import AdminNav from '../components/AdminNav';
 import { createInvestor } from '../lib/investorService';
+import { researchInvestor } from '../lib/aiResearch';
 
 export default function InviteInvestorPage() {
   const [formData, setFormData] = useState({
@@ -14,27 +15,71 @@ export default function InviteInvestorPage() {
     geography: 'Global',
   });
   const [loading, setLoading] = useState(false);
+  const [researching, setResearching] = useState(false);
   const [success, setSuccess] = useState(false);
+
+  const handleResearch = async () => {
+    if (!formData.website) {
+      alert('❌ Please enter a website URL first');
+      return;
+    }
+
+    setResearching(true);
+    try {
+      const researchedData = await researchInvestor(
+        formData.website,
+        formData.linkedin,
+        formData.name
+      );
+
+      // Update form with researched data
+      setFormData({
+        name: researchedData.name || formData.name,
+        type: researchedData.type || formData.type,
+        tagline: researchedData.tagline || formData.tagline,
+        website: researchedData.website,
+        linkedin: researchedData.linkedin || formData.linkedin,
+        checkSize: researchedData.checkSize || formData.checkSize,
+        geography: researchedData.geography || formData.geography,
+      });
+
+      // Store full data for submission
+      (window as any).__researchedInvestorData = researchedData;
+      
+      alert('✅ Research complete! Review the data and click Submit.');
+    } catch (error: any) {
+      alert('❌ ' + (error.message || 'Failed to research investor'));
+    } finally {
+      setResearching(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     
     try {
+      const researchedData = (window as any).__researchedInvestorData;
+      
       const { data, error } = await createInvestor({
         name: formData.name,
         type: formData.type,
-        tagline: formData.tagline,
+        tagline: formData.tagline || researchedData?.tagline,
+        description: researchedData?.description,
         website: formData.website,
         linkedin: formData.linkedin,
-        check_size: formData.checkSize,
+        twitter: researchedData?.twitter,
+        contact_email: researchedData?.contactEmail,
+        aum: researchedData?.aum,
+        fund_size: researchedData?.fundSize,
+        check_size: formData.checkSize || researchedData?.checkSize,
+        stage: researchedData?.stage || [],
+        sectors: researchedData?.sectors || [],
         geography: formData.geography,
-        stage: [],
-        sectors: [],
-        portfolio_count: 0,
-        exits: 0,
-        unicorns: 0,
-        notable_investments: [],
+        portfolio_count: researchedData?.portfolioCount || 0,
+        exits: researchedData?.exits || 0,
+        unicorns: researchedData?.unicorns || 0,
+        notable_investments: researchedData?.notableInvestments || [],
         hot_honey_investments: 0,
         hot_honey_startups: [],
       });
@@ -165,6 +210,22 @@ export default function InviteInvestorPage() {
                 placeholder="https://example.com"
                 className="w-full px-4 py-3 rounded-xl bg-white/20 text-white placeholder-purple-300 border-2 border-purple-400/50 focus:border-yellow-400 outline-none"
               />
+            </div>
+
+            {/* AI Research Button */}
+            <div className="bg-gradient-to-r from-blue-500/20 to-purple-500/20 border-2 border-blue-400/50 rounded-xl p-4">
+              <p className="text-white font-bold mb-2">🤖 AI-Powered Research</p>
+              <p className="text-sm text-purple-200 mb-3">
+                Let AI automatically research and fill in investor details from their website
+              </p>
+              <button
+                type="button"
+                onClick={handleResearch}
+                disabled={!formData.website || researching || loading}
+                className="w-full py-3 px-6 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold rounded-xl shadow-lg hover:from-blue-600 hover:to-purple-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {researching ? '🔍 Researching...' : '✨ Research with AI'}
+              </button>
             </div>
 
             {/* LinkedIn */}
