@@ -317,7 +317,7 @@ export default function StartupCardOfficial({ startup, onVote, onSwipeAway }: Pr
         </div>
       )}
 
-      <div className="bg-gradient-to-br from-amber-300 via-orange-400 to-yellow-500 rounded-2xl p-5 shadow-2xl border-4 border-orange-500 relative w-[360px] h-[420px] flex flex-col">
+      <div className="bg-gradient-to-br from-amber-300 via-orange-400 to-yellow-500 rounded-2xl p-5 shadow-2xl border-4 border-orange-500 relative w-full max-w-[360px] sm:w-[360px] h-auto min-h-[420px] flex flex-col mx-auto">
         <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/20 to-transparent pointer-events-none"></div>
         
         <div className="relative flex flex-col h-full">
