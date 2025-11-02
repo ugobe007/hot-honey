@@ -316,24 +316,33 @@ Return valid JSON with: name, pitch, fivePoints (array of 5 strings), industry, 
               content: `You are a research assistant. Given a startup name or website, provide comprehensive information in this exact JSON format:
 {
   "name": "Startup Name",
-  "valueProp": "One sentence value proposition",
-  "problem": "The problem they solve (max 300 chars)",
-  "solution": "Their solution (max 300 chars)",
-  "team": "Team background with company names (max 300 chars)",
-  "funding": "Funding amount if known, e.g. '$2M Seed' or 'Seeking $2M Seed'",
+  "valueProp": "One sentence value proposition (max 60 chars)",
+  "problem": "The problem they solve (max 100 chars)",
+  "solution": "Their solution (max 100 chars)",
+  "team": "Team background with company names (max 100 chars)",
+  "funding": "Funding amount if known, e.g. '$2M Seed' or 'Seeking $2M'",
   "industry": "Primary industry",
   "stage": "Pre-Seed, Seed, or Series A",
   "founderName": "Founder's full name if available, or 'Startup Team'",
   "founderEmail": "contact@startupname.com or info@startupname.com",
-  "fivePoints": ["Problem statement", "Solution", "Market size", "Team", "Raise amount"]
+  "fivePoints": [
+    "Problem in 10 words or less",
+    "Solution in 10 words or less", 
+    "Market size in 10 words or less",
+    "Team credentials in 10 words or less",
+    "Raise amount in 10 words or less"
+  ]
 }
 
-IMPORTANT: 
-- Fill ALL fields with best available information
+CRITICAL RULES:
+- Keep ALL text extremely concise
+- Problem, solution, team: MAX 100 characters each
+- valueProp: MAX 60 characters
+- fivePoints: Each point MAX 10 words
+- No lengthy explanations or run-on sentences
+- Use abbreviations when appropriate (e.g., "Ex-Google AI engineers" not "Former Google artificial intelligence engineers")
 - For founder name: use actual founder if known, otherwise use "Startup Team"
-- For founder email: derive from website domain or use generic contact email
-- Only preserve existing form values if they're already filled
-- Make educated guesses based on typical startup patterns if info not available`
+- For founder email: derive from website domain or use generic contact email`
             },
             {
               role: 'user',
@@ -447,7 +456,55 @@ Fill ONLY the EMPTY fields with your research. Return JSON with ALL fields fille
     setError('');
 
     try {
-      // Always use localStorage for now (Supabase needs proper schema configuration)
+      // Prepare fivePoints array
+      const fivePointsArray = formData.fivePoints.length > 0 ? formData.fivePoints : [
+        formData.problem || 'Problem statement',
+        formData.solution || 'Solution description',
+        `${formData.industry || 'Technology'} market opportunity`,
+        formData.team || 'Experienced team',
+        formData.funding || 'Seeking funding'
+      ];
+
+      // Save to Supabase startup_uploads table
+      const { data: supabaseData, error: supabaseError } = await supabase
+        .from('startup_uploads')
+        .insert([{
+          name: formData.name,
+          pitch: formData.valueProp || `${formData.problem} | ${formData.solution}`,
+          description: formData.problem,
+          tagline: formData.valueProp,
+          website: formData.website,
+          linkedin: formData.linkedin,
+          raise_amount: formData.funding,
+          stage: formData.stage === 'Pre-Seed' ? 1 : formData.stage === 'Seed' ? 1 : formData.stage === 'Series A' ? 2 : 1,
+          source_type: 'manual' as const,
+          submitted_email: formData.founderEmail,
+          status: 'approved' as const, // Auto-approve for immediate voting
+          extracted_data: {
+            problem: formData.problem,
+            solution: formData.solution,
+            team: formData.team,
+            funding: formData.funding,
+            industry: formData.industry,
+            founderName: formData.founderName,
+            founderEmail: formData.founderEmail,
+            presentationUrl: formData.presentationUrl,
+            videoUrl: formData.videoUrl,
+            fivePoints: fivePointsArray, // Store fivePoints here
+            marketSize: `${formData.industry || 'Technology'} market`,
+            unique: formData.solution,
+          }
+        }])
+        .select()
+        .single();
+
+      if (supabaseError) {
+        throw new Error(supabaseError.message);
+      }
+
+      console.log('Startup saved to Supabase:', supabaseData);
+
+      // Also save to localStorage for backward compatibility
       const newStartup = {
         id: Date.now(),
         name: formData.name,
@@ -465,25 +522,16 @@ Fill ONLY the EMPTY fields with your research. Return JSON with ALL fields fille
         founderEmail: formData.founderEmail,
         presentationUrl: formData.presentationUrl,
         videoUrl: formData.videoUrl,
-        fivePoints: formData.fivePoints.length > 0 ? formData.fivePoints : [
-          formData.problem,
-          formData.solution,
-          `${formData.industry || 'Technology'} market`,
-          formData.team,
-          formData.funding
-        ],
+        fivePoints: fivePointsArray,
         yesVotes: 0,
         noVotes: 0,
         hotness: 0,
       };
 
-      // Save to localStorage
       const uploadedStartups = localStorage.getItem('uploadedStartups');
       const startups = uploadedStartups ? JSON.parse(uploadedStartups) : [];
       startups.push(newStartup);
       localStorage.setItem('uploadedStartups', JSON.stringify(startups));
-      
-      console.log('Startup saved successfully:', newStartup);
 
       setSubmitted(true);
       
