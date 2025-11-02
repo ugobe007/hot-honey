@@ -61,51 +61,27 @@ export default function SetupPage() {
             Database Setup
           </h1>
           <p className="text-2xl text-purple-200">
-            Initialize investors and upload tables
+            Seed investor data
           </p>
         </div>
 
         <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 mb-8 border-2 border-purple-400/50">
-          <h2 className="text-3xl font-bold text-white mb-6">Setup Instructions</h2>
-          
-          <div className="space-y-4 text-purple-100">
-            <div className="bg-purple-900/50 p-4 rounded-xl">
-              <h3 className="text-xl font-bold mb-2">Step 0: Test Connection</h3>
-              <p className="mb-2">First, verify Supabase is working. Go to Supabase Dashboard → SQL Editor and run:</p>
-              <code className="block bg-black/50 p-3 rounded text-sm overflow-x-auto">
-                supabase/test_connection.sql
-              </code>
-              <p className="text-sm text-purple-300 mt-2">✅ If you see a success message, proceed to Step 1</p>
-            </div>
-
-            <div className="bg-purple-900/50 p-4 rounded-xl">
-              <h3 className="text-xl font-bold mb-2">Step 1: Create Tables</h3>
-              <p className="mb-2">Run these files ONE AT A TIME in Supabase SQL Editor:</p>
-              <div className="space-y-2">
-                <code className="block bg-black/50 p-2 rounded text-sm">1️⃣ supabase/migrations/step1_create_investors.sql</code>
-                <code className="block bg-black/50 p-2 rounded text-sm">2️⃣ supabase/migrations/step2_create_uploads.sql</code>
-                <code className="block bg-black/50 p-2 rounded text-sm">3️⃣ supabase/migrations/step3_create_indexes.sql</code>
-                <code className="block bg-black/50 p-2 rounded text-sm">4️⃣ supabase/migrations/step4_triggers_rls.sql</code>
-                <code className="block bg-black/50 p-2 rounded text-sm">5️⃣ supabase/migrations/step5_policies.sql</code>
-              </div>
-              <p className="text-sm text-purple-300 mt-2">⚠️ Wait for each to complete before running the next</p>
-            </div>
-
-            <div className="bg-purple-900/50 p-4 rounded-xl">
-              <h3 className="text-xl font-bold mb-2">Step 2: Seed Data</h3>
-              <p className="mb-4">Click the button below to seed initial investor data:</p>
-              <button
-                onClick={runSetup}
-                disabled={loading}
-                className="px-8 py-4 bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold rounded-xl shadow-xl hover:from-yellow-600 hover:to-orange-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {loading ? '⏳ Running Setup...' : '🚀 Seed Investor Data'}
-              </button>
-            </div>
+          <div className="text-center">
+            <p className="text-xl text-purple-100 mb-6">
+              Click the button below to add initial investor data to your database:
+            </p>
+            
+            <button
+              onClick={runSetup}
+              disabled={loading}
+              className="px-8 py-4 bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold text-xl rounded-xl shadow-xl hover:from-yellow-600 hover:to-orange-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed mb-6"
+            >
+              {loading ? '⏳ Seeding Data...' : '🚀 Seed Investor Data'}
+            </button>
 
             {status && (
-              <div className="bg-black/50 p-4 rounded-xl">
-                <h3 className="text-xl font-bold mb-2">Status:</h3>
+              <div className="bg-black/50 p-4 rounded-xl text-left">
+                <h3 className="text-xl font-bold mb-2 text-white">Status:</h3>
                 <pre className="text-sm text-green-300 whitespace-pre-wrap font-mono">
                   {status}
                 </pre>
