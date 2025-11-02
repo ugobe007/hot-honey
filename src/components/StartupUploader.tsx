@@ -287,9 +287,21 @@ Provide comprehensive information about this company in the JSON format specifie
               <button
                 onClick={handleAIResearch}
                 disabled={researchingWithAI}
-                className="w-full py-4 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold rounded-xl shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed mt-3"
+                className={`w-full py-4 rounded-xl font-bold shadow-2xl transition-all transform hover:scale-105 ${
+                  researchingWithAI
+                    ? 'bg-gradient-to-r from-yellow-400 via-orange-400 to-pink-500 text-white cursor-wait animate-pulse'
+                    : 'bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500 hover:from-purple-700 hover:via-pink-700 hover:to-orange-600 text-white animate-pulse hover:animate-none'
+                }`}
               >
-                {researchingWithAI ? '🤖 AI Researching...' : '🤖 Fill with AI Research'}
+                {researchingWithAI ? (
+                  <span className="flex items-center justify-center gap-2">
+                    🤖 <span className="inline-block animate-spin">⚡</span> AI Magic in Progress...
+                  </span>
+                ) : (
+                  <span className="flex items-center justify-center gap-2">
+                    ✨ <span className="text-xl">🤖</span> Auto-Fill with AI Magic ✨
+                  </span>
+                )}
               </button>
             </div>
           )}

@@ -1,6 +1,6 @@
 // FILE: src/pages/Vote.tsx
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useStore } from '../store';
 import StartupCardOfficial from '../components/StartupCardOfficial';
 
@@ -9,6 +9,12 @@ const Vote: React.FC = () => {
   const currentIndex = useStore((state) => state.currentIndex);
   const voteYes = useStore((state) => state.voteYes);
   const voteNo = useStore((state) => state.voteNo);
+  const loadStartupsFromDatabase = useStore((state) => state.loadStartupsFromDatabase);
+
+  // Load approved startups from database on mount
+  useEffect(() => {
+    loadStartupsFromDatabase();
+  }, [loadStartupsFromDatabase]);
 
   const currentStartup = startups[currentIndex];
 

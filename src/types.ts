@@ -8,6 +8,7 @@ export interface StoreState {
   rateStartup: (index: number, rating: number) => void;
   resetVoting: () => void;
   unvote: (startup: Startup) => void;
+  loadStartupsFromDatabase: () => Promise<void>;
 }
 // FIXED types.ts
 
