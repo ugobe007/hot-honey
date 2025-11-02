@@ -32,33 +32,28 @@ const Dashboard: React.FC = () => {
       isAnonymous, 
       userId, 
       portfolioLength: portfolio.length,
-      localStorage_portfolio: localStorage.getItem('hot-money-honey-store')
+      myYesVotes_localStorage: localStorage.getItem('myYesVotes')
     });
     
     if (isAnonymous) {
-      // For anonymous users, check both Zustand portfolio and localStorage
-      let votes: YesVote[] = [];
+      // For anonymous users, read from myYesVotes localStorage
+      const myYesVotesStr = localStorage.getItem('myYesVotes');
+      console.log('myYesVotes from localStorage:', myYesVotesStr);
       
-      if (portfolio.length > 0) {
-        console.log('Loading from portfolio:', portfolio);
-        votes = portfolio.map(startup => ({
-          id: startup.id,
-          name: startup.name,
-          pitch: startup.pitch,
-          tagline: startup.tagline,
-          stage: startup.stage,
-          fivePoints: startup.fivePoints,
-          votedAt: new Date().toISOString(),
-        }));
-      } else {
-        // Fallback: load directly from localStorage
-        const storedState = localStorage.getItem('hot-money-honey-store');
-        if (storedState) {
-          try {
-            const parsed = JSON.parse(storedState);
-            console.log('Parsed store from localStorage:', parsed);
-            if (parsed.state?.portfolio && parsed.state.portfolio.length > 0) {
-              votes = parsed.state.portfolio.map((startup: any) => ({
+      if (myYesVotesStr) {
+        try {
+          const yesVoteIds = JSON.parse(myYesVotesStr);
+          console.log('Parsed YES vote IDs:', yesVoteIds);
+          
+          // Remove duplicates from the array
+          const uniqueIds = [...new Set(yesVoteIds)];
+          console.log('Unique IDs:', uniqueIds);
+          
+          // Enrich with full startup data
+          const enrichedVotes = uniqueIds.map((id: string) => {
+            const startup = startupData.find(s => s.id.toString() === id);
+            if (startup) {
+              return {
                 id: startup.id,
                 name: startup.name,
                 pitch: startup.pitch,
@@ -66,16 +61,20 @@ const Dashboard: React.FC = () => {
                 stage: startup.stage,
                 fivePoints: startup.fivePoints,
                 votedAt: new Date().toISOString(),
-              }));
+              };
             }
-          } catch (e) {
-            console.error('Error parsing localStorage:', e);
-          }
+            return null;
+          }).filter(Boolean) as YesVote[];
+          
+          console.log('Final enriched votes:', enrichedVotes);
+          setMyYesVotes(enrichedVotes);
+        } catch (e) {
+          console.error('Error parsing myYesVotes:', e);
         }
+      } else {
+        console.log('No myYesVotes in localStorage');
+        setMyYesVotes([]);
       }
-      
-      console.log('Final enriched votes:', votes);
-      setMyYesVotes(votes);
     } else {
       // For authenticated users, get YES vote startup IDs from Supabase
       const yesVoteIds = getYesVotes();
