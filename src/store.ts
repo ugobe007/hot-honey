@@ -43,6 +43,22 @@ export const useStore = create<StoreState>()(
         const newPortfolio = alreadyInPortfolio
           ? state.portfolio.map((s: Startup) => s.id === updatedStartup.id ? updatedStartup : s)
           : [...state.portfolio, updatedStartup];
+        
+        // Save YES votes to localStorage for Dashboard
+        const myYesVotes = JSON.parse(localStorage.getItem('myYesVotes') || '[]');
+        const startupIdStr = updatedStartup.id.toString();
+        if (!myYesVotes.includes(startupIdStr)) {
+          myYesVotes.push(startupIdStr);
+          localStorage.setItem('myYesVotes', JSON.stringify(myYesVotes));
+        }
+        
+        // Also save to votedStartups
+        const votedStartups = JSON.parse(localStorage.getItem('votedStartups') || '[]');
+        if (!votedStartups.includes(startupIdStr)) {
+          votedStartups.push(startupIdStr);
+          localStorage.setItem('votedStartups', JSON.stringify(votedStartups));
+        }
+        
         set({
           startups: updatedStartups,
           portfolio: newPortfolio,
