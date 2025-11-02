@@ -45,7 +45,7 @@ export default function Settings() {
       {/* Top Navigation */}
       <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-[200] pointer-events-auto">
         <div className="flex gap-2 pointer-events-auto">
-          <Link to="/" className="text-4xl hover:scale-110 transition-transform" title="Hot Money Honey">
+          <Link to="/" className="text-6xl hover:scale-110 transition-transform bg-gradient-to-r from-orange-500 to-purple-600 bg-clip-text text-transparent hover:from-orange-400 hover:to-purple-500" style={{WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'}} title="Hot Money Honey">
             🍯
           </Link>
           <Link to="/" className="px-5 py-2.5 bg-purple-700 hover:bg-purple-600 text-white font-bold rounded-2xl transition-all shadow-lg">

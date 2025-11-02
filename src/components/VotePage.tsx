@@ -107,7 +107,7 @@ const VotePage: React.FC = () => {
         {/* NAVIGATION */}
         <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50">
           <div className="flex gap-1 items-center">
-            <Link to="/signup" className="text-4xl hover:scale-110 transition-transform cursor-pointer" title="Sign Up">
+            <Link to="/signup" className="text-6xl hover:scale-110 transition-transform cursor-pointer bg-gradient-to-r from-orange-500 to-purple-600 bg-clip-text text-transparent hover:from-orange-400 hover:to-purple-500" style={{WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'}} title="Sign Up">
               🍯
             </Link>
             <Link to="/signup" className="px-4 py-1.5 bg-yellow-400 text-black rounded-full font-medium text-sm shadow-lg hover:bg-yellow-500 transition-colors">
@@ -158,7 +158,7 @@ const VotePage: React.FC = () => {
       {/* NAVIGATION - FIXED AT TOP */}
       <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50">
         <div className="flex gap-1 items-center">
-          <Link to="/signup" className="text-4xl hover:scale-110 transition-transform cursor-pointer" title="Sign Up">
+          <Link to="/signup" className="text-6xl hover:scale-110 transition-transform cursor-pointer bg-gradient-to-r from-orange-500 to-purple-600 bg-clip-text text-transparent hover:from-orange-400 hover:to-purple-500" style={{WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'}} title="Sign Up">
             🍯
           </Link>
           <Link to="/signup" className="px-4 py-1.5 bg-yellow-400 text-black rounded-full font-medium text-sm shadow-lg hover:bg-yellow-500 transition-colors">
