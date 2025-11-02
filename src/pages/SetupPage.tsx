@@ -12,25 +12,41 @@ export default function SetupPage() {
     setStatus('🚀 Starting setup...\n');
 
     try {
-      setStatus(prev => prev + '\n📝 Creating tables in Supabase...');
-      setStatus(prev => prev + '\n⚠️  Please run the SQL migration manually in Supabase SQL Editor:');
-      setStatus(prev => prev + '\n   supabase/migrations/create_investors_and_uploads.sql\n');
-
-      setStatus(prev => prev + '\n🌱 Seeding investor data...');
+      setStatus(prev => prev + '\n⚠️  Make sure you ran all 5 SQL files first!');
+      setStatus(prev => prev + '\n\n🌱 Seeding investor data...');
+      
       const results = await seedInitialInvestors();
       
       const successCount = results.filter(r => !r.error).length;
       const errorCount = results.filter(r => r.error).length;
 
-      setStatus(prev => prev + `\n✅ Seeded ${successCount} investors`);
+      if (successCount > 0) {
+        setStatus(prev => prev + `\n✅ Successfully seeded ${successCount} investors!`);
+      }
+      
       if (errorCount > 0) {
-        setStatus(prev => prev + `\n⚠️  ${errorCount} errors (possibly duplicates)`);
+        setStatus(prev => prev + `\n\n⚠️  ${errorCount} errors occurred:`);
+        results.forEach((result, i) => {
+          if (result.error) {
+            setStatus(prev => prev + `\n   - Investor ${i + 1}: ${result.error.message}`);
+          }
+        });
+        setStatus(prev => prev + '\n\n💡 Common errors:');
+        setStatus(prev => prev + '\n   - "relation does not exist" → Run the SQL migrations first');
+        setStatus(prev => prev + '\n   - "duplicate key" → Data already seeded (this is OK)');
+        setStatus(prev => prev + '\n   - "permission denied" → Check your Supabase anon key');
       }
 
-      setStatus(prev => prev + '\n\n✨ Setup complete! You can now visit /investors');
+      if (successCount > 0) {
+        setStatus(prev => prev + '\n\n✨ Setup complete! Visit /investors to see your data.');
+      }
 
-    } catch (error) {
-      setStatus(prev => prev + `\n\n❌ Error: ${error}`);
+    } catch (error: any) {
+      setStatus(prev => prev + `\n\n❌ Error: ${error.message || error}`);
+      setStatus(prev => prev + '\n\n🔍 Troubleshooting:');
+      setStatus(prev => prev + '\n   1. Check your .env file has VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY');
+      setStatus(prev => prev + '\n   2. Verify you ran all SQL migration files in order');
+      setStatus(prev => prev + '\n   3. Check Supabase dashboard for any errors');
     } finally {
       setLoading(false);
     }
@@ -54,11 +70,25 @@ export default function SetupPage() {
           
           <div className="space-y-4 text-purple-100">
             <div className="bg-purple-900/50 p-4 rounded-xl">
-              <h3 className="text-xl font-bold mb-2">Step 1: Create Tables</h3>
-              <p className="mb-2">Go to your Supabase Dashboard → SQL Editor and run:</p>
+              <h3 className="text-xl font-bold mb-2">Step 0: Test Connection</h3>
+              <p className="mb-2">First, verify Supabase is working. Go to Supabase Dashboard → SQL Editor and run:</p>
               <code className="block bg-black/50 p-3 rounded text-sm overflow-x-auto">
-                supabase/migrations/create_investors_and_uploads.sql
+                supabase/test_connection.sql
               </code>
+              <p className="text-sm text-purple-300 mt-2">✅ If you see a success message, proceed to Step 1</p>
+            </div>
+
+            <div className="bg-purple-900/50 p-4 rounded-xl">
+              <h3 className="text-xl font-bold mb-2">Step 1: Create Tables</h3>
+              <p className="mb-2">Run these files ONE AT A TIME in Supabase SQL Editor:</p>
+              <div className="space-y-2">
+                <code className="block bg-black/50 p-2 rounded text-sm">1️⃣ supabase/migrations/step1_create_investors.sql</code>
+                <code className="block bg-black/50 p-2 rounded text-sm">2️⃣ supabase/migrations/step2_create_uploads.sql</code>
+                <code className="block bg-black/50 p-2 rounded text-sm">3️⃣ supabase/migrations/step3_create_indexes.sql</code>
+                <code className="block bg-black/50 p-2 rounded text-sm">4️⃣ supabase/migrations/step4_triggers_rls.sql</code>
+                <code className="block bg-black/50 p-2 rounded text-sm">5️⃣ supabase/migrations/step5_policies.sql</code>
+              </div>
+              <p className="text-sm text-purple-300 mt-2">⚠️ Wait for each to complete before running the next</p>
             </div>
 
             <div className="bg-purple-900/50 p-4 rounded-xl">
