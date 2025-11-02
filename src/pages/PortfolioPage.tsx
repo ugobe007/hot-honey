@@ -129,15 +129,17 @@ export default function PortfolioPage() {
   return (
     <>
       {/* Navigation Bar - OUTSIDE main container */}
-      <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-[200] pointer-events-auto">
-        <div className="flex gap-3 items-center pointer-events-auto">
-          <Link to="/signup" className="text-6xl hover:scale-110 transition-transform cursor-pointer" title="Hot Money Honey">
+      <div className="fixed top-2 left-1/2 transform -translate-x-1/2 z-[200] pointer-events-auto w-full px-2 sm:px-0 sm:w-auto">
+        <div className="flex gap-1 sm:gap-3 items-center pointer-events-auto justify-center flex-wrap">
+          <Link to="/signup" className="text-4xl sm:text-6xl hover:scale-110 transition-transform cursor-pointer" title="Hot Money Honey">
             🍯
           </Link>
           
           <Link 
             to="/" 
-            className={`font-bold rounded-full transition-all text-sm py-2 px-4 ${
+            className={`font-bold rounded-full transition-all whitespace-nowrap ${
+              isActive('/') ? 'text-xs sm:text-sm py-1.5 sm:py-2 px-3 sm:px-4' : 'text-xs sm:text-sm py-1 sm:py-2 px-2 sm:px-4'
+            } ${
               isActive('/')
                 ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg scale-110'
                 : 'bg-purple-700 hover:bg-purple-600 text-white'
@@ -148,8 +150,8 @@ export default function PortfolioPage() {
 
           <Link 
             to="/dashboard" 
-            className={`font-bold rounded-full transition-all text-sm ${
-              isActive('/dashboard') ? 'py-3 px-6 scale-110 text-base' : 'py-2 px-4'
+            className={`font-bold rounded-full transition-all whitespace-nowrap ${
+              isActive('/dashboard') ? 'py-1.5 sm:py-3 px-3 sm:px-6 scale-110 text-xs sm:text-base' : 'py-1 sm:py-2 px-2 sm:px-4 text-xs sm:text-sm'
             } ${
               isActive('/dashboard')
                 ? 'bg-gradient-to-r from-cyan-400 to-blue-500 text-white shadow-xl'
@@ -161,7 +163,9 @@ export default function PortfolioPage() {
 
           <Link 
             to="/vote" 
-            className={`font-bold rounded-full transition-all text-sm py-2 px-4 ${
+            className={`font-bold rounded-full transition-all whitespace-nowrap ${
+              isActive('/vote') ? 'text-xs sm:text-sm py-1.5 sm:py-2 px-3 sm:px-4' : 'text-xs sm:text-sm py-1 sm:py-2 px-2 sm:px-4'
+            } ${
               isActive('/vote')
                 ? 'bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg scale-110'
                 : 'bg-purple-700 hover:bg-purple-600 text-white'
@@ -172,8 +176,8 @@ export default function PortfolioPage() {
 
           <Link 
             to="/portfolio" 
-            className={`font-bold rounded-full transition-all ${
-              isActive('/portfolio') ? 'py-3 px-6 scale-110 text-base' : 'py-2 px-4 text-sm'
+            className={`font-bold rounded-full transition-all whitespace-nowrap ${
+              isActive('/portfolio') ? 'py-1.5 sm:py-3 px-3 sm:px-6 scale-110 text-xs sm:text-base' : 'py-1 sm:py-2 px-2 sm:px-4 text-xs sm:text-sm'
             } ${
               isActive('/portfolio')
                 ? 'bg-gradient-to-r from-yellow-500 to-orange-500 text-white shadow-lg'
@@ -212,15 +216,15 @@ export default function PortfolioPage() {
       </div>
 
       {/* Main content container */}
-      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-green-400 to-purple-950 p-8" style={{ backgroundImage: 'radial-gradient(ellipse 800px 600px at 20% 40%, rgba(134, 239, 172, 0.4), transparent), linear-gradient(to bottom right, rgb(88, 28, 135), rgb(59, 7, 100))' }}>
-        <div className="max-w-4xl mx-auto pt-28">
+      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-green-400 to-purple-950 p-4 sm:p-8" style={{ backgroundImage: 'radial-gradient(ellipse 800px 600px at 20% 40%, rgba(134, 239, 172, 0.4), transparent), linear-gradient(to bottom right, rgb(88, 28, 135), rgb(59, 7, 100))' }}>
+        <div className="max-w-4xl mx-auto pt-24 sm:pt-28 px-2">
         {/* Header */}
-        <div className="text-center mb-12">
-          <div className="text-8xl mb-4">⭐</div>
-          <h1 className="text-5xl font-bold bg-gradient-to-r from-yellow-300 via-orange-400 to-red-500 bg-clip-text text-transparent mb-4">
+        <div className="text-center mb-8 sm:mb-12">
+          <div className="text-6xl sm:text-8xl mb-4">⭐</div>
+          <h1 className="text-3xl sm:text-5xl font-bold bg-gradient-to-r from-yellow-300 via-orange-400 to-red-500 bg-clip-text text-transparent mb-2 sm:mb-4">
             Your Portfolio
           </h1>
-          <p className="text-xl text-white font-bold drop-shadow-lg">
+          <p className="text-lg sm:text-xl text-white font-bold drop-shadow-lg">
             Startups you've voted YES on
           </p>
         </div>

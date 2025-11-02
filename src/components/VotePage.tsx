@@ -105,9 +105,9 @@ const VotePage: React.FC = () => {
     return (
       <div className="min-h-screen bg-gradient-to-br from-purple-900 via-green-400 to-purple-950" style={{ backgroundImage: 'radial-gradient(ellipse 800px 600px at 20% 40%, rgba(134, 239, 172, 0.4), transparent), linear-gradient(to bottom right, rgb(88, 28, 135), rgb(59, 7, 100))' }}>
         {/* NAVIGATION */}
-        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50">
-          <div className="flex gap-1 items-center">
-            <Link to="/signup" className="text-6xl hover:scale-110 transition-transform cursor-pointer" title="Hot Money Honey">
+        <div className="fixed top-2 left-1/2 transform -translate-x-1/2 z-50 w-full px-2 sm:px-0 sm:w-auto">
+          <div className="flex gap-1 items-center justify-center flex-wrap">
+            <Link to="/signup" className="text-4xl sm:text-6xl hover:scale-110 transition-transform cursor-pointer" title="Hot Money Honey">
               🍯
             </Link>
             <Link to="/signup" className="px-4 py-1.5 bg-yellow-400 text-black rounded-full font-medium text-sm shadow-lg hover:bg-yellow-500 transition-colors">
@@ -156,9 +156,9 @@ const VotePage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-green-400 to-purple-950" style={{ backgroundImage: 'radial-gradient(ellipse 800px 600px at 20% 40%, rgba(134, 239, 172, 0.4), transparent), linear-gradient(to bottom right, rgb(88, 28, 135), rgb(59, 7, 100))' }}>
             {/* NAVIGATION - FIXED AT TOP */}
-      <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50">
-        <div className="flex gap-1 items-center">
-          <Link to="/signup" className="text-6xl hover:scale-110 transition-transform cursor-pointer" title="Hot Money Honey">
+      <div className="fixed top-2 left-1/2 transform -translate-x-1/2 z-50 w-full px-2 sm:px-0 sm:w-auto">
+        <div className="flex gap-1 items-center justify-center flex-wrap">
+          <Link to="/signup" className="text-4xl sm:text-6xl hover:scale-110 transition-transform cursor-pointer" title="Hot Money Honey">
             🍯
           </Link>
           <Link to="/signup" className="px-4 py-1.5 bg-yellow-400 text-black rounded-full font-medium text-sm shadow-lg hover:bg-yellow-500 transition-colors">
