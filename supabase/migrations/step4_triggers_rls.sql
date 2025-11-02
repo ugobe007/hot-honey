@@ -10,10 +10,12 @@ BEGIN
 END;
 $$ language 'plpgsql';
 
--- Create triggers
+-- Create triggers (drop first if they exist)
+DROP TRIGGER IF EXISTS update_investors_updated_at ON investors;
 CREATE TRIGGER update_investors_updated_at BEFORE UPDATE ON investors
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
+DROP TRIGGER IF EXISTS update_startup_uploads_updated_at ON startup_uploads;
 CREATE TRIGGER update_startup_uploads_updated_at BEFORE UPDATE ON startup_uploads
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
