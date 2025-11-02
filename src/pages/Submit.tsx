@@ -10,6 +10,7 @@ export default function Submit() {
   const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploadingDoc, setUploadingDoc] = useState(false);
+  const [researchingWithAI, setResearchingWithAI] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     valueProp: '',
@@ -280,7 +281,104 @@ Return valid JSON with: name, pitch, fivePoints (array of 5 strings), industry, 
       funding,
       industry,
       stage: 'Seed'
-    };
+    }
+  };
+
+  const handleAIResearch = async () => {
+    if (!formData.website && !formData.name) {
+      alert('Please enter at least the startup name or website first!');
+      return;
+    }
+
+    setResearchingWithAI(true);
+    try {
+      const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
+      
+      if (!apiKey || apiKey === 'your-openai-api-key-here') {
+        alert('⚠️ OpenAI API key not configured. Please add it to your .env file.');
+        setResearchingWithAI(false);
+        return;
+      }
+
+      const searchQuery = formData.website || formData.name;
+      
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+          model: 'gpt-4o-mini',
+          messages: [
+            {
+              role: 'system',
+              content: `You are a research assistant. Given a startup name or website, provide information in this exact JSON format:
+{
+  "name": "Startup Name",
+  "valueProp": "One sentence value proposition",
+  "problem": "The problem they solve (max 300 chars)",
+  "solution": "Their solution (max 300 chars)",
+  "team": "Team background (max 300 chars)",
+  "funding": "Funding amount if known, e.g. '$2M Seed'",
+  "industry": "Primary industry",
+  "stage": "Pre-Seed, Seed, or Series A",
+  "fivePoints": ["Problem statement", "Solution", "Market size", "Team", "Raise amount"]
+}
+
+IMPORTANT: Only fill in fields where you have EMPTY current values. If the form already has data, preserve it.`
+            },
+            {
+              role: 'user',
+              content: `Research this startup: ${searchQuery}
+
+Current form data (preserve non-empty values):
+Name: ${formData.name || 'EMPTY'}
+Value Prop: ${formData.valueProp || 'EMPTY'}
+Problem: ${formData.problem || 'EMPTY'}
+Solution: ${formData.solution || 'EMPTY'}
+Team: ${formData.team || 'EMPTY'}
+Funding: ${formData.funding || 'EMPTY'}
+Industry: ${formData.industry || 'EMPTY'}
+Stage: ${formData.stage || 'EMPTY'}
+
+Fill ONLY the EMPTY fields with your research. Return JSON.`
+            }
+          ],
+          response_format: { type: 'json_object' },
+          temperature: 0.3,
+          max_tokens: 1000
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`API error: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      const aiData = JSON.parse(data.choices[0].message.content);
+
+      // Only update empty fields
+      setFormData(prev => ({
+        ...prev,
+        name: prev.name || aiData.name || prev.name,
+        valueProp: prev.valueProp || aiData.valueProp || prev.valueProp,
+        problem: prev.problem || aiData.problem || prev.problem,
+        solution: prev.solution || aiData.solution || prev.solution,
+        team: prev.team || aiData.team || prev.team,
+        funding: prev.funding || aiData.funding || prev.funding,
+        industry: prev.industry || aiData.industry || prev.industry,
+        stage: prev.stage === 'Pre-Seed' ? (aiData.stage || prev.stage) : prev.stage,
+        fivePoints: prev.fivePoints.length > 0 ? prev.fivePoints : (aiData.fivePoints || []),
+      }));
+
+      alert('✅ AI research complete! Please review and edit the auto-filled information.');
+    } catch (error: any) {
+      console.error('AI research error:', error);
+      alert(`❌ AI research failed: ${error.message}`);
+    } finally {
+      setResearchingWithAI(false);
+    }
   };
 
   const handleDocumentUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -495,10 +593,33 @@ Return valid JSON with: name, pitch, fivePoints (array of 5 strings), industry, 
                 <>📤 Upload PDF or PowerPoint</>
               )}
             </button>
+
+            {/* AI Research Button */}
+            <button
+              type="button"
+              onClick={handleAIResearch}
+              disabled={researchingWithAI || (!formData.website && !formData.name)}
+              className={`w-full py-6 rounded-2xl font-bold text-lg transition-all shadow-lg ${
+                researchingWithAI
+                  ? 'bg-yellow-400 text-gray-900 cursor-wait'
+                  : (!formData.website && !formData.name)
+                  ? 'bg-gray-500 text-gray-300 cursor-not-allowed'
+                  : 'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white'
+              }`}
+            >
+              {researchingWithAI ? (
+                <>✨ AI Researching...</>
+              ) : (
+                <>✨ Fill Missing Data with AI</>
+              )}
+            </button>
           </div>
 
           <p className="text-center mt-4 text-sm opacity-90">
-            ✨ Accepted: PDF, PPT, PPTX • Auto-extracts: Problem, Solution, Team & more!
+            ✨ Upload a pitch deck OR use AI to auto-fill from your website/name!
+          </p>
+          <p className="text-center mt-2 text-xs opacity-75">
+            💡 Tip: Enter your startup name or website first, then click "Fill Missing Data with AI"
           </p>
         </div>
 
