@@ -132,7 +132,7 @@ const Dashboard: React.FC = () => {
     <>
       <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-[200] pointer-events-auto">
         <div className="flex gap-2 pointer-events-auto">
-          <Link to="/" className="text-4xl hover:scale-110 transition-transform">🍯</Link>
+          <Link to="/" className="text-6xl hover:scale-110 transition-transform">🍯</Link>
           <Link to="/" className="px-4 py-2 bg-purple-700 hover:bg-purple-600 text-white font-bold rounded-full transition-all shadow-lg text-sm">🏠 Home</Link>
           <Link to="/vote" className="px-4 py-2 bg-purple-700 hover:bg-purple-600 text-white font-bold rounded-full transition-all shadow-lg text-sm">🗳️ Vote</Link>
           <Link to="/dashboard" className="px-6 py-3 bg-gradient-to-r from-cyan-400 to-blue-500 text-white font-bold rounded-full shadow-xl scale-110 text-base">📊 Dashboard</Link>

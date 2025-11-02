@@ -107,7 +107,7 @@ const VotePage: React.FC = () => {
         {/* NAVIGATION */}
         <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50">
           <div className="flex gap-1 items-center">
-            <Link to="/signup" className="text-5xl hover:scale-110 transition-transform cursor-pointer flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-400 hover:to-purple-500 shadow-lg" title="Sign Up">
+            <Link to="/signup" className="text-6xl hover:scale-110 transition-transform cursor-pointer" title="Hot Money Honey">
               🍯
             </Link>
             <Link to="/signup" className="px-4 py-1.5 bg-yellow-400 text-black rounded-full font-medium text-sm shadow-lg hover:bg-yellow-500 transition-colors">
@@ -155,10 +155,10 @@ const VotePage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-green-400 to-purple-950" style={{ backgroundImage: 'radial-gradient(ellipse 800px 600px at 20% 40%, rgba(134, 239, 172, 0.4), transparent), linear-gradient(to bottom right, rgb(88, 28, 135), rgb(59, 7, 100))' }}>
-      {/* NAVIGATION - FIXED AT TOP */}
+            {/* NAVIGATION - FIXED AT TOP */}
       <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50">
         <div className="flex gap-1 items-center">
-          <Link to="/signup" className="text-5xl hover:scale-110 transition-transform cursor-pointer flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-400 hover:to-purple-500 shadow-lg" title="Sign Up">
+          <Link to="/signup" className="text-6xl hover:scale-110 transition-transform cursor-pointer" title="Hot Money Honey">
             🍯
           </Link>
           <Link to="/signup" className="px-4 py-1.5 bg-yellow-400 text-black rounded-full font-medium text-sm shadow-lg hover:bg-yellow-500 transition-colors">

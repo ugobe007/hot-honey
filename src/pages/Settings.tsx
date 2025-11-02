@@ -44,8 +44,8 @@ export default function Settings() {
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-purple-800 to-indigo-900 p-8">
       {/* Top Navigation */}
       <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-[200] pointer-events-auto">
-        <div className="flex gap-2 items-center pointer-events-auto">
-          <Link to="/" className="text-5xl hover:scale-110 transition-transform flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-400 hover:to-purple-500 shadow-lg" title="Hot Money Honey">
+        <div className="flex gap-2 pointer-events-auto">
+          <Link to="/" className="text-6xl hover:scale-110 transition-transform" title="Hot Money Honey">
             🍯
           </Link>
           <Link to="/" className="px-4 py-2 bg-purple-700 hover:bg-purple-600 text-white font-bold rounded-full transition-all shadow-lg text-sm">
