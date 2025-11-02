@@ -31,6 +31,7 @@ export const useStore = create<StoreState>()(
       portfolio: [],
       voteYes: (startup: Startup) => {
         const state = get();
+        console.log('voteYes called for:', startup.name, 'Current portfolio:', state.portfolio);
         const updatedStartups = [...state.startups];
         const index = updatedStartups.findIndex(s => s.id === startup.id);
         let updatedStartup = startup;
@@ -43,6 +44,8 @@ export const useStore = create<StoreState>()(
         const newPortfolio = alreadyInPortfolio
           ? state.portfolio.map((s: Startup) => s.id === updatedStartup.id ? updatedStartup : s)
           : [...state.portfolio, updatedStartup];
+        
+        console.log('New portfolio will be:', newPortfolio);
         
         // Save YES votes to localStorage for Dashboard
         const myYesVotes = JSON.parse(localStorage.getItem('myYesVotes') || '[]');

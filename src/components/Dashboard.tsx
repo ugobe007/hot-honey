@@ -28,8 +28,11 @@ const Dashboard: React.FC = () => {
 
     const isAnonymous = !userId || userId.startsWith('anon_');
     
+    console.log('Dashboard useEffect:', { isAnonymous, userId, portfolioLength: portfolio.length });
+    
     if (isAnonymous) {
       // For anonymous users, use the Zustand portfolio store
+      console.log('Loading from portfolio:', portfolio);
       const enrichedVotes = portfolio.map(startup => ({
         id: startup.id,
         name: startup.name,
@@ -39,6 +42,7 @@ const Dashboard: React.FC = () => {
         fivePoints: startup.fivePoints,
         votedAt: new Date().toISOString(),
       }));
+      console.log('Enriched votes:', enrichedVotes);
       setMyYesVotes(enrichedVotes);
     } else {
       // For authenticated users, get YES vote startup IDs from Supabase
