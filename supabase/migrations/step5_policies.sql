@@ -1,6 +1,15 @@
 -- STEP 5: Create RLS policies
 -- Run this after step 4 is successful
 
+-- Drop existing policies if they exist (to allow re-running)
+DROP POLICY IF EXISTS "Anyone can read investors" ON investors;
+DROP POLICY IF EXISTS "Anyone can insert investors" ON investors;
+DROP POLICY IF EXISTS "Anyone can update investors" ON investors;
+DROP POLICY IF EXISTS "Anyone can read approved startup uploads" ON startup_uploads;
+DROP POLICY IF EXISTS "Anyone can read their own uploads" ON startup_uploads;
+DROP POLICY IF EXISTS "Anyone can submit startup uploads" ON startup_uploads;
+DROP POLICY IF EXISTS "Anyone can update their own uploads" ON startup_uploads;
+
 -- Investors table policies
 CREATE POLICY "Anyone can read investors"
   ON investors FOR SELECT
