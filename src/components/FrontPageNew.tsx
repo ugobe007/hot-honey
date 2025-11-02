@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import StartupCardOfficial from './StartupCardOfficial';
+import AdminNav from './AdminNav';
 import startupData from '../data/startupData';
 
 const FrontPageNew: React.FC = () => {
@@ -187,6 +188,9 @@ const FrontPageNew: React.FC = () => {
           animation: slide-left 0.25s ease-out forwards;
         }
       `}</style>
+      
+      {/* Admin Navigation */}
+      <AdminNav />
     </div>
   );
 };
