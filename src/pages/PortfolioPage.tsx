@@ -131,13 +131,13 @@ export default function PortfolioPage() {
       {/* Navigation Bar - OUTSIDE main container */}
       <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-[200] pointer-events-auto">
         <div className="flex gap-3 items-center pointer-events-auto">
-          <Link to="/signup" className="text-6xl hover:scale-110 transition-transform cursor-pointer bg-gradient-to-r from-orange-500 to-purple-600 bg-clip-text text-transparent hover:from-orange-400 hover:to-purple-500" style={{WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'}} title="Hot Money Honey">
+          <Link to="/signup" className="text-5xl hover:scale-110 transition-transform cursor-pointer flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-400 hover:to-purple-500 shadow-lg" title="Hot Money Honey">
             🍯
           </Link>
           
           <Link 
             to="/" 
-            className={`font-bold rounded-2xl transition-all ${getButtonSize('/')} ${
+            className={`font-bold rounded-full transition-all text-sm py-2 px-4 ${
               isActive('/')
                 ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg scale-110'
                 : 'bg-purple-700 hover:bg-purple-600 text-white'
@@ -148,11 +148,11 @@ export default function PortfolioPage() {
 
           <Link 
             to="/dashboard" 
-            className={`font-bold rounded-2xl transition-all ${
-              isActive('/dashboard') ? 'text-lg py-3 px-7' : 'text-base py-2.5 px-5'
+            className={`font-bold rounded-full transition-all text-sm ${
+              isActive('/dashboard') ? 'py-3 px-6 scale-110 text-base' : 'py-2 px-4'
             } ${
               isActive('/dashboard')
-                ? 'bg-gradient-to-r from-cyan-400 to-blue-500 text-white shadow-xl scale-110'
+                ? 'bg-gradient-to-r from-cyan-400 to-blue-500 text-white shadow-xl'
                 : 'bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-500 hover:to-blue-600 text-white shadow-lg'
             }`}
           >
@@ -161,7 +161,7 @@ export default function PortfolioPage() {
 
           <Link 
             to="/vote" 
-            className={`font-bold rounded-2xl transition-all ${getButtonSize('/vote')} ${
+            className={`font-bold rounded-full transition-all text-sm py-2 px-4 ${
               isActive('/vote')
                 ? 'bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg scale-110'
                 : 'bg-purple-700 hover:bg-purple-600 text-white'
@@ -172,9 +172,11 @@ export default function PortfolioPage() {
 
           <Link 
             to="/portfolio" 
-            className={`font-bold rounded-2xl transition-all ${getButtonSize('/portfolio')} ${
+            className={`font-bold rounded-full transition-all ${
+              isActive('/portfolio') ? 'py-3 px-6 scale-110 text-base' : 'py-2 px-4 text-sm'
+            } ${
               isActive('/portfolio')
-                ? 'bg-gradient-to-r from-yellow-500 to-orange-500 text-white shadow-lg scale-110'
+                ? 'bg-gradient-to-r from-yellow-500 to-orange-500 text-white shadow-lg'
                 : 'bg-purple-700 hover:bg-purple-600 text-white'
             }`}
           >
