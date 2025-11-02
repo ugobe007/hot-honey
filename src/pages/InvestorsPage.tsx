@@ -23,7 +23,7 @@ export default function InvestorsPage() {
     if (!error && data && data.length > 0) {
       // Map database format to component format
       const mappedData: InvestorFirm[] = data.map((inv: any) => ({
-        id: parseInt(inv.id) || Math.random(),
+        id: inv.id, // Keep UUID as string
         name: inv.name,
         type: inv.type,
         tagline: inv.tagline,
@@ -63,7 +63,7 @@ export default function InvestorsPage() {
       const { data, error } = await searchInvestors(searchQuery, filterType);
       if (!error && data) {
         const mappedData: InvestorFirm[] = data.map((inv: any) => ({
-          id: parseInt(inv.id) || Math.random(),
+          id: inv.id, // Keep UUID as string
           name: inv.name,
           type: inv.type,
           tagline: inv.tagline,

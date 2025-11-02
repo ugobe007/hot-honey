@@ -1,12 +1,14 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { InvestorFirm } from '../data/investorData';
 
 interface InvestorCardProps {
   investor: InvestorFirm;
-  onContact?: (investorId: number) => void;
+  onContact?: (investorId: number | string) => void;
+  showEdit?: boolean;
 }
 
-export default function InvestorCard({ investor, onContact }: InvestorCardProps) {
+export default function InvestorCard({ investor, onContact, showEdit = true }: InvestorCardProps) {
   const [showDetails, setShowDetails] = useState(false);
 
   const getTypeColor = (type: string) => {
@@ -165,7 +167,7 @@ export default function InvestorCard({ investor, onContact }: InvestorCardProps)
         )}
 
         {/* Action Buttons */}
-        <div className="flex gap-3">
+        <div className="flex gap-3 mb-3">
           {investor.website && (
             <a
               href={investor.website}
@@ -187,6 +189,16 @@ export default function InvestorCard({ investor, onContact }: InvestorCardProps)
             </a>
           )}
         </div>
+
+        {/* Edit Button (Admin Only) */}
+        {showEdit && (
+          <Link
+            to={`/investor/${investor.id}/edit`}
+            className="w-full block bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-3 px-4 rounded-xl text-center transition-all shadow-lg mb-3"
+          >
+            ✏️ Edit Profile
+          </Link>
+        )}
 
         {/* Contact Button */}
         {onContact && (

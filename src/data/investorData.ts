@@ -1,7 +1,7 @@
 // Investment firms and accelerators data
 
 export interface InvestorFirm {
-  id: number;
+  id: number | string; // Support both numeric (legacy) and UUID (database)
   name: string;
   type: 'vc_firm' | 'accelerator' | 'angel_network' | 'corporate_vc';
   tagline?: string;
