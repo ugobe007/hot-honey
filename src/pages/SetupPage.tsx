@@ -1,11 +1,14 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import AdminNav from '../components/AdminNav';
-import { seedInitialInvestors } from '../lib/investorService';
+import { seedInitialInvestors, findDuplicateInvestors, removeDuplicateInvestors } from '../lib/investorService';
 
 export default function SetupPage() {
   const [status, setStatus] = useState<string>('');
   const [loading, setLoading] = useState(false);
+  const [duplicates, setDuplicates] = useState<any>(null);
+  const [checkingDupes, setCheckingDupes] = useState(false);
+  const [removingDupes, setRemovingDupes] = useState(false);
 
   const runSetup = async () => {
     setLoading(true);
@@ -52,6 +55,52 @@ export default function SetupPage() {
     }
   };
 
+  const checkDuplicates = async () => {
+    setCheckingDupes(true);
+    try {
+      const { data, error } = await findDuplicateInvestors();
+      if (error) {
+        alert(`Error: ${error.message}`);
+      } else {
+        setDuplicates(data);
+      }
+    } catch (error: any) {
+      alert(`Error: ${error.message}`);
+    } finally {
+      setCheckingDupes(false);
+    }
+  };
+
+  const removeDuplicates = async () => {
+    if (!confirm('Are you sure you want to remove duplicate entries? This will keep only the oldest entry for each investor name.')) {
+      return;
+    }
+
+    setRemovingDupes(true);
+    try {
+      const { data, error } = await removeDuplicateInvestors();
+      if (error) {
+        alert(`Error: ${error.message}`);
+        setRemovingDupes(false);
+      } else {
+        alert(data?.message || 'Done!');
+        // Clear the list and re-check
+        setDuplicates(null);
+        setRemovingDupes(false);
+        // Re-check for any remaining duplicates
+        setCheckingDupes(true);
+        const recheckResult = await findDuplicateInvestors();
+        if (!recheckResult.error) {
+          setDuplicates(recheckResult.data);
+        }
+        setCheckingDupes(false);
+      }
+    } catch (error: any) {
+      alert(`Error: ${error.message}`);
+      setRemovingDupes(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-purple-800 to-indigo-900 p-8">
       <div className="max-w-4xl mx-auto">
@@ -90,10 +139,74 @@ export default function SetupPage() {
           </div>
         </div>
 
-        <div className="text-center">
+        {/* Duplicate Management Section */}
+        <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 mb-8 border-2 border-red-400/50">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold text-white mb-4">🔍 Manage Duplicates</h2>
+            <p className="text-xl text-purple-100 mb-6">
+              Check for and remove duplicate investor entries
+            </p>
+            
+            <button
+              onClick={checkDuplicates}
+              disabled={checkingDupes}
+              className="px-8 py-4 bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-bold text-xl rounded-xl shadow-xl hover:from-blue-600 hover:to-cyan-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed mr-4"
+            >
+              {checkingDupes ? '🔍 Checking...' : '🔍 Check for Duplicates'}
+            </button>
+
+            {duplicates && duplicates.length > 0 && (
+              <button
+                onClick={removeDuplicates}
+                disabled={removingDupes}
+                className="px-8 py-4 bg-gradient-to-r from-red-500 to-pink-500 text-white font-bold text-xl rounded-xl shadow-xl hover:from-red-600 hover:to-pink-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {removingDupes ? '🗑️ Removing...' : '🗑️ Remove Duplicates'}
+              </button>
+            )}
+
+            {duplicates !== null && (
+              <div className="mt-6 bg-black/50 p-4 rounded-xl text-left">
+                <h3 className="text-xl font-bold mb-2 text-white">
+                  {duplicates.length === 0 ? '✅ No Duplicates Found' : `⚠️ Found ${duplicates.length} Duplicate Name(s)`}
+                </h3>
+                {duplicates.length > 0 && (
+                  <div className="space-y-4 mt-4">
+                    {duplicates.map((dup: any, idx: number) => (
+                      <div key={idx} className="bg-white/10 p-3 rounded-lg">
+                        <p className="text-white font-bold mb-2">
+                          {dup.name} ({dup.count} entries)
+                        </p>
+                        <div className="text-sm text-purple-200 space-y-1">
+                          {dup.investors.map((inv: any, invIdx: number) => (
+                            <div key={inv.id}>
+                              {invIdx === 0 ? '✅ Keep: ' : '❌ Remove: '}
+                              ID: {inv.id.substring(0, 8)}... (Created: {new Date(inv.created_at).toLocaleDateString()})
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                    <p className="text-yellow-300 text-sm mt-4">
+                      💡 Tip: The oldest entry for each duplicate will be kept, newer ones will be removed.
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="text-center space-x-4">
+          <Link
+            to="/invite-investor"
+            className="inline-block px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-bold text-xl rounded-xl shadow-xl hover:from-green-600 hover:to-emerald-600 transition-all"
+          >
+            ✚ Add New Investor
+          </Link>
           <Link
             to="/investors"
-            className="inline-block px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold rounded-xl shadow-xl hover:from-cyan-600 hover:to-blue-600 transition-all"
+            className="inline-block px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold text-xl rounded-xl shadow-xl hover:from-cyan-600 hover:to-blue-600 transition-all"
           >
             💼 View Investors
           </Link>

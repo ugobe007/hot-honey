@@ -182,7 +182,91 @@ export async function updateStartupStatus(
   return { data, error: null };
 }
 
-// Helper function to seed initial investor data
+// Find duplicate investors by name
+export async function findDuplicateInvestors() {
+  const { data, error } = await supabase
+    .from('investors')
+    .select('id, name, created_at')
+    .order('name')
+    .order('created_at');
+
+  if (error) {
+    console.error('Error fetching investors:', error);
+    return { data: null, error };
+  }
+
+  // Group by name to find duplicates
+  const nameMap = new Map<string, any[]>();
+  data?.forEach((investor: any) => {
+    const existing = nameMap.get(investor.name) || [];
+    nameMap.set(investor.name, [...existing, investor]);
+  });
+
+  // Filter to only duplicates (count > 1)
+  const duplicates = Array.from(nameMap.entries())
+    .filter(([_, investors]) => investors.length > 1)
+    .map(([name, investors]) => ({
+      name,
+      count: investors.length,
+      investors: investors.sort((a: any, b: any) => 
+        new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+      )
+    }));
+
+  return { data: duplicates, error: null };
+}
+
+// Remove duplicate investors, keeping only the oldest entry for each name
+export async function removeDuplicateInvestors() {
+  const { data: duplicates, error: findError } = await findDuplicateInvestors();
+  
+  if (findError || !duplicates) {
+    return { data: null, error: findError };
+  }
+
+  const idsToDelete: string[] = [];
+  const keptInvestors: any[] = [];
+
+  duplicates.forEach((duplicate: any) => {
+    // Keep the first (oldest) entry, delete the rest
+    const [keep, ...remove] = duplicate.investors;
+    keptInvestors.push({ name: duplicate.name, id: keep.id, created_at: keep.created_at });
+    idsToDelete.push(...remove.map((inv: any) => inv.id));
+  });
+
+  if (idsToDelete.length === 0) {
+    return { 
+      data: { 
+        message: 'No duplicates found', 
+        removed: 0, 
+        kept: [] 
+      }, 
+      error: null 
+    };
+  }
+
+  // Delete duplicates
+  const { error: deleteError } = await supabase
+    .from('investors')
+    .delete()
+    .in('id', idsToDelete);
+
+  if (deleteError) {
+    console.error('Error deleting duplicates:', deleteError);
+    return { data: null, error: deleteError };
+  }
+
+  return { 
+    data: { 
+      message: `Removed ${idsToDelete.length} duplicate entries`,
+      removed: idsToDelete.length,
+      kept: keptInvestors
+    }, 
+    error: null 
+  };
+}
+
+// Seed initial investor data
 export async function seedInitialInvestors() {
   const investors = [
     {

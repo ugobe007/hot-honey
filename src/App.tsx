@@ -26,6 +26,7 @@ import InvestorsPage from './pages/InvestorsPage';
 import UploadPage from './pages/UploadPage';
 import SetupPage from './pages/SetupPage';
 import InviteInvestorPage from './pages/InviteInvestorPage';
+import EditInvestorPage from './pages/EditInvestorPage';
 import './App.css';
 
 const App: React.FC = () => {
@@ -53,6 +54,7 @@ const App: React.FC = () => {
           <Route path="/vote" element={<VotePage />} />
           <Route path="/vote-demo" element={<VoteDemo />} />
           <Route path="/investors" element={<InvestorsPage />} /> {/* ✅ Investor Directory */}
+          <Route path="/investor/:id/edit" element={<EditInvestorPage />} /> {/* ✅ Edit Investor */}
           <Route path="/invite-investor" element={<InviteInvestorPage />} /> {/* ✅ Invite Investor */}
           <Route path="/portfolio" element={<PortfolioPage />} /> {/* ✅ FIXED */}
           <Route path="/submit" element={<Submit />} />
@@ -71,6 +73,7 @@ const App: React.FC = () => {
           <Route path="/admin/document-upload" element={<DocumentUpload />} />
           <Route path="/admin/review" element={<AdminReview />} />
           <Route path="/admin/setup" element={<SetupPage />} />
+          <Route path="/setup" element={<SetupPage />} /> {/* ✅ Setup shortcut */}
           <Route path="/analytics" element={<Analytics />} />
         </Routes>
       </main>

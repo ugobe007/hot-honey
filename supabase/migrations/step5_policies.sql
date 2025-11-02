@@ -5,6 +5,7 @@
 DROP POLICY IF EXISTS "Anyone can read investors" ON investors;
 DROP POLICY IF EXISTS "Anyone can insert investors" ON investors;
 DROP POLICY IF EXISTS "Anyone can update investors" ON investors;
+DROP POLICY IF EXISTS "Anyone can delete investors" ON investors;
 DROP POLICY IF EXISTS "Anyone can read approved startup uploads" ON startup_uploads;
 DROP POLICY IF EXISTS "Anyone can read their own uploads" ON startup_uploads;
 DROP POLICY IF EXISTS "Anyone can submit startup uploads" ON startup_uploads;
@@ -23,6 +24,11 @@ CREATE POLICY "Anyone can insert investors"
 
 CREATE POLICY "Anyone can update investors"
   ON investors FOR UPDATE
+  TO public
+  USING (true);
+
+CREATE POLICY "Anyone can delete investors"
+  ON investors FOR DELETE
   TO public
   USING (true);
 
