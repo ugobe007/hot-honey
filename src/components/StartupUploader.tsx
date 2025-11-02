@@ -22,6 +22,7 @@ export default function StartupUploader() {
   const [linkedinUrl, setLinkedinUrl] = useState('');
   const [deckFile, setDeckFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
+  const [researchingWithAI, setResearchingWithAI] = useState(false);
   const [extractedData, setExtractedData] = useState<StartupData | null>(null);
   const [manualData, setManualData] = useState<StartupData>({
     name: '',
@@ -76,6 +77,84 @@ export default function StartupUploader() {
       alert('❌ Error parsing deck.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleAIResearch = async () => {
+    if (!websiteUrl) {
+      alert('Please enter a website URL first!');
+      return;
+    }
+
+    setResearchingWithAI(true);
+    try {
+      const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
+      
+      if (!apiKey || apiKey === 'your-openai-api-key-here') {
+        alert('⚠️ OpenAI API key not configured. Please add it to your .env file.');
+        setResearchingWithAI(false);
+        return;
+      }
+
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+          model: 'gpt-4o-mini',
+          messages: [
+            {
+              role: 'system',
+              content: `You are a startup research assistant. Given a company website, provide comprehensive information in this exact JSON format:
+{
+  "name": "Company Name",
+  "tagline": "One sentence value proposition",
+  "description": "Company description (max 300 chars)",
+  "pitch": "What they do and their unique value (max 300 chars)",
+  "website": "Company website URL",
+  "raise": "Funding amount if known (e.g. '$2M Seed' or 'Seeking $2M')",
+  "stage": 0-2 (0=Pre-Seed, 1=Seed, 2=Series A),
+  "teamSize": number,
+  "founded": year
+}
+
+Fill ALL fields with best available information from the website and public sources.`
+            },
+            {
+              role: 'user',
+              content: `Research this startup: ${websiteUrl}
+
+Provide comprehensive information about this company in the JSON format specified.`
+            }
+          ],
+          response_format: { type: 'json_object' }
+        })
+      });
+
+      const data = await response.json();
+      const aiData = JSON.parse(data.choices[0].message.content);
+
+      // Set extracted data from AI research
+      setExtractedData({
+        name: aiData.name || '',
+        website: aiData.website || websiteUrl,
+        description: aiData.description || '',
+        pitch: aiData.pitch || '',
+        tagline: aiData.tagline || '',
+        raise: aiData.raise || '',
+        stage: aiData.stage || 0,
+        teamSize: aiData.teamSize,
+        founded: aiData.founded,
+      });
+
+      alert('✅ AI research complete! Please review and edit the information below.');
+    } catch (error: any) {
+      console.error('AI research error:', error);
+      alert(`❌ AI research failed: ${error.message}`);
+    } finally {
+      setResearchingWithAI(false);
     }
   };
 
@@ -203,6 +282,14 @@ export default function StartupUploader() {
                 className="w-full py-4 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold rounded-xl shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? '🔄 Extracting Data...' : '✨ Extract Data'}
+              </button>
+              
+              <button
+                onClick={handleAIResearch}
+                disabled={researchingWithAI}
+                className="w-full py-4 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold rounded-xl shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed mt-3"
+              >
+                {researchingWithAI ? '🤖 AI Researching...' : '🤖 Fill with AI Research'}
               </button>
             </div>
           )}
