@@ -28,22 +28,54 @@ const Dashboard: React.FC = () => {
 
     const isAnonymous = !userId || userId.startsWith('anon_');
     
-    console.log('Dashboard useEffect:', { isAnonymous, userId, portfolioLength: portfolio.length });
+    console.log('Dashboard useEffect:', { 
+      isAnonymous, 
+      userId, 
+      portfolioLength: portfolio.length,
+      localStorage_portfolio: localStorage.getItem('hot-money-honey-store')
+    });
     
     if (isAnonymous) {
-      // For anonymous users, use the Zustand portfolio store
-      console.log('Loading from portfolio:', portfolio);
-      const enrichedVotes = portfolio.map(startup => ({
-        id: startup.id,
-        name: startup.name,
-        pitch: startup.pitch,
-        tagline: startup.tagline,
-        stage: startup.stage,
-        fivePoints: startup.fivePoints,
-        votedAt: new Date().toISOString(),
-      }));
-      console.log('Enriched votes:', enrichedVotes);
-      setMyYesVotes(enrichedVotes);
+      // For anonymous users, check both Zustand portfolio and localStorage
+      let votes: YesVote[] = [];
+      
+      if (portfolio.length > 0) {
+        console.log('Loading from portfolio:', portfolio);
+        votes = portfolio.map(startup => ({
+          id: startup.id,
+          name: startup.name,
+          pitch: startup.pitch,
+          tagline: startup.tagline,
+          stage: startup.stage,
+          fivePoints: startup.fivePoints,
+          votedAt: new Date().toISOString(),
+        }));
+      } else {
+        // Fallback: load directly from localStorage
+        const storedState = localStorage.getItem('hot-money-honey-store');
+        if (storedState) {
+          try {
+            const parsed = JSON.parse(storedState);
+            console.log('Parsed store from localStorage:', parsed);
+            if (parsed.state?.portfolio && parsed.state.portfolio.length > 0) {
+              votes = parsed.state.portfolio.map((startup: any) => ({
+                id: startup.id,
+                name: startup.name,
+                pitch: startup.pitch,
+                tagline: startup.tagline,
+                stage: startup.stage,
+                fivePoints: startup.fivePoints,
+                votedAt: new Date().toISOString(),
+              }));
+            }
+          } catch (e) {
+            console.error('Error parsing localStorage:', e);
+          }
+        }
+      }
+      
+      console.log('Final enriched votes:', votes);
+      setMyYesVotes(votes);
     } else {
       // For authenticated users, get YES vote startup IDs from Supabase
       const yesVoteIds = getYesVotes();
