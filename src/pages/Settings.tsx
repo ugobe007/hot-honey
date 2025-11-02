@@ -44,20 +44,20 @@ export default function Settings() {
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-purple-800 to-indigo-900 p-8">
       {/* Top Navigation */}
       <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-[200] pointer-events-auto">
-        <div className="flex gap-2 pointer-events-auto">
-          <Link to="/" className="text-6xl hover:scale-110 transition-transform bg-gradient-to-r from-orange-500 to-purple-600 bg-clip-text text-transparent hover:from-orange-400 hover:to-purple-500" style={{WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'}} title="Hot Money Honey">
+        <div className="flex gap-2 items-center pointer-events-auto">
+          <Link to="/" className="text-5xl hover:scale-110 transition-transform flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-400 hover:to-purple-500 shadow-lg" title="Hot Money Honey">
             🍯
           </Link>
-          <Link to="/" className="px-5 py-2.5 bg-purple-700 hover:bg-purple-600 text-white font-bold rounded-2xl transition-all shadow-lg">
+          <Link to="/" className="px-4 py-2 bg-purple-700 hover:bg-purple-600 text-white font-bold rounded-full transition-all shadow-lg text-sm">
             🏠 Home
           </Link>
-          <Link to="/vote" className="px-5 py-2.5 bg-purple-700 hover:bg-purple-600 text-white font-bold rounded-2xl transition-all shadow-lg">
+          <Link to="/vote" className="px-4 py-2 bg-purple-700 hover:bg-purple-600 text-white font-bold rounded-full transition-all shadow-lg text-sm">
             🗳️ Vote
           </Link>
-          <Link to="/dashboard" className="px-5 py-2.5 bg-purple-700 hover:bg-purple-600 text-white font-bold rounded-2xl transition-all shadow-lg">
+          <Link to="/dashboard" className="px-4 py-2 bg-purple-700 hover:bg-purple-600 text-white font-bold rounded-full transition-all shadow-lg text-sm">
             📊 Dashboard
           </Link>
-          <Link to="/portfolio" className="px-5 py-2.5 bg-purple-700 hover:bg-purple-600 text-white font-bold rounded-2xl transition-all shadow-lg">
+          <Link to="/portfolio" className="px-4 py-2 bg-purple-700 hover:bg-purple-600 text-white font-bold rounded-full transition-all shadow-lg text-sm">
             ⭐ Portfolio
           </Link>
           <Link to="/settings" className="px-7 py-3 bg-gradient-to-r from-cyan-400 to-blue-500 text-white font-bold rounded-2xl shadow-xl scale-110">
