@@ -42,32 +42,21 @@ const Dashboard: React.FC = () => {
       
       if (myYesVotesStr) {
         try {
-          const yesVoteIds = JSON.parse(myYesVotesStr);
-          console.log('Parsed YES vote IDs:', yesVoteIds);
+          const yesVotesArray = JSON.parse(myYesVotesStr);
+          console.log('Parsed YES votes array:', yesVotesArray);
           
-          // Remove duplicates from the array
-          const uniqueIds = [...new Set(yesVoteIds)];
-          console.log('Unique IDs:', uniqueIds);
-          
-          // Enrich with full startup data
-          const enrichedVotes = uniqueIds.map((id: string) => {
-            const startup = startupData.find(s => s.id.toString() === id);
-            if (startup) {
-              return {
-                id: startup.id,
-                name: startup.name,
-                pitch: startup.pitch,
-                tagline: startup.tagline,
-                stage: startup.stage,
-                fivePoints: startup.fivePoints,
-                votedAt: new Date().toISOString(),
-              };
+          // The votes are already full startup objects, just need to deduplicate by ID
+          const uniqueVotesMap = new Map();
+          yesVotesArray.forEach((vote: YesVote) => {
+            if (vote && vote.id !== undefined) {
+              uniqueVotesMap.set(vote.id, vote);
             }
-            return null;
-          }).filter(Boolean) as YesVote[];
+          });
           
-          console.log('Final enriched votes:', enrichedVotes);
-          setMyYesVotes(enrichedVotes);
+          const uniqueVotes = Array.from(uniqueVotesMap.values());
+          console.log('Unique votes after deduplication:', uniqueVotes);
+          
+          setMyYesVotes(uniqueVotes);
         } catch (e) {
           console.error('Error parsing myYesVotes:', e);
         }
