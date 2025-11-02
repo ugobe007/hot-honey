@@ -68,32 +68,50 @@ const FrontPageNew: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-green-400 to-purple-950" style={{ backgroundImage: 'radial-gradient(ellipse 800px 600px at 20% 40%, rgba(134, 239, 172, 0.4), transparent), linear-gradient(to bottom right, rgb(88, 28, 135), rgb(59, 7, 100))' }}>
       <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50">
-        <div className="flex gap-1 items-center">
-          <Link to="/signup" className="text-6xl hover:scale-110 transition-transform cursor-pointer" title="Hot Money Honey">
+        <div className="flex gap-2 items-center">
+          <Link to="/signup" className="text-6xl hover:scale-110 transition-transform cursor-pointer" title="Sign Up">
             🍯
           </Link>
-          <Link to="/signup" className="px-4 py-1.5 bg-yellow-400 text-black rounded-full font-medium text-sm shadow-lg hover:bg-yellow-500 transition-colors">
-            👤 Sign Up
-          </Link>
-          <Link to="/" className="px-4 py-1.5 bg-orange-500 text-white rounded-full font-medium text-sm shadow-lg hover:bg-orange-600 transition-colors">
+          <Link 
+            to="/" 
+            className="flex items-center justify-center bg-orange-500 text-white font-medium text-sm shadow-lg hover:bg-orange-600 transition-colors"
+            style={{ width: '120px', height: '45px', borderRadius: '22.5px' }}
+          >
             🏠 Home
           </Link>
-          <Link to="/vote" className="px-4 py-1.5 bg-purple-700 text-white rounded-full font-medium text-sm shadow-lg hover:bg-purple-600 transition-colors">
+          <Link 
+            to="/vote" 
+            className="flex items-center justify-center bg-purple-700 text-white font-medium text-sm shadow-lg hover:bg-purple-600 transition-colors"
+            style={{ width: '110px', height: '45px', borderRadius: '22.5px' }}
+          >
             <span className="blink-text">🗳️ Vote</span>
           </Link>
-          <Link to="/investors" className="px-4 py-1.5 bg-purple-700 text-white rounded-full font-medium text-sm shadow-lg hover:bg-purple-600 transition-colors">
+          <Link 
+            to="/investors" 
+            className="flex items-center justify-center bg-purple-700 text-white font-medium text-sm shadow-lg hover:bg-purple-600 transition-colors"
+            style={{ width: '140px', height: '45px', borderRadius: '22.5px' }}
+          >
             💼 Investors
           </Link>
-          <Link to="/upload" className="px-4 py-1.5 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-full font-medium text-sm shadow-lg hover:from-green-600 hover:to-emerald-700 transition-all">
-            🚀 Submit
-          </Link>
-          <Link to="/portfolio" className="px-4 py-1.5 bg-purple-700 text-white rounded-full font-medium text-sm shadow-lg hover:bg-purple-600 transition-colors">
+          <Link 
+            to="/portfolio" 
+            className="flex items-center justify-center bg-purple-700 text-white font-medium text-sm shadow-lg hover:bg-purple-600 transition-colors"
+            style={{ width: '130px', height: '45px', borderRadius: '22.5px' }}
+          >
             ⭐ Portfolio
           </Link>
-          <Link to="/analytics" className="px-4 py-1.5 bg-gradient-to-r from-purple-700 to-purple-900 text-yellow-400 rounded-full font-bold text-sm shadow-lg hover:from-purple-800 hover:to-purple-950 transition-all">
+          <Link 
+            to="/analytics" 
+            className="flex items-center justify-center bg-gradient-to-r from-purple-700 to-purple-900 text-yellow-400 font-bold text-sm shadow-lg hover:from-purple-800 hover:to-purple-950 transition-all"
+            style={{ width: '140px', height: '45px', borderRadius: '22.5px' }}
+          >
             📈 Analytics
           </Link>
-          <Link to="/dashboard" className="px-4 py-1.5 bg-orange-500 text-white rounded-full font-medium text-sm shadow-lg hover:bg-orange-600 transition-colors">
+          <Link 
+            to="/dashboard" 
+            className="flex items-center justify-center bg-orange-500 text-white font-medium text-sm shadow-lg hover:bg-orange-600 transition-colors"
+            style={{ width: '145px', height: '45px', borderRadius: '22.5px' }}
+          >
             👤 Dashboard
           </Link>
         </div>

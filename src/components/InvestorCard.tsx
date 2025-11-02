@@ -24,7 +24,7 @@ export default function InvestorCard({ investor, onContact, showEdit = true }: I
   const getTypeLabel = (type: string) => {
     switch (type) {
       case 'vc_firm': return '💼 VC FIRM';
-      case 'accelerator': return '🚀 ACCELERATOR';
+      case 'accelerator': return '🚀 ACCEL-ERATOR';
       case 'angel_network': return '👼 ANGEL NETWORK';
       case 'corporate_vc': return '🏢 CORPORATE VC';
       default: return '💰 INVESTOR';
