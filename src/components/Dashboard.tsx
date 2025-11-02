@@ -5,6 +5,7 @@ import { NotificationBell } from './NotificationBell';
 import startupData from '../data/startupData';
 import { useAuth } from '../hooks/useAuth';
 import { useVotes } from '../hooks/useVotes';
+import { useStore } from '../store';
 
 interface YesVote {
   id: number;
@@ -19,33 +20,50 @@ interface YesVote {
 const Dashboard: React.FC = () => {
   const { userId, isLoading: authLoading } = useAuth();
   const { votes, isLoading: votesLoading, getYesVotes, voteCounts } = useVotes(userId);
+  const portfolio = useStore((state) => state.portfolio);
   const [myYesVotes, setMyYesVotes] = useState<YesVote[]>([]);
 
   useEffect(() => {
     if (authLoading || votesLoading) return;
 
-    // Get YES vote startup IDs from Supabase
-    const yesVoteIds = getYesVotes();
+    const isAnonymous = !userId || userId.startsWith('anon_');
     
-    // Enrich with full startup data
-    const enrichedVotes = yesVoteIds.map(id => {
-      const startup = startupData.find(s => s.id.toString() === id);
-      if (startup) {
-        return {
-          id: startup.id,
-          name: startup.name,
-          pitch: startup.pitch,
-          tagline: startup.tagline,
-          stage: startup.stage,
-          fivePoints: startup.fivePoints,
-          votedAt: votes.find(v => v.startup_id === id)?.created_at || new Date().toISOString(),
-        };
-      }
-      return null;
-    }).filter(Boolean) as YesVote[];
+    if (isAnonymous) {
+      // For anonymous users, use the Zustand portfolio store
+      const enrichedVotes = portfolio.map(startup => ({
+        id: startup.id,
+        name: startup.name,
+        pitch: startup.pitch,
+        tagline: startup.tagline,
+        stage: startup.stage,
+        fivePoints: startup.fivePoints,
+        votedAt: new Date().toISOString(),
+      }));
+      setMyYesVotes(enrichedVotes);
+    } else {
+      // For authenticated users, get YES vote startup IDs from Supabase
+      const yesVoteIds = getYesVotes();
+      
+      // Enrich with full startup data
+      const enrichedVotes = yesVoteIds.map(id => {
+        const startup = startupData.find(s => s.id.toString() === id);
+        if (startup) {
+          return {
+            id: startup.id,
+            name: startup.name,
+            pitch: startup.pitch,
+            tagline: startup.tagline,
+            stage: startup.stage,
+            fivePoints: startup.fivePoints,
+            votedAt: votes.find(v => v.startup_id === id)?.created_at || new Date().toISOString(),
+          };
+        }
+        return null;
+      }).filter(Boolean) as YesVote[];
 
-    setMyYesVotes(enrichedVotes);
-  }, [authLoading, votesLoading, votes]); // FIXED: Removed getYesVotes from dependencies
+      setMyYesVotes(enrichedVotes);
+    }
+  }, [authLoading, votesLoading, votes, portfolio, userId]); // Added portfolio and userId to dependencies
 
   const handleVote = (vote: 'yes' | 'no') => {
     console.log(`Voted ${vote}`);
