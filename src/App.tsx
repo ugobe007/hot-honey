@@ -22,6 +22,9 @@ import Analytics from './pages/Analytics';
 import Login from './pages/Login';
 import AdminReview from './pages/AdminReview';
 import WelcomeModal from './components/WelcomeModal';
+import InvestorsPage from './pages/InvestorsPage';
+import UploadPage from './pages/UploadPage';
+import SetupPage from './pages/SetupPage';
 import './App.css';
 
 const App: React.FC = () => {
@@ -48,9 +51,10 @@ const App: React.FC = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/vote" element={<VotePage />} />
           <Route path="/vote-demo" element={<VoteDemo />} />
-          <Route path="/investors" element={<PortfolioPage />} /> {/* ✅ FIXED */}
+          <Route path="/investors" element={<InvestorsPage />} /> {/* ✅ Investor Directory */}
           <Route path="/portfolio" element={<PortfolioPage />} /> {/* ✅ FIXED */}
           <Route path="/submit" element={<Submit />} />
+          <Route path="/upload" element={<UploadPage />} /> {/* ✅ Startup Uploader */}
           <Route path="/startup/:id" element={<StartupDetail />} />
           <Route path="/deals" element={<Deals />} />
           <Route path="/startups" element={<OldDashboard />} /> {/* Old page */}
@@ -64,6 +68,7 @@ const App: React.FC = () => {
           <Route path="/admin/bulk-import" element={<BulkImport />} />
           <Route path="/admin/document-upload" element={<DocumentUpload />} />
           <Route path="/admin/review" element={<AdminReview />} />
+          <Route path="/admin/setup" element={<SetupPage />} />
           <Route path="/analytics" element={<Analytics />} />
         </Routes>
       </main>

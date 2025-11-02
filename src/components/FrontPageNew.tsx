@@ -78,7 +78,13 @@ const FrontPageNew: React.FC = () => {
             🏠 Home
           </Link>
           <Link to="/vote" className="px-4 py-1.5 bg-purple-700 text-white rounded-full font-medium text-sm shadow-lg hover:bg-purple-600 transition-colors">
-            <span className="blink-text">�️ Vote</span>
+            <span className="blink-text">🗳️ Vote</span>
+          </Link>
+          <Link to="/investors" className="px-4 py-1.5 bg-purple-700 text-white rounded-full font-medium text-sm shadow-lg hover:bg-purple-600 transition-colors">
+            💼 Investors
+          </Link>
+          <Link to="/upload" className="px-4 py-1.5 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-full font-medium text-sm shadow-lg hover:from-green-600 hover:to-emerald-700 transition-all">
+            🚀 Submit
           </Link>
           <Link to="/portfolio" className="px-4 py-1.5 bg-purple-700 text-white rounded-full font-medium text-sm shadow-lg hover:bg-purple-600 transition-colors">
             ⭐ Portfolio
