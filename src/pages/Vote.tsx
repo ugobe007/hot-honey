@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useStore } from '../store';
-import StartupCard from '../components/StartupCard';
+import StartupCardOfficial from '../components/StartupCardOfficial';
 
 const Vote: React.FC = () => {
   const startups = useStore((state) => state.startups);
@@ -31,10 +31,9 @@ const Vote: React.FC = () => {
 
   return (
         <div className="flex justify-center mt-10 bg-orange-50 min-h-screen">
-      <StartupCard
+      <StartupCardOfficial
         startup={currentStartup}
-        onYes={() => voteYes(currentStartup)}
-        onNo={voteNo}
+        onVote={(vote) => vote === 'yes' ? voteYes(currentStartup) : voteNo()}
       />
     </div>
   );
