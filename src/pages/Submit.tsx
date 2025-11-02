@@ -313,20 +313,27 @@ Return valid JSON with: name, pitch, fivePoints (array of 5 strings), industry, 
           messages: [
             {
               role: 'system',
-              content: `You are a research assistant. Given a startup name or website, provide information in this exact JSON format:
+              content: `You are a research assistant. Given a startup name or website, provide comprehensive information in this exact JSON format:
 {
   "name": "Startup Name",
   "valueProp": "One sentence value proposition",
   "problem": "The problem they solve (max 300 chars)",
   "solution": "Their solution (max 300 chars)",
-  "team": "Team background (max 300 chars)",
-  "funding": "Funding amount if known, e.g. '$2M Seed'",
+  "team": "Team background with company names (max 300 chars)",
+  "funding": "Funding amount if known, e.g. '$2M Seed' or 'Seeking $2M Seed'",
   "industry": "Primary industry",
   "stage": "Pre-Seed, Seed, or Series A",
+  "founderName": "Founder's full name if available, or 'Startup Team'",
+  "founderEmail": "contact@startupname.com or info@startupname.com",
   "fivePoints": ["Problem statement", "Solution", "Market size", "Team", "Raise amount"]
 }
 
-IMPORTANT: Only fill in fields where you have EMPTY current values. If the form already has data, preserve it.`
+IMPORTANT: 
+- Fill ALL fields with best available information
+- For founder name: use actual founder if known, otherwise use "Startup Team"
+- For founder email: derive from website domain or use generic contact email
+- Only preserve existing form values if they're already filled
+- Make educated guesses based on typical startup patterns if info not available`
             },
             {
               role: 'user',
@@ -341,20 +348,13 @@ Team: ${formData.team || 'EMPTY'}
 Funding: ${formData.funding || 'EMPTY'}
 Industry: ${formData.industry || 'EMPTY'}
 Stage: ${formData.stage || 'EMPTY'}
+Founder Name: ${formData.founderName || 'EMPTY'}
+Founder Email: ${formData.founderEmail || 'EMPTY'}
 
-Fill ONLY the EMPTY fields with your research. Return JSON.`
+Fill ONLY the EMPTY fields with your research. Return JSON with ALL fields filled.`
             }
           ],
           response_format: { type: 'json_object' },
-          temperature: 0.3,
-          max_tokens: 1000
-        })
-      });
-
-      if (!response.ok) {
-        throw new Error(`API error: ${response.statusText}`);
-      }
-
       const data = await response.json();
       const aiData = JSON.parse(data.choices[0].message.content);
 
@@ -369,8 +369,19 @@ Fill ONLY the EMPTY fields with your research. Return JSON.`
         funding: prev.funding || aiData.funding || prev.funding,
         industry: prev.industry || aiData.industry || prev.industry,
         stage: prev.stage === 'Pre-Seed' ? (aiData.stage || prev.stage) : prev.stage,
+        founderName: prev.founderName || aiData.founderName || 'Startup Team',
+        founderEmail: prev.founderEmail || aiData.founderEmail || `contact@${(prev.website || searchQuery).replace(/^https?:\/\//,'').replace(/\/$/, '').split('/')[0]}`,
         fivePoints: prev.fivePoints.length > 0 ? prev.fivePoints : (aiData.fivePoints || []),
       }));
+
+      alert('✅ AI research complete! Please review and edit the auto-filled information.');
+    } catch (error: any) {
+      console.error('AI research error:', error);
+      alert(`❌ AI research failed: ${error.message}`);
+    } finally {
+      setResearchingWithAI(false);
+    }
+  };  }));
 
       alert('✅ AI research complete! Please review and edit the auto-filled information.');
     } catch (error: any) {
