@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import AdminNav from '../components/AdminNav';
 import { seedInitialInvestors } from '../lib/investorService';
 
 export default function SetupPage() {
@@ -92,6 +93,9 @@ export default function SetupPage() {
           </Link>
         </div>
       </div>
+      
+      {/* Admin Navigation */}
+      <AdminNav currentPage="setup" />
     </div>
   );
 }

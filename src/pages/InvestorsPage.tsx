@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import InvestorCard from '../components/InvestorCard';
+import AdminNav from '../components/AdminNav';
 import investorData, { InvestorFirm } from '../data/investorData';
 import { getAllInvestors, searchInvestors } from '../lib/investorService';
 
@@ -131,16 +132,22 @@ export default function InvestorsPage() {
           <p className="text-lg sm:text-2xl text-purple-200">
             Connect with {investors.length}+ VCs, Accelerators & Angel Networks
           </p>
-          {!useDatabase && (
-            <div className="mt-4">
+          <div className="mt-4 flex gap-4 justify-center items-center flex-wrap">
+            {!useDatabase && (
               <Link 
                 to="/admin/setup" 
                 className="inline-block px-4 py-2 bg-yellow-500/20 border-2 border-yellow-500 text-yellow-300 rounded-full text-sm hover:bg-yellow-500/30 transition-all"
               >
                 ⚠️ Using static data - Click to setup database
               </Link>
-            </div>
-          )}
+            )}
+            <Link
+              to="/invite-investor"
+              className="inline-block px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-full text-sm hover:from-green-600 hover:to-emerald-700 transition-all shadow-lg"
+            >
+              ➕ Know an investor? Add them!
+            </Link>
+          </div>
         </div>
 
         {/* Search & Filter */}
@@ -224,6 +231,9 @@ export default function InvestorsPage() {
           </div>
         )}
       </div>
+      
+      {/* Admin Navigation */}
+      <AdminNav />
     </div>
   );
 }
