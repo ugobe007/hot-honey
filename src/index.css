@@ -9,6 +9,16 @@ body {
   font-family: sans-serif;
 }
 
+/* CRITICAL: Force navigation links to be clickable */
+a, button, [role="button"] {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+}
+
+nav, [class*="fixed"] {
+  pointer-events: auto !important;
+}
+
 /* 3D plastic effect */
 .plastic {
   background: linear-gradient(145deg, rgba(255, 255, 255, 0.25), rgba(0, 0, 0, 0.05));

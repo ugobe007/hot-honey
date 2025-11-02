@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { OpenAIDataService } from '../lib/openaiDataService';
 
 interface ScrapedCompany {
   name: string;
@@ -313,46 +314,69 @@ export default function BulkImport() {
     }, 100);
   };
 
-  const handleImportAll = () => {
-    const uploadedStartups = localStorage.getItem('uploadedStartups');
-    const existing = uploadedStartups ? JSON.parse(uploadedStartups) : [];
+  const handleImportAll = async () => {
+    setLoading(true);
     
-    const newStartups = enrichedCompanies.map((company, index) => ({
-      id: Date.now() + index,
-      name: company.name,
-      tagline: company.pitch,
-      pitch: company.pitch,
-      stage: company.stage === 'Pre-Seed' ? 1 : company.stage === 'Seed' ? 1 : 2,
-      website: company.website,
-      industries: [company.industry],
-      fivePoints: company.fivePoints,
-      raise: company.funding,
-      funding: company.funding,
-      yesVotes: 0,
-      noVotes: 0,
-      hotness: 0,
-      vcBacked: company.vcSource,
-      entityType: company.entityType || 'startup'
-    }));
+    try {
+      // Upload to Supabase using OpenAIDataService
+      const results = await OpenAIDataService.uploadBulkStartups(
+        enrichedCompanies.map(company => ({
+          name: company.name,
+          website: company.website,
+          pitch: company.pitch,
+          fivePoints: company.fivePoints,
+          stage: company.stage,
+          funding: company.funding,
+          industry: company.industry,
+          entityType: company.entityType || 'startup',
+          scraped_by: company.vcSource || vcUrl
+        }))
+      );
+      
+      console.log(`✅ Uploaded ${results.successful}/${results.total} to Supabase`);
+      
+      // Also keep in localStorage for immediate access (will be removed later)
+      const uploadedStartups = localStorage.getItem('uploadedStartups');
+      const existing = uploadedStartups ? JSON.parse(uploadedStartups) : [];
+      
+      const newStartups = enrichedCompanies.map((company, index) => ({
+        id: Date.now() + index,
+        name: company.name,
+        tagline: company.pitch,
+        pitch: company.pitch,
+        stage: company.stage === 'Pre-Seed' ? 1 : company.stage === 'Seed' ? 1 : 2,
+        website: company.website,
+        industries: [company.industry],
+        fivePoints: company.fivePoints,
+        raise: company.funding,
+        funding: company.funding,
+        yesVotes: 0,
+        noVotes: 0,
+        hotness: 0,
+        vcBacked: company.vcSource,
+        entityType: company.entityType || 'startup'
+      }));
 
-    localStorage.setItem('uploadedStartups', JSON.stringify([...existing, ...newStartups]));
-    
-    const startupCount = newStartups.filter(s => s.entityType === 'startup').length;
-    const vcCount = newStartups.filter(s => s.entityType === 'vc_firm').length;
-    const acceleratorCount = newStartups.filter(s => s.entityType === 'accelerator').length;
-    
-    let message = `✅ Successfully imported:\n`;
-    if (startupCount > 0) message += `• ${startupCount} startup${startupCount > 1 ? 's' : ''}\n`;
-    if (vcCount > 0) message += `• ${vcCount} VC firm${vcCount > 1 ? 's' : ''}\n`;
-    if (acceleratorCount > 0) message += `• ${acceleratorCount} accelerator${acceleratorCount > 1 ? 's' : ''}\n`;
-    message += `\nWould you like to view Analytics to see trends and intelligence?\n\nClick OK for Analytics, Cancel to go to Voting.`;
-    
-    const shouldViewAnalytics = confirm(message);
-    
-    if (shouldViewAnalytics) {
-      navigate('/analytics');
-    } else {
-      navigate('/vote');
+      localStorage.setItem('uploadedStartups', JSON.stringify([...existing, ...newStartups]));
+      
+      const startupCount = newStartups.filter(s => s.entityType === 'startup').length;
+      const vcCount = newStartups.filter(s => s.entityType === 'vc_firm').length;
+      const acceleratorCount = newStartups.filter(s => s.entityType === 'accelerator').length;
+      
+      let message = `✅ Successfully imported to Supabase:\n`;
+      if (startupCount > 0) message += `• ${startupCount} startup${startupCount > 1 ? 's' : ''}\n`;
+      if (vcCount > 0) message += `• ${vcCount} VC firm${vcCount > 1 ? 's' : ''}\n`;
+      if (acceleratorCount > 0) message += `• ${acceleratorCount} accelerator${acceleratorCount > 1 ? 's' : ''}\n`;
+      message += `\nStartups are pending admin review.\n\nGo to Admin Review to approve and publish them.`;
+      
+      alert(message);
+      navigate('/admin/review');
+      
+    } catch (error) {
+      console.error('❌ Failed to import:', error);
+      alert('Failed to import startups. Check console for details.');
+    } finally {
+      setLoading(false);
     }
   };
 

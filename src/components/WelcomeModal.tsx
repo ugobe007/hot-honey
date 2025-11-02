@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 interface WelcomeModalProps {
   forceOpen?: boolean;
@@ -8,8 +8,24 @@ interface WelcomeModalProps {
 
 export default function WelcomeModal({ forceOpen = false, onClose }: WelcomeModalProps = {}) {
   const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
+
+  // NEVER show modal on these pages (absolute block)
+  const excludedPaths = ['/dashboard', '/portfolio', '/vote', '/submit', '/settings', '/startup'];
+  const shouldExclude = excludedPaths.some(path => location.pathname.startsWith(path));
+
+  // If on excluded page and not forced, don't render at all
+  if (shouldExclude && !forceOpen) {
+    return null;
+  }
 
   useEffect(() => {
+    // Don't show on excluded pages unless forced
+    if (shouldExclude && !forceOpen) {
+      setIsOpen(false);
+      return;
+    }
+
     if (forceOpen) {
       setIsOpen(true);
     } else {
@@ -19,7 +35,7 @@ export default function WelcomeModal({ forceOpen = false, onClose }: WelcomeModa
         setIsOpen(true);
       }
     }
-  }, [forceOpen]);
+  }, [forceOpen, shouldExclude]);
 
   const handleAgree = () => {
     localStorage.setItem('hmh_acknowledged', 'true');

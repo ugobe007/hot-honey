@@ -9,23 +9,37 @@ if (!supabaseUrl || !supabaseAnonKey) {
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-// Types matching your existing schema
+// Database Types - aligned with OpenAI 5-point format
 export interface Startup {
   id: string;
   name: string;
-  value_prop: string;
-  problem: string;
-  solution: string;
-  team: string;
-  funding: string;
-  stage: string;
-  votes_yes: number;
-  votes_no: number;
+  website: string;
+  
+  // 5-point data structure (OpenAI format)
+  value_proposition: string;  // Point 1: What value does this provide?
+  problem: string;             // Point 2: What problem are they solving?
+  solution: string;            // Point 3: How do they solve it?
+  team: string;                // Point 4: Team background and former employers
+  investment: string;          // Point 5: Funding raised or needed
+  
+  // Metadata
+  logo?: string;
+  pitch_deck_url?: string;
+  
+  // OpenAI scraping metadata
+  scraped_by?: string;         // Source URL
+  scraped_at?: string;
+  
+  // Review workflow
+  status: 'pending' | 'approved' | 'rejected' | 'published';
+  reviewed_by?: string;
+  reviewed_at?: string;
+  published_at?: string;
+  validated: boolean;
+  
+  // Timestamps
   created_at: string;
   updated_at: string;
-  presentation_url?: string;
-  video_url?: string;
-  pitch_deck_url?: string;
 }
 
 // User vote tracking

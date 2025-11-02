@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import VotePage from './components/VotePage';
 import PortfolioPage from './pages/PortfolioPage'; // ✅ FIXED - was pointing to non-existent Portfolio
 import Submit from './pages/Submit';
@@ -18,18 +18,22 @@ import SharedPortfolio from './pages/SharedPortfolio';
 import BulkUpload from './pages/BulkUpload';
 import BulkImport from './pages/BulkImport';
 import DocumentUpload from './pages/DocumentUpload';
-import ProcessUploads from './pages/ProcessUploads';
 import Analytics from './pages/Analytics';
 import Login from './pages/Login';
+import AdminReview from './pages/AdminReview';
 import WelcomeModal from './components/WelcomeModal';
 import './App.css';
 
 const App: React.FC = () => {
   const [showHowItWorks, setShowHowItWorks] = useState(false);
+  const location = useLocation();
+  
+  // Only show WelcomeModal on home page
+  const isHomePage = (location.pathname === '/' || location.pathname === '/home');
 
   return (
     <div className="min-h-screen">
-      <WelcomeModal />
+      {isHomePage && <WelcomeModal />}
       {showHowItWorks && (
         <WelcomeModal 
           forceOpen={true} 
@@ -56,10 +60,10 @@ const App: React.FC = () => {
           <Route path="/contact" element={<Contact />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/shared-portfolio/:shareId" element={<SharedPortfolio />} />
-          <Route path="/admin/bulk-upload" element={<BulkImport />} />
+          <Route path="/admin/bulk-upload" element={<BulkUpload />} />
           <Route path="/admin/bulk-import" element={<BulkImport />} />
           <Route path="/admin/document-upload" element={<DocumentUpload />} />
-          <Route path="/admin/process-uploads" element={<ProcessUploads />} />
+          <Route path="/admin/review" element={<AdminReview />} />
           <Route path="/analytics" element={<Analytics />} />
         </Routes>
       </main>
