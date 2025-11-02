@@ -25,17 +25,25 @@ export default function EditStartups() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editData, setEditData] = useState<any>(null);
   const [saving, setSaving] = useState(false);
+  const [statusFilter, setStatusFilter] = useState<string>('all');
 
   useEffect(() => {
     loadStartups();
-  }, []);
+  }, [statusFilter]);
 
   const loadStartups = async () => {
     setLoading(true);
-    const { data, error } = await supabase
+    let query = supabase
       .from('startup_uploads')
       .select('*')
       .order('created_at', { ascending: false });
+
+    // Apply status filter if not 'all'
+    if (statusFilter !== 'all') {
+      query = query.eq('status', statusFilter);
+    }
+
+    const { data, error } = await query;
 
     if (error) {
       console.error('Error loading startups:', error);
@@ -52,6 +60,7 @@ export default function EditStartups() {
       name: startup.name,
       pitch: startup.pitch || '',
       tagline: startup.tagline || '',
+      status: startup.status,
       fivePoints: startup.extracted_data?.fivePoints || ['', '', '', '', ''],
       problem: startup.extracted_data?.problem || '',
       solution: startup.extracted_data?.solution || '',
@@ -76,6 +85,7 @@ export default function EditStartups() {
         name: editData.name,
         pitch: editData.pitch,
         tagline: editData.tagline,
+        status: editData.status,
         extracted_data: {
           fivePoints: editData.fivePoints,
           problem: editData.problem,
@@ -142,6 +152,53 @@ export default function EditStartups() {
           </Link>
         </div>
 
+        {/* Status Filter */}
+        <div className="bg-white/10 backdrop-blur-lg rounded-xl p-4 mb-6 border border-white/20">
+          <div className="flex items-center gap-4">
+            <span className="text-white font-bold">Filter by Status:</span>
+            <button
+              onClick={() => setStatusFilter('all')}
+              className={`px-4 py-2 rounded-lg font-semibold transition-all ${
+                statusFilter === 'all'
+                  ? 'bg-white text-purple-600'
+                  : 'bg-white/20 text-white hover:bg-white/30'
+              }`}
+            >
+              All ({startups.length})
+            </button>
+            <button
+              onClick={() => setStatusFilter('pending')}
+              className={`px-4 py-2 rounded-lg font-semibold transition-all ${
+                statusFilter === 'pending'
+                  ? 'bg-yellow-500 text-white'
+                  : 'bg-white/20 text-white hover:bg-white/30'
+              }`}
+            >
+              Pending
+            </button>
+            <button
+              onClick={() => setStatusFilter('approved')}
+              className={`px-4 py-2 rounded-lg font-semibold transition-all ${
+                statusFilter === 'approved'
+                  ? 'bg-green-500 text-white'
+                  : 'bg-white/20 text-white hover:bg-white/30'
+              }`}
+            >
+              Approved
+            </button>
+            <button
+              onClick={() => setStatusFilter('rejected')}
+              className={`px-4 py-2 rounded-lg font-semibold transition-all ${
+                statusFilter === 'rejected'
+                  ? 'bg-red-500 text-white'
+                  : 'bg-white/20 text-white hover:bg-white/30'
+              }`}
+            >
+              Rejected
+            </button>
+          </div>
+        </div>
+
         <div className="grid gap-6">
           {startups.map((startup) => (
             <div
@@ -172,6 +229,23 @@ export default function EditStartups() {
                       maxLength={60}
                     />
                     <p className="text-xs text-white/60 mt-1">{editData.tagline?.length || 0}/60 chars</p>
+                  </div>
+
+                  <div>
+                    <label className="block text-white font-bold mb-2">Status</label>
+                    <select
+                      value={editData.status}
+                      onChange={(e) => setEditData({ ...editData, status: e.target.value })}
+                      className="w-full px-4 py-2 rounded-xl bg-white/20 text-white border border-white/30 focus:border-orange-400 outline-none font-semibold"
+                    >
+                      <option value="pending" className="bg-purple-900">⏳ Pending</option>
+                      <option value="approved" className="bg-purple-900">✅ Approved (Shows in voting)</option>
+                      <option value="rejected" className="bg-purple-900">❌ Rejected</option>
+                      <option value="reviewing" className="bg-purple-900">👀 Reviewing</option>
+                    </select>
+                    <p className="text-xs text-white/60 mt-1">
+                      {editData.status === 'approved' ? '✅ This startup will appear in voting' : '⚠️ This startup will NOT appear in voting'}
+                    </p>
                   </div>
 
                   <div>
@@ -272,9 +346,24 @@ export default function EditStartups() {
                     <div>
                       <h2 className="text-2xl font-bold text-white">{startup.name}</h2>
                       <p className="text-orange-400 font-semibold">{startup.tagline || startup.pitch}</p>
-                      <p className="text-sm text-white/60 mt-1">
-                        Status: <span className="text-white font-semibold">{startup.status}</span>
-                      </p>
+                      <div className="flex items-center gap-2 mt-2">
+                        <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                          startup.status === 'approved' ? 'bg-green-500 text-white' :
+                          startup.status === 'pending' ? 'bg-yellow-500 text-white' :
+                          startup.status === 'rejected' ? 'bg-red-500 text-white' :
+                          'bg-blue-500 text-white'
+                        }`}>
+                          {startup.status === 'approved' ? '✅ APPROVED' :
+                           startup.status === 'pending' ? '⏳ PENDING' :
+                           startup.status === 'rejected' ? '❌ REJECTED' :
+                           '👀 REVIEWING'}
+                        </span>
+                        {startup.status === 'approved' && (
+                          <span className="text-xs text-green-400 font-semibold">
+                            🎯 In voting rotation
+                          </span>
+                        )}
+                      </div>
                     </div>
                     <div className="flex gap-2">
                       <button
