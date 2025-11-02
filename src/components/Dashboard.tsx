@@ -89,8 +89,35 @@ const Dashboard: React.FC = () => {
     }
   }, [authLoading, votesLoading, votes, portfolio, userId]); // Added portfolio and userId to dependencies
 
-  const handleVote = (vote: 'yes' | 'no') => {
-    console.log(`Voted ${vote}`);
+  const handleVote = (vote: 'yes' | 'no', startup?: any) => {
+    if (vote === 'no' && startup) {
+      // Remove from state immediately for instant UI update
+      setMyYesVotes(prev => prev.filter(v => v.id !== startup.id));
+      
+      // Remove from localStorage
+      const myYesVotesStr = localStorage.getItem('myYesVotes');
+      if (myYesVotesStr) {
+        try {
+          const yesVotesArray = JSON.parse(myYesVotesStr);
+          const updatedVotes = yesVotesArray.filter((v: any) => v.id !== startup.id);
+          localStorage.setItem('myYesVotes', JSON.stringify(updatedVotes));
+        } catch (e) {
+          console.error('Error updating myYesVotes:', e);
+        }
+      }
+      
+      // Also remove from votedStartups
+      const votedStartupsStr = localStorage.getItem('votedStartups');
+      if (votedStartupsStr) {
+        try {
+          const votedStartups = JSON.parse(votedStartupsStr);
+          const updatedVoted = votedStartups.filter((id: number) => id !== startup.id);
+          localStorage.setItem('votedStartups', JSON.stringify(updatedVoted));
+        } catch (e) {
+          console.error('Error updating votedStartups:', e);
+        }
+      }
+    }
   };
 
   if (authLoading || votesLoading) {
