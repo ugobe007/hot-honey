@@ -354,7 +354,10 @@ Founder Email: ${formData.founderEmail || 'EMPTY'}
 Fill ONLY the EMPTY fields with your research. Return JSON with ALL fields filled.`
             }
           ],
-          response_format: { type: 'json_object' },
+          response_format: { type: 'json_object' }
+        })
+      });
+
       const data = await response.json();
       const aiData = JSON.parse(data.choices[0].message.content);
 
@@ -373,15 +376,6 @@ Fill ONLY the EMPTY fields with your research. Return JSON with ALL fields fille
         founderEmail: prev.founderEmail || aiData.founderEmail || `contact@${(prev.website || searchQuery).replace(/^https?:\/\//,'').replace(/\/$/, '').split('/')[0]}`,
         fivePoints: prev.fivePoints.length > 0 ? prev.fivePoints : (aiData.fivePoints || []),
       }));
-
-      alert('✅ AI research complete! Please review and edit the auto-filled information.');
-    } catch (error: any) {
-      console.error('AI research error:', error);
-      alert(`❌ AI research failed: ${error.message}`);
-    } finally {
-      setResearchingWithAI(false);
-    }
-  };  }));
 
       alert('✅ AI research complete! Please review and edit the auto-filled information.');
     } catch (error: any) {
