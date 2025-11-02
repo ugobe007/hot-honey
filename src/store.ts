@@ -4,7 +4,43 @@ import { Startup, StoreState } from './types';
 import { create } from 'zustand';
 import { persist, StateStorage } from 'zustand/middleware';
 import startupData from './data/startupData';
+import { getStartupUploads } from './lib/investorService';
 
+// Function to load approved startups from Supabase
+export async function loadApprovedStartups(): Promise<Startup[]> {
+  try {
+    const { data, error } = await getStartupUploads('approved');
+    
+    if (error || !data) {
+      console.error('Error loading approved startups:', error);
+      return [];
+    }
+
+    // Convert startup_uploads to Startup format
+    return data.map((upload: any, index: number) => ({
+      id: startupData.length + index, // Use unique IDs after static data
+      name: upload.name || 'Unnamed Startup',
+      description: upload.description || '',
+      pitch: upload.pitch || upload.tagline || '',
+      tagline: upload.tagline || '',
+      marketSize: upload.extracted_data?.marketSize || '',
+      unique: upload.extracted_data?.unique || '',
+      raise: upload.raise_amount || '',
+      stage: upload.stage || 1,
+      yesVotes: 0,
+      noVotes: 0,
+      hotness: 0,
+      answersCount: 0,
+      fivePoints: upload.extracted_data?.fivePoints || [],
+      website: upload.website,
+      linkedin: upload.linkedin,
+      comments: [],
+    }));
+  } catch (err) {
+    console.error('Failed to load approved startups:', err);
+    return [];
+  }
+}
 
 export const useStore = create<StoreState>()(
   persist<StoreState>(
@@ -86,6 +122,14 @@ export const useStore = create<StoreState>()(
         set((state) => ({
           currentIndex: 0,
         }));
+      },
+      loadStartupsFromDatabase: async () => {
+        const approvedStartups = await loadApprovedStartups();
+        const allStartups = [
+          ...startupData.map((s, idx) => ({ ...s, id: idx, yesVotes: 0 })),
+          ...approvedStartups
+        ];
+        set({ startups: allStartups });
       },
     }),
     {

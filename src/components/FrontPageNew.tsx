@@ -1,14 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import StartupCardOfficial from './StartupCardOfficial';
 import AdminNav from './AdminNav';
 import startupData from '../data/startupData';
+import { loadApprovedStartups } from '../store';
 
 const FrontPageNew: React.FC = () => {
   const [currentStartupIndices, setCurrentStartupIndices] = useState([0, 1, 2]);
   const [startups, setStartups] = useState(startupData);
   const [nextAvailableIndex, setNextAvailableIndex] = useState(3);
   const [slidingCards, setSlidingCards] = useState<number[]>([]);
+
+  // Load approved startups from database on mount
+  useEffect(() => {
+    const loadStartups = async () => {
+      const approvedStartups = await loadApprovedStartups();
+      const allStartups = [...startupData, ...approvedStartups];
+      setStartups(allStartups);
+      setNextAvailableIndex(Math.min(3, allStartups.length));
+    };
+    loadStartups();
+  }, []);
 
   const handleVote = (startupId: number, vote: 'yes' | 'no', cardPosition: number) => {
     setStartups(prevStartups =>

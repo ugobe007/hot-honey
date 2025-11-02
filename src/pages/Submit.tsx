@@ -604,16 +604,20 @@ Fill ONLY the EMPTY fields with your research. Return JSON with ALL fields fille
               type="button"
               onClick={handleAIResearch}
               disabled={researchingWithAI}
-              className={`w-full py-6 rounded-2xl font-bold text-lg transition-all shadow-lg ${
+              className={`w-full py-6 rounded-2xl font-bold text-lg transition-all shadow-2xl transform hover:scale-105 ${
                 researchingWithAI
-                  ? 'bg-yellow-400 text-gray-900 cursor-wait'
-                  : 'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white'
+                  ? 'bg-gradient-to-r from-yellow-400 via-orange-400 to-pink-500 text-white cursor-wait animate-pulse'
+                  : 'bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500 hover:from-purple-700 hover:via-pink-700 hover:to-orange-600 text-white animate-pulse hover:animate-none'
               }`}
             >
               {researchingWithAI ? (
-                <>✨ AI Researching...</>
+                <span className="flex items-center justify-center gap-2">
+                  🤖 <span className="inline-block animate-spin">⚡</span> AI Magic in Progress...
+                </span>
               ) : (
-                <>✨ Fill Missing Data with AI</>
+                <span className="flex items-center justify-center gap-2">
+                  ✨ <span className="text-2xl">🤖</span> Auto-Fill with AI Magic ✨
+                </span>
               )}
             </button>
           </div>
