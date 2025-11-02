@@ -110,9 +110,9 @@ export default function StartupUploader() {
               content: `You are a startup research assistant. Given a company website, provide comprehensive information in this exact JSON format:
 {
   "name": "Company Name",
-  "tagline": "One sentence value proposition",
-  "description": "Company description (max 300 chars)",
-  "pitch": "What they do and their unique value (max 300 chars)",
+  "tagline": "One sentence value proposition (max 60 chars)",
+  "description": "Company description (max 100 chars)",
+  "pitch": "What they do and their unique value (max 100 chars)",
   "website": "Company website URL",
   "raise": "Funding amount if known (e.g. '$2M Seed' or 'Seeking $2M')",
   "stage": 0-2 (0=Pre-Seed, 1=Seed, 2=Series A),
@@ -120,7 +120,13 @@ export default function StartupUploader() {
   "founded": year
 }
 
-Fill ALL fields with best available information from the website and public sources.`
+CRITICAL RULES:
+- Keep ALL text extremely concise
+- Description, pitch: MAX 100 characters each
+- Tagline: MAX 60 characters
+- Use abbreviations when appropriate (e.g., "AI-powered" not "artificial intelligence powered")
+- No lengthy explanations or run-on sentences
+- Fill ALL fields with best available information from the website and public sources.`
             },
             {
               role: 'user',
