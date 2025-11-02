@@ -18,22 +18,46 @@ export default function PortfolioPage() {
   useEffect(() => {
     if (authLoading || votesLoading) return;
 
-    // Get YES vote startup IDs from Supabase
-    const yesVoteIds = getYesVotes();
+    const isAnonymous = !userId || userId.startsWith('anon_');
     
-    // Enrich with full startup data
-    const enrichedVotes = yesVoteIds.map(id => {
-      const startup = startupData.find(s => s.id.toString() === id);
-      if (startup) {
-        return {
-          ...startup,
-          votedAt: votes.find(v => v.startup_id === id)?.created_at || new Date().toISOString(),
-        };
+    if (isAnonymous) {
+      // For anonymous users, load from localStorage
+      const myYesVotesStr = localStorage.getItem('myYesVotes');
+      if (myYesVotesStr) {
+        try {
+          const yesVotesArray = JSON.parse(myYesVotesStr);
+          
+          // Deduplicate by ID
+          const uniqueVotesMap = new Map();
+          yesVotesArray.forEach((vote: any) => {
+            if (vote && vote.id !== undefined) {
+              uniqueVotesMap.set(vote.id, vote);
+            }
+          });
+          
+          setMyYesVotes(Array.from(uniqueVotesMap.values()));
+        } catch (e) {
+          console.error('Error loading votes from localStorage:', e);
+        }
       }
-      return null;
-    }).filter(Boolean);
-    
-    setMyYesVotes(enrichedVotes);
+    } else {
+      // For authenticated users, get YES vote startup IDs from Supabase
+      const yesVoteIds = getYesVotes();
+      
+      // Enrich with full startup data
+      const enrichedVotes = yesVoteIds.map(id => {
+        const startup = startupData.find(s => s.id.toString() === id);
+        if (startup) {
+          return {
+            ...startup,
+            votedAt: votes.find(v => v.startup_id === id)?.created_at || new Date().toISOString(),
+          };
+        }
+        return null;
+      }).filter(Boolean);
+      
+      setMyYesVotes(enrichedVotes);
+    }
 
     // Check admin status
     const userProfile = localStorage.getItem('userProfile');
@@ -41,10 +65,42 @@ export default function PortfolioPage() {
       const profile = JSON.parse(userProfile);
       setIsAdmin(profile.email === 'admin@hotmoneyhoney.com' || profile.isAdmin);
     }
-  }, [authLoading, votesLoading, votes]); // FIXED: Removed getYesVotes from dependencies
+  }, [authLoading, votesLoading, votes, userId]); // Added userId to dependencies
 
-  const handleVote = (vote: 'yes' | 'no') => {
-    console.log(`Voted ${vote}`);
+  const handleVote = (vote: 'yes' | 'no', startup?: any) => {
+    if (vote === 'no' && startup) {
+      // Remove from state immediately for instant UI update
+      setMyYesVotes(prev => prev.filter(v => v.id !== startup.id));
+      
+      // For anonymous users, remove from localStorage
+      const isAnonymous = !userId || userId.startsWith('anon_');
+      if (isAnonymous) {
+        const myYesVotesStr = localStorage.getItem('myYesVotes');
+        if (myYesVotesStr) {
+          try {
+            const yesVotesArray = JSON.parse(myYesVotesStr);
+            const updatedVotes = yesVotesArray.filter((v: any) => v.id !== startup.id);
+            localStorage.setItem('myYesVotes', JSON.stringify(updatedVotes));
+          } catch (e) {
+            console.error('Error updating myYesVotes:', e);
+          }
+        }
+        
+        const votedStartupsStr = localStorage.getItem('votedStartups');
+        if (votedStartupsStr) {
+          try {
+            const votedStartups = JSON.parse(votedStartupsStr);
+            const updatedVoted = votedStartups.filter((id: number) => id !== startup.id);
+            localStorage.setItem('votedStartups', JSON.stringify(updatedVoted));
+          } catch (e) {
+            console.error('Error updating votedStartups:', e);
+          }
+        }
+      } else {
+        // For authenticated users, remove from Supabase
+        removeVote(startup.id.toString());
+      }
+    }
   };
 
   const handleRemoveFavorite = async (startupId: number) => {

@@ -17,7 +17,7 @@ interface Startup {
 
 interface Props {
   startup: Startup;
-  onVote: (vote: 'yes' | 'no') => void;
+  onVote: (vote: 'yes' | 'no', startup?: Startup) => void;
   onSwipeAway?: () => void;
 }
 
@@ -181,7 +181,7 @@ export default function StartupCardOfficial({ startup, onVote, onSwipeAway }: Pr
     setShowVoteMessage(true);
     setTimeout(() => setShowVoteMessage(false), 3000);
 
-    onVote(vote);
+    onVote(vote, startup);
 
     // Show sign-up prompt for anonymous users after voting
     const isAnonymous = !userId || userId.startsWith('anon_');
