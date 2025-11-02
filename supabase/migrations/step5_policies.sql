@@ -38,7 +38,7 @@ CREATE POLICY "Anyone can read approved startup uploads"
   TO public
   USING (status IN ('approved', 'published'));
 
-CREATE POLICY "Anyone can read their own uploads"
+CREATE POLICY "Anyone can read all uploads for admin"
   ON startup_uploads FOR SELECT
   TO public
   USING (true);
