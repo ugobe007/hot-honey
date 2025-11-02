@@ -131,7 +131,7 @@ export default function PortfolioPage() {
       {/* Navigation Bar - OUTSIDE main container */}
       <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-[200] pointer-events-auto">
         <div className="flex gap-3 items-center pointer-events-auto">
-          <Link to="/signup" className="text-4xl hover:scale-110 transition-transform cursor-pointer" title="Hot Money Honey">
+          <Link to="/signup" className="text-6xl hover:scale-110 transition-transform cursor-pointer bg-gradient-to-r from-orange-500 to-purple-600 bg-clip-text text-transparent hover:from-orange-400 hover:to-purple-500" style={{WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'}} title="Hot Money Honey">
             🍯
           </Link>
           
