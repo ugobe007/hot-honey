@@ -27,6 +27,7 @@ import UploadPage from './pages/UploadPage';
 import SetupPage from './pages/SetupPage';
 import InviteInvestorPage from './pages/InviteInvestorPage';
 import EditInvestorPage from './pages/EditInvestorPage';
+import EditStartups from './pages/EditStartups';
 import './App.css';
 
 const App: React.FC = () => {
@@ -73,6 +74,7 @@ const App: React.FC = () => {
           <Route path="/admin/document-upload" element={<DocumentUpload />} />
           <Route path="/admin/review" element={<AdminReview />} />
           <Route path="/admin/setup" element={<SetupPage />} />
+          <Route path="/admin/edit-startups" element={<EditStartups />} />
           <Route path="/setup" element={<SetupPage />} /> {/* ✅ Setup shortcut */}
           <Route path="/analytics" element={<Analytics />} />
         </Routes>

@@ -48,6 +48,17 @@ export default function AdminNav({ currentPage }: AdminNavProps) {
           >
             📋 Review Queue
           </Link>
+          <Link
+            to="/admin/edit-startups"
+            className={`flex items-center justify-center font-bold text-sm whitespace-nowrap transition-all ${
+              currentPage === 'edit'
+                ? 'bg-white text-purple-600 shadow-lg'
+                : 'bg-purple-500/50 text-white hover:bg-purple-500'
+            }`}
+            style={{ width: '140px', height: '40px', borderRadius: '20px' }}
+          >
+            ✏️ Edit Startups
+          </Link>
         </div>
       </div>
     </div>
