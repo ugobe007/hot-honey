@@ -190,22 +190,22 @@ export default function InvestorsPage() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           <div className="bg-gradient-to-r from-blue-600 to-blue-800 rounded-2xl p-6 text-center">
             <div className="text-4xl mb-2">💼</div>
-            <div className="text-3xl font-bold text-white">{investorData.filter(i => i.type === 'vc_firm').length}</div>
+            <div className="text-3xl font-bold text-white">{investors.filter(i => i.type === 'vc_firm').length}</div>
             <div className="text-blue-200 text-sm font-semibold">VC Firms</div>
           </div>
           <div className="bg-gradient-to-r from-green-600 to-green-800 rounded-2xl p-6 text-center">
             <div className="text-4xl mb-2">🚀</div>
-            <div className="text-3xl font-bold text-white">{investorData.filter(i => i.type === 'accelerator').length}</div>
+            <div className="text-3xl font-bold text-white">{investors.filter(i => i.type === 'accelerator').length}</div>
             <div className="text-green-200 text-sm font-semibold">Accelerators</div>
           </div>
           <div className="bg-gradient-to-r from-purple-600 to-purple-800 rounded-2xl p-6 text-center">
             <div className="text-4xl mb-2">🦄</div>
-            <div className="text-3xl font-bold text-white">{investorData.reduce((sum, i) => sum + (i.unicorns || 0), 0)}</div>
+            <div className="text-3xl font-bold text-white">{investors.reduce((sum, i) => sum + (i.unicorns || 0), 0)}</div>
             <div className="text-purple-200 text-sm font-semibold">Unicorns Created</div>
           </div>
           <div className="bg-gradient-to-r from-orange-600 to-orange-800 rounded-2xl p-6 text-center">
             <div className="text-4xl mb-2">💰</div>
-            <div className="text-3xl font-bold text-white">{investorData.reduce((sum, i) => sum + (i.portfolioCount || 0), 0)}+</div>
+            <div className="text-3xl font-bold text-white">{investors.reduce((sum, i) => sum + (i.portfolioCount || 0), 0)}+</div>
             <div className="text-orange-200 text-sm font-semibold">Portfolio Cos</div>
           </div>
         </div>

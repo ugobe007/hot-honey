@@ -30,8 +30,8 @@ export default function NavBar() {
 
   const isActive = (path: string) => location.pathname === path;
   const getButtonSize = (path: string) => {
-    if (isActive(path)) return 'text-2xl py-4 px-8'; // 2x larger when active
-    return 'text-base py-3 px-6'; // Normal size
+    if (isActive(path)) return 'text-2xl py-5 px-12'; // 2x larger when active - more pill shaped
+    return 'text-base py-4 px-10'; // Normal size - more pill shaped
   };
 
   return (
@@ -56,7 +56,7 @@ export default function NavBar() {
           <div className="flex items-center gap-3">
             <button
               onClick={() => navigate('/')}
-              className={`font-bold rounded-2xl transition-all ${getButtonSize('/')} ${
+              className={`font-bold rounded-full transition-all ${getButtonSize('/')} ${
                 isActive('/')
                   ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg scale-110'
                   : 'bg-purple-700 hover:bg-purple-600 text-white'
@@ -65,13 +65,13 @@ export default function NavBar() {
               🏠 Home
             </button>
 
-            {isLoggedIn ? (
+            {isLoggedIn && (
               <>
                 {/* Dashboard Button - Larger and Light Blue */}
                 <button
                   onClick={() => navigate('/dashboard')}
-                  className={`font-bold rounded-2xl transition-all ${
-                    isActive('/dashboard') ? 'text-2xl py-4 px-10' : 'text-lg py-4 px-8'
+                  className={`font-bold rounded-full transition-all ${
+                    isActive('/dashboard') ? 'text-2xl py-5 px-14' : 'text-lg py-4 px-12'
                   } ${
                     isActive('/dashboard')
                       ? 'bg-gradient-to-r from-cyan-400 to-blue-500 text-white shadow-xl scale-110'
@@ -83,7 +83,7 @@ export default function NavBar() {
 
                 <button
                   onClick={() => navigate('/vote')}
-                  className={`font-bold rounded-2xl transition-all ${getButtonSize('/vote')} ${
+                  className={`font-bold rounded-full transition-all ${getButtonSize('/vote')} ${
                     isActive('/vote')
                       ? 'bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg scale-110'
                       : 'bg-purple-700 hover:bg-purple-600 text-white'
@@ -94,7 +94,7 @@ export default function NavBar() {
 
                 <button
                   onClick={() => navigate('/portfolio')}
-                  className={`font-bold rounded-2xl transition-all ${getButtonSize('/portfolio')} ${
+                  className={`font-bold rounded-full transition-all ${getButtonSize('/portfolio')} ${
                     isActive('/portfolio')
                       ? 'bg-gradient-to-r from-yellow-500 to-orange-500 text-white shadow-lg scale-110'
                       : 'bg-purple-700 hover:bg-purple-600 text-white'
@@ -103,58 +103,25 @@ export default function NavBar() {
                   ⭐ Portfolio
                 </button>
 
-                <button
-                  onClick={() => navigate('/submit')}
-                  className={`font-bold rounded-2xl transition-all ${getButtonSize('/submit')} ${
-                    isActive('/submit')
-                      ? 'bg-gradient-to-r from-pink-500 to-red-500 text-white shadow-lg scale-110'
-                      : 'bg-purple-700 hover:bg-purple-600 text-white'
-                  }`}
-                >
-                  📝 Submit
-                </button>
-
-                <button
-                  onClick={() => navigate('/admin/document-upload')}
-                  className={`font-bold rounded-2xl transition-all ${getButtonSize('/admin/document-upload')} ${
-                    isActive('/admin/document-upload')
-                      ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg scale-110'
-                      : 'bg-purple-700 hover:bg-purple-600 text-white'
-                  }`}
-                >
-                  📄 Scanned Docs
-                </button>
-
                 {/* Notification Bell */}
                 <NotificationBell />
 
                 {userProfile && (
-                  <div className="ml-4 flex items-center gap-3 bg-purple-800/50 rounded-2xl px-4 py-2 border-2 border-purple-600">
+                  <div className="ml-4 flex items-center gap-3 bg-gradient-to-r from-purple-900 to-purple-700 rounded-full px-4 py-2 border-2 border-purple-500">
                     <span className="text-white font-semibold">{userProfile.name}</span>
                     <button
                       onClick={handleLogout}
-                      className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-xl transition-all text-sm"
+                      className="bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 text-white font-bold py-2 px-4 rounded-full transition-all text-sm"
                     >
                       Logout
                     </button>
                   </div>
                 )}
               </>
-            ) : (
-              <button
-                onClick={() => navigate('/signup')}
-                className={`font-bold rounded-2xl transition-all ${getButtonSize('/signup')} ${
-                  isActive('/signup')
-                    ? 'bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg scale-110'
-                    : 'bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white shadow-lg'
-                }`}
-              >
-                ✨ Sign Up / Log In
-              </button>
             )}
           </div>
         </div>
       </div>
     </nav>
   );
-}
+}/* CACHE BUSTER Sun Nov  2 06:39:48 PST 2025 */

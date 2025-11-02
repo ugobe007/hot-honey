@@ -12,36 +12,39 @@ export default function AdminNav({ currentPage }: AdminNavProps) {
 
   return (
     <div className="fixed bottom-4 right-4 z-50">
-      <div className="bg-gradient-to-r from-red-600 to-pink-600 rounded-2xl shadow-2xl border-2 border-red-400/50 p-4">
-        <div className="text-xs font-bold text-red-200 mb-2 text-center">🔐 ADMIN</div>
+      <div className="bg-gradient-to-r from-purple-900 to-purple-700 rounded-2xl shadow-2xl border-2 border-purple-500/50 p-4">
+        <div className="text-xs font-bold text-purple-200 mb-2 text-center">🔐 ADMIN</div>
         <div className="flex flex-col gap-2">
           <Link
             to="/admin/setup"
-            className={`px-4 py-2 rounded-lg font-bold text-sm whitespace-nowrap transition-all ${
+            className={`flex items-center justify-center font-bold text-sm whitespace-nowrap transition-all ${
               currentPage === 'setup'
-                ? 'bg-white text-red-600 shadow-lg'
-                : 'bg-red-500/50 text-white hover:bg-red-500'
+                ? 'bg-white text-purple-600 shadow-lg'
+                : 'bg-purple-500/50 text-white hover:bg-purple-500'
             }`}
+            style={{ width: '140px', height: '40px', borderRadius: '20px' }}
           >
             🔧 DB Setup
           </Link>
           <Link
             to="/invite-investor"
-            className={`px-4 py-2 rounded-lg font-bold text-sm whitespace-nowrap transition-all ${
+            className={`flex items-center justify-center font-bold text-sm whitespace-nowrap transition-all ${
               currentPage === 'invite'
-                ? 'bg-white text-red-600 shadow-lg'
-                : 'bg-red-500/50 text-white hover:bg-red-500'
+                ? 'bg-white text-purple-600 shadow-lg'
+                : 'bg-purple-500/50 text-white hover:bg-purple-500'
             }`}
+            style={{ width: '140px', height: '40px', borderRadius: '20px' }}
           >
             ➕ Add Investor
           </Link>
           <Link
             to="/admin/review"
-            className={`px-4 py-2 rounded-lg font-bold text-sm whitespace-nowrap transition-all ${
+            className={`flex items-center justify-center font-bold text-sm whitespace-nowrap transition-all ${
               currentPage === 'review'
-                ? 'bg-white text-red-600 shadow-lg'
-                : 'bg-red-500/50 text-white hover:bg-red-500'
+                ? 'bg-white text-purple-600 shadow-lg'
+                : 'bg-purple-500/50 text-white hover:bg-purple-500'
             }`}
+            style={{ width: '140px', height: '40px', borderRadius: '20px' }}
           >
             📋 Review Queue
           </Link>
