@@ -72,7 +72,7 @@ const ActivityTicker: React.FC<ActivityTickerProps> = ({ activities }) => {
 
         .ticker-content {
           display: inline-flex;
-          animation: scroll-left 60s linear infinite;
+          animation: scroll-left 120s linear infinite;
           will-change: transform;
         }
 
