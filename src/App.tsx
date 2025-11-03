@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Routes, Route, Link, useLocation } from 'react-router-dom';
-import { AuthProvider } from './contexts/AuthContext';
+import { Routes, Route, Link, useLocation, Navigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 import VotePage from './components/VotePage';
 import PortfolioPage from './pages/PortfolioPage'; // ✅ FIXED - was pointing to non-existent Portfolio
 import Submit from './pages/Submit';
@@ -38,6 +38,19 @@ import SyncStartups from './pages/SyncStartups';
 import DataIntelligence from './pages/DataIntelligence';
 import './App.css';
 
+// Wrapper component that redirects admins to admin dashboard
+function DashboardRouter() {
+  const { user } = useAuth();
+  
+  // If user is admin, redirect to admin dashboard
+  if (user?.isAdmin) {
+    return <Navigate to="/admin/dashboard" replace />;
+  }
+  
+  // Otherwise show regular dashboard
+  return <NewDashboard />;
+}
+
 const App: React.FC = () => {
   const [showHowItWorks, setShowHowItWorks] = useState(false);
   const location = useLocation();
@@ -73,7 +86,7 @@ const App: React.FC = () => {
           <Route path="/startup/:id" element={<StartupDetail />} />
           <Route path="/deals" element={<Deals />} />
           <Route path="/startups" element={<OldDashboard />} /> {/* Old page */}
-          <Route path="/dashboard" element={<NewDashboard />} /> {/* ✅ NEW DASHBOARD */}
+          <Route path="/dashboard" element={<DashboardRouter />} /> {/* ✅ UNIFIED DASHBOARD - redirects admins */}
           <Route path="/about" element={<About />} />
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/contact" element={<Contact />} />

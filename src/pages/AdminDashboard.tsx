@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
+import StartupCardOfficial from '../components/StartupCardOfficial';
+import startupData from '../data/startupData';
 
 interface StartupData {
   id: string;
@@ -11,6 +13,16 @@ interface StartupData {
   website_url?: string;
   description?: string;
   badges?: string[];
+}
+
+interface YesVote {
+  id: number;
+  name: string;
+  pitch?: string;
+  tagline?: string;
+  stage?: number;
+  fivePoints?: string[];
+  votedAt: string;
 }
 
 export default function AdminDashboard() {
@@ -25,7 +37,8 @@ export default function AdminDashboard() {
   });
   const [pendingStartups, setPendingStartups] = useState<StartupData[]>([]);
   const [recentStartups, setRecentStartups] = useState<StartupData[]>([]);
-  const [activeTab, setActiveTab] = useState<'overview' | 'pending' | 'all' | 'investors'>('overview');
+  const [myYesVotes, setMyYesVotes] = useState<YesVote[]>([]);
+  const [activeTab, setActiveTab] = useState<'overview' | 'myvotes' | 'pending' | 'all' | 'investors'>('overview');
 
   useEffect(() => {
     if (!user?.isAdmin) {
@@ -33,7 +46,27 @@ export default function AdminDashboard() {
       return;
     }
     loadDashboardData();
+    loadMyVotes();
   }, [user, navigate]);
+
+  const loadMyVotes = () => {
+    // Load from localStorage for now (both authenticated and anonymous users)
+    const myYesVotesStr = localStorage.getItem('myYesVotes');
+    if (myYesVotesStr) {
+      try {
+        const yesVotesArray = JSON.parse(myYesVotesStr);
+        const uniqueVotesMap = new Map();
+        yesVotesArray.forEach((vote: YesVote) => {
+          if (vote && vote.id !== undefined) {
+            uniqueVotesMap.set(vote.id, vote);
+          }
+        });
+        setMyYesVotes(Array.from(uniqueVotesMap.values()));
+      } catch (e) {
+        console.error('Error loading votes from localStorage:', e);
+      }
+    }
+  };
 
   const loadDashboardData = async () => {
     setLoading(true);
@@ -136,10 +169,10 @@ export default function AdminDashboard() {
         </div>
 
         {/* Navigation Tabs */}
-        <div className="flex gap-2 mb-6 bg-white/10 backdrop-blur-md rounded-lg p-2">
+        <div className="flex gap-2 mb-6 bg-white/10 backdrop-blur-md rounded-lg p-2 overflow-x-auto">
           <button
             onClick={() => setActiveTab('overview')}
-            className={`flex-1 py-3 px-4 rounded-lg font-medium transition ${
+            className={`flex-1 py-3 px-4 rounded-lg font-medium transition whitespace-nowrap ${
               activeTab === 'overview'
                 ? 'bg-purple-600 text-white'
                 : 'text-purple-200 hover:bg-white/10'
@@ -148,8 +181,18 @@ export default function AdminDashboard() {
             📊 Overview
           </button>
           <button
+            onClick={() => setActiveTab('myvotes')}
+            className={`flex-1 py-3 px-4 rounded-lg font-medium transition whitespace-nowrap ${
+              activeTab === 'myvotes'
+                ? 'bg-purple-600 text-white'
+                : 'text-purple-200 hover:bg-white/10'
+            }`}
+          >
+            ⭐ My YES Votes ({myYesVotes.length})
+          </button>
+          <button
             onClick={() => setActiveTab('pending')}
-            className={`flex-1 py-3 px-4 rounded-lg font-medium transition ${
+            className={`flex-1 py-3 px-4 rounded-lg font-medium transition whitespace-nowrap ${
               activeTab === 'pending'
                 ? 'bg-purple-600 text-white'
                 : 'text-purple-200 hover:bg-white/10'
@@ -159,7 +202,7 @@ export default function AdminDashboard() {
           </button>
           <button
             onClick={() => setActiveTab('all')}
-            className={`flex-1 py-3 px-4 rounded-lg font-medium transition ${
+            className={`flex-1 py-3 px-4 rounded-lg font-medium transition whitespace-nowrap ${
               activeTab === 'all'
                 ? 'bg-purple-600 text-white'
                 : 'text-purple-200 hover:bg-white/10'
@@ -169,7 +212,7 @@ export default function AdminDashboard() {
           </button>
           <button
             onClick={() => setActiveTab('investors')}
-            className={`flex-1 py-3 px-4 rounded-lg font-medium transition ${
+            className={`flex-1 py-3 px-4 rounded-lg font-medium transition whitespace-nowrap ${
               activeTab === 'investors'
                 ? 'bg-purple-600 text-white'
                 : 'text-purple-200 hover:bg-white/10'
@@ -324,6 +367,52 @@ export default function AdminDashboard() {
                       ))
                     )}
                   </div>
+                </div>
+              )}
+
+              {/* My YES Votes Tab */}
+              {activeTab === 'myvotes' && (
+                <div>
+                  <h2 className="text-2xl font-bold text-white mb-6">⭐ My YES Votes</h2>
+                  
+                  {myYesVotes.length === 0 ? (
+                    <div className="text-center py-12">
+                      <div className="text-6xl mb-4">🗳️</div>
+                      <h3 className="text-xl font-bold text-white mb-2">No votes yet!</h3>
+                      <p className="text-purple-200 mb-6">
+                        Start voting on startups to see them here
+                      </p>
+                      <button
+                        onClick={() => navigate('/vote')}
+                        className="px-6 py-3 bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white font-bold rounded-lg transition shadow-lg"
+                      >
+                        Go to Vote Page
+                      </button>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="mb-4 text-purple-200">
+                        You've voted YES on {myYesVotes.length} startup{myYesVotes.length !== 1 ? 's' : ''}
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
+                        {myYesVotes.map((vote) => {
+                          const startup = startupData.find(s => s.id === vote.id);
+                          if (!startup) return null;
+                          
+                          return (
+                            <StartupCardOfficial
+                              key={vote.id}
+                              startup={startup}
+                              onVote={() => {
+                                // Reload votes after removal
+                                loadMyVotes();
+                              }}
+                            />
+                          );
+                        })}
+                      </div>
+                    </>
+                  )}
                 </div>
               )}
 
