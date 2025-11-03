@@ -58,10 +58,9 @@ export async function generateRecentActivities(): Promise<ActivityItem[]> {
       });
     });
 
-    // Add some "new startup" activities from recent data
-    const recentStartups = startupData.slice(0, 5);
-    recentStartups.forEach((startup, index) => {
-      const daysAgo = index + 1;
+    // Add some "new startup" activities from ALL startups
+    startupData.forEach((startup, index) => {
+      const daysAgo = (index % 10) + 1; // Cycle through recent days
       activities.push({
         id: `new-${startup.id}`,
         type: 'new',
@@ -71,17 +70,45 @@ export async function generateRecentActivities(): Promise<ActivityItem[]> {
       });
     });
 
-    // Add some funding announcements (simulated for now - can connect to real data later)
-    const fundingStartups = startupData.slice(5, 8);
-    const fundingAmounts = ['$500K', '$1M', '$2M', '$5M'];
-    fundingStartups.forEach((startup, index) => {
-      const daysAgo = (index + 2) * 2;
+    // Add funding announcements for ALL startups
+    const fundingAmounts = ['$500K', '$750K', '$1M', '$1.5M', '$2M', '$3M', '$5M'];
+    startupData.forEach((startup, index) => {
+      const daysAgo = (index % 15) + 1; // Spread over 15 days
       activities.push({
         id: `funding-${startup.id}`,
         type: 'funding',
         icon: '💰',
         text: `${startup.name} raised ${fundingAmounts[index % fundingAmounts.length]}`,
         timestamp: new Date(now.getTime() - daysAgo * 24 * 60 * 60 * 1000),
+      });
+    });
+
+    // Add industry news related to startups
+    const industryNews = [
+      { icon: '📰', text: 'AI market projected to reach $1.8T by 2030', days: 1, type: 'trending' },
+      { icon: '🌍', text: 'Clean energy investments hit record $500B this year', days: 2, type: 'trending' },
+      { icon: '💳', text: 'Crypto payment volume surges 150% in Q3', days: 2, type: 'trending' },
+      { icon: '🏥', text: 'Digital health funding reaches $29B milestone', days: 3, type: 'trending' },
+      { icon: '🔬', text: 'Patent filings for AI technology up 35% YoY', days: 3, type: 'trending' },
+      { icon: '☀️', text: 'Solar panel costs drop 20%, boosting adoption', days: 4, type: 'trending' },
+      { icon: '🤖', text: 'Enterprise AI adoption crosses 75% threshold', days: 5, type: 'trending' },
+      { icon: '🔐', text: 'Blockchain security startups raise $12B in 2025', days: 5, type: 'trending' },
+      { icon: '🌱', text: 'Sustainability tech funding triples vs last year', days: 6, type: 'trending' },
+      { icon: '💰', text: 'Fintech valuations recover with 40% increase', days: 7, type: 'trending' },
+      { icon: '🎓', text: 'Top VCs increase seed stage investments by 60%', days: 8, type: 'trending' },
+      { icon: '🚀', text: 'Y Combinator batch sees 80% funding success rate', days: 9, type: 'trending' },
+      { icon: '📊', text: 'SaaS companies hit $200B collective ARR', days: 10, type: 'trending' },
+      { icon: '🔋', text: 'Battery storage costs fall 50%, enabling growth', days: 11, type: 'trending' },
+      { icon: '🌐', text: 'Web3 user adoption reaches 100M active users', days: 12, type: 'trending' },
+    ];
+
+    industryNews.forEach((news, index) => {
+      activities.push({
+        id: `industry-${index}`,
+        type: news.type as 'trending',
+        icon: news.icon,
+        text: news.text,
+        timestamp: new Date(now.getTime() - news.days * 24 * 60 * 60 * 1000),
       });
     });
 
