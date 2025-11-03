@@ -6,6 +6,8 @@ export async function generateRecentActivities(): Promise<ActivityItem[]> {
   const activities: ActivityItem[] = [];
   const now = new Date();
 
+  console.log('🎬 Starting activity generation...');
+
   try {
     // Load ALL startups from Supabase instead of hardcoded data
     const { data: allStartups, error: startupsError } = await supabase
@@ -15,7 +17,7 @@ export async function generateRecentActivities(): Promise<ActivityItem[]> {
       .order('created_at', { ascending: false });
 
     if (startupsError) {
-      console.error('Error loading startups from Supabase:', startupsError);
+      console.error('❌ Error loading startups from Supabase:', startupsError);
       return generateFallbackActivities();
     }
 
@@ -252,6 +254,8 @@ export async function generateRecentActivities(): Promise<ActivityItem[]> {
     // Sort by timestamp (newest first)
     activities.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
 
+    console.log(`📋 Total activities before deduplication: ${activities.length}`);
+
     // Remove duplicates - keep track of both ID and text to catch true duplicates
     const seenActivities = new Set<string>();
     const uniqueActivities = activities.filter(activity => {
@@ -266,11 +270,17 @@ export async function generateRecentActivities(): Promise<ActivityItem[]> {
       return true;
     });
 
-    console.log(`📡 Generated ${uniqueActivities.length} unique real-time activities (filtered from ${activities.length})`);
+    console.log(`✅ Generated ${uniqueActivities.length} unique activities (filtered from ${activities.length})`);
+    
+    if (uniqueActivities.length === 0) {
+      console.warn('⚠️ No activities generated, returning fallback');
+      return generateFallbackActivities();
+    }
+    
     return uniqueActivities;
 
   } catch (error) {
-    console.error('Error generating activities:', error);
+    console.error('❌ Error generating activities:', error);
     
     // Fallback to simulated data if Supabase fails
     return generateFallbackActivities();
