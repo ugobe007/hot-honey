@@ -32,17 +32,110 @@ const startupData: Startup[] = [
       }
     ],
     fivePoints: [
-      'Tesla for home solar systems',           // 1. Value prop
-      '$180B renewable energy market',          // 2. Market size
-      'Self-installing smart panels',           // 3. Unique value
-      'Ex-Tesla, SolarCity engineers',          // 4. Team
-      'Raising $5M Series B'                    // 5. Investment
-    ], // 👈 MISSING COMMA WAS HERE
+      'Tesla for home solar systems',
+      '$180B renewable energy market',
+      'Self-installing smart panels',
+      'Ex-Tesla, SolarCity engineers',
+      'Raising $5M Series B'
+    ],
     teamLogos: ['/logos/tesla.png', '/logos/solarcity.png', '/logos/apple.png'],
     video: 'https://www.youtube.com/watch?v=greentech',
     deck: 'https://example.com/greentech-deck.pdf',
     press: 'https://techcrunch.com/greentech',
     tech: 'ML + IoT smart grid integration',
+    founders: [
+      {
+        name: 'Sarah Chen',
+        role: 'CEO & Co-Founder',
+        background: 'Ex-Tesla Energy VP, 10 years in renewable energy',
+        linkedIn: 'https://linkedin.com/in/sarahchen'
+      },
+      {
+        name: 'Marcus Rodriguez',
+        role: 'CTO & Co-Founder',
+        background: 'Former SolarCity Lead Engineer, MIT Energy Systems PhD',
+        linkedIn: 'https://linkedin.com/in/marcusrodriguez'
+      }
+    ],
+    ipFilings: [
+      {
+        type: 'patent',
+        title: 'Self-Installing Solar Panel System with AI Optimization',
+        status: 'approved',
+        date: new Date('2025-08-15'),
+        jurisdiction: 'USPTO'
+      },
+      {
+        type: 'patent',
+        title: 'IoT-Based Smart Grid Integration Technology',
+        status: 'pending',
+        date: new Date('2025-09-22'),
+        jurisdiction: 'USPTO'
+      },
+      {
+        type: 'trademark',
+        title: 'GreenTech Solar',
+        status: 'approved',
+        date: new Date('2025-07-01'),
+        jurisdiction: 'USPTO'
+      }
+    ],
+    teamHires: [
+      {
+        name: 'Jennifer Park',
+        role: 'VP of Operations',
+        previousCompany: 'Tesla',
+        joinedDate: new Date('2025-09-15')
+      },
+      {
+        name: 'David Liu',
+        role: 'Head of Product',
+        previousCompany: 'Apple',
+        joinedDate: new Date('2025-10-01')
+      }
+    ],
+    advisors: [
+      {
+        name: 'Dr. Emily Watson',
+        expertise: 'Renewable Energy Policy',
+        currentRole: 'Former DOE Advisor',
+        company: 'US Department of Energy',
+        joinedDate: new Date('2025-08-01')
+      },
+      {
+        name: 'James Mitchell',
+        expertise: 'Solar Manufacturing',
+        currentRole: 'CEO',
+        company: 'SunPower',
+        joinedDate: new Date('2025-09-10')
+      }
+    ],
+    boardMembers: [
+      {
+        name: 'Robert Chang',
+        expertise: 'Venture Capital',
+        currentRole: 'Partner',
+        company: 'Sequoia Capital',
+        joinedDate: new Date('2025-07-15')
+      }
+    ],
+    customerTraction: [
+      {
+        metric: '500 residential installations',
+        date: new Date('2025-10-15'),
+        description: 'Reached 500 home installations across California'
+      },
+      {
+        metric: '$2.5M ARR',
+        date: new Date('2025-10-20'),
+        description: 'Hit $2.5M annual recurring revenue milestone'
+      },
+      {
+        metric: '15 commercial contracts',
+        date: new Date('2025-10-28'),
+        description: 'Signed with major retail chains including Target'
+      }
+    ]
   },
   {
     id: 1,
@@ -71,6 +164,85 @@ const startupData: Startup[] = [
     deck: 'https://example.com/neuralnest-deck.pdf',
     press: 'https://techcrunch.com/neuralnest',
     tech: 'GPT-4 + behavioral psychology models',
+    founders: [
+      {
+        name: 'Dr. Amanda Foster',
+        role: 'CEO & Co-Founder',
+        background: 'Clinical Psychologist, Stanford Medical School Faculty',
+        linkedIn: 'https://linkedin.com/in/amandafoster'
+      },
+      {
+        name: 'Alex Kumar',
+        role: 'CTO & Co-Founder',
+        background: 'Ex-OpenAI Research Scientist, Deep Learning expert',
+        linkedIn: 'https://linkedin.com/in/alexkumar'
+      }
+    ],
+    ipFilings: [
+      {
+        type: 'patent',
+        title: 'AI-Powered Cognitive Behavioral Therapy System',
+        status: 'pending',
+        date: new Date('2025-09-05'),
+        jurisdiction: 'USPTO'
+      },
+      {
+        type: 'trademark',
+        title: 'NeuralNest',
+        status: 'approved',
+        date: new Date('2025-06-20'),
+        jurisdiction: 'USPTO'
+      }
+    ],
+    teamHires: [
+      {
+        name: 'Dr. Rachel Green',
+        role: 'Chief Medical Officer',
+        previousCompany: 'Kaiser Permanente',
+        joinedDate: new Date('2025-10-05')
+      },
+      {
+        name: 'Tom Anderson',
+        role: 'Lead AI Engineer',
+        previousCompany: 'Google Brain',
+        joinedDate: new Date('2025-09-20')
+      }
+    ],
+    advisors: [
+      {
+        name: 'Dr. Steven Hayes',
+        expertise: 'Clinical Psychology',
+        currentRole: 'Professor',
+        company: 'University of Nevada',
+        joinedDate: new Date('2025-08-15')
+      }
+    ],
+    boardMembers: [
+      {
+        name: 'Lisa Chen',
+        expertise: 'Healthcare Technology',
+        currentRole: 'Managing Partner',
+        company: 'a16z Bio',
+        joinedDate: new Date('2025-07-01')
+      }
+    ],
+    customerTraction: [
+      {
+        metric: '50K active users',
+        date: new Date('2025-10-10'),
+        description: 'Crossed 50,000 monthly active users'
+      },
+      {
+        metric: '4.8/5 user rating',
+        date: new Date('2025-10-22'),
+        description: 'Maintaining 4.8 star rating across app stores'
+      },
+      {
+        metric: 'Partnership with 3 health insurers',
+        date: new Date('2025-10-30'),
+        description: 'Covered by Anthem, United, and Cigna'
+      }
+    ]
   },
   {
     id: 2,
@@ -98,7 +270,81 @@ const startupData: Startup[] = [
     video: 'https://www.youtube.com/watch?v=finflow',
     deck: 'https://example.com/finflow-deck.pdf',
     press: 'https://techcrunch.com/finflow',
-    tech: 'Blockchain APIs + real-time currency conversion',
+    tech: 'Lightning Network + instant settlement',
+    founders: [
+      {
+        name: 'Michael Zhang',
+        role: 'CEO & Co-Founder',
+        background: 'Ex-Stripe Payments Lead, Built crypto infrastructure',
+        linkedIn: 'https://linkedin.com/in/michaelzhang'
+      },
+      {
+        name: 'Priya Patel',
+        role: 'CTO & Co-Founder',
+        background: 'Former Coinbase Senior Engineer, Blockchain expert',
+        linkedIn: 'https://linkedin.com/in/priyapatel'
+      }
+    ],
+    ipFilings: [
+      {
+        type: 'patent',
+        title: 'Real-Time Cryptocurrency Settlement Protocol',
+        status: 'filed',
+        date: new Date('2025-10-10'),
+        jurisdiction: 'USPTO'
+      },
+      {
+        type: 'trademark',
+        title: 'FinFlow',
+        status: 'approved',
+        date: new Date('2025-08-12'),
+        jurisdiction: 'USPTO'
+      }
+    ],
+    teamHires: [
+      {
+        name: 'Kevin Martinez',
+        role: 'Head of Compliance',
+        previousCompany: 'PayPal',
+        joinedDate: new Date('2025-10-12')
+      },
+      {
+        name: 'Sophie Williams',
+        role: 'VP of Engineering',
+        previousCompany: 'Coinbase',
+        joinedDate: new Date('2025-09-28')
+      }
+    ],
+    advisors: [
+      {
+        name: 'Brian Armstrong',
+        expertise: 'Cryptocurrency Regulation',
+        currentRole: 'Former Advisor',
+        company: 'Coinbase',
+        joinedDate: new Date('2025-09-01')
+      }
+    ],
+    boardMembers: [
+      {
+        name: 'Jessica Tan',
+        expertise: 'FinTech Investments',
+        currentRole: 'Partner',
+        company: 'Paradigm',
+        joinedDate: new Date('2025-08-01')
+      }
+    ],
+    customerTraction: [
+      {
+        metric: '1,000 merchants onboarded',
+        date: new Date('2025-10-18'),
+        description: 'Processing $5M monthly volume'
+      },
+      {
+        metric: '$20M transaction volume',
+        date: new Date('2025-10-25'),
+        description: 'Crossed $20M in total transaction volume'
+      }
+    ]
   },
   {
     id: 3,

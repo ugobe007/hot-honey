@@ -12,6 +12,42 @@ export interface StoreState {
 }
 // FIXED types.ts
 
+export interface Founder {
+  name: string;
+  role: string;
+  background: string;
+  linkedIn?: string;
+}
+
+export interface IPFiling {
+  type: 'patent' | 'trademark' | 'copyright';
+  title: string;
+  status: 'pending' | 'approved' | 'filed';
+  date: Date;
+  jurisdiction?: string;
+}
+
+export interface TeamMember {
+  name: string;
+  role: string;
+  previousCompany?: string;
+  joinedDate: Date;
+}
+
+export interface Advisor {
+  name: string;
+  expertise: string;
+  currentRole?: string;
+  company?: string;
+  joinedDate: Date;
+}
+
+export interface CustomerTraction {
+  metric: string; // e.g., "10K users", "$500K ARR", "100 enterprise clients"
+  date: Date;
+  description?: string;
+}
+
 export interface Startup {
   id: number;
   name: string;
@@ -35,6 +71,12 @@ export interface Startup {
   hotness?: number; // Calculated hotness score out of 5.0
   answersCount?: number; // Number of answers (questions answered)
   industries?: string[]; // Industry tags: fintech, ai, saas, deeptech, robotics, healthtech, edtech, cleantech, ecommerce, crypto, consumer, enterprise
+  founders?: Founder[];
+  ipFilings?: IPFiling[];
+  teamHires?: TeamMember[];
+  advisors?: Advisor[];
+  boardMembers?: Advisor[]; // Reuse Advisor interface for board members
+  customerTraction?: CustomerTraction[];
 }
 
 export interface Comment {
