@@ -205,7 +205,7 @@ export default function BulkImport() {
       const websitePrompt = `${entityType === 'startup' ? 'Company' : entityType === 'vc_firm' ? 'VC Firm' : 'Accelerator'}: ${company.name}\nWebsite: ${company.website}\n${company.tagline || ''}`;
 
       const systemPrompt = entityType === 'startup' 
-        ? `Create a 5-point StartupCard for this company. Return JSON with: pitch (catchy tagline as string), fivePoints (array of 5 SHORT strings like ["Problem they solve", "Their solution", "Market size", "Team background", "Funding amount"]), industry (string), stage (string), funding (string)`
+        ? `Create a 5-point StartupCard for this company. Return JSON with: pitch (catchy tagline as string), fivePoints (array of 5 SHORT strings - max 12 words each - following this format: ["Problem: one line", "Solution: one line", "Market: one line with $ size only", "Team: former employers only (e.g. 'Ex-Google, Meta')", "Funding: amount only"]), industry (string), stage (string), funding (string). Keep team to ONE line focusing on notable former employers. Keep market size to ONE line with $ amount only.`
         : `Create a 5-point profile for this ${entityType === 'vc_firm' ? 'venture capital firm' : 'accelerator'}. Return JSON with: pitch (description as string), fivePoints (array of 5 SHORT strings like ["Investment focus", "Portfolio size", "Check size", "Notable exits", "Geographic presence"]), industry (set to "Venture Capital"), stage (set to "N/A"), funding (set to "N/A")`;
 
       const response = await fetch('https://api.openai.com/v1/chat/completions', {
