@@ -182,7 +182,7 @@ export default function DataIntelligence() {
                 <MetricCard
                   icon="🔥"
                   label="Hot Deals"
-                  value={latestReport.hotDeals.toString()}
+                  value={latestReport.hotDealsCount.toString()}
                   color="from-red-500 to-rose-600"
                 />
               </div>
@@ -273,7 +273,7 @@ export default function DataIntelligence() {
                 <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border-2 border-white/20">
                   <h3 className="text-2xl font-black text-white mb-4">🔥 Hot Deals</h3>
                   <div className="space-y-3">
-                    {latestReport.hotDeals.map((deal, idx) => (
+                    {latestReport.hotDeals.map((deal: any, idx: number) => (
                       <div key={idx} className="bg-white/5 rounded-lg p-4 border border-white/10">
                         <div className="flex items-start justify-between mb-2">
                           <h4 className="text-xl font-black text-orange-300">{deal.companyName}</h4>
