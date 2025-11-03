@@ -36,6 +36,7 @@ import ProfilePage from './pages/ProfilePage';
 import AdminDashboard from './pages/AdminDashboard';
 import SyncStartups from './pages/SyncStartups';
 import DataIntelligence from './pages/DataIntelligence';
+import Feed from './pages/Feed';
 import './App.css';
 
 // Wrapper component that redirects admins to admin dashboard
@@ -77,6 +78,7 @@ const App: React.FC = () => {
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/vote" element={<VotePage />} />
           <Route path="/vote-demo" element={<VoteDemo />} />
+          <Route path="/feed" element={<Feed />} /> {/* ✅ Activity Feed */}
           <Route path="/investors" element={<InvestorsPage />} /> {/* ✅ Investor Directory */}
           <Route path="/investor/:id/edit" element={<EditInvestorPage />} /> {/* ✅ Edit Investor */}
           <Route path="/invite-investor" element={<InviteInvestorPage />} /> {/* ✅ Invite Investor */}
