@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import StartupCardOfficial from './StartupCardOfficial';
+import ActivityTicker from './ActivityTicker';
 import { NotificationBell } from './NotificationBell';
 import startupData from '../data/startupData';
 import { useAuth } from '../hooks/useAuth';
 import { useVotes } from '../hooks/useVotes';
 import { useStore } from '../store';
+import { generateRecentActivities } from '../utils/activityGenerator';
 
 interface YesVote {
   id: number;
@@ -22,6 +24,7 @@ const Dashboard: React.FC = () => {
   const { votes, isLoading: votesLoading, getYesVotes, voteCounts } = useVotes(userId);
   const portfolio = useStore((state) => state.portfolio);
   const [myYesVotes, setMyYesVotes] = useState<YesVote[]>([]);
+  const [activities, setActivities] = useState<any[]>([]);
 
   useEffect(() => {
     if (authLoading || votesLoading) return;
@@ -87,6 +90,17 @@ const Dashboard: React.FC = () => {
 
       setMyYesVotes(enrichedVotes);
     }
+
+    // Load activities
+    console.log('📊 Dashboard (components): About to load activities...');
+    generateRecentActivities()
+      .then((recentActivities) => {
+        console.log(`📊 Dashboard (components): Received ${recentActivities.length} activities`);
+        setActivities(recentActivities);
+      })
+      .catch((error) => {
+        console.error('📊 Dashboard (components): Error loading activities:', error);
+      });
   }, [authLoading, votesLoading, votes, portfolio, userId]); // Added portfolio and userId to dependencies
 
   const handleVote = (vote: 'yes' | 'no', startup?: any) => {
@@ -150,6 +164,12 @@ const Dashboard: React.FC = () => {
 
       <div className="min-h-screen bg-gradient-to-br from-purple-900 via-purple-800 to-indigo-900 p-4 sm:p-8">
         <div className="pt-24 sm:pt-28 px-2 sm:px-4 max-w-7xl mx-auto">
+          
+          {/* Activity Ticker */}
+          <div className="mb-8">
+            <ActivityTicker activities={activities} />
+          </div>
+
           <div className="text-center mb-8 sm:mb-12">
             <h1 className="text-4xl sm:text-6xl font-bold text-white mb-2 sm:mb-4">🔥 My Hot Picks</h1>
             <p className="text-lg sm:text-2xl text-purple-200">You've voted YES on <span className="font-bold text-cyan-400">{myYesVotes.length}</span> {myYesVotes.length === 1 ? 'startup' : 'startups'}</p>
