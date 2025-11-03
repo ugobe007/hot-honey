@@ -50,13 +50,18 @@ export default function AdminDashboard() {
     }
     loadDashboardData();
     loadMyVotes();
-    loadActivities();
+    
+    // Load activities with error handling
+    console.log('👑 AdminDashboard: About to load activities...');
+    generateRecentActivities()
+      .then((recentActivities) => {
+        console.log(`👑 AdminDashboard: Received ${recentActivities.length} activities`);
+        setActivities(recentActivities);
+      })
+      .catch((error) => {
+        console.error('👑 AdminDashboard: Error loading activities:', error);
+      });
   }, [user, navigate]);
-
-  const loadActivities = async () => {
-    const recentActivities = await generateRecentActivities();
-    setActivities(recentActivities);
-  };
 
   const loadMyVotes = () => {
     // Load from localStorage for now (both authenticated and anonymous users)
