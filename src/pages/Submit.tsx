@@ -479,7 +479,7 @@ Fill ONLY the EMPTY fields with your research. Return JSON with ALL fields fille
           stage: formData.stage === 'Pre-Seed' ? 1 : formData.stage === 'Seed' ? 1 : formData.stage === 'Series A' ? 2 : 1,
           source_type: 'manual' as const,
           submitted_email: formData.founderEmail,
-          status: 'approved' as const, // Auto-approve for immediate voting
+          status: 'pending' as const, // Requires admin review before publishing
           extracted_data: {
             problem: formData.problem,
             solution: formData.solution,
@@ -504,11 +504,11 @@ Fill ONLY the EMPTY fields with your research. Return JSON with ALL fields fille
 
       console.log('✅ Startup saved to Supabase:', supabaseData);
 
-      // Show success alert and navigate immediately
-      alert(`🎉 Success!\n\n${formData.name} has been submitted and is now live on the Vote page!\n\nUsers can start voting on it immediately.`);
+      // Show success alert and navigate to admin dashboard
+      alert(`🎉 Success!\n\n${formData.name} has been submitted for review!\n\nAn admin will review and approve it soon. You'll be notified when it's published to the Vote page.`);
       
-      // Navigate directly to vote page
-      navigate('/vote');
+      // Navigate to dashboard
+      navigate('/dashboard');
       
     } catch (err: any) {
       console.error('Error submitting startup:', err);
