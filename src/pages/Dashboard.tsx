@@ -105,6 +105,10 @@ const Dashboard: React.FC = () => {
       <div className="pt-28 max-w-7xl mx-auto">
         {/* Activity Ticker */}
         <div className="mb-8">
+          {(() => {
+            console.log('📊 Dashboard: Rendering with', activities.length, 'activities');
+            return null;
+          })()}
           <ActivityTicker activities={activities} />
         </div>
 

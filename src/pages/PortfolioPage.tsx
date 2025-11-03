@@ -2,10 +2,12 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import StartupCardOfficial from '../components/StartupCardOfficial';
+import ActivityTicker from '../components/ActivityTicker';
 import { NotificationBell } from '../components/NotificationBell';
 import startupData from '../data/startupData';
 import { useAuth } from '../hooks/useAuth';
 import { useVotes } from '../hooks/useVotes';
+import { generateRecentActivities } from '../utils/activityGenerator';
 
 export default function PortfolioPage() {
   const navigate = useNavigate();
@@ -13,6 +15,7 @@ export default function PortfolioPage() {
   const { userId, isLoading: authLoading } = useAuth();
   const { votes, isLoading: votesLoading, getYesVotes, removeVote } = useVotes(userId);
   const [myYesVotes, setMyYesVotes] = useState<any[]>([]);
+  const [activities, setActivities] = useState<any[]>([]);
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
@@ -65,6 +68,17 @@ export default function PortfolioPage() {
       const profile = JSON.parse(userProfile);
       setIsAdmin(profile.email === 'admin@hotmoneyhoney.com' || profile.isAdmin);
     }
+
+    // Load activities
+    console.log('📁 Portfolio: About to load activities...');
+    generateRecentActivities()
+      .then((recentActivities) => {
+        console.log(`📁 Portfolio: Received ${recentActivities.length} activities`);
+        setActivities(recentActivities);
+      })
+      .catch((error) => {
+        console.error('📁 Portfolio: Error loading activities:', error);
+      });
   }, [authLoading, votesLoading, votes, userId]); // Added userId to dependencies
 
   const handleVote = (vote: 'yes' | 'no', startup?: any) => {
@@ -218,6 +232,12 @@ export default function PortfolioPage() {
       {/* Main content container */}
       <div className="min-h-screen bg-gradient-to-br from-purple-900 via-green-400 to-purple-950 p-4 sm:p-8" style={{ backgroundImage: 'radial-gradient(ellipse 800px 600px at 20% 40%, rgba(134, 239, 172, 0.4), transparent), linear-gradient(to bottom right, rgb(88, 28, 135), rgb(59, 7, 100))' }}>
         <div className="max-w-7xl mx-auto pt-24 sm:pt-28 px-2">{/* Changed from max-w-4xl to max-w-7xl for grid */}
+        
+        {/* Activity Ticker */}
+        <div className="mb-8">
+          <ActivityTicker activities={activities} />
+        </div>
+
         {/* Header */}
         <div className="text-center mb-8 sm:mb-12">
           <div className="text-6xl sm:text-8xl mb-4">⭐</div>

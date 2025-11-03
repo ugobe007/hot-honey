@@ -51,6 +51,8 @@ const Vote: React.FC = () => {
     );
   }
 
+  console.log('🎯 Vote page: Rendering with', activities.length, 'activities');
+
   return (
     <div className="bg-orange-50 min-h-screen px-2 sm:px-4">
       {/* Activity Ticker at the top */}
