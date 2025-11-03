@@ -18,8 +18,18 @@ const ActivityTicker: React.FC<ActivityTickerProps> = ({ activities }) => {
   const [displayActivities, setDisplayActivities] = useState<ActivityItem[]>([]);
 
   useEffect(() => {
-    // Duplicate activities for seamless loop
-    setDisplayActivities([...activities, ...activities]);
+    // If no activities yet, show placeholder content
+    if (activities.length === 0) {
+      const placeholderActivities: ActivityItem[] = [
+        { id: 'loading-1', type: 'trending', icon: '🔥', text: 'Loading startup activity...', timestamp: new Date() },
+        { id: 'loading-2', type: 'new', icon: '🚀', text: 'Fetching latest updates...', timestamp: new Date() },
+        { id: 'loading-3', type: 'trending', icon: '📊', text: 'Connecting to database...', timestamp: new Date() },
+      ];
+      setDisplayActivities([...placeholderActivities, ...placeholderActivities]);
+    } else {
+      // Duplicate activities for seamless loop
+      setDisplayActivities([...activities, ...activities]);
+    }
   }, [activities]);
 
   const handleClick = () => {
@@ -72,7 +82,7 @@ const ActivityTicker: React.FC<ActivityTickerProps> = ({ activities }) => {
 
         .ticker-content {
           display: inline-flex;
-          animation: scroll-left 120s linear infinite;
+          animation: scroll-left 240s linear infinite;
           will-change: transform;
         }
 
