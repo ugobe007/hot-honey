@@ -42,6 +42,12 @@ export async function generateRecentActivities(): Promise<ActivityItem[]> {
 
     // Add approved startup activities
     approvedStartups.forEach((startup, index) => {
+      // Skip if no company name
+      if (!startup.company_name) {
+        console.warn('Skipping approved startup with no company_name:', startup.id);
+        return;
+      }
+      
       const hoursAgo = (index + 10) * 3;
       activities.push({
         id: `approved-${startup.id}`,
@@ -82,17 +88,17 @@ export async function generateRecentActivities(): Promise<ActivityItem[]> {
     // Sort by timestamp (newest first)
     activities.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
 
-    // Remove duplicates based on startup ID
-    const seenStartups = new Set<string>();
+    // Remove duplicates - keep track of both ID and text to catch true duplicates
+    const seenActivities = new Set<string>();
     const uniqueActivities = activities.filter(activity => {
-      // Extract startup ID from the id field (e.g., "trending-123" -> "123")
-      const startupId = activity.id.split('-').slice(1).join('-');
+      // Create a unique key from the activity text (which includes the startup name)
+      const uniqueKey = activity.text.toLowerCase().trim();
       
-      if (seenStartups.has(startupId)) {
+      if (seenActivities.has(uniqueKey)) {
         return false; // Skip duplicate
       }
       
-      seenStartups.add(startupId);
+      seenActivities.add(uniqueKey);
       return true;
     });
 
