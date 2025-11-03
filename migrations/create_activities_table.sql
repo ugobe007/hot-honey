@@ -35,26 +35,26 @@ CREATE POLICY "Activities are viewable by everyone" ON activities
 CREATE POLICY "Users can insert their own activities" ON activities
   FOR INSERT WITH CHECK (true); -- We'll handle auth in the app layer
 
--- Sample queries to test:
--- 1. Get recent activities
--- SELECT * FROM activities ORDER BY created_at DESC LIMIT 20;
+-- Sample queries to test (commented out):
+-- Get recent activities:
+--   SELECT * FROM activities ORDER BY created_at DESC LIMIT 20;
 
--- 2. Get votes in last hour
--- SELECT COUNT(*) FROM activities 
--- WHERE event_type = 'user_voted' 
--- AND created_at > NOW() - INTERVAL '1 hour';
+-- Get votes in last hour:
+--   SELECT COUNT(*) FROM activities 
+--   WHERE event_type = 'user_voted' 
+--   AND created_at > NOW() - INTERVAL '1 hour';
 
--- 3. Get activities for a specific startup
--- SELECT * FROM activities 
--- WHERE startup_id = '123' 
--- ORDER BY created_at DESC;
+-- Get activities for a specific startup:
+--   SELECT * FROM activities 
+--   WHERE startup_id = '123' 
+--   ORDER BY created_at DESC;
 
--- 4. Get user voting activity
--- SELECT user_name, startup_id, vote_type, created_at 
--- FROM activities 
--- WHERE event_type = 'user_voted' 
--- ORDER BY created_at DESC 
--- LIMIT 10;
+-- Get user voting activity:
+--   SELECT user_name, startup_id, vote_type, created_at 
+--   FROM activities 
+--   WHERE event_type = 'user_voted' 
+--   ORDER BY created_at DESC 
+--   LIMIT 10;
 
 COMMENT ON TABLE activities IS 'Tracks all user and system activities for the activity feed';
 COMMENT ON COLUMN activities.event_type IS 'Type of activity: user_voted, startup_approved, etc.';
