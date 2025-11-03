@@ -82,8 +82,22 @@ export async function generateRecentActivities(): Promise<ActivityItem[]> {
     // Sort by timestamp (newest first)
     activities.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
 
-    console.log(`📡 Generated ${activities.length} real-time activities`);
-    return activities;
+    // Remove duplicates based on startup ID
+    const seenStartups = new Set<string>();
+    const uniqueActivities = activities.filter(activity => {
+      // Extract startup ID from the id field (e.g., "trending-123" -> "123")
+      const startupId = activity.id.split('-').slice(1).join('-');
+      
+      if (seenStartups.has(startupId)) {
+        return false; // Skip duplicate
+      }
+      
+      seenStartups.add(startupId);
+      return true;
+    });
+
+    console.log(`📡 Generated ${uniqueActivities.length} unique real-time activities (filtered from ${activities.length})`);
+    return uniqueActivities;
 
   } catch (error) {
     console.error('Error generating activities:', error);
