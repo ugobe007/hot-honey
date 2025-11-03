@@ -164,7 +164,7 @@ export class CrawlerOrchestrator {
         totalFundingAmount,
         newStartupsDiscovered: startups.length,
         activeInvestors: investors.length,
-        hotDeals: deals.length,
+        hotDealsCount: deals.length,
         topFundings: fundings.slice(0, 10),
         topStartups: startups.slice(0, 10),
         topInvestors: investors.slice(0, 10),

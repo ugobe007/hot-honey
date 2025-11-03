@@ -71,7 +71,7 @@ export interface DailyReport {
   totalFundingAmount: string;
   newStartupsDiscovered: number;
   activeInvestors: number;
-  hotDeals: number;
+  hotDealsCount: number;
   
   // Top items
   topFundings: FundingData[];

@@ -217,7 +217,7 @@ export default function PortfolioPage() {
 
       {/* Main content container */}
       <div className="min-h-screen bg-gradient-to-br from-purple-900 via-green-400 to-purple-950 p-4 sm:p-8" style={{ backgroundImage: 'radial-gradient(ellipse 800px 600px at 20% 40%, rgba(134, 239, 172, 0.4), transparent), linear-gradient(to bottom right, rgb(88, 28, 135), rgb(59, 7, 100))' }}>
-        <div className="max-w-4xl mx-auto pt-24 sm:pt-28 px-2">
+        <div className="max-w-7xl mx-auto pt-24 sm:pt-28 px-2">{/* Changed from max-w-4xl to max-w-7xl for grid */}
         {/* Header */}
         <div className="text-center mb-8 sm:mb-12">
           <div className="text-6xl sm:text-8xl mb-4">⭐</div>
@@ -255,10 +255,10 @@ export default function PortfolioPage() {
               </p>
             </div>
 
-            {/* Full Startup Cards */}
-            <div className="space-y-8">
+            {/* Startup Cards in Horizontal Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
               {myYesVotes.map((startup) => (
-                <div key={startup.id} className="relative">
+                <div key={startup.id} className="relative flex flex-col items-center">
                   <StartupCardOfficial
                     startup={startup}
                     onVote={handleVote}
@@ -268,9 +268,9 @@ export default function PortfolioPage() {
                   <div className="mt-4 text-center">
                     <button
                       onClick={() => handleRemoveFavorite(startup.id)}
-                      className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded-xl transition-all"
+                      className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded-xl transition-all shadow-lg"
                     >
-                      ❌ Remove from Portfolio
+                      ❌ Remove
                     </button>
                   </div>
                 </div>
