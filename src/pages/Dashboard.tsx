@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import StartupCardOfficial from '../components/StartupCardOfficial';
+import ActivityTicker from '../components/ActivityTicker';
 import startupData from '../data/startupData';
+import { generateRecentActivities } from '../utils/activityGenerator';
 
 interface YesVote {
   id: number;
@@ -16,6 +18,7 @@ interface YesVote {
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
   const [myYesVotes, setMyYesVotes] = useState<YesVote[]>([]);
+  const [activities, setActivities] = useState<any[]>([]);
 
   useEffect(() => {
     // Load YES votes from localStorage
@@ -39,6 +42,13 @@ const Dashboard: React.FC = () => {
       localStorage.setItem('myYesVotes', JSON.stringify(enrichedVotes));
       setMyYesVotes(enrichedVotes);
     }
+
+    // Load activities
+    const loadActivities = async () => {
+      const recentActivities = await generateRecentActivities();
+      setActivities(recentActivities);
+    };
+    loadActivities();
   }, []);
 
   const handleVote = (vote: 'yes' | 'no') => {
@@ -89,6 +99,11 @@ const Dashboard: React.FC = () => {
       </div>
 
       <div className="pt-28 max-w-7xl mx-auto">
+        {/* Activity Ticker */}
+        <div className="mb-8">
+          <ActivityTicker activities={activities} />
+        </div>
+
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-6xl font-bold text-white mb-4">
