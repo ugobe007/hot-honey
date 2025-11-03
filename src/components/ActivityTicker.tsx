@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 interface ActivityItem {
   id: string;
-  type: 'new' | 'trending' | 'approved' | 'funding';
+  type: 'new' | 'trending' | 'approved' | 'funding' | 'ip-filing' | 'team-hire' | 'advisor-join' | 'board-member' | 'customer-milestone';
   icon: string;
   text: string;
   timestamp: Date;

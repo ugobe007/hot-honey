@@ -85,6 +85,101 @@ export async function generateRecentActivities(): Promise<ActivityItem[]> {
       });
     });
 
+    // Add IP filing activities
+    startupData.forEach((startup) => {
+      if (startup.ipFilings && startup.ipFilings.length > 0) {
+        startup.ipFilings.forEach((filing) => {
+          const daysSinceFiling = Math.floor((now.getTime() - filing.date.getTime()) / (1000 * 60 * 60 * 24));
+          if (daysSinceFiling <= 30) { // Only show recent filings (last 30 days)
+            const icon = filing.type === 'patent' ? '📜' : filing.type === 'trademark' ? '™️' : '©️';
+            const statusText = filing.status === 'approved' ? 'secured' : filing.status === 'pending' ? 'filed for' : 'submitted';
+            activities.push({
+              id: `ip-${startup.id}-${filing.title}`,
+              type: 'ip-filing',
+              icon,
+              text: `${startup.name} ${statusText} ${filing.type}: "${filing.title}"`,
+              timestamp: filing.date,
+            });
+          }
+        });
+      }
+    });
+
+    // Add team hire activities
+    startupData.forEach((startup) => {
+      if (startup.teamHires && startup.teamHires.length > 0) {
+        startup.teamHires.forEach((hire) => {
+          const daysSinceHire = Math.floor((now.getTime() - hire.joinedDate.getTime()) / (1000 * 60 * 60 * 24));
+          if (daysSinceHire <= 30) { // Only show recent hires (last 30 days)
+            const prevCompany = hire.previousCompany ? ` from ${hire.previousCompany}` : '';
+            activities.push({
+              id: `hire-${startup.id}-${hire.name}`,
+              type: 'team-hire',
+              icon: '👥',
+              text: `${startup.name} hired ${hire.name} as ${hire.role}${prevCompany}`,
+              timestamp: hire.joinedDate,
+            });
+          }
+        });
+      }
+    });
+
+    // Add advisor activities
+    startupData.forEach((startup) => {
+      if (startup.advisors && startup.advisors.length > 0) {
+        startup.advisors.forEach((advisor) => {
+          const daysSinceJoin = Math.floor((now.getTime() - advisor.joinedDate.getTime()) / (1000 * 60 * 60 * 24));
+          if (daysSinceJoin <= 30) { // Only show recent advisors (last 30 days)
+            const company = advisor.company ? ` at ${advisor.company}` : '';
+            activities.push({
+              id: `advisor-${startup.id}-${advisor.name}`,
+              type: 'advisor-join',
+              icon: '🎓',
+              text: `${advisor.name} (${advisor.expertise}${company}) joined ${startup.name} as advisor`,
+              timestamp: advisor.joinedDate,
+            });
+          }
+        });
+      }
+    });
+
+    // Add board member activities
+    startupData.forEach((startup) => {
+      if (startup.boardMembers && startup.boardMembers.length > 0) {
+        startup.boardMembers.forEach((member) => {
+          const daysSinceJoin = Math.floor((now.getTime() - member.joinedDate.getTime()) / (1000 * 60 * 60 * 24));
+          if (daysSinceJoin <= 30) { // Only show recent board members (last 30 days)
+            const company = member.company ? ` from ${member.company}` : '';
+            activities.push({
+              id: `board-${startup.id}-${member.name}`,
+              type: 'board-member',
+              icon: '🏛️',
+              text: `${member.name}${company} joined ${startup.name} board`,
+              timestamp: member.joinedDate,
+            });
+          }
+        });
+      }
+    });
+
+    // Add customer traction activities
+    startupData.forEach((startup) => {
+      if (startup.customerTraction && startup.customerTraction.length > 0) {
+        startup.customerTraction.forEach((traction) => {
+          const daysSinceMilestone = Math.floor((now.getTime() - traction.date.getTime()) / (1000 * 60 * 60 * 24));
+          if (daysSinceMilestone <= 30) { // Only show recent milestones (last 30 days)
+            activities.push({
+              id: `traction-${startup.id}-${traction.metric}`,
+              type: 'customer-milestone',
+              icon: '📈',
+              text: `${startup.name} reached ${traction.metric}`,
+              timestamp: traction.date,
+            });
+          }
+        });
+      }
+    });
+
     // Sort by timestamp (newest first)
     activities.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
 
