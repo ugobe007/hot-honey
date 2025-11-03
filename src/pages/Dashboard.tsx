@@ -43,12 +43,16 @@ const Dashboard: React.FC = () => {
       setMyYesVotes(enrichedVotes);
     }
 
-    // Load activities
-    const loadActivities = async () => {
-      const recentActivities = await generateRecentActivities();
-      setActivities(recentActivities);
-    };
-    loadActivities();
+    // Load activities with error handling
+    console.log('📊 Dashboard: About to load activities...');
+    generateRecentActivities()
+      .then((recentActivities) => {
+        console.log(`📊 Dashboard: Received ${recentActivities.length} activities`);
+        setActivities(recentActivities);
+      })
+      .catch((error) => {
+        console.error('📊 Dashboard: Error loading activities:', error);
+      });
   }, []);
 
   const handleVote = (vote: 'yes' | 'no') => {

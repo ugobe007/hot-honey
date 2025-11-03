@@ -16,18 +16,21 @@ const Vote: React.FC = () => {
 
   // Load approved startups from database on mount
   useEffect(() => {
+    console.log('🎯 Vote page: useEffect triggered');
     loadStartupsFromDatabase();
     
-    // Load activities
-    const loadActivities = async () => {
-      console.log('🎯 Vote page: Loading activities...');
-      const recentActivities = await generateRecentActivities();
-      console.log(`🎯 Vote page: Received ${recentActivities.length} activities`);
-      setActivities(recentActivities);
-      console.log('🎯 Vote page: Activities state updated');
-    };
-    loadActivities();
-  }, [loadStartupsFromDatabase]);
+    // Load activities immediately
+    console.log('🎯 Vote page: About to load activities...');
+    generateRecentActivities()
+      .then((recentActivities) => {
+        console.log(`🎯 Vote page: Received ${recentActivities.length} activities`);
+        setActivities(recentActivities);
+        console.log('🎯 Vote page: Activities state updated');
+      })
+      .catch((error) => {
+        console.error('🎯 Vote page: Error loading activities:', error);
+      });
+  }, []);
 
   const currentStartup = startups[currentIndex];
 
