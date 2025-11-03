@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import startupData from '../data/startupData';
+import { getTrendingStartups, getTopVotedStartups, getRecentlyApprovedStartups } from '../utils/voteAnalytics';
 
 interface ActivityEvent {
   id: string;
@@ -21,7 +22,118 @@ const Feed: React.FC = () => {
     generateActivities();
   }, []);
 
-  const generateActivities = () => {
+  const generateActivities = async () => {
+    const events: ActivityEvent[] = [];
+    const now = new Date();
+
+    try {
+      // Get real data from Supabase
+      const [trendingStartups, topVotedStartups, approvedStartups] = await Promise.all([
+        getTrendingStartups(10),
+        getTopVotedStartups(10),
+        getRecentlyApprovedStartups(10),
+      ]);
+
+      // Add trending events
+      trendingStartups.forEach((item, index) => {
+        const hoursAgo = index * 2;
+        const timestamp = new Date(now.getTime() - hoursAgo * 60 * 60 * 1000);
+        
+        events.push({
+          id: `trending-${item.startup.id}`,
+          type: 'trending',
+          icon: '🔥',
+          title: 'Trending Now',
+          description: `${item.startup.name} has ${item.stats.totalYesVotes} YES votes and climbing! (Trending score: ${item.stats.trendingScore})`,
+          timestamp,
+          startupId: item.startup.id,
+          startupName: item.startup.name,
+        });
+      });
+
+      // Add new vote events for highly voted startups
+      topVotedStartups.forEach((item, index) => {
+        if (item.stats.recentYesVotes > 0) {
+          const hoursAgo = (index + 10) * 3;
+          const timestamp = new Date(now.getTime() - hoursAgo * 60 * 60 * 1000);
+          
+          events.push({
+            id: `new-votes-${item.startup.id}`,
+            type: 'trending',
+            icon: '⭐',
+            title: 'Hot Votes',
+            description: `${item.startup.name} got ${item.stats.recentYesVotes} new votes in the last 24 hours!`,
+            timestamp,
+            startupId: item.startup.id,
+            startupName: item.startup.name,
+          });
+        }
+      });
+
+      // Add approved startup events
+      approvedStartups.forEach((startup, index) => {
+        const timestamp = new Date(startup.updated_at || startup.created_at);
+        
+        events.push({
+          id: `approved-${startup.id}`,
+          type: 'approved',
+          icon: '✅',
+          title: 'Admin Approved',
+          description: `${startup.company_name} approved and now live for voting`,
+          timestamp,
+          startupId: startup.id,
+          startupName: startup.company_name,
+        });
+      });
+
+      // Add some "new startup" activities from recent data
+      const recentStartups = startupData.slice(0, 10);
+      recentStartups.forEach((startup, index) => {
+        const daysAgo = index + 1;
+        events.push({
+          id: `new-${startup.id}`,
+          type: 'new',
+          icon: '🚀',
+          title: 'New Startup Launched',
+          description: `${startup.name} just joined the platform!`,
+          timestamp: new Date(now.getTime() - daysAgo * 24 * 60 * 60 * 1000),
+          startupId: startup.id,
+          startupName: startup.name,
+        });
+      });
+
+      // Add some funding announcements (simulated for now)
+      const fundingStartups = startupData.slice(10, 15);
+      const fundingAmounts = ['$500K', '$1M', '$2M', '$5M', '$10M'];
+      fundingStartups.forEach((startup, index) => {
+        const daysAgo = (index + 2) * 2;
+        const amount = fundingAmounts[index % fundingAmounts.length];
+        events.push({
+          id: `funding-${startup.id}`,
+          type: 'funding',
+          icon: '💰',
+          title: 'Funding Announcement',
+          description: `${startup.name} just raised ${amount} in seed funding!`,
+          timestamp: new Date(now.getTime() - daysAgo * 24 * 60 * 60 * 1000),
+          startupId: startup.id,
+          startupName: startup.name,
+        });
+      });
+
+      // Sort by timestamp (newest first)
+      events.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
+      
+      console.log(`📡 Generated ${events.length} real-time feed events`);
+      setActivities(events);
+
+    } catch (error) {
+      console.error('Error generating activities:', error);
+      // Fallback to simulated data
+      generateFallbackActivities();
+    }
+  };
+
+  const generateFallbackActivities = () => {
     const events: ActivityEvent[] = [];
     const now = new Date();
 

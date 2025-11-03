@@ -16,6 +16,7 @@ const FrontPageNew: React.FC = () => {
   const [votedStartupIds, setVotedStartupIds] = useState<Set<number>>(new Set());
   const [nextAvailableIndex, setNextAvailableIndex] = useState(3);
   const [slidingCards, setSlidingCards] = useState<number[]>([]);
+  const [activities, setActivities] = useState<any[]>([]);
 
   // Load approved startups from database on mount and load voted IDs
   useEffect(() => {
@@ -65,6 +66,10 @@ const FrontPageNew: React.FC = () => {
         setCurrentStartupIndices([0, Math.min(1, allStartups.length - 1), Math.min(2, allStartups.length - 1)]);
         setNextAvailableIndex(3);
       }
+
+      // Load activities
+      const recentActivities = await generateRecentActivities();
+      setActivities(recentActivities);
     };
     loadStartups();
   }, []);
@@ -318,7 +323,7 @@ const FrontPageNew: React.FC = () => {
           </div>
           
           {/* Activity Ticker */}
-          <ActivityTicker activities={generateRecentActivities()} />
+          <ActivityTicker activities={activities} />
           
           {/* Featured Startups Grid */}
           <div className="mt-8">
