@@ -1,14 +1,15 @@
 import { Link } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
 interface AdminNavProps {
   currentPage?: string;
 }
 
 export default function AdminNav({ currentPage }: AdminNavProps) {
-  // TODO: Add actual admin authentication check
-  const isAdmin = true; // For now, always show admin links
+  const { user } = useAuth();
 
-  if (!isAdmin) return null;
+  // Only show for logged-in admins
+  if (!user?.isAdmin) return null;
 
   return (
     <div className="fixed bottom-4 right-4 z-50">

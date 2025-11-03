@@ -41,92 +41,53 @@ export class OpenAIDataService {
    */
   static async uploadScrapedStartup(data: ScrapedStartupData) {
     try {
-      // Convert 5-point array to individual columns for Supabase
-      const [valueProp, market, unique, team, investment] = data.fivePoints;
+      console.log('📤 Uploading startup:', data.name);
+      
+      // Upload to startup_uploads table - matching exact schema from MigrateStartupData.tsx
+      const insertData = {
+        name: data.name,
+        website: data.website || '',
+        description: data.pitch || '',
+        tagline: data.pitch || '',
+        pitch: data.pitch || '',
+        raise_amount: data.funding || '',
+        raise_type: data.stage || '',
+        stage: 1, // Default to 1 (Seed stage)
+        source_type: 'manual', // Must be 'manual' - check constraint only allows specific values
+        status: 'pending', // Pending for admin review
+        extracted_data: {
+          fivePoints: data.fivePoints || [],
+          industry: data.industry || 'Technology',
+          stage: data.stage || 'Seed',
+          funding: data.funding || 'N/A',
+          pitch: data.pitch || '',
+          marketSize: data.fivePoints?.[2] || '',
+          unique: data.fivePoints?.[1] || '',
+        },
+        submitted_by: null,
+        submitted_email: 'bulk@import.com',
+      };
+      
+      console.log('📝 Insert data:', insertData);
       
       const { data: startup, error } = await supabase
-        .from('startups')
-        .insert([{
-          // Generate ID as string (matching your existing format)
-          id: `startup_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-          name: data.name,
-          website: data.website,
-          
-          // Map 5 points to their respective columns
-          tagline: data.pitch,
-          pitch: data.pitch,
-          
-          // Store in both formats for compatibility
-          five_points: data.fivePoints,  // Array format (for frontend)
-          value_proposition: valueProp,  // Point 1
-          problem: market,                // Point 2 (market/problem)
-          solution: unique,               // Point 3 (solution/unique value)
-          team: team,                     // Point 4
-          investment: investment,         // Point 5
-          
-          // Metadata
-          logo: data.logo,
-          pitch_deck_url: data.deck,
-          scraped_by: data.scraped_by || data.website,
-          scraped_at: new Date().toISOString(),
-          
-          // Workflow status
-          status: 'pending',              // Awaiting admin review
-          validated: false,
-          
-          // Additional fields
-          stage: data.stage || 'Seed',
-          funding: data.funding,
-        }])
+        .from('startup_uploads')
+        .insert([insertData])
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error('❌ Supabase error for', data.name, ':', error);
+        throw error;
+      }
 
-      console.log('✅ Startup uploaded to Supabase:', startup.name);
-      
-      // Also add to localStorage for immediate use (matches your existing workflow)
-      this.addToLocalStorage(startup);
+      console.log('✅ Startup uploaded to Supabase:', startup?.name);
       
       return { success: true, startup };
       
     } catch (error: any) {
-      console.error('❌ Failed to upload startup:', error.message);
-      return { success: false, error: error.message };
-    }
-  }
-
-  /**
-   * Add startup to localStorage (matches BulkImport behavior)
-   * This allows immediate voting without page reload
-   */
-  private static addToLocalStorage(startup: any) {
-    try {
-      const uploadedStartups = localStorage.getItem('uploadedStartups');
-      const existing = uploadedStartups ? JSON.parse(uploadedStartups) : [];
-      
-      const newStartup = {
-        id: Date.now(),
-        name: startup.name,
-        tagline: startup.pitch,
-        pitch: startup.pitch,
-        stage: startup.stage === 'Pre-Seed' ? 1 : startup.stage === 'Seed' ? 1 : 2,
-        website: startup.website,
-        industries: [startup.industry || 'Technology'],
-        fivePoints: startup.five_points,
-        raise: startup.funding,
-        funding: startup.funding,
-        yesVotes: 0,
-        noVotes: 0,
-        hotness: 0,
-        vcBacked: startup.scraped_by,
-        entityType: startup.entityType || 'startup'
-      };
-      
-      localStorage.setItem('uploadedStartups', JSON.stringify([...existing, newStartup]));
-      console.log('✅ Added to localStorage for immediate voting');
-    } catch (error) {
-      console.error('⚠️ Could not add to localStorage:', error);
+      console.error('❌ Failed to upload startup:', data.name, error);
+      return { success: false, error: error.message || String(error) };
     }
   }
 
@@ -135,20 +96,27 @@ export class OpenAIDataService {
    * Used by BulkImport page after enrichment
    */
   static async uploadBulkStartups(startups: ScrapedStartupData[]) {
+    console.log('🚀 Starting bulk upload of', startups.length, 'startups');
+    
     const results = await Promise.all(
       startups.map(startup => this.uploadScrapedStartup(startup))
     );
 
     const successful = results.filter(r => r.success).length;
     const failed = results.filter(r => !r.success).length;
+    const errors = results.filter(r => !r.success).map(r => r.error);
 
     console.log(`📊 Bulk upload complete: ${successful} successful, ${failed} failed`);
+    if (errors.length > 0) {
+      console.error('❌ Upload errors:', errors);
+    }
     
     return {
       total: startups.length,
       successful,
       failed,
       results,
+      errors,
     };
   }
 
@@ -159,7 +127,7 @@ export class OpenAIDataService {
   static async getPendingStartups() {
     try {
       const { data, error } = await supabase
-        .from('startups')
+        .from('startup_uploads')
         .select('*')
         .eq('status', 'pending')
         .order('created_at', { ascending: false });
@@ -177,16 +145,13 @@ export class OpenAIDataService {
    * Approve and publish startup to live site
    * Combines approve + publish for simpler workflow
    */
-  static async approveAndPublish(startupId: string, reviewedBy: string) {
+  static async approveAndPublish(startupId: string, reviewedBy: string = 'admin') {
     try {
       const { data, error } = await supabase
-        .from('startups')
+        .from('startup_uploads')
         .update({
-          status: 'published',
-          validated: true,
-          reviewed_by: reviewedBy,
-          reviewed_at: new Date().toISOString(),
-          published_at: new Date().toISOString(),
+          status: 'approved',
+          updated_at: new Date().toISOString(),
         })
         .eq('id', startupId)
         .select()
@@ -194,7 +159,7 @@ export class OpenAIDataService {
 
       if (error) throw error;
       
-      console.log('✅ Startup approved and published:', data.name);
+      console.log('✅ Startup approved:', data.company_name);
       return { success: true, startup: data };
       
     } catch (error: any) {
@@ -206,14 +171,13 @@ export class OpenAIDataService {
   /**
    * Reject a scraped startup
    */
-  static async rejectStartup(startupId: string, reviewedBy: string) {
+  static async rejectStartup(startupId: string, reviewedBy: string = 'admin') {
     try {
       const { data, error } = await supabase
-        .from('startups')
+        .from('startup_uploads')
         .update({
           status: 'rejected',
-          reviewed_by: reviewedBy,
-          reviewed_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
         })
         .eq('id', startupId)
         .select()
@@ -221,7 +185,7 @@ export class OpenAIDataService {
 
       if (error) throw error;
       
-      console.log('❌ Startup rejected:', data.name);
+      console.log('❌ Startup rejected:', data.company_name);
       return { success: true, startup: data };
       
     } catch (error: any) {

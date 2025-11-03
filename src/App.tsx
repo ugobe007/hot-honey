@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Routes, Route, Link, useLocation } from 'react-router-dom';
+import { AuthProvider } from './contexts/AuthContext';
 import VotePage from './components/VotePage';
 import PortfolioPage from './pages/PortfolioPage'; // ✅ FIXED - was pointing to non-existent Portfolio
 import Submit from './pages/Submit';
@@ -28,6 +29,12 @@ import SetupPage from './pages/SetupPage';
 import InviteInvestorPage from './pages/InviteInvestorPage';
 import EditInvestorPage from './pages/EditInvestorPage';
 import EditStartups from './pages/EditStartups';
+import MigrateLocalStorage from './pages/MigrateLocalStorage';
+import MigrateStartupData from './pages/MigrateStartupData';
+import DiagnosticPage from './pages/DiagnosticPage';
+import ProfilePage from './pages/ProfilePage';
+import AdminDashboard from './pages/AdminDashboard';
+import SyncStartups from './pages/SyncStartups';
 import './App.css';
 
 const App: React.FC = () => {
@@ -38,9 +45,10 @@ const App: React.FC = () => {
   const isHomePage = (location.pathname === '/' || location.pathname === '/home');
 
   return (
-    <div className="min-h-screen">
-      {isHomePage && <WelcomeModal />}
-      {showHowItWorks && (
+    <AuthProvider>
+      <div className="min-h-screen">
+        {isHomePage && <WelcomeModal />}
+        {showHowItWorks && (
         <WelcomeModal 
           forceOpen={true} 
           onClose={() => setShowHowItWorks(false)} 
@@ -52,6 +60,7 @@ const App: React.FC = () => {
           <Route path="/home" element={<FrontPageNew />} />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/profile" element={<ProfilePage />} />
           <Route path="/vote" element={<VotePage />} />
           <Route path="/vote-demo" element={<VoteDemo />} />
           <Route path="/investors" element={<InvestorsPage />} /> {/* ✅ Investor Directory */}
@@ -73,8 +82,13 @@ const App: React.FC = () => {
           <Route path="/admin/bulk-import" element={<BulkImport />} />
           <Route path="/admin/document-upload" element={<DocumentUpload />} />
           <Route path="/admin/review" element={<AdminReview />} />
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/setup" element={<SetupPage />} />
           <Route path="/admin/edit-startups" element={<EditStartups />} />
+          <Route path="/admin/sync" element={<SyncStartups />} />
+          <Route path="/admin/migrate" element={<MigrateLocalStorage />} />
+          <Route path="/admin/migrate-data" element={<MigrateStartupData />} />
+          <Route path="/admin/diagnostic" element={<DiagnosticPage />} />
           <Route path="/setup" element={<SetupPage />} /> {/* ✅ Setup shortcut */}
           <Route path="/analytics" element={<Analytics />} />
         </Routes>
@@ -107,7 +121,8 @@ const App: React.FC = () => {
         </div>
         <p className="text-purple-200">&copy; {new Date().getFullYear()} Hot Honey. All rights reserved.</p>
       </footer>
-    </div>
+      </div>
+    </AuthProvider>
   );
 };
 

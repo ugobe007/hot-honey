@@ -5,39 +5,67 @@ import { create } from 'zustand';
 import { persist, StateStorage } from 'zustand/middleware';
 import startupData from './data/startupData';
 import { getStartupUploads } from './lib/investorService';
+import { supabase } from './lib/supabase';
 
-// Function to load approved startups from Supabase
-export async function loadApprovedStartups(): Promise<Startup[]> {
+// Function to load approved startups from Supabase with pagination
+export async function loadApprovedStartups(limit: number = 50, offset: number = 0): Promise<Startup[]> {
   try {
-    const { data, error } = await getStartupUploads('approved');
+    console.log(`📊 Loading approved startups (limit: ${limit}, offset: ${offset})`);
+    
+    // Load approved ones with pagination
+    const { data, error } = await supabase
+      .from('startup_uploads')
+      .select('*')
+      .eq('status', 'approved')
+      .order('created_at', { ascending: false })
+      .range(offset, offset + limit - 1);
     
     if (error || !data) {
-      console.error('Error loading approved startups:', error);
+      console.error('❌ Error loading approved startups:', error);
       return [];
     }
 
+    console.log(`✅ Approved startups loaded: ${data.length} (offset: ${offset}, limit: ${limit})`);
+    
+    if (data.length > 0) {
+      console.log('📦 Sample startup data:', data[0]);
+    }
+
     // Convert startup_uploads to Startup format
-    return data.map((upload: any, index: number) => ({
-      id: startupData.length + index, // Use unique IDs after static data
-      name: upload.name || 'Unnamed Startup',
-      description: upload.description || '',
-      pitch: upload.pitch || upload.tagline || '',
-      tagline: upload.tagline || '',
-      marketSize: upload.extracted_data?.marketSize || '',
-      unique: upload.extracted_data?.unique || '',
-      raise: upload.raise_amount || '',
-      stage: upload.stage || 1,
-      yesVotes: 0,
-      noVotes: 0,
-      hotness: 0,
-      answersCount: 0,
-      fivePoints: upload.extracted_data?.fivePoints || [],
-      website: upload.website,
-      linkedin: upload.linkedin,
-      comments: [],
-    }));
+    const converted = data.map((upload: any) => {
+      // Extract data from the extracted_data JSONB field
+      const extractedData = upload.extracted_data || {};
+      const fivePoints = extractedData.fivePoints || [];
+      
+      const startup = {
+        id: upload.id, // Use Supabase UUID directly - FIXED!
+        name: upload.name || 'Unnamed Startup',
+        description: upload.description || upload.pitch || upload.tagline || '',
+        pitch: upload.pitch || upload.description || upload.tagline || '',
+        tagline: upload.tagline || upload.description || '',
+        marketSize: extractedData.marketSize || '',
+        unique: extractedData.unique || '',
+        raise: upload.raise_amount || '',
+        stage: upload.stage || 1,
+        yesVotes: 0,
+        noVotes: 0,
+        hotness: 0,
+        answersCount: 0,
+        fivePoints: fivePoints,
+        website: upload.website || '',
+        linkedin: upload.linkedin || '',
+        comments: [],
+        industries: extractedData.industries || [],
+      };
+      
+      console.log(`📄 Converted startup:`, startup.name, 'UUID:', startup.id, 'Points:', fivePoints.length);
+      
+      return startup;
+    });
+    
+    return converted;
   } catch (err) {
-    console.error('Failed to load approved startups:', err);
+    console.error('💥 Failed to load approved startups:', err);
     return [];
   }
 }
