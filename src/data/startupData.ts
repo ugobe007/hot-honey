@@ -401,6 +401,74 @@ const startupData: Startup[] = [
     deck: 'https://example.com/chefie-deck.pdf',
     press: 'https://techcrunch.com/chefie',
     tech: 'React Native, GPT-4 Vision API',
+    founders: [
+      {
+        name: 'Chef Maria Santos',
+        role: 'CEO & Co-Founder',
+        background: 'Michelin-starred chef, culinary TV personality',
+        linkedIn: 'https://linkedin.com/in/mariasantos'
+      },
+      {
+        name: 'Jake Thompson',
+        role: 'CTO & Co-Founder',
+        background: 'Ex-YouTube ML Engineer, built video recommendation systems',
+        linkedIn: 'https://linkedin.com/in/jakethompson'
+      }
+    ],
+    ipFilings: [
+      {
+        type: 'patent',
+        title: 'AI-Powered Real-Time Cooking Guidance System',
+        status: 'pending',
+        date: new Date('2025-09-18'),
+        jurisdiction: 'USPTO'
+      },
+      {
+        type: 'trademark',
+        title: 'Chefie',
+        status: 'approved',
+        date: new Date('2025-08-05'),
+        jurisdiction: 'USPTO'
+      }
+    ],
+    teamHires: [
+      {
+        name: 'Emily Rodriguez',
+        role: 'Head of Content',
+        previousCompany: 'TikTok',
+        joinedDate: new Date('2025-10-08')
+      }
+    ],
+    advisors: [
+      {
+        name: 'Gordon Ramsay',
+        expertise: 'Culinary Excellence',
+        currentRole: 'Celebrity Chef',
+        company: 'Gordon Ramsay Group',
+        joinedDate: new Date('2025-09-25')
+      }
+    ],
+    boardMembers: [
+      {
+        name: 'Sarah Lee',
+        expertise: 'Consumer Tech',
+        currentRole: 'Partner',
+        company: 'Lightspeed Venture',
+        joinedDate: new Date('2025-08-20')
+      }
+    ],
+    customerTraction: [
+      {
+        metric: '100K app downloads',
+        date: new Date('2025-10-12'),
+        description: 'Hit 100,000 downloads in first 2 months'
+      },
+      {
+        metric: '25K daily active users',
+        date: new Date('2025-10-25'),
+        description: 'Strong 25% DAU/MAU ratio'
+      }
+    ]
   },
   {
     id: 5,
@@ -429,6 +497,34 @@ const startupData: Startup[] = [
     deck: 'https://example.com/hushroom-deck.pdf',
     press: 'https://techcrunch.com/hushroom',
     tech: 'Modular architecture and AR layout planning',
+    founders: [
+      {
+        name: 'Daniel Park',
+        role: 'CEO & Co-Founder',
+        background: 'Former WeWork VP of Design, RISD Industrial Design',
+        linkedIn: 'https://linkedin.com/in/danielpark'
+      }
+    ],
+    teamHires: [
+      {
+        name: 'Lisa Chen',
+        role: 'Head of Manufacturing',
+        previousCompany: 'IKEA',
+        joinedDate: new Date('2025-10-14')
+      }
+    ],
+    customerTraction: [
+      {
+        metric: '200 units sold',
+        date: new Date('2025-10-20'),
+        description: 'Sold 200 pods at $8K average price'
+      },
+      {
+        metric: '$1.6M revenue',
+        date: new Date('2025-10-28'),
+        description: 'Hit $1.6M in revenue, 40% margins'
+      }
+    ]
   },
   {
     id: 6,
@@ -457,6 +553,39 @@ const startupData: Startup[] = [
     deck: 'https://example.com/petpulse-deck.pdf',
     press: 'https://techcrunch.com/petpulse',
     tech: 'BLE sensors + AI diagnostics',
+    founders: [
+      {
+        name: 'Dr. Amy Chen',
+        role: 'CEO & Co-Founder',
+        background: 'Veterinarian + Ex-Fitbit Product Manager',
+        linkedIn: 'https://linkedin.com/in/amychen'
+      }
+    ],
+    ipFilings: [
+      {
+        type: 'patent',
+        title: 'Pet Health Monitoring Wearable Device',
+        status: 'filed',
+        date: new Date('2025-10-05'),
+        jurisdiction: 'USPTO'
+      }
+    ],
+    advisors: [
+      {
+        name: 'Dr. Jane Foster',
+        expertise: 'Veterinary Medicine',
+        currentRole: 'Chief Veterinarian',
+        company: 'PetSmart',
+        joinedDate: new Date('2025-09-12')
+      }
+    ],
+    customerTraction: [
+      {
+        metric: '5K devices pre-ordered',
+        date: new Date('2025-10-18'),
+        description: 'Kickstarter raised $400K with 5,000 pre-orders'
+      }
+    ]
   },
   {
     id: 7,
@@ -485,6 +614,38 @@ const startupData: Startup[] = [
     deck: 'https://example.com/droply-deck.pdf',
     press: 'https://techcrunch.com/droply',
     tech: 'IoT, GPS routing, and solar billing integration',
+    founders: [
+      {
+        name: 'Carlos Mendez',
+        role: 'CEO & Co-Founder',
+        background: 'Ex-UPS Operations Director, Supply Chain MBA',
+        linkedIn: 'https://linkedin.com/in/carlosmendez'
+      }
+    ],
+    teamHires: [
+      {
+        name: 'Maya Singh',
+        role: 'VP of Engineering',
+        previousCompany: 'SmartThings',
+        joinedDate: new Date('2025-09-30')
+      }
+    ],
+    boardMembers: [
+      {
+        name: 'Tom Harrison',
+        expertise: 'Logistics & Supply Chain',
+        currentRole: 'Former VP',
+        company: 'UPS',
+        joinedDate: new Date('2025-09-15')
+      }
+    ],
+    customerTraction: [
+      {
+        metric: '300 households served',
+        date: new Date('2025-10-22'),
+        description: 'Serving 300 rural households across 3 states'
+      }
+    ]
   },
   {
     id: 8,
@@ -513,6 +674,50 @@ const startupData: Startup[] = [
     deck: 'https://example.com/musenet-deck.pdf',
     press: 'https://techcrunch.com/musenet',
     tech: 'LLMs + real-time waveform synthesis',
+    founders: [
+      {
+        name: 'Nina Patel',
+        role: 'CEO & Co-Founder',
+        background: 'Ex-Spotify Product Lead, Berklee Music grad',
+        linkedIn: 'https://linkedin.com/in/ninapatel'
+      },
+      {
+        name: 'Dr. Mark Wilson',
+        role: 'Chief Science Officer',
+        background: 'Neuroscientist, Stanford Sleep Lab',
+        linkedIn: 'https://linkedin.com/in/markwilson'
+      }
+    ],
+    ipFilings: [
+      {
+        type: 'patent',
+        title: 'Biometric-Adaptive Music Generation System',
+        status: 'pending',
+        date: new Date('2025-09-28'),
+        jurisdiction: 'USPTO'
+      }
+    ],
+    advisors: [
+      {
+        name: 'Hans Zimmer',
+        expertise: 'Music Composition',
+        currentRole: 'Composer',
+        company: 'Remote Control Productions',
+        joinedDate: new Date('2025-10-01')
+      }
+    ],
+    customerTraction: [
+      {
+        metric: '75K subscribers',
+        date: new Date('2025-10-15'),
+        description: '$9.99/mo premium tier, $75K MRR'
+      },
+      {
+        metric: '4.9/5 app rating',
+        date: new Date('2025-10-25'),
+        description: 'Top wellness app on App Store'
+      }
+    ]
   },
   {
     id: 9,
@@ -541,6 +746,64 @@ const startupData: Startup[] = [
     deck: 'https://example.com/bytesize-deck.pdf',
     press: 'https://techcrunch.com/bytesize',
     tech: 'React, Node.js, and WebAssembly',
+    founders: [
+      {
+        name: 'Ryan Kim',
+        role: 'CEO & Co-Founder',
+        background: 'Ex-Google Developer Advocate, taught 1M+ students',
+        linkedIn: 'https://linkedin.com/in/ryankim'
+      },
+      {
+        name: 'Sophia Martinez',
+        role: 'CPO & Co-Founder',
+        background: 'Former Meta Product Manager, EdTech expert',
+        linkedIn: 'https://linkedin.com/in/sophiamartinez'
+      }
+    ],
+    teamHires: [
+      {
+        name: 'Alex Johnson',
+        role: 'Head of Content',
+        previousCompany: 'Udemy',
+        joinedDate: new Date('2025-10-02')
+      },
+      {
+        name: 'Emma Davis',
+        role: 'Lead Engineer',
+        previousCompany: 'Amazon',
+        joinedDate: new Date('2025-10-16')
+      }
+    ],
+    advisors: [
+      {
+        name: 'Sal Khan',
+        expertise: 'Online Education',
+        currentRole: 'Founder',
+        company: 'Khan Academy',
+        joinedDate: new Date('2025-09-20')
+      }
+    ],
+    boardMembers: [
+      {
+        name: 'Ann Chen',
+        expertise: 'EdTech Investments',
+        currentRole: 'Partner',
+        company: 'Reach Capital',
+        joinedDate: new Date('2025-09-05')
+      }
+    ],
+    customerTraction: [
+      {
+        metric: '500K monthly active learners',
+        date: new Date('2025-10-10'),
+        description: 'Growing 30% month-over-month'
+      },
+      {
+        metric: '50K paid subscribers',
+        date: new Date('2025-10-26'),
+        description: '$14.99/mo premium, $750K MRR'
+      }
+    ]
   },
   {
     id: 10,
@@ -569,6 +832,74 @@ const startupData: Startup[] = [
     deck: 'https://example.com/solarsync-deck.pdf',
     press: 'https://techcrunch.com/solarsync',
     tech: 'IoT + ML with Raspberry Pi edge devices',
+    founders: [
+      {
+        name: 'Jessica Brown',
+        role: 'CEO & Co-Founder',
+        background: 'Ex-Tesla Energy Product Manager, Cleantech MBA',
+        linkedIn: 'https://linkedin.com/in/jessicabrown'
+      },
+      {
+        name: 'Dr. Robert Lee',
+        role: 'CTO & Co-Founder',
+        background: 'Former NASA Engineer, PhD in Renewable Energy Systems',
+        linkedIn: 'https://linkedin.com/in/robertlee'
+      }
+    ],
+    ipFilings: [
+      {
+        type: 'patent',
+        title: 'AI-Based Solar Energy Load Management System',
+        status: 'filed',
+        date: new Date('2025-10-08'),
+        jurisdiction: 'USPTO'
+      },
+      {
+        type: 'trademark',
+        title: 'SolarSync',
+        status: 'approved',
+        date: new Date('2025-09-01'),
+        jurisdiction: 'USPTO'
+      }
+    ],
+    teamHires: [
+      {
+        name: 'Mike Chen',
+        role: 'Head of Sales',
+        previousCompany: 'SolarCity',
+        joinedDate: new Date('2025-10-10')
+      }
+    ],
+    advisors: [
+      {
+        name: 'Elon Musk',
+        expertise: 'Clean Energy Innovation',
+        currentRole: 'CEO',
+        company: 'Tesla',
+        joinedDate: new Date('2025-09-18')
+      }
+    ],
+    boardMembers: [
+      {
+        name: 'Patricia Wong',
+        expertise: 'Clean Energy Investments',
+        currentRole: 'Managing Partner',
+        company: 'Energy Impact Partners',
+        joinedDate: new Date('2025-08-25')
+      }
+    ],
+    customerTraction: [
+      {
+        metric: '250 home installations',
+        date: new Date('2025-10-12'),
+        description: 'Average 30% energy cost savings'
+      },
+      {
+        metric: 'Partnership with 2 utilities',
+        date: new Date('2025-10-24'),
+        description: 'Pilot programs with PG&E and SDG&E'
+      }
+    ]
   }
 ];
 
