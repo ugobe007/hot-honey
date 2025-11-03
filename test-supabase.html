@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Supabase Connection</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <h1>Supabase Data Test</h1>
+    <button onclick="testConnection()">Test Connection</button>
+    <button onclick="checkStartups()">Check Startups</button>
+    <button onclick="checkLocalStorage()">Check localStorage</button>
+    <pre id="output"></pre>
+
+    <script>
+        const SUPABASE_URL = 'https://hjwutbhqvzawtlhivqzq.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhqd3V0Ymhxdnphd3RsaGl2cXpxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzA1NzY5NjgsImV4cCI6MjA0NjE1Mjk2OH0.pZbKCE2UjW3d6iAJprzYoZb0BiwXcnHKzQP9waPB0mg';
+        
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        const output = document.getElementById('output');
+
+        async function testConnection() {
+            output.textContent = 'Testing connection...';
+            try {
+                const { data, error } = await supabase
+                    .from('startup_uploads')
+                    .select('count');
+                
+                if (error) {
+                    output.textContent = 'ERROR: ' + JSON.stringify(error, null, 2);
+                } else {
+                    output.textContent = 'SUCCESS! Connection works.\nCount result: ' + JSON.stringify(data, null, 2);
+                }
+            } catch (err) {
+                output.textContent = 'EXCEPTION: ' + err.message;
+            }
+        }
+
+        async function checkStartups() {
+            output.textContent = 'Loading all startups...';
+            try {
+                const { data, error } = await supabase
+                    .from('startup_uploads')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+                
+                if (error) {
+                    output.textContent = 'ERROR: ' + JSON.stringify(error, null, 2);
+                } else {
+                    output.textContent = `Found ${data.length} startups:\n\n` + 
+                        JSON.stringify(data.map(s => ({
+                            name: s.name,
+                            status: s.status,
+                            created: s.created_at,
+                            hasData: !!s.extracted_data
+                        })), null, 2);
+                }
+            } catch (err) {
+                output.textContent = 'EXCEPTION: ' + err.message;
+            }
+        }
+
+        function checkLocalStorage() {
+            const uploaded = localStorage.getItem('uploadedStartups');
+            if (!uploaded) {
+                output.textContent = 'No uploadedStartups in localStorage';
+                return;
+            }
+            
+            try {
+                const startups = JSON.parse(uploaded);
+                output.textContent = `Found ${startups.length} startups in localStorage:\n\n` + 
+                    JSON.stringify(startups.map(s => ({
+                        name: s.name,
+                        id: s.id,
+                        hasPoints: s.fivePoints?.length || 0
+                    })), null, 2);
+            } catch (err) {
+                output.textContent = 'Error parsing localStorage: ' + err.message;
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,25 +1,20 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 interface StartupUpload {
   id: string;
   name: string;
-  pitch?: string;
-  tagline?: string;
+  pitch: string | null;
+  tagline: string | null;
   status: string;
-  extracted_data?: {
-    fivePoints?: string[];
-    problem?: string;
-    solution?: string;
-    team?: string;
-    funding?: string;
-    industry?: string;
-  };
+  extracted_data: any;
+  admin_notes: string | null;
   created_at: string;
 }
 
 export default function EditStartups() {
+  const navigate = useNavigate();
   const [startups, setStartups] = useState<StartupUpload[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -27,6 +22,7 @@ export default function EditStartups() {
   const [saving, setSaving] = useState(false);
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [debugInfo, setDebugInfo] = useState<any>(null);
+  const [sourceFilter, setSourceFilter] = useState<string>('all'); // 'all', 'supabase', 'localStorage'
 
   useEffect(() => {
     loadStartups();
@@ -35,42 +31,35 @@ export default function EditStartups() {
   const loadStartups = async () => {
     setLoading(true);
     
-    // First, try to get ALL startups without any filter to debug
-    const { data: allData, error: allError } = await supabase
+    // Load from Supabase only
+    const { data, error } = await supabase
       .from('startup_uploads')
       .select('*')
       .order('created_at', { ascending: false });
-
-    console.log('🔍 DEBUG - All startups in database:', allData);
-    console.log('🔍 DEBUG - Error if any:', allError);
-    console.log('🔍 DEBUG - Total count:', allData?.length);
-
-    // Store debug info
-    setDebugInfo({
-      totalInDatabase: allData?.length || 0,
-      names: allData?.map(s => s.name) || [],
-      statuses: allData?.map(s => ({ name: s.name, status: s.status })) || []
-    });
-
-    let query = supabase
-      .from('startup_uploads')
-      .select('*')
-      .order('created_at', { ascending: false });
-
-    // Apply status filter if not 'all'
-    if (statusFilter !== 'all') {
-      query = query.eq('status', statusFilter);
-    }
-
-    const { data, error } = await query;
 
     if (error) {
       console.error('Error loading startups:', error);
-      alert(`Failed to load startups: ${error.message}`);
-    } else {
-      console.log('🔍 DEBUG - Filtered startups:', data);
-      setStartups(data || []);
+      alert(`Error: ${error.message}`);
+      setLoading(false);
+      return;
     }
+
+    console.log('✅ Loaded from Supabase:', data);
+
+    // Apply status filter
+    let filtered = data || [];
+    if (statusFilter !== 'all') {
+      filtered = filtered.filter(s => s.status === statusFilter);
+    }
+
+    // Store debug info
+    setDebugInfo({
+      totalInDatabase: data?.length || 0,
+      totalShowing: filtered.length,
+      statuses: (data || []).map(s => ({ name: s.name, status: s.status }))
+    });
+
+    setStartups(filtered);
     setLoading(false);
   };
 
@@ -99,6 +88,10 @@ export default function EditStartups() {
     if (!editingId || !editData) return;
 
     setSaving(true);
+    
+    const wasApproved = editData.status === 'approved';
+    
+    // Save to Supabase only
     const { error } = await supabase
       .from('startup_uploads')
       .update({
@@ -119,13 +112,24 @@ export default function EditStartups() {
 
     if (error) {
       console.error('Error saving:', error);
-      alert('Failed to save changes');
+      alert('Failed to save changes: ' + error.message);
+      setSaving(false);
+      return;
+    }
+
+    alert('✅ Saved successfully!');
+    
+    // If approved, redirect to admin dashboard
+    if (wasApproved) {
+      setTimeout(() => {
+        navigate('/admin/dashboard');
+      }, 500);
     } else {
-      alert('✅ Saved successfully!');
       await loadStartups();
       setEditingId(null);
       setEditData(null);
     }
+    
     setSaving(false);
   };
 
@@ -151,6 +155,123 @@ export default function EditStartups() {
     }
   };
 
+  const bulkApprove = async () => {
+    // Only approve startups that are 'approved' status AND not under review
+    const approvableStartups = startups.filter(s => 
+      s.status === 'approved' && 
+      !s.admin_notes?.includes('UNDER_REVIEW')
+    );
+    
+    if (approvableStartups.length === 0) {
+      alert('No startups available for bulk approval. Make sure startups are marked as "approved" and not under review.');
+      return;
+    }
+
+    if (!confirm(`Publish ${approvableStartups.length} approved startups to the Vote page?\n\n(Startups marked "Under Review" will be skipped)`)) {
+      return;
+    }
+
+    setSaving(true);
+    
+    try {
+      for (const startup of approvableStartups) {
+        // No actual status change needed since they're already approved
+        // This is just confirming they're ready for voting
+        console.log(`✅ ${startup.name} ready for voting`);
+      }
+      
+      alert(`✅ ${approvableStartups.length} startups are now live on the Vote page!`);
+      
+      // Always redirect to admin dashboard after bulk approval
+      setTimeout(() => {
+        navigate('/admin/dashboard');
+      }, 500);
+    } catch (err) {
+      alert('Error during bulk approval');
+      console.error(err);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const bulkApprovePending = async () => {
+    // Get all pending startups (not under review)
+    const pendingStartups = startups.filter(s => 
+      s.status === 'pending' && 
+      !s.admin_notes?.includes('UNDER_REVIEW')
+    );
+    
+    if (pendingStartups.length === 0) {
+      alert('No pending startups to approve.\n\nTip: Upload new startups using Bulk Import, then come here to approve them.');
+      return;
+    }
+
+    if (!confirm(`🚀 Approve & Publish ${pendingStartups.length} Startups?\n\nThis will:\n✅ Change status to "approved"\n✅ Make them visible on Vote page immediately\n✅ Users can start voting on them\n\n(Startups marked "Under Review" will be skipped)`)) {
+      return;
+    }
+
+    setSaving(true);
+    
+    try {
+      let successCount = 0;
+      let failCount = 0;
+      
+      // Update all pending startups to approved
+      for (const startup of pendingStartups) {
+        const { error } = await supabase
+          .from('startup_uploads')
+          .update({ status: 'approved' })
+          .eq('id', startup.id);
+        
+        if (error) {
+          console.error(`Failed to approve ${startup.name}:`, error);
+          failCount++;
+        } else {
+          console.log(`✅ Approved: ${startup.name}`);
+          successCount++;
+        }
+      }
+      
+      if (successCount > 0) {
+        alert(`✅ Success!\n\n${successCount} startups approved and published!\n${failCount > 0 ? `\n⚠️ ${failCount} failed (check console)` : ''}\n\nUsers can now vote on them.\n\n💡 Tip: Visit the Vote page to see how they look!`);
+        
+        // Reload to show updated statuses
+        await loadStartups();
+        
+        // Redirect to admin dashboard
+        setTimeout(() => {
+          navigate('/admin/dashboard');
+        }, 800);
+      } else {
+        alert('❌ Failed to approve any startups. Check console for errors.');
+      }
+    } catch (err) {
+      alert('Error during bulk approval');
+      console.error(err);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const toggleUnderReview = async (startup: StartupUpload) => {
+    const isCurrentlyUnderReview = startup.admin_notes?.includes('UNDER_REVIEW');
+    const newNotes = isCurrentlyUnderReview
+      ? (startup.admin_notes || '').replace('UNDER_REVIEW', '').trim()
+      : `${startup.admin_notes || ''} UNDER_REVIEW`.trim();
+
+    const { error } = await supabase
+      .from('startup_uploads')
+      .update({ admin_notes: newNotes })
+      .eq('id', startup.id);
+
+    if (error) {
+      alert('Failed to update review status');
+      console.error(error);
+    } else {
+      await loadStartups();
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-purple-900 via-purple-800 to-indigo-900 p-8 flex items-center justify-center">
@@ -164,57 +285,88 @@ export default function EditStartups() {
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-5xl font-bold text-white">✏️ Edit Startups</h1>
-          <Link
-            to="/"
-            className="px-6 py-3 bg-white/20 hover:bg-white/30 text-white font-bold rounded-xl transition-all"
-          >
-            ← Back
-          </Link>
+          <div className="flex gap-3">
+            <Link
+              to="/admin/migrate-data"
+              className="px-6 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white font-bold rounded-xl transition-all shadow-lg"
+            >
+              🔄 Migrate Code to DB
+            </Link>
+            <Link
+              to="/admin/sync"
+              className="px-6 py-3 bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white font-bold rounded-xl transition-all shadow-lg"
+            >
+              🔄 Sync from Code
+            </Link>
+            <Link
+              to="/admin/migrate"
+              className="px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl transition-all shadow-lg"
+            >
+              � Migrate localStorage
+            </Link>
+            <Link
+              to="/"
+              className="px-6 py-3 bg-white/20 hover:bg-white/30 text-white font-bold rounded-xl transition-all"
+            >
+              ← Back
+            </Link>
+          </div>
         </div>
 
         {/* Status Filter */}
         <div className="bg-white/10 backdrop-blur-lg rounded-xl p-4 mb-6 border border-white/20">
-          <div className="flex items-center gap-4">
-            <span className="text-white font-bold">Filter by Status:</span>
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <span className="text-white font-bold">Filter by Status:</span>
+              <button
+                onClick={() => setStatusFilter('all')}
+                className={`px-4 py-2 rounded-lg font-semibold transition-all ${
+                  statusFilter === 'all'
+                    ? 'bg-white text-purple-600'
+                    : 'bg-white/20 text-white hover:bg-white/30'
+                }`}
+              >
+                All ({startups.length})
+              </button>
+              <button
+                onClick={() => setStatusFilter('pending')}
+                className={`px-4 py-2 rounded-lg font-semibold transition-all ${
+                  statusFilter === 'pending'
+                    ? 'bg-yellow-500 text-white'
+                    : 'bg-white/20 text-white hover:bg-white/30'
+                }`}
+              >
+                Pending
+              </button>
+              <button
+                onClick={() => setStatusFilter('approved')}
+                className={`px-4 py-2 rounded-lg font-semibold transition-all ${
+                  statusFilter === 'approved'
+                    ? 'bg-green-500 text-white'
+                    : 'bg-white/20 text-white hover:bg-white/30'
+                }`}
+              >
+                Approved
+              </button>
+              <button
+                onClick={() => setStatusFilter('rejected')}
+                className={`px-4 py-2 rounded-lg font-semibold transition-all ${
+                  statusFilter === 'rejected'
+                    ? 'bg-red-500 text-white'
+                    : 'bg-white/20 text-white hover:bg-white/30'
+                }`}
+              >
+                Rejected
+              </button>
+            </div>
+            
+            {/* Primary Bulk Approve Button - For Pending Startups */}
             <button
-              onClick={() => setStatusFilter('all')}
-              className={`px-4 py-2 rounded-lg font-semibold transition-all ${
-                statusFilter === 'all'
-                  ? 'bg-white text-purple-600'
-                  : 'bg-white/20 text-white hover:bg-white/30'
-              }`}
+              onClick={bulkApprovePending}
+              disabled={saving || startups.filter(s => s.status === 'pending' && !s.admin_notes?.includes('UNDER_REVIEW')).length === 0}
+              className="px-8 py-3 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed text-white font-bold rounded-xl transition-all shadow-xl text-lg"
             >
-              All ({startups.length})
-            </button>
-            <button
-              onClick={() => setStatusFilter('pending')}
-              className={`px-4 py-2 rounded-lg font-semibold transition-all ${
-                statusFilter === 'pending'
-                  ? 'bg-yellow-500 text-white'
-                  : 'bg-white/20 text-white hover:bg-white/30'
-              }`}
-            >
-              Pending
-            </button>
-            <button
-              onClick={() => setStatusFilter('approved')}
-              className={`px-4 py-2 rounded-lg font-semibold transition-all ${
-                statusFilter === 'approved'
-                  ? 'bg-green-500 text-white'
-                  : 'bg-white/20 text-white hover:bg-white/30'
-              }`}
-            >
-              Approved
-            </button>
-            <button
-              onClick={() => setStatusFilter('rejected')}
-              className={`px-4 py-2 rounded-lg font-semibold transition-all ${
-                statusFilter === 'rejected'
-                  ? 'bg-red-500 text-white'
-                  : 'bg-white/20 text-white hover:bg-white/30'
-              }`}
-            >
-              Rejected
+              {saving ? '⏳ Approving...' : `🚀 Bulk Approve & Publish (${startups.filter(s => s.status === 'pending' && !s.admin_notes?.includes('UNDER_REVIEW')).length})`}
             </button>
           </div>
         </div>
@@ -222,29 +374,32 @@ export default function EditStartups() {
         {/* Debug Panel */}
         {debugInfo && (
           <div className="bg-yellow-500/20 border-2 border-yellow-400 rounded-xl p-4 mb-6">
-            <h3 className="text-yellow-300 font-bold mb-2">🔍 Debug Info:</h3>
-            <p className="text-white">
-              <strong>Total in database:</strong> {debugInfo.totalInDatabase} startups
-            </p>
-            <p className="text-white">
-              <strong>Showing filtered:</strong> {startups.length} startups
-            </p>
-            {debugInfo.statuses.length > 0 && (
-              <div className="mt-2">
-                <p className="text-white font-bold">All startups in DB:</p>
-                <ul className="text-white text-sm">
-                  {debugInfo.statuses.map((item: any, i: number) => (
-                    <li key={i}>
-                      • {item.name} - <span className={`font-bold ${
-                        item.status === 'approved' ? 'text-green-400' :
-                        item.status === 'pending' ? 'text-yellow-400' :
-                        'text-red-400'
-                      }`}>{item.status}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
+            <h3 className="text-yellow-300 font-bold mb-2">🗄️ Database Info:</h3>
+            <div className="text-white space-y-2">
+              <p>
+                <strong>Total in Database:</strong> {debugInfo.totalInDatabase} startups
+              </p>
+              <p>
+                <strong>Showing after filter:</strong> {debugInfo.totalShowing} startups
+              </p>
+              {debugInfo.statuses && debugInfo.statuses.length > 0 && (
+                <div className="mt-3 pt-3 border-t border-yellow-400/30">
+                  <p className="font-bold mb-2">All Startups:</p>
+                  <ul className="text-sm space-y-1">
+                    {debugInfo.statuses.map((item: any, i: number) => (
+                      <li key={i}>
+                        • <span className="text-yellow-200">{item.name}</span> - 
+                        <span className={`ml-1 font-bold ${
+                          item.status === 'approved' ? 'text-green-400' :
+                          item.status === 'pending' ? 'text-yellow-400' :
+                          'text-red-400'
+                        }`}>{item.status}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
           </div>
         )}
 
@@ -392,8 +547,24 @@ export default function EditStartups() {
                 // VIEW MODE
                 <div>
                   <div className="flex justify-between items-start mb-4">
-                    <div>
-                      <h2 className="text-2xl font-bold text-white">{startup.name}</h2>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-3 mb-2">
+                        <h2 className="text-2xl font-bold text-white">{startup.name}</h2>
+                        
+                        {/* Under Review Checkbox */}
+                        <label className="flex items-center gap-2 cursor-pointer bg-purple-500/30 hover:bg-purple-500/50 px-3 py-1 rounded-lg transition-all">
+                          <input
+                            type="checkbox"
+                            checked={startup.admin_notes?.includes('UNDER_REVIEW') || false}
+                            onChange={() => toggleUnderReview(startup)}
+                            className="w-4 h-4 cursor-pointer"
+                          />
+                          <span className="text-sm font-semibold text-white">
+                            🔍 Under Review
+                          </span>
+                        </label>
+                      </div>
+                      
                       <p className="text-orange-400 font-semibold">{startup.tagline || startup.pitch}</p>
                       <div className="flex items-center gap-2 mt-2">
                         <span className={`px-3 py-1 rounded-full text-xs font-bold ${
@@ -407,9 +578,14 @@ export default function EditStartups() {
                            startup.status === 'rejected' ? '❌ REJECTED' :
                            '👀 REVIEWING'}
                         </span>
-                        {startup.status === 'approved' && (
+                        {startup.status === 'approved' && !startup.admin_notes?.includes('UNDER_REVIEW') && (
                           <span className="text-xs text-green-400 font-semibold">
-                            🎯 In voting rotation
+                            🎯 Live on Vote page
+                          </span>
+                        )}
+                        {startup.admin_notes?.includes('UNDER_REVIEW') && (
+                          <span className="text-xs text-purple-400 font-semibold">
+                            🔍 Excluded from bulk publish
                           </span>
                         )}
                       </div>

@@ -502,42 +502,14 @@ Fill ONLY the EMPTY fields with your research. Return JSON with ALL fields fille
         throw new Error(supabaseError.message);
       }
 
-      console.log('Startup saved to Supabase:', supabaseData);
+      console.log('✅ Startup saved to Supabase:', supabaseData);
 
-      // Also save to localStorage for backward compatibility
-      const newStartup = {
-        id: Date.now(),
-        name: formData.name,
-        tagline: formData.valueProp,
-        pitch: formData.valueProp || `${formData.problem} | ${formData.solution}`,
-        stage: formData.stage === 'Pre-Seed' ? 1 : formData.stage === 'Seed' ? 1 : formData.stage === 'Series A' ? 2 : 1,
-        team: formData.team,
-        funding: formData.funding,
-        raise: formData.funding,
-        website: formData.website,
-        industries: formData.industry ? [formData.industry] : [],
-        problem: formData.problem,
-        solution: formData.solution,
-        founderName: formData.founderName,
-        founderEmail: formData.founderEmail,
-        presentationUrl: formData.presentationUrl,
-        videoUrl: formData.videoUrl,
-        fivePoints: fivePointsArray,
-        yesVotes: 0,
-        noVotes: 0,
-        hotness: 0,
-      };
-
-      const uploadedStartups = localStorage.getItem('uploadedStartups');
-      const startups = uploadedStartups ? JSON.parse(uploadedStartups) : [];
-      startups.push(newStartup);
-      localStorage.setItem('uploadedStartups', JSON.stringify(startups));
-
-      setSubmitted(true);
+      // Show success alert and navigate immediately
+      alert(`🎉 Success!\n\n${formData.name} has been submitted and is now live on the Vote page!\n\nUsers can start voting on it immediately.`);
       
-      setTimeout(() => {
-        navigate('/vote');
-      }, 3000);
+      // Navigate directly to vote page
+      navigate('/vote');
+      
     } catch (err: any) {
       console.error('Error submitting startup:', err);
       setError(err.message || 'Failed to submit startup. Please try again.');
@@ -545,31 +517,6 @@ Fill ONLY the EMPTY fields with your research. Return JSON with ALL fields fille
       setLoading(false);
     }
   };
-
-  if (submitted) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-purple-800 to-indigo-900 flex items-center justify-center p-8">
-        <div className="bg-white rounded-3xl p-12 shadow-2xl text-center max-w-2xl">
-          <div className="text-8xl mb-6">🎉</div>
-          <h1 className="text-4xl font-bold text-orange-600 mb-4">
-            Submission Received!
-          </h1>
-          <p className="text-xl text-gray-700 mb-6">
-            Thank you for submitting <strong>{formData.name}</strong>!
-          </p>
-          <p className="text-lg text-gray-600 mb-8">
-            Your startup is now in our system. Get ready to get Hot! 🔥
-          </p>
-          <button
-            onClick={() => navigate('/vote-demo')}
-            className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-4 px-8 rounded-2xl shadow-lg transition-all text-lg"
-          >
-            See Other Hot Startups →
-          </button>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-purple-800 to-indigo-900 p-8">
@@ -582,26 +529,12 @@ Fill ONLY the EMPTY fields with your research. Return JSON with ALL fields fille
           >
             ← Home
           </button>
-          <div className="flex gap-3">
-            <button
-              onClick={() => navigate('/admin/bulk-import')}
-              className="bg-purple-500 hover:bg-purple-600 text-white font-bold py-3 px-6 rounded-2xl shadow-lg transition-all text-sm"
-            >
-              🚀 Bulk Import
-            </button>
-            <button
-              onClick={() => {
-                if (confirm('Clear all uploaded startups? This cannot be undone.')) {
-                  localStorage.removeItem('uploadedStartups');
-                  alert('✅ All uploaded startups cleared!');
-                  window.location.reload();
-                }
-              }}
-              className="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-2xl shadow-lg transition-all text-sm"
-            >
-              🗑️ Clear Uploads
-            </button>
-          </div>
+          <button
+            onClick={() => navigate('/admin/bulk-import')}
+            className="bg-purple-500 hover:bg-purple-600 text-white font-bold py-3 px-6 rounded-2xl shadow-lg transition-all text-sm"
+          >
+            🚀 Bulk Import
+          </button>
         </div>
 
         {/* Header */}

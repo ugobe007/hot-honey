@@ -205,8 +205,8 @@ export default function BulkImport() {
       const websitePrompt = `${entityType === 'startup' ? 'Company' : entityType === 'vc_firm' ? 'VC Firm' : 'Accelerator'}: ${company.name}\nWebsite: ${company.website}\n${company.tagline || ''}`;
 
       const systemPrompt = entityType === 'startup' 
-        ? `Create a 5-point StartupCard for this company. Return JSON with: pitch (catchy tagline), fivePoints (array of 5: problem, solution, market, team, raise), industry, stage, funding`
-        : `Create a 5-point profile for this ${entityType === 'vc_firm' ? 'venture capital firm' : 'accelerator'}. Return JSON with: pitch (description), fivePoints (array of 5: investment focus, portfolio size, check size/stage, notable exits, geographic presence), industry (set to "Venture Capital"), stage (set to "N/A"), funding (set to "N/A")`;
+        ? `Create a 5-point StartupCard for this company. Return JSON with: pitch (catchy tagline as string), fivePoints (array of 5 SHORT strings like ["Problem they solve", "Their solution", "Market size", "Team background", "Funding amount"]), industry (string), stage (string), funding (string)`
+        : `Create a 5-point profile for this ${entityType === 'vc_firm' ? 'venture capital firm' : 'accelerator'}. Return JSON with: pitch (description as string), fivePoints (array of 5 SHORT strings like ["Investment focus", "Portfolio size", "Check size", "Notable exits", "Geographic presence"]), industry (set to "Venture Capital"), stage (set to "N/A"), funding (set to "N/A")`;
 
       const response = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
@@ -237,11 +237,23 @@ export default function BulkImport() {
       const data = await response.json();
       const parsed = JSON.parse(data.choices[0].message.content);
 
+      // Ensure fivePoints is an array of strings, not objects
+      let fivePoints = parsed.fivePoints || [];
+      if (fivePoints.length > 0 && typeof fivePoints[0] === 'object') {
+        // Convert objects to strings (e.g., {problem: "text"} becomes "text")
+        fivePoints = fivePoints.map((point: any) => {
+          if (typeof point === 'string') return point;
+          // Get the first value from the object
+          const values = Object.values(point);
+          return values[0] || '';
+        });
+      }
+
       return {
         ...company,
         entityType,
         pitch: parsed.pitch || company.tagline || `${company.name} - ${entityType === 'startup' ? 'Innovative startup' : entityType === 'vc_firm' ? 'VC Firm' : 'Accelerator'}`,
-        fivePoints: parsed.fivePoints || [],
+        fivePoints: fivePoints,
         industry: parsed.industry || (entityType === 'startup' ? 'Technology' : 'Venture Capital'),
         funding: parsed.funding || (entityType === 'startup' ? '$2M Seed' : 'N/A'),
         stage: parsed.stage || (entityType === 'startup' ? 'Seed' : 'N/A')
@@ -270,10 +282,15 @@ export default function BulkImport() {
   const handleEnrichAll = async () => {
     console.log('🤖 Starting enrichment for', scrapedCompanies.length, 'companies');
     console.log('📋 Companies to enrich:', scrapedCompanies);
+    console.log('🔑 API Key exists:', !!import.meta.env.VITE_OPENAI_API_KEY);
+    console.log('🔍 Current step BEFORE:', currentStep);
     
     setIsEnriching(true);
-    setCurrentStep('enriching');
+    // Keep on 'review' step so UI stays visible during enrichment
     const enriched: EnrichedCompany[] = [];
+    let errors = 0;
+
+    console.log('🔍 Current step AFTER setIsEnriching:', currentStep);
 
     for (let i = 0; i < scrapedCompanies.length; i++) {
       const company = scrapedCompanies[i];
@@ -294,7 +311,9 @@ export default function BulkImport() {
           await new Promise(resolve => setTimeout(resolve, 2000));
         }
       } catch (error) {
+        errors++;
         console.error(`❌ Error enriching ${company.name}:`, error);
+        alert(`⚠️ Failed to enrich "${company.name}". Error: ${error}\n\nContinuing with remaining companies...`);
         // Continue with next company even if one fails
       }
     }
@@ -302,10 +321,21 @@ export default function BulkImport() {
     console.log('✅ All enrichment complete:', enriched.length, 'companies');
     console.log('📦 Final enriched data:', enriched);
     
+    if (enriched.length === 0) {
+      alert('❌ No companies were successfully enriched. Check your OpenAI API key and try again.');
+      setIsEnriching(false);
+      setCurrentStep('review');
+      return;
+    }
+    
     // Final state update
     setEnrichedCompanies(enriched);
     setIsEnriching(false);
     setCurrentStep('review');
+    
+    if (errors > 0) {
+      alert(`⚠️ Enrichment complete with ${errors} error(s).\n✅ Successfully enriched: ${enriched.length} companies`);
+    }
     
     // Force a small delay to ensure state updates
     setTimeout(() => {
@@ -315,6 +345,9 @@ export default function BulkImport() {
   };
 
   const handleImportAll = async () => {
+    console.log('🚀 Starting import of', enrichedCompanies.length, 'companies');
+    console.log('📦 Data to upload:', enrichedCompanies);
+    
     setLoading(true);
     
     try {
@@ -333,44 +366,34 @@ export default function BulkImport() {
         }))
       );
       
+      console.log(`✅ Upload results:`, results);
       console.log(`✅ Uploaded ${results.successful}/${results.total} to Supabase`);
       
-      // Also keep in localStorage for immediate access (will be removed later)
-      const uploadedStartups = localStorage.getItem('uploadedStartups');
-      const existing = uploadedStartups ? JSON.parse(uploadedStartups) : [];
+      if (results.successful === 0) {
+        const errorDetails = results.errors?.join('\n') || 'Unknown error';
+        alert(`❌ Failed to upload any startups!\n\nErrors:\n${errorDetails}\n\nCheck the browser console (F12) for more details.`);
+        setLoading(false);
+        return;
+      }
       
-      const newStartups = enrichedCompanies.map((company, index) => ({
-        id: Date.now() + index,
-        name: company.name,
-        tagline: company.pitch,
-        pitch: company.pitch,
-        stage: company.stage === 'Pre-Seed' ? 1 : company.stage === 'Seed' ? 1 : 2,
-        website: company.website,
-        industries: [company.industry],
-        fivePoints: company.fivePoints,
-        raise: company.funding,
-        funding: company.funding,
-        yesVotes: 0,
-        noVotes: 0,
-        hotness: 0,
-        vcBacked: company.vcSource,
-        entityType: company.entityType || 'startup'
-      }));
-
-      localStorage.setItem('uploadedStartups', JSON.stringify([...existing, ...newStartups]));
+      if (results.failed > 0) {
+        const errorDetails = results.errors?.slice(0, 3).join('\n') || 'Some uploads failed';
+        alert(`⚠️ Partial success:\n✅ ${results.successful} uploaded\n❌ ${results.failed} failed\n\nFirst errors:\n${errorDetails}`);
+      }
       
-      const startupCount = newStartups.filter(s => s.entityType === 'startup').length;
-      const vcCount = newStartups.filter(s => s.entityType === 'vc_firm').length;
-      const acceleratorCount = newStartups.filter(s => s.entityType === 'accelerator').length;
+      // Count entities
+      const startupCount = enrichedCompanies.filter(c => c.entityType === 'startup').length;
+      const vcCount = enrichedCompanies.filter(c => c.entityType === 'vc_firm').length;
+      const acceleratorCount = enrichedCompanies.filter(c => c.entityType === 'accelerator').length;
       
       let message = `✅ Successfully imported to Supabase:\n`;
       if (startupCount > 0) message += `• ${startupCount} startup${startupCount > 1 ? 's' : ''}\n`;
       if (vcCount > 0) message += `• ${vcCount} VC firm${vcCount > 1 ? 's' : ''}\n`;
       if (acceleratorCount > 0) message += `• ${acceleratorCount} accelerator${acceleratorCount > 1 ? 's' : ''}\n`;
-      message += `\nStartups are pending admin review.\n\nGo to Admin Review to approve and publish them.`;
+      message += `\nAll items are pending review.\n\n🎯 Taking you to Admin Dashboard!\n💡 Go to "Edit Startups" to bulk approve them.`;
       
       alert(message);
-      navigate('/admin/review');
+      navigate('/admin/dashboard');
       
     } catch (error) {
       console.error('❌ Failed to import:', error);
@@ -636,14 +659,14 @@ export default function BulkImport() {
 
         {/* Step 2: Review & Enrich */}
         {currentStep === 'review' && scrapedCompanies.length > 0 && (
-          <div className="space-y-6">
+          <div className="space-y-6" key="review-section">
             <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 border-2 border-purple-400">
               <h2 className="text-3xl font-bold text-white mb-4">
                 ✅ Found {scrapedCompanies.length} Companies
               </h2>
               
-              <div className="mb-6 max-h-96 overflow-y-auto space-y-2">
-                {scrapedCompanies.map((company, i) => {
+              <div className="mb-6 max-h-96 overflow-y-auto space-y-2"
+key="companies-list">{scrapedCompanies.map((company, i) => {
                   const entityType = company.entityType || 'startup';
                   const entityIcon = entityType === 'vc_firm' ? '💼' : entityType === 'accelerator' ? '🚀' : '🏢';
                   const entityLabel = entityType === 'vc_firm' ? 'VC Firm' : entityType === 'accelerator' ? 'Accelerator' : 'Startup';
@@ -673,17 +696,33 @@ export default function BulkImport() {
                 })}
               </div>
 
-              {enrichedCompanies.length === 0 && (
+              {/* Progress notification - always show when enriching */}
+              {isEnriching && (
+                <div className="mb-6 bg-orange-500/20 border-2 border-orange-400 rounded-2xl p-6 text-center animate-pulse">
+                  <h3 className="text-white text-2xl font-bold mb-2">
+                    🤖 AI is analyzing each company...
+                  </h3>
+                  <p className="text-orange-200 mb-3">
+                    This takes about 2 seconds per company. Please wait...
+                  </p>
+                  <div className="text-3xl font-bold text-orange-300">
+                    {enrichedCompanies.length} / {scrapedCompanies.length} completed
+                  </div>
+                </div>
+              )}
+
+              {/* Show Enrich button only when not enriching and no enriched companies */}
+              {!isEnriching && enrichedCompanies.length === 0 && (
                 <button
                   onClick={handleEnrichAll}
-                  disabled={isEnriching}
-                  className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-4 px-8 rounded-2xl shadow-lg transition-all text-lg w-full disabled:opacity-50"
+                  className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-4 px-8 rounded-2xl shadow-lg transition-all text-lg w-full"
                 >
-                  {isEnriching ? '🤖 AI is analyzing each company...' : '🤖 Enrich All with AI (Creates 5 Points)'}
+                  🤖 Enrich All with AI (Creates 5 Points)
                 </button>
               )}
 
-              {enrichedCompanies.length > 0 && (
+              {/* Show Import button only when done enriching and have enriched companies */}
+              {!isEnriching && enrichedCompanies.length > 0 && (
                 <button
                   onClick={handleImportAll}
                   className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-4 px-8 rounded-2xl shadow-lg transition-all text-lg w-full"

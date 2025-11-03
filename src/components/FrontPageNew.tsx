@@ -1,23 +1,68 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import StartupCardOfficial from './StartupCardOfficial';
 import AdminNav from './AdminNav';
 import startupData from '../data/startupData';
 import { loadApprovedStartups } from '../store';
 
 const FrontPageNew: React.FC = () => {
+  const navigate = useNavigate();
+  const { isLoggedIn, user, logout } = useAuth();
   const [currentStartupIndices, setCurrentStartupIndices] = useState([0, 1, 2]);
   const [startups, setStartups] = useState(startupData);
+  const [votedStartupIds, setVotedStartupIds] = useState<Set<number>>(new Set());
   const [nextAvailableIndex, setNextAvailableIndex] = useState(3);
   const [slidingCards, setSlidingCards] = useState<number[]>([]);
 
-  // Load approved startups from database on mount
+  // Load approved startups from database on mount and load voted IDs
   useEffect(() => {
     const loadStartups = async () => {
       const approvedStartups = await loadApprovedStartups();
       const allStartups = [...startupData, ...approvedStartups];
+      
+      // Check for duplicate IDs and log them
+      const idCounts = new Map<number, number>();
+      allStartups.forEach(startup => {
+        idCounts.set(startup.id, (idCounts.get(startup.id) || 0) + 1);
+      });
+      
+      const duplicates = Array.from(idCounts.entries()).filter(([_, count]) => count > 1);
+      if (duplicates.length > 0) {
+        console.warn('⚠️ Duplicate startup IDs found:', duplicates);
+      }
+      
+      console.log('📊 Total startups loaded:', allStartups.length);
+      console.log('📦 From static data:', startupData.length);
+      console.log('📦 From database:', approvedStartups.length);
+      
       setStartups(allStartups);
-      setNextAvailableIndex(Math.min(3, allStartups.length));
+      
+      // Load previously voted startup IDs from localStorage
+      const votedIds = JSON.parse(localStorage.getItem('votedStartups') || '[]');
+      setVotedStartupIds(new Set(votedIds.map((id: string) => parseInt(id))));
+      
+      // Find first 3 unvoted startup indices
+      const unvotedIndices: number[] = [];
+      for (let i = 0; i < allStartups.length && unvotedIndices.length < 3; i++) {
+        if (!votedIds.includes(allStartups[i].id.toString())) {
+          unvotedIndices.push(i);
+        }
+      }
+      
+      // Ensure we have 3 different indices
+      while (unvotedIndices.length < 3 && unvotedIndices.length < allStartups.length) {
+        unvotedIndices.push(unvotedIndices.length);
+      }
+      
+      if (unvotedIndices.length >= 3) {
+        setCurrentStartupIndices(unvotedIndices.slice(0, 3));
+        setNextAvailableIndex(unvotedIndices.length < allStartups.length ? unvotedIndices[2] + 1 : 0);
+      } else {
+        // Fallback if not enough startups
+        setCurrentStartupIndices([0, Math.min(1, allStartups.length - 1), Math.min(2, allStartups.length - 1)]);
+        setNextAvailableIndex(3);
+      }
     };
     loadStartups();
   }, []);
@@ -35,11 +80,23 @@ const FrontPageNew: React.FC = () => {
       )
     );
 
+    // Mark this startup as voted
+    setVotedStartupIds(prev => {
+      const newSet = new Set(prev);
+      newSet.add(startupId);
+      
+      // Save to localStorage
+      const votedIds = Array.from(newSet).map(id => id.toString());
+      localStorage.setItem('votedStartups', JSON.stringify(votedIds));
+      
+      return newSet;
+    });
+
     // Save YES votes to localStorage for dashboard
     if (vote === 'yes') {
       const yesVotes = localStorage.getItem('myYesVotes');
       const yesVotesList = yesVotes ? JSON.parse(yesVotes) : [];
-      const startup = startupData.find(s => s.id === startupId);
+      const startup = startups.find(s => s.id === startupId);
       
       if (startup) {
         yesVotesList.push({
@@ -48,7 +105,7 @@ const FrontPageNew: React.FC = () => {
           pitch: startup.pitch,
           tagline: startup.tagline,
           stage: startup.stage,
-          fivePoints: startup.fivePoints, // Include full fivePoints array
+          fivePoints: startup.fivePoints,
           votedAt: new Date().toISOString()
         });
         localStorage.setItem('myYesVotes', JSON.stringify(yesVotesList));
@@ -63,19 +120,65 @@ const FrontPageNew: React.FC = () => {
     setTimeout(() => {
       setCurrentStartupIndices(prev => {
         const newIndices = [...prev];
+        
+        // Shift cards up
         for (let i = cardPosition; i < 2; i++) {
           newIndices[i] = prev[i + 1];
         }
-        newIndices[2] = nextAvailableIndex % startupData.length;
+        
+        // Find next unvoted startup
+        let nextIndex = nextAvailableIndex;
+        while (nextIndex < startups.length && votedStartupIds.has(startups[nextIndex].id)) {
+          nextIndex++;
+        }
+        
+        // Add the next unvoted startup or cycle back to start if we've voted on all
+        if (nextIndex >= startups.length) {
+          // We've gone through all startups, find first unvoted from beginning
+          nextIndex = 0;
+          while (nextIndex < startups.length && votedStartupIds.has(startups[nextIndex].id)) {
+            nextIndex++;
+          }
+          
+          if (nextIndex >= startups.length) {
+            // All startups have been voted on!
+            console.log('All startups have been voted on!');
+            nextIndex = 0; // Reset to beginning (or show a message)
+          }
+        }
+        
+        // Ensure we don't duplicate cards - check if nextIndex is already showing
+        const currentlyShowing = [newIndices[0], newIndices[1]];
+        while (currentlyShowing.includes(nextIndex) && nextIndex < startups.length) {
+          nextIndex++;
+          // If we've checked all startups, loop back
+          if (nextIndex >= startups.length) {
+            nextIndex = 0;
+          }
+          // Skip voted startups
+          while (nextIndex < startups.length && votedStartupIds.has(startups[nextIndex].id)) {
+            nextIndex++;
+          }
+        }
+        
+        newIndices[2] = nextIndex;
+        setNextAvailableIndex(nextIndex + 1);
+        
         return newIndices;
       });
       
-      setNextAvailableIndex(prev => prev + 1);
       setSlidingCards([]);
     }, 250);
   };
 
-  const displayedStartups = currentStartupIndices.map(index => startups[index]);
+  const displayedStartups = currentStartupIndices
+    .map(index => startups[index])
+    .filter((startup, idx, arr) => {
+      // Remove duplicates - only show if it's the first occurrence of this ID
+      if (!startup) return false;
+      const firstIdx = arr.findIndex(s => s && s.id === startup.id);
+      return firstIdx === idx;
+    });
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-green-400 to-purple-950" style={{ backgroundImage: 'radial-gradient(ellipse 800px 600px at 20% 40%, rgba(134, 239, 172, 0.4), transparent), linear-gradient(to bottom right, rgb(88, 28, 135), rgb(59, 7, 100))' }}>
@@ -129,14 +232,39 @@ const FrontPageNew: React.FC = () => {
         </div>
       </div>
 
-      {/* Log In button in upper right corner */}
-      <div className="fixed top-4 right-8 z-50">
-        <Link 
-          to="/login" 
-          className="px-6 py-2 bg-white text-purple-700 rounded-full font-bold text-sm shadow-lg hover:bg-gray-100 transition-all border-2 border-purple-300"
-        >
-          🔑 Log In
-        </Link>
+      {/* Dynamic Login/Logout button in upper right corner */}
+      <div className="fixed top-4 right-8 z-50 flex flex-col items-end gap-2">
+        {isLoggedIn ? (
+          <>
+            <button
+              onClick={() => {
+                logout();
+                navigate('/');
+              }}
+              className="px-6 py-2 bg-white text-purple-700 rounded-full font-bold text-sm shadow-lg hover:bg-gray-100 transition-all border-2 border-purple-300"
+            >
+              � Log Out
+            </button>
+            <Link
+              to="/profile"
+              className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-full font-semibold text-sm shadow-lg hover:bg-purple-700 transition-all"
+            >
+              {user?.isAdmin ? (
+                <img src="/images/Mr_Bee_Head.jpg" alt="Profile" className="w-8 h-8 object-contain" />
+              ) : (
+                <span>👨‍💼</span>
+              )}
+              <span>Profile</span>
+            </Link>
+          </>
+        ) : (
+          <Link 
+            to="/login" 
+            className="px-6 py-2 bg-white text-purple-700 rounded-full font-bold text-sm shadow-lg hover:bg-gray-100 transition-all border-2 border-purple-300"
+          >
+            🔑 Log In
+          </Link>
+        )}
       </div>
 
       <div className="pt-28 px-8">

@@ -1,86 +1,123 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import StartupCardOfficial from './StartupCardOfficial';
 import VCFirmCard from './VCFirmCard';
-import startupData from '../data/startupData';
+import { loadApprovedStartups } from '../store';
+import { saveVote, hasVoted, getYesVotes } from '../lib/voteService';
 
 const VotePage: React.FC = () => {
-  const [votedStartupIds, setVotedStartupIds] = useState<number[]>([]);
-  const [unvotedStartups, setUnvotedStartups] = useState(startupData);
-  const [totalStartupCount, setTotalStartupCount] = useState(startupData.length);
+  const [unvotedStartups, setUnvotedStartups] = useState<any[]>([]);
+  const [totalStartupCount, setTotalStartupCount] = useState(0);
   const [showFiltered, setShowFiltered] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [offset, setOffset] = useState(0);
+  const BATCH_SIZE = 20; // Load 20 startups at a time
+  
+  const loadMoreRef = useRef<HTMLDivElement>(null);
 
-  // Load voted startup IDs from localStorage on mount
-  useEffect(() => {
-    const voted = localStorage.getItem('votedStartups');
-    const preferences = localStorage.getItem('investorPreferences');
-    
-    // Merge uploaded startups with default startupData
-    const uploadedStartups = localStorage.getItem('uploadedStartups');
-    let allStartups = [...startupData];
-    
-    if (uploadedStartups) {
-      const uploaded = JSON.parse(uploadedStartups);
-      allStartups = [...allStartups, ...uploaded];
-    }
-    
-    // Set total count for tracking
-    setTotalStartupCount(allStartups.length);
-    
-    let filteredStartups = allStartups;
-
-    // Apply industry filter if enabled
-    if (preferences) {
-      const prefs = JSON.parse(preferences);
-      if (prefs.filterEnabled && prefs.industries && prefs.industries.length > 0) {
-        setShowFiltered(true);
-        filteredStartups = allStartups.filter(startup => {
-          // If startup has no industries tagged, show it anyway
-          if (!startup.industries || startup.industries.length === 0) return true;
-          // Check if any of startup's industries match investor's preferences
-          return startup.industries.some(ind => prefs.industries.includes(ind));
-        });
-      }
-    }
-
-    if (voted) {
-      const votedIds = JSON.parse(voted);
-      setVotedStartupIds(votedIds);
-      
-      // Filter out already voted startups
-      const unvoted = filteredStartups.filter(s => !votedIds.includes(s.id));
-      setUnvotedStartups(unvoted);
+  // Load startups with pagination
+  const loadStartups = useCallback(async (isLoadMore = false) => {
+    if (isLoadMore) {
+      setLoadingMore(true);
     } else {
-      setUnvotedStartups(filteredStartups);
+      setLoading(true);
     }
+    
+    try {
+      const currentOffset = isLoadMore ? offset : 0;
+      const preferences = localStorage.getItem('investorPreferences');
+      
+      // Load startups from Supabase with pagination
+      const approvedStartups = await loadApprovedStartups(BATCH_SIZE, currentOffset);
+      
+      console.log(`🗳️ VotePage loaded ${approvedStartups.length} startups (offset: ${currentOffset})`);
+      
+      // Check if there are more startups to load
+      if (approvedStartups.length < BATCH_SIZE) {
+        setHasMore(false);
+      }
+      
+      let filteredStartups = approvedStartups;
+
+      // Apply industry filter if enabled
+      if (preferences) {
+        const prefs = JSON.parse(preferences);
+        if (prefs.filterEnabled && prefs.industries && prefs.industries.length > 0) {
+          setShowFiltered(true);
+          filteredStartups = approvedStartups.filter(startup => {
+            if (!startup.industries || startup.industries.length === 0) return true;
+            return startup.industries.some((ind: string) => prefs.industries.includes(ind));
+          });
+        }
+      }
+
+      // Filter out already voted startups
+      const yesVotedIds = getYesVotes();
+      const unvoted = filteredStartups.filter(s => !yesVotedIds.includes(String(s.id)));
+      
+      if (isLoadMore) {
+        setUnvotedStartups(prev => [...prev, ...unvoted]);
+        setOffset(currentOffset + BATCH_SIZE);
+      } else {
+        setUnvotedStartups(unvoted);
+        setTotalStartupCount(unvoted.length);
+        setOffset(BATCH_SIZE);
+      }
+    } catch (error) {
+      console.error('Error loading startups:', error);
+    } finally {
+      setLoading(false);
+      setLoadingMore(false);
+    }
+  }, [offset]);
+
+  // Initial load
+  useEffect(() => {
+    loadStartups(false);
   }, []);
 
-  const handleVote = (startupId: number, vote: 'yes' | 'no') => {
-    // Save vote to localStorage
-    const newVotedIds = [...votedStartupIds, startupId];
-    setVotedStartupIds(newVotedIds);
-    localStorage.setItem('votedStartups', JSON.stringify(newVotedIds));
+  // Intersection Observer for infinite scroll
+  useEffect(() => {
+    if (!loadMoreRef.current || !hasMore || loadingMore) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore && !loadingMore) {
+          loadStartups(true);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    observer.observe(loadMoreRef.current);
+
+    return () => observer.disconnect();
+  }, [hasMore, loadingMore, loadStartups]);
+
+  const handleVote = async (startupId: string | number, vote: 'yes' | 'no') => {
+    const idString = String(startupId); // Ensure it's a string
+    
+    // Save vote to both localStorage and Supabase
+    const result = await saveVote(idString, vote);
+    
+    if (!result.success) {
+      console.error('Failed to save vote:', result.error);
+      // Still proceed - vote is cached locally
+    }
 
     // Save YES votes to localStorage for dashboard and portfolio
     if (vote === 'yes') {
       const yesVotes = localStorage.getItem('myYesVotes');
       const yesVotesList = yesVotes ? JSON.parse(yesVotes) : [];
       
-      // Find the full startup object (check both startupData and uploaded startups)
-      let startup = startupData.find(s => s.id === startupId);
-      
-      if (!startup) {
-        const uploadedStartups = localStorage.getItem('uploadedStartups');
-        if (uploadedStartups) {
-          const uploaded = JSON.parse(uploadedStartups);
-          startup = uploaded.find((s: any) => s.id === startupId);
-        }
-      }
+      // Find the full startup object
+      const startup = unvotedStartups.find(s => String(s.id) === idString);
       
       if (startup) {
-        // Save the FULL startup object with all 5 points
         yesVotesList.push({
-          ...startup, // Include ALL startup data (fivePoints, industries, website, etc.)
+          ...startup,
           votedAt: new Date().toISOString()
         });
         localStorage.setItem('myYesVotes', JSON.stringify(yesVotesList));
@@ -88,18 +125,28 @@ const VotePage: React.FC = () => {
     }
 
     // Remove from unvoted list immediately
-    setUnvotedStartups(prev => prev.filter(s => s.id !== startupId));
+    setUnvotedStartups(prev => prev.filter(s => String(s.id) !== idString));
   };
 
   const handleResetVotes = () => {
     if (confirm('⚠️ Reset ALL votes? This will clear your voting history.')) {
-      localStorage.removeItem('votedStartups');
+      localStorage.removeItem('user_votes');
       localStorage.removeItem('myYesVotes');
-      setVotedStartupIds([]);
-      setUnvotedStartups(startupData);
-      alert('✅ Votes reset! You can now vote on all startups again.');
+      // Reload the page
+      window.location.reload();
     }
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-green-400 to-purple-950 flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-6xl mb-4 animate-spin">🍯</div>
+          <div className="text-2xl text-white font-bold">Loading startups...</div>
+        </div>
+      </div>
+    );
+  }
 
   if (unvotedStartups.length === 0) {
     return (
@@ -240,6 +287,44 @@ const VotePage: React.FC = () => {
               );
             })}
           </div>
+          
+          {/* Loading More Indicator & Infinite Scroll Trigger */}
+          {hasMore && (
+            <div ref={loadMoreRef} className="text-center py-8">
+              {loadingMore ? (
+                <div className="text-white text-xl">
+                  <div className="animate-spin inline-block w-8 h-8 border-4 border-white border-t-transparent rounded-full mb-2"></div>
+                  <p>Loading more startups...</p>
+                </div>
+              ) : (
+                <div className="text-purple-200 text-sm">
+                  Scroll for more...
+                </div>
+              )}
+            </div>
+          )}
+          
+          {/* No More Startups Message */}
+          {!hasMore && unvotedStartups.length > 0 && (
+            <div className="text-center py-8 text-white text-xl">
+              🎉 You've seen all available startups!
+            </div>
+          )}
+          
+          {/* No Startups Left */}
+          {unvotedStartups.length === 0 && !loading && (
+            <div className="text-center py-16 text-white">
+              <div className="text-6xl mb-4">🎉</div>
+              <h2 className="text-3xl font-bold mb-2">All Done!</h2>
+              <p className="text-xl text-purple-200 mb-6">You've voted on all available startups.</p>
+              <Link
+                to="/dashboard"
+                className="inline-block px-8 py-3 bg-gradient-to-r from-green-500 to-blue-500 text-white font-bold rounded-xl hover:from-green-600 hover:to-blue-600 transition-all"
+              >
+                View Your Dashboard
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </div>
