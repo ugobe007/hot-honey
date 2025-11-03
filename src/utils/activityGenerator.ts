@@ -1,4 +1,4 @@
-import startupData from '../data/startupData';
+import { supabase } from '../lib/supabase';
 import type { ActivityItem } from '../components/ActivityTicker';
 import { getTrendingStartups, getTopVotedStartups, getRecentlyApprovedStartups } from './voteAnalytics';
 
@@ -7,6 +7,21 @@ export async function generateRecentActivities(): Promise<ActivityItem[]> {
   const now = new Date();
 
   try {
+    // Load ALL startups from Supabase instead of hardcoded data
+    const { data: allStartups, error: startupsError } = await supabase
+      .from('startup_uploads')
+      .select('*')
+      .eq('status', 'approved')
+      .order('created_at', { ascending: false });
+
+    if (startupsError) {
+      console.error('Error loading startups from Supabase:', startupsError);
+      return generateFallbackActivities();
+    }
+
+    const startupData = allStartups || [];
+    console.log(`📊 Loaded ${startupData.length} startups from Supabase for activity generation`);
+
     // Get real data from Supabase
     const [trendingStartups, topVotedStartups, approvedStartups] = await Promise.all([
       getTrendingStartups(5),
@@ -60,12 +75,13 @@ export async function generateRecentActivities(): Promise<ActivityItem[]> {
 
     // Add some "new startup" activities from ALL startups
     startupData.forEach((startup, index) => {
+      const startupName = startup.name || startup.company_name || 'Unknown';
       const daysAgo = (index % 10) + 1; // Cycle through recent days
       activities.push({
         id: `new-${startup.id}`,
         type: 'new',
         icon: '🚀',
-        text: `New: ${startup.name} just launched`,
+        text: `New: ${startupName} just launched`,
         timestamp: new Date(now.getTime() - daysAgo * 24 * 60 * 60 * 1000),
       });
     });
@@ -73,12 +89,13 @@ export async function generateRecentActivities(): Promise<ActivityItem[]> {
     // Add funding announcements for ALL startups
     const fundingAmounts = ['$500K', '$750K', '$1M', '$1.5M', '$2M', '$3M', '$5M'];
     startupData.forEach((startup, index) => {
+      const startupName = startup.name || startup.company_name || 'Unknown';
       const daysAgo = (index % 15) + 1; // Spread over 15 days
       activities.push({
         id: `funding-${startup.id}`,
         type: 'funding',
         icon: '💰',
-        text: `${startup.name} raised ${fundingAmounts[index % fundingAmounts.length]}`,
+        text: `${startupName} raised ${fundingAmounts[index % fundingAmounts.length]}`,
         timestamp: new Date(now.getTime() - daysAgo * 24 * 60 * 60 * 1000),
       });
     });
@@ -112,11 +129,16 @@ export async function generateRecentActivities(): Promise<ActivityItem[]> {
       });
     });
 
-    // Add IP filing activities
+    // Add IP filing activities - check extracted_data or direct fields
     startupData.forEach((startup) => {
-      if (startup.ipFilings && startup.ipFilings.length > 0) {
-        startup.ipFilings.forEach((filing) => {
-          const daysSinceFiling = Math.floor((now.getTime() - filing.date.getTime()) / (1000 * 60 * 60 * 24));
+      const extractedData = startup.extracted_data || {};
+      const ipFilings = startup.ipFilings || extractedData.ipFilings || startup.ip_filings || [];
+      const startupName = startup.name || startup.company_name || 'Unknown';
+      
+      if (ipFilings && ipFilings.length > 0) {
+        ipFilings.forEach((filing: any) => {
+          const filingDate = new Date(filing.date);
+          const daysSinceFiling = Math.floor((now.getTime() - filingDate.getTime()) / (1000 * 60 * 60 * 24));
           if (daysSinceFiling <= 30) { // Only show recent filings (last 30 days)
             const icon = filing.type === 'patent' ? '📜' : filing.type === 'trademark' ? '™️' : '©️';
             const statusText = filing.status === 'approved' ? 'secured' : filing.status === 'pending' ? 'filed for' : 'submitted';
@@ -124,8 +146,8 @@ export async function generateRecentActivities(): Promise<ActivityItem[]> {
               id: `ip-${startup.id}-${filing.title}`,
               type: 'ip-filing',
               icon,
-              text: `${startup.name} ${statusText} ${filing.type}: "${filing.title}"`,
-              timestamp: filing.date,
+              text: `${startupName} ${statusText} ${filing.type}: "${filing.title}"`,
+              timestamp: filingDate,
             });
           }
         });
@@ -134,17 +156,22 @@ export async function generateRecentActivities(): Promise<ActivityItem[]> {
 
     // Add team hire activities
     startupData.forEach((startup) => {
-      if (startup.teamHires && startup.teamHires.length > 0) {
-        startup.teamHires.forEach((hire) => {
-          const daysSinceHire = Math.floor((now.getTime() - hire.joinedDate.getTime()) / (1000 * 60 * 60 * 24));
+      const extractedData = startup.extracted_data || {};
+      const teamHires = startup.teamHires || extractedData.teamHires || startup.team_hires || [];
+      const startupName = startup.name || startup.company_name || 'Unknown';
+      
+      if (teamHires && teamHires.length > 0) {
+        teamHires.forEach((hire: any) => {
+          const joinDate = new Date(hire.joinedDate);
+          const daysSinceHire = Math.floor((now.getTime() - joinDate.getTime()) / (1000 * 60 * 60 * 24));
           if (daysSinceHire <= 30) { // Only show recent hires (last 30 days)
             const prevCompany = hire.previousCompany ? ` from ${hire.previousCompany}` : '';
             activities.push({
               id: `hire-${startup.id}-${hire.name}`,
               type: 'team-hire',
               icon: '👥',
-              text: `${startup.name} hired ${hire.name} as ${hire.role}${prevCompany}`,
-              timestamp: hire.joinedDate,
+              text: `${startupName} hired ${hire.name} as ${hire.role}${prevCompany}`,
+              timestamp: joinDate,
             });
           }
         });
@@ -153,17 +180,22 @@ export async function generateRecentActivities(): Promise<ActivityItem[]> {
 
     // Add advisor activities
     startupData.forEach((startup) => {
-      if (startup.advisors && startup.advisors.length > 0) {
-        startup.advisors.forEach((advisor) => {
-          const daysSinceJoin = Math.floor((now.getTime() - advisor.joinedDate.getTime()) / (1000 * 60 * 60 * 24));
+      const extractedData = startup.extracted_data || {};
+      const advisors = startup.advisors || extractedData.advisors || [];
+      const startupName = startup.name || startup.company_name || 'Unknown';
+      
+      if (advisors && advisors.length > 0) {
+        advisors.forEach((advisor: any) => {
+          const joinDate = new Date(advisor.joinedDate);
+          const daysSinceJoin = Math.floor((now.getTime() - joinDate.getTime()) / (1000 * 60 * 60 * 24));
           if (daysSinceJoin <= 30) { // Only show recent advisors (last 30 days)
             const company = advisor.company ? ` at ${advisor.company}` : '';
             activities.push({
               id: `advisor-${startup.id}-${advisor.name}`,
               type: 'advisor-join',
               icon: '🎓',
-              text: `${advisor.name} (${advisor.expertise}${company}) joined ${startup.name} as advisor`,
-              timestamp: advisor.joinedDate,
+              text: `${advisor.name} (${advisor.expertise}${company}) joined ${startupName} as advisor`,
+              timestamp: joinDate,
             });
           }
         });
@@ -172,17 +204,22 @@ export async function generateRecentActivities(): Promise<ActivityItem[]> {
 
     // Add board member activities
     startupData.forEach((startup) => {
-      if (startup.boardMembers && startup.boardMembers.length > 0) {
-        startup.boardMembers.forEach((member) => {
-          const daysSinceJoin = Math.floor((now.getTime() - member.joinedDate.getTime()) / (1000 * 60 * 60 * 24));
+      const extractedData = startup.extracted_data || {};
+      const boardMembers = startup.boardMembers || extractedData.boardMembers || startup.board_members || [];
+      const startupName = startup.name || startup.company_name || 'Unknown';
+      
+      if (boardMembers && boardMembers.length > 0) {
+        boardMembers.forEach((member: any) => {
+          const joinDate = new Date(member.joinedDate);
+          const daysSinceJoin = Math.floor((now.getTime() - joinDate.getTime()) / (1000 * 60 * 60 * 24));
           if (daysSinceJoin <= 30) { // Only show recent board members (last 30 days)
             const company = member.company ? ` from ${member.company}` : '';
             activities.push({
               id: `board-${startup.id}-${member.name}`,
               type: 'board-member',
               icon: '🏛️',
-              text: `${member.name}${company} joined ${startup.name} board`,
-              timestamp: member.joinedDate,
+              text: `${member.name}${company} joined ${startupName} board`,
+              timestamp: joinDate,
             });
           }
         });
@@ -191,16 +228,21 @@ export async function generateRecentActivities(): Promise<ActivityItem[]> {
 
     // Add customer traction activities
     startupData.forEach((startup) => {
-      if (startup.customerTraction && startup.customerTraction.length > 0) {
-        startup.customerTraction.forEach((traction) => {
-          const daysSinceMilestone = Math.floor((now.getTime() - traction.date.getTime()) / (1000 * 60 * 60 * 24));
+      const extractedData = startup.extracted_data || {};
+      const customerTraction = startup.customerTraction || extractedData.customerTraction || startup.customer_traction || [];
+      const startupName = startup.name || startup.company_name || 'Unknown';
+      
+      if (customerTraction && customerTraction.length > 0) {
+        customerTraction.forEach((traction: any) => {
+          const tractionDate = new Date(traction.date);
+          const daysSinceMilestone = Math.floor((now.getTime() - tractionDate.getTime()) / (1000 * 60 * 60 * 24));
           if (daysSinceMilestone <= 30) { // Only show recent milestones (last 30 days)
             activities.push({
               id: `traction-${startup.id}-${traction.metric}`,
               type: 'customer-milestone',
               icon: '📈',
-              text: `${startup.name} reached ${traction.metric}`,
-              timestamp: traction.date,
+              text: `${startupName} reached ${traction.metric}`,
+              timestamp: tractionDate,
             });
           }
         });
