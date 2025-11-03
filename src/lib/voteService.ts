@@ -1,5 +1,7 @@
 // Vote persistence service - handles both localStorage and Supabase
 import { supabase } from './supabase';
+import { logActivity } from './activityLogger';
+import startupData from '../data/startupData';
 
 export interface Vote {
   id?: string;
@@ -57,6 +59,19 @@ export async function saveVote(
         // Not critical - vote is saved locally
       } else {
         console.log('✅ Vote synced to Supabase:', data);
+        
+        // 3. Log activity to activities table
+        const startup = startupData.find(s => s.id.toString() === startupId);
+        await logActivity({
+          eventType: 'user_voted',
+          startupId: startupId,
+          startupName: startup?.name,
+          userId: userId || undefined,
+          voteType: voteType,
+          metadata: {
+            startupName: startup?.name || 'Unknown Startup',
+          },
+        });
       }
     } catch (dbError) {
       console.warn('⚠️ Supabase votes table may not exist yet. Vote saved locally.');

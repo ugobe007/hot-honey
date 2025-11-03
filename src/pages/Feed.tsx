@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import startupData from '../data/startupData';
 import { getTrendingStartups, getTopVotedStartups, getRecentlyApprovedStartups } from '../utils/voteAnalytics';
+import UserActivityStats from '../components/UserActivityStats';
 
 interface ActivityEvent {
   id: string;
@@ -304,6 +305,11 @@ const Feed: React.FC = () => {
             💰 Funding ({activities.filter(a => a.type === 'funding').length})
           </button>
         </div>
+      </div>
+
+      {/* User Activity Stats - LIVE */}
+      <div className="max-w-4xl mx-auto mb-8">
+        <UserActivityStats />
       </div>
 
       {/* Activity Timeline */}
