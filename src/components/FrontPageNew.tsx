@@ -3,8 +3,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import StartupCardOfficial from './StartupCardOfficial';
 import AdminNav from './AdminNav';
+import ActivityTicker from './ActivityTicker';
 import startupData from '../data/startupData';
 import { loadApprovedStartups } from '../store';
+import { generateRecentActivities } from '../utils/activityGenerator';
 
 const FrontPageNew: React.FC = () => {
   const navigate = useNavigate();
@@ -308,25 +310,34 @@ const FrontPageNew: React.FC = () => {
             <h3 className="text-2xl font-bold text-white" style={{ 
               textShadow: '2px 2px 4px rgba(147, 51, 234, 0.6), -2px -2px 4px rgba(134, 239, 172, 0.4)' 
             }}>
-              ⭐ Featured Startups
+              📡 Live Activity Feed
             </h3>
+            <p className="text-purple-200 mt-2">
+              See what's happening right now
+            </p>
           </div>
           
-          <div className="grid md:grid-cols-3 gap-6 justify-items-center">
-            {displayedStartups.map((startup, position) => (
-              <div 
-                key={`${startup.id}-${position}`}
-                className={`transition-all duration-250 ease-out ${
-                  slidingCards.includes(position) ? 'animate-slide-left' : ''
-                }`}
-              >
-                <StartupCardOfficial
-                  startup={startup}
-                  onVote={(vote) => handleVote(startup.id, vote, position)}
-                  onSwipeAway={() => handleSwipeAway(position)}
-                />
-              </div>
-            ))}
+          {/* Activity Ticker */}
+          <ActivityTicker activities={generateRecentActivities()} />
+          
+          {/* Featured Startups Grid */}
+          <div className="mt-8">
+            <div className="grid md:grid-cols-3 gap-6 justify-items-center">
+              {displayedStartups.map((startup, position) => (
+                <div 
+                  key={`${startup.id}-${position}`}
+                  className={`transition-all duration-250 ease-out ${
+                    slidingCards.includes(position) ? 'animate-slide-left' : ''
+                  }`}
+                >
+                  <StartupCardOfficial
+                    startup={startup}
+                    onVote={(vote) => handleVote(startup.id, vote, position)}
+                    onSwipeAway={() => handleSwipeAway(position)}
+                  />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
