@@ -1,8 +1,10 @@
 // FILE: src/pages/Vote.tsx
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useStore } from '../store';
 import StartupCardOfficial from '../components/StartupCardOfficial';
+import ActivityTicker from '../components/ActivityTicker';
+import { generateRecentActivities } from '../utils/activityGenerator';
 
 const Vote: React.FC = () => {
   const startups = useStore((state) => state.startups);
@@ -10,10 +12,18 @@ const Vote: React.FC = () => {
   const voteYes = useStore((state) => state.voteYes);
   const voteNo = useStore((state) => state.voteNo);
   const loadStartupsFromDatabase = useStore((state) => state.loadStartupsFromDatabase);
+  const [activities, setActivities] = useState<any[]>([]);
 
   // Load approved startups from database on mount
   useEffect(() => {
     loadStartupsFromDatabase();
+    
+    // Load activities
+    const loadActivities = async () => {
+      const recentActivities = await generateRecentActivities();
+      setActivities(recentActivities);
+    };
+    loadActivities();
   }, [loadStartupsFromDatabase]);
 
   const currentStartup = startups[currentIndex];
@@ -36,11 +46,19 @@ const Vote: React.FC = () => {
   }
 
   return (
-    <div className="flex justify-center items-start mt-10 bg-orange-50 min-h-screen px-2 sm:px-4">
-      <StartupCardOfficial
-        startup={currentStartup}
-        onVote={(vote) => vote === 'yes' ? voteYes(currentStartup) : voteNo()}
-      />
+    <div className="bg-orange-50 min-h-screen px-2 sm:px-4">
+      {/* Activity Ticker at the top */}
+      <div className="max-w-6xl mx-auto pt-4 pb-6">
+        <ActivityTicker activities={activities} />
+      </div>
+      
+      {/* Startup card */}
+      <div className="flex justify-center items-start">
+        <StartupCardOfficial
+          startup={currentStartup}
+          onVote={(vote) => vote === 'yes' ? voteYes(currentStartup) : voteNo()}
+        />
+      </div>
     </div>
   );
 };

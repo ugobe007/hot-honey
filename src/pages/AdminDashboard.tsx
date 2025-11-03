@@ -3,7 +3,9 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
 import StartupCardOfficial from '../components/StartupCardOfficial';
+import ActivityTicker from '../components/ActivityTicker';
 import startupData from '../data/startupData';
+import { generateRecentActivities } from '../utils/activityGenerator';
 
 interface StartupData {
   id: string;
@@ -29,6 +31,7 @@ export default function AdminDashboard() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
+  const [activities, setActivities] = useState<any[]>([]);
   const [stats, setStats] = useState({
     totalStartups: 0,
     pendingStartups: 0,
@@ -47,7 +50,13 @@ export default function AdminDashboard() {
     }
     loadDashboardData();
     loadMyVotes();
+    loadActivities();
   }, [user, navigate]);
+
+  const loadActivities = async () => {
+    const recentActivities = await generateRecentActivities();
+    setActivities(recentActivities);
+  };
 
   const loadMyVotes = () => {
     // Load from localStorage for now (both authenticated and anonymous users)
@@ -146,6 +155,11 @@ export default function AdminDashboard() {
           >
             ← Back
           </button>
+        </div>
+
+        {/* Activity Ticker */}
+        <div className="mb-8">
+          <ActivityTicker activities={activities} />
         </div>
 
         {/* Stats Overview */}
