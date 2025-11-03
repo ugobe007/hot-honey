@@ -14,12 +14,16 @@ interface ActivityTickerProps {
 }
 
 const ActivityTicker: React.FC<ActivityTickerProps> = ({ activities }) => {
+  console.log('🎪 ActivityTicker component rendering');
   const navigate = useNavigate();
   const [displayActivities, setDisplayActivities] = useState<ActivityItem[]>([]);
 
   useEffect(() => {
+    console.log(`🎪 ActivityTicker received ${activities.length} activities`);
+    
     // If no activities yet, show placeholder content
     if (activities.length === 0) {
+      console.log('🎪 ActivityTicker: Showing placeholder content');
       const placeholderActivities: ActivityItem[] = [
         { id: 'loading-1', type: 'trending', icon: '🔥', text: 'Loading startup activity...', timestamp: new Date() },
         { id: 'loading-2', type: 'new', icon: '🚀', text: 'Fetching latest updates...', timestamp: new Date() },
@@ -27,6 +31,7 @@ const ActivityTicker: React.FC<ActivityTickerProps> = ({ activities }) => {
       ];
       setDisplayActivities([...placeholderActivities, ...placeholderActivities]);
     } else {
+      console.log('🎪 ActivityTicker: Displaying real activities');
       // Duplicate activities for seamless loop
       setDisplayActivities([...activities, ...activities]);
     }

@@ -20,8 +20,11 @@ const Vote: React.FC = () => {
     
     // Load activities
     const loadActivities = async () => {
+      console.log('🎯 Vote page: Loading activities...');
       const recentActivities = await generateRecentActivities();
+      console.log(`🎯 Vote page: Received ${recentActivities.length} activities`);
       setActivities(recentActivities);
+      console.log('🎯 Vote page: Activities state updated');
     };
     loadActivities();
   }, [loadStartupsFromDatabase]);
