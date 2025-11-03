@@ -35,6 +35,7 @@ import DiagnosticPage from './pages/DiagnosticPage';
 import ProfilePage from './pages/ProfilePage';
 import AdminDashboard from './pages/AdminDashboard';
 import SyncStartups from './pages/SyncStartups';
+import DataIntelligence from './pages/DataIntelligence';
 import './App.css';
 
 const App: React.FC = () => {
@@ -89,6 +90,7 @@ const App: React.FC = () => {
           <Route path="/admin/migrate" element={<MigrateLocalStorage />} />
           <Route path="/admin/migrate-data" element={<MigrateStartupData />} />
           <Route path="/admin/diagnostic" element={<DiagnosticPage />} />
+          <Route path="/data-intelligence" element={<DataIntelligence />} />
           <Route path="/setup" element={<SetupPage />} /> {/* ✅ Setup shortcut */}
           <Route path="/analytics" element={<Analytics />} />
         </Routes>
