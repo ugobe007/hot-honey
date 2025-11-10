@@ -181,7 +181,7 @@ export default function HomePageV2() {
       </div>
 
       {/* Hero Section */}
-      <section className="pt-32 pb-4 px-8"
+      <section className="pt-32 pb-2 px-8"
       >
         <div className="max-w-4xl mx-auto text-center">
           <div className="mb-8">
@@ -204,7 +204,7 @@ export default function HomePageV2() {
           </div>
 
           {/* CTA Section */}
-          <div className="flex gap-4 justify-center mb-2">
+          <div className="flex gap-4 justify-center mb-1">
             <button
               onClick={() => navigate('/vote')}
               className="px-10 py-5 text-xl font-bold transition-all hover:scale-105"
@@ -235,9 +235,9 @@ export default function HomePageV2() {
       </section>
 
       {/* Featured Startups Preview */}
-      <section className="pt-2 pb-8 px-8">
+      <section className="pt-1 pb-8 px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
+          <div className="text-center mb-6">
             <h2 
               className="text-4xl font-bold mb-4"
               style={{ color: colors.steelGray }}
