@@ -37,6 +37,10 @@ import AdminDashboard from './pages/AdminDashboard';
 import SyncStartups from './pages/SyncStartups';
 import DataIntelligence from './pages/DataIntelligence';
 import Feed from './pages/Feed';
+import HomePageV2 from './pages/HomePageV2';
+import VotePageV2 from './pages/VotePageV2';
+import PortfolioPageV2 from './pages/PortfolioPageV2';
+import DashboardPageV2 from './pages/DashboardPageV2';
 import './App.css';
 
 // Wrapper component that redirects admins to admin dashboard
@@ -72,6 +76,11 @@ const App: React.FC = () => {
       <main>
         <Routes>
           <Route path="/" element={<FrontPageNew />} />
+          <Route path="/v2" element={<HomePageV2 />} />
+          <Route path="/v2/dashboard" element={<DashboardPageV2 />} />
+          <Route path="/v2/vote" element={<VotePageV2 />} />
+          <Route path="/v2/portfolio" element={<PortfolioPageV2 />} />
+          <Route path="/v2/deals" element={<Deals />} />
           <Route path="/home" element={<FrontPageNew />} />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/login" element={<Login />} />
