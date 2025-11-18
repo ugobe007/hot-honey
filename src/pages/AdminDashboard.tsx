@@ -3,7 +3,8 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
 import StartupCardOfficial from '../components/StartupCardOfficial';
-import ActivityTicker from '../components/ActivityTicker';
+import HamburgerMenu from '../components/HamburgerMenu';
+import NewsUpdate from '../components/NewsUpdate';
 import startupData from '../data/startupData';
 import { generateRecentActivities } from '../utils/activityGenerator';
 
@@ -44,10 +45,18 @@ export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState<'overview' | 'myvotes' | 'pending' | 'all' | 'investors'>('overview');
 
   useEffect(() => {
+    console.log('🔍 AdminDashboard - User object:', user);
+    console.log('🔍 AdminDashboard - isAdmin:', user?.isAdmin);
+    console.log('🔍 AdminDashboard - localStorage currentUser:', localStorage.getItem('currentUser'));
+    console.log('🔍 AdminDashboard - localStorage userProfile:', localStorage.getItem('userProfile'));
+    
+    // Don't redirect here - let the render handle it with proper UI
     if (!user?.isAdmin) {
-      navigate('/');
+      console.warn('⚠️ AdminDashboard: User is not admin');
       return;
     }
+    
+    console.log('✅ AdminDashboard: User is admin, loading data...');
     loadDashboardData();
     loadMyVotes();
     
@@ -61,7 +70,7 @@ export default function AdminDashboard() {
       .catch((error) => {
         console.error('👑 AdminDashboard: Error loading activities:', error);
       });
-  }, [user, navigate]);
+  }, [user]);
 
   const loadMyVotes = () => {
     // Load from localStorage for now (both authenticated and anonymous users)
@@ -137,20 +146,79 @@ export default function AdminDashboard() {
     }
   };
 
-  if (!user?.isAdmin) {
-    return null;
+  // Show loading state while checking auth
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-slate-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-6xl mb-4">🔒</div>
+          <h2 className="text-2xl font-bold text-slate-800 mb-2">Checking Authentication...</h2>
+          <p className="text-slate-600">Please log in with admin credentials</p>
+          <button
+            onClick={() => navigate('/login')}
+            className="mt-4 px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition"
+          >
+            Go to Login
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user.isAdmin) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-slate-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-6xl mb-4">⛔</div>
+          <h2 className="text-2xl font-bold text-slate-800 mb-2">Access Denied</h2>
+          <p className="text-slate-600 mb-4">You need admin privileges to access this page</p>
+          <p className="text-sm text-slate-500 mb-4">Current user: {user.email}</p>
+          <div className="flex gap-3 justify-center">
+            <button
+              onClick={() => navigate('/login')}
+              className="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition"
+            >
+              Login as Admin
+            </button>
+            <button
+              onClick={() => navigate('/')}
+              className="px-6 py-2 bg-slate-600 hover:bg-slate-700 text-white rounded-lg transition"
+            >
+              Go Home
+            </button>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-purple-800 to-indigo-900 py-8 px-4">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-slate-100 py-8 px-4">
+      {/* Hamburger Menu */}
+      <HamburgerMenu />
+
+      {/* Current Page Button */}
+      <div className="fixed top-6 left-1/2 transform -translate-x-1/2 z-40">
+        <button
+          onClick={() => navigate('/')}
+          className="px-4 py-2 rounded-full bg-gradient-to-b from-slate-300 via-slate-200 to-slate-400 text-slate-800 font-medium text-sm flex items-center gap-2 shadow-lg hover:from-slate-400 hover:via-slate-300 hover:to-slate-500 transition-all cursor-pointer"
+          style={{
+            boxShadow: '0 4px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.8), inset 0 -1px 0 rgba(0,0,0,0.2)',
+            textShadow: '0 1px 1px rgba(255,255,255,0.8)'
+          }}>
+          <span>🏠</span>
+          <span>Home</span>
+        </button>
+      </div>
+
+      <div className="max-w-7xl mx-auto pt-20">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-4xl font-bold text-white mb-2">
+            <h1 className="text-4xl font-bold text-orange-600 mb-2">
               👑 Admin Dashboard
             </h1>
-            <p className="text-purple-200">
+            <p className="text-slate-700">
               Manage startups, investors, and review pending submissions
             </p>
           </div>
@@ -164,77 +232,77 @@ export default function AdminDashboard() {
 
         {/* Activity Ticker */}
         <div className="mb-8">
-          <ActivityTicker activities={activities} />
+          <NewsUpdate activities={activities} />
         </div>
 
         {/* Stats Overview */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-          <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
-            <div className="text-3xl font-bold text-white mb-2">{stats.totalStartups}</div>
-            <div className="text-purple-200">Total Startups</div>
+          <div className="bg-white/90 backdrop-blur-md rounded-xl p-6 border-2 border-slate-300 shadow-lg">
+            <div className="text-3xl font-bold text-slate-800 mb-2">{stats.totalStartups}</div>
+            <div className="text-slate-600 font-medium">Total Startups</div>
           </div>
-          <div className="bg-orange-500/20 backdrop-blur-md rounded-xl p-6 border border-orange-400/30">
-            <div className="text-3xl font-bold text-white mb-2">{stats.pendingStartups}</div>
-            <div className="text-orange-200">Pending Review</div>
+          <div className="bg-amber-50 backdrop-blur-md rounded-xl p-6 border-2 border-orange-400 shadow-lg">
+            <div className="text-3xl font-bold text-orange-700 mb-2">{stats.pendingStartups}</div>
+            <div className="text-orange-700 font-medium">Pending Review</div>
           </div>
-          <div className="bg-green-500/20 backdrop-blur-md rounded-xl p-6 border border-green-400/30">
-            <div className="text-3xl font-bold text-white mb-2">{stats.approvedStartups}</div>
-            <div className="text-green-200">Approved</div>
+          <div className="bg-emerald-50 backdrop-blur-md rounded-xl p-6 border-2 border-green-500 shadow-lg">
+            <div className="text-3xl font-bold text-green-700 mb-2">{stats.approvedStartups}</div>
+            <div className="text-green-700 font-medium">Approved</div>
           </div>
-          <div className="bg-red-500/20 backdrop-blur-md rounded-xl p-6 border border-red-400/30">
-            <div className="text-3xl font-bold text-white mb-2">{stats.rejectedStartups}</div>
-            <div className="text-red-200">Rejected</div>
+          <div className="bg-slate-100 backdrop-blur-md rounded-xl p-6 border-2 border-slate-400 shadow-lg">
+            <div className="text-3xl font-bold text-slate-700 mb-2">{stats.rejectedStartups}</div>
+            <div className="text-slate-700 font-medium">Rejected</div>
           </div>
         </div>
 
         {/* Navigation Tabs */}
-        <div className="flex gap-2 mb-6 bg-white/10 backdrop-blur-md rounded-lg p-2 overflow-x-auto">
+        <div className="flex gap-2 mb-6 bg-white/80 backdrop-blur-md rounded-lg p-2 overflow-x-auto border-2 border-slate-300 shadow-lg">
           <button
             onClick={() => setActiveTab('overview')}
-            className={`flex-1 py-3 px-4 rounded-lg font-medium transition whitespace-nowrap ${
+            className={`flex-1 py-3 px-4 rounded-lg font-semibold transition whitespace-nowrap ${
               activeTab === 'overview'
-                ? 'bg-purple-600 text-white'
-                : 'text-purple-200 hover:bg-white/10'
+                ? 'bg-purple-600 text-white shadow-md'
+                : 'text-slate-700 hover:bg-slate-100'
             }`}
           >
             📊 Overview
           </button>
           <button
             onClick={() => setActiveTab('myvotes')}
-            className={`flex-1 py-3 px-4 rounded-lg font-medium transition whitespace-nowrap ${
+            className={`flex-1 py-3 px-4 rounded-lg font-semibold transition whitespace-nowrap ${
               activeTab === 'myvotes'
-                ? 'bg-purple-600 text-white'
-                : 'text-purple-200 hover:bg-white/10'
+                ? 'bg-purple-600 text-white shadow-md'
+                : 'text-slate-700 hover:bg-slate-100'
             }`}
           >
             ⭐ My YES Votes ({myYesVotes.length})
           </button>
           <button
             onClick={() => setActiveTab('pending')}
-            className={`flex-1 py-3 px-4 rounded-lg font-medium transition whitespace-nowrap ${
+            className={`flex-1 py-3 px-4 rounded-lg font-semibold transition whitespace-nowrap ${
               activeTab === 'pending'
-                ? 'bg-purple-600 text-white'
-                : 'text-purple-200 hover:bg-white/10'
+                ? 'bg-purple-600 text-white shadow-md'
+                : 'text-slate-700 hover:bg-slate-100'
             }`}
           >
             ⏳ Pending ({stats.pendingStartups})
           </button>
           <button
             onClick={() => setActiveTab('all')}
-            className={`flex-1 py-3 px-4 rounded-lg font-medium transition whitespace-nowrap ${
+            className={`flex-1 py-3 px-4 rounded-lg font-semibold transition whitespace-nowrap ${
               activeTab === 'all'
-                ? 'bg-purple-600 text-white'
-                : 'text-purple-200 hover:bg-white/10'
+                ? 'bg-purple-600 text-white shadow-md'
+                : 'text-slate-700 hover:bg-slate-100'
             }`}
           >
             🚀 All Startups
           </button>
           <button
             onClick={() => setActiveTab('investors')}
-            className={`flex-1 py-3 px-4 rounded-lg font-medium transition whitespace-nowrap ${
+            className={`flex-1 py-3 px-4 rounded-lg font-semibold transition whitespace-nowrap ${
               activeTab === 'investors'
-                ? 'bg-purple-600 text-white'
-                : 'text-purple-200 hover:bg-white/10'
+                ? 'bg-purple-600 text-white shadow-md'
+                : 'text-slate-700 hover:bg-slate-100'
             }`}
           >
             💼 Investors
@@ -242,28 +310,28 @@ export default function AdminDashboard() {
         </div>
 
         {/* Content Area */}
-        <div className="bg-white/10 backdrop-blur-md rounded-xl border border-white/20 p-6">
+        <div className="bg-white/90 backdrop-blur-md rounded-xl border-2 border-slate-300 p-6 shadow-lg">
           {loading ? (
-            <div className="text-center py-12 text-white">
+            <div className="text-center py-12 text-slate-700">
               <div className="animate-spin text-4xl mb-4">⏳</div>
-              <div>Loading dashboard data...</div>
+              <div className="font-medium">Loading dashboard data...</div>
             </div>
           ) : (
             <>
               {/* Overview Tab */}
               {activeTab === 'overview' && (
                 <div>
-                  <h2 className="text-2xl font-bold text-white mb-6">Dashboard Overview</h2>
+                  <h2 className="text-2xl font-bold text-orange-600 mb-6">Dashboard Overview</h2>
                   
                   {/* Pending Startups Alert */}
                   {stats.pendingStartups > 0 && (
-                    <div className="bg-gradient-to-r from-orange-500 to-pink-500 rounded-xl p-6 mb-6 border-2 border-orange-400 shadow-xl">
+                    <div className="bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 rounded-xl p-6 mb-6 border-2 border-orange-600 shadow-xl">
                       <div className="flex items-center justify-between">
                         <div>
                           <h3 className="text-2xl font-bold text-white mb-2">
                             🎯 {stats.pendingStartups} Startup{stats.pendingStartups > 1 ? 's' : ''} Awaiting Review
                           </h3>
-                          <p className="text-orange-100 mb-4">
+                          <p className="text-white/90 mb-4 font-medium">
                             New submissions need your approval before appearing on the Vote page
                           </p>
                           <div className="flex gap-3">
@@ -275,7 +343,7 @@ export default function AdminDashboard() {
                             </button>
                             <button
                               onClick={() => navigate('/admin/edit-startups')}
-                              className="px-6 py-3 bg-purple-900 text-white font-bold rounded-lg hover:bg-purple-800 transition shadow-lg"
+                              className="px-6 py-3 bg-purple-700 text-white font-bold rounded-lg hover:bg-purple-800 transition shadow-lg"
                             >
                               ✏️ Detailed Review & Bulk Approve
                             </button>
@@ -290,7 +358,7 @@ export default function AdminDashboard() {
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
                     <button
                       onClick={() => navigate('/admin/edit-startups')}
-                      className="bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white font-bold py-6 rounded-xl transition shadow-lg"
+                      className="bg-gradient-to-br from-purple-500 to-purple-700 hover:from-purple-600 hover:to-purple-800 text-white font-bold py-6 rounded-xl transition shadow-lg"
                     >
                       <div className="text-3xl mb-2">✏️</div>
                       <div className="text-lg">Edit & Approve</div>
@@ -298,7 +366,7 @@ export default function AdminDashboard() {
                     </button>
                     <button
                       onClick={() => navigate('/admin/bulk-import')}
-                      className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-bold py-6 rounded-xl transition shadow-lg"
+                      className="bg-gradient-to-br from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700 text-white font-bold py-6 rounded-xl transition shadow-lg"
                     >
                       <div className="text-3xl mb-2">🚀</div>
                       <div className="text-lg">Bulk Import</div>
@@ -306,7 +374,7 @@ export default function AdminDashboard() {
                     </button>
                     <button
                       onClick={() => navigate('/vote')}
-                      className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-bold py-6 rounded-xl transition shadow-lg"
+                      className="bg-gradient-to-br from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white font-bold py-6 rounded-xl transition shadow-lg"
                     >
                       <div className="text-3xl mb-2">🗳️</div>
                       <div className="text-lg">Vote Page</div>
@@ -314,7 +382,7 @@ export default function AdminDashboard() {
                     </button>
                     <button
                       onClick={() => navigate('/submit')}
-                      className="bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-bold py-6 rounded-xl transition shadow-lg"
+                      className="bg-gradient-to-br from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white font-bold py-6 rounded-xl transition shadow-lg"
                     >
                       <div className="text-3xl mb-2">➕</div>
                       <div className="text-lg">Submit Startup</div>
@@ -323,40 +391,40 @@ export default function AdminDashboard() {
                   </div>
 
                   {/* Recent Startups */}
-                  <h3 className="text-xl font-bold text-white mb-4">Recent Submissions</h3>
+                  <h3 className="text-xl font-bold text-slate-800 mb-4">Recent Submissions</h3>
                   <div className="space-y-3">
                     {recentStartups.length === 0 ? (
-                      <div className="text-center py-8 text-purple-200">
+                      <div className="text-center py-8 text-slate-600">
                         No startups found. Import some startups to get started!
                       </div>
                     ) : (
                       recentStartups.map((startup) => (
                         <div
                           key={startup.id}
-                          className="bg-white/5 hover:bg-white/10 rounded-lg p-4 border border-white/10 transition"
+                          className="bg-slate-50 hover:bg-slate-100 rounded-lg p-4 border-2 border-slate-200 transition shadow-sm"
                         >
                           <div className="flex items-start justify-between">
                             <div className="flex-1">
                               <div className="flex items-center gap-3 mb-2">
-                                <h4 className="text-lg font-semibold text-white">
+                                <h4 className="text-lg font-semibold text-slate-800">
                                   {startup.company_name}
                                 </h4>
                                 <span
-                                  className={`px-3 py-1 rounded-full text-xs font-medium ${
+                                  className={`px-3 py-1 rounded-full text-xs font-semibold ${
                                     startup.status === 'approved'
-                                      ? 'bg-green-500/30 text-green-200'
+                                      ? 'bg-green-100 text-green-700 border border-green-300'
                                       : startup.status === 'pending'
-                                      ? 'bg-orange-500/30 text-orange-200'
-                                      : 'bg-red-500/30 text-red-200'
+                                      ? 'bg-amber-100 text-orange-700 border border-orange-300'
+                                      : 'bg-slate-100 text-slate-700 border border-slate-300'
                                   }`}
                                 >
                                   {startup.status}
                                 </span>
                               </div>
-                              <p className="text-purple-200 text-sm mb-2 line-clamp-2">
+                              <p className="text-slate-600 text-sm mb-2 line-clamp-2">
                                 {startup.description || 'No description'}
                               </p>
-                              <div className="flex items-center gap-2 text-xs text-purple-300">
+                              <div className="flex items-center gap-2 text-xs text-slate-500 font-medium">
                                 <span>
                                   {new Date(startup.created_at).toLocaleDateString()}
                                 </span>
@@ -367,7 +435,7 @@ export default function AdminDashboard() {
                                       href={startup.website_url}
                                       target="_blank"
                                       rel="noopener noreferrer"
-                                      className="hover:text-purple-100 underline"
+                                      className="hover:text-orange-600 underline"
                                     >
                                       Website
                                     </a>
@@ -377,7 +445,7 @@ export default function AdminDashboard() {
                             </div>
                             <button
                               onClick={() => navigate(`/admin/edit-startups?id=${startup.id}`)}
-                              className="ml-4 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-sm transition"
+                              className="ml-4 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-sm transition font-medium"
                             >
                               Edit
                             </button>

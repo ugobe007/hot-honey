@@ -2,12 +2,11 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import StartupCardOfficial from '../components/StartupCardOfficial';
-import ActivityTicker from '../components/ActivityTicker';
+import HamburgerMenu from '../components/HamburgerMenu';
 import { NotificationBell } from '../components/NotificationBell';
 import startupData from '../data/startupData';
 import { useAuth } from '../hooks/useAuth';
 import { useVotes } from '../hooks/useVotes';
-import { generateRecentActivities } from '../utils/activityGenerator';
 
 export default function PortfolioPage() {
   const navigate = useNavigate();
@@ -15,7 +14,6 @@ export default function PortfolioPage() {
   const { userId, isLoading: authLoading } = useAuth();
   const { votes, isLoading: votesLoading, getYesVotes, removeVote } = useVotes(userId);
   const [myYesVotes, setMyYesVotes] = useState<any[]>([]);
-  const [activities, setActivities] = useState<any[]>([]);
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
@@ -68,17 +66,6 @@ export default function PortfolioPage() {
       const profile = JSON.parse(userProfile);
       setIsAdmin(profile.email === 'admin@hotmoneyhoney.com' || profile.isAdmin);
     }
-
-    // Load activities
-    console.log('📁 Portfolio: About to load activities...');
-    generateRecentActivities()
-      .then((recentActivities) => {
-        console.log(`📁 Portfolio: Received ${recentActivities.length} activities`);
-        setActivities(recentActivities);
-      })
-      .catch((error) => {
-        console.error('📁 Portfolio: Error loading activities:', error);
-      });
   }, [authLoading, votesLoading, votes, userId]); // Added userId to dependencies
 
   const handleVote = (vote: 'yes' | 'no', startup?: any) => {
@@ -142,115 +129,50 @@ export default function PortfolioPage() {
 
   return (
     <>
-      {/* Navigation Bar - OUTSIDE main container */}
-      <div className="fixed top-2 left-1/2 transform -translate-x-1/2 z-[200] pointer-events-auto w-full px-2 sm:px-0 sm:w-auto">
-        <div className="flex gap-1 sm:gap-3 items-center pointer-events-auto justify-center flex-wrap">
-          <Link to="/signup" className="text-4xl sm:text-6xl hover:scale-110 transition-transform cursor-pointer" title="Hot Money Honey">
-            🍯
-          </Link>
-          
-          <Link 
-            to="/" 
-            className={`font-bold rounded-full transition-all whitespace-nowrap ${
-              isActive('/') ? 'text-xs sm:text-sm py-1.5 sm:py-2 px-3 sm:px-4' : 'text-xs sm:text-sm py-1 sm:py-2 px-2 sm:px-4'
-            } ${
-              isActive('/')
-                ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg scale-110'
-                : 'bg-purple-700 hover:bg-purple-600 text-white'
-            }`}
-          >
-            🏠 Home
-          </Link>
-
-          <Link 
-            to="/dashboard" 
-            className={`font-bold rounded-full transition-all whitespace-nowrap ${
-              isActive('/dashboard') ? 'py-1.5 sm:py-3 px-3 sm:px-6 scale-110 text-xs sm:text-base' : 'py-1 sm:py-2 px-2 sm:px-4 text-xs sm:text-sm'
-            } ${
-              isActive('/dashboard')
-                ? 'bg-gradient-to-r from-cyan-400 to-blue-500 text-white shadow-xl'
-                : 'bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-500 hover:to-blue-600 text-white shadow-lg'
-            }`}
-          >
-            📊 Dashboard
-          </Link>
-
-          <Link 
-            to="/vote" 
-            className={`font-bold rounded-full transition-all whitespace-nowrap ${
-              isActive('/vote') ? 'text-xs sm:text-sm py-1.5 sm:py-2 px-3 sm:px-4' : 'text-xs sm:text-sm py-1 sm:py-2 px-2 sm:px-4'
-            } ${
-              isActive('/vote')
-                ? 'bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg scale-110'
-                : 'bg-purple-700 hover:bg-purple-600 text-white'
-            }`}
-          >
-            🗳️ Vote
-          </Link>
-
-          <Link 
-            to="/portfolio" 
-            className={`font-bold rounded-full transition-all whitespace-nowrap ${
-              isActive('/portfolio') ? 'py-1.5 sm:py-3 px-3 sm:px-6 scale-110 text-xs sm:text-base' : 'py-1 sm:py-2 px-2 sm:px-4 text-xs sm:text-sm'
-            } ${
-              isActive('/portfolio')
-                ? 'bg-gradient-to-r from-yellow-500 to-orange-500 text-white shadow-lg'
-                : 'bg-purple-700 hover:bg-purple-600 text-white'
-            }`}
-          >
-            ⭐ Portfolio
-          </Link>
-
-          <Link 
-            to="/settings" 
-            className={`font-bold rounded-2xl transition-all ${getButtonSize('/settings')} ${
-              isActive('/settings')
-                ? 'bg-gradient-to-r from-gray-500 to-gray-700 text-white shadow-lg scale-110'
-                : 'bg-purple-700 hover:bg-purple-600 text-white'
-            }`}
-          >
-            ⚙️ Settings
-          </Link>
-
-          {isAdmin && (
-            <Link 
-              to="/admin/bulk-upload" 
-              className={`font-bold rounded-2xl transition-all ${getButtonSize('/admin/bulk-upload')} ${
-                isActive('/admin/bulk-upload')
-                  ? 'bg-gradient-to-r from-gray-500 to-gray-700 text-white shadow-lg scale-110'
-                  : 'bg-gradient-to-r from-gray-400 to-gray-600 hover:from-gray-500 hover:to-gray-700 text-white'
-              }`}
-            >
-              📊 Bulk Upload
-            </Link>
-          )}
-
-          <NotificationBell />
-        </div>
-      </div>
-
       {/* Main content container */}
-      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-green-400 to-purple-950 p-4 sm:p-8" style={{ backgroundImage: 'radial-gradient(ellipse 800px 600px at 20% 40%, rgba(134, 239, 172, 0.4), transparent), linear-gradient(to bottom right, rgb(88, 28, 135), rgb(59, 7, 100))' }}>
-        <div className="max-w-7xl mx-auto pt-24 sm:pt-28 px-2">{/* Changed from max-w-4xl to max-w-7xl for grid */}
+      <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-slate-100 p-4 sm:p-8">
+        {/* Hamburger Menu */}
+        <HamburgerMenu />
+
+        {/* Current Page Button */}
+        <div className="fixed top-6 left-1/2 transform -translate-x-1/2 z-40">
+          <button
+            onClick={() => navigate('/')}
+            className="px-4 py-2 rounded-full bg-gradient-to-b from-slate-300 via-slate-200 to-slate-400 text-slate-800 font-medium text-sm flex items-center gap-2 shadow-lg hover:from-slate-400 hover:via-slate-300 hover:to-slate-500 transition-all cursor-pointer"
+            style={{
+              boxShadow: '0 4px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.8), inset 0 -1px 0 rgba(0,0,0,0.2)',
+              textShadow: '0 1px 1px rgba(255,255,255,0.8)'
+            }}>
+            <span>🏠</span>
+            <span>Home</span>
+          </button>
+        </div>
+
+        <div className="max-w-7xl mx-auto pt-20 sm:pt-24 px-2">{/* Reduced padding */}
         
-        {/* Activity Ticker */}
-        <div className="mb-8">
-          <ActivityTicker activities={activities} />
-        </div>
+          {/* Header */}
+          <div className="text-center mb-6">
+            <div className="text-5xl mb-3">🍯</div>
+            <h1 className="text-3xl sm:text-4xl font-bold text-orange-600 mb-2">
+              Your Portfolio
+            </h1>
+            <p className="text-base sm:text-lg text-slate-700 font-semibold">
+              Startups you've voted YES on
+            </p>
+            <button
+              onClick={() => navigate('/dashboard')}
+              className="mt-4 px-4 py-2 rounded-full bg-gradient-to-b from-slate-300 via-slate-200 to-slate-400 text-slate-800 hover:from-slate-400 hover:via-slate-300 hover:to-slate-500 transition-all font-medium text-sm shadow-lg"
+              style={{
+                boxShadow: '0 4px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.8), inset 0 -1px 0 rgba(0,0,0,0.2)',
+                textShadow: '0 1px 1px rgba(255,255,255,0.8)'
+              }}
+            >
+              ← Back to Dashboard
+            </button>
+          </div>
 
-        {/* Header */}
-        <div className="text-center mb-8 sm:mb-12">
-          <div className="text-6xl sm:text-8xl mb-4">⭐</div>
-          <h1 className="text-3xl sm:text-5xl font-bold bg-gradient-to-r from-yellow-300 via-orange-400 to-red-500 bg-clip-text text-transparent mb-2 sm:mb-4">
-            Your Portfolio
-          </h1>
-          <p className="text-lg sm:text-xl text-white font-bold drop-shadow-lg">
-            Startups you've voted YES on
-          </p>
-        </div>
-
-        {/* Portfolio Content */}
-        {myYesVotes.length === 0 ? (
+          {/* Portfolio Content */}
+          {myYesVotes.length === 0 ? (
           <div className="bg-white rounded-3xl p-12 text-center shadow-2xl">
             <div className="text-6xl mb-4">📭</div>
             <h2 className="text-3xl font-bold text-gray-800 mb-4">No picks yet!</h2>
@@ -265,12 +187,12 @@ export default function PortfolioPage() {
             </button>
           </div>
         ) : (
-          <div className="space-y-8">
-            <div className="bg-white/10 backdrop-blur-md rounded-3xl p-6 border-2 border-orange-400">
-              <h2 className="text-2xl font-bold text-white mb-2">
+          <div className="space-y-6">
+            <div className="bg-white/90 backdrop-blur-md rounded-2xl p-4 border-2 border-orange-400">
+              <h2 className="text-lg font-bold text-slate-800 mb-1">
                 ✨ {myYesVotes.length} Startup{myYesVotes.length !== 1 ? 's' : ''} in Your Portfolio
               </h2>
-              <p className="text-purple-200">
+              <p className="text-sm text-slate-700">
                 These are the startups you've voted YES on!
               </p>
             </div>
@@ -314,8 +236,8 @@ export default function PortfolioPage() {
             </div>
           </div>
         )}
-        </div>
-      </div>
+        </div>{/* Close max-w-7xl container */}
+      </div>{/* Close page */}
     </>
   );
 }

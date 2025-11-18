@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import InvestorCard from '../components/InvestorCard';
 import AdminNav from '../components/AdminNav';
+import HamburgerMenu from '../components/HamburgerMenu';
 import investorData, { InvestorFirm } from '../data/investorData';
 import { getAllInvestors, searchInvestors } from '../lib/investorService';
 
 export default function InvestorsPage() {
+  const navigate = useNavigate();
   const [filterType, setFilterType] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [investors, setInvestors] = useState<InvestorFirm[]>(investorData);
@@ -110,33 +112,39 @@ export default function InvestorsPage() {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-purple-800 to-indigo-900 p-4 sm:p-8">
-      {/* Navigation */}
-      <div className="fixed top-2 left-1/2 transform -translate-x-1/2 z-50 w-full px-2 sm:px-0 sm:w-auto">
-        <div className="flex gap-1 sm:gap-2 items-center justify-center flex-wrap">
-          <Link to="/" className="text-4xl sm:text-6xl hover:scale-110 transition-transform">🍯</Link>
-          <Link to="/" className="px-3 sm:px-4 py-1 sm:py-2 bg-purple-700 hover:bg-purple-600 text-white font-bold rounded-full transition-all shadow-lg text-xs sm:text-sm whitespace-nowrap">🏠 Home</Link>
-          <Link to="/vote" className="px-3 sm:px-4 py-1 sm:py-2 bg-purple-700 hover:bg-purple-600 text-white font-bold rounded-full transition-all shadow-lg text-xs sm:text-sm whitespace-nowrap">🗳️ Vote</Link>
-          <Link to="/investors" className="px-4 sm:px-6 py-1.5 sm:py-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold rounded-full shadow-xl scale-105 sm:scale-110 text-xs sm:text-base whitespace-nowrap">💼 Investors</Link>
-          <Link to="/portfolio" className="px-3 sm:px-4 py-1 sm:py-2 bg-purple-700 hover:bg-purple-600 text-white font-bold rounded-full transition-all shadow-lg text-xs sm:text-sm whitespace-nowrap">⭐ Portfolio</Link>
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-slate-100 p-4 sm:p-8">
+      {/* Hamburger Menu */}
+      <HamburgerMenu />
+
+      {/* Home Button */}
+      <div className="fixed top-6 left-1/2 transform -translate-x-1/2 z-40">
+        <button
+          onClick={() => navigate('/')}
+          className="px-4 py-2 rounded-full bg-gradient-to-b from-slate-300 via-slate-200 to-slate-400 text-slate-800 font-medium text-sm flex items-center gap-2 shadow-lg hover:from-slate-400 hover:via-slate-300 hover:to-slate-500 transition-all cursor-pointer"
+          style={{
+            boxShadow: '0 4px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.8), inset 0 -1px 0 rgba(0,0,0,0.2)',
+            textShadow: '0 1px 1px rgba(255,255,255,0.8)'
+          }}>
+          <span>🏠</span>
+          <span>Home</span>
+        </button>
       </div>
 
       <div className="max-w-7xl mx-auto pt-24 sm:pt-28">
         {/* Header */}
         <div className="text-center mb-8 sm:mb-12">
           <div className="text-6xl sm:text-8xl mb-4">💼</div>
-          <h1 className="text-4xl sm:text-6xl font-bold text-white mb-2 sm:mb-4">
+          <h1 className="text-4xl sm:text-6xl font-bold text-orange-600 mb-2 sm:mb-4">
             Investor Network
           </h1>
-          <p className="text-lg sm:text-2xl text-purple-200">
+          <p className="text-lg sm:text-2xl text-slate-700">
             Connect with {investors.length}+ VCs, Accelerators & Angel Networks
           </p>
           <div className="mt-4 flex gap-4 justify-center items-center flex-wrap">
             {!useDatabase && (
               <Link 
                 to="/admin/setup" 
-                className="inline-block px-4 py-2 bg-yellow-500/20 border-2 border-yellow-500 text-yellow-300 rounded-full text-sm hover:bg-yellow-500/30 transition-all"
+                className="inline-block px-4 py-2 bg-yellow-100 border-2 border-yellow-500 text-yellow-700 rounded-full text-sm hover:bg-yellow-200 transition-all"
               >
                 ⚠️ Using static data - Click to setup database
               </Link>
@@ -151,7 +159,7 @@ export default function InvestorsPage() {
         </div>
 
         {/* Search & Filter */}
-        <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-4 sm:p-6 mb-8 border-2 border-purple-400/50">
+        <div className="bg-white/80 backdrop-blur-lg rounded-3xl p-4 sm:p-6 mb-8 border-2 border-orange-200">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Search */}
             <div>
@@ -160,7 +168,7 @@ export default function InvestorsPage() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="🔍 Search investors..."
-                className="w-full px-4 py-3 rounded-xl bg-white/20 text-white placeholder-purple-300 border-2 border-purple-400/50 focus:border-yellow-400 outline-none"
+                className="w-full px-4 py-3 rounded-xl bg-white text-slate-800 placeholder-slate-400 border-2 border-orange-200 focus:border-orange-400 outline-none"
               />
             </div>
 
@@ -169,44 +177,44 @@ export default function InvestorsPage() {
               <select
                 value={filterType}
                 onChange={(e) => setFilterType(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl bg-white/20 text-white border-2 border-purple-400/50 focus:border-yellow-400 outline-none appearance-none cursor-pointer"
+                className="w-full px-4 py-3 rounded-xl bg-white text-slate-800 border-2 border-orange-200 focus:border-orange-400 outline-none appearance-none cursor-pointer"
               >
-                <option value="all" className="bg-purple-900">All Types</option>
-                <option value="vc_firm" className="bg-purple-900">💼 VC Firms</option>
-                <option value="accelerator" className="bg-purple-900">🚀 Accelerators</option>
-                <option value="angel_network" className="bg-purple-900">👼 Angel Networks</option>
-                <option value="corporate_vc" className="bg-purple-900">🏢 Corporate VCs</option>
+                <option value="all" className="bg-white">All Types</option>
+                <option value="vc_firm" className="bg-white">💼 VC Firms</option>
+                <option value="accelerator" className="bg-white">🚀 Accelerators</option>
+                <option value="angel_network" className="bg-white">👼 Angel Networks</option>
+                <option value="corporate_vc" className="bg-white">🏢 Corporate VCs</option>
               </select>
             </div>
           </div>
 
           {/* Results Count */}
-          <p className="text-purple-200 text-sm mt-4">
+          <p className="text-slate-700 text-sm mt-4">
             Showing {filteredInvestors.length} investor{filteredInvestors.length !== 1 ? 's' : ''}
           </p>
         </div>
 
         {/* Stats Overview */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <div className="bg-gradient-to-r from-blue-600 to-blue-800 rounded-2xl p-6 text-center">
+          <div className="bg-white/80 backdrop-blur-md rounded-2xl p-6 text-center border-2 border-blue-300">
             <div className="text-4xl mb-2">💼</div>
-            <div className="text-3xl font-bold text-white">{investors.filter(i => i.type === 'vc_firm').length}</div>
-            <div className="text-blue-200 text-sm font-semibold">VC Firms</div>
+            <div className="text-3xl font-bold text-blue-700">{investors.filter(i => i.type === 'vc_firm').length}</div>
+            <div className="text-slate-700 text-sm font-semibold">VC Firms</div>
           </div>
-          <div className="bg-gradient-to-r from-green-600 to-green-800 rounded-2xl p-6 text-center">
+          <div className="bg-white/80 backdrop-blur-md rounded-2xl p-6 text-center border-2 border-green-300">
             <div className="text-4xl mb-2">🚀</div>
-            <div className="text-3xl font-bold text-white">{investors.filter(i => i.type === 'accelerator').length}</div>
-            <div className="text-green-200 text-sm font-semibold">Accelerators</div>
+            <div className="text-3xl font-bold text-green-700">{investors.filter(i => i.type === 'accelerator').length}</div>
+            <div className="text-slate-700 text-sm font-semibold">Accelerators</div>
           </div>
-          <div className="bg-gradient-to-r from-purple-600 to-purple-800 rounded-2xl p-6 text-center">
+          <div className="bg-white/80 backdrop-blur-md rounded-2xl p-6 text-center border-2 border-purple-300">
             <div className="text-4xl mb-2">🦄</div>
-            <div className="text-3xl font-bold text-white">{investors.reduce((sum, i) => sum + (i.unicorns || 0), 0)}</div>
-            <div className="text-purple-200 text-sm font-semibold">Unicorns Created</div>
+            <div className="text-3xl font-bold text-purple-700">{investors.reduce((sum, i) => sum + (i.unicorns || 0), 0)}</div>
+            <div className="text-slate-700 text-sm font-semibold">Unicorns Created</div>
           </div>
-          <div className="bg-gradient-to-r from-orange-600 to-orange-800 rounded-2xl p-6 text-center">
+          <div className="bg-white/80 backdrop-blur-md rounded-2xl p-6 text-center border-2 border-orange-300">
             <div className="text-4xl mb-2">💰</div>
-            <div className="text-3xl font-bold text-white">{investors.reduce((sum, i) => sum + (i.portfolioCount || 0), 0)}+</div>
-            <div className="text-orange-200 text-sm font-semibold">Portfolio Cos</div>
+            <div className="text-3xl font-bold text-orange-700">{investors.reduce((sum, i) => sum + (i.portfolioCount || 0), 0)}+</div>
+            <div className="text-slate-700 text-sm font-semibold">Portfolio Cos</div>
           </div>
         </div>
 
@@ -224,10 +232,10 @@ export default function InvestorsPage() {
             ))}
           </div>
         ) : (
-          <div className="text-center py-20 bg-white/10 backdrop-blur-lg rounded-3xl border-2 border-purple-400/50">
+          <div className="text-center py-20 bg-white/80 backdrop-blur-lg rounded-3xl border-2 border-orange-200">
             <div className="text-8xl mb-6">🔍</div>
-            <h2 className="text-4xl font-bold text-white mb-4">No investors found</h2>
-            <p className="text-xl text-purple-200 mb-8">Try adjusting your search or filters</p>
+            <h2 className="text-4xl font-bold text-orange-600 mb-4">No investors found</h2>
+            <p className="text-xl text-slate-700 mb-8">Try adjusting your search or filters</p>
           </div>
         )}
       </div>

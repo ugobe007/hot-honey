@@ -2,11 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import StartupCardOfficial from './StartupCardOfficial';
-import AdminNav from './AdminNav';
-import ActivityTicker from './ActivityTicker';
+import NewsUpdate from './NewsUpdate';
+import HamburgerMenu from './HamburgerMenu';
 import startupData from '../data/startupData';
 import { loadApprovedStartups } from '../store';
-import { generateRecentActivities } from '../utils/activityGenerator';
 
 const FrontPageNew: React.FC = () => {
   const navigate = useNavigate();
@@ -16,7 +15,6 @@ const FrontPageNew: React.FC = () => {
   const [votedStartupIds, setVotedStartupIds] = useState<Set<number>>(new Set());
   const [nextAvailableIndex, setNextAvailableIndex] = useState(3);
   const [slidingCards, setSlidingCards] = useState<number[]>([]);
-  const [activities, setActivities] = useState<any[]>([]);
 
   // Load approved startups from database on mount and load voted IDs
   useEffect(() => {
@@ -66,10 +64,6 @@ const FrontPageNew: React.FC = () => {
         setCurrentStartupIndices([0, Math.min(1, allStartups.length - 1), Math.min(2, allStartups.length - 1)]);
         setNextAvailableIndex(3);
       }
-
-      // Load activities
-      const recentActivities = await generateRecentActivities();
-      setActivities(recentActivities);
     };
     loadStartups();
   }, []);
@@ -188,99 +182,53 @@ const FrontPageNew: React.FC = () => {
     });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-green-400 to-purple-950" style={{ backgroundImage: 'radial-gradient(ellipse 800px 600px at 20% 40%, rgba(134, 239, 172, 0.4), transparent), linear-gradient(to bottom right, rgb(88, 28, 135), rgb(59, 7, 100))' }}>
-      <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50">
-        <div className="flex gap-2 items-center">
-          <Link to="/signup" className="text-6xl hover:scale-110 transition-transform cursor-pointer" title="Sign Up">
-            🍯
-          </Link>
-          <Link 
-            to="/" 
-            className="flex items-center justify-center bg-orange-500 text-white font-medium text-sm shadow-lg hover:bg-orange-600 transition-colors"
-            style={{ width: '120px', height: '45px', borderRadius: '22.5px' }}
-          >
-            🏠 Home
-          </Link>
-          <Link 
-            to="/vote" 
-            className="flex items-center justify-center bg-purple-700 text-white font-medium text-sm shadow-lg hover:bg-purple-600 transition-colors"
-            style={{ width: '110px', height: '45px', borderRadius: '22.5px' }}
-          >
-            <span className="blink-text">🗳️ Vote</span>
-          </Link>
-          <Link 
-            to="/investors" 
-            className="flex items-center justify-center bg-purple-700 text-white font-medium text-sm shadow-lg hover:bg-purple-600 transition-colors"
-            style={{ width: '140px', height: '45px', borderRadius: '22.5px' }}
-          >
-            💼 Investors
-          </Link>
-          <Link 
-            to="/portfolio" 
-            className="flex items-center justify-center bg-purple-700 text-white font-medium text-sm shadow-lg hover:bg-purple-600 transition-colors"
-            style={{ width: '130px', height: '45px', borderRadius: '22.5px' }}
-          >
-            ⭐ Portfolio
-          </Link>
-          <Link 
-            to="/analytics" 
-            className="flex items-center justify-center bg-gradient-to-r from-purple-700 to-purple-900 text-yellow-400 font-bold text-sm shadow-lg hover:from-purple-800 hover:to-purple-950 transition-all"
-            style={{ width: '140px', height: '45px', borderRadius: '22.5px' }}
-          >
-            📈 Analytics
-          </Link>
-          <Link 
-            to="/dashboard" 
-            className="flex items-center justify-center bg-orange-500 text-white font-medium text-sm shadow-lg hover:bg-orange-600 transition-colors"
-            style={{ width: '145px', height: '45px', borderRadius: '22.5px' }}
-          >
-            👤 Dashboard
-          </Link>
-        </div>
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-slate-100">
+      {/* Hamburger Menu */}
+      <HamburgerMenu />
 
-      {/* Dynamic Login/Logout button in upper right corner */}
-      <div className="fixed top-4 right-8 z-50 flex flex-col items-end gap-2">
-        {isLoggedIn ? (
-          <>
-            <button
-              onClick={() => {
-                logout();
-                navigate('/');
-              }}
-              className="px-6 py-2 bg-white text-purple-700 rounded-full font-bold text-sm shadow-lg hover:bg-gray-100 transition-all border-2 border-purple-300"
-            >
-              � Log Out
-            </button>
-            <Link
-              to="/profile"
-              className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-full font-semibold text-sm shadow-lg hover:bg-purple-700 transition-all"
-            >
-              {user?.isAdmin ? (
-                <img src="/images/Mr_Bee_Head.jpg" alt="Profile" className="w-8 h-8 object-contain" />
-              ) : (
-                <span>👨‍💼</span>
-              )}
-              <span>Profile</span>
-            </Link>
-          </>
-        ) : (
-          <Link 
-            to="/login" 
-            className="px-6 py-2 bg-white text-purple-700 rounded-full font-bold text-sm shadow-lg hover:bg-gray-100 transition-all border-2 border-purple-300"
+      {/* Centered Buttons at Top */}
+      <div className="fixed top-6 left-1/2 transform -translate-x-1/2 z-40 flex items-center gap-2">
+        {isLoggedIn && (
+          <Link
+            to="/portfolio"
+            className="px-3 py-2 rounded-full bg-gradient-to-r from-[#FFE102] to-[#f99006] text-slate-800 hover:from-[#f99006] hover:to-[#f87004] hover:text-white transition-all shadow-lg font-bold text-sm flex items-center gap-2"
           >
-            🔑 Log In
+            <span>⭐</span>
+            <span>Portfolio</span>
+          </Link>
+        )}
+        <Link
+          to="/dashboard"
+          className="px-3 py-2 rounded-full bg-gradient-to-b from-slate-300 via-slate-200 to-slate-400 text-slate-800 hover:from-slate-400 hover:via-slate-300 hover:to-slate-500 transition-all font-medium text-sm flex items-center gap-2"
+          style={{
+            boxShadow: '0 4px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.8), inset 0 -1px 0 rgba(0,0,0,0.2)',
+            textShadow: '0 1px 1px rgba(255,255,255,0.8)'
+          }}
+        >
+          <span>👤</span>
+          <span>Dashboard</span>
+        </Link>
+        {!isLoggedIn && (
+          <Link
+            to="/signup"
+            className="px-3 py-2 rounded-full bg-gradient-to-r from-purple-600 to-purple-800 text-white hover:from-purple-700 hover:to-purple-900 transition-all shadow-lg font-medium text-sm flex items-center gap-2"
+          >
+            <span>🔑</span>
+            <span>Log In</span>
           </Link>
         )}
       </div>
 
       <div className="pt-28 px-8">
-        <div className="text-center mb-8">
+        <div className="text-center mb-4 flex flex-col items-center">
           <div className="relative inline-block">
-            <h1 className="text-8xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-orange-400 to-red-500 mb-2">
-              Hot Honey
+            <h1 className="text-8xl font-bold text-[#f87004] mb-2" style={{
+              textShadow: '2px 2px 0px #fb9f05, 4px 4px 0px #f99006, 6px 6px 0px #ae3e07',
+              transform: 'translateZ(0)'
+            }}>
+              Hot Money
             </h1>
-            {/* Mr. Bee leaning on Honey */}
+            {/* Mr. Bee leaning on title */}
             <img 
               src="/images/Mr_Bee.png" 
               alt="Mr. Bee" 
@@ -291,20 +239,17 @@ const FrontPageNew: React.FC = () => {
             />
           </div>
           
-          <div className="mt-6 mb-4">
-            <h2 className="text-3xl font-bold text-white mb-3">
+          <div className="mt-2 mb-3">
+            <h2 className="text-3xl font-bold text-slate-700 mb-2">
               🔥 Start Collecting Hot Deals 🔥
             </h2>
-            <p className="text-lg text-purple-200 max-w-2xl mx-auto mb-6 font-medium">
+            <p className="text-lg text-slate-600 max-w-2xl mx-auto mb-3 font-medium">
               Discover the hottest startup deals and grow your investment portfolio
             </p>
           </div>
 
-          <div className="flex gap-4 justify-center mb-8">
-            <Link to="/vote" className="px-6 py-2.5 bg-orange-500 text-white rounded-lg font-medium text-base hover:bg-orange-600 transition-colors shadow-lg">
-              📊 Start Voting
-            </Link>
-            <Link to="/submit" className="px-6 py-2.5 bg-white text-orange-500 border-2 border-orange-500 rounded-lg font-medium text-base hover:bg-orange-50 transition-colors shadow-lg">
+          <div className="flex gap-4 justify-center mb-4">
+            <Link to="/submit" className="px-6 py-2.5 bg-gradient-to-br from-[#f87004] via-[#fb9f05] to-[#f99006] text-[#4700d6] border-2 border-[#f87004] rounded-lg font-bold text-base hover:from-[#fb9f05] hover:via-[#f87004] hover:to-[#ae3e07] transition-all shadow-lg">
               📈 Submit Startup
             </Link>
           </div>
@@ -312,18 +257,16 @@ const FrontPageNew: React.FC = () => {
 
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-6">
-            <h3 className="text-2xl font-bold text-white" style={{ 
-              textShadow: '2px 2px 4px rgba(147, 51, 234, 0.6), -2px -2px 4px rgba(134, 239, 172, 0.4)' 
-            }}>
-              📡 Live Activity Feed
+            <h3 className="text-2xl font-bold text-[#a81eff]" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.3)' }}>
+              📰 Venture Capital News
             </h3>
-            <p className="text-purple-200 mt-2">
-              See what's happening right now
+            <p className="text-slate-600 mt-2">
+              Latest deals and investments (updates every 20 seconds)
             </p>
           </div>
           
-          {/* Activity Ticker */}
-          <ActivityTicker activities={activities} />
+          {/* News Update Ticker */}
+          <NewsUpdate />
           
           {/* Featured Startups Grid */}
           <div className="mt-8">
@@ -362,9 +305,6 @@ const FrontPageNew: React.FC = () => {
           animation: slide-left 0.25s ease-out forwards;
         }
       `}</style>
-      
-      {/* Admin Navigation */}
-      <AdminNav />
     </div>
   );
 };

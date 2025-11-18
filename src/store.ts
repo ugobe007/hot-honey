@@ -20,9 +20,20 @@ export async function loadApprovedStartups(limit: number = 50, offset: number = 
       .order('created_at', { ascending: false })
       .range(offset, offset + limit - 1);
     
-    if (error || !data) {
-      console.error('❌ Error loading approved startups:', error);
-      return [];
+    // If Supabase fails or returns empty, fall back to local startupData
+    if (error || !data || data.length === 0) {
+      if (error) {
+        console.warn('⚠️ Supabase error, using local data:', error.message);
+      } else {
+        console.warn('⚠️ No data from Supabase, using local data');
+      }
+      
+      // Return paginated slice of local startupData
+      const start = offset;
+      const end = offset + limit;
+      const localData = startupData.slice(start, end);
+      console.log(`✅ Using local startup data: ${localData.length} startups (offset: ${offset})`);
+      return localData;
     }
 
     console.log(`✅ Approved startups loaded: ${data.length} (offset: ${offset}, limit: ${limit})`);
@@ -65,8 +76,11 @@ export async function loadApprovedStartups(limit: number = 50, offset: number = 
     
     return converted;
   } catch (err) {
-    console.error('💥 Failed to load approved startups:', err);
-    return [];
+    console.error('💥 Failed to load approved startups, using local data:', err);
+    // Fall back to local data on exception
+    const start = offset;
+    const end = offset + limit;
+    return startupData.slice(start, end);
   }
 }
 

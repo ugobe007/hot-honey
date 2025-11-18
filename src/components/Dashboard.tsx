@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import StartupCardOfficial from './StartupCardOfficial';
-import ActivityTicker from './ActivityTicker';
+import HamburgerMenu from './HamburgerMenu';
+import BonusCard from './BonusCard';
+import FirePointsWidget from './FirePointsWidget';
 import { NotificationBell } from './NotificationBell';
 import startupData from '../data/startupData';
 import { useAuth } from '../hooks/useAuth';
 import { useVotes } from '../hooks/useVotes';
 import { useStore } from '../store';
-import { generateRecentActivities } from '../utils/activityGenerator';
+import { shouldShowBonusCard, initializeInvestorProfile } from '../utils/firePointsManager';
 
 interface YesVote {
   id: number;
@@ -24,12 +26,23 @@ const Dashboard: React.FC = () => {
   const { votes, isLoading: votesLoading, getYesVotes, voteCounts } = useVotes(userId);
   const portfolio = useStore((state) => state.portfolio);
   const [myYesVotes, setMyYesVotes] = useState<YesVote[]>([]);
-  const [activities, setActivities] = useState<any[]>([]);
+  const [showBonusCard, setShowBonusCard] = useState(false);
 
   useEffect(() => {
     if (authLoading || votesLoading) return;
 
     const isAnonymous = !userId || userId.startsWith('anon_');
+    
+    // Initialize investor profile if needed
+    const userIdForProfile = userId || localStorage.getItem('userId') || `anon_${Date.now()}`;
+    if (!localStorage.getItem('investorProfile')) {
+      initializeInvestorProfile(userIdForProfile);
+    }
+    
+    // Check for bonus card (20% chance)
+    if (shouldShowBonusCard()) {
+      setTimeout(() => setShowBonusCard(true), 2000); // Show after 2 seconds
+    }
     
     console.log('Dashboard useEffect:', { 
       isAnonymous, 
@@ -90,17 +103,6 @@ const Dashboard: React.FC = () => {
 
       setMyYesVotes(enrichedVotes);
     }
-
-    // Load activities
-    console.log('📊 Dashboard (components): About to load activities...');
-    generateRecentActivities()
-      .then((recentActivities) => {
-        console.log(`📊 Dashboard (components): Received ${recentActivities.length} activities`);
-        setActivities(recentActivities);
-      })
-      .catch((error) => {
-        console.error('📊 Dashboard (components): Error loading activities:', error);
-      });
   }, [authLoading, votesLoading, votes, portfolio, userId]); // Added portfolio and userId to dependencies
 
   const handleVote = (vote: 'yes' | 'no', startup?: any) => {
@@ -136,50 +138,60 @@ const Dashboard: React.FC = () => {
 
   if (authLoading || votesLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-purple-800 to-indigo-900 flex items-center justify-center">
-        <div className="text-white text-2xl">Loading your picks...</div>
+      <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-slate-100 flex items-center justify-center">
+        <div className="text-orange-600 text-2xl font-bold">Loading your picks...</div>
       </div>
     );
   }
 
   return (
     <>
-      <div className="fixed top-2 left-1/2 transform -translate-x-1/2 z-[200] pointer-events-auto w-full px-2 sm:px-0 sm:w-auto">
-        <div className="flex gap-1 sm:gap-2 pointer-events-auto items-center justify-center flex-wrap">
-          <Link to="/" className="text-4xl sm:text-6xl hover:scale-110 transition-transform">🍯</Link>
-          <Link to="/" className="px-2 sm:px-4 py-1 sm:py-2 bg-purple-700 hover:bg-purple-600 text-white font-bold rounded-full transition-all shadow-lg text-xs sm:text-sm whitespace-nowrap">🏠 Home</Link>
-          <Link to="/vote" className="px-2 sm:px-4 py-1 sm:py-2 bg-purple-700 hover:bg-purple-600 text-white font-bold rounded-full transition-all shadow-lg text-xs sm:text-sm whitespace-nowrap">🗳️ Vote</Link>
-          <Link to="/investors" className="px-2 sm:px-4 py-1 sm:py-2 bg-purple-700 hover:bg-purple-600 text-white font-bold rounded-full transition-all shadow-lg text-xs sm:text-sm whitespace-nowrap">💼 Investors</Link>
-          <Link to="/upload" className="px-2 sm:px-3 py-1 sm:py-1.5 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-full shadow-lg text-xs sm:text-sm whitespace-nowrap">🚀 Submit</Link>
-          <Link to="/dashboard" className="px-3 sm:px-6 py-1.5 sm:py-3 bg-gradient-to-r from-cyan-400 to-blue-500 text-white font-bold rounded-full shadow-xl scale-105 sm:scale-110 text-xs sm:text-base whitespace-nowrap">📊 Dashboard</Link>
-          <Link to="/portfolio" className="px-2 sm:px-4 py-1 sm:py-2 bg-purple-700 hover:bg-purple-600 text-white font-bold rounded-full transition-all shadow-lg text-xs sm:text-sm whitespace-nowrap">⭐ Portfolio</Link>
-        </div>
+      {/* Hamburger Menu */}
+      <HamburgerMenu />
+
+      {/* Current Page Button */}
+      <div className="fixed top-6 left-1/2 transform -translate-x-1/2 z-40">
+        <Link to="/" className="px-4 py-2 rounded-full bg-gradient-to-b from-slate-300 via-slate-200 to-slate-400 text-slate-800 font-medium text-sm flex items-center gap-2 shadow-lg hover:from-slate-400 hover:via-slate-300 hover:to-slate-500 transition-all"
+          style={{
+            boxShadow: '0 4px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.8), inset 0 -1px 0 rgba(0,0,0,0.2)',
+            textShadow: '0 1px 1px rgba(255,255,255,0.8)'
+          }}>
+          <span>📊</span>
+          <span>Dashboard</span>
+        </Link>
       </div>
 
-      <div className="fixed top-2 right-2 sm:top-4 sm:right-4 z-[200] flex gap-1 sm:gap-2 pointer-events-auto flex-wrap justify-end">
-        <NotificationBell />
-        <Link to="/settings" className="px-2 sm:px-3 py-1 sm:py-1.5 bg-purple-600 hover:bg-purple-500 text-white text-xs sm:text-sm font-medium rounded-lg transition-all shadow-md whitespace-nowrap">⚙️</Link>
-        <button onClick={() => { localStorage.clear(); window.location.href = '/'; }} className="px-2 sm:px-3 py-1 sm:py-1.5 bg-red-600 hover:bg-red-500 text-white text-xs sm:text-sm font-medium rounded-lg transition-all shadow-md">🚪</button>
-      </div>
-
-      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-purple-800 to-indigo-900 p-4 sm:p-8">
+      <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-slate-100 p-4 sm:p-8">
         <div className="pt-24 sm:pt-28 px-2 sm:px-4 max-w-7xl mx-auto">
           
-          {/* Activity Ticker */}
-          <div className="mb-8">
-            <ActivityTicker activities={activities} />
+          <div className="text-center mb-8 sm:mb-12">
+            <div className="relative inline-block">
+              <h1 className="text-4xl sm:text-6xl font-bold text-orange-600 mb-2 sm:mb-4 inline-flex items-center gap-3">
+                🔥 My Hot Picks
+              </h1>
+              {/* Mr. Bee next to title - larger and closer */}
+              <img 
+                src="/images/Mr_Bee.png" 
+                alt="Mr. Bee" 
+                className="absolute -right-20 sm:-right-24 w-24 sm:w-28 h-24 sm:h-28 object-contain"
+                style={{ 
+                  top: '-10px'
+                }}
+              />
+            </div>
+            <p className="text-lg sm:text-2xl text-slate-700 mt-4">You've voted YES on <span className="font-bold text-orange-500">{myYesVotes.length}</span> {myYesVotes.length === 1 ? 'startup' : 'startups'}</p>
           </div>
 
-          <div className="text-center mb-8 sm:mb-12">
-            <h1 className="text-4xl sm:text-6xl font-bold text-white mb-2 sm:mb-4">🔥 My Hot Picks</h1>
-            <p className="text-lg sm:text-2xl text-purple-200">You've voted YES on <span className="font-bold text-cyan-400">{myYesVotes.length}</span> {myYesVotes.length === 1 ? 'startup' : 'startups'}</p>
+          {/* Fire Points Widget */}
+          <div className="mb-8">
+            <FirePointsWidget />
           </div>
 
           {myYesVotes.length === 0 ? (
-            <div className="text-center py-20 bg-white/10 backdrop-blur-lg rounded-3xl border-2 border-purple-400/50">
+            <div className="text-center py-20 bg-orange-50/50 backdrop-blur-lg rounded-3xl border-2 border-orange-200/50">
               <div className="text-8xl mb-6">🤷‍♂️</div>
-              <h2 className="text-4xl font-bold text-white mb-4">No hot picks yet!</h2>
-              <p className="text-xl text-purple-200 mb-8">Start voting YES on startups you're interested in</p>
+              <h2 className="text-4xl font-bold text-orange-600 mb-4">No hot picks yet!</h2>
+              <p className="text-xl text-slate-700 mb-8">Start voting YES on startups you're interested in</p>
               <Link to="/vote" className="inline-block px-8 py-4 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold text-lg rounded-2xl shadow-xl transition-all">🔥 Start Voting Now</Link>
             </div>
           ) : (
@@ -191,6 +203,14 @@ const Dashboard: React.FC = () => {
           )}
         </div>
       </div>
+      
+      {/* Bonus Card Modal */}
+      {showBonusCard && (
+        <BonusCard
+          onClose={() => setShowBonusCard(false)}
+          onClaim={() => setShowBonusCard(false)}
+        />
+      )}
     </>
   );
 };

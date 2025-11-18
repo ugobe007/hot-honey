@@ -19,18 +19,11 @@ interface ActivityTickerProps {
  * Speed is controlled by animation duration in seconds.
  * The ticker scrolls through ALL activities once per duration.
  * 
- * Speed History:
- * - 60s  (1 min)  = TOO FAST - hard to read
- * - 90s  (1.5 min) = TOO FAST - still rushing
- * - 120s (2 min)   = TOO FAST - better but still quick
- * - 180s (3 min)   = TOO FAST - getting better
- * - 240s (4 min)   = TOO FAST - user feedback
- * - 300s (5 min)   = TESTING - current speed
- * 
- * Current Setting: 300s (5 minutes per full loop)
- * Rationale: Allows comfortable reading time for ~50+ activities
+ * Current Setting: 40s (40 seconds per full loop)
+ * Rationale: Smooth, engaging speed - visible movement but readable
  */
-const TICKER_SPEED_SECONDS = 300;
+// ⚙️ Configuration
+const TICKER_SPEED_SECONDS = 180; // Takes 180 seconds to scroll through all activities
 
 const ActivityTicker: React.FC<ActivityTickerProps> = ({ activities }) => {
   console.log('🎪 ActivityTicker component rendering');
@@ -46,14 +39,8 @@ const ActivityTicker: React.FC<ActivityTickerProps> = ({ activities }) => {
     if (activities.length === 0) {
       console.log('🎪 ActivityTicker: Showing loading state');
       setIsLoading(true);
-      const loadingActivities: ActivityItem[] = [
-        { id: 'loading-1', type: 'trending', icon: '⏳', text: 'Ticker is loading...', timestamp: new Date() },
-        { id: 'loading-2', type: 'new', icon: '🔄', text: 'Fetching startup updates...', timestamp: new Date() },
-        { id: 'loading-3', type: 'trending', icon: '📡', text: 'Connecting to database...', timestamp: new Date() },
-      ];
-      setDisplayActivities([...loadingActivities, ...loadingActivities]);
-      // Trigger animation even for loading state
-      setAnimationKey(prev => prev + 1);
+      // Don't show loading activities, just wait for real data
+      setDisplayActivities([]);
     } else {
       console.log('🎪 ActivityTicker: Displaying real activities');
       setIsLoading(false);
@@ -70,7 +57,7 @@ const ActivityTicker: React.FC<ActivityTickerProps> = ({ activities }) => {
 
   return (
     <div 
-      className="relative overflow-hidden bg-gradient-to-r from-purple-900/50 via-purple-800/50 to-indigo-900/50 backdrop-blur-md border-2 border-purple-400/30 rounded-xl cursor-pointer hover:border-purple-400/60 transition-all shadow-xl"
+      className="relative overflow-hidden bg-gradient-to-r from-purple-700 via-purple-600 to-purple-800 border-2 border-purple-500 rounded-xl cursor-pointer hover:border-purple-400 transition-all shadow-xl"
       onClick={handleClick}
       style={{ height: '80px' }}
     >
@@ -87,10 +74,10 @@ const ActivityTicker: React.FC<ActivityTickerProps> = ({ activities }) => {
                 <span className="text-lg font-medium whitespace-nowrap">
                   {activity.text}
                 </span>
-                <span className="text-purple-300 text-sm ml-4 whitespace-nowrap">
+                <span className="text-purple-200 text-sm ml-4 whitespace-nowrap">
                   {getRelativeTime(activity.timestamp)}
                 </span>
-                <span className="text-purple-400 mx-6">|</span>
+                <span className="text-purple-300 mx-6">|</span>
               </div>
             ))}
           </div>
@@ -98,23 +85,13 @@ const ActivityTicker: React.FC<ActivityTickerProps> = ({ activities }) => {
       </div>
 
       {/* Gradient fade edges */}
-      <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-purple-900/80 to-transparent pointer-events-none z-10" />
-      <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-indigo-900/80 to-transparent pointer-events-none z-10" />
+      <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-purple-700 to-transparent pointer-events-none z-10" />
+      <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-purple-800 to-transparent pointer-events-none z-10" />
 
-      {/* Loading indicator when activities are loading */}
-      {isLoading && (
-        <div className="absolute top-2 left-4 bg-yellow-500/90 px-3 py-1.5 rounded-full text-white text-sm font-semibold pointer-events-none z-20 flex items-center gap-2">
-          <span className="animate-spin">⏳</span>
-          <span>Ticker is loading...</span>
-        </div>
-      )}
-
-      {/* Click hint - More prominent (only show when not loading) */}
-      {!isLoading && (
-        <div className="absolute top-2 right-4 bg-purple-600/90 px-3 py-1.5 rounded-full text-white text-sm font-semibold pointer-events-none z-20 animate-pulse shadow-lg">
-          👆 Click to see all updates
-        </div>
-      )}
+      {/* Click hint */}
+      <div className="absolute top-2 right-4 bg-purple-900 px-3 py-1.5 rounded-full text-white text-sm font-semibold pointer-events-none z-20 animate-pulse shadow-lg">
+        👆 Click to see all updates
+      </div>
 
       <style>{`
         .ticker-wrapper {
