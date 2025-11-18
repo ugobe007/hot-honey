@@ -1,12 +1,15 @@
 // FILE: src/pages/Vote.tsx
 
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useStore } from '../store';
 import StartupCardOfficial from '../components/StartupCardOfficial';
 import ActivityTicker from '../components/ActivityTicker';
+import HamburgerMenu from '../components/HamburgerMenu';
 import { generateRecentActivities } from '../utils/activityGenerator';
 
 const Vote: React.FC = () => {
+  const navigate = useNavigate();
   const startups = useStore((state) => state.startups);
   const currentIndex = useStore((state) => state.currentIndex);
   const voteYes = useStore((state) => state.voteYes);
@@ -55,6 +58,26 @@ const Vote: React.FC = () => {
 
   return (
     <div className="bg-orange-50 min-h-screen px-2 sm:px-4">
+      {/* Hamburger Menu */}
+      <HamburgerMenu />
+
+      {/* Vote Button - Links to Home */}
+      <div className="fixed top-6 left-1/2 transform -translate-x-1/2 z-40">
+        <button
+          onClick={() => {
+            console.log('Vote button clicked, navigating to /');
+            navigate('/');
+          }}
+          className="px-4 py-2 rounded-full bg-gradient-to-b from-slate-300 via-slate-200 to-slate-400 text-slate-800 font-medium text-sm flex items-center gap-2 shadow-lg hover:from-slate-400 hover:via-slate-300 hover:to-slate-500 transition-all cursor-pointer"
+          style={{
+            boxShadow: '0 4px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.8), inset 0 -1px 0 rgba(0,0,0,0.2)',
+            textShadow: '0 1px 1px rgba(255,255,255,0.8)'
+          }}>
+          <span>🗳️</span>
+          <span>Vote</span>
+        </button>
+      </div>
+
       {/* Activity Ticker at the top */}
       <div className="max-w-6xl mx-auto pt-4 pb-6">
         <ActivityTicker activities={activities} />

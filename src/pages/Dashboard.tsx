@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import StartupCardOfficial from '../components/StartupCardOfficial';
-import ActivityTicker from '../components/ActivityTicker';
+import HamburgerMenu from '../components/HamburgerMenu';
 import startupData from '../data/startupData';
-import { generateRecentActivities } from '../utils/activityGenerator';
 
 interface YesVote {
   id: number;
@@ -18,7 +17,6 @@ interface YesVote {
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
   const [myYesVotes, setMyYesVotes] = useState<YesVote[]>([]);
-  const [activities, setActivities] = useState<any[]>([]);
 
   useEffect(() => {
     // Load YES votes from localStorage
@@ -42,17 +40,6 @@ const Dashboard: React.FC = () => {
       localStorage.setItem('myYesVotes', JSON.stringify(enrichedVotes));
       setMyYesVotes(enrichedVotes);
     }
-
-    // Load activities with error handling
-    console.log('📊 Dashboard: About to load activities...');
-    generateRecentActivities()
-      .then((recentActivities) => {
-        console.log(`📊 Dashboard: Received ${recentActivities.length} activities`);
-        setActivities(recentActivities);
-      })
-      .catch((error) => {
-        console.error('📊 Dashboard: Error loading activities:', error);
-      });
   }, []);
 
   const handleVote = (vote: 'yes' | 'no') => {
@@ -67,26 +54,22 @@ const Dashboard: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-purple-800 to-indigo-900 p-8">
-      {/* Top Navigation */}
-      <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-[200] pointer-events-auto">
-        <div className="flex gap-2 pointer-events-auto">
-          <Link to="/" className="text-4xl hover:scale-110 transition-transform" title="Hot Money Honey">
-            🍯
-          </Link>
-          <Link to="/" className="px-5 py-2.5 bg-purple-700 hover:bg-purple-600 text-white font-bold rounded-2xl transition-all shadow-lg">
-            🏠 Home
-          </Link>
-          <Link to="/vote" className="px-5 py-2.5 bg-purple-700 hover:bg-purple-600 text-white font-bold rounded-2xl transition-all shadow-lg">
-            🗳️ Vote
-          </Link>
-          <Link to="/dashboard" className="px-7 py-3 bg-gradient-to-r from-cyan-400 to-blue-500 text-white font-bold rounded-2xl shadow-xl scale-110">
-            📊 Dashboard
-          </Link>
-          <Link to="/portfolio" className="px-5 py-2.5 bg-purple-700 hover:bg-purple-600 text-white font-bold rounded-2xl transition-all shadow-lg">
-            ⭐ Portfolio
-          </Link>
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-slate-100 p-8">
+      {/* Hamburger Menu */}
+      <HamburgerMenu />
+
+      {/* Current Page Button */}
+      <div className="fixed top-6 left-1/2 transform -translate-x-1/2 z-40">
+        <button
+          onClick={() => navigate('/')}
+          className="px-4 py-2 rounded-full bg-gradient-to-b from-slate-300 via-slate-200 to-slate-400 text-slate-800 font-medium text-sm flex items-center gap-2 shadow-lg hover:from-slate-400 hover:via-slate-300 hover:to-slate-500 transition-all cursor-pointer"
+          style={{
+            boxShadow: '0 4px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.8), inset 0 -1px 0 rgba(0,0,0,0.2)',
+            textShadow: '0 1px 1px rgba(255,255,255,0.8)'
+          }}>
+          <span>🏠</span>
+          <span>Home</span>
+        </button>
       </div>
 
       {/* User Controls - Upper Right */}
@@ -103,32 +86,23 @@ const Dashboard: React.FC = () => {
       </div>
 
       <div className="pt-28 max-w-7xl mx-auto">
-        {/* Activity Ticker */}
-        <div className="mb-8">
-          {(() => {
-            console.log('📊 Dashboard: Rendering with', activities.length, 'activities');
-            return null;
-          })()}
-          <ActivityTicker activities={activities} />
-        </div>
-
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-6xl font-bold text-white mb-4">
+          <h1 className="text-6xl font-bold text-orange-600 mb-4">
             🔥 My Hot Picks
           </h1>
-          <p className="text-2xl text-purple-200">
-            You've voted YES on <span className="font-bold text-yellow-300">{myYesVotes.length}</span> {myYesVotes.length === 1 ? 'startup' : 'startups'}
+          <p className="text-2xl text-slate-700">
+            You've voted YES on <span className="font-bold text-orange-500">{myYesVotes.length}</span> {myYesVotes.length === 1 ? 'startup' : 'startups'}
           </p>
         </div>
 
         {myYesVotes.length === 0 ? (
           <div className="text-center py-16">
             <div className="text-8xl mb-6">📭</div>
-            <p className="text-3xl font-bold text-white mb-4">
+            <p className="text-3xl font-bold text-orange-600 mb-4">
               No hot picks yet!
             </p>
-            <p className="text-xl text-purple-200 mb-8">
+            <p className="text-xl text-slate-700 mb-8">
               Start voting YES on startups you're interested in
             </p>
             <button

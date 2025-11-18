@@ -111,32 +111,32 @@ const App: React.FC = () => {
         </Routes>
       </main>
 
-      <footer className="bg-gradient-to-r from-purple-900 via-purple-700 to-green-400 text-center text-sm py-4">
-        <div className="flex justify-center items-center gap-6 mb-2">
+      <footer className="text-center text-sm py-8">
+        <div className="flex justify-center items-center gap-6 mb-3 flex-wrap">
           <button 
             onClick={() => setShowHowItWorks(true)}
-            className="text-yellow-300 hover:text-yellow-400 font-semibold hover:underline cursor-pointer bg-transparent border-none"
+            className="text-orange-600 hover:text-orange-700 font-semibold hover:underline cursor-pointer bg-transparent border-none transition-colors"
           >
             🔥 How It Works
           </button>
-          <span className="text-purple-300">•</span>
-          <Link to="/about" className="text-yellow-300 hover:text-yellow-400 font-semibold hover:underline">
+          <span className="text-slate-400">•</span>
+          <Link to="/about" className="text-orange-600 hover:text-orange-700 font-semibold hover:underline transition-colors">
             About Us
           </Link>
-          <span className="text-purple-300">•</span>
-          <Link to="/contact" className="text-yellow-300 hover:text-yellow-400 font-semibold hover:underline">
+          <span className="text-slate-400">•</span>
+          <Link to="/contact" className="text-orange-600 hover:text-orange-700 font-semibold hover:underline transition-colors">
             Contact Us
           </Link>
-          <span className="text-purple-300">•</span>
-          <Link to="/privacy" className="text-yellow-300 hover:text-yellow-400 font-semibold hover:underline">
+          <span className="text-slate-400">•</span>
+          <Link to="/privacy" className="text-orange-600 hover:text-orange-700 font-semibold hover:underline transition-colors">
             Privacy Policy
           </Link>
-          <span className="text-purple-300">•</span>
-          <Link to="/startups" className="text-yellow-300 hover:text-yellow-400 font-semibold hover:underline">
+          <span className="text-slate-400">•</span>
+          <Link to="/startups" className="text-orange-600 hover:text-orange-700 font-semibold hover:underline transition-colors">
             For Startups
           </Link>
         </div>
-        <p className="text-purple-200">&copy; {new Date().getFullYear()} Hot Honey. All rights reserved.</p>
+        <p className="text-slate-600">&copy; {new Date().getFullYear()} Hot Money. All rights reserved.</p>
       </footer>
       </div>
     </AuthProvider>

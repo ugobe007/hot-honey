@@ -2,10 +2,13 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import StartupCardOfficial from './StartupCardOfficial';
 import VCFirmCard from './VCFirmCard';
+import HamburgerMenu from './HamburgerMenu';
 import { loadApprovedStartups } from '../store';
 import { saveVote, hasVoted, getYesVotes } from '../lib/voteService';
+import { awardPoints } from '../utils/firePointsManager';
 
 const VotePage: React.FC = () => {
+  const navigate = useNavigate();
   const [unvotedStartups, setUnvotedStartups] = useState<any[]>([]);
   const [totalStartupCount, setTotalStartupCount] = useState(0);
   const [showFiltered, setShowFiltered] = useState(false);
@@ -13,6 +16,8 @@ const VotePage: React.FC = () => {
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [offset, setOffset] = useState(0);
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
   const BATCH_SIZE = 20; // Load 20 startups at a time
   
   const loadMoreRef = useRef<HTMLDivElement>(null);
@@ -99,11 +104,29 @@ const VotePage: React.FC = () => {
   const handleVote = async (startupId: string | number, vote: 'yes' | 'no') => {
     const idString = String(startupId); // Ensure it's a string
     
-    // Save vote to both localStorage and Supabase
-    const result = await saveVote(idString, vote);
+    // Award fire points
+    const pointAction = vote === 'yes' ? 'VOTE_YES' : 'VOTE_NO';
+    const result = awardPoints(pointAction);
     
-    if (!result.success) {
-      console.error('Failed to save vote:', result.error);
+    // Show toast notification
+    setToastMessage(`🔥 +${result.pointsEarned} Fire Points!`);
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 3000);
+    
+    // Check for perk unlocks
+    if (result.perksUnlocked.length > 0) {
+      setTimeout(() => {
+        setToastMessage(`🎊 Unlocked: ${result.perksUnlocked.join(', ')}!`);
+        setShowToast(true);
+        setTimeout(() => setShowToast(false), 4000);
+      }, 3500);
+    }
+    
+    // Save vote to both localStorage and Supabase
+    const voteResult = await saveVote(idString, vote);
+    
+    if (!voteResult.success) {
+      console.error('Failed to save vote:', voteResult.error);
       // Still proceed - vote is cached locally
     }
 
@@ -150,46 +173,36 @@ const VotePage: React.FC = () => {
 
   if (unvotedStartups.length === 0) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-green-400 to-purple-950" style={{ backgroundImage: 'radial-gradient(ellipse 800px 600px at 20% 40%, rgba(134, 239, 172, 0.4), transparent), linear-gradient(to bottom right, rgb(88, 28, 135), rgb(59, 7, 100))' }}>
-        {/* NAVIGATION */}
-        <div className="fixed top-2 left-1/2 transform -translate-x-1/2 z-50 w-full px-2 sm:px-0 sm:w-auto">
-          <div className="flex gap-1 items-center justify-center flex-wrap">
-            <Link to="/signup" className="text-4xl sm:text-6xl hover:scale-110 transition-transform cursor-pointer" title="Hot Money Honey">
-              🍯
-            </Link>
-            <Link to="/signup" className="px-4 py-1.5 bg-yellow-400 text-black rounded-full font-medium text-sm shadow-lg hover:bg-yellow-500 transition-colors">
-              👤 Sign Up
-            </Link>
-            <Link to="/" className="px-4 py-1.5 bg-orange-500 text-white rounded-full font-medium text-sm shadow-lg hover:bg-orange-600 transition-colors">
-              🏠 Home
-            </Link>
-            <Link to="/vote" className="px-4 py-1.5 bg-purple-700 text-white rounded-full font-medium text-sm shadow-lg">
-              🗳️ Vote
-            </Link>
-            <Link to="/portfolio" className="px-4 py-1.5 bg-purple-700 text-white rounded-full font-medium text-sm shadow-lg hover:bg-purple-600 transition-colors">
-              ⭐ Portfolio
-            </Link>
-            <Link to="/dashboard" className="px-4 py-1.5 bg-orange-500 text-white rounded-full font-medium text-sm shadow-lg hover:bg-orange-600 transition-colors">
-              👤 Dashboard
-            </Link>
-            <Link to="/settings" className="px-4 py-1.5 bg-purple-500 text-white rounded-full font-medium text-sm shadow-lg hover:bg-purple-600 transition-colors">
-              ⚙️ Settings
-            </Link>
-          </div>
+      <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-slate-100">
+        {/* Hamburger Menu */}
+        <HamburgerMenu />
+
+        {/* Current Page Button Only */}
+        <div className="fixed top-6 left-1/2 transform -translate-x-1/2 z-40">
+          <button
+            onClick={() => navigate('/')}
+            className="px-4 py-2 rounded-full bg-gradient-to-b from-slate-300 via-slate-200 to-slate-400 text-slate-800 font-medium text-sm flex items-center gap-2 shadow-lg hover:from-slate-400 hover:via-slate-300 hover:to-slate-500 transition-all cursor-pointer"
+            style={{
+              boxShadow: '0 4px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.8), inset 0 -1px 0 rgba(0,0,0,0.2)',
+              textShadow: '0 1px 1px rgba(255,255,255,0.8)'
+            }}>
+            <span>🏠</span>
+            <span>Home</span>
+          </button>
         </div>
 
-        <div className="flex items-center justify-center min-h-screen">
-          <div className="text-center">
-            <h2 className="text-6xl font-bold text-white mb-4">🎉</h2>
-            <h3 className="text-4xl font-bold text-white mb-4">All Done!</h3>
-            <p className="text-xl text-purple-200 mb-8">You've voted on all {totalStartupCount} startups!</p>
-            <div className="flex gap-4 justify-center">
-              <Link to="/dashboard" className="px-8 py-3 bg-orange-500 text-white rounded-lg font-medium text-lg hover:bg-orange-600 transition-colors shadow-lg">
+        <div className="flex items-center justify-center min-h-screen pt-20">
+          <div className="text-center bg-white rounded-2xl p-12 shadow-xl max-w-2xl mx-4">
+            <h2 className="text-6xl font-bold mb-4">🎉</h2>
+            <h3 className="text-4xl font-bold text-slate-800 mb-4">All Done!</h3>
+            <p className="text-xl text-slate-600 mb-8">You've voted on all {totalStartupCount} startups!</p>
+            <div className="flex gap-4 justify-center flex-wrap">
+              <Link to="/dashboard" className="px-8 py-3 bg-amber-500 text-white rounded-lg font-medium text-lg hover:bg-amber-600 transition-colors shadow-lg">
                 View My Hot Picks 🔥
               </Link>
               <button
                 onClick={handleResetVotes}
-                className="px-8 py-3 bg-gray-500 text-white rounded-lg font-medium text-lg hover:bg-gray-600 transition-colors shadow-lg"
+                className="px-8 py-3 bg-slate-500 text-white rounded-lg font-medium text-lg hover:bg-slate-600 transition-colors shadow-lg"
               >
                 🔄 Reset & Vote Again
               </button>
@@ -201,43 +214,33 @@ const VotePage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-green-400 to-purple-950" style={{ backgroundImage: 'radial-gradient(ellipse 800px 600px at 20% 40%, rgba(134, 239, 172, 0.4), transparent), linear-gradient(to bottom right, rgb(88, 28, 135), rgb(59, 7, 100))' }}>
-            {/* NAVIGATION - FIXED AT TOP */}
-      <div className="fixed top-2 left-1/2 transform -translate-x-1/2 z-50 w-full px-2 sm:px-0 sm:w-auto">
-        <div className="flex gap-1 items-center justify-center flex-wrap">
-          <Link to="/signup" className="text-4xl sm:text-6xl hover:scale-110 transition-transform cursor-pointer" title="Hot Money Honey">
-            🍯
-          </Link>
-          <Link to="/signup" className="px-4 py-1.5 bg-yellow-400 text-black rounded-full font-medium text-sm shadow-lg hover:bg-yellow-500 transition-colors">
-            👤 Sign Up
-          </Link>
-          <Link to="/" className="px-4 py-1.5 bg-orange-500 text-white rounded-full font-medium text-sm shadow-lg hover:bg-orange-600 transition-colors">
-            🏠 Home
-          </Link>
-          <Link to="/vote" className="px-4 py-1.5 bg-purple-700 text-white rounded-full font-medium text-sm shadow-lg">
-            🗳️ Vote
-          </Link>
-          <Link to="/portfolio" className="px-4 py-1.5 bg-purple-700 text-white rounded-full font-medium text-sm shadow-lg hover:bg-purple-600 transition-colors">
-            ⭐ Portfolio
-          </Link>
-          <Link to="/dashboard" className="px-4 py-1.5 bg-orange-500 text-white rounded-full font-medium text-sm shadow-lg hover:bg-orange-600 transition-colors">
-            👤 Dashboard
-          </Link>
-          <Link to="/settings" className="px-4 py-1.5 bg-purple-500 text-white rounded-full font-medium text-sm shadow-lg hover:bg-purple-600 transition-colors">
-            ⚙️ Settings
-          </Link>
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-slate-100">
+      {/* Hamburger Menu */}
+      <HamburgerMenu />
+
+      {/* Vote Button - Links to Home */}
+      <div className="fixed top-6 left-1/2 transform -translate-x-1/2 z-40">
+        <button
+          onClick={() => navigate('/')}
+          className="px-4 py-2 rounded-full bg-gradient-to-b from-slate-300 via-slate-200 to-slate-400 text-slate-800 font-medium text-sm flex items-center gap-2 shadow-lg hover:from-slate-400 hover:via-slate-300 hover:to-slate-500 transition-all cursor-pointer"
+          style={{
+            boxShadow: '0 4px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.8), inset 0 -1px 0 rgba(0,0,0,0.2)',
+            textShadow: '0 1px 1px rgba(255,255,255,0.8)'
+          }}>
+          <span>🗳️</span>
+          <span>Vote</span>
+        </button>
       </div>
 
       <div className="pt-28 px-8 pb-16">
         <div className="mb-8 text-center">
           <div className="flex justify-between items-center max-w-7xl mx-auto mb-4">
             <div className="flex-1">
-              <h1 className="text-5xl font-bold text-white mb-3">
+              <h1 className="text-5xl font-bold text-orange-600 mb-3">
                 🔥 Vote on Startups
               </h1>
-              <p className="text-xl text-purple-200">
-                <span className="font-bold text-yellow-300">{unvotedStartups.length}</span> of {totalStartupCount} {unvotedStartups.length === 1 ? 'startup' : 'startups'} remaining
+              <p className="text-xl text-slate-700">
+                <span className="font-bold text-orange-500">{unvotedStartups.length}</span> of {totalStartupCount} {unvotedStartups.length === 1 ? 'startup' : 'startups'} remaining
               </p>
               {showFiltered && (
                 <div className="mt-2 inline-block bg-purple-500 text-white px-4 py-2 rounded-full text-sm font-semibold">
@@ -327,6 +330,15 @@ const VotePage: React.FC = () => {
           )}
         </div>
       </div>
+      
+      {/* Fire Points Toast Notification */}
+      {showToast && (
+        <div className="fixed bottom-8 right-8 z-[1000] animate-bounce">
+          <div className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-6 py-4 rounded-2xl shadow-2xl font-bold text-lg">
+            {toastMessage}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

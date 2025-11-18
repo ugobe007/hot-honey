@@ -1,42 +1,46 @@
 import { useNavigate } from 'react-router-dom';
+import HamburgerMenu from '../components/HamburgerMenu';
 
 export default function About() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-green-400 to-purple-950 p-8 relative">
-      {/* Radial green accent */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute w-96 h-96 bg-green-400 rounded-full blur-3xl opacity-40" style={{left: '20%', top: '40%'}}></div>
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-slate-100 p-8 relative">
+      {/* Hamburger Menu */}
+      <HamburgerMenu />
+
+      {/* Current Page Button */}
+      <div className="fixed top-6 left-1/2 transform -translate-x-1/2 z-40">
+        <button
+          onClick={() => navigate('/')}
+          className="px-4 py-2 rounded-full bg-gradient-to-b from-slate-300 via-slate-200 to-slate-400 text-slate-800 font-medium text-sm flex items-center gap-2 shadow-lg hover:from-slate-400 hover:via-slate-300 hover:to-slate-500 transition-all cursor-pointer"
+          style={{
+            boxShadow: '0 4px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.8), inset 0 -1px 0 rgba(0,0,0,0.2)',
+            textShadow: '0 1px 1px rgba(255,255,255,0.8)'
+          }}>
+          <span>ℹ️</span>
+          <span>About Us</span>
+        </button>
       </div>
       
-      <div className="max-w-4xl mx-auto relative z-10">
-        {/* Navigation */}
-        <div className="flex justify-between items-center mb-8">
-          <button
-            onClick={() => navigate('/')}
-            className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-3 px-6 rounded-2xl shadow-lg transition-all"
-          >
-            ← Home
-          </button>
-        </div>
+      <div className="max-w-4xl mx-auto relative z-10 pt-20">
 
         {/* Header */}
         <div className="text-center mb-12">
-          <div className="text-8xl mb-4">🍯</div>
-          <h1 className="text-5xl font-bold bg-gradient-to-r from-yellow-300 via-orange-400 to-red-500 bg-clip-text text-transparent mb-4">
-            About Hot Honey
+          <div className="text-8xl mb-4">🔥</div>
+          <h1 className="text-5xl font-bold text-orange-600 mb-4">
+            About Hot Money
           </h1>
-          <p className="text-2xl text-yellow-300 font-semibold mb-2">
+          <p className="text-2xl text-orange-500 font-semibold mb-2">
             "Get Them While They're Hot."
           </p>
-          <p className="text-xl text-purple-200 font-medium">
+          <p className="text-xl text-slate-700 font-medium">
             A Social Discovery Platform for Investors and Startups
           </p>
         </div>
 
         {/* Content Container */}
-        <div className="bg-white rounded-3xl shadow-2xl p-12">
+        <div className="bg-white/95 backdrop-blur-lg rounded-3xl shadow-2xl p-12 border-2 border-orange-200">
           {/* Our Approach */}
           <section className="mb-8">
             <h2 className="text-3xl font-bold text-orange-600 mb-4">Our Approach</h2>
@@ -151,37 +155,37 @@ export default function About() {
             <div className="overflow-x-auto">
               <table className="w-full border-collapse">
                 <thead>
-                  <tr className="bg-gradient-to-r from-orange-400 to-orange-500 text-white">
+                  <tr className="bg-gradient-to-r from-orange-500 to-orange-600 text-white">
                     <th className="p-3 text-left rounded-tl-xl">Step</th>
                     <th className="p-3 text-left">Stage</th>
                     <th className="p-3 text-left rounded-tr-xl">Description</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr className="bg-orange-50">
-                    <td className="p-3 font-bold">1</td>
-                    <td className="p-3 font-semibold">Discovery</td>
-                    <td className="p-3">Swipe-based exploration with concise, five-point StartupCards</td>
+                  <tr className="bg-orange-100">
+                    <td className="p-3 font-bold text-slate-800">1</td>
+                    <td className="p-3 font-semibold text-slate-800">Discovery</td>
+                    <td className="p-3 text-slate-700">Swipe-based exploration with concise, five-point StartupCards</td>
                   </tr>
                   <tr className="bg-white">
-                    <td className="p-3 font-bold">2</td>
-                    <td className="p-3 font-semibold">Attraction</td>
-                    <td className="p-3">Startups with 5+ "Yes" votes unlock added visibility and data</td>
+                    <td className="p-3 font-bold text-slate-800">2</td>
+                    <td className="p-3 font-semibold text-slate-800">Attraction</td>
+                    <td className="p-3 text-slate-700">Startups with 5+ "Yes" votes unlock added visibility and data</td>
                   </tr>
-                  <tr className="bg-orange-50">
-                    <td className="p-3 font-bold">3</td>
-                    <td className="p-3 font-semibold">Reveal</td>
-                    <td className="p-3">Investors disclose identity for private, time-bound pitch meetings</td>
+                  <tr className="bg-orange-100">
+                    <td className="p-3 font-bold text-slate-800">3</td>
+                    <td className="p-3 font-semibold text-slate-800">Reveal</td>
+                    <td className="p-3 text-slate-700">Investors disclose identity for private, time-bound pitch meetings</td>
                   </tr>
                   <tr className="bg-white">
-                    <td className="p-3 font-bold">4</td>
-                    <td className="p-3 font-semibold">Commitment</td>
-                    <td className="p-3">Deal Room access with NDA, decks, and analytics</td>
+                    <td className="p-3 font-bold text-slate-800">4</td>
+                    <td className="p-3 font-semibold text-slate-800">Commitment</td>
+                    <td className="p-3 text-slate-700">Deal Room access with NDA, decks, and analytics</td>
                   </tr>
-                  <tr className="bg-orange-50">
-                    <td className="p-3 font-bold">5</td>
-                    <td className="p-3 font-semibold">Social Sharing</td>
-                    <td className="p-3">Once a startup is "Hot," investors share it socially—fueling virality</td>
+                  <tr className="bg-orange-100">
+                    <td className="p-3 font-bold text-slate-800">5</td>
+                    <td className="p-3 font-semibold text-slate-800">Social Sharing</td>
+                    <td className="p-3 text-slate-700">Once a startup is "Hot," investors share it socially—fueling virality</td>
                   </tr>
                 </tbody>
               </table>
@@ -271,15 +275,15 @@ export default function About() {
           <section className="mb-8">
             <h2 className="text-3xl font-bold text-orange-600 mb-4">The Market</h2>
             <div className="grid md:grid-cols-3 gap-4 mb-4">
-              <div className="bg-gradient-to-br from-orange-400 to-orange-500 rounded-2xl p-6 text-white text-center">
+              <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl p-6 text-white text-center shadow-lg">
                 <div className="text-4xl font-bold mb-2">$6.4T</div>
                 <div className="text-sm">Global Startup Economy</div>
               </div>
-              <div className="bg-gradient-to-br from-orange-400 to-orange-500 rounded-2xl p-6 text-white text-center">
+              <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl p-6 text-white text-center shadow-lg">
                 <div className="text-4xl font-bold mb-2">$25-30B</div>
                 <div className="text-sm">Early-Stage Angel Investment Annually</div>
               </div>
-              <div className="bg-gradient-to-br from-orange-400 to-orange-500 rounded-2xl p-6 text-white text-center">
+              <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl p-6 text-white text-center shadow-lg">
                 <div className="text-4xl font-bold mb-2">28%</div>
                 <div className="text-sm">CAGR in Digital Investing Platforms</div>
               </div>
@@ -402,7 +406,7 @@ export default function About() {
             <p className="text-lg text-gray-700 leading-relaxed mb-4">
               Within five years, Hot Honey will become the <strong>global social layer for venture capital</strong>—a daily habit for investors and founders alike.
             </p>
-            <div className="bg-gradient-to-r from-orange-400 to-orange-500 rounded-2xl p-6 text-white">
+            <div className="bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl p-6 text-white shadow-lg">
               <p className="text-xl font-semibold mb-3">
                 We're not just building a platform. We're building a movement.
               </p>
@@ -417,12 +421,12 @@ export default function About() {
         </div>
 
         {/* CTA Section */}
-        <div className="bg-gradient-to-br from-orange-300 via-orange-400 to-orange-500 rounded-3xl p-8 shadow-2xl text-center">
+        <div className="bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 rounded-3xl p-8 shadow-2xl text-center border-2 border-orange-300">
           <h2 className="text-3xl font-bold text-white mb-4">Ready to Join the Movement?</h2>
           <p className="text-xl text-white mb-6">
-            Whether you're an investor seeking the next big thing or a startup ready to build momentum—Hot Honey is your platform.
+            Whether you're an investor seeking the next big thing or a startup ready to build momentum—Hot Money is your platform.
           </p>
-          <div className="flex gap-4 justify-center">
+          <div className="flex gap-4 justify-center flex-wrap">
             <button
               onClick={() => navigate('/signup')}
               className="bg-white text-orange-600 font-bold py-4 px-8 rounded-2xl shadow-lg hover:bg-gray-100 transition-all text-lg"
@@ -431,7 +435,7 @@ export default function About() {
             </button>
             <button
               onClick={() => navigate('/vote')}
-              className="bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white font-bold py-4 px-8 rounded-2xl shadow-lg transition-all text-lg"
+              className="bg-gradient-to-r from-slate-700 to-slate-800 hover:from-slate-800 hover:to-slate-900 text-white font-bold py-4 px-8 rounded-2xl shadow-lg transition-all text-lg"
             >
               🔥 Start Voting
             </button>

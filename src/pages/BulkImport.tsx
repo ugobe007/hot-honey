@@ -386,11 +386,29 @@ export default function BulkImport() {
       const vcCount = enrichedCompanies.filter(c => c.entityType === 'vc_firm').length;
       const acceleratorCount = enrichedCompanies.filter(c => c.entityType === 'accelerator').length;
       
-      let message = `✅ Successfully imported to Supabase:\n`;
-      if (startupCount > 0) message += `• ${startupCount} startup${startupCount > 1 ? 's' : ''}\n`;
-      if (vcCount > 0) message += `• ${vcCount} VC firm${vcCount > 1 ? 's' : ''}\n`;
-      if (acceleratorCount > 0) message += `• ${acceleratorCount} accelerator${acceleratorCount > 1 ? 's' : ''}\n`;
-      message += `\nAll items are pending review.\n\n🎯 Taking you to Admin Dashboard!\n💡 Go to "Edit Startups" to bulk approve them.`;
+      // Show detailed workflow explanation
+      let message = `🎉 SUBMISSION SUCCESSFUL!\n\n`;
+      message += `✅ Saved to Database:\n`;
+      if (startupCount > 0) message += `   • ${startupCount} startup${startupCount > 1 ? 's' : ''}\n`;
+      if (vcCount > 0) message += `   • ${vcCount} VC firm${vcCount > 1 ? 's' : ''}\n`;
+      if (acceleratorCount > 0) message += `   • ${acceleratorCount} accelerator${acceleratorCount > 1 ? 's' : ''}\n`;
+      message += `\n📍 WHERE YOU ARE NOW:\n`;
+      message += `   Step 1 ✅ Upload Complete\n`;
+      message += `   Step 2 ⏳ Pending Admin Review\n`;
+      message += `   Step 3 ⏸️ Approval (not yet)\n`;
+      message += `   Step 4 ⏸️ Goes Live for Voting\n\n`;
+      message += `🔄 WHAT HAPPENS NEXT:\n`;
+      message += `   1. Admin reviews all submissions\n`;
+      message += `   2. Admin approves quality startups\n`;
+      message += `   3. Approved startups appear on voting page\n`;
+      message += `   4. Investors vote YES/NO on each startup\n`;
+      message += `   5. Top startups advance through 4 stages\n`;
+      message += `   6. Stage 4 startups get funded!\n\n`;
+      message += `⏱️ TIMELINE:\n`;
+      message += `   • Review: 1-2 business days\n`;
+      message += `   • Goes live after approval\n\n`;
+      message += `🎯 NEXT STEP:\n`;
+      message += `   Admin Dashboard → "Edit Startups" → Bulk Approve`;
       
       alert(message);
       navigate('/admin/dashboard');

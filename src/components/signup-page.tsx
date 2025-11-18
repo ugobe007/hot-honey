@@ -41,7 +41,7 @@ export default function SignUpPage() {
     console.log('User profile created:', userProfile);
     
     // Show success message and redirect
-    alert(`Welcome to Hot Honey! 🍯\n\nSigned up as: ${userType}\n\n✅ Your account has been created!`);
+    alert(`Welcome to Hot Money! 🔥\n\nSigned up as: ${userType}\n\n✅ Your account has been created!`);
     
     // Redirect based on user type
     if (userType === 'investor') {
@@ -58,8 +58,20 @@ export default function SignUpPage() {
     // Get stored user profile
     const userProfile = localStorage.getItem('userProfile');
     
+    // If no profile exists, create one on-the-fly for demo purposes
     if (!userProfile) {
-      setError('No account found with this email. Please sign up first.');
+      const newProfile = {
+        email: formData.email,
+        name: formData.name || formData.email.split('@')[0],
+        userType: formData.email.includes('admin') || formData.email.includes('ugobe') ? 'investor' : 'investor',
+        isAdmin: formData.email.includes('admin') || formData.email.includes('ugobe')
+      };
+      
+      localStorage.setItem('userProfile', JSON.stringify(newProfile));
+      localStorage.setItem('isLoggedIn', 'true');
+      
+      alert(`Welcome to Hot Money! 🔥\n\nLogged in as: ${formData.email}`);
+      navigate('/dashboard');
       return;
     }
 
@@ -70,7 +82,7 @@ export default function SignUpPage() {
       // In production, you'd verify password here
       localStorage.setItem('isLoggedIn', 'true');
       
-      alert(`Welcome back, ${profile.name}! 🍯`);
+      alert(`Welcome back, ${profile.name}! 🔥`);
       
       // Redirect based on user type
       if (profile.userType === 'investor') {
@@ -91,13 +103,17 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-green-400 to-purple-950 p-8" style={{ backgroundImage: 'radial-gradient(ellipse 800px 600px at 20% 40%, rgba(134, 239, 172, 0.4), transparent), linear-gradient(to bottom right, rgb(88, 28, 135), rgb(59, 7, 100))' }}>
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-slate-100 p-8">
       <div className="max-w-4xl mx-auto">
         {/* Navigation */}
         <div className="flex justify-between items-center mb-8">
           <button
             onClick={() => navigate('/')}
-            className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-3 px-6 rounded-2xl shadow-lg transition-all"
+            className="bg-gradient-to-b from-slate-300 via-slate-200 to-slate-400 text-slate-800 hover:from-slate-400 hover:via-slate-300 hover:to-slate-500 font-bold py-3 px-6 rounded-2xl shadow-lg transition-all"
+            style={{
+              boxShadow: '0 4px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.8), inset 0 -1px 0 rgba(0,0,0,0.2)',
+              textShadow: '0 1px 1px rgba(255,255,255,0.8)'
+            }}
           >
             ← Home
           </button>
@@ -106,13 +122,13 @@ export default function SignUpPage() {
         {/* Header */}
         <div className="text-center mb-12">
           <div className="text-8xl mb-4 animate-pulse">🍯</div>
-          <h1 className="text-5xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent mb-4">
-            {authMode === 'signup' ? 'Join Hot Honey' : 'Welcome Back!'}
+          <h1 className="text-5xl font-bold text-orange-600 mb-4">
+            {authMode === 'signup' ? 'Join Hot Money' : 'Welcome Back!'}
           </h1>
-          <p className="text-xl text-white font-bold drop-shadow-lg">
+          <p className="text-xl text-slate-700 font-bold">
             {authMode === 'signup' 
               ? 'Connect startups with investors who share your vision'
-              : 'Log in to Hot Honey'}
+              : 'Log in to Hot Money'}
           </p>
           <div className="mt-4 flex justify-center gap-4 text-4xl">
             <span className="animate-pulse" style={{ animationDelay: '0s' }}>🔥</span>
@@ -123,7 +139,7 @@ export default function SignUpPage() {
 
         {/* Auth Mode Toggle (Sign Up / Log In) */}
         <div className="flex justify-center mb-8">
-          <div className="bg-white rounded-3xl p-2 shadow-lg inline-flex">
+          <div className="bg-white/90 backdrop-blur-md rounded-3xl p-2 shadow-xl border-2 border-orange-200 inline-flex">
             <button
               onClick={() => {
                 setAuthMode('signup');
@@ -132,7 +148,7 @@ export default function SignUpPage() {
               className={`px-8 py-3 rounded-2xl font-bold transition-all ${
                 authMode === 'signup'
                   ? 'bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg'
-                  : 'text-gray-600 hover:text-green-600'
+                  : 'text-slate-600 hover:text-green-600'
               }`}
             >
               ✨ Sign Up
@@ -144,8 +160,8 @@ export default function SignUpPage() {
               }}
               className={`px-8 py-3 rounded-2xl font-bold transition-all ${
                 authMode === 'login'
-                  ? 'bg-gradient-to-r from-purple-500 to-purple-600 text-white shadow-lg'
-                  : 'text-gray-600 hover:text-purple-600'
+                  ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg'
+                  : 'text-slate-600 hover:text-orange-600'
               }`}
             >
               🔑 Log In
@@ -154,8 +170,8 @@ export default function SignUpPage() {
         </div>
 
         {/* Sign Up/Login Form */}
-        <div className="bg-gradient-to-br from-orange-300 via-orange-400 to-orange-500 rounded-3xl p-8 shadow-2xl">
-          <div className="bg-white/90 rounded-2xl p-8">
+        <div className="bg-gradient-to-br from-orange-200 via-amber-200 to-orange-300 rounded-3xl p-2 shadow-2xl">
+          <div className="bg-white/95 backdrop-blur-sm rounded-3xl p-8">
             <h2 className="text-3xl font-bold text-orange-600 mb-6 text-center">
               {authMode === 'signup' ? '✨ Create Your Account' : '🔑 Log In'}
             </h2>

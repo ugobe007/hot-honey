@@ -88,6 +88,25 @@ export default function StartupCardOfficial({ startup, onVote, onSwipeAway }: Pr
   const currentVotes = startup.yesVotes || 0;
   const progress = Math.min((currentVotes / votesNeeded) * 100, 100);
 
+  // Function to clean up point text by removing common prefixes and truncate to one sentence
+  const cleanPointText = (text: string): string => {
+    if (!text) return text;
+    
+    // Remove common prefixes
+    let cleaned = text
+      .replace(/^(Problem:|Solution:|Team:|Market|Team background:|Market size:|Investment focus:|Portfolio size:|Check size:|Notable exits:)\s*/i, '')
+      .replace(/^(Problem they solve:|Their solution:)\s*/i, '')
+      .trim();
+    
+    // Truncate to first sentence (end at period, question mark, or exclamation)
+    const firstSentenceMatch = cleaned.match(/^[^.!?]+[.!?]/);
+    if (firstSentenceMatch) {
+      cleaned = firstSentenceMatch[0].trim();
+    }
+    
+    return cleaned;
+  };
+
   const handleReaction = async (reactionType: 'thumbs_up' | 'thumbs_down') => {
     const isAnonymous = !userId || userId.startsWith('anon_');
 
@@ -317,16 +336,16 @@ export default function StartupCardOfficial({ startup, onVote, onSwipeAway }: Pr
         </div>
       )}
 
-      <div className="bg-gradient-to-br from-amber-300 via-orange-400 to-yellow-500 rounded-2xl p-5 shadow-2xl border-4 border-orange-500 relative w-full max-w-[360px] sm:w-[360px] h-auto min-h-[420px] flex flex-col mx-auto">
-        <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/20 to-transparent pointer-events-none"></div>
+      <div className="bg-gradient-to-br from-[#f87004] via-[#fb9f05] to-[#FFB402] rounded-2xl p-5 shadow-2xl border-4 border-[#ae3e07] relative w-full max-w-[360px] sm:w-[360px] h-auto min-h-[420px] flex flex-col mx-auto">
+        <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/30 to-transparent pointer-events-none"></div>
         
         <div className="relative flex flex-col h-full">
           <div className="flex justify-between items-start mb-2">
             <div className="flex-1">
-              <h2 className="text-2xl font-black text-gray-900 tracking-tight leading-none">
+              <h2 className="text-2xl font-black text-lime-400 tracking-tight leading-none drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
                 {startup.name}
               </h2>
-              <p className="text-blue-700 font-bold text-base mt-0.5">
+              <p className="text-[#001eff] font-bold text-base mt-0.5">
                 stage #{startup.stage || 1}
               </p>
             </div>
@@ -341,14 +360,14 @@ export default function StartupCardOfficial({ startup, onVote, onSwipeAway }: Pr
           {showSecret && (
             <div className="bg-yellow-200 border-2 border-yellow-400 rounded-lg p-1.5 mb-2">
               <p className="text-[10px] font-bold text-gray-900 leading-tight">
-                🤫 {startup.fivePoints && startup.fivePoints[4] ? startup.fivePoints[4] : 'Traction data available'}
+                🤫 {startup.fivePoints && startup.fivePoints[4] ? cleanPointText(startup.fivePoints[4]) : 'Traction data available'}
               </p>
             </div>
           )}
 
           {startup.pitch && (
-            <p className="text-lg font-black text-gray-900 leading-tight tracking-tight mb-3">
-              "{startup.pitch}"
+            <p className="text-lg font-black text-[#4700d6] leading-tight tracking-tight mb-3">
+              "{cleanPointText(startup.pitch)}"
             </p>
           )}
 
@@ -358,12 +377,20 @@ export default function StartupCardOfficial({ startup, onVote, onSwipeAway }: Pr
                 key={i} 
                 className="text-base font-black text-gray-900 leading-tight tracking-tight"
               >
-                {point}
+                {cleanPointText(point)}
               </p>
             ))}
             {startup.raise && (
-              <p className="text-base font-black text-gray-900 leading-tight tracking-tight">
-                💰 {startup.raise}
+              <p className="text-xl font-black text-gray-900 leading-tight tracking-tight">
+                💰 {(() => {
+                  const raiseStr = startup.raise.toString();
+                  // Check if it's a number and less than $100
+                  const match = raiseStr.match(/\$?([\d.]+)/);
+                  if (match && parseFloat(match[1]) < 100 && !raiseStr.includes('M') && !raiseStr.includes('K')) {
+                    return 'N/A';
+                  }
+                  return startup.raise;
+                })()}
               </p>
             )}
           </div>
@@ -399,7 +426,7 @@ export default function StartupCardOfficial({ startup, onVote, onSwipeAway }: Pr
               onClick={() => handleVote('yes')}
               disabled={hasVoted}
               className={`flex-1 font-black py-2 px-3 rounded-xl text-sm shadow-lg transition-all ${
-                voteType === 'yes' ? 'bg-green-600 text-white scale-105' : 'bg-orange-500 hover:bg-orange-600 text-white'
+                voteType === 'yes' ? 'bg-[#f87004] text-white scale-105 border-2 border-white' : 'bg-[#f87004] hover:bg-[#ae3e07] text-white'
               } disabled:opacity-50 disabled:cursor-not-allowed`}
             >
               yes
@@ -409,8 +436,8 @@ export default function StartupCardOfficial({ startup, onVote, onSwipeAway }: Pr
               disabled={hasVoted}
               className={`flex-1 font-black py-2 px-3 rounded-xl text-sm shadow-lg transition-all ${
                 voteType === 'no' 
-                  ? 'bg-gray-700 text-white opacity-50' 
-                  : 'bg-gradient-to-br from-gray-300 via-gray-400 to-gray-300 hover:from-gray-400 hover:via-gray-500 hover:to-gray-400 text-gray-800 shadow-[inset_0_2px_4px_rgba(255,255,255,0.6)]'
+                  ? 'bg-slate-400 text-white opacity-90 border-2 border-white' 
+                  : 'bg-gradient-to-br from-slate-300 via-slate-200 to-slate-400 hover:from-slate-400 hover:via-slate-300 hover:to-slate-500 text-slate-800 shadow-[inset_0_2px_4px_rgba(255,255,255,0.8)]'
               } disabled:opacity-50 disabled:cursor-not-allowed`}
             >
               no
@@ -419,7 +446,7 @@ export default function StartupCardOfficial({ startup, onVote, onSwipeAway }: Pr
 
           <button
             onClick={() => setShowCommentBox(!showCommentBox)}
-            className="w-full bg-gray-300 hover:bg-gray-400 text-gray-700 font-bold py-2 px-4 rounded-xl text-xs transition-all"
+            className="w-full bg-purple-800 hover:bg-purple-900 text-white font-bold py-2 px-4 rounded-xl text-xs transition-all shadow-lg"
           >
             comments ({startup.comments?.length || 0})
           </button>

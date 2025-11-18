@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import HamburgerMenu from '../components/HamburgerMenu';
 
 interface AnalyticsData {
   totalStartups: number;
@@ -289,25 +290,36 @@ export default function Analytics() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-purple-800 to-orange-600 flex items-center justify-center">
-        <div className="text-white text-2xl font-bold">🔍 Analyzing data...</div>
+      <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-slate-100 flex items-center justify-center">
+        <div className="text-orange-600 text-2xl font-bold">🔍 Analyzing data...</div>
       </div>
     );
   }
 
   if (!analytics) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-purple-800 to-orange-600 p-8">
-        <div className="max-w-4xl mx-auto">
+      <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-slate-100 p-8">
+        {/* Hamburger Menu */}
+        <HamburgerMenu />
+
+        {/* Current Page Button */}
+        <div className="fixed top-6 left-1/2 transform -translate-x-1/2 z-40">
           <button
             onClick={() => navigate('/')}
-            className="mb-6 bg-white/20 hover:bg-white/30 text-white font-bold py-2 px-4 rounded-lg"
-          >
-            ← Back
+            className="px-4 py-2 rounded-full bg-gradient-to-b from-slate-300 via-slate-200 to-slate-400 text-slate-800 font-medium text-sm flex items-center gap-2 shadow-lg hover:from-slate-400 hover:via-slate-300 hover:to-slate-500 transition-all cursor-pointer"
+            style={{
+              boxShadow: '0 4px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.8), inset 0 -1px 0 rgba(0,0,0,0.2)',
+              textShadow: '0 1px 1px rgba(255,255,255,0.8)'
+            }}>
+            <span>📊</span>
+            <span>Analytics</span>
           </button>
-          <div className="bg-white/10 backdrop-blur-md rounded-3xl p-12 text-center border-2 border-purple-400">
-            <h1 className="text-4xl font-black text-white mb-4">📊 No Data Yet</h1>
-            <p className="text-purple-200 text-lg mb-6">
+        </div>
+
+        <div className="max-w-4xl mx-auto pt-28">
+          <div className="bg-white/80 backdrop-blur-md rounded-3xl p-12 text-center border-2 border-orange-200">
+            <h1 className="text-4xl font-black text-orange-600 mb-4">📊 No Data Yet</h1>
+            <p className="text-slate-700 text-lg mb-6">
               Upload some startups to see analytics and intelligence
             </p>
             <button
@@ -323,65 +335,76 @@ export default function Analytics() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-purple-800 to-orange-600 p-8">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-slate-100 p-8">
+      {/* Hamburger Menu */}
+      <HamburgerMenu />
+
+      {/* Current Page Button */}
+      <div className="fixed top-6 left-1/2 transform -translate-x-1/2 z-40">
+        <button
+          onClick={() => navigate('/')}
+          className="px-4 py-2 rounded-full bg-gradient-to-b from-slate-300 via-slate-200 to-slate-400 text-slate-800 font-medium text-sm flex items-center gap-2 shadow-lg hover:from-slate-400 hover:via-slate-300 hover:to-slate-500 transition-all cursor-pointer"
+          style={{
+            boxShadow: '0 4px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.8), inset 0 -1px 0 rgba(0,0,0,0.2)',
+            textShadow: '0 1px 1px rgba(255,255,255,0.8)'
+          }}>
+          <span>📊</span>
+          <span>Analytics</span>
+        </button>
+      </div>
+
+      <div className="max-w-7xl mx-auto pt-28">
         {/* Header */}
-        <div className="flex justify-between items-center mb-8">
-          <button
-            onClick={() => navigate('/')}
-            className="bg-white/20 hover:bg-white/30 text-white font-bold py-2 px-4 rounded-lg"
-          >
-            ← Back
-          </button>
+        <div className="flex justify-end items-center mb-8">
           <button
             onClick={analyzeData}
-            className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg"
+            className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg shadow-lg"
           >
             🔄 Refresh Data
           </button>
         </div>
 
-        <h1 className="text-5xl font-black text-white mb-8 text-center">
+        <h1 className="text-5xl font-black text-orange-600 mb-8 text-center">
           📊 Startup Intelligence Dashboard
         </h1>
 
         {/* Key Metrics */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 border-2 border-purple-400">
-            <div className="text-purple-200 text-sm font-bold mb-2">Total Startups</div>
-            <div className="text-4xl font-black text-white">{analytics.totalStartups}</div>
+          <div className="bg-white/80 backdrop-blur-md rounded-xl p-6 border-2 border-purple-300">
+            <div className="text-purple-700 text-sm font-bold mb-2">Total Startups</div>
+            <div className="text-4xl font-black text-slate-800">{analytics.totalStartups}</div>
           </div>
-          <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 border-2 border-orange-400">
-            <div className="text-orange-200 text-sm font-bold mb-2">Total Votes</div>
-            <div className="text-4xl font-black text-white">{analytics.totalVotes}</div>
+          <div className="bg-white/80 backdrop-blur-md rounded-xl p-6 border-2 border-orange-300">
+            <div className="text-orange-700 text-sm font-bold mb-2">Total Votes</div>
+            <div className="text-4xl font-black text-slate-800">{analytics.totalVotes}</div>
           </div>
-          <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 border-2 border-green-400">
-            <div className="text-green-200 text-sm font-bold mb-2">Avg Hotness</div>
-            <div className="text-4xl font-black text-white">{analytics.avgHotness.toFixed(1)}🔥</div>
+          <div className="bg-white/80 backdrop-blur-md rounded-xl p-6 border-2 border-green-300">
+            <div className="text-green-700 text-sm font-bold mb-2">Avg Hotness</div>
+            <div className="text-4xl font-black text-slate-800">{analytics.avgHotness.toFixed(1)}🔥</div>
           </div>
-          <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 border-2 border-blue-400">
-            <div className="text-blue-200 text-sm font-bold mb-2">Yes Rate</div>
-            <div className="text-4xl font-black text-white">{analytics.votingPatterns.avgYesRate.toFixed(1)}%</div>
+          <div className="bg-white/80 backdrop-blur-md rounded-xl p-6 border-2 border-blue-300">
+            <div className="text-blue-700 text-sm font-bold mb-2">Yes Rate</div>
+            <div className="text-4xl font-black text-slate-800">{analytics.votingPatterns.avgYesRate.toFixed(1)}%</div>
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Industry Distribution */}
-          <div className="bg-white/10 backdrop-blur-md rounded-3xl p-6 border-2 border-purple-400">
-            <h2 className="text-2xl font-black text-white mb-4">🏢 Industry Trends</h2>
+          <div className="bg-white/80 backdrop-blur-md rounded-3xl p-6 border-2 border-purple-300">
+            <h2 className="text-2xl font-black text-purple-700 mb-4">🏢 Industry Trends</h2>
             <div className="space-y-3">
               {Object.entries(analytics.industries)
                 .sort(([, a], [, b]) => b - a)
                 .slice(0, 8)
                 .map(([industry, count]) => (
                   <div key={industry}>
-                    <div className="flex justify-between text-white font-bold mb-1">
+                    <div className="flex justify-between text-slate-800 font-bold mb-1">
                       <span>{industry}</span>
                       <span>{count}</span>
                     </div>
-                    <div className="w-full bg-purple-700 rounded-full h-2">
+                    <div className="w-full bg-purple-200 rounded-full h-2">
                       <div
-                        className="bg-gradient-to-r from-purple-400 to-purple-500 h-2 rounded-full"
+                        className="bg-gradient-to-r from-purple-500 to-purple-600 h-2 rounded-full"
                         style={{ width: `${(count / analytics.totalStartups) * 100}%` }}
                       />
                     </div>
@@ -391,20 +414,20 @@ export default function Analytics() {
           </div>
 
           {/* Funding Stages */}
-          <div className="bg-white/10 backdrop-blur-md rounded-3xl p-6 border-2 border-orange-400">
-            <h2 className="text-2xl font-black text-white mb-4">💰 Funding Stages</h2>
+          <div className="bg-white/80 backdrop-blur-md rounded-3xl p-6 border-2 border-orange-300">
+            <h2 className="text-2xl font-black text-orange-700 mb-4">💰 Funding Stages</h2>
             <div className="space-y-3">
               {Object.entries(analytics.stages)
                 .sort(([, a], [, b]) => b - a)
                 .map(([stage, count]) => (
                   <div key={stage}>
-                    <div className="flex justify-between text-white font-bold mb-1">
+                    <div className="flex justify-between text-slate-800 font-bold mb-1">
                       <span>{stage}</span>
                       <span>{count}</span>
                     </div>
-                    <div className="w-full bg-orange-700 rounded-full h-2">
+                    <div className="w-full bg-orange-200 rounded-full h-2">
                       <div
-                        className="bg-gradient-to-r from-orange-400 to-orange-500 h-2 rounded-full"
+                        className="bg-gradient-to-r from-orange-500 to-orange-600 h-2 rounded-full"
                         style={{ width: `${(count / analytics.totalStartups) * 100}%` }}
                       />
                     </div>
@@ -414,20 +437,20 @@ export default function Analytics() {
           </div>
 
           {/* Funding Ranges */}
-          <div className="bg-white/10 backdrop-blur-md rounded-3xl p-6 border-2 border-green-400">
-            <h2 className="text-2xl font-black text-white mb-4">💵 Funding Ranges</h2>
+          <div className="bg-white/80 backdrop-blur-md rounded-3xl p-6 border-2 border-green-300">
+            <h2 className="text-2xl font-black text-green-700 mb-4">💵 Funding Ranges</h2>
             <div className="space-y-3">
               {Object.entries(analytics.fundingRanges)
                 .sort(([, a], [, b]) => b - a)
                 .map(([range, count]) => (
                   <div key={range}>
-                    <div className="flex justify-between text-white font-bold mb-1">
+                    <div className="flex justify-between text-slate-800 font-bold mb-1">
                       <span>{range}</span>
                       <span>{count}</span>
                     </div>
-                    <div className="w-full bg-green-700 rounded-full h-2">
+                    <div className="w-full bg-green-200 rounded-full h-2">
                       <div
-                        className="bg-gradient-to-r from-green-400 to-green-500 h-2 rounded-full"
+                        className="bg-gradient-to-r from-green-500 to-green-600 h-2 rounded-full"
                         style={{ width: `${(count / analytics.totalStartups) * 100}%` }}
                       />
                     </div>
@@ -437,8 +460,8 @@ export default function Analytics() {
           </div>
 
           {/* Team Backgrounds */}
-          <div className="bg-white/10 backdrop-blur-md rounded-3xl p-6 border-2 border-blue-400">
-            <h2 className="text-2xl font-black text-white mb-4">👥 Common Team Backgrounds</h2>
+          <div className="bg-white/80 backdrop-blur-md rounded-3xl p-6 border-2 border-blue-300">
+            <h2 className="text-2xl font-black text-blue-700 mb-4">👥 Common Team Backgrounds</h2>
             <div className="flex flex-wrap gap-2">
               {Object.entries(analytics.teamBackgrounds)
                 .sort(([, a], [, b]) => b - a)
@@ -456,9 +479,9 @@ export default function Analytics() {
         </div>
 
         {/* Common Problems */}
-        <div className="mt-8 bg-white/10 backdrop-blur-md rounded-3xl p-6 border-2 border-red-400">
-          <h2 className="text-2xl font-black text-white mb-4">🔥 Top 5 Problem Areas</h2>
-          <p className="text-red-200 text-sm mb-4">Market problems startups are solving (weighted by frequency)</p>
+        <div className="mt-8 bg-white/80 backdrop-blur-md rounded-3xl p-6 border-2 border-red-300">
+          <h2 className="text-2xl font-black text-red-700 mb-4">🔥 Top 5 Problem Areas</h2>
+          <p className="text-red-600 text-sm mb-4">Market problems startups are solving (weighted by frequency)</p>
           {analytics.commonProblems.length > 0 ? (
             <div className="space-y-4">
               {analytics.commonProblems.map((problemTheme, idx) => {
@@ -469,15 +492,15 @@ export default function Analytics() {
                 const example = match ? match[3] : '';
                 
                 return (
-                  <div key={idx} className="bg-red-500/20 rounded-xl p-5 border-l-4 border-red-500">
+                  <div key={idx} className="bg-red-100 rounded-xl p-5 border-l-4 border-red-500">
                     <div className="flex items-center justify-between mb-2">
-                      <h3 className="text-red-300 font-black text-lg">#{idx + 1} {theme}</h3>
+                      <h3 className="text-red-700 font-black text-lg">#{idx + 1} {theme}</h3>
                       <span className="bg-red-600 text-white px-3 py-1 rounded-full text-xs font-bold">
                         {count} startup{count !== '1' ? 's' : ''}
                       </span>
                     </div>
                     {example && (
-                      <p className="text-white text-sm leading-relaxed italic">
+                      <p className="text-slate-800 text-sm leading-relaxed italic">
                         Example: "{example}"
                       </p>
                     )}
@@ -486,14 +509,14 @@ export default function Analytics() {
               })}
             </div>
           ) : (
-            <p className="text-red-200 text-sm italic">No problem statements captured yet. Upload startups with detailed pitch decks.</p>
+            <p className="text-red-600 text-sm italic">No problem statements captured yet. Upload startups with detailed pitch decks.</p>
           )}
         </div>
 
         {/* Common Solutions */}
-        <div className="mt-8 bg-white/10 backdrop-blur-md rounded-3xl p-6 border-2 border-yellow-400">
-          <h2 className="text-2xl font-black text-white mb-4">💡 Top 5 Solution Approaches</h2>
-          <p className="text-yellow-200 text-sm mb-4">How startups are solving problems (weighted by frequency)</p>
+        <div className="mt-8 bg-white/80 backdrop-blur-md rounded-3xl p-6 border-2 border-yellow-300">
+          <h2 className="text-2xl font-black text-yellow-700 mb-4">💡 Top 5 Solution Approaches</h2>
+          <p className="text-yellow-700 text-sm mb-4">How startups are solving problems (weighted by frequency)</p>
           {analytics.commonSolutions.length > 0 ? (
             <div className="space-y-4">
               {analytics.commonSolutions.map((solutionTheme, idx) => {
@@ -503,15 +526,15 @@ export default function Analytics() {
                 const example = match ? match[3] : '';
                 
                 return (
-                  <div key={idx} className="bg-yellow-500/20 rounded-xl p-5 border-l-4 border-yellow-500">
+                  <div key={idx} className="bg-yellow-100 rounded-xl p-5 border-l-4 border-yellow-500">
                     <div className="flex items-center justify-between mb-2">
-                      <h3 className="text-yellow-300 font-black text-lg">#{idx + 1} {theme}</h3>
+                      <h3 className="text-yellow-700 font-black text-lg">#{idx + 1} {theme}</h3>
                       <span className="bg-yellow-600 text-white px-3 py-1 rounded-full text-xs font-bold">
                         {count} startup{count !== '1' ? 's' : ''}
                       </span>
                     </div>
                     {example && (
-                      <p className="text-white text-sm leading-relaxed italic">
+                      <p className="text-slate-800 text-sm leading-relaxed italic">
                         Example: "{example}"
                       </p>
                     )}
@@ -520,26 +543,26 @@ export default function Analytics() {
               })}
             </div>
           ) : (
-            <p className="text-yellow-200 text-sm italic">No solution statements captured yet. Upload startups with detailed pitch decks.</p>
+            <p className="text-yellow-700 text-sm italic">No solution statements captured yet. Upload startups with detailed pitch decks.</p>
           )}
         </div>
 
         {/* Top Performers */}
-        <div className="mt-8 bg-white/10 backdrop-blur-md rounded-3xl p-6 border-2 border-pink-400">
-          <h2 className="text-2xl font-black text-white mb-4">🏆 Top Performers</h2>
+        <div className="mt-8 bg-white/80 backdrop-blur-md rounded-3xl p-6 border-2 border-pink-300">
+          <h2 className="text-2xl font-black text-pink-700 mb-4">🏆 Top Performers</h2>
           <div className="space-y-3">
             {analytics.topPerformers.slice(0, 5).map((startup, i) => (
-              <div key={startup.id} className="bg-pink-500/20 rounded-xl p-4 flex items-center justify-between">
+              <div key={startup.id} className="bg-pink-100 rounded-xl p-4 flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                  <div className="text-3xl font-black text-white">#{i + 1}</div>
+                  <div className="text-3xl font-black text-pink-700">#{i + 1}</div>
                   <div>
-                    <h3 className="text-white font-bold text-lg">{startup.name}</h3>
-                    <p className="text-pink-200 text-sm">{startup.pitch}</p>
+                    <h3 className="text-slate-800 font-bold text-lg">{startup.name}</h3>
+                    <p className="text-pink-700 text-sm">{startup.pitch}</p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="text-2xl font-black text-white">{startup.hotness || 0}🔥</div>
-                  <div className="text-pink-200 text-xs">
+                  <div className="text-2xl font-black text-slate-800">{startup.hotness || 0}🔥</div>
+                  <div className="text-pink-700 text-xs">
                     👍 {startup.yesVotes || 0} | 👎 {startup.noVotes || 0}
                   </div>
                 </div>
@@ -550,19 +573,19 @@ export default function Analytics() {
 
         {/* Most Controversial */}
         {analytics.votingPatterns.mostControversial.length > 0 && (
-          <div className="mt-8 bg-white/10 backdrop-blur-md rounded-3xl p-6 border-2 border-gray-400">
-            <h2 className="text-2xl font-black text-white mb-4">⚖️ Most Controversial (Split Decisions)</h2>
+          <div className="mt-8 bg-white/80 backdrop-blur-md rounded-3xl p-6 border-2 border-gray-300">
+            <h2 className="text-2xl font-black text-gray-700 mb-4">⚖️ Most Controversial (Split Decisions)</h2>
             <div className="space-y-3">
               {analytics.votingPatterns.mostControversial.map((startup) => (
-                <div key={startup.id} className="bg-gray-500/20 rounded-xl p-4">
-                  <h3 className="text-white font-bold text-lg mb-2">{startup.name}</h3>
+                <div key={startup.id} className="bg-gray-100 rounded-xl p-4">
+                  <h3 className="text-slate-800 font-bold text-lg mb-2">{startup.name}</h3>
                   <div className="flex items-center gap-4">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="text-green-400 font-bold">👍 Yes: {startup.yesVotes || 0}</span>
-                        <span className="text-red-400 font-bold">👎 No: {startup.noVotes || 0}</span>
+                        <span className="text-green-600 font-bold">👍 Yes: {startup.yesVotes || 0}</span>
+                        <span className="text-red-600 font-bold">👎 No: {startup.noVotes || 0}</span>
                       </div>
-                      <div className="w-full bg-gray-700 rounded-full h-3 flex overflow-hidden">
+                      <div className="w-full bg-gray-300 rounded-full h-3 flex overflow-hidden">
                         <div
                           className="bg-green-500"
                           style={{ width: `${((startup.yesVotes || 0) / ((startup.yesVotes || 0) + (startup.noVotes || 0))) * 100}%` }}
