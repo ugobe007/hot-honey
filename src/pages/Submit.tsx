@@ -519,7 +519,7 @@ Fill ONLY the EMPTY fields with your research. Return JSON with ALL fields fille
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-purple-800 to-indigo-900 p-8">
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-slate-100 p-8">
       <div className="max-w-4xl mx-auto">
         {/* Navigation */}
         <div className="flex justify-between items-center mb-8">
@@ -531,7 +531,7 @@ Fill ONLY the EMPTY fields with your research. Return JSON with ALL fields fille
           </button>
           <button
             onClick={() => navigate('/admin/bulk-import')}
-            className="bg-purple-500 hover:bg-purple-600 text-white font-bold py-3 px-6 rounded-2xl shadow-lg transition-all text-sm"
+            className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold py-3 px-6 rounded-2xl shadow-lg transition-all text-sm"
           >
             🚀 Bulk Import
           </button>
@@ -540,23 +540,23 @@ Fill ONLY the EMPTY fields with your research. Return JSON with ALL fields fille
         {/* Header */}
         <div className="text-center mb-12">
           <div className="text-8xl mb-4">🚀</div>
-          <h1 className="text-5xl font-bold text-white mb-4">
+          <h1 className="text-5xl font-bold text-orange-600 mb-4">
             Submit Your Startup
           </h1>
-          <p className="text-xl text-purple-200 font-medium mb-2">
+          <p className="text-xl text-orange-700 font-medium mb-2">
             Get discovered by investors who want to find you
           </p>
-          <p className="text-lg text-purple-300">
+          <p className="text-lg text-orange-600">
             Fill out the form below to join Hot Honey 🍯
           </p>
         </div>
 
         {/* Quick Upload Option */}
-        <div className="bg-white/20 backdrop-blur-sm rounded-3xl p-8 mb-8 border border-white/30 shadow-2xl">
+        <div className="bg-white rounded-3xl p-8 mb-8 border-2 border-orange-200 shadow-2xl">
           <div className="text-center mb-6">
             <div className="text-6xl mb-3">📄</div>
-            <h2 className="text-3xl font-bold mb-2 text-white">Upload Your Pitch Deck</h2>
-            <p className="text-lg text-purple-100">AI will auto-fill the form below from your presentation!</p>
+            <h2 className="text-3xl font-bold mb-2 text-orange-600">Upload Your Pitch Deck</h2>
+            <p className="text-lg text-orange-700">AI will auto-fill the form below from your presentation!</p>
           </div>
 
           <div className="flex justify-center">
@@ -571,7 +571,7 @@ Fill ONLY the EMPTY fields with your research. Return JSON with ALL fields fille
               type="button"
               onClick={() => fileInputRef.current?.click()}
               disabled={uploadingDoc}
-              className="px-8 py-4 bg-white text-purple-700 font-bold rounded-2xl shadow-lg hover:bg-gray-100 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-8 py-4 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold rounded-2xl shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {uploadingDoc ? (
                 <>🔍 Scanning Document...</>
@@ -587,8 +587,8 @@ Fill ONLY the EMPTY fields with your research. Return JSON with ALL fields fille
               disabled={researchingWithAI}
               className={`w-full py-6 rounded-2xl font-bold text-lg transition-all shadow-2xl transform hover:scale-105 ${
                 researchingWithAI
-                  ? 'bg-gradient-to-r from-yellow-400 via-orange-400 to-pink-500 text-white cursor-wait animate-pulse'
-                  : 'bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500 hover:from-purple-700 hover:via-pink-700 hover:to-orange-600 text-white animate-pulse hover:animate-none'
+                  ? 'bg-gradient-to-r from-yellow-400 via-orange-400 to-orange-500 text-white cursor-wait animate-pulse'
+                  : 'bg-gradient-to-r from-amber-500 via-orange-500 to-orange-600 hover:from-amber-600 hover:via-orange-600 hover:to-orange-700 text-white animate-pulse hover:animate-none'
               }`}
             >
               {researchingWithAI ? (
@@ -603,10 +603,10 @@ Fill ONLY the EMPTY fields with your research. Return JSON with ALL fields fille
             </button>
           </div>
 
-          <p className="text-center mt-4 text-sm opacity-90">
+          <p className="text-center mt-4 text-sm text-orange-700">
             ✨ Upload a pitch deck OR use AI to auto-fill from your website/name!
           </p>
-          <p className="text-center mt-2 text-xs opacity-75">
+          <p className="text-center mt-2 text-xs text-orange-600">
             💡 Tip: Enter your startup name or website first, then click "Fill Missing Data with AI"
           </p>
         </div>
@@ -619,17 +619,17 @@ Fill ONLY the EMPTY fields with your research. Return JSON with ALL fields fille
         )}
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="bg-white/10 backdrop-blur-sm rounded-3xl p-8 shadow-2xl mb-8 border border-white/20">
+        <form onSubmit={handleSubmit} className="bg-white rounded-3xl p-8 shadow-2xl mb-8 border-2 border-orange-200">
           {/* Basic Information */}
           <section className="mb-8">
-            <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
+            <h2 className="text-2xl font-bold text-orange-600 mb-6 flex items-center gap-2">
               <span>📋</span> Basic Information
             </h2>
             
             <div className="space-y-4">
               <div>
-                <label className="block text-white font-semibold mb-2">
-                  Startup Name <span className="text-red-400">*</span>
+                <label className="block text-gray-700 font-semibold mb-2">
+                  Startup Name <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -637,14 +637,14 @@ Fill ONLY the EMPTY fields with your research. Return JSON with ALL fields fille
                   value={formData.name}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 bg-white/20 backdrop-blur-sm border-2 border-white/30 rounded-xl focus:border-purple-400 focus:outline-none transition-colors text-white placeholder-purple-200"
+                  className="w-full px-4 py-3 border-2 border-orange-200 rounded-xl focus:border-orange-500 focus:outline-none transition-colors"
                   placeholder="e.g., HyperLoop"
                 />
               </div>
 
               <div>
-                <label className="block text-white font-semibold mb-2">
-                  Value Proposition <span className="text-red-400">*</span>
+                <label className="block text-gray-700 font-semibold mb-2">
+                  Value Proposition <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -652,7 +652,7 @@ Fill ONLY the EMPTY fields with your research. Return JSON with ALL fields fille
                   value={formData.valueProp}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 bg-white/20 backdrop-blur-sm border-2 border-white/30 rounded-xl focus:border-purple-400 focus:outline-none transition-colors text-white placeholder-purple-200"
+                  className="w-full px-4 py-3 border-2 border-orange-200 rounded-xl focus:border-orange-500 focus:outline-none transition-colors"
                   placeholder="One sentence that describes what you do"
                 />
               </div>
