@@ -422,24 +422,24 @@ export default function BulkImport() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-purple-800 to-indigo-900 p-8">
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-slate-100 p-8">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-5xl font-bold text-white mb-2">🚀 Bulk Import Startups</h1>
-            <p className="text-purple-200">Automated VC portfolio scraping & enrichment</p>
+            <h1 className="text-5xl font-bold text-orange-600 mb-2">🚀 Bulk Import Startups</h1>
+            <p className="text-slate-600 font-semibold">Automated VC portfolio scraping & enrichment</p>
           </div>
           <div className="flex gap-3">
             <button
               onClick={() => setCurrentStep(currentStep === 'sources' ? 'input' : 'sources')}
-              className="bg-purple-500 hover:bg-purple-600 text-white font-bold py-3 px-6 rounded-2xl transition-all"
+              className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-3 px-6 rounded-2xl transition-all"
             >
               {currentStep === 'sources' ? '← Back to Import' : '⚙️ Manage Sources'}
             </button>
             <button
               onClick={() => navigate('/submit')}
-              className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-2xl transition-all"
+              className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold py-3 px-6 rounded-2xl transition-all"
             >
               ← Submit Page
             </button>
@@ -450,26 +450,26 @@ export default function BulkImport() {
         {currentStep === 'sources' && (
           <div className="space-y-6">
             {/* Auto-Refresh Info */}
-            <div className="bg-gradient-to-r from-green-500/20 to-blue-500/20 backdrop-blur-md rounded-3xl p-6 border-2 border-green-400">
-              <h2 className="text-2xl font-bold text-white mb-3">🤖 Automated Weekly Refresh</h2>
-              <p className="text-purple-100 mb-4">
+            <div className="bg-white rounded-3xl p-6 border-2 border-green-400">
+              <h2 className="text-2xl font-bold text-slate-800 mb-3">🤖 Automated Weekly Refresh</h2>
+              <p className="text-slate-700 mb-4">
                 AI learns to scrape these sources automatically. Enable auto-refresh for weekly updates of fresh startup data.
               </p>
               <button
                 onClick={handleRefreshAll}
-                className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-xl transition-all"
+                className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-3 px-6 rounded-xl transition-all"
               >
                 🔄 Refresh All Sources Now
               </button>
             </div>
 
             {/* Saved Sources */}
-            <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 border-2 border-purple-400">
+            <div className="bg-white rounded-3xl p-8 border-2 border-orange-200">
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-3xl font-bold text-white">📚 Saved Sources ({savedSources.length})</h2>
+                <h2 className="text-3xl font-bold text-slate-800">📚 Saved Sources ({savedSources.length})</h2>
                 <button
                   onClick={() => setShowAddSource(!showAddSource)}
-                  className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-xl transition-all"
+                  className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-2 px-4 rounded-xl transition-all"
                 >
                   {showAddSource ? '✕ Cancel' : '+ Add Source'}
                 </button>
@@ -477,35 +477,35 @@ export default function BulkImport() {
 
               {/* Add Source Form */}
               {showAddSource && (
-                <div className="bg-purple-700/50 rounded-xl p-6 mb-6">
-                  <h3 className="text-white font-bold mb-4">Add New Source</h3>
+                <div className="bg-amber-50 border-2 border-amber-400 rounded-xl p-6 mb-6">
+                  <h3 className="text-slate-800 font-bold mb-4">Add New Source</h3>
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-purple-200 mb-2 font-semibold">Source Name</label>
+                      <label className="block text-slate-700 mb-2 font-semibold">Source Name</label>
                       <input
                         type="text"
                         value={newSource.name}
                         onChange={(e) => setNewSource({...newSource, name: e.target.value})}
                         placeholder="e.g., Y Combinator W24"
-                        className="w-full px-4 py-2 bg-white/20 border-2 border-purple-300 rounded-lg text-white placeholder-purple-300"
+                        className="w-full px-4 py-2 bg-white border-2 border-orange-300 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-orange-500"
                       />
                     </div>
                     <div>
-                      <label className="block text-purple-200 mb-2 font-semibold">Portfolio URL</label>
+                      <label className="block text-slate-700 mb-2 font-semibold">Portfolio URL</label>
                       <input
                         type="text"
                         value={newSource.url}
                         onChange={(e) => setNewSource({...newSource, url: e.target.value})}
                         placeholder="https://www.ycombinator.com/companies"
-                        className="w-full px-4 py-2 bg-white/20 border-2 border-purple-300 rounded-lg text-white placeholder-purple-300"
+                        className="w-full px-4 py-2 bg-white border-2 border-orange-300 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-orange-500"
                       />
                     </div>
                     <div>
-                      <label className="block text-purple-200 mb-2 font-semibold">Type</label>
+                      <label className="block text-slate-700 mb-2 font-semibold">Type</label>
                       <select
                         value={newSource.type}
                         onChange={(e) => setNewSource({...newSource, type: e.target.value as any})}
-                        className="w-full px-4 py-2 bg-white/20 border-2 border-purple-300 rounded-lg text-white"
+                        className="w-full px-4 py-2 bg-white border-2 border-orange-300 rounded-lg text-slate-800"
                       >
                         <option value="vc_portfolio">VC Portfolio</option>
                         <option value="accelerator">Accelerator</option>
@@ -519,11 +519,11 @@ export default function BulkImport() {
                         onChange={(e) => setNewSource({...newSource, autoRefresh: e.target.checked})}
                         className="w-5 h-5"
                       />
-                      <label className="text-purple-200">Enable weekly auto-refresh</label>
+                      <label className="text-slate-700">Enable weekly auto-refresh</label>
                     </div>
                     <button
                       onClick={handleAddSource}
-                      className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-xl w-full transition-all"
+                      className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-3 px-6 rounded-xl w-full transition-all"
                     >
                       ✅ Save Source
                     </button>
@@ -534,13 +534,13 @@ export default function BulkImport() {
               {/* Sources List */}
               <div className="space-y-3">
                 {savedSources.length === 0 ? (
-                  <p className="text-purple-200 text-center py-8">No saved sources yet. Add your first VC portfolio or accelerator!</p>
+                  <p className="text-slate-600 text-center py-8">No saved sources yet. Add your first VC portfolio or accelerator!</p>
                 ) : (
                   savedSources.map((source) => (
-                    <div key={source.id} className="bg-purple-700/50 rounded-xl p-4 flex justify-between items-center">
+                    <div key={source.id} className="bg-orange-50 border-2 border-orange-200 rounded-xl p-4 flex justify-between items-center">
                       <div className="flex-1">
                         <div className="flex items-center gap-3 mb-2">
-                          <h3 className="text-white font-bold text-lg">{source.name}</h3>
+                          <h3 className="text-slate-800 font-bold text-lg">{source.name}</h3>
                           <span className={`px-3 py-1 rounded-full text-xs font-bold ${
                             source.type === 'vc_portfolio' ? 'bg-blue-500' :
                             source.type === 'accelerator' ? 'bg-green-500' : 'bg-gray-500'
@@ -548,14 +548,14 @@ export default function BulkImport() {
                             {source.type.replace('_', ' ').toUpperCase()}
                           </span>
                           {source.autoRefresh && (
-                            <span className="bg-orange-500 text-white px-2 py-1 rounded-full text-xs font-bold">
+                            <span className="bg-amber-500 text-white px-2 py-1 rounded-full text-xs font-bold">
                               🤖 AUTO
                             </span>
                           )}
                         </div>
-                        <p className="text-purple-200 text-sm mb-1">{source.url}</p>
+                        <p className="text-slate-600 text-sm mb-1">{source.url}</p>
                         {source.lastScraped && (
-                          <p className="text-purple-300 text-xs">
+                          <p className="text-slate-500 text-xs">
                             Last scraped: {new Date(source.lastScraped).toLocaleDateString()}
                           </p>
                         )}
@@ -563,13 +563,13 @@ export default function BulkImport() {
                       <div className="flex gap-2">
                         <button
                           onClick={() => handleRefreshSource(source)}
-                          className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg transition-all text-sm"
+                          className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-2 px-4 rounded-lg transition-all text-sm"
                         >
                           🔄 Refresh
                         </button>
                         <button
                           onClick={() => handleDeleteSource(source.id)}
-                          className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg transition-all text-sm"
+                          className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-bold py-2 px-4 rounded-lg transition-all text-sm"
                         >
                           🗑️
                         </button>
@@ -581,13 +581,13 @@ export default function BulkImport() {
             </div>
 
             {/* Instructions */}
-            <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 border-2 border-orange-400">
-              <h2 className="text-2xl font-bold text-white mb-4">💡 How It Works</h2>
-              <div className="space-y-3 text-purple-100">
-                <p><strong className="text-orange-300">1. Add Sources:</strong> Input VC portfolio URLs, accelerator sites, or startup lists</p>
-                <p><strong className="text-orange-300">2. AI Learns:</strong> System learns HTML patterns to extract company URLs automatically</p>
-                <p><strong className="text-orange-300">3. Auto-Refresh:</strong> Weekly cron job scrapes sources, enriches with 5-point format</p>
-                <p><strong className="text-orange-300">4. Fresh Data:</strong> Your startup database stays current with latest YC batch, new funding rounds</p>
+            <div className="bg-white rounded-3xl p-8 border-2 border-orange-400">
+              <h2 className="text-2xl font-bold text-slate-800 mb-4">💡 How It Works</h2>
+              <div className="space-y-3 text-slate-700">
+                <p><strong className="text-orange-600">1. Add Sources:</strong> Input VC portfolio URLs, accelerator sites, or startup lists</p>
+                <p><strong className="text-orange-600">2. AI Learns:</strong> System learns HTML patterns to extract company URLs automatically</p>
+                <p><strong className="text-orange-600">3. Auto-Refresh:</strong> Weekly cron job scrapes sources, enriches with 5-point format</p>
+                <p><strong className="text-orange-600">4. Fresh Data:</strong> Your startup database stays current with latest YC batch, new funding rounds</p>
               </div>
             </div>
           </div>
@@ -595,20 +595,20 @@ export default function BulkImport() {
 
         {/* Step 1: Input */}
         {currentStep === 'input' && (
-          <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 border-2 border-purple-400">
-            <h2 className="text-3xl font-bold text-white mb-6">📋 Enter Company Websites</h2>
+          <div className="bg-white rounded-3xl p-8 border-2 border-orange-200">
+            <h2 className="text-3xl font-bold text-slate-800 mb-6">📋 Enter Company Websites</h2>
             
             {/* Quick Templates */}
             <div className="mb-6">
-              <p className="text-purple-200 mb-3 font-semibold">Quick Start Templates:</p>
+              <p className="text-slate-700 mb-3 font-semibold">Quick Start Templates:</p>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {vcTemplates.map((template) => (
-                  <div key={template.name} className="bg-purple-700/50 rounded-xl p-4">
-                    <h3 className="text-white font-bold mb-2">{template.name}</h3>
-                    <p className="text-purple-200 text-sm mb-3">Scrape their portfolio page</p>
+                  <div key={template.name} className="bg-orange-50 border-2 border-orange-200 rounded-xl p-4">
+                    <h3 className="text-slate-800 font-bold mb-2">{template.name}</h3>
+                    <p className="text-slate-600 text-sm mb-3">Scrape their portfolio page</p>
                     <button
                       onClick={() => setVcUrl(template.url)}
-                      className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-lg text-sm transition-all w-full"
+                      className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-2 px-4 rounded-lg text-sm transition-all w-full"
                     >
                       Use Template
                     </button>
@@ -619,9 +619,9 @@ export default function BulkImport() {
 
             {/* Manual Input */}
             <div className="mb-6">
-              <div className="bg-blue-500/20 border-2 border-blue-400 rounded-xl p-4 mb-4">
-                <h3 className="text-white font-bold mb-2">📋 Current Workflow (MVP)</h3>
-                <ol className="text-purple-100 text-sm space-y-1 list-decimal list-inside">
+              <div className="bg-blue-50 border-2 border-blue-400 rounded-xl p-4 mb-4">
+                <h3 className="text-slate-800 font-bold mb-2">📋 Current Workflow (MVP)</h3>
+                <ol className="text-slate-700 text-sm space-y-1 list-decimal list-inside">
                   <li>Visit a VC portfolio page (e.g., YC, a16z)</li>
                   <li>Manually copy company website URLs</li>
                   <li>Paste them below (one per line)</li>
@@ -629,7 +629,7 @@ export default function BulkImport() {
                 </ol>
               </div>
 
-              <label className="block text-white font-bold mb-3">
+              <label className="block text-slate-800 font-bold mb-3">
                 Paste Company Websites (one per line):
               </label>
               <textarea
@@ -637,13 +637,13 @@ export default function BulkImport() {
                 onChange={(e) => setVcUrl(e.target.value)}
                 placeholder="https://airbnb.com&#10;https://stripe.com&#10;https://coinbase.com&#10;https://figma.com&#10;https://notion.so"
                 rows={10}
-                className="w-full px-4 py-3 bg-white/20 border-2 border-purple-300 rounded-xl text-white placeholder-purple-300 focus:outline-none focus:border-orange-400 font-mono text-sm"
+                className="w-full px-4 py-3 bg-white border-2 border-orange-300 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:border-orange-500 font-mono text-sm"
               />
               <div className="flex justify-between items-center mt-2">
-                <p className="text-purple-200 text-sm">
+                <p className="text-slate-600 text-sm">
                   💡 Manually copy URLs from any VC portfolio page
                 </p>
-                <p className="text-yellow-300 text-sm font-bold">
+                <p className="text-orange-600 text-sm font-bold">
                   {vcUrl.split('\n').filter(u => u.trim()).length} URLs ready
                 </p>
               </div>
@@ -658,17 +658,17 @@ export default function BulkImport() {
             </button>
 
             {/* Future Feature Notice */}
-            <div className="mt-6 bg-purple-500/20 border-2 border-purple-400 rounded-xl p-4">
-              <h3 className="text-white font-bold mb-2">🚀 Future: Automated Scraping</h3>
-              <p className="text-purple-100 text-sm mb-2">
+            <div className="mt-6 bg-amber-50 border-2 border-amber-400 rounded-xl p-4">
+              <h3 className="text-slate-800 font-bold mb-2">🚀 Future: Automated Scraping</h3>
+              <p className="text-slate-700 text-sm mb-2">
                 In production, AI will automatically:
               </p>
-              <ul className="text-purple-100 text-sm space-y-1 list-disc list-inside">
+              <ul className="text-slate-700 text-sm space-y-1 list-disc list-inside">
                 <li>Scrape portfolio pages for company URLs</li>
                 <li>Run weekly to get fresh startups</li>
                 <li>Use the "Manage Sources" feature above</li>
               </ul>
-              <p className="text-yellow-300 text-xs mt-2">
+              <p className="text-amber-700 text-xs mt-2 font-semibold">
                 ⚠️ Requires backend server with Puppeteer/Playwright
               </p>
             </div>
@@ -678,22 +678,22 @@ export default function BulkImport() {
         {/* Step 2: Review & Enrich */}
         {currentStep === 'review' && scrapedCompanies.length > 0 && (
           <div className="space-y-6" key="review-section">
-            <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 border-2 border-purple-400">
-              <h2 className="text-3xl font-bold text-white mb-4">
+            <div className="bg-white rounded-3xl p-8 border-2 border-orange-200">
+              <h2 className="text-3xl font-bold text-slate-800 mb-4">
                 ✅ Found {scrapedCompanies.length} Companies
               </h2>
               
-              <div className="mb-6 max-h-96 overflow-y-auto space-y-2"
-key="companies-list">{scrapedCompanies.map((company, i) => {
+              <div className="mb-6 max-h-96 overflow-y-auto space-y-2" key="companies-list">
+                {scrapedCompanies.map((company, i) => {
                   const entityType = company.entityType || 'startup';
                   const entityIcon = entityType === 'vc_firm' ? '💼' : entityType === 'accelerator' ? '🚀' : '🏢';
                   const entityLabel = entityType === 'vc_firm' ? 'VC Firm' : entityType === 'accelerator' ? 'Accelerator' : 'Startup';
                   
                   return (
-                    <div key={i} className="bg-purple-700/50 rounded-lg p-4 flex justify-between items-center">
+                    <div key={i} className="bg-orange-50 border-2 border-orange-200 rounded-lg p-4 flex justify-between items-center">
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
-                          <h3 className="text-white font-bold">{company.name}</h3>
+                          <h3 className="text-slate-800 font-bold">{company.name}</h3>
                           <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${
                             entityType === 'vc_firm' ? 'bg-lime-400 text-gray-900' :
                             entityType === 'accelerator' ? 'bg-lime-500 text-gray-900' :
@@ -702,7 +702,7 @@ key="companies-list">{scrapedCompanies.map((company, i) => {
                             {entityIcon} {entityLabel}
                           </span>
                         </div>
-                        <p className="text-purple-200 text-sm">{company.website}</p>
+                        <p className="text-slate-600 text-sm">{company.website}</p>
                       </div>
                       {enrichedCompanies[i] && (
                         <span className="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-bold">
@@ -716,14 +716,14 @@ key="companies-list">{scrapedCompanies.map((company, i) => {
 
               {/* Progress notification - always show when enriching */}
               {isEnriching && (
-                <div className="mb-6 bg-orange-500/20 border-2 border-orange-400 rounded-2xl p-6 text-center animate-pulse">
-                  <h3 className="text-white text-2xl font-bold mb-2">
+                <div className="mb-6 bg-orange-50 border-2 border-orange-400 rounded-2xl p-6 text-center animate-pulse">
+                  <h3 className="text-slate-800 text-2xl font-bold mb-2">
                     🤖 AI is analyzing each company...
                   </h3>
-                  <p className="text-orange-200 mb-3">
+                  <p className="text-orange-700 mb-3">
                     This takes about 2 seconds per company. Please wait...
                   </p>
-                  <div className="text-3xl font-bold text-orange-300">
+                  <div className="text-3xl font-bold text-orange-600">
                     {enrichedCompanies.length} / {scrapedCompanies.length} completed
                   </div>
                 </div>
@@ -752,17 +752,17 @@ key="companies-list">{scrapedCompanies.map((company, i) => {
 
             {/* Progress Bar */}
             {isEnriching && (
-              <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 border-2 border-orange-400">
-                <h3 className="text-white font-bold mb-4">
+              <div className="bg-white rounded-3xl p-8 border-2 border-orange-400">
+                <h3 className="text-slate-800 font-bold mb-4">
                   Enriching: {Math.round(enrichmentProgress)}%
                 </h3>
-                <div className="w-full bg-purple-700 rounded-full h-4">
+                <div className="w-full bg-slate-200 rounded-full h-4">
                   <div 
                     className="bg-gradient-to-r from-orange-500 to-orange-600 h-4 rounded-full transition-all duration-500"
                     style={{ width: `${enrichmentProgress}%` }}
                   />
                 </div>
-                <p className="text-purple-200 text-sm mt-3">
+                <p className="text-slate-600 text-sm mt-3">
                   ⏱️ Rate limited to 1 company every 2 seconds (OpenAI API limits)
                 </p>
               </div>
@@ -770,8 +770,8 @@ key="companies-list">{scrapedCompanies.map((company, i) => {
 
             {/* Preview Enriched Companies */}
             {enrichedCompanies.length > 0 && (
-              <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 border-2 border-green-400">
-                <h2 className="text-3xl font-bold text-white mb-6">👀 Preview</h2>
+              <div className="bg-white rounded-3xl p-8 border-2 border-green-400">
+                <h2 className="text-3xl font-bold text-slate-800 mb-6">👀 Preview</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-96 overflow-y-auto">
                   {enrichedCompanies.slice(0, 6).map((company, i) => (
                     <div key={i} className="bg-gradient-to-br from-orange-400 to-orange-500 rounded-xl p-4">
@@ -788,7 +788,7 @@ key="companies-list">{scrapedCompanies.map((company, i) => {
                   ))}
                 </div>
                 {enrichedCompanies.length > 6 && (
-                  <p className="text-purple-200 text-center mt-4">
+                  <p className="text-slate-600 text-center mt-4">
                     ...and {enrichedCompanies.length - 6} more
                   </p>
                 )}
