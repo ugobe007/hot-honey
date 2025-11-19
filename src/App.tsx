@@ -32,6 +32,7 @@ import EditStartups from './pages/EditStartups';
 import MigrateLocalStorage from './pages/MigrateLocalStorage';
 import MigrateStartupData from './pages/MigrateStartupData';
 import DiagnosticPage from './pages/DiagnosticPage';
+import DatabaseDiagnostic from './pages/DatabaseDiagnostic';
 import ProfilePage from './pages/ProfilePage';
 import AdminDashboard from './pages/AdminDashboard';
 import SyncStartups from './pages/SyncStartups';
@@ -105,6 +106,7 @@ const App: React.FC = () => {
           <Route path="/admin/migrate" element={<MigrateLocalStorage />} />
           <Route path="/admin/migrate-data" element={<MigrateStartupData />} />
           <Route path="/admin/diagnostic" element={<DiagnosticPage />} />
+          <Route path="/admin/database-check" element={<DatabaseDiagnostic />} />
           <Route path="/data-intelligence" element={<DataIntelligence />} />
           <Route path="/setup" element={<SetupPage />} /> {/* ✅ Setup shortcut */}
           <Route path="/analytics" element={<Analytics />} />

@@ -66,22 +66,22 @@ export default function DiagnosticPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-purple-800 to-indigo-900 p-8 flex items-center justify-center">
-        <div className="text-white text-2xl">Loading diagnostic data...</div>
+      <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-slate-100 p-8 flex items-center justify-center">
+        <div className="text-orange-600 text-2xl font-bold">Loading diagnostic data...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-purple-800 to-indigo-900 p-8">
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-slate-100 p-8">
       <div className="max-w-7xl mx-auto">
         
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-5xl font-bold text-white">🔍 System Diagnostic</h1>
+          <h1 className="text-5xl font-bold text-orange-600">🔍 System Diagnostic</h1>
           <button
             onClick={() => navigate('/')}
-            className="px-6 py-3 bg-white/20 hover:bg-white/30 text-white font-bold rounded-xl transition-all"
+            className="px-6 py-3 bg-gradient-to-r from-slate-600 to-slate-700 hover:from-slate-700 hover:to-slate-800 text-white font-bold rounded-xl transition-all"
           >
             ← Back
           </button>
@@ -112,31 +112,31 @@ export default function DiagnosticPage() {
         <div className="grid gap-6">
           
           {/* Supabase Data */}
-          <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20">
-            <h2 className="text-3xl font-bold text-white mb-4">🗄️ Supabase Database</h2>
+          <div className="bg-white rounded-2xl p-6 border-2 border-orange-200">
+            <h2 className="text-3xl font-bold text-slate-800 mb-4">🗄️ Supabase Database</h2>
             
             {supabaseData?.error && (
-              <div className="bg-red-500/20 border border-red-400 rounded-xl p-4 mb-4">
-                <p className="text-white font-bold">❌ Error: {supabaseData.error}</p>
+              <div className="bg-red-50 border-2 border-red-400 rounded-xl p-4 mb-4">
+                <p className="text-red-700 font-bold">❌ Error: {supabaseData.error}</p>
               </div>
             )}
 
             <div className="grid gap-4">
-              <div className="bg-blue-500/20 border border-blue-400 rounded-xl p-4">
-                <h3 className="text-white font-bold text-xl mb-2">
+              <div className="bg-blue-50 border-2 border-blue-400 rounded-xl p-4">
+                <h3 className="text-slate-800 font-bold text-xl mb-2">
                   📊 Total Startups: {supabaseData?.all.length || 0}
                 </h3>
                 {supabaseData?.all.length > 0 && (
-                  <ul className="text-white/80 text-sm space-y-1 mt-3">
+                  <ul className="text-slate-700 text-sm space-y-1 mt-3">
                     {supabaseData.all.map((s: any, i: number) => (
                       <li key={i}>
-                        • <span className="text-yellow-300">{s.name}</span> - 
+                        • <span className="text-orange-600 font-semibold">{s.name}</span> - 
                         <span className={`ml-2 font-bold ${
-                          s.status === 'approved' ? 'text-green-400' :
-                          s.status === 'pending' ? 'text-yellow-400' :
-                          'text-red-400'
+                          s.status === 'approved' ? 'text-green-600' :
+                          s.status === 'pending' ? 'text-amber-600' :
+                          'text-red-600'
                         }`}>{s.status}</span>
-                        <span className="text-white/60 ml-2 text-xs">
+                        <span className="text-slate-500 ml-2 text-xs">
                           {new Date(s.created_at).toLocaleString()}
                         </span>
                       </li>
@@ -145,12 +145,12 @@ export default function DiagnosticPage() {
                 )}
               </div>
 
-              <div className="bg-green-500/20 border border-green-400 rounded-xl p-4">
-                <h3 className="text-white font-bold text-xl mb-2">
+              <div className="bg-green-50 border-2 border-green-400 rounded-xl p-4">
+                <h3 className="text-slate-800 font-bold text-xl mb-2">
                   ✅ Approved (Visible in Voting): {supabaseData?.approved.length || 0}
                 </h3>
                 {supabaseData?.approved.length > 0 && (
-                  <ul className="text-white/80 text-sm space-y-1 mt-3">
+                  <ul className="text-slate-700 text-sm space-y-1 mt-3">
                     {supabaseData.approved.map((s: any, i: number) => (
                       <li key={i}>• {s.name}</li>
                     ))}
@@ -158,12 +158,12 @@ export default function DiagnosticPage() {
                 )}
               </div>
 
-              <div className="bg-yellow-500/20 border border-yellow-400 rounded-xl p-4">
-                <h3 className="text-white font-bold text-xl mb-2">
+              <div className="bg-amber-50 border-2 border-amber-400 rounded-xl p-4">
+                <h3 className="text-slate-800 font-bold text-xl mb-2">
                   ⏳ Pending Review: {supabaseData?.pending.length || 0}
                 </h3>
                 {supabaseData?.pending.length > 0 && (
-                  <ul className="text-white/80 text-sm space-y-1 mt-3">
+                  <ul className="text-slate-700 text-sm space-y-1 mt-3">
                     {supabaseData.pending.map((s: any, i: number) => (
                       <li key={i}>• {s.name}</li>
                     ))}
@@ -174,38 +174,38 @@ export default function DiagnosticPage() {
           </div>
 
           {/* localStorage Data */}
-          <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20">
-            <h2 className="text-3xl font-bold text-white mb-4">💾 localStorage (Legacy)</h2>
+          <div className="bg-white rounded-2xl p-6 border-2 border-orange-200">
+            <h2 className="text-3xl font-bold text-slate-800 mb-4">💾 localStorage (Legacy)</h2>
             
             <div className="grid gap-4">
-              <div className="bg-orange-500/20 border border-orange-400 rounded-xl p-4">
-                <h3 className="text-white font-bold text-xl mb-2">
+              <div className="bg-orange-50 border-2 border-orange-400 rounded-xl p-4">
+                <h3 className="text-slate-800 font-bold text-xl mb-2">
                   📦 Uploaded Startups: {localStorageData?.uploadedStartups.length || 0}
                 </h3>
                 {localStorageData?.uploadedStartups.length > 0 ? (
                   <>
-                    <p className="text-orange-300 text-sm mb-2">
+                    <p className="text-orange-700 text-sm mb-2">
                       ⚠️ These should be migrated to Supabase!
                     </p>
-                    <ul className="text-white/80 text-sm space-y-1 mt-3">
+                    <ul className="text-slate-700 text-sm space-y-1 mt-3">
                       {localStorageData.uploadedStartups.map((s: any, i: number) => (
                         <li key={i}>• {s.name || 'Unnamed'}</li>
                       ))}
                     </ul>
                   </>
                 ) : (
-                  <p className="text-green-300 text-sm">✅ No legacy data (good!)</p>
+                  <p className="text-green-600 text-sm">✅ No legacy data (good!)</p>
                 )}
               </div>
 
-              <div className="bg-purple-500/20 border border-purple-400 rounded-xl p-4">
-                <h3 className="text-white font-bold text-xl mb-2">
+              <div className="bg-pink-50 border-2 border-pink-400 rounded-xl p-4">
+                <h3 className="text-slate-800 font-bold text-xl mb-2">
                   ❤️ Your YES Votes: {localStorageData?.myYesVotes.length || 0}
                 </h3>
               </div>
 
-              <div className="bg-indigo-500/20 border border-indigo-400 rounded-xl p-4">
-                <h3 className="text-white font-bold text-xl mb-2">
+              <div className="bg-blue-50 border-2 border-blue-400 rounded-xl p-4">
+                <h3 className="text-slate-800 font-bold text-xl mb-2">
                   🗳️ Voted Startups: {localStorageData?.votedStartups.length || 0}
                 </h3>
               </div>
@@ -213,34 +213,34 @@ export default function DiagnosticPage() {
           </div>
 
           {/* System Status */}
-          <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20">
-            <h2 className="text-3xl font-bold text-white mb-4">📋 System Status</h2>
+          <div className="bg-white rounded-2xl p-6 border-2 border-orange-200">
+            <h2 className="text-3xl font-bold text-slate-800 mb-4">📋 System Status</h2>
             
-            <div className="space-y-3 text-white">
+            <div className="space-y-3 text-slate-700">
               <p>
-                <strong className="text-green-400">✅ Supabase Connection:</strong> {supabaseData?.error ? 'Failed' : 'Working'}
+                <strong className="text-green-600">✅ Supabase Connection:</strong> {supabaseData?.error ? 'Failed' : 'Working'}
               </p>
               <p>
-                <strong className="text-blue-400">📊 Data Storage:</strong> {
+                <strong className="text-blue-600">📊 Data Storage:</strong> {
                   localStorageData?.uploadedStartups.length > 0 
                     ? '⚠️ Mixed (Supabase + localStorage)' 
                     : '✅ Supabase Only'
                 }
               </p>
               <p>
-                <strong className="text-yellow-400">🚀 Total Approved for Voting:</strong> {supabaseData?.approved.length || 0}
+                <strong className="text-amber-600">🚀 Total Approved for Voting:</strong> {supabaseData?.approved.length || 0}
               </p>
               <p>
-                <strong className="text-purple-400">⏳ Awaiting Review:</strong> {supabaseData?.pending.length || 0}
+                <strong className="text-orange-600">⏳ Awaiting Review:</strong> {supabaseData?.pending.length || 0}
               </p>
             </div>
 
             {localStorageData?.uploadedStartups.length > 0 && (
-              <div className="mt-4 pt-4 border-t border-white/20">
-                <p className="text-orange-300 font-bold mb-2">
+              <div className="mt-4 pt-4 border-t-2 border-orange-200">
+                <p className="text-orange-700 font-bold mb-2">
                   ⚠️ Action Required:
                 </p>
-                <p className="text-white/80 text-sm">
+                <p className="text-slate-600 text-sm">
                   You have {localStorageData.uploadedStartups.length} startups in localStorage.
                   Click "Migrate localStorage → Supabase" above to move them to the database.
                 </p>
@@ -249,30 +249,30 @@ export default function DiagnosticPage() {
           </div>
 
           {/* Quick Links */}
-          <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20">
-            <h2 className="text-3xl font-bold text-white mb-4">🔗 Quick Links</h2>
+          <div className="bg-white rounded-2xl p-6 border-2 border-orange-200">
+            <h2 className="text-3xl font-bold text-slate-800 mb-4">🔗 Quick Links</h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               <button
                 onClick={() => navigate('/submit')}
-                className="py-3 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-xl transition-all"
+                className="py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-xl transition-all"
               >
                 📝 Submit Startup
               </button>
               <button
                 onClick={() => navigate('/vote')}
-                className="py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-xl transition-all"
+                className="py-3 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold rounded-xl transition-all"
               >
                 🗳️ Vote
               </button>
               <button
                 onClick={() => navigate('/admin/edit-startups')}
-                className="py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-all"
+                className="py-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold rounded-xl transition-all"
               >
                 ✏️ Edit Startups
               </button>
               <button
                 onClick={() => navigate('/admin/bulk-import')}
-                className="py-3 bg-orange-600 hover:bg-orange-700 text-white font-semibold rounded-xl transition-all"
+                className="py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-semibold rounded-xl transition-all"
               >
                 🚀 Bulk Import
               </button>

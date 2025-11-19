@@ -16,6 +16,37 @@ export default function PortfolioPage() {
   const [myYesVotes, setMyYesVotes] = useState<any[]>([]);
   const [isAdmin, setIsAdmin] = useState(false);
 
+  // Helper functions for stage information
+  const getStageInfo = (stage: number) => {
+    switch(stage) {
+      case 1: return { name: 'Stage 1', description: 'Anonymous voting', color: 'bg-slate-300', icon: '📊' };
+      case 2: return { name: 'Stage 2', description: 'Review materials', color: 'bg-orange-400', icon: '📄' };
+      case 3: return { name: 'Stage 3', description: 'Meet founder', color: 'bg-slate-300', icon: '🤝' };
+      case 4: return { name: 'Stage 4', description: 'Deal room access', color: 'bg-slate-300', icon: '💼' };
+      default: return { name: 'Stage 1', description: 'Voting stage', color: 'bg-slate-300', icon: '🗳️' };
+    }
+  };
+
+  const getVotingNotification = (startup: any) => {
+    const stage = startup.stage || 1;
+    const currentVotes = startup.yesVotes || 0;
+    const votesNeeded = stage === 4 ? 1 : 5;
+    const votesRemaining = Math.max(0, votesNeeded - currentVotes);
+
+    if (currentVotes >= votesNeeded) {
+      if (stage === 4) {
+        return { message: '🎉 FUNDED! Deal closed!', color: 'bg-green-100 border-green-500 text-green-800' };
+      } else {
+        return { message: `✅ Advanced to Stage ${stage + 1}!`, color: 'bg-blue-100 border-blue-500 text-blue-800' };
+      }
+    } else {
+      return { 
+        message: `🔔 Needs ${votesRemaining} more vote${votesRemaining !== 1 ? 's' : ''} to advance`, 
+        color: 'bg-amber-100 border-amber-500 text-amber-800' 
+      };
+    }
+  };
+
   useEffect(() => {
     if (authLoading || votesLoading) return;
 
@@ -199,37 +230,63 @@ export default function PortfolioPage() {
 
             {/* Startup Cards in Horizontal Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
-              {myYesVotes.map((startup) => (
-                <div key={startup.id} className="relative flex flex-col items-center">
-                  <StartupCardOfficial
-                    startup={startup}
-                    onVote={handleVote}
-                  />
-                  
-                  {/* Remove from Portfolio Button */}
-                  <div className="mt-4 text-center">
-                    <button
-                      onClick={() => handleRemoveFavorite(startup.id)}
-                      className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded-xl transition-all shadow-lg"
-                    >
-                      ❌ Remove
-                    </button>
+              {myYesVotes.map((startup) => {
+                const stageInfo = getStageInfo(startup.stage || 1);
+                const notification = getVotingNotification(startup);
+                
+                return (
+                  <div key={startup.id} className="relative flex flex-col items-center w-full max-w-md">
+                    {/* Stage Badge */}
+                    <div className="mb-3 w-full">
+                      <div className={`${stageInfo.color} ${startup.stage === 2 ? 'text-white' : 'text-slate-800'} px-4 py-2 rounded-xl text-center font-bold shadow-lg flex items-center justify-center gap-2`}>
+                        <span>{stageInfo.icon}</span>
+                        <span>{stageInfo.name}: {stageInfo.description}</span>
+                      </div>
+                    </div>
+
+                    {/* Voting Progress Notification */}
+                    <div className={`mb-3 w-full border-2 rounded-xl px-4 py-2 text-center font-semibold ${notification.color}`}>
+                      {notification.message}
+                    </div>
+
+                    <StartupCardOfficial
+                      startup={startup}
+                      onVote={handleVote}
+                    />
+                    
+                    {/* Action Buttons */}
+                    <div className="mt-4 flex gap-3 justify-center w-full items-center">
+                      <button
+                        onClick={() => navigate('/vote')}
+                        className="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-bold py-3 px-8 rounded-xl transition-all shadow-lg flex items-center gap-2 text-base"
+                      >
+                        <span>🗳️</span>
+                        <span>Vote Again</span>
+                      </button>
+                      <button
+                        onClick={() => handleRemoveFavorite(startup.id)}
+                        className="bg-gradient-to-r from-slate-400 to-slate-500 hover:from-slate-500 hover:to-slate-600 text-white font-semibold py-2 px-4 rounded-lg transition-all shadow-md flex items-center gap-1 text-sm"
+                      >
+                        <span>❌</span>
+                        <span>Remove</span>
+                      </button>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
             {/* Action Buttons */}
             <div className="flex gap-4 justify-center mt-8">
               <button
                 onClick={() => navigate('/vote')}
-                className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-3 px-8 rounded-2xl shadow-lg transition-all"
+                className="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-bold py-3 px-8 rounded-2xl shadow-lg transition-all"
               >
                 🗳️ Continue Voting
               </button>
               <button
                 onClick={() => navigate('/dashboard')}
-                className="bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-500 hover:to-blue-600 text-white font-bold py-3 px-8 rounded-2xl shadow-lg transition-all"
+                className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-3 px-8 rounded-2xl shadow-lg transition-all"
               >
                 📊 Back to Dashboard
               </button>

@@ -10,10 +10,11 @@ import { generateRecentActivities } from '../utils/activityGenerator';
 
 interface StartupData {
   id: string;
-  company_name: string;
+  name: string;
   status: 'pending' | 'approved' | 'rejected';
   created_at: string;
-  website_url?: string;
+  website?: string;
+  pitch?: string;
   description?: string;
   badges?: string[];
 }
@@ -358,7 +359,7 @@ export default function AdminDashboard() {
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
                     <button
                       onClick={() => navigate('/admin/edit-startups')}
-                      className="bg-gradient-to-br from-purple-500 to-purple-700 hover:from-purple-600 hover:to-purple-800 text-white font-bold py-6 rounded-xl transition shadow-lg"
+                      className="bg-gradient-to-br from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-6 rounded-xl transition shadow-lg"
                     >
                       <div className="text-3xl mb-2">✏️</div>
                       <div className="text-lg">Edit & Approve</div>
@@ -366,7 +367,7 @@ export default function AdminDashboard() {
                     </button>
                     <button
                       onClick={() => navigate('/admin/bulk-import')}
-                      className="bg-gradient-to-br from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700 text-white font-bold py-6 rounded-xl transition shadow-lg"
+                      className="bg-gradient-to-br from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold py-6 rounded-xl transition shadow-lg"
                     >
                       <div className="text-3xl mb-2">🚀</div>
                       <div className="text-lg">Bulk Import</div>
@@ -374,7 +375,7 @@ export default function AdminDashboard() {
                     </button>
                     <button
                       onClick={() => navigate('/vote')}
-                      className="bg-gradient-to-br from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white font-bold py-6 rounded-xl transition shadow-lg"
+                      className="bg-gradient-to-br from-orange-400 to-amber-500 hover:from-orange-500 hover:to-amber-600 text-white font-bold py-6 rounded-xl transition shadow-lg"
                     >
                       <div className="text-3xl mb-2">🗳️</div>
                       <div className="text-lg">Vote Page</div>
@@ -382,11 +383,31 @@ export default function AdminDashboard() {
                     </button>
                     <button
                       onClick={() => navigate('/submit')}
-                      className="bg-gradient-to-br from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white font-bold py-6 rounded-xl transition shadow-lg"
+                      className="bg-gradient-to-br from-purple-700 to-purple-900 hover:from-purple-800 hover:to-purple-950 text-lime-400 font-bold py-6 rounded-xl transition shadow-lg"
                     >
-                      <div className="text-3xl mb-2">➕</div>
+                      <div className="text-3xl mb-2 text-lime-400">➕</div>
                       <div className="text-lg">Submit Startup</div>
                       <div className="text-sm opacity-90">Add one manually</div>
+                    </button>
+                  </div>
+
+                  {/* Developer Tools */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                    <button
+                      onClick={() => navigate('/admin/database-check')}
+                      className="bg-gradient-to-br from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white font-bold py-6 rounded-xl transition shadow-lg"
+                    >
+                      <div className="text-3xl mb-2">🔍</div>
+                      <div className="text-lg">Database Check</div>
+                      <div className="text-sm opacity-90">Verify data integrity</div>
+                    </button>
+                    <button
+                      onClick={() => navigate('/admin/diagnostic')}
+                      className="bg-gradient-to-br from-slate-600 to-slate-700 hover:from-slate-700 hover:to-slate-800 text-white font-bold py-6 rounded-xl transition shadow-lg"
+                    >
+                      <div className="text-3xl mb-2">🛠️</div>
+                      <div className="text-lg">System Diagnostic</div>
+                      <div className="text-sm opacity-90">Check system status</div>
                     </button>
                   </div>
 
@@ -407,7 +428,7 @@ export default function AdminDashboard() {
                             <div className="flex-1">
                               <div className="flex items-center gap-3 mb-2">
                                 <h4 className="text-lg font-semibold text-slate-800">
-                                  {startup.company_name}
+                                  {startup.name}
                                 </h4>
                                 <span
                                   className={`px-3 py-1 rounded-full text-xs font-semibold ${
@@ -428,11 +449,11 @@ export default function AdminDashboard() {
                                 <span>
                                   {new Date(startup.created_at).toLocaleDateString()}
                                 </span>
-                                {startup.website_url && (
+                                {startup.website && (
                                   <>
                                     <span>•</span>
                                     <a
-                                      href={startup.website_url}
+                                      href={startup.website}
                                       target="_blank"
                                       rel="noopener noreferrer"
                                       className="hover:text-orange-600 underline"
@@ -460,13 +481,13 @@ export default function AdminDashboard() {
               {/* My YES Votes Tab */}
               {activeTab === 'myvotes' && (
                 <div>
-                  <h2 className="text-2xl font-bold text-white mb-6">⭐ My YES Votes</h2>
+                  <h2 className="text-2xl font-bold text-orange-600 mb-6">⭐ My YES Votes</h2>
                   
                   {myYesVotes.length === 0 ? (
                     <div className="text-center py-12">
                       <div className="text-6xl mb-4">🗳️</div>
-                      <h3 className="text-xl font-bold text-white mb-2">No votes yet!</h3>
-                      <p className="text-purple-200 mb-6">
+                      <h3 className="text-xl font-bold text-slate-800 mb-2">No votes yet!</h3>
+                      <p className="text-slate-600 mb-6">
                         Start voting on startups to see them here
                       </p>
                       <button
@@ -478,7 +499,7 @@ export default function AdminDashboard() {
                     </div>
                   ) : (
                     <>
-                      <div className="mb-4 text-purple-200">
+                      <div className="mb-4 text-slate-700 font-medium">
                         You've voted YES on {myYesVotes.length} startup{myYesVotes.length !== 1 ? 's' : ''}
                       </div>
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
@@ -506,12 +527,12 @@ export default function AdminDashboard() {
               {/* Pending Tab */}
               {activeTab === 'pending' && (
                 <div>
-                  <h2 className="text-2xl font-bold text-white mb-6">
+                  <h2 className="text-2xl font-bold text-orange-600 mb-6">
                     Pending Approval ({pendingStartups.length})
                   </h2>
                   <div className="space-y-4">
                     {pendingStartups.length === 0 ? (
-                      <div className="text-center py-12 text-purple-200">
+                      <div className="text-center py-12 text-slate-600">
                         <div className="text-5xl mb-4">✅</div>
                         <div className="text-xl">No pending startups. Great job!</div>
                       </div>
@@ -519,22 +540,22 @@ export default function AdminDashboard() {
                       pendingStartups.map((startup) => (
                         <div
                           key={startup.id}
-                          className="bg-white/5 rounded-lg p-6 border border-orange-400/30"
+                          className="bg-white rounded-lg p-6 border-2 border-orange-200 shadow-sm"
                         >
                           <div className="flex items-start justify-between mb-4">
                             <div className="flex-1">
-                              <h3 className="text-xl font-bold text-white mb-2">
-                                {startup.company_name}
+                              <h3 className="text-xl font-bold text-slate-800 mb-2">
+                                {startup.name}
                               </h3>
-                              <p className="text-purple-200 mb-3">
-                                {startup.description || 'No description provided'}
+                              <p className="text-slate-600 mb-3">
+                                {startup.pitch || startup.description || 'No description provided'}
                               </p>
-                              {startup.website_url && (
+                              {startup.website && (
                                 <a
-                                  href={startup.website_url}
+                                  href={startup.website}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="text-purple-300 hover:text-purple-100 text-sm underline"
+                                  className="text-orange-600 hover:text-orange-700 text-sm underline font-medium"
                                 >
                                   {startup.website_url}
                                 </a>
@@ -572,7 +593,7 @@ export default function AdminDashboard() {
               {activeTab === 'all' && (
                 <div>
                   <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-2xl font-bold text-white">
+                    <h2 className="text-2xl font-bold text-orange-600">
                       All Startups ({stats.totalStartups})
                     </h2>
                     <button
@@ -586,29 +607,29 @@ export default function AdminDashboard() {
                     {recentStartups.map((startup) => (
                       <div
                         key={startup.id}
-                        className="bg-white/5 hover:bg-white/10 rounded-lg p-4 border border-white/10 transition cursor-pointer"
+                        className="bg-white hover:bg-slate-50 rounded-lg p-4 border-2 border-slate-200 transition cursor-pointer shadow-sm"
                         onClick={() => navigate(`/admin/edit-startups?id=${startup.id}`)}
                       >
                         <div className="flex items-center justify-between">
                           <div className="flex-1">
                             <div className="flex items-center gap-3">
-                              <h4 className="text-lg font-semibold text-white">
-                                {startup.company_name}
+                              <h4 className="text-lg font-semibold text-slate-800">
+                                {startup.name}
                               </h4>
                               <span
-                                className={`px-2 py-1 rounded-full text-xs ${
+                                className={`px-2 py-1 rounded-full text-xs font-semibold ${
                                   startup.status === 'approved'
-                                    ? 'bg-green-500/30 text-green-200'
+                                    ? 'bg-green-100 text-green-700 border border-green-300'
                                     : startup.status === 'pending'
-                                    ? 'bg-orange-500/30 text-orange-200'
-                                    : 'bg-red-500/30 text-red-200'
+                                    ? 'bg-amber-100 text-orange-700 border border-orange-300'
+                                    : 'bg-red-100 text-red-700 border border-red-300'
                                 }`}
                               >
                                 {startup.status}
                               </span>
                             </div>
                           </div>
-                          <div className="text-purple-300 text-sm">
+                          <div className="text-slate-600 text-sm font-medium">
                             {new Date(startup.created_at).toLocaleDateString()}
                           </div>
                         </div>
@@ -620,9 +641,9 @@ export default function AdminDashboard() {
 
               {/* Investors Tab */}
               {activeTab === 'investors' && (
-                <div className="text-center py-12 text-purple-200">
+                <div className="text-center py-12 text-slate-600">
                   <div className="text-5xl mb-4">💼</div>
-                  <div className="text-xl mb-2">Investor Management</div>
+                  <div className="text-xl mb-2 text-slate-800 font-semibold">Investor Management</div>
                   <div className="mb-6">Coming soon - manage investor profiles and portfolios</div>
                   <button
                     onClick={() => navigate('/admin/add-investor')}

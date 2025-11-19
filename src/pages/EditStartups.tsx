@@ -274,17 +274,17 @@ export default function EditStartups() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-purple-800 to-indigo-900 p-8 flex items-center justify-center">
-        <div className="text-white text-2xl">Loading...</div>
+      <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-slate-100 p-8 flex items-center justify-center">
+        <div className="text-orange-600 text-2xl font-bold">Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-purple-800 to-indigo-900 p-8">
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-slate-100 p-8">
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-5xl font-bold text-white">✏️ Edit Startups</h1>
+          <h1 className="text-5xl font-bold text-orange-600">✏️ Edit Startups</h1>
           <div className="flex gap-3">
             <Link
               to="/admin/migrate-data"
@@ -306,7 +306,7 @@ export default function EditStartups() {
             </Link>
             <Link
               to="/"
-              className="px-6 py-3 bg-white/20 hover:bg-white/30 text-white font-bold rounded-xl transition-all"
+              className="px-6 py-3 bg-gradient-to-r from-slate-600 to-slate-700 hover:from-slate-700 hover:to-slate-800 text-white font-bold rounded-xl transition-all shadow-lg"
             >
               ← Back
             </Link>
@@ -314,16 +314,16 @@ export default function EditStartups() {
         </div>
 
         {/* Status Filter */}
-        <div className="bg-white/10 backdrop-blur-lg rounded-xl p-4 mb-6 border border-white/20">
+        <div className="bg-white rounded-xl p-4 mb-6 border-2 border-orange-200 shadow-lg">
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-4">
-              <span className="text-white font-bold">Filter by Status:</span>
+              <span className="text-slate-800 font-bold">Filter by Status:</span>
               <button
                 onClick={() => setStatusFilter('all')}
                 className={`px-4 py-2 rounded-lg font-semibold transition-all ${
                   statusFilter === 'all'
-                    ? 'bg-white text-purple-600'
-                    : 'bg-white/20 text-white hover:bg-white/30'
+                    ? 'bg-orange-500 text-white shadow-md'
+                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                 }`}
               >
                 All ({startups.length})
@@ -332,8 +332,8 @@ export default function EditStartups() {
                 onClick={() => setStatusFilter('pending')}
                 className={`px-4 py-2 rounded-lg font-semibold transition-all ${
                   statusFilter === 'pending'
-                    ? 'bg-yellow-500 text-white'
-                    : 'bg-white/20 text-white hover:bg-white/30'
+                    ? 'bg-amber-500 text-white shadow-md'
+                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                 }`}
               >
                 Pending
@@ -342,8 +342,8 @@ export default function EditStartups() {
                 onClick={() => setStatusFilter('approved')}
                 className={`px-4 py-2 rounded-lg font-semibold transition-all ${
                   statusFilter === 'approved'
-                    ? 'bg-green-500 text-white'
-                    : 'bg-white/20 text-white hover:bg-white/30'
+                    ? 'bg-green-500 text-white shadow-md'
+                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                 }`}
               >
                 Approved
@@ -352,8 +352,8 @@ export default function EditStartups() {
                 onClick={() => setStatusFilter('rejected')}
                 className={`px-4 py-2 rounded-lg font-semibold transition-all ${
                   statusFilter === 'rejected'
-                    ? 'bg-red-500 text-white'
-                    : 'bg-white/20 text-white hover:bg-white/30'
+                    ? 'bg-red-500 text-white shadow-md'
+                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                 }`}
               >
                 Rejected
@@ -373,9 +373,9 @@ export default function EditStartups() {
 
         {/* Debug Panel */}
         {debugInfo && (
-          <div className="bg-yellow-500/20 border-2 border-yellow-400 rounded-xl p-4 mb-6">
-            <h3 className="text-yellow-300 font-bold mb-2">🗄️ Database Info:</h3>
-            <div className="text-white space-y-2">
+          <div className="bg-amber-50 border-2 border-amber-400 rounded-xl p-4 mb-6">
+            <h3 className="text-amber-800 font-bold mb-2">🗄️ Database Info:</h3>
+            <div className="text-slate-700 space-y-2">
               <p>
                 <strong>Total in Database:</strong> {debugInfo.totalInDatabase} startups
               </p>
@@ -383,12 +383,12 @@ export default function EditStartups() {
                 <strong>Showing after filter:</strong> {debugInfo.totalShowing} startups
               </p>
               {debugInfo.statuses && debugInfo.statuses.length > 0 && (
-                <div className="mt-3 pt-3 border-t border-yellow-400/30">
+                <div className="mt-3 pt-3 border-t border-amber-300">
                   <p className="font-bold mb-2">All Startups:</p>
                   <ul className="text-sm space-y-1">
                     {debugInfo.statuses.map((item: any, i: number) => (
                       <li key={i}>
-                        • <span className="text-yellow-200">{item.name}</span> - 
+                        • <span className="text-slate-800">{item.name}</span> - 
                         <span className={`ml-1 font-bold ${
                           item.status === 'approved' ? 'text-green-400' :
                           item.status === 'pending' ? 'text-yellow-400' :
@@ -407,47 +407,47 @@ export default function EditStartups() {
           {startups.map((startup) => (
             <div
               key={startup.id}
-              className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20"
+              className="bg-white rounded-2xl p-6 border-2 border-orange-200 shadow-lg"
             >
               {editingId === startup.id ? (
                 // EDIT MODE
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-white font-bold mb-2">Startup Name</label>
+                    <label className="block text-slate-800 font-bold mb-2">Startup Name</label>
                     <input
                       type="text"
                       value={editData.name}
                       onChange={(e) => setEditData({ ...editData, name: e.target.value })}
-                      className="w-full px-4 py-2 rounded-xl bg-white/20 text-white border border-white/30 focus:border-orange-400 outline-none"
+                      className="w-full px-4 py-2 rounded-xl bg-white text-slate-800 border-2 border-orange-200 focus:border-orange-500 outline-none"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-white font-bold mb-2">Tagline / Value Prop</label>
+                    <label className="block text-slate-800 font-bold mb-2">Tagline / Value Prop</label>
                     <input
                       type="text"
                       value={editData.tagline}
                       onChange={(e) => setEditData({ ...editData, tagline: e.target.value })}
-                      className="w-full px-4 py-2 rounded-xl bg-white/20 text-white border border-white/30 focus:border-orange-400 outline-none"
+                      className="w-full px-4 py-2 rounded-xl bg-white text-slate-800 border-2 border-orange-200 focus:border-orange-500 outline-none"
                       placeholder="Max 60 characters"
                       maxLength={60}
                     />
-                    <p className="text-xs text-white/60 mt-1">{editData.tagline?.length || 0}/60 chars</p>
+                    <p className="text-xs text-slate-500 mt-1">{editData.tagline?.length || 0}/60 chars</p>
                   </div>
 
                   <div>
-                    <label className="block text-white font-bold mb-2">Status</label>
+                    <label className="block text-slate-800 font-bold mb-2">Status</label>
                     <select
                       value={editData.status}
                       onChange={(e) => setEditData({ ...editData, status: e.target.value })}
-                      className="w-full px-4 py-2 rounded-xl bg-white/20 text-white border border-white/30 focus:border-orange-400 outline-none font-semibold"
+                      className="w-full px-4 py-2 rounded-xl bg-white text-slate-800 border-2 border-orange-200 focus:border-orange-500 outline-none font-semibold"
                     >
-                      <option value="pending" className="bg-purple-900">⏳ Pending</option>
-                      <option value="approved" className="bg-purple-900">✅ Approved (Shows in voting)</option>
-                      <option value="rejected" className="bg-purple-900">❌ Rejected</option>
-                      <option value="reviewing" className="bg-purple-900">👀 Reviewing</option>
+                      <option value="pending" className="bg-white">⏳ Pending</option>
+                      <option value="approved" className="bg-white">✅ Approved (Shows in voting)</option>
+                      <option value="rejected" className="bg-white">❌ Rejected</option>
+                      <option value="reviewing" className="bg-white">👀 Reviewing</option>
                     </select>
-                    <p className="text-xs text-white/60 mt-1">
+                    <p className="text-xs text-slate-500 mt-1">
                       {editData.status === 'approved' ? '✅ This startup will appear in voting' : '⚠️ This startup will NOT appear in voting'}
                     </p>
                   </div>
@@ -537,7 +537,7 @@ export default function EditStartups() {
                     <button
                       onClick={cancelEdit}
                       disabled={saving}
-                      className="px-8 py-3 bg-white/20 hover:bg-white/30 text-white font-bold rounded-xl transition-all"
+                      className="px-8 py-3 bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold rounded-xl transition-all"
                     >
                       Cancel
                     </button>
@@ -549,23 +549,23 @@ export default function EditStartups() {
                   <div className="flex justify-between items-start mb-4">
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
-                        <h2 className="text-2xl font-bold text-white">{startup.name}</h2>
+                        <h2 className="text-2xl font-bold text-slate-800">{startup.name}</h2>
                         
                         {/* Under Review Checkbox */}
-                        <label className="flex items-center gap-2 cursor-pointer bg-purple-500/30 hover:bg-purple-500/50 px-3 py-1 rounded-lg transition-all">
+                        <label className="flex items-center gap-2 cursor-pointer bg-amber-100 hover:bg-amber-200 px-3 py-1 rounded-lg transition-all border border-amber-300">
                           <input
                             type="checkbox"
                             checked={startup.admin_notes?.includes('UNDER_REVIEW') || false}
                             onChange={() => toggleUnderReview(startup)}
                             className="w-4 h-4 cursor-pointer"
                           />
-                          <span className="text-sm font-semibold text-white">
+                          <span className="text-sm font-semibold text-amber-800">
                             🔍 Under Review
                           </span>
                         </label>
                       </div>
                       
-                      <p className="text-orange-400 font-semibold">{startup.tagline || startup.pitch}</p>
+                      <p className="text-orange-600 font-semibold">{startup.tagline || startup.pitch}</p>
                       <div className="flex items-center gap-2 mt-2">
                         <span className={`px-3 py-1 rounded-full text-xs font-bold ${
                           startup.status === 'approved' ? 'bg-green-500 text-white' :
@@ -579,12 +579,12 @@ export default function EditStartups() {
                            '👀 REVIEWING'}
                         </span>
                         {startup.status === 'approved' && !startup.admin_notes?.includes('UNDER_REVIEW') && (
-                          <span className="text-xs text-green-400 font-semibold">
+                          <span className="text-xs text-green-600 font-semibold">
                             🎯 Live on Vote page
                           </span>
                         )}
                         {startup.admin_notes?.includes('UNDER_REVIEW') && (
-                          <span className="text-xs text-purple-400 font-semibold">
+                          <span className="text-xs text-amber-600 font-semibold">
                             🔍 Excluded from bulk publish
                           </span>
                         )}
@@ -607,9 +607,9 @@ export default function EditStartups() {
                   </div>
 
                   {startup.extracted_data?.fivePoints && (
-                    <div className="bg-black/20 rounded-xl p-4">
-                      <p className="text-white font-bold mb-2">5 Points:</p>
-                      <ol className="space-y-1 text-white/90">
+                    <div className="bg-white border-2 border-orange-200 rounded-xl p-4">
+                      <p className="text-slate-800 font-bold mb-2">5 Points:</p>
+                      <ol className="space-y-1 text-slate-700">
                         {startup.extracted_data.fivePoints.map((point, i) => (
                           <li key={i} className="text-sm">
                             {i + 1}. {point}
@@ -626,7 +626,7 @@ export default function EditStartups() {
 
         {startups.length === 0 && (
           <div className="text-center py-16">
-            <p className="text-white text-xl">No startups found</p>
+            <p className="text-slate-600 text-xl">No startups found</p>
           </div>
         )}
       </div>

@@ -261,7 +261,7 @@ const FrontPageNew: React.FC = () => {
               📰 Venture Capital News
             </h3>
             <p className="text-slate-600 mt-2">
-              Latest deals and investments (updates every 20 seconds)
+              Latest deals and investments (click ticker to read more • updates every 20 seconds)
             </p>
           </div>
           
