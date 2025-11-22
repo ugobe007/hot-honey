@@ -140,8 +140,10 @@ A: Enterprise plans can request custom limits. Contact GitHub Sales for details.
 A: Services may be rate-limited or throttled until the next billing cycle. Critical operations may still work with reduced capacity.
 
 ## Related Documentation
-- [QUICK_REFERENCE.md](./QUICK_REFERENCE.md) - Quick reference for this project
+For more information about this project, see:
 - [README.md](./README.md) - Main project documentation
+- [ADMIN_GUIDE.md](./ADMIN_GUIDE.md) - Administrator guide
+- [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md) - Deployment instructions
 
 ---
 
