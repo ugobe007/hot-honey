@@ -17,6 +17,7 @@ Matchmaking for investors and startups
 ### For Developers
 - **[DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md)** - Deployment instructions
 - **[OPENAI_INTEGRATION.md](./OPENAI_INTEGRATION.md)** - AI research feature documentation
+- **[COPILOT_BUDGET_GUIDE.md](./COPILOT_BUDGET_GUIDE.md)** - GitHub Copilot budget management guide
 
 ## Features
 - 🔥 Vote on hot startups
