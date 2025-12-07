@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { startups } from './data/startupData';
-
+import { API_BASE } from '@/lib/apiConfig';
 
 const SyndicateForm: React.FC = () => {
   const [name, setName] = useState('');
@@ -11,7 +11,7 @@ const SyndicateForm: React.FC = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:3001/api/syndicates', {
+      const response = await fetch(`${API_BASE}/api/syndicates`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

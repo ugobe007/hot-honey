@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GOD Algorithm Test Suite - Browser Console</title>
+  <style>
+    body {
+      font-family: 'Courier New', monospace;
+      background: #1a1140;
+      color: #fff;
+      padding: 40px;
+      line-height: 1.6;
+    }
+    h1 {
+      color: #a855f7;
+      border-bottom: 3px solid #a855f7;
+      padding-bottom: 10px;
+    }
+    h2 {
+      color: #22d3ee;
+      margin-top: 30px;
+    }
+    .test-section {
+      background: #2d1b69;
+      border: 2px solid #4a2a8f;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+    .command {
+      background: #000;
+      border-left: 4px solid #22d3ee;
+      padding: 15px;
+      margin: 10px 0;
+      overflow-x: auto;
+    }
+    .success { color: #22c55e; }
+    .error { color: #ef4444; }
+    .warning { color: #f59e0b; }
+    code {
+      background: #000;
+      padding: 2px 6px;
+      border-radius: 3px;
+      color: #22d3ee;
+    }
+    .instruction {
+      background: #4a2a8f;
+      border-left: 4px solid #a855f7;
+      padding: 15px;
+      margin: 15px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>🧪 GOD Algorithm Test Suite - Browser Console</h1>
+  
+  <div class="instruction">
+    <strong>📋 How to Use This Test Suite:</strong>
+    <ol>
+      <li>Open your browser's Developer Console (F12 or Cmd+Option+I)</li>
+      <li>Navigate to the Matching Engine page in your app</li>
+      <li>Copy and paste the test commands below into the console</li>
+      <li>Review the detailed output to verify GOD algorithm is working</li>
+    </ol>
+  </div>
+
+  <div class="test-section">
+    <h2>🔍 TEST 0: Check if GOD Algorithm is Loaded</h2>
+    <p>Run this first to verify the GOD algorithm is available:</p>
+    <div class="command">
+      <pre>
+// Check if GOD algorithm functions exist
+console.log('🔍 Checking GOD Algorithm availability...');
+console.log('calculateAdvancedMatchScore:', typeof window.calculateAdvancedMatchScore);
+console.log('generateAdvancedMatches:', typeof window.generateAdvancedMatches);
+
+// Note: These functions are imported in MatchingEngine.tsx
+// If undefined, the page needs to be on the matching engine route
+      </pre>
+    </div>
+  </div>
+
+  <div class="test-section">
+    <h2>📊 TEST 1: Analyze Current Match Scores</h2>
+    <p>This will show you the distribution of scores currently displayed:</p>
+    <div class="command">
+      <pre>
+// Extract scores from current matches on page
+const matchCards = document.querySelectorAll('[class*="Match"]');
+console.log(`Found ${matchCards.length} match cards on page`);
+
+// Look for score displays
+const scoreElements = Array.from(document.querySelectorAll('*'))
+  .filter(el => el.textContent.includes('% Match'));
+
+console.log('\n📊 Current Match Scores:');
+scoreElements.slice(0, 5).forEach((el, i) => {
+  const scoreMatch = el.textContent.match(/(\d+)%/);
+  if (scoreMatch) {
+    console.log(`   Match ${i + 1}: ${scoreMatch[1]}%`);
+  }
+});
+      </pre>
+    </div>
+  </div>
+
+  <div class="test-section">
+    <h2>🧮 TEST 2: Score Distribution Analysis</h2>
+    <p>Analyze all scores to check if GOD algorithm is working:</p>
+    <div class="command">
+      <pre>
+// Function to analyze score distribution
+function analyzeScores() {
+  const scoreElements = Array.from(document.querySelectorAll('*'))
+    .filter(el => el.textContent.includes('% Match'));
+  
+  const scores = scoreElements.map(el => {
+    const match = el.textContent.match(/(\d+)%/);
+    return match ? parseInt(match[1]) : null;
+  }).filter(s => s !== null);
+
+  if (scores.length === 0) {
+    console.log('❌ No scores found on page. Navigate to Matching Engine.');
+    return;
+  }
+
+  const min = Math.min(...scores);
+  const max = Math.max(...scores);
+  const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
+  const median = scores.sort((a, b) => a - b)[Math.floor(scores.length / 2)];
+  
+  // Check standard deviation
+  const variance = scores.reduce((sum, s) => sum + Math.pow(s - avg, 2), 0) / scores.length;
+  const std = Math.sqrt(variance);
+
+  console.log('\n' + '═'.repeat(60));
+  console.log('📊 SCORE DISTRIBUTION ANALYSIS');
+  console.log('═'.repeat(60));
+  console.log(`\nCount:      ${scores.length}`);
+  console.log(`Min:        ${min}`);
+  console.log(`Max:        ${max}`);
+  console.log(`Average:    ${avg.toFixed(1)}`);
+  console.log(`Median:     ${median}`);
+  console.log(`Std Dev:    ${std.toFixed(2)}`);
+
+  // Check if all scores are the same
+  const allSame = scores.every(s => s === scores[0]);
+  const all85 = scores.every(s => s === 85);
+
+  console.log('\n🔍 Validation Checks:');
+  
+  if (allSame) {
+    console.log('❌ All scores are identical - GOD algorithm may not be running');
+  } else {
+    console.log('✅ Scores show variation - algorithm is differentiating');
+  }
+
+  if (all85) {
+    console.log('❌ All scores are exactly 85 - using default fallback');
+  } else {
+    console.log('✅ Not using default fallback values');
+  }
+
+  if (std < 1) {
+    console.log('❌ Standard deviation too low - no real scoring happening');
+  } else {
+    console.log(`✅ Good variation (std: ${std.toFixed(2)})`);
+  }
+
+  if (min >= 30 && max <= 100) {
+    console.log('✅ Score range is reasonable (30-100)');
+  } else {
+    console.log(`⚠️  Score range unusual: ${min}-${max}`);
+  }
+
+  console.log('\n' + '═'.repeat(60) + '\n');
+
+  return { scores, min, max, avg, median, std, allSame, all85 };
+}
+
+// Run the analysis
+const results = analyzeScores();
+      </pre>
+    </div>
+  </div>
+
+  <div class="test-section">
+    <h2>🔄 TEST 3: Monitor Score Changes</h2>
+    <p>Watch scores change when you click "Show Next Match":</p>
+    <div class="command">
+      <pre>
+// Monitor score changes
+let previousScore = null;
+
+function monitorScores() {
+  const scoreEl = document.querySelector('[class*="Match"]');
+  if (!scoreEl) {
+    console.log('⚠️  Score element not found');
+    return;
+  }
+
+  const scoreMatch = scoreEl.textContent.match(/(\d+)%/);
+  if (scoreMatch) {
+    const currentScore = parseInt(scoreMatch[1]);
+    
+    if (previousScore !== null) {
+      const change = currentScore - previousScore;
+      console.log(`📊 Score changed: ${previousScore} → ${currentScore} (${change > 0 ? '+' : ''}${change})`);
+    } else {
+      console.log(`📊 Initial score: ${currentScore}`);
+    }
+    
+    previousScore = currentScore;
+  }
+}
+
+// Run every 2 seconds
+const monitorInterval = setInterval(monitorScores, 2000);
+console.log('✅ Monitoring started. Click "Show Next Match" to see score changes.');
+console.log('   To stop: clearInterval(monitorInterval)');
+      </pre>
+    </div>
+  </div>
+
+  <div class="test-section">
+    <h2>🧪 TEST 4: Database Score Check</h2>
+    <p>Check scores stored in the database (requires Supabase client):</p>
+    <div class="command">
+      <pre>
+// Check if matches are stored with scores
+async function checkDatabaseScores() {
+  if (typeof window.supabase === 'undefined') {
+    console.log('⚠️  Supabase client not available');
+    console.log('   This test requires Supabase to be initialized');
+    return;
+  }
+
+  const { data, error } = await window.supabase
+    .from('matches')
+    .select('startup_id, investor_id, score, created_at')
+    .order('created_at', { ascending: false })
+    .limit(10);
+
+  if (error) {
+    console.log('❌ Error fetching matches:', error);
+    return;
+  }
+
+  console.log('\n📊 Recent Database Matches:');
+  data.forEach((match, i) => {
+    console.log(`   ${i + 1}. Score: ${match.score}, Created: ${new Date(match.created_at).toLocaleTimeString()}`);
+  });
+
+  // Analyze database scores
+  const scores = data.map(m => m.score);
+  const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
+  console.log(`\n   Average DB Score: ${avg.toFixed(1)}`);
+}
+
+checkDatabaseScores();
+      </pre>
+    </div>
+  </div>
+
+  <div class="test-section">
+    <h2>🎯 TEST 5: Manual Score Calculation</h2>
+    <p>Manually calculate a score to verify algorithm is accessible:</p>
+    <div class="command">
+      <pre>
+// Create test startup and investor
+const testStartup = {
+  name: "Test AI Startup",
+  stage: 2,
+  industries: ["AI/ML", "B2B"],
+  sectors: ["AI/ML"],
+  raise_amount: "$5M",
+  team: [{ name: "CEO", background: "Ex-Google" }],
+  revenue: 1000000,
+  market_size: 50,
+  launched: true
+};
+
+const testInvestor = {
+  id: "test-vc",
+  name: "Test VC",
+  stage: ["series_a"],
+  sectors: ["AI/ML"],
+  check_size: "$1M-$10M"
+};
+
+// This will only work if you're on a page where the function is imported
+// Try navigating to /matches route first
+console.log('🧪 Testing manual score calculation...');
+console.log('Test Startup:', testStartup.name);
+console.log('Test Investor:', testInvestor.name);
+console.log('\nNote: This requires being on the Matching Engine page');
+      </pre>
+    </div>
+  </div>
+
+  <div class="test-section">
+    <h2>🔬 TEST 6: Component Score Breakdown</h2>
+    <p>Look for GOD algorithm component scores in console:</p>
+    <div class="command">
+      <pre>
+// Filter console for GOD algorithm logs
+console.log('🔍 Looking for GOD algorithm console logs...');
+console.log('   Check above for messages starting with:');
+console.log('   🧮 GOD Algorithm Scoring');
+console.log('   📊 Component Scores');
+console.log('   🎯 Matching Bonuses');
+console.log('   📈 Final Score');
+console.log('\n   If you don\'t see these, the verbose logging may be disabled');
+console.log('   or you need to trigger a new match calculation.');
+      </pre>
+    </div>
+  </div>
+
+  <div class="test-section">
+    <h2>✅ EXPECTED RESULTS</h2>
+    <div class="instruction">
+      <strong>The GOD Algorithm is WORKING if:</strong>
+      <ul class="success">
+        <li>✅ Scores vary between matches (not all the same)</li>
+        <li>✅ Standard deviation is at least 1.0</li>
+        <li>✅ Scores range from ~30 to ~98</li>
+        <li>✅ Average score is 60-75</li>
+        <li>✅ Console shows component breakdowns</li>
+        <li>✅ Matching bonuses are applied</li>
+        <li>✅ No crashes or errors</li>
+      </ul>
+      
+      <strong>The GOD Algorithm is BROKEN if:</strong>
+      <ul class="error">
+        <li>❌ All scores are exactly 85 (default fallback)</li>
+        <li>❌ No variation in scores (std &lt; 1)</li>
+        <li>❌ No console output from scoring</li>
+        <li>❌ Crashes on missing data</li>
+        <li>❌ Bonuses never apply</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="test-section">
+    <h2>📝 Test Results Template</h2>
+    <p>Copy this and fill in your results:</p>
+    <div class="command">
+      <pre>
+/*
+═══════════════════════════════════════════════════════
+🧪 GOD ALGORITHM TEST RESULTS
+═══════════════════════════════════════════════════════
+
+Date: _______________
+Tester: _______________
+
+TEST RESULTS:
+- [ ] Test 0: GOD functions available
+- [ ] Test 1: Match scores displayed
+- [ ] Test 2: Score distribution analysis PASS
+- [ ] Test 3: Scores change between matches
+- [ ] Test 4: Database scores stored correctly
+- [ ] Test 5: Manual calculation works
+- [ ] Test 6: Component breakdowns visible
+
+SCORE STATISTICS:
+- Min Score: _____
+- Max Score: _____
+- Average: _____
+- Std Dev: _____
+
+ISSUES FOUND:
+1. 
+2. 
+3. 
+
+OVERALL STATUS: [ ] PASS [ ] FAIL
+
+NOTES:
+
+
+═══════════════════════════════════════════════════════
+*/
+      </pre>
+    </div>
+  </div>
+
+  <div class="instruction">
+    <strong>💡 Troubleshooting Tips:</strong>
+    <ul>
+      <li>If no scores appear: Make sure you're on the <code>/matches</code> route</li>
+      <li>If all scores are 85: Check that GOD algorithm files are imported correctly</li>
+      <li>If no console logs: Set <code>DEBUG_GOD = true</code> in matchingService.ts</li>
+      <li>If errors occur: Check browser console for detailed error messages</li>
+      <li>If tests fail: Run <code>npm run build</code> to rebuild with latest changes</li>
+    </ul>
+  </div>
+
+  <div style="margin-top: 40px; padding-top: 20px; border-top: 2px solid #4a2a8f; text-align: center; color: #888;">
+    <p>🔧 GOD Algorithm Test Suite v1.0</p>
+    <p>Created for Hot Money Honey - December 6, 2025</p>
+  </div>
+</body>
+</html>
