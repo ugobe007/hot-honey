@@ -57,7 +57,7 @@ export async function getAllInvestors() {
   const { data, error } = await supabase
     .from('investors')
     .select('*')
-    .order('portfolio_count', { ascending: false });
+    .order('created_at', { ascending: false });
 
   if (error) {
     console.error('Error fetching investors:', error);

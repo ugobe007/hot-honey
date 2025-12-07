@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { API_BASE } from '@/lib/apiConfig';
 
 const UploadDocuments: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -17,7 +18,7 @@ const UploadDocuments: React.FC = () => {
     formData.append('document', file);
 
     try {
-      const response = await fetch('http://localhost:3001/api/documents', {
+      const response = await fetch(`${API_BASE}/api/documents`, {
         method: 'POST',
         body: formData,
       });

@@ -1,0 +1,49 @@
+🔧 Fix critical configuration issues and enhance backend
+
+Critical fixes from code review (Dec 6, 2025):
+
+✅ Port Configuration
+- Changed backend port from 3001 to 3002
+- Added environment variable support (PORT env var)
+
+✅ Environment Variables
+- Populated .env.example with complete configuration
+- Populated server/.env.example with backend config
+- Added Supabase, API, and OpenAI variable templates
+
+✅ Remove Hardcoded URLs
+- Fixed src/components/SyndicateForm.tsx
+- Fixed src/components/UploadDocuments.tsx
+- Now use API_BASE from centralized config
+
+✅ API Configuration Utility
+- Created src/lib/apiConfig.ts (TypeScript)
+- Centralized API_BASE constant
+- Helper functions: apiCall(), uploadFile(), submitSyndicateForm()
+
+✅ Enhanced Server Capabilities
+- Added health check endpoint: GET /api/health
+- Added API info endpoint: GET /api
+- Added request logging middleware
+- Added 404 and 500 error handlers
+- Added API-style routes (/api/syndicates, /api/documents)
+
+✅ Package Configuration
+- Updated server/package.json main entry (index.js)
+- Added start and dev scripts
+
+Files changed:
+- Modified: server/index.js (37 → 100+ lines)
+- Modified: server/package.json
+- Modified: src/components/SyndicateForm.tsx
+- Modified: src/components/UploadDocuments.tsx
+- Modified: .env.example
+- Modified: server/.env.example
+- Created: src/lib/apiConfig.ts
+- Created: FIXES_APPLIED.md
+- Created: QUICK_START_AFTER_FIXES.md
+
+Breaking change: Backend now runs on port 3002 (was 3001)
+Action required: Update .env with new port and credentials
+
+See FIXES_APPLIED.md for complete details.

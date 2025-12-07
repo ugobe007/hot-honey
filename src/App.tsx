@@ -8,7 +8,9 @@ import StartupDetail from './pages/StartupDetail';
 import Deals from './pages/Deals';
 import OldDashboard from './pages/Dashboard'; // ✅ Renamed to avoid conflict
 import NewDashboard from './components/Dashboard'; // ✅ This is the new one
-import FrontPageNew from './components/FrontPageNew';
+import LandingPage from './pages/LandingPage'; // ✅ NEW - Matching platform landing page
+import FrontPageNew from './components/FrontPageNew'; // ✅ OLD - Voting interface
+import MatchingEngine from './components/MatchingEngine'; // ✅ Matching engine component
 import VoteDemo from './pages/VoteDemo';
 import SignUpPage from './components/signup-page';
 import About from './pages/About';
@@ -72,8 +74,10 @@ const App: React.FC = () => {
       )}
       <main>
         <Routes>
-          <Route path="/" element={<FrontPageNew />} />
-          <Route path="/home" element={<FrontPageNew />} />
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/home" element={<LandingPage />} />
+          <Route path="/matching-engine" element={<MatchingEngine />} />
+          <Route path="/vote-cards" element={<FrontPageNew />} />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/profile" element={<ProfilePage />} />
