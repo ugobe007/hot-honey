@@ -1,0 +1,50 @@
+name: VC Data Enrichment
+
+# Schedule enrichment to run automatically
+on:
+  schedule:
+    # Runs daily at 3 AM UTC (adjust timezone as needed)
+    - cron: '0 3 * * *'
+    
+    # Optional: Run twice daily (3 AM and 3 PM UTC)
+    # - cron: '0 3,15 * * *'
+    
+    # Optional: Run every 6 hours
+    # - cron: '0 */6 * * *'
+  
+  # Allow manual trigger from GitHub Actions UI
+  workflow_dispatch:
+
+jobs:
+  enrich-vc-data:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run VC enrichment
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+        run: |
+          echo "🚀 Starting VC enrichment..."
+          npx tsx scripts/enrich-vcs.ts
+          echo "✅ Enrichment complete!"
+      
+      - name: Upload logs (optional)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: enrichment-logs-${{ github.run_number }}
+          path: logs/
+          retention-days: 7
