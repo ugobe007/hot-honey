@@ -878,13 +878,13 @@ export default function MatchingEngine() {
             </div>
             <Link
               to="/trending"
-              className="group flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-[#1a0033] to-[#2d1b4e] hover:from-[#2d1b4e] hover:to-[#3d2a5e] text-white font-bold rounded-2xl border-2 border-orange-500/50 hover:border-orange-400 shadow-lg shadow-purple-900/50 hover:shadow-orange-500/30 transition-all hover:scale-105"
+              className="group flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-[#1a0033] to-[#2d1b4e] hover:from-[#2d1b4e] hover:to-[#3d2a5e] text-white font-semibold rounded-xl border border-orange-500/50 hover:border-orange-400 shadow-md shadow-purple-900/50 hover:shadow-orange-500/30 transition-all hover:scale-105"
             >
-              <Search className="w-5 h-5 text-orange-400 group-hover:text-orange-300" />
-              <span className="text-lg bg-gradient-to-r from-orange-400 to-yellow-400 bg-clip-text text-transparent">
-                Explore 700+ Startups & 500+ Investors
+              <Search className="w-4 h-4 text-orange-400 group-hover:text-orange-300" />
+              <span className="text-sm bg-gradient-to-r from-orange-400 to-yellow-400 bg-clip-text text-transparent">
+                Explore Startups & Investors
               </span>
-              <TrendingUp className="w-5 h-5 text-orange-400 group-hover:text-orange-300 group-hover:translate-x-1 transition-transform" />
+              <TrendingUp className="w-4 h-4 text-orange-400 group-hover:text-orange-300 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
           
