@@ -29,13 +29,15 @@ interface Startup {
   id: string;
   name: string;
   tagline?: string;
-  sector?: string;
-  stage?: string;
-  location?: string;
-  god_score?: number;
-  votes?: number;
+  industry?: string;
+  industries?: string[];
+  stage?: number;
+  geography?: string;
   website?: string;
-  description?: string;
+  pitch?: string;
+  funding?: string;
+  five_points?: string[];
+  hotScore?: number; // calculated client-side
 }
 
 interface Investor {
@@ -50,9 +52,45 @@ interface Investor {
   notable_investments?: string[];
 }
 
-// Categorize a startup based on its sector/description/tagline
+// Calculate a hot score based on available data
+function calculateHotScore(startup: Startup): number {
+  let score = 50; // base score
+  
+  // Has funding info
+  if (startup.funding && startup.funding !== 'Unknown') {
+    const fundingMatch = startup.funding.match(/\$?([\d.]+)\s*(million|m|k|thousand)?/i);
+    if (fundingMatch) {
+      const amount = parseFloat(fundingMatch[1]);
+      const unit = fundingMatch[2]?.toLowerCase();
+      if (unit === 'million' || unit === 'm') {
+        score += Math.min(amount * 2, 30); // max 30 points from funding
+      } else if (amount > 100) {
+        score += 15;
+      }
+    }
+  }
+  
+  // Has 5 points (well-documented)
+  if (startup.five_points && startup.five_points.length >= 3) {
+    score += 10;
+  }
+  
+  // Has tagline
+  if (startup.tagline && startup.tagline.length > 20) {
+    score += 5;
+  }
+  
+  // Has website
+  if (startup.website) {
+    score += 5;
+  }
+  
+  return Math.min(Math.round(score), 99);
+}
+
+// Categorize a startup based on its industry/tagline/pitch
 function categorizeStartup(startup: Startup): string[] {
-  const text = `${startup.sector || ''} ${startup.tagline || ''} ${startup.description || ''} ${startup.name || ''}`.toLowerCase();
+  const text = `${startup.industry || ''} ${startup.tagline || ''} ${startup.pitch || ''} ${startup.name || ''} ${startup.industries?.join(' ') || ''}`.toLowerCase();
   const matchedCategories: string[] = [];
   
   for (const cat of CATEGORIES) {
@@ -86,20 +124,33 @@ export default function TrendingPage() {
     async function fetchData() {
       setLoading(true);
       
-      // Fetch startups with god_score - get more for category distribution
-      const { data: startupData } = await supabase
+      // Fetch startups with actual columns
+      const { data: startupData, error: startupError } = await supabase
         .from('startups')
-        .select('id, name, tagline, sector, stage, location, god_score, votes, website, description')
-        .order('god_score', { ascending: false, nullsFirst: false })
-        .limit(800);
+        .select('id, name, tagline, industry, industries, stage, geography, website, pitch, funding, five_points')
+        .limit(500);
+      
+      if (startupError) {
+        console.error('Error fetching startups:', startupError);
+      }
+      
+      // Calculate hot scores and add to startups
+      const startupsWithScores = (startupData || []).map(s => ({
+        ...s,
+        hotScore: calculateHotScore(s)
+      })).sort((a, b) => (b.hotScore || 0) - (a.hotScore || 0));
       
       // Fetch investors
-      const { data: investorData } = await supabase
+      const { data: investorData, error: investorError } = await supabase
         .from('investors')
         .select('id, name, type, sectors, stage, check_size, geography, portfolio_size, notable_investments')
         .limit(200);
       
-      setStartups(startupData || []);
+      if (investorError) {
+        console.error('Error fetching investors:', investorError);
+      }
+      
+      setStartups(startupsWithScores);
       setInvestors(investorData || []);
       setLoading(false);
     }
@@ -127,10 +178,10 @@ export default function TrendingPage() {
       }
     }
     
-    // Sort each category by god_score and limit to top entries
+    // Sort each category by hotScore and limit to top entries
     for (const catId of Object.keys(categorized)) {
       categorized[catId] = categorized[catId]
-        .sort((a, b) => (b.god_score || 0) - (a.god_score || 0))
+        .sort((a, b) => (b.hotScore || 0) - (a.hotScore || 0))
         .slice(0, 20); // Top 20 per category
     }
     
@@ -148,7 +199,7 @@ export default function TrendingPage() {
       filtered[catId] = catStartups.filter(s => 
         s.name?.toLowerCase().includes(query) ||
         s.tagline?.toLowerCase().includes(query) ||
-        s.sector?.toLowerCase().includes(query)
+        s.industry?.toLowerCase().includes(query)
       );
     }
     
@@ -354,34 +405,36 @@ export default function TrendingPage() {
                                     {index < 3 && <span className="text-orange-400 text-sm">🔥</span>}
                                   </div>
                                   <div className="text-sm text-gray-400 truncate max-w-[180px] md:max-w-[280px]">
-                                    {startup.tagline || startup.sector || 'Innovative startup'}
+                                    {startup.tagline || startup.industry || 'Innovative startup'}
                                   </div>
                                 </div>
                               </td>
                               <td className="py-3 hidden md:table-cell">
                                 <span className={`px-2 py-1 text-xs rounded-full ${
-                                  startup.stage?.toLowerCase().includes('seed') 
+                                  startup.stage === 1
                                     ? 'bg-emerald-500/20 text-emerald-300'
-                                    : startup.stage?.toLowerCase().includes('series') 
+                                    : startup.stage === 2
                                       ? 'bg-blue-500/20 text-blue-300'
-                                      : 'bg-purple-500/20 text-purple-300'
+                                      : startup.stage && startup.stage >= 3
+                                        ? 'bg-purple-500/20 text-purple-300'
+                                        : 'bg-gray-500/20 text-gray-300'
                                 }`}>
-                                  {startup.stage || 'Early'}
+                                  {startup.stage === 1 ? 'Seed' : startup.stage === 2 ? 'Series A' : startup.stage === 3 ? 'Series B' : startup.funding || 'Early'}
                                 </span>
                               </td>
                               <td className="py-3 hidden lg:table-cell text-sm text-gray-400">
-                                {startup.location || 'Global'}
+                                {startup.geography || 'Global'}
                               </td>
                               <td className="py-3 pr-2 text-right">
                                 <div className="inline-flex items-center gap-1">
                                   <div className={`text-lg font-bold ${
-                                    (startup.god_score || 0) >= 80 
+                                    (startup.hotScore || 0) >= 80 
                                       ? 'bg-gradient-to-r from-orange-400 to-red-400' 
-                                      : (startup.god_score || 0) >= 60 
+                                      : (startup.hotScore || 0) >= 60 
                                         ? 'bg-gradient-to-r from-yellow-400 to-orange-400'
                                         : 'bg-gradient-to-r from-gray-400 to-gray-300'
                                   } bg-clip-text text-transparent`}>
-                                    {startup.god_score || '--'}
+                                    {startup.hotScore || '--'}
                                   </div>
                                   <ChevronRight className="w-4 h-4 text-gray-500 group-hover:text-orange-400 transition-colors" />
                                 </div>
@@ -446,10 +499,10 @@ export default function TrendingPage() {
                 <Rocket className="w-7 h-7 text-white" />
               </div>
               <h2 className="text-xl font-bold text-white mb-1">{selectedStartup.name}</h2>
-              <p className="text-gray-400 text-sm">{selectedStartup.tagline || selectedStartup.sector}</p>
+              <p className="text-gray-400 text-sm">{selectedStartup.tagline || selectedStartup.industry}</p>
               <div className="mt-2 inline-flex items-center gap-2 px-3 py-1 bg-orange-500/20 rounded-full">
                 <Flame className="w-4 h-4 text-orange-400" />
-                <span className="text-orange-400 font-bold">{selectedStartup.god_score || 85}</span>
+                <span className="text-orange-400 font-bold">{selectedStartup.hotScore || 85}</span>
                 <span className="text-orange-300 text-sm">Hot Score</span>
               </div>
             </div>
