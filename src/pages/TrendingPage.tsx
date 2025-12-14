@@ -13,16 +13,17 @@ import LogoDropdownMenu from '../components/LogoDropdownMenu';
 
 // Category definitions with icons and keywords for matching
 const CATEGORIES = [
-  { id: 'ai', name: 'AI & Machine Learning', icon: Cpu, color: 'from-purple-500 to-indigo-500', keywords: ['ai', 'artificial intelligence', 'machine learning', 'ml', 'deep learning', 'generative', 'llm', 'nlp', 'computer vision', 'neural', 'gpt', 'automation'] },
-  { id: 'fintech', name: 'FinTech & Payments', icon: Banknote, color: 'from-emerald-500 to-teal-500', keywords: ['fintech', 'financial', 'payments', 'banking', 'insurance', 'insurtech', 'crypto', 'blockchain', 'defi', 'lending', 'wealth', 'trading'] },
+  { id: 'ai', name: 'AI & Machine Learning', icon: Cpu, color: 'from-purple-500 to-indigo-500', keywords: ['ai', 'artificial intelligence', 'machine learning', 'ml', 'deep learning', 'generative', 'llm', 'nlp', 'computer vision', 'neural', 'gpt', 'content', 'image', 'video', 'translation', 'search', 'simulation'] },
+  { id: 'cybersecurity', name: 'Cybersecurity', icon: Shield, color: 'from-red-500 to-rose-500', keywords: ['cybersecurity', 'security', 'cyber', 'infosec', 'threat', 'privacy', 'encryption', 'identity'] },
+  { id: 'fintech', name: 'FinTech & Payments', icon: Banknote, color: 'from-emerald-500 to-teal-500', keywords: ['fintech', 'financial', 'payments', 'banking', 'insurance', 'insurtech', 'crypto', 'blockchain', 'defi', 'lending', 'wealth', 'trading', 'credit'] },
   { id: 'healthtech', name: 'HealthTech & Digital Health', icon: Heart, color: 'from-pink-500 to-rose-500', keywords: ['health', 'healthcare', 'medical', 'medtech', 'digital health', 'telehealth', 'wellness', 'clinical', 'patient', 'diagnostic'] },
-  { id: 'climate', name: 'Climate & Clean Energy', icon: Leaf, color: 'from-green-500 to-emerald-500', keywords: ['climate', 'cleantech', 'sustainability', 'renewable', 'energy', 'solar', 'green', 'carbon', 'ev', 'electric', 'environmental'] },
-  { id: 'saas', name: 'SaaS & Enterprise', icon: Building2, color: 'from-blue-500 to-cyan-500', keywords: ['saas', 'enterprise', 'b2b', 'software', 'cloud', 'productivity', 'workflow', 'automation', 'crm', 'erp', 'platform'] },
-  { id: 'ecommerce', name: 'E-Commerce & Retail', icon: ShoppingBag, color: 'from-orange-500 to-amber-500', keywords: ['ecommerce', 'e-commerce', 'retail', 'marketplace', 'dtc', 'consumer', 'shopping', 'commerce', 'brand'] },
+  { id: 'climate', name: 'Climate & Clean Energy', icon: Leaf, color: 'from-green-500 to-emerald-500', keywords: ['climate', 'cleantech', 'sustainability', 'renewable', 'energy', 'solar', 'green', 'carbon', 'ev', 'electric', 'environmental', 'recycling'] },
+  { id: 'saas', name: 'SaaS & Developer Tools', icon: Building2, color: 'from-blue-500 to-cyan-500', keywords: ['saas', 'enterprise', 'b2b', 'software', 'cloud', 'productivity', 'workflow', 'crm', 'erp', 'platform', 'developer', 'devops', 'database', 'backend', 'infrastructure', 'collaboration'] },
+  { id: 'ecommerce', name: 'E-Commerce & Consumer', icon: ShoppingBag, color: 'from-orange-500 to-amber-500', keywords: ['ecommerce', 'e-commerce', 'retail', 'marketplace', 'dtc', 'consumer', 'shopping', 'commerce', 'brand', 'fashion', 'food', 'delivery', 'quick'] },
   { id: 'edtech', name: 'EdTech & Learning', icon: GraduationCap, color: 'from-amber-500 to-yellow-500', keywords: ['edtech', 'education', 'learning', 'training', 'school', 'university', 'course', 'tutoring', 'skill'] },
-  { id: 'mobility', name: 'Mobility & Logistics', icon: Car, color: 'from-cyan-500 to-blue-500', keywords: ['mobility', 'transportation', 'automotive', 'logistics', 'delivery', 'supply chain', 'fleet', 'shipping', 'freight'] },
+  { id: 'mobility', name: 'Mobility & Logistics', icon: Car, color: 'from-cyan-500 to-blue-500', keywords: ['mobility', 'transportation', 'automotive', 'logistics', 'delivery', 'supply chain', 'fleet', 'shipping', 'freight', 'marine'] },
   { id: 'biotech', name: 'BioTech & Life Sciences', icon: FlaskConical, color: 'from-violet-500 to-purple-500', keywords: ['biotech', 'biotechnology', 'life sciences', 'pharma', 'drug', 'genomics', 'therapeutics'] },
-  { id: 'hardware', name: 'Hardware & Robotics', icon: Factory, color: 'from-slate-500 to-zinc-500', keywords: ['hardware', 'robotics', 'iot', 'devices', 'manufacturing', 'sensors', 'drones', '3d printing', 'semiconductor'] },
+  { id: 'hardware', name: 'Hardware & Deep Tech', icon: Factory, color: 'from-slate-500 to-zinc-500', keywords: ['hardware', 'robotics', 'iot', 'devices', 'manufacturing', 'sensors', 'drones', '3d printing', 'semiconductor', 'optical', 'aerospace', 'space', 'industrial'] },
 ];
 
 interface Startup {
