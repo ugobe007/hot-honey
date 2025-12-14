@@ -58,6 +58,7 @@ import MasterControlCenter from './pages/MasterControlCenter';
 import InvestorEnrichmentPage from './pages/InvestorEnrichmentPage';
 import DiscoveredInvestors from './pages/DiscoveredInvestors';
 import GetMatchedPage from './pages/GetMatchedPage';
+import TrendingPage from './pages/TrendingPage';
 import './App.css';
 
 // Wrapper component that redirects admins to admin dashboard
@@ -84,6 +85,8 @@ const App: React.FC = () => {
           <Route path="/" element={<LandingPage />} />
           <Route path="/home" element={<LandingPage />} />
           <Route path="/get-matched" element={<GetMatchedPage />} /> {/* ✅ Pricing & Signup */}
+          <Route path="/trending" element={<TrendingPage />} /> {/* 🔥 Trending & Discovery */}
+          <Route path="/discover" element={<TrendingPage />} /> {/* 🔥 Alias for Trending */}
           <Route path="/matching-engine" element={<MatchingEngine />} />
           <Route path="/matching" element={<MatchingEngine />} />
           <Route path="/match" element={<MatchingEngine />} />

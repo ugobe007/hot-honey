@@ -88,7 +88,7 @@ export default function LogoDropdownMenu() {
                 </div>
                 <div>
                   <h2 className="text-lg font-bold bg-gradient-to-r from-orange-400 via-red-500 to-yellow-400 bg-clip-text text-transparent">
-                    Hot Money
+                    Hot Match
                   </h2>
                   <p className="text-xs text-purple-300">AI-Powered Matching</p>
                 </div>
@@ -139,6 +139,15 @@ export default function LogoDropdownMenu() {
                 >
                   <Rocket className="w-4 h-4 text-orange-950" />
                   <span className="text-orange-950">Startups</span>
+                </Link>
+                
+                <Link
+                  to="/trending"
+                  onClick={() => setIsOpen(false)}
+                  className="group px-3 py-2.5 rounded-xl bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 transition-all font-bold flex items-center gap-3 border border-red-600/50 shadow-md"
+                >
+                  <TrendingUp className="w-4 h-4 text-red-950" />
+                  <span className="text-red-950">🔥 Trending</span>
                 </Link>
                 
                 <Link
