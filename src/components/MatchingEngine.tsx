@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { ThumbsUp, Info, Share2, Sparkles, Search, TrendingUp } from 'lucide-react';
+import { ThumbsUp, Info, Share2, Sparkles, Search, TrendingUp, Heart } from 'lucide-react';
 import { loadApprovedStartups } from '../store';
 import { getAllInvestors } from '../lib/investorService';
 import { calculateAdvancedMatchScore } from '../services/matchingService';
@@ -835,16 +835,8 @@ export default function MatchingEngine() {
       {/* Logo Dropdown Menu (replaces hamburger + separate logo) */}
       <LogoDropdownMenu />
 
-      {/* Navigation Buttons - Top Right */}
-      <div className="fixed top-8 right-8 z-50 flex items-center gap-3">
-        <Link
-          to="/trending"
-          className="flex items-center gap-2 px-5 py-3 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white rounded-xl font-bold shadow-lg shadow-orange-500/30 hover:shadow-orange-500/50 transition-all"
-        >
-          <Search className="w-5 h-5" />
-          <span className="hidden sm:inline">Explore</span>
-          <TrendingUp className="w-4 h-4" />
-        </Link>
+      {/* Get Matched Button - Top Right */}
+      <div className="fixed top-8 right-8 z-50">
         <Link
           to="/get-matched"
           className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 via-violet-600 to-indigo-600 hover:from-purple-700 hover:via-violet-700 hover:to-indigo-700 text-white rounded-xl font-bold shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50 transition-all animate-pulse hover:animate-none"
@@ -877,13 +869,23 @@ export default function MatchingEngine() {
 
         {/* Match Display with Lightning Animation */}
         <div className="max-w-7xl mx-auto mb-16">
-          {/* Match Badge - Keep it visible */}
-          <div className="flex justify-center mb-8">
+          {/* Match Badge & Explore Button */}
+          <div className="flex flex-col items-center gap-4 mb-8">
             <div className="bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full px-10 py-4 shadow-xl">
               <span className="text-2xl font-bold text-gray-900 flex items-center gap-2">
                 ⚡ {match.matchScore}% Match ✨
               </span>
             </div>
+            <Link
+              to="/trending"
+              className="group flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-[#1a0033] to-[#2d1b4e] hover:from-[#2d1b4e] hover:to-[#3d2a5e] text-white font-bold rounded-2xl border-2 border-orange-500/50 hover:border-orange-400 shadow-lg shadow-purple-900/50 hover:shadow-orange-500/30 transition-all hover:scale-105"
+            >
+              <Search className="w-5 h-5 text-orange-400 group-hover:text-orange-300" />
+              <span className="text-lg bg-gradient-to-r from-orange-400 to-yellow-400 bg-clip-text text-transparent">
+                Explore 700+ Startups & 500+ Investors
+              </span>
+              <TrendingUp className="w-5 h-5 text-orange-400 group-hover:text-orange-300 group-hover:translate-x-1 transition-transform" />
+            </Link>
           </div>
           
           <div className="relative">
