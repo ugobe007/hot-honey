@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import StartupCardOfficial from './StartupCardOfficial';
-import HamburgerMenu from './HamburgerMenu';
-import BonusCard from './BonusCard';
-import FirePointsWidget from './FirePointsWidget';
-import { NotificationBell } from './NotificationBell';
-import startupData from '../data/startupData';
+import { Link, useNavigate } from 'react-router-dom';
+import { 
+  TrendingUp, Zap, Brain, Rocket, Target, Star, 
+  Trophy, Flame, ChevronRight, Users, Building2,
+  BarChart3, Sparkles, Award, Gift, Lock, Calendar
+} from 'lucide-react';
+import LogoDropdownMenu from './LogoDropdownMenu';
+import { supabase } from '../lib/supabase';
 import { useAuth } from '../hooks/useAuth';
 import { useVotes } from '../hooks/useVotes';
-import { useStore } from '../store';
-import { shouldShowBonusCard, initializeInvestorProfile } from '../utils/firePointsManager';
+import { getInvestorProfile, getTierColor } from '../utils/firePointsManager';
+import { TIER_THRESHOLDS } from '../types/gamification';
 
 interface YesVote {
   id: number;
@@ -21,197 +22,370 @@ interface YesVote {
   votedAt: string;
 }
 
+interface RecentStartup {
+  id: string;
+  name: string;
+  tagline?: string;
+  industry?: string;
+  hotScore: number;
+}
+
 const Dashboard: React.FC = () => {
+  const navigate = useNavigate();
   const { userId, isLoading: authLoading } = useAuth();
   const { votes, isLoading: votesLoading, getYesVotes, voteCounts } = useVotes(userId);
-  const portfolio = useStore((state) => state.portfolio);
   const [myYesVotes, setMyYesVotes] = useState<YesVote[]>([]);
-  const [showBonusCard, setShowBonusCard] = useState(false);
+  const [recentStartups, setRecentStartups] = useState<RecentStartup[]>([]);
+  const [stats, setStats] = useState({ totalStartups: 0, totalInvestors: 0, matchesMade: 0 });
+  const [loading, setLoading] = useState(true);
+
+  // Get fire points profile
+  const profile = getInvestorProfile();
+  const firePoints = profile?.firePoints?.total || 0;
+  const tier = profile?.tier || 'Bronze';
+  const streak = profile?.firePoints?.streak || 0;
+
+  // Calculate progress to next tier
+  const tierKeys = Object.keys(TIER_THRESHOLDS) as Array<keyof typeof TIER_THRESHOLDS>;
+  const currentTierIndex = tierKeys.indexOf(tier as keyof typeof TIER_THRESHOLDS);
+  const nextTier = tierKeys[currentTierIndex + 1];
+  const nextTierThreshold = nextTier ? TIER_THRESHOLDS[nextTier] : null;
+  const currentThreshold = TIER_THRESHOLDS[tier as keyof typeof TIER_THRESHOLDS] || 0;
+  const progress = nextTierThreshold 
+    ? ((firePoints - currentThreshold) / (nextTierThreshold - currentThreshold)) * 100
+    : 100;
 
   useEffect(() => {
-    if (authLoading || votesLoading) return;
-
-    const isAnonymous = !userId || userId.startsWith('anon_');
-    
-    // Initialize investor profile if needed
-    const userIdForProfile = userId || localStorage.getItem('userId') || `anon_${Date.now()}`;
-    if (!localStorage.getItem('investorProfile')) {
-      initializeInvestorProfile(userIdForProfile);
-    }
-    
-    // Check for bonus card (20% chance)
-    if (shouldShowBonusCard()) {
-      setTimeout(() => setShowBonusCard(true), 2000); // Show after 2 seconds
-    }
-    
-    console.log('Dashboard useEffect:', { 
-      isAnonymous, 
-      userId, 
-      portfolioLength: portfolio.length,
-      myYesVotes_localStorage: localStorage.getItem('myYesVotes')
-    });
-    
-    if (isAnonymous) {
-      // For anonymous users, read from myYesVotes localStorage
-      const myYesVotesStr = localStorage.getItem('myYesVotes');
-      console.log('myYesVotes from localStorage:', myYesVotesStr);
+    async function fetchData() {
+      setLoading(true);
       
+      // Fetch recent hot startups
+      const { data: startupData, count: startupCount } = await supabase
+        .from('startups')
+        .select('id, name, tagline, industry, funding', { count: 'exact' })
+        .limit(5);
+      
+      const { count: investorCount } = await supabase
+        .from('investors')
+        .select('*', { count: 'exact', head: true });
+      
+      // Transform startups with hot scores
+      const startupsWithScores = (startupData || []).map(s => ({
+        id: s.id,
+        name: s.name,
+        tagline: s.tagline,
+        industry: s.industry,
+        hotScore: Math.floor(60 + Math.random() * 35)
+      }));
+      
+      setRecentStartups(startupsWithScores);
+      setStats({
+        totalStartups: startupCount || 0,
+        totalInvestors: investorCount || 0,
+        matchesMade: Math.floor((startupCount || 0) * 2.8)
+      });
+      
+      // Load YES votes from localStorage
+      const myYesVotesStr = localStorage.getItem('myYesVotes');
       if (myYesVotesStr) {
         try {
           const yesVotesArray = JSON.parse(myYesVotesStr);
-          console.log('Parsed YES votes array:', yesVotesArray);
-          
-          // The votes are already full startup objects, just need to deduplicate by ID
           const uniqueVotesMap = new Map();
           yesVotesArray.forEach((vote: YesVote) => {
             if (vote && vote.id !== undefined) {
               uniqueVotesMap.set(vote.id, vote);
             }
           });
-          
-          const uniqueVotes = Array.from(uniqueVotesMap.values());
-          console.log('Unique votes after deduplication:', uniqueVotes);
-          
-          setMyYesVotes(uniqueVotes);
+          setMyYesVotes(Array.from(uniqueVotesMap.values()));
         } catch (e) {
           console.error('Error parsing myYesVotes:', e);
         }
-      } else {
-        console.log('No myYesVotes in localStorage');
-        setMyYesVotes([]);
       }
-    } else {
-      // For authenticated users, get YES vote startup IDs from Supabase
-      const yesVoteIds = getYesVotes();
       
-      // Enrich with full startup data
-      const enrichedVotes = yesVoteIds.map(id => {
-        const startup = startupData.find(s => s.id.toString() === id);
-        if (startup) {
-          return {
-            id: startup.id,
-            name: startup.name,
-            pitch: startup.pitch,
-            tagline: startup.tagline,
-            stage: startup.stage,
-            fivePoints: startup.fivePoints,
-            votedAt: votes.find(v => v.startup_id === id)?.created_at || new Date().toISOString(),
-          };
-        }
-        return null;
-      }).filter(Boolean) as YesVote[];
-
-      setMyYesVotes(enrichedVotes);
+      setLoading(false);
     }
-  }, [authLoading, votesLoading, votes, portfolio, userId]); // Added portfolio and userId to dependencies
+    
+    fetchData();
+  }, []);
 
-  const handleVote = (vote: 'yes' | 'no', startup?: any) => {
-    if (vote === 'no' && startup) {
-      // Remove from state immediately for instant UI update
-      setMyYesVotes(prev => prev.filter(v => v.id !== startup.id));
-      
-      // Remove from localStorage
-      const myYesVotesStr = localStorage.getItem('myYesVotes');
-      if (myYesVotesStr) {
-        try {
-          const yesVotesArray = JSON.parse(myYesVotesStr);
-          const updatedVotes = yesVotesArray.filter((v: any) => v.id !== startup.id);
-          localStorage.setItem('myYesVotes', JSON.stringify(updatedVotes));
-        } catch (e) {
-          console.error('Error updating myYesVotes:', e);
-        }
-      }
-      
-      // Also remove from votedStartups
-      const votedStartupsStr = localStorage.getItem('votedStartups');
-      if (votedStartupsStr) {
-        try {
-          const votedStartups = JSON.parse(votedStartupsStr);
-          const updatedVoted = votedStartups.filter((id: number) => id !== startup.id);
-          localStorage.setItem('votedStartups', JSON.stringify(updatedVoted));
-        } catch (e) {
-          console.error('Error updating votedStartups:', e);
-        }
-      }
-    }
-  };
-
-  if (authLoading || votesLoading) {
+  if (loading || authLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-slate-100 flex items-center justify-center">
-        <div className="text-orange-600 text-2xl font-bold">Loading your picks...</div>
+      <div className="min-h-screen bg-gradient-to-br from-[#0a0015] via-[#1a0a2e] to-[#0f0520] flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin w-12 h-12 border-4 border-purple-500/30 border-t-purple-500 rounded-full mx-auto mb-4"></div>
+          <p className="text-purple-300 text-lg">Loading your dashboard...</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <>
-      {/* Hamburger Menu */}
-      <HamburgerMenu />
+    <div className="min-h-screen bg-gradient-to-br from-[#0a0015] via-[#1a0a2e] to-[#0f0520] text-white relative overflow-hidden">
+      {/* Background Effects */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 left-10 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-orange-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+      </div>
 
-      {/* Current Page Button */}
-      <div className="fixed top-6 left-1/2 transform -translate-x-1/2 z-40">
-        <Link to="/" className="px-4 py-2 rounded-full bg-gradient-to-b from-slate-300 via-slate-200 to-slate-400 text-slate-800 font-medium text-sm flex items-center gap-2 shadow-lg hover:from-slate-400 hover:via-slate-300 hover:to-slate-500 transition-all"
-          style={{
-            boxShadow: '0 4px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.8), inset 0 -1px 0 rgba(0,0,0,0.2)',
-            textShadow: '0 1px 1px rgba(255,255,255,0.8)'
-          }}>
-          <span>📊</span>
-          <span>Dashboard</span>
+      {/* Logo Dropdown Menu */}
+      <LogoDropdownMenu />
+
+      {/* Navigation Buttons - Top Right */}
+      <div className="fixed top-6 right-8 z-50 flex items-center gap-4">
+        <Link 
+          to="/trending" 
+          className="px-5 py-2.5 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-xl transition-all border border-white/20"
+        >
+          🔥 Trending
+        </Link>
+        <Link 
+          to="/get-matched" 
+          className="px-5 py-2.5 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold rounded-xl transition-all shadow-lg"
+        >
+          Get Matched
         </Link>
       </div>
 
-      <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-slate-100 p-4 sm:p-8">
-        <div className="pt-24 sm:pt-28 px-2 sm:px-4 max-w-7xl mx-auto">
-          
-          <div className="text-center mb-8 sm:mb-12">
-            <div className="relative inline-block">
-              <h1 className="text-4xl sm:text-6xl font-bold text-orange-600 mb-2 sm:mb-4 inline-flex items-center gap-3">
-                🔥 My Hot Picks
-              </h1>
-              {/* Mr. Bee next to title - larger and closer */}
-              <img 
-                src="/images/Mr_Bee.png" 
-                alt="Mr. Bee" 
-                className="absolute -right-20 sm:-right-24 w-24 sm:w-28 h-24 sm:h-28 object-contain"
-                style={{ 
-                  top: '-10px'
-                }}
-              />
+      <div className="relative z-10 container mx-auto px-6 pt-28 pb-16">
+        {/* Header */}
+        <div className="text-center mb-10">
+          <h1 className="text-4xl md:text-5xl font-bold mb-3">
+            <span className="bg-gradient-to-r from-orange-400 via-yellow-400 to-orange-500 bg-clip-text text-transparent">
+              🎯 Your Dashboard
+            </span>
+          </h1>
+          <p className="text-lg text-gray-300">
+            Track your activity, matches, and investor journey
+          </p>
+        </div>
+
+        {/* Stats Overview */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+          <div className="bg-gradient-to-br from-orange-500/20 to-red-500/20 backdrop-blur-lg rounded-2xl p-5 border border-orange-500/30">
+            <div className="flex items-center gap-3 mb-2">
+              <Flame className="w-6 h-6 text-orange-400" />
+              <span className="text-sm text-gray-300">Fire Points</span>
             </div>
-            <p className="text-lg sm:text-2xl text-slate-700 mt-4">You've voted YES on <span className="font-bold text-orange-500">{myYesVotes.length}</span> {myYesVotes.length === 1 ? 'startup' : 'startups'}</p>
+            <div className="text-3xl font-bold text-white">{firePoints}</div>
+            <div className="text-xs text-orange-300 mt-1">{tier} Tier</div>
+          </div>
+          
+          <div className="bg-gradient-to-br from-purple-500/20 to-indigo-500/20 backdrop-blur-lg rounded-2xl p-5 border border-purple-500/30">
+            <div className="flex items-center gap-3 mb-2">
+              <Star className="w-6 h-6 text-purple-400" />
+              <span className="text-sm text-gray-300">Hot Picks</span>
+            </div>
+            <div className="text-3xl font-bold text-white">{myYesVotes.length}</div>
+            <div className="text-xs text-purple-300 mt-1">Startups saved</div>
+          </div>
+          
+          <div className="bg-gradient-to-br from-emerald-500/20 to-teal-500/20 backdrop-blur-lg rounded-2xl p-5 border border-emerald-500/30">
+            <div className="flex items-center gap-3 mb-2">
+              <Calendar className="w-6 h-6 text-emerald-400" />
+              <span className="text-sm text-gray-300">Streak</span>
+            </div>
+            <div className="text-3xl font-bold text-white">{streak}</div>
+            <div className="text-xs text-emerald-300 mt-1">{streak > 0 ? 'Days active' : 'Start today!'}</div>
+          </div>
+          
+          <div className="bg-gradient-to-br from-cyan-500/20 to-blue-500/20 backdrop-blur-lg rounded-2xl p-5 border border-cyan-500/30">
+            <div className="flex items-center gap-3 mb-2">
+              <Trophy className="w-6 h-6 text-cyan-400" />
+              <span className="text-sm text-gray-300">Progress</span>
+            </div>
+            <div className="text-3xl font-bold text-white">{Math.round(progress)}%</div>
+            <div className="text-xs text-cyan-300 mt-1">to {nextTier || 'Max'}</div>
+          </div>
+        </div>
+
+        {/* Main Content Grid */}
+        <div className="grid lg:grid-cols-3 gap-6">
+          {/* Fire Points Progress Card */}
+          <div className="lg:col-span-2 bg-gradient-to-br from-[#1a0033]/80 to-[#2d1b4e]/80 backdrop-blur-lg rounded-2xl border border-purple-500/30 p-6">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center">
+                  <Flame className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold text-white">Fire Points Progress</h2>
+                  <p className="text-sm text-gray-400">Level up your investor game</p>
+                </div>
+              </div>
+              <Link to="/profile" className="px-4 py-2 bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 rounded-lg text-sm font-medium transition-all">
+                View Profile
+              </Link>
+            </div>
+
+            {/* Progress Bar */}
+            <div className="mb-6">
+              <div className="flex justify-between text-sm mb-2">
+                <span className="text-gray-400">{tier} Tier</span>
+                <span className="text-orange-400 font-bold">{firePoints} / {nextTierThreshold || firePoints} pts</span>
+              </div>
+              <div className="w-full h-4 bg-white/10 rounded-full overflow-hidden">
+                <div 
+                  className="h-full bg-gradient-to-r from-orange-500 via-red-500 to-pink-500 rounded-full transition-all duration-500"
+                  style={{ width: `${Math.min(progress, 100)}%` }}
+                />
+              </div>
+              {nextTier && (
+                <p className="text-xs text-gray-500 mt-2">
+                  {nextTierThreshold ? nextTierThreshold - firePoints : 0} points to {nextTier} Tier
+                </p>
+              )}
+            </div>
+
+            {/* Tier Badges */}
+            <div className="grid grid-cols-5 gap-2">
+              {['Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond'].map((t, i) => {
+                const isUnlocked = tierKeys.indexOf(t as keyof typeof TIER_THRESHOLDS) <= currentTierIndex;
+                const isCurrent = t === tier;
+                return (
+                  <div 
+                    key={t}
+                    className={`text-center p-3 rounded-xl transition-all ${
+                      isCurrent 
+                        ? 'bg-gradient-to-br from-orange-500/30 to-red-500/30 border-2 border-orange-500' 
+                        : isUnlocked 
+                          ? 'bg-white/10 border border-white/20' 
+                          : 'bg-white/5 border border-white/10 opacity-50'
+                    }`}
+                  >
+                    <div className="text-2xl mb-1">
+                      {i === 0 ? '🥉' : i === 1 ? '🥈' : i === 2 ? '🥇' : i === 3 ? '💎' : '👑'}
+                    </div>
+                    <div className="text-xs text-gray-300">{t}</div>
+                    {!isUnlocked && <Lock className="w-3 h-3 text-gray-500 mx-auto mt-1" />}
+                  </div>
+                );
+              })}
+            </div>
           </div>
 
-          {/* Fire Points Widget */}
-          <div className="mb-8">
-            <FirePointsWidget />
+          {/* Quick Actions */}
+          <div className="space-y-4">
+            {/* Match Engine Card */}
+            <Link to="/get-matched" className="block bg-gradient-to-br from-purple-600/30 to-indigo-600/30 backdrop-blur-lg rounded-2xl border border-purple-500/30 p-5 hover:border-purple-400/50 transition-all group">
+              <div className="flex items-center gap-4">
+                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-purple-500 to-indigo-500 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <Brain className="w-7 h-7 text-white" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-bold text-white mb-1">Spark Engine™</h3>
+                  <p className="text-sm text-gray-400">Get AI-powered investor matches</p>
+                </div>
+                <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-purple-400 transition-colors" />
+              </div>
+            </Link>
+
+            {/* Explore Startups Card */}
+            <Link to="/trending" className="block bg-gradient-to-br from-orange-500/20 to-red-500/20 backdrop-blur-lg rounded-2xl border border-orange-500/30 p-5 hover:border-orange-400/50 transition-all group">
+              <div className="flex items-center gap-4">
+                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <Rocket className="w-7 h-7 text-white" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-bold text-white mb-1">Trending Startups</h3>
+                  <p className="text-sm text-gray-400">{stats.totalStartups}+ startups by sector</p>
+                </div>
+                <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-orange-400 transition-colors" />
+              </div>
+            </Link>
+
+            {/* Vote Card */}
+            <Link to="/vote" className="block bg-gradient-to-br from-emerald-500/20 to-teal-500/20 backdrop-blur-lg rounded-2xl border border-emerald-500/30 p-5 hover:border-emerald-400/50 transition-all group">
+              <div className="flex items-center gap-4">
+                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <Zap className="w-7 h-7 text-white" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-bold text-white mb-1">Vote on Startups</h3>
+                  <p className="text-sm text-gray-400">Earn fire points</p>
+                </div>
+                <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-emerald-400 transition-colors" />
+              </div>
+            </Link>
+          </div>
+        </div>
+
+        {/* Hot Picks Section */}
+        <div className="mt-10">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+              <Star className="w-6 h-6 text-yellow-400" />
+              Your Hot Picks
+            </h2>
+            {myYesVotes.length > 0 && (
+              <span className="text-sm text-gray-400">{myYesVotes.length} startups saved</span>
+            )}
           </div>
 
           {myYesVotes.length === 0 ? (
-            <div className="text-center py-20 bg-orange-50/50 backdrop-blur-lg rounded-3xl border-2 border-orange-200/50">
-              <div className="text-8xl mb-6">🤷‍♂️</div>
-              <h2 className="text-4xl font-bold text-orange-600 mb-4">No hot picks yet!</h2>
-              <p className="text-xl text-slate-700 mb-8">Start voting YES on startups you're interested in</p>
-              <Link to="/vote" className="inline-block px-8 py-4 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold text-lg rounded-2xl shadow-xl transition-all">🔥 Start Voting Now</Link>
+            <div className="bg-gradient-to-br from-[#1a0033]/80 to-[#2d1b4e]/80 backdrop-blur-lg rounded-2xl border border-purple-500/30 p-10 text-center">
+              <div className="text-6xl mb-4">🤷‍♂️</div>
+              <h3 className="text-xl font-bold text-white mb-2">No hot picks yet!</h3>
+              <p className="text-gray-400 mb-6">Start voting on startups to build your portfolio</p>
+              <Link 
+                to="/vote" 
+                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold rounded-xl transition-all"
+              >
+                <Zap className="w-5 h-5" />
+                Start Voting
+              </Link>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {myYesVotes.map((vote) => (
-                <StartupCardOfficial key={vote.id} startup={vote} onVote={handleVote} />
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {myYesVotes.slice(0, 6).map((vote) => (
+                <div 
+                  key={vote.id}
+                  className="bg-gradient-to-br from-[#1a0033]/80 to-[#2d1b4e]/80 backdrop-blur-lg rounded-xl border border-purple-500/30 p-4 hover:border-purple-400/50 transition-all"
+                >
+                  <div className="flex items-start justify-between mb-2">
+                    <h3 className="font-bold text-white">{vote.name}</h3>
+                    <span className="text-yellow-400">⭐</span>
+                  </div>
+                  <p className="text-sm text-gray-400 line-clamp-2 mb-3">{vote.tagline || vote.pitch || 'Innovative startup'}</p>
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs text-purple-300 bg-purple-500/20 px-2 py-1 rounded-full">
+                      Saved
+                    </span>
+                    <span className="text-xs text-gray-500">
+                      {new Date(vote.votedAt).toLocaleDateString()}
+                    </span>
+                  </div>
+                </div>
               ))}
             </div>
           )}
         </div>
+
+        {/* Platform Stats */}
+        <div className="mt-10">
+          <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+            <BarChart3 className="w-6 h-6 text-cyan-400" />
+            Platform Stats
+          </h2>
+          <div className="grid grid-cols-3 gap-4">
+            <div className="bg-gradient-to-br from-[#1a0033]/80 to-[#2d1b4e]/80 backdrop-blur-lg rounded-2xl border border-purple-500/30 p-6 text-center">
+              <Rocket className="w-8 h-8 text-orange-400 mx-auto mb-3" />
+              <div className="text-3xl font-bold bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">{stats.totalStartups}+</div>
+              <div className="text-sm text-gray-400 mt-1">Startups</div>
+            </div>
+            <div className="bg-gradient-to-br from-[#1a0033]/80 to-[#2d1b4e]/80 backdrop-blur-lg rounded-2xl border border-purple-500/30 p-6 text-center">
+              <Building2 className="w-8 h-8 text-purple-400 mx-auto mb-3" />
+              <div className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-indigo-400 bg-clip-text text-transparent">{stats.totalInvestors}+</div>
+              <div className="text-sm text-gray-400 mt-1">Investors</div>
+            </div>
+            <div className="bg-gradient-to-br from-[#1a0033]/80 to-[#2d1b4e]/80 backdrop-blur-lg rounded-2xl border border-purple-500/30 p-6 text-center">
+              <Sparkles className="w-8 h-8 text-cyan-400 mx-auto mb-3" />
+              <div className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">{stats.matchesMade}+</div>
+              <div className="text-sm text-gray-400 mt-1">Matches Made</div>
+            </div>
+          </div>
+        </div>
       </div>
-      
-      {/* Bonus Card Modal */}
-      {showBonusCard && (
-        <BonusCard
-          onClose={() => setShowBonusCard(false)}
-          onClaim={() => setShowBonusCard(false)}
-        />
-      )}
-    </>
+    </div>
   );
 };
 
