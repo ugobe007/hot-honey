@@ -73,37 +73,42 @@ export default function DiagnosticPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-slate-100 p-8">
+    <div className="min-h-screen bg-gradient-to-br from-[#0f0a1a] via-[#1a0f2e] to-[#0f0a1a] p-8">
       <div className="max-w-7xl mx-auto">
         
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-5xl font-bold text-orange-600">🔍 System Diagnostic</h1>
+          <div>
+            <h1 className="text-5xl font-bold bg-gradient-to-r from-orange-500 via-amber-400 to-orange-500 bg-clip-text text-transparent mb-2">
+              🔍 System Diagnostic
+            </h1>
+            <p className="text-slate-400 text-lg">Database health check and system monitoring</p>
+          </div>
           <button
-            onClick={() => navigate('/')}
-            className="px-6 py-3 bg-gradient-to-r from-slate-600 to-slate-700 hover:from-slate-700 hover:to-slate-800 text-white font-bold rounded-xl transition-all"
+            onClick={() => navigate('/admin/control')}
+            className="px-6 py-3 bg-gradient-to-r from-slate-700 to-slate-800 hover:from-slate-600 hover:to-slate-700 text-white font-bold rounded-xl transition-all shadow-lg hover:shadow-orange-500/20"
           >
-            ← Back
+            ← Back to Control Center
           </button>
         </div>
 
         {/* Actions */}
-        <div className="flex gap-4 mb-8">
+        <div className="flex gap-4 mb-8 flex-wrap">
           <button
             onClick={loadData}
-            className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl transition-all"
+            className="px-6 py-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-500 hover:to-green-600 text-white font-bold rounded-xl transition-all shadow-lg hover:shadow-green-500/30"
           >
             🔄 Refresh Data
           </button>
           <button
             onClick={clearLocalStorage}
-            className="px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl transition-all"
+            className="px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white font-bold rounded-xl transition-all shadow-lg hover:shadow-red-500/30"
           >
             🗑️ Clear localStorage
           </button>
           <button
             onClick={() => navigate('/admin/migrate')}
-            className="px-6 py-3 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-xl transition-all"
+            className="px-6 py-3 bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-500 hover:to-amber-500 text-white font-bold rounded-xl transition-all shadow-lg hover:shadow-orange-500/30"
           >
             🔄 Migrate localStorage → Supabase
           </button>
@@ -112,29 +117,29 @@ export default function DiagnosticPage() {
         <div className="grid gap-6">
           
           {/* Supabase Data */}
-          <div className="bg-white rounded-2xl p-6 border-2 border-orange-200">
-            <h2 className="text-3xl font-bold text-slate-800 mb-4">🗄️ Supabase Database</h2>
+          <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-6 border-2 border-orange-500/30 shadow-xl">
+            <h2 className="text-3xl font-bold text-orange-400 mb-4">🗄️ Supabase Database</h2>
             
             {supabaseData?.error && (
-              <div className="bg-red-50 border-2 border-red-400 rounded-xl p-4 mb-4">
-                <p className="text-red-700 font-bold">❌ Error: {supabaseData.error}</p>
+              <div className="bg-red-900/30 border-2 border-red-500 rounded-xl p-4 mb-4">
+                <p className="text-red-400 font-bold">❌ Error: {supabaseData.error}</p>
               </div>
             )}
 
             <div className="grid gap-4">
-              <div className="bg-blue-50 border-2 border-blue-400 rounded-xl p-4">
-                <h3 className="text-slate-800 font-bold text-xl mb-2">
+              <div className="bg-blue-900/20 border-2 border-blue-500/40 rounded-xl p-4">
+                <h3 className="text-blue-300 font-bold text-xl mb-2">
                   📊 Total Startups: {supabaseData?.all.length || 0}
                 </h3>
                 {supabaseData?.all.length > 0 && (
-                  <ul className="text-slate-700 text-sm space-y-1 mt-3">
+                  <ul className="text-slate-300 text-sm space-y-1 mt-3">
                     {supabaseData.all.map((s: any, i: number) => (
                       <li key={i}>
-                        • <span className="text-orange-600 font-semibold">{s.name}</span> - 
+                        • <span className="text-orange-400 font-semibold">{s.name}</span> - 
                         <span className={`ml-2 font-bold ${
-                          s.status === 'approved' ? 'text-green-600' :
-                          s.status === 'pending' ? 'text-amber-600' :
-                          'text-red-600'
+                          s.status === 'approved' ? 'text-green-400' :
+                          s.status === 'pending' ? 'text-amber-400' :
+                          'text-red-400'
                         }`}>{s.status}</span>
                         <span className="text-slate-500 ml-2 text-xs">
                           {new Date(s.created_at).toLocaleString()}
@@ -145,12 +150,12 @@ export default function DiagnosticPage() {
                 )}
               </div>
 
-              <div className="bg-green-50 border-2 border-green-400 rounded-xl p-4">
-                <h3 className="text-slate-800 font-bold text-xl mb-2">
+              <div className="bg-green-900/20 border-2 border-green-500/40 rounded-xl p-4">
+                <h3 className="text-green-300 font-bold text-xl mb-2">
                   ✅ Approved (Visible in Voting): {supabaseData?.approved.length || 0}
                 </h3>
                 {supabaseData?.approved.length > 0 && (
-                  <ul className="text-slate-700 text-sm space-y-1 mt-3">
+                  <ul className="text-slate-300 text-sm space-y-1 mt-3">
                     {supabaseData.approved.map((s: any, i: number) => (
                       <li key={i}>• {s.name}</li>
                     ))}
@@ -158,12 +163,12 @@ export default function DiagnosticPage() {
                 )}
               </div>
 
-              <div className="bg-amber-50 border-2 border-amber-400 rounded-xl p-4">
-                <h3 className="text-slate-800 font-bold text-xl mb-2">
+              <div className="bg-amber-900/20 border-2 border-amber-500/40 rounded-xl p-4">
+                <h3 className="text-amber-300 font-bold text-xl mb-2">
                   ⏳ Pending Review: {supabaseData?.pending.length || 0}
                 </h3>
                 {supabaseData?.pending.length > 0 && (
-                  <ul className="text-slate-700 text-sm space-y-1 mt-3">
+                  <ul className="text-slate-300 text-sm space-y-1 mt-3">
                     {supabaseData.pending.map((s: any, i: number) => (
                       <li key={i}>• {s.name}</li>
                     ))}
@@ -174,38 +179,38 @@ export default function DiagnosticPage() {
           </div>
 
           {/* localStorage Data */}
-          <div className="bg-white rounded-2xl p-6 border-2 border-orange-200">
-            <h2 className="text-3xl font-bold text-slate-800 mb-4">💾 localStorage (Legacy)</h2>
+          <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-6 border-2 border-orange-500/30 shadow-xl">
+            <h2 className="text-3xl font-bold text-orange-400 mb-4">💾 localStorage (Legacy)</h2>
             
             <div className="grid gap-4">
-              <div className="bg-orange-50 border-2 border-orange-400 rounded-xl p-4">
-                <h3 className="text-slate-800 font-bold text-xl mb-2">
+              <div className="bg-orange-900/20 border-2 border-orange-500/40 rounded-xl p-4">
+                <h3 className="text-orange-300 font-bold text-xl mb-2">
                   📦 Uploaded Startups: {localStorageData?.uploadedStartups.length || 0}
                 </h3>
                 {localStorageData?.uploadedStartups.length > 0 ? (
                   <>
-                    <p className="text-orange-700 text-sm mb-2">
+                    <p className="text-orange-400 text-sm mb-2">
                       ⚠️ These should be migrated to Supabase!
                     </p>
-                    <ul className="text-slate-700 text-sm space-y-1 mt-3">
+                    <ul className="text-slate-300 text-sm space-y-1 mt-3">
                       {localStorageData.uploadedStartups.map((s: any, i: number) => (
                         <li key={i}>• {s.name || 'Unnamed'}</li>
                       ))}
                     </ul>
                   </>
                 ) : (
-                  <p className="text-green-600 text-sm">✅ No legacy data (good!)</p>
+                  <p className="text-green-400 text-sm">✅ No legacy data (good!)</p>
                 )}
               </div>
 
-              <div className="bg-pink-50 border-2 border-pink-400 rounded-xl p-4">
-                <h3 className="text-slate-800 font-bold text-xl mb-2">
+              <div className="bg-pink-900/20 border-2 border-pink-500/40 rounded-xl p-4">
+                <h3 className="text-pink-300 font-bold text-xl mb-2">
                   ❤️ Your YES Votes: {localStorageData?.myYesVotes.length || 0}
                 </h3>
               </div>
 
-              <div className="bg-blue-50 border-2 border-blue-400 rounded-xl p-4">
-                <h3 className="text-slate-800 font-bold text-xl mb-2">
+              <div className="bg-blue-900/20 border-2 border-blue-500/40 rounded-xl p-4">
+                <h3 className="text-blue-300 font-bold text-xl mb-2">
                   🗳️ Voted Startups: {localStorageData?.votedStartups.length || 0}
                 </h3>
               </div>
@@ -213,10 +218,10 @@ export default function DiagnosticPage() {
           </div>
 
           {/* System Status */}
-          <div className="bg-white rounded-2xl p-6 border-2 border-orange-200">
-            <h2 className="text-3xl font-bold text-slate-800 mb-4">📋 System Status</h2>
+          <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-6 border-2 border-orange-500/30 shadow-xl">
+            <h2 className="text-3xl font-bold text-orange-400 mb-4">📋 System Status</h2>
             
-            <div className="space-y-3 text-slate-700">
+            <div className="space-y-3 text-slate-300">
               <p>
                 <strong className="text-green-600">✅ Supabase Connection:</strong> {supabaseData?.error ? 'Failed' : 'Working'}
               </p>
@@ -236,11 +241,11 @@ export default function DiagnosticPage() {
             </div>
 
             {localStorageData?.uploadedStartups.length > 0 && (
-              <div className="mt-4 pt-4 border-t-2 border-orange-200">
-                <p className="text-orange-700 font-bold mb-2">
+              <div className="mt-4 pt-4 border-t-2 border-orange-500/30">
+                <p className="text-orange-400 font-bold mb-2">
                   ⚠️ Action Required:
                 </p>
-                <p className="text-slate-600 text-sm">
+                <p className="text-slate-400 text-sm">
                   You have {localStorageData.uploadedStartups.length} startups in localStorage.
                   Click "Migrate localStorage → Supabase" above to move them to the database.
                 </p>
@@ -249,30 +254,54 @@ export default function DiagnosticPage() {
           </div>
 
           {/* Quick Links */}
-          <div className="bg-white rounded-2xl p-6 border-2 border-orange-200">
-            <h2 className="text-3xl font-bold text-slate-800 mb-4">🔗 Quick Links</h2>
+          <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-6 border-2 border-orange-500/30 shadow-xl">
+            <h2 className="text-3xl font-bold text-orange-400 mb-4">🔗 Admin Tools</h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               <button
-                onClick={() => navigate('/submit')}
-                className="py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-xl transition-all"
+                onClick={() => navigate('/admin/control')}
+                className="py-3 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 text-white font-semibold rounded-xl transition-all shadow-lg hover:shadow-purple-500/30"
               >
-                📝 Submit Startup
+                🎛️ Control Center
               </button>
               <button
-                onClick={() => navigate('/vote')}
-                className="py-3 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold rounded-xl transition-all"
+                onClick={() => navigate('/admin/dashboard')}
+                className="py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white font-semibold rounded-xl transition-all shadow-lg hover:shadow-blue-500/30"
               >
-                🗳️ Vote
+                📊 Dashboard
+              </button>
+              <button
+                onClick={() => navigate('/admin/operations')}
+                className="py-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-500 hover:to-green-600 text-white font-semibold rounded-xl transition-all shadow-lg hover:shadow-green-500/30"
+              >
+                ⚙️ Operations
+              </button>
+              <button
+                onClick={() => navigate('/admin/ml-dashboard')}
+                className="py-3 bg-gradient-to-r from-pink-600 to-pink-700 hover:from-pink-500 hover:to-pink-600 text-white font-semibold rounded-xl transition-all shadow-lg hover:shadow-pink-500/30"
+              >
+                🤖 ML Dashboard
+              </button>
+              <button
+                onClick={() => navigate('/admin/god-scores')}
+                className="py-3 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white font-semibold rounded-xl transition-all shadow-lg hover:shadow-orange-500/30"
+              >
+                ⭐ GOD Scores
+              </button>
+              <button
+                onClick={() => navigate('/admin/rss-manager')}
+                className="py-3 bg-gradient-to-r from-cyan-600 to-cyan-700 hover:from-cyan-500 hover:to-cyan-600 text-white font-semibold rounded-xl transition-all shadow-lg hover:shadow-cyan-500/30"
+              >
+                📡 RSS Manager
               </button>
               <button
                 onClick={() => navigate('/admin/edit-startups')}
-                className="py-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold rounded-xl transition-all"
+                className="py-3 bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white font-semibold rounded-xl transition-all shadow-lg hover:shadow-indigo-500/30"
               >
                 ✏️ Edit Startups
               </button>
               <button
                 onClick={() => navigate('/admin/bulk-import')}
-                className="py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-semibold rounded-xl transition-all"
+                className="py-3 bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-500 hover:to-teal-600 text-white font-semibold rounded-xl transition-all shadow-lg hover:shadow-teal-500/30"
               >
                 🚀 Bulk Import
               </button>

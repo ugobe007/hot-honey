@@ -39,6 +39,7 @@ export default function BulkImport() {
   const [currentStep, setCurrentStep] = useState<'input' | 'scraping' | 'enriching' | 'review' | 'sources'>('input');
   const [progress, setProgress] = useState({ current: 0, total: 0 });
   const [enrichmentProgress, setEnrichmentProgress] = useState(0);
+  const [uploadProgress, setUploadProgress] = useState(0);
   const [isEnriching, setIsEnriching] = useState(false);
   const [savedSources, setSavedSources] = useState<SavedSource[]>([]);
   const [showAddSource, setShowAddSource] = useState(false);
@@ -286,35 +287,59 @@ export default function BulkImport() {
     console.log('🔍 Current step BEFORE:', currentStep);
     
     setIsEnriching(true);
-    // Keep on 'review' step so UI stays visible during enrichment
     const enriched: EnrichedCompany[] = [];
     let errors = 0;
 
     console.log('🔍 Current step AFTER setIsEnriching:', currentStep);
 
-    for (let i = 0; i < scrapedCompanies.length; i++) {
-      const company = scrapedCompanies[i];
-      console.log(`📊 Enriching ${i + 1}/${scrapedCompanies.length}: ${company.name}`);
+    // Process in batches of 10 for better performance
+    const BATCH_SIZE = 10;
+    const totalBatches = Math.ceil(scrapedCompanies.length / BATCH_SIZE);
+
+    for (let batchIndex = 0; batchIndex < totalBatches; batchIndex++) {
+      const start = batchIndex * BATCH_SIZE;
+      const end = Math.min(start + BATCH_SIZE, scrapedCompanies.length);
+      const batch = scrapedCompanies.slice(start, end);
       
-      try {
-        const enrichedData = await enrichWithAI(company);
-        console.log('✅ Enriched:', enrichedData.name);
-        enriched.push(enrichedData);
-        console.log(`📦 Enriched array now has ${enriched.length} companies`);
-        setEnrichmentProgress(((i + 1) / scrapedCompanies.length) * 100);
+      console.log(`📦 Processing batch ${batchIndex + 1}/${totalBatches} (companies ${start + 1}-${end})`);
+
+      // Process batch in parallel
+      const batchPromises = batch.map(async (company, idx) => {
+        const globalIdx = start + idx;
+        console.log(`📊 Enriching ${globalIdx + 1}/${scrapedCompanies.length}: ${company.name}`);
         
-        // Update state immediately after each enrichment
-        setEnrichedCompanies([...enriched]);
-        
-        if (i < scrapedCompanies.length - 1) {
-          console.log('⏱️ Waiting 2 seconds before next enrichment...');
-          await new Promise(resolve => setTimeout(resolve, 2000));
+        try {
+          const enrichedData = await enrichWithAI(company);
+          console.log('✅ Enriched:', enrichedData.name);
+          return { success: true, data: enrichedData };
+        } catch (error) {
+          console.error(`❌ Error enriching ${company.name}:`, error);
+          return { success: false, error: String(error), company };
         }
-      } catch (error) {
-        errors++;
-        console.error(`❌ Error enriching ${company.name}:`, error);
-        alert(`⚠️ Failed to enrich "${company.name}". Error: ${error}\n\nContinuing with remaining companies...`);
-        // Continue with next company even if one fails
+      });
+
+      const batchResults = await Promise.all(batchPromises);
+      
+      // Process results
+      batchResults.forEach((result) => {
+        if (result.success && result.data) {
+          enriched.push(result.data);
+        } else {
+          errors++;
+        }
+      });
+
+      // Update progress
+      setEnrichmentProgress((end / scrapedCompanies.length) * 100);
+      setEnrichedCompanies([...enriched]);
+      
+      console.log(`✅ Batch ${batchIndex + 1} complete: ${batchResults.filter(r => r.success).length}/${batch.length} successful`);
+      console.log(`📊 Total enriched so far: ${enriched.length}/${scrapedCompanies.length}`);
+      
+      // Small delay between batches to avoid rate limits
+      if (batchIndex < totalBatches - 1) {
+        console.log('⏱️ Waiting 1 second before next batch...');
+        await new Promise(resolve => setTimeout(resolve, 1000));
       }
     }
 
@@ -349,9 +374,10 @@ export default function BulkImport() {
     console.log('📦 Data to upload:', enrichedCompanies);
     
     setLoading(true);
+    setUploadProgress(0);
     
     try {
-      // Upload to Supabase using OpenAIDataService
+      // Upload to Supabase using OpenAIDataService with progress tracking
       const results = await OpenAIDataService.uploadBulkStartups(
         enrichedCompanies.map(company => ({
           name: company.name,
@@ -363,7 +389,12 @@ export default function BulkImport() {
           industry: company.industry,
           entityType: company.entityType || 'startup',
           scraped_by: company.vcSource || vcUrl
-        }))
+        })),
+        // Progress callback
+        (current: number, total: number) => {
+          setUploadProgress((current / total) * 100);
+          console.log(`📤 Upload progress: ${current}/${total}`);
+        }
       );
       
       console.log(`✅ Upload results:`, results);
@@ -408,10 +439,11 @@ export default function BulkImport() {
       message += `   • Review: 1-2 business days\n`;
       message += `   • Goes live after approval\n\n`;
       message += `🎯 NEXT STEP:\n`;
-      message += `   Admin Dashboard → "Edit Startups" → Bulk Approve`;
+      message += `   Click OK to go to Edit Startups\n`;
+      message += `   Then click: "🚀 Bulk Approve" button`;
       
       alert(message);
-      navigate('/admin/dashboard');
+      navigate('/admin/edit-startups');
       
     } catch (error) {
       console.error('❌ Failed to import:', error);
@@ -422,24 +454,45 @@ export default function BulkImport() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-slate-100 p-8">
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-purple-950 p-8">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-5xl font-bold text-orange-600 mb-2">🚀 Bulk Import Startups</h1>
-            <p className="text-slate-600 font-semibold">Automated VC portfolio scraping & enrichment</p>
+            <div className="flex items-center gap-3 mb-2">
+              <span className="bg-blue-500 text-white text-sm font-bold px-3 py-1 rounded-full">STEP 1</span>
+              <h1 className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-500">🚀 Bulk Import Startups</h1>
+            </div>
+            <p className="text-gray-300 font-semibold">Automated VC portfolio scraping & enrichment</p>
           </div>
           <div className="flex gap-3">
             <button
+              onClick={() => navigate('/admin/edit-startups')}
+              className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-3 px-6 rounded-2xl transition-all shadow-lg hover:shadow-purple-500/50 flex items-center gap-2"
+            >
+              Next: Review & Approve →
+            </button>
+            <button
+              onClick={() => navigate('/admin/instructions')}
+              className="bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-bold py-3 px-6 rounded-2xl transition-all shadow-lg hover:shadow-pink-500/50"
+            >
+              📚 Instructions
+            </button>
+            <button
+              onClick={() => navigate('/admin/operations')}
+              className="bg-gradient-to-r from-purple-500 to-cyan-500 hover:from-purple-600 hover:to-cyan-600 text-white font-bold py-3 px-6 rounded-2xl transition-all shadow-lg hover:shadow-purple-500/50"
+            >
+              🏠 Admin Home
+            </button>
+            <button
               onClick={() => setCurrentStep(currentStep === 'sources' ? 'input' : 'sources')}
-              className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-3 px-6 rounded-2xl transition-all"
+              className="bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white font-bold py-3 px-6 rounded-2xl transition-all shadow-lg hover:shadow-purple-500/50"
             >
               {currentStep === 'sources' ? '← Back to Import' : '⚙️ Manage Sources'}
             </button>
             <button
               onClick={() => navigate('/submit')}
-              className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold py-3 px-6 rounded-2xl transition-all"
+              className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-bold py-3 px-6 rounded-2xl transition-all shadow-lg hover:shadow-cyan-500/50"
             >
               ← Submit Page
             </button>
@@ -450,9 +503,9 @@ export default function BulkImport() {
         {currentStep === 'sources' && (
           <div className="space-y-6">
             {/* Auto-Refresh Info */}
-            <div className="bg-white rounded-3xl p-6 border-2 border-green-400">
-              <h2 className="text-2xl font-bold text-slate-800 mb-3">🤖 Automated Weekly Refresh</h2>
-              <p className="text-slate-700 mb-4">
+            <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-6 border-2 border-green-400/50 shadow-xl">
+              <h2 className="text-2xl font-bold text-white mb-3">🤖 Automated Weekly Refresh</h2>
+              <p className="text-gray-300 mb-4">
                 AI learns to scrape these sources automatically. Enable auto-refresh for weekly updates of fresh startup data.
               </p>
               <button
@@ -464,9 +517,9 @@ export default function BulkImport() {
             </div>
 
             {/* Saved Sources */}
-            <div className="bg-white rounded-3xl p-8 border-2 border-orange-200">
+            <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-8 border-2 border-orange-400/50 shadow-xl">
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-3xl font-bold text-slate-800">📚 Saved Sources ({savedSources.length})</h2>
+                <h2 className="text-3xl font-bold text-white">📚 Saved Sources ({savedSources.length})</h2>
                 <button
                   onClick={() => setShowAddSource(!showAddSource)}
                   className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-2 px-4 rounded-xl transition-all"
@@ -595,8 +648,8 @@ export default function BulkImport() {
 
         {/* Step 1: Input */}
         {currentStep === 'input' && (
-          <div className="bg-white rounded-3xl p-8 border-2 border-orange-200">
-            <h2 className="text-3xl font-bold text-slate-800 mb-6">📋 Enter Company Websites</h2>
+          <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-8 border-2 border-orange-400/50 shadow-xl">
+            <h2 className="text-3xl font-bold text-white mb-6">📋 Enter Company Websites</h2>
             
             {/* Quick Templates */}
             <div className="mb-6">
@@ -678,8 +731,8 @@ export default function BulkImport() {
         {/* Step 2: Review & Enrich */}
         {currentStep === 'review' && scrapedCompanies.length > 0 && (
           <div className="space-y-6" key="review-section">
-            <div className="bg-white rounded-3xl p-8 border-2 border-orange-200">
-              <h2 className="text-3xl font-bold text-slate-800 mb-4">
+            <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-8 border-2 border-orange-400/50 shadow-xl">
+              <h2 className="text-3xl font-bold text-white mb-4">
                 ✅ Found {scrapedCompanies.length} Companies
               </h2>
               
@@ -718,13 +771,16 @@ export default function BulkImport() {
               {isEnriching && (
                 <div className="mb-6 bg-orange-50 border-2 border-orange-400 rounded-2xl p-6 text-center animate-pulse">
                   <h3 className="text-slate-800 text-2xl font-bold mb-2">
-                    🤖 AI is analyzing each company...
+                    🤖 AI is analyzing companies in batches of 10...
                   </h3>
                   <p className="text-orange-700 mb-3">
-                    This takes about 2 seconds per company. Please wait...
+                    Processing {scrapedCompanies.length} companies in parallel batches
                   </p>
                   <div className="text-3xl font-bold text-orange-600">
                     {enrichedCompanies.length} / {scrapedCompanies.length} completed
+                  </div>
+                  <div className="text-sm text-slate-600 mt-2">
+                    ⚡ Estimated time: {Math.ceil(scrapedCompanies.length / 10)} seconds
                   </div>
                 </div>
               )}
@@ -763,7 +819,25 @@ export default function BulkImport() {
                   />
                 </div>
                 <p className="text-slate-600 text-sm mt-3">
-                  ⏱️ Rate limited to 1 company every 2 seconds (OpenAI API limits)
+                  ⚡ Processing 10 companies per batch with 1s delay between batches
+                </p>
+              </div>
+            )}
+
+            {/* Upload Progress Bar */}
+            {loading && uploadProgress > 0 && (
+              <div className="bg-white rounded-3xl p-8 border-2 border-blue-400 mt-6">
+                <h3 className="text-slate-800 font-bold mb-4">
+                  Uploading to Database: {Math.round(uploadProgress)}%
+                </h3>
+                <div className="w-full bg-slate-200 rounded-full h-4">
+                  <div 
+                    className="bg-gradient-to-r from-blue-500 to-blue-600 h-4 rounded-full transition-all duration-500"
+                    style={{ width: `${uploadProgress}%` }}
+                  />
+                </div>
+                <p className="text-slate-600 text-sm mt-3">
+                  📤 Uploading in batches of 50 startups
                 </p>
               </div>
             )}

@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hot Money Honey - Smoke Test Diagnostics</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      margin: 0;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+    h1 {
+      text-align: center;
+      font-size: 2.5em;
+      margin-bottom: 10px;
+    }
+    .subtitle {
+      text-align: center;
+      opacity: 0.9;
+      margin-bottom: 30px;
+    }
+    .test-section {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 10px;
+      border-left: 4px solid #4CAF50;
+    }
+    .test-section.fail {
+      border-left-color: #f44336;
+    }
+    .test-section.warning {
+      border-left-color: #ff9800;
+    }
+    button {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 10px 5px;
+      transition: transform 0.2s;
+    }
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+    button:active {
+      transform: translateY(0);
+    }
+    .result {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 15px;
+      font-family: 'Courier New', monospace;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    .pass { color: #4CAF50; font-weight: bold; }
+    .fail { color: #f44336; font-weight: bold; }
+    .warning { color: #ff9800; font-weight: bold; }
+    .score-display {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 5px 15px;
+      border-radius: 20px;
+      margin: 5px;
+      font-weight: bold;
+    }
+    .checklist {
+      list-style: none;
+      padding: 0;
+    }
+    .checklist li {
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .status-badge {
+      display: inline-block;
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-size: 0.9em;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+    .status-pass { background: #4CAF50; }
+    .status-fail { background: #f44336; }
+    .status-warning { background: #ff9800; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>⚡ Hot Money Honey</h1>
+    <p class="subtitle">15-Minute Smoke Test Diagnostics</p>
+
+    <!-- Test 1: Page Load -->
+    <div class="test-section" id="test1">
+      <h2>1. Basic Load Test</h2>
+      <ul class="checklist">
+        <li id="check-load">✅ Page loaded successfully</li>
+        <li id="check-styles">⏳ Checking styles...</li>
+        <li id="check-console">⏳ Checking console errors...</li>
+      </ul>
+      <button onclick="runTest1()">🔄 Re-run Test 1</button>
+      <div class="result" id="result1"></div>
+    </div>
+
+    <!-- Test 2: Score Verification -->
+    <div class="test-section" id="test2">
+      <h2>2. Matching Engine Score Test</h2>
+      <p>This test checks if GOD algorithm is generating varied scores (not all 85)</p>
+      <button onclick="runTest2()">🧮 Check Scores</button>
+      <div class="result" id="result2"></div>
+    </div>
+
+    <!-- Test 3: Console Output -->
+    <div class="test-section" id="test3">
+      <h2>3. Console Output Test</h2>
+      <p>Looking for GOD algorithm logging...</p>
+      <button onclick="runTest3()">📊 Check Console Logs</button>
+      <div class="result" id="result3"></div>
+    </div>
+
+    <!-- Test 4: Navigation -->
+    <div class="test-section" id="test4">
+      <h2>4. Navigation Test</h2>
+      <p>Test critical routes:</p>
+      <button onclick="testRoute('/')">🏠 Home</button>
+      <button onclick="testRoute('/vote')">🗳️ Vote</button>
+      <button onclick="testRoute('/investors')">💼 Investors</button>
+      <button onclick="testRoute('/submit')">📝 Submit</button>
+      <div class="result" id="result4"></div>
+    </div>
+
+    <!-- Overall Status -->
+    <div class="test-section" id="overall">
+      <h2>📊 Overall Status</h2>
+      <div id="overall-status"></div>
+      <button onclick="runAllTests()">▶️ Run All Tests</button>
+      <button onclick="generateReport()">📋 Generate Report</button>
+    </div>
+  </div>
+
+  <script>
+    let testResults = {
+      test1: null,
+      test2: null,
+      test3: null,
+      test4: null
+    };
+
+    // Test 1: Basic Load
+    function runTest1() {
+      const result = document.getElementById('result1');
+      const section = document.getElementById('test1');
+      
+      result.innerHTML = '<p>Running diagnostics...</p>';
+      
+      let output = '';
+      let passed = true;
+
+      // Check if page loaded
+      output += '✅ Page loaded successfully\n';
+      
+      // Check styles
+      const computedStyle = window.getComputedStyle(document.body);
+      if (computedStyle.background.includes('gradient')) {
+        output += '✅ Styles loaded correctly (gradient detected)\n';
+        document.getElementById('check-styles').innerHTML = '✅ Styles loaded correctly';
+      } else {
+        output += '❌ Styles may not be loaded correctly\n';
+        document.getElementById('check-styles').innerHTML = '❌ Styles issue detected';
+        passed = false;
+      }
+
+      // Check console errors
+      output += '⚠️ Check browser console (F12) for red errors\n';
+      document.getElementById('check-console').innerHTML = '⚠️ Manually check console';
+
+      result.innerHTML = `<pre>${output}</pre>`;
+      
+      testResults.test1 = passed;
+      section.className = passed ? 'test-section' : 'test-section warning';
+      updateOverallStatus();
+    }
+
+    // Test 2: Score Verification
+    function runTest2() {
+      const result = document.getElementById('result2');
+      const section = document.getElementById('test2');
+      
+      result.innerHTML = '<p>Analyzing scores on page...</p>';
+      
+      let output = '';
+      let passed = true;
+
+      // Extract scores from page
+      const bodyText = document.body.innerText;
+      const scoreMatches = bodyText.match(/(\d+)%\s*Match/g);
+      
+      if (!scoreMatches || scoreMatches.length === 0) {
+        output += '❌ No scores found on page\n';
+        output += '⚠️ Are you on the matching engine page?\n';
+        passed = false;
+      } else {
+        output += `✅ Found ${scoreMatches.length} score(s)\n\n`;
+        output += '📊 Scores detected:\n';
+        
+        const scores = scoreMatches.map(s => parseInt(s.match(/\d+/)[0]));
+        const uniqueScores = [...new Set(scores)];
+        
+        scores.forEach((score, i) => {
+          output += `   <span class="score-display">${score}%</span>`;
+          if ((i + 1) % 5 === 0) output += '\n';
+        });
+        
+        output += '\n\n';
+        output += `🎯 Unique scores: ${uniqueScores.length}\n\n`;
+        
+        // Check for failures
+        if (uniqueScores.length === 1) {
+          if (uniqueScores[0] === 85) {
+            output += '❌ CRITICAL: All scores are 85 (default fallback)\n';
+            output += '   → GOD algorithm is NOT running\n';
+            output += '   → Check that generateAdvancedMatches() is being called\n';
+            passed = false;
+          } else {
+            output += `❌ FAIL: All scores are the same (${uniqueScores[0]})\n`;
+            output += '   → Algorithm may be broken or not varying\n';
+            passed = false;
+          }
+        } else if (uniqueScores.length < 3 && scores.length > 5) {
+          output += '⚠️ WARNING: Very low score variation\n';
+          output += '   → May indicate algorithm issue\n';
+          passed = false;
+        } else {
+          output += '✅ PASS: Scores are varying correctly\n';
+          output += `   → Range: ${Math.min(...scores)} - ${Math.max(...scores)}%\n`;
+          output += `   → Average: ${(scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(1)}%\n`;
+        }
+      }
+
+      result.innerHTML = `<pre>${output}</pre>`;
+      testResults.test2 = passed;
+      section.className = passed ? 'test-section' : 'test-section fail';
+      updateOverallStatus();
+    }
+
+    // Test 3: Console Output
+    function runTest3() {
+      const result = document.getElementById('result3');
+      const section = document.getElementById('test3');
+      
+      let output = '';
+      let passed = true;
+
+      output += '📝 Console Output Check:\n\n';
+      output += 'Open your browser console (F12) and look for:\n\n';
+      output += '✓ 🧮 GOD Algorithm messages\n';
+      output += '✓ 📊 Component scores (Team, Traction, Market, etc.)\n';
+      output += '✓ 🎯 Matching bonuses\n';
+      output += '✓ 📈 Final scores\n\n';
+      output += '═══════════════════════════════════════\n';
+      output += 'Expected output should look like:\n';
+      output += '═══════════════════════════════════════\n\n';
+      output += '🧮 GOD Algorithm - Match #1 of 5\n';
+      output += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n';
+      output += '📊 Component Scores:\n';
+      output += '   🏆 Team:       82\n';
+      output += '   📈 Traction:   75\n';
+      output += '   🎯 Market:     88\n';
+      output += '   💡 Product:    78\n';
+      output += '🎯 Matching Bonuses: +15\n';
+      output += '📈 FINAL SCORE: 84.2 / 100\n\n';
+      output += '⚠️ If you DON\'T see this output:\n';
+      output += '   → Check DEBUG_GOD = true in matchingService.ts\n';
+      output += '   → Verify generateAdvancedMatches() is called\n';
+      output += '   → Reload the page and watch console\n';
+
+      result.innerHTML = `<pre>${output}</pre>`;
+      testResults.test3 = null; // Requires manual verification
+      section.className = 'test-section warning';
+      updateOverallStatus();
+    }
+
+    // Test 4: Navigation
+    function testRoute(route) {
+      const result = document.getElementById('result4');
+      result.innerHTML += `<p>Testing route: <strong>${route}</strong></p>`;
+      result.innerHTML += `<p><a href="${route}" target="_blank">→ Open ${route} in new tab</a></p>`;
+    }
+
+    // Run all tests
+    function runAllTests() {
+      runTest1();
+      setTimeout(() => runTest2(), 500);
+      setTimeout(() => runTest3(), 1000);
+    }
+
+    // Update overall status
+    function updateOverallStatus() {
+      const overall = document.getElementById('overall-status');
+      const results = Object.values(testResults);
+      const passed = results.filter(r => r === true).length;
+      const failed = results.filter(r => r === false).length;
+      const pending = results.filter(r => r === null).length;
+
+      let status = '';
+      let badge = '';
+
+      if (failed > 0) {
+        badge = '<span class="status-badge status-fail">❌ CRITICAL ISSUES</span>';
+        status += `<p>${badge}</p>`;
+        status += `<p>Failed: ${failed} | Passed: ${passed} | Pending: ${pending}</p>`;
+        status += '<p><strong>⚠️ Fix critical issues before proceeding</strong></p>';
+      } else if (pending > 0) {
+        badge = '<span class="status-badge status-warning">⏳ TESTING IN PROGRESS</span>';
+        status += `<p>${badge}</p>`;
+        status += `<p>Passed: ${passed} | Pending: ${pending}</p>`;
+      } else {
+        badge = '<span class="status-badge status-pass">✅ ALL TESTS PASSED</span>';
+        status += `<p>${badge}</p>`;
+        status += '<p><strong>🎉 Ready for full testing!</strong></p>';
+      }
+
+      overall.innerHTML = status;
+    }
+
+    // Generate report
+    function generateReport() {
+      let report = '=== HOT MONEY HONEY SMOKE TEST REPORT ===\n\n';
+      report += `Date: ${new Date().toLocaleString()}\n`;
+      report += `Browser: ${navigator.userAgent}\n\n`;
+      
+      report += '--- TEST RESULTS ---\n';
+      report += `Test 1 (Load): ${testResults.test1 === true ? 'PASS' : testResults.test1 === false ? 'FAIL' : 'PENDING'}\n`;
+      report += `Test 2 (Scores): ${testResults.test2 === true ? 'PASS' : testResults.test2 === false ? 'FAIL' : 'PENDING'}\n`;
+      report += `Test 3 (Console): ${testResults.test3 === true ? 'PASS' : testResults.test3 === false ? 'FAIL' : 'MANUAL CHECK'}\n`;
+      report += `Test 4 (Navigation): ${testResults.test4 === true ? 'PASS' : testResults.test4 === false ? 'FAIL' : 'PENDING'}\n\n`;
+      
+      const passed = Object.values(testResults).filter(r => r === true).length;
+      const failed = Object.values(testResults).filter(r => r === false).length;
+      
+      report += '--- SUMMARY ---\n';
+      report += `Passed: ${passed}\n`;
+      report += `Failed: ${failed}\n`;
+      report += `Overall: ${failed === 0 && passed > 0 ? 'READY FOR FULL TESTING' : 'NEEDS FIXES'}\n`;
+
+      console.log(report);
+      alert('Report generated! Check browser console for full report.');
+      
+      // Also copy to clipboard if possible
+      navigator.clipboard.writeText(report).then(() => {
+        console.log('Report copied to clipboard!');
+      }).catch(() => {
+        console.log('Report in console (clipboard copy failed)');
+      });
+    }
+
+    // Run initial tests on load
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        runTest1();
+      }, 500);
+    });
+  </script>
+</body>
+</html>

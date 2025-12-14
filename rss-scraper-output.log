@@ -1,0 +1,115 @@
+[dotenv@17.2.3] injecting env (5) from .env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+🚀 Starting RSS Scraping...
+
+📰 Found 14 enabled RSS sources
+
+
+📡 Scraping: AI News
+   URL: https://www.artificialintelligence-news.com
+   ❌ Error: Invalid character in entity name
+Line: 1
+Column: 491
+Char: &
+
+📡 Scraping: Crunchbase News
+   URL: https://news.crunchbase.com/feed/
+   ✅ Found 10 items
+   📅 10 articles from last 7 days
+   ⚠️  Failed to save article: SpaceX IPO At $1.5T Valuation Would Be 10x Larger ...
+   ⚠️  Failed to save article: The Founder’s Dilemma In The Age Of AI: Left Vs. R...
+   ⚠️  Failed to save article: Jeff Bezos’s Project Prometheus Joins The Unicorn ...
+   ⚠️  Failed to save article: Exclusive: Founded By Husband And Wife Team, Zed R...
+   ⚠️  Failed to save article: The Founder’s Dilemma In The Age of AI: Efficiency...
+   ⚠️  Failed to save article: Nuclear Fission Shows Continuing Popularity (With ...
+   ⚠️  Failed to save article: Hollywood Legend Turned Startup Investor Jeffrey K...
+   ⚠️  Failed to save article: The Week’s 10 Biggest Funding Rounds: Investors Ge...
+   ⚠️  Failed to save article: Yes, I’m Biased. But Still, Leading Unicorns Like ...
+   ⚠️  Failed to save article: Pets Are Getting More Pampered, And VCs Are Fundin...
+
+📡 Scraping: Founders Today
+   URL: https://www.founderstoday.news
+   ❌ Error: Invalid character in tag name
+Line: 46
+Column: 643
+Char: ;
+
+📡 Scraping: Morning News
+   URL: https://www.morningbrew.com/search
+   ❌ Error: Feed not recognized as RSS 1 or 2.
+
+📡 Scraping: PitchBook
+   URL: https://pitchbook.com/news/feed
+   ❌ Error: Status code 403
+
+📡 Scraping: Seeking Alpha Market News
+   URL: https://seekingalpha.com/market-news
+   ❌ Error: Feed not recognized as RSS 1 or 2.
+
+📡 Scraping: SOSV News
+   URL: https://sosv.com/news/
+   ❌ Error: Attribute without value
+Line: 102
+Column: 38
+Char: s
+
+📡 Scraping: TechCrunch
+   URL: https://techcrunch.com/feed/
+   ✅ Found 20 items
+   📅 20 articles from last 7 days
+   ⚠️  Failed to save article: Spotify tests more personalized, AI-powered ‘Promp...
+   ⚠️  Failed to save article: Overview Energy wants to beam energy from space to...
+   ⚠️  Failed to save article: OSHA investigating new crane accident at SpaceX’s ...
+   ⚠️  Failed to save article: Marco Rubio bans Calibri font at State Department ...
+   ⚠️  Failed to save article: YouTube TV to launch genre-based subscription plan...
+   ⚠️  Failed to save article: Reddit is testing verification badges...
+   ⚠️  Failed to save article: Google is testing AI-powered article overviews on ...
+   ⚠️  Failed to save article: Amazon changes how copyright protection is applied...
+   ⚠️  Failed to save article: ChatGPT is Apple’s most downloaded app of 2025 in ...
+   ⚠️  Failed to save article: Amazon now offers same-day delivery of perishable ...
+
+📡 Scraping: TechCrunch News
+   URL: https://techcrunch.com/latest/
+   ❌ Error: Invalid character in entity name
+Line: 54
+Column: 22
+Char: &
+
+📡 Scraping: The Information
+   URL: https://www.theinformation.com/feed
+   ❌ Error: Status code 403
+
+📡 Scraping: Venture Beat
+   URL: https://venturebeat.com
+   ❌ Error: Status code 429
+
+📡 Scraping: VentureBeat
+   URL: https://venturebeat.com/feed/
+   ✅ Found 7 items
+   📅 7 articles from last 7 days
+   ⚠️  Failed to save article: The AI that scored 95% — until consultants learned...
+   ⚠️  Failed to save article: OpenAI report reveals a 6x productivity gap betwee...
+   ⚠️  Failed to save article: How Hud's runtime sensor cut triage time from 3 ho...
+   ⚠️  Failed to save article: Quilter's AI just designed an 843‑part Linux compu...
+   ⚠️  Failed to save article: How Google’s TPUs are reshaping the economics of l...
+   ⚠️  Failed to save article: Mistral launches powerful Devstral 2 coding model ...
+   ⚠️  Failed to save article: Databricks' OfficeQA uncovers disconnect: AI agent...
+
+📡 Scraping: Wired---Venture News
+   URL: https://www.wired.com/tag/venture-capital/
+   ❌ Error: Invalid character in entity name
+Line: 1298
+Column: 24428
+Char: &
+
+📡 Scraping: YC News
+   URL: https://news.ycombinator.com
+   ❌ Error: Feed not recognized as RSS 1 or 2.
+
+============================================================
+📊 SCRAPING COMPLETE
+============================================================
+✅ Successful sources: 3
+❌ Failed sources: 11
+📄 Total new articles saved: 0
+============================================================
+

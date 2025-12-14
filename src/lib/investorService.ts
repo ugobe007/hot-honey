@@ -1,23 +1,33 @@
 import { supabase } from './supabase';
 
+/**
+ * Database column mapping:
+ * - sector_focus (DB) -> sectors (frontend)
+ * - stage_focus (DB) -> stage (frontend)
+ * - check_size_min/check_size_max (DB) -> checkSizeMin/checkSizeMax (frontend)
+ */
+
 export interface InvestorDB {
   id: string;
   name: string;
   type: 'vc_firm' | 'accelerator' | 'angel_network' | 'corporate_vc';
   tagline?: string;
-  description?: string;
+  bio?: string;  // DB uses 'bio' not 'description'
   website?: string;
   logo?: string;
   linkedin?: string;
   twitter?: string;
-  contact_email?: string;
+  email?: string;  // DB uses 'email' not 'contact_email'
   aum?: string;
   fund_size?: string;
-  check_size?: string;
-  stage?: string[];
-  sectors?: string[];
+  // Database columns for check size
+  check_size_min?: number;
+  check_size_max?: number;
+  // Database columns (correct names)
+  stage_focus?: string[];  // NOT 'stage'
+  sector_focus?: string[]; // NOT 'sectors'
   geography?: string;
-  portfolio_count?: number;
+  portfolio_size?: number;  // DB uses 'portfolio_size' not 'portfolio_count'
   exits?: number;
   unicorns?: number;
   notable_investments?: string[];
@@ -25,6 +35,59 @@ export interface InvestorDB {
   hot_honey_startups?: string[];
   created_at?: string;
   updated_at?: string;
+}
+
+// Frontend-friendly interface (what UI components expect)
+export interface InvestorFrontend {
+  id: string;
+  name: string;
+  type: string;
+  tagline?: string;
+  description?: string;
+  website?: string;
+  linkedin?: string;
+  twitter?: string;
+  contactEmail?: string;
+  aum?: string;
+  fundSize?: string;
+  checkSizeMin?: number;
+  checkSizeMax?: number;
+  stage?: string[];    // Mapped from stage_focus
+  sectors?: string[];  // Mapped from sector_focus
+  geography?: string;
+  portfolioCount?: number;
+  exits?: number;
+  unicorns?: number;
+  notableInvestments?: string[];
+}
+
+/**
+ * Maps database investor row to frontend-friendly format
+ */
+function mapInvestorToFrontend(dbInvestor: any): InvestorFrontend {
+  return {
+    id: dbInvestor.id,
+    name: dbInvestor.name,
+    type: dbInvestor.type || 'vc_firm',
+    tagline: dbInvestor.tagline,
+    description: dbInvestor.bio,  // Map bio -> description
+    website: dbInvestor.website,
+    linkedin: dbInvestor.linkedin,
+    twitter: dbInvestor.twitter,
+    contactEmail: dbInvestor.email,
+    aum: dbInvestor.aum,
+    fundSize: dbInvestor.fund_size,
+    checkSizeMin: dbInvestor.check_size_min,
+    checkSizeMax: dbInvestor.check_size_max,
+    // Map DB columns to frontend names
+    stage: dbInvestor.stage_focus || dbInvestor.stage || [],
+    sectors: dbInvestor.sector_focus || dbInvestor.sectors || [],
+    geography: dbInvestor.geography,
+    portfolioCount: dbInvestor.portfolio_size,
+    exits: dbInvestor.exits,
+    unicorns: dbInvestor.unicorns,
+    notableInvestments: dbInvestor.notable_investments,
+  };
 }
 
 export interface StartupUploadDB {
@@ -54,6 +117,7 @@ export interface StartupUploadDB {
 
 // Investor functions
 export async function getAllInvestors() {
+  // Prioritize VC Firms and known entities over individual names
   const { data, error } = await supabase
     .from('investors')
     .select('*')
@@ -64,7 +128,26 @@ export async function getAllInvestors() {
     return { data: null, error };
   }
 
-  return { data, error: null };
+  // Prioritize by type: VC Firm > Accelerator > Corporate VC > VC > Angel
+  const typeOrder: Record<string, number> = {
+    'VC Firm': 1,
+    'Accelerator': 2, 
+    'Corporate VC': 3,
+    'VC': 4,
+    'Angel': 5
+  };
+  
+  const sorted = data?.sort((a, b) => {
+    const orderA = typeOrder[a.type] || 10;
+    const orderB = typeOrder[b.type] || 10;
+    return orderA - orderB;
+  }) || [];
+  
+  console.log(`📊 Investors sorted: ${sorted.filter(i => i.type === 'VC Firm').length} VC Firms, ${sorted.filter(i => i.type === 'VC').length} VCs, ${sorted.filter(i => i.type === 'Angel').length} Angels`);
+
+  // Map database columns to frontend-friendly format
+  const mappedData = sorted.map(mapInvestorToFrontend) || null;
+  return { data: mappedData, error: null };
 }
 
 export async function getInvestorById(id: string) {
@@ -79,7 +162,9 @@ export async function getInvestorById(id: string) {
     return { data: null, error };
   }
 
-  return { data, error: null };
+  // Map to frontend format
+  const mappedData = data ? mapInvestorToFrontend(data) : null;
+  return { data: mappedData, error: null };
 }
 
 export async function searchInvestors(query: string, type?: string) {
@@ -95,7 +180,7 @@ export async function searchInvestors(query: string, type?: string) {
     queryBuilder = queryBuilder.eq('type', type);
   }
 
-  queryBuilder = queryBuilder.order('hot_honey_investments', { ascending: false });
+  queryBuilder = queryBuilder.order('created_at', { ascending: false });
 
   const { data, error } = await queryBuilder;
 
@@ -104,7 +189,9 @@ export async function searchInvestors(query: string, type?: string) {
     return { data: null, error };
   }
 
-  return { data, error: null };
+  // Map to frontend format
+  const mappedData = data?.map(mapInvestorToFrontend) || null;
+  return { data: mappedData, error: null };
 }
 
 export async function createInvestor(investor: Omit<InvestorDB, 'id' | 'created_at' | 'updated_at'>) {

@@ -191,18 +191,22 @@ const VotePage: React.FC = () => {
           </button>
         </div>
 
-        <div className="flex items-center justify-center min-h-screen pt-20">
-          <div className="text-center bg-white rounded-2xl p-12 shadow-xl max-w-2xl mx-4">
-            <h2 className="text-6xl font-bold mb-4">🎉</h2>
-            <h3 className="text-4xl font-bold text-slate-800 mb-4">All Done!</h3>
-            <p className="text-xl text-slate-600 mb-8">You've voted on all {totalStartupCount} startups!</p>
+        <div className="flex items-center justify-center min-h-screen pt-20 relative z-10">
+          <div className="text-center bg-gradient-to-br from-purple-900/60 to-indigo-900/60 backdrop-blur-lg border-2 border-purple-500/30 rounded-3xl p-12 shadow-2xl max-w-2xl mx-4">
+            <h2 className="text-8xl mb-6">🎉</h2>
+            <h3 className="text-5xl font-bold mb-4">
+              <span className="bg-gradient-to-r from-green-400 via-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+                All Done!
+              </span>
+            </h3>
+            <p className="text-2xl text-white mb-8">You've voted on all {totalStartupCount} startups!</p>
             <div className="flex gap-4 justify-center flex-wrap">
-              <Link to="/dashboard" className="px-8 py-3 bg-amber-500 text-white rounded-lg font-medium text-lg hover:bg-amber-600 transition-colors shadow-lg">
+              <Link to="/dashboard" className="px-8 py-4 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white rounded-xl font-bold text-lg transition-all shadow-lg hover:scale-105 border-2 border-orange-400/30">
                 View My Hot Picks 🔥
               </Link>
               <button
                 onClick={handleResetVotes}
-                className="px-8 py-3 bg-slate-500 text-white rounded-lg font-medium text-lg hover:bg-slate-600 transition-colors shadow-lg"
+                className="px-8 py-4 bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 text-white rounded-xl font-bold text-lg transition-all shadow-lg hover:scale-105 border-2 border-gray-600/30"
               >
                 🔄 Reset & Vote Again
               </button>
@@ -214,7 +218,13 @@ const VotePage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-slate-100">
+    <div className="min-h-screen bg-gradient-to-b from-[#160020] via-[#240032] to-[#330044] relative overflow-hidden">
+      {/* Animated background */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 left-10 w-64 h-64 bg-[#9400cd]/5 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-[#9400cd]/5 rounded-full blur-3xl animate-pulse"></div>
+      </div>
+
       {/* Hamburger Menu */}
       <HamburgerMenu />
 
@@ -222,35 +232,56 @@ const VotePage: React.FC = () => {
       <div className="fixed top-6 left-1/2 transform -translate-x-1/2 z-40">
         <button
           onClick={() => navigate('/')}
-          className="px-4 py-2 rounded-full bg-gradient-to-b from-slate-300 via-slate-200 to-slate-400 text-slate-800 font-medium text-sm flex items-center gap-2 shadow-lg hover:from-slate-400 hover:via-slate-300 hover:to-slate-500 transition-all cursor-pointer"
-          style={{
-            boxShadow: '0 4px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.8), inset 0 -1px 0 rgba(0,0,0,0.2)',
-            textShadow: '0 1px 1px rgba(255,255,255,0.8)'
-          }}>
+          className="px-6 py-3 rounded-full bg-gradient-to-r from-green-500 via-emerald-500 to-green-600 text-white font-bold text-sm flex items-center gap-2 shadow-xl hover:from-green-600 hover:via-emerald-600 hover:to-green-700 transition-all cursor-pointer hover:scale-105 border-2 border-green-400/30">
           <span>🗳️</span>
           <span>Vote</span>
         </button>
       </div>
 
-      <div className="pt-28 px-8 pb-16">
-        <div className="mb-8 text-center">
-          <div className="flex justify-between items-center max-w-7xl mx-auto mb-4">
-            <div className="flex-1">
-              <h1 className="text-5xl font-bold text-orange-600 mb-3">
-                🔥 Vote on Startups
+      {/* Loading State */}
+      {loading && (
+        <div className="flex items-center justify-center min-h-screen pt-28">
+          <div className="text-center">
+            <div className="inline-block animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-purple-400 mb-4"></div>
+            <div className="text-white text-2xl font-bold">Loading Startups...</div>
+          </div>
+        </div>
+      )}
+
+      {/* Main Content - Only show if not loading */}
+      {!loading && (
+        <>
+      <div className="relative z-10 pt-28 px-8 pb-16">
+        <div className="mb-12 text-center">
+          <div className="max-w-7xl mx-auto">
+            {/* Header */}
+            <div className="mb-8">
+              <h1 className="text-6xl font-bold mb-4">
+                <span className="bg-gradient-to-r from-green-400 via-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+                  🔥 Vote on Startups
+                </span>
               </h1>
-              <p className="text-xl text-slate-700">
-                <span className="font-bold text-orange-500">{unvotedStartups.length}</span> of {totalStartupCount} {unvotedStartups.length === 1 ? 'startup' : 'startups'} remaining
-              </p>
-              {showFiltered && (
-                <div className="mt-2 inline-block bg-purple-500 text-white px-4 py-2 rounded-full text-sm font-semibold">
-                  🎯 Showing only your preferred industries
+              <div className="flex items-center justify-center gap-4">
+                <div className="px-6 py-3 bg-gradient-to-r from-purple-600/30 to-indigo-600/30 backdrop-blur-sm border border-purple-400/30 rounded-xl">
+                  <p className="text-2xl text-white">
+                    <span className="font-bold text-orange-400">{unvotedStartups.length}</span>
+                    <span className="text-gray-300"> of </span>
+                    <span className="font-bold text-cyan-400">{totalStartupCount}</span>
+                    <span className="text-gray-300"> {unvotedStartups.length === 1 ? 'startup' : 'startups'} remaining</span>
+                  </p>
                 </div>
-              )}
+                {showFiltered && (
+                  <div className="px-4 py-2 bg-gradient-to-r from-purple-500/20 to-indigo-500/20 border border-purple-400/30 text-purple-300 rounded-full text-sm font-semibold backdrop-blur-sm">
+                    🎯 Filtered by your preferences
+                  </div>
+                )}
+              </div>
             </div>
+            
+            {/* Reset Button */}
             <button
               onClick={handleResetVotes}
-              className="px-4 py-2 bg-gray-500 text-white rounded-lg font-medium text-sm hover:bg-gray-600 transition-colors shadow-lg"
+              className="px-6 py-3 bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 text-white rounded-xl font-medium text-sm transition-all shadow-lg border-2 border-gray-600/30 hover:scale-105"
             >
               🔄 Reset All Votes
             </button>
@@ -338,6 +369,8 @@ const VotePage: React.FC = () => {
             {toastMessage}
           </div>
         </div>
+      )}
+      </>
       )}
     </div>
   );

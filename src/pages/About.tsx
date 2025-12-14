@@ -1,445 +1,328 @@
-import { useNavigate } from 'react-router-dom';
-import HamburgerMenu from '../components/HamburgerMenu';
+import { Link } from 'react-router-dom';
+import { Zap, Target, Users, Brain, Rocket, Shield, Star, TrendingUp, Heart, ArrowRight, CheckCircle2, Sparkles } from 'lucide-react';
+import LogoDropdownMenu from '../components/LogoDropdownMenu';
 
 export default function About() {
-  const navigate = useNavigate();
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-slate-100 p-8 relative">
-      {/* Hamburger Menu */}
-      <HamburgerMenu />
-
-      {/* Current Page Button */}
-      <div className="fixed top-6 left-1/2 transform -translate-x-1/2 z-40">
-        <button
-          onClick={() => navigate('/')}
-          className="px-4 py-2 rounded-full bg-gradient-to-b from-slate-300 via-slate-200 to-slate-400 text-slate-800 font-medium text-sm flex items-center gap-2 shadow-lg hover:from-slate-400 hover:via-slate-300 hover:to-slate-500 transition-all cursor-pointer"
-          style={{
-            boxShadow: '0 4px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.8), inset 0 -1px 0 rgba(0,0,0,0.2)',
-            textShadow: '0 1px 1px rgba(255,255,255,0.8)'
-          }}>
-          <span>ℹ️</span>
-          <span>About Us</span>
-        </button>
+    <div className="min-h-screen bg-gradient-to-br from-[#0a0015] via-[#1a0a2e] to-[#0f0520] text-white relative overflow-hidden">
+      {/* Background Effects */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 left-10 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-pink-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
       </div>
-      
-      <div className="max-w-4xl mx-auto relative z-10 pt-20">
 
-        {/* Header */}
-        <div className="text-center mb-12">
-          <div className="text-8xl mb-4">🔥</div>
-          <h1 className="text-5xl font-bold text-orange-600 mb-4">
-            About Hot Money
+      {/* Logo Dropdown Menu */}
+      <LogoDropdownMenu />
+
+      {/* Navigation Buttons - Top Right */}
+      <div className="fixed top-6 right-8 z-50 flex items-center gap-4">
+        <Link 
+          to="/get-matched" 
+          className="px-5 py-2.5 bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-500 hover:to-amber-600 text-purple-900 font-bold rounded-xl transition-all shadow-lg"
+        >
+          Get Matched
+        </Link>
+        <Link 
+          to="/login" 
+          className="px-5 py-2.5 bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-500 hover:to-amber-600 text-purple-900 font-bold rounded-xl transition-all shadow-lg"
+        >
+          Log In
+        </Link>
+      </div>
+
+      <div className="relative z-10 container mx-auto px-8 pt-32 pb-20">
+        {/* Hero Section */}
+        <div className="text-center mb-20">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-500/20 to-cyan-500/20 border border-purple-500/30 rounded-full mb-6">
+            <Sparkles className="w-4 h-4 text-purple-400" />
+            <span className="text-purple-300 text-sm font-medium">AI-Powered Startup-Investor Matching</span>
+          </div>
+          <h1 className="text-5xl md:text-7xl font-bold mb-6">
+            About <span className="bg-gradient-to-r from-orange-400 via-red-500 to-yellow-400 bg-clip-text text-transparent">Hot Match</span>
           </h1>
-          <p className="text-2xl text-orange-500 font-semibold mb-2">
-            "Get Them While They're Hot."
-          </p>
-          <p className="text-xl text-slate-700 font-medium">
-            A Social Discovery Platform for Investors and Startups
+          <p className="text-2xl text-gray-300 max-w-3xl mx-auto mb-8">
+            Where AI meets intuition to create perfect startup-investor connections in seconds.
           </p>
         </div>
 
-        {/* Content Container */}
-        <div className="bg-white/95 backdrop-blur-lg rounded-3xl shadow-2xl p-12 border-2 border-orange-200">
-          {/* Our Approach */}
-          <section className="mb-8">
-            <h2 className="text-3xl font-bold text-orange-600 mb-4">Our Approach</h2>
-            <p className="text-lg text-gray-700 leading-relaxed mb-4">
-              Hot Honey is a <strong>social discovery platform</strong> that transforms how early-stage investors and startups connect. We've created a <strong>courtship process</strong> for investment—where chemistry develops before capital flows.
+        {/* Mission Statement */}
+        <div className="max-w-4xl mx-auto mb-20">
+          <div className="bg-gradient-to-br from-purple-900/50 to-indigo-900/50 backdrop-blur-lg rounded-3xl p-10 border border-purple-500/30 shadow-2xl">
+            <div className="flex items-center gap-4 mb-6">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center shadow-lg">
+                <Target className="w-8 h-8 text-white" />
+              </div>
+              <h2 className="text-3xl font-bold text-white">Our Mission</h2>
+            </div>
+            <p className="text-xl text-gray-300 leading-relaxed">
+              Hot Match transforms the chaotic world of startup fundraising into an intelligent, 
+              data-driven experience. We believe every great startup deserves to meet their perfect 
+              investor match—and every investor deserves to discover their next portfolio winner.
             </p>
-            
-            <div className="bg-gradient-to-br from-orange-50 to-yellow-50 rounded-2xl p-6 mb-4">
-              <h3 className="text-xl font-bold text-orange-600 mb-3">The 5-Point Discovery Framework</h3>
-              <p className="text-gray-700 mb-4 leading-relaxed">
-                At the heart of our approach is the <strong>5-Point StartupCard</strong>—a precisely designed format that condenses each startup's story into bite-sized, essential information. This creates <strong>quick interest</strong> and allows both investors and startups to develop genuine connections through progressive discovery.
-              </p>
-              
-              <div className="space-y-3">
-                <div className="flex items-start gap-3">
-                  <span className="text-2xl">1️⃣</span>
-                  <div>
-                    <strong className="text-gray-800">The Problem:</strong>
-                    <span className="text-gray-700"> Investors instantly understand the pain point being solved</span>
-                  </div>
+          </div>
+        </div>
+
+        {/* How It Works */}
+        <div className="mb-20">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-white mb-4">How Hot Match Works</h2>
+            <p className="text-xl text-gray-400">AI-powered matching in three simple steps</p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {/* Step 1 */}
+            <div className="group relative">
+              <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-pink-600 rounded-3xl blur opacity-25 group-hover:opacity-50 transition-opacity"></div>
+              <div className="relative bg-gradient-to-br from-[#1a0033] to-[#2d1b4e] rounded-3xl p-8 border border-purple-500/30 h-full">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500 to-violet-600 flex items-center justify-center mb-6 shadow-lg">
+                  <span className="text-2xl font-bold text-white">1</span>
                 </div>
-                <div className="flex items-start gap-3">
-                  <span className="text-2xl">2️⃣</span>
-                  <div>
-                    <strong className="text-gray-800">The Solution:</strong>
-                    <span className="text-gray-700"> The startup's unique approach becomes immediately clear</span>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <span className="text-2xl">3️⃣</span>
-                  <div>
-                    <strong className="text-gray-800">Market Size:</strong>
-                    <span className="text-gray-700"> The opportunity scale sparks investor curiosity</span>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <span className="text-2xl">4️⃣</span>
-                  <div>
-                    <strong className="text-gray-800">Team Companies:</strong>
-                    <span className="text-gray-700"> Credibility is established through founder pedigree</span>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <span className="text-2xl">💰</span>
-                  <div>
-                    <strong className="text-gray-800">Investment Amount:</strong>
-                    <span className="text-gray-700"> Investors know exactly what's being raised</span>
-                  </div>
-                </div>
+                <h3 className="text-2xl font-bold text-white mb-4">Create Your Profile</h3>
+                <p className="text-gray-400 leading-relaxed">
+                  Startups share their pitch using our 5-point format. Investors define their thesis, 
+                  check size, and sector preferences. Our AI learns what makes you unique.
+                </p>
               </div>
             </div>
 
-            <div className="bg-purple-50 border-2 border-purple-300 rounded-2xl p-6">
-              <h3 className="text-xl font-bold text-purple-700 mb-3">🤝 The Courtship Process</h3>
-              <p className="text-gray-700 leading-relaxed mb-3">
-                Like dating, investing is about building trust and chemistry. Our platform mimics the natural courtship process:
-              </p>
-              <ul className="space-y-2 text-gray-700">
-                <li className="flex gap-2">
-                  <span className="font-bold">💭</span>
-                  <span><strong>First Impression:</strong> The 5-point card creates instant curiosity</span>
+            {/* Step 2 */}
+            <div className="group relative">
+              <div className="absolute -inset-1 bg-gradient-to-r from-orange-600 to-red-600 rounded-3xl blur opacity-25 group-hover:opacity-50 transition-opacity"></div>
+              <div className="relative bg-gradient-to-br from-[#1a0033] to-[#2d1b4e] rounded-3xl p-8 border border-orange-500/30 h-full">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center mb-6 shadow-lg">
+                  <span className="text-2xl font-bold text-white">2</span>
+                </div>
+                <h3 className="text-2xl font-bold text-white mb-4">AI Finds Your Match</h3>
+                <p className="text-gray-400 leading-relaxed">
+                  Our GOD Algorithm (Gather, Optimize, Deliver) analyzes hundreds of data points 
+                  to calculate compatibility scores and find your perfect matches instantly.
+                </p>
+              </div>
+            </div>
+
+            {/* Step 3 */}
+            <div className="group relative">
+              <div className="absolute -inset-1 bg-gradient-to-r from-emerald-600 to-cyan-600 rounded-3xl blur opacity-25 group-hover:opacity-50 transition-opacity"></div>
+              <div className="relative bg-gradient-to-br from-[#1a0033] to-[#2d1b4e] rounded-3xl p-8 border border-emerald-500/30 h-full">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-cyan-500 flex items-center justify-center mb-6 shadow-lg">
+                  <span className="text-2xl font-bold text-white">3</span>
+                </div>
+                <h3 className="text-2xl font-bold text-white mb-4">Connect & Close</h3>
+                <p className="text-gray-400 leading-relaxed">
+                  Review AI-generated explanations for each match. Swipe to show interest. 
+                  When both sides match, unlock direct communication and start your partnership.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* The GOD Algorithm */}
+        <div className="mb-20">
+          <div className="max-w-5xl mx-auto">
+            <div className="bg-gradient-to-br from-indigo-900/50 to-purple-900/50 backdrop-blur-lg rounded-3xl p-10 border border-indigo-500/30 shadow-2xl">
+              <div className="flex items-center gap-4 mb-8">
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg">
+                  <Brain className="w-8 h-8 text-white" />
+                </div>
+                <div>
+                  <h2 className="text-3xl font-bold text-white">The GOD Algorithm</h2>
+                  <p className="text-indigo-300">Gather • Optimize • Deliver</p>
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-3 gap-6">
+                <div className="bg-black/30 rounded-2xl p-6 border border-indigo-500/20">
+                  <div className="text-3xl mb-3">🔍</div>
+                  <h4 className="text-xl font-bold text-white mb-2">Gather</h4>
+                  <p className="text-gray-400 text-sm">
+                    Collects data from profiles, market trends, investment history, and sector dynamics 
+                    to build comprehensive understanding.
+                  </p>
+                </div>
+                <div className="bg-black/30 rounded-2xl p-6 border border-purple-500/20">
+                  <div className="text-3xl mb-3">⚡</div>
+                  <h4 className="text-xl font-bold text-white mb-2">Optimize</h4>
+                  <p className="text-gray-400 text-sm">
+                    Applies machine learning to score compatibility across stage fit, sector alignment, 
+                    check size match, and thesis overlap.
+                  </p>
+                </div>
+                <div className="bg-black/30 rounded-2xl p-6 border border-violet-500/20">
+                  <div className="text-3xl mb-3">🎯</div>
+                  <h4 className="text-xl font-bold text-white mb-2">Deliver</h4>
+                  <p className="text-gray-400 text-sm">
+                    Presents ranked matches with AI-generated explanations, next steps, and 
+                    actionable insights for both parties.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Why Hot Match */}
+        <div className="mb-20">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-white mb-4">Why Choose Hot Match?</h2>
+            <p className="text-xl text-gray-400">Built for the modern fundraising landscape</p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+            <div className="bg-gradient-to-br from-[#1a0033]/80 to-[#2d1b4e]/80 backdrop-blur-lg rounded-2xl p-6 border border-purple-500/20 text-center hover:scale-105 transition-all">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-yellow-500 to-orange-500 flex items-center justify-center mx-auto mb-4 shadow-lg">
+                <Zap className="w-6 h-6 text-white" />
+              </div>
+              <h3 className="text-lg font-bold text-white mb-2">Lightning Fast</h3>
+              <p className="text-gray-400 text-sm">Find matches in 60 seconds, not 6 months</p>
+            </div>
+            <div className="bg-gradient-to-br from-[#1a0033]/80 to-[#2d1b4e]/80 backdrop-blur-lg rounded-2xl p-6 border border-purple-500/20 text-center hover:scale-105 transition-all">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-indigo-500 flex items-center justify-center mx-auto mb-4 shadow-lg">
+                <Shield className="w-6 h-6 text-white" />
+              </div>
+              <h3 className="text-lg font-bold text-white mb-2">Privacy First</h3>
+              <p className="text-gray-400 text-sm">Investor identities protected until mutual interest</p>
+            </div>
+            <div className="bg-gradient-to-br from-[#1a0033]/80 to-[#2d1b4e]/80 backdrop-blur-lg rounded-2xl p-6 border border-purple-500/20 text-center hover:scale-105 transition-all">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-cyan-500 flex items-center justify-center mx-auto mb-4 shadow-lg">
+                <TrendingUp className="w-6 h-6 text-white" />
+              </div>
+              <h3 className="text-lg font-bold text-white mb-2">Data-Driven</h3>
+              <p className="text-gray-400 text-sm">500+ investors, 700+ startups in our network</p>
+            </div>
+            <div className="bg-gradient-to-br from-[#1a0033]/80 to-[#2d1b4e]/80 backdrop-blur-lg rounded-2xl p-6 border border-purple-500/20 text-center hover:scale-105 transition-all">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center mx-auto mb-4 shadow-lg">
+                <Heart className="w-6 h-6 text-white" />
+              </div>
+              <h3 className="text-lg font-bold text-white mb-2">Human Touch</h3>
+              <p className="text-gray-400 text-sm">AI suggestions with human-readable explanations</p>
+            </div>
+          </div>
+        </div>
+
+        {/* For Startups & Investors */}
+        <div className="mb-20">
+          <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+            {/* For Startups */}
+            <div className="bg-gradient-to-br from-emerald-900/40 to-cyan-900/40 backdrop-blur-lg rounded-3xl p-8 border border-emerald-500/30">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-cyan-500 flex items-center justify-center">
+                  <Rocket className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-2xl font-bold text-white">For Startups</h3>
+              </div>
+              <ul className="space-y-4">
+                <li className="flex items-start gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-400 mt-0.5 flex-shrink-0" />
+                  <span className="text-gray-300">Get matched with investors who actually invest in your stage & sector</span>
                 </li>
-                <li className="flex gap-2">
-                  <span className="font-bold">🍯</span>
-                  <span><strong>Progressive Reveal:</strong> Information unlocks as interest grows (honeypot secrets)</span>
+                <li className="flex items-start gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-400 mt-0.5 flex-shrink-0" />
+                  <span className="text-gray-300">Skip cold outreach—let AI find warm introductions</span>
                 </li>
-                <li className="flex gap-2">
-                  <span className="font-bold">🔒</span>
-                  <span><strong>Protected Privacy:</strong> Investors stay anonymous until Stage 3</span>
+                <li className="flex items-start gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-400 mt-0.5 flex-shrink-0" />
+                  <span className="text-gray-300">See exactly why each investor is a good fit</span>
                 </li>
-                <li className="flex gap-2">
-                  <span className="font-bold">🔥</span>
-                  <span><strong>Social Proof:</strong> Votes and heat meters show collective validation</span>
+                <li className="flex items-start gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-400 mt-0.5 flex-shrink-0" />
+                  <span className="text-gray-300">Track investor interest and engagement in real-time</span>
                 </li>
-                <li className="flex gap-2">
-                  <span className="font-bold">💬</span>
-                  <span><strong>Commitment:</strong> Only interested parties proceed to serious conversations</span>
+                <li className="flex items-start gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-400 mt-0.5 flex-shrink-0" />
+                  <span className="text-gray-300">Access to 500+ verified active investors</span>
                 </li>
               </ul>
             </div>
-          </section>
 
-          {/* The Problem */}
-          <section className="mb-8">
-            <h2 className="text-3xl font-bold text-orange-600 mb-4">The Problem We Solve</h2>
-            <p className="text-lg text-gray-700 leading-relaxed mb-4">
-              Millions of startups compete for over 1.2 million active investors, yet less than 3% ever connect meaningfully.
-            </p>
-            <div className="bg-orange-50 rounded-2xl p-6 mb-4">
-              <ul className="space-y-3 text-gray-700">
-                <li className="flex gap-3">
-                  <span className="text-orange-600 font-bold">•</span>
-                  <span><strong>Data-driven platforms</strong> like AngelList or Carta provide credibility but lack engagement.</span>
+            {/* For Investors */}
+            <div className="bg-gradient-to-br from-purple-900/40 to-indigo-900/40 backdrop-blur-lg rounded-3xl p-8 border border-purple-500/30">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-indigo-500 flex items-center justify-center">
+                  <Users className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-2xl font-bold text-white">For Investors</h3>
+              </div>
+              <ul className="space-y-4">
+                <li className="flex items-start gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" />
+                  <span className="text-gray-300">Discover pre-vetted startups that match your thesis</span>
                 </li>
-                <li className="flex gap-3">
-                  <span className="text-orange-600 font-bold">•</span>
-                  <span><strong>Social platforms</strong> like LinkedIn and X provide energy but lack structure and verification.</span>
+                <li className="flex items-start gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" />
+                  <span className="text-gray-300">Stay anonymous until you choose to reveal yourself</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" />
+                  <span className="text-gray-300">AI filters through 700+ startups to find your winners</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" />
+                  <span className="text-gray-300">Vote and track trending startups before they blow up</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" />
+                  <span className="text-gray-300">Efficient deal flow—review matches in minutes, not hours</span>
                 </li>
               </ul>
             </div>
-            <p className="text-lg text-gray-700 leading-relaxed font-semibold">
-              Hot Honey fills the gap by combining both worlds—trust and excitement.
-            </p>
-          </section>
+          </div>
+        </div>
 
-          {/* The Solution */}
-          <section className="mb-8">
-            <h2 className="text-3xl font-bold text-orange-600 mb-4">The Solution</h2>
-            <p className="text-lg text-gray-700 leading-relaxed mb-4">
-              The platform guides users through a five-step emotional and functional journey:
-            </p>
-            <div className="overflow-x-auto">
-              <table className="w-full border-collapse">
-                <thead>
-                  <tr className="bg-gradient-to-r from-orange-500 to-orange-600 text-white">
-                    <th className="p-3 text-left rounded-tl-xl">Step</th>
-                    <th className="p-3 text-left">Stage</th>
-                    <th className="p-3 text-left rounded-tr-xl">Description</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="bg-orange-100">
-                    <td className="p-3 font-bold text-slate-800">1</td>
-                    <td className="p-3 font-semibold text-slate-800">Discovery</td>
-                    <td className="p-3 text-slate-700">Swipe-based exploration with concise, five-point StartupCards</td>
-                  </tr>
-                  <tr className="bg-white">
-                    <td className="p-3 font-bold text-slate-800">2</td>
-                    <td className="p-3 font-semibold text-slate-800">Attraction</td>
-                    <td className="p-3 text-slate-700">Startups with 5+ "Yes" votes unlock added visibility and data</td>
-                  </tr>
-                  <tr className="bg-orange-100">
-                    <td className="p-3 font-bold text-slate-800">3</td>
-                    <td className="p-3 font-semibold text-slate-800">Reveal</td>
-                    <td className="p-3 text-slate-700">Investors disclose identity for private, time-bound pitch meetings</td>
-                  </tr>
-                  <tr className="bg-white">
-                    <td className="p-3 font-bold text-slate-800">4</td>
-                    <td className="p-3 font-semibold text-slate-800">Commitment</td>
-                    <td className="p-3 text-slate-700">Deal Room access with NDA, decks, and analytics</td>
-                  </tr>
-                  <tr className="bg-orange-100">
-                    <td className="p-3 font-bold text-slate-800">5</td>
-                    <td className="p-3 font-semibold text-slate-800">Social Sharing</td>
-                    <td className="p-3 text-slate-700">Once a startup is "Hot," investors share it socially—fueling virality</td>
-                  </tr>
-                </tbody>
-              </table>
+        {/* Stats Section */}
+        <div className="mb-20">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-5xl mx-auto">
+            <div className="bg-gradient-to-br from-[#1a0033]/80 to-[#2d1b4e]/80 backdrop-blur-lg rounded-2xl p-6 border border-purple-500/20 text-center">
+              <div className="text-4xl font-bold bg-gradient-to-r from-orange-400 to-yellow-400 bg-clip-text text-transparent mb-2">700+</div>
+              <div className="text-gray-400">Startups</div>
             </div>
-            <p className="text-lg text-gray-700 leading-relaxed mt-4 italic">
-              This process transforms curiosity into confidence and commitment—the logic of human trust, encoded into a platform.
-            </p>
-          </section>
-
-          {/* The 5-Point Format */}
-          <section className="mb-8">
-            <h2 className="text-3xl font-bold text-orange-600 mb-4">The 5-Point Format</h2>
-            <p className="text-lg text-gray-700 leading-relaxed mb-4">
-              At the heart of Hot Honey is our <strong>5-point StartupCard format</strong>—a precisely designed data structure that condenses each startup's elevator pitch into a bite-size card that reveals just enough of what is important.
-            </p>
-            <p className="text-lg text-gray-700 leading-relaxed mb-6">
-              <strong>Hot Honey helps identify quality investment candidates faster and with more precision.</strong> The Hot Money Process enables quick discovery without all the overhead and utilizes crowd and market intelligence to identify the winners.
-            </p>
-            
-            <div className="bg-gradient-to-br from-orange-50 to-yellow-50 rounded-2xl p-6 mb-6">
-              <h3 className="text-xl font-bold text-orange-600 mb-4">The Five Essential Points</h3>
-              <div className="space-y-3">
-                <div className="flex gap-3 items-start">
-                  <span className="text-2xl">1️⃣</span>
-                  <div>
-                    <strong className="text-gray-800">The Problem:</strong>
-                    <span className="text-gray-700"> What pain point is being solved?</span>
-                  </div>
-                </div>
-                <div className="flex gap-3 items-start">
-                  <span className="text-2xl">2️⃣</span>
-                  <div>
-                    <strong className="text-gray-800">The Solution:</strong>
-                    <span className="text-gray-700"> How does the startup solve it?</span>
-                  </div>
-                </div>
-                <div className="flex gap-3 items-start">
-                  <span className="text-2xl">3️⃣</span>
-                  <div>
-                    <strong className="text-gray-800">Market Size:</strong>
-                    <span className="text-gray-700"> What's the opportunity scale?</span>
-                  </div>
-                </div>
-                <div className="flex gap-3 items-start">
-                  <span className="text-2xl">4️⃣</span>
-                  <div>
-                    <strong className="text-gray-800">Team Companies:</strong>
-                    <span className="text-gray-700"> Where have the founders worked before?</span>
-                  </div>
-                </div>
-                <div className="flex gap-3 items-start">
-                  <span className="text-2xl">💰</span>
-                  <div>
-                    <strong className="text-gray-800">Investment Amount:</strong>
-                    <span className="text-gray-700"> How much are they raising?</span>
-                  </div>
-                </div>
-              </div>
+            <div className="bg-gradient-to-br from-[#1a0033]/80 to-[#2d1b4e]/80 backdrop-blur-lg rounded-2xl p-6 border border-purple-500/20 text-center">
+              <div className="text-4xl font-bold bg-gradient-to-r from-orange-400 to-yellow-400 bg-clip-text text-transparent mb-2">500+</div>
+              <div className="text-gray-400">Investors</div>
             </div>
-
-            <div className="bg-white border-2 border-orange-300 rounded-2xl p-6 mb-4">
-              <h3 className="text-xl font-bold text-orange-600 mb-3 flex items-center gap-2">
-                🍯 Progressive Information Reveal
-              </h3>
-              <p className="text-gray-700 mb-3">
-                Critical traction data and sensitive business metrics are hidden behind the <strong>honeypot icon</strong>. This information unlocks progressively as startups advance through stages, ensuring the right information is revealed at the right time.
-              </p>
-              <p className="text-gray-700">
-                This structured reveal process allows investors to make quick, informed decisions at each stage without information overload—reviewing what is most important before proceeding.
-              </p>
+            <div className="bg-gradient-to-br from-[#1a0033]/80 to-[#2d1b4e]/80 backdrop-blur-lg rounded-2xl p-6 border border-purple-500/20 text-center">
+              <div className="text-4xl font-bold bg-gradient-to-r from-orange-400 to-yellow-400 bg-clip-text text-transparent mb-2">337+</div>
+              <div className="text-gray-400">Matches Made</div>
             </div>
-
-            <div className="bg-purple-100 border-2 border-purple-400 rounded-2xl p-6">
-              <h3 className="text-xl font-bold text-purple-700 mb-3 flex items-center gap-2">
-                🔒 Investor Anonymity Until Stage 3
-              </h3>
-              <p className="text-gray-700 mb-3">
-                <strong>Investors remain completely anonymous during the Discovery and Attraction stages.</strong> Your identity is not disclosed to startups until you reach <strong>Stage 3 (Reveal)</strong>—when you actively choose to disclose your identity for private, time-bound pitch meetings.
-              </p>
-              <p className="text-gray-700">
-                This anonymity ensures unbiased review, privacy during the discovery process, and gives investors full control over when and how they engage with founders.
-              </p>
+            <div className="bg-gradient-to-br from-[#1a0033]/80 to-[#2d1b4e]/80 backdrop-blur-lg rounded-2xl p-6 border border-purple-500/20 text-center">
+              <div className="text-4xl font-bold bg-gradient-to-r from-orange-400 to-yellow-400 bg-clip-text text-transparent mb-2">60s</div>
+              <div className="text-gray-400">Average Match Time</div>
             </div>
-          </section>
-
-          {/* Market Opportunity */}
-          <section className="mb-8">
-            <h2 className="text-3xl font-bold text-orange-600 mb-4">The Market</h2>
-            <div className="grid md:grid-cols-3 gap-4 mb-4">
-              <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl p-6 text-white text-center shadow-lg">
-                <div className="text-4xl font-bold mb-2">$6.4T</div>
-                <div className="text-sm">Global Startup Economy</div>
-              </div>
-              <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl p-6 text-white text-center shadow-lg">
-                <div className="text-4xl font-bold mb-2">$25-30B</div>
-                <div className="text-sm">Early-Stage Angel Investment Annually</div>
-              </div>
-              <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl p-6 text-white text-center shadow-lg">
-                <div className="text-4xl font-bold mb-2">28%</div>
-                <div className="text-sm">CAGR in Digital Investing Platforms</div>
-              </div>
-            </div>
-            <p className="text-lg text-gray-700 leading-relaxed">
-              Hot Honey is positioned as the <strong>social-trust layer for global venture capital</strong>—where credibility meets virality.
-            </p>
-          </section>
-
-          {/* The Hot Economy Flywheel */}
-          <section className="mb-8">
-            <h2 className="text-3xl font-bold text-orange-600 mb-6 text-center">The Hot Economy Flywheel</h2>
-            <div className="bg-gradient-to-br from-orange-50 to-yellow-50 rounded-2xl p-8">
-              <img 
-                src="/images/hot-economy-flywheel.png" 
-                alt="The Hot Economy Flywheel" 
-                className="w-full max-w-2xl mx-auto rounded-xl shadow-lg mb-6"
-              />
-              <p className="text-lg text-gray-700 leading-relaxed text-center italic">
-                Every vote creates value. Every share fuels the loop. Every insight compounds the Hot Economy.
-              </p>
-              <div className="mt-6 grid md:grid-cols-2 gap-4">
-                <div className="bg-white rounded-xl p-4">
-                  <h4 className="font-bold text-orange-600 mb-2">Outer Loop</h4>
-                  <p className="text-gray-700 text-sm">
-                    Investors → Startups → Data Engine → Partners → Revenue → Investors
-                  </p>
-                </div>
-                <div className="bg-white rounded-xl p-4">
-                  <h4 className="font-bold text-orange-600 mb-2">Inner Loop</h4>
-                  <p className="text-gray-700 text-sm">
-                    Curiosity → Engagement → Trust → Recognition → Influence
-                  </p>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* How It Works */}
-          <section className="mb-8">
-            <h2 className="text-3xl font-bold text-orange-600 mb-4">How It Works</h2>
-            <div className="space-y-4">
-              <div className="flex gap-4 items-start">
-                <div className="text-4xl">🔍</div>
-                <div>
-                  <h3 className="text-xl font-bold text-gray-800 mb-2">Discover</h3>
-                  <p className="text-gray-700">
-                    Swipe through curated StartupCards. Each card distills a startup into five key points: Problem, Solution, Market, Team, and Momentum. Make instinctive yes/no decisions based on curiosity.
-                  </p>
-                </div>
-              </div>
-              <div className="flex gap-4 items-start">
-                <div className="text-4xl">🔥</div>
-                <div>
-                  <h3 className="text-xl font-bold text-gray-800 mb-2">Build Heat</h3>
-                  <p className="text-gray-700">
-                    Every "Yes" vote raises a startup's Heat Meter. High-heat startups appear in the Hot 5 Feed—the daily trending list that keeps investors coming back.
-                  </p>
-                </div>
-              </div>
-              <div className="flex gap-4 items-start">
-                <div className="text-4xl">🤝</div>
-                <div>
-                  <h3 className="text-xl font-bold text-gray-800 mb-2">Connect</h3>
-                  <p className="text-gray-700">
-                    Verified investors unlock direct messaging, pitch sessions, and Deal Room access. Founders receive real-time feedback on who's interested and why.
-                  </p>
-                </div>
-              </div>
-              <div className="flex gap-4 items-start">
-                <div className="text-4xl">💰</div>
-                <div>
-                  <h3 className="text-xl font-bold text-gray-800 mb-2">Invest Together</h3>
-                  <p className="text-gray-700">
-                    Form or join syndicates. Share Hot Lists. Co-invest with confidence. The platform makes group investment transparent, social, and fun.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* Our Values */}
-          <section className="mb-8">
-            <h2 className="text-3xl font-bold text-orange-600 mb-4">Our Values</h2>
-            <ul className="space-y-3">
-              <li className="flex items-start gap-3">
-                <span className="text-orange-600 font-bold text-xl">✓</span>
-                <div>
-                  <strong className="text-gray-800">Human-Centered Design:</strong>
-                  <span className="text-gray-700"> We believe emotion drives decisions. Data confirms them.</span>
-                </div>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="text-orange-600 font-bold text-xl">✓</span>
-                <div>
-                  <strong className="text-gray-800">Transparency:</strong>
-                  <span className="text-gray-700"> Open, honest communication between startups and investors builds trust.</span>
-                </div>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="text-orange-600 font-bold text-xl">✓</span>
-                <div>
-                  <strong className="text-gray-800">Community-Driven:</strong>
-                  <span className="text-gray-700"> Our voting system ensures the best startups rise to the top organically.</span>
-                </div>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="text-orange-600 font-bold text-xl">✓</span>
-                <div>
-                  <strong className="text-gray-800">Quality Over Quantity:</strong>
-                  <span className="text-gray-700"> We curate deals so investors can focus on what truly matters.</span>
-                </div>
-              </li>
-            </ul>
-          </section>
-
-          {/* Vision */}
-          <section>
-            <h2 className="text-3xl font-bold text-orange-600 mb-4">The Vision</h2>
-            <p className="text-lg text-gray-700 leading-relaxed mb-4">
-              Within five years, Hot Honey will become the <strong>global social layer for venture capital</strong>—a daily habit for investors and founders alike.
-            </p>
-            <div className="bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl p-6 text-white shadow-lg">
-              <p className="text-xl font-semibold mb-3">
-                We're not just building a platform. We're building a movement.
-              </p>
-              <p className="text-lg">
-                Where chemistry precedes capital. Where trust is earned transparently. Where the best ideas win through collective validation.
-              </p>
-              <p className="text-2xl font-bold mt-4 text-center">
-                The heat is rising. 🔥
-              </p>
-            </div>
-          </section>
+          </div>
         </div>
 
         {/* CTA Section */}
-        <div className="bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 rounded-3xl p-8 shadow-2xl text-center border-2 border-orange-300">
-          <h2 className="text-3xl font-bold text-white mb-4">Ready to Join the Movement?</h2>
-          <p className="text-xl text-white mb-6">
-            Whether you're an investor seeking the next big thing or a startup ready to build momentum—Hot Money is your platform.
-          </p>
-          <div className="flex gap-4 justify-center flex-wrap">
-            <button
-              onClick={() => navigate('/signup')}
-              className="bg-white text-orange-600 font-bold py-4 px-8 rounded-2xl shadow-lg hover:bg-gray-100 transition-all text-lg"
-            >
-              🚀 Join Now
-            </button>
-            <button
-              onClick={() => navigate('/vote')}
-              className="bg-gradient-to-r from-slate-700 to-slate-800 hover:from-slate-800 hover:to-slate-900 text-white font-bold py-4 px-8 rounded-2xl shadow-lg transition-all text-lg"
-            >
-              🔥 Start Voting
-            </button>
+        <div className="text-center">
+          <div className="bg-gradient-to-br from-purple-900/50 to-indigo-900/50 backdrop-blur-lg rounded-3xl p-12 border border-purple-500/30 max-w-4xl mx-auto">
+            <h2 className="text-4xl font-bold text-white mb-4">Ready to Find Your Perfect Match?</h2>
+            <p className="text-xl text-gray-300 mb-8">
+              Join hundreds of startups and investors already making connections on Hot Match.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link
+                to="/get-matched"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold text-lg rounded-xl transition-all shadow-lg hover:shadow-orange-500/30"
+              >
+                <Zap className="w-5 h-5" />
+                Get Matched Now
+                <ArrowRight className="w-5 h-5" />
+              </Link>
+              <Link
+                to="/match"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold text-lg rounded-xl transition-all shadow-lg"
+              >
+                <Star className="w-5 h-5" />
+                Try AI Matching
+              </Link>
+            </div>
           </div>
+        </div>
+
+        {/* Footer */}
+        <div className="text-center mt-16 text-gray-500 text-sm">
+          <p>© 2025 Hot Match. All rights reserved.</p>
+          <p className="mt-2">Made with 🔥 for founders and investors everywhere.</p>
         </div>
       </div>
     </div>

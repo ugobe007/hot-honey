@@ -12,16 +12,30 @@ export interface InvestorFirm {
   // Investment info
   aum?: string; // Assets under management
   fundSize?: string; // Current fund size
+  activeFundSize?: number; // Active fund size in dollars
   checkSize?: string; // Typical check size (e.g., "$500K-$5M")
+  checkSizeMin?: number; // Min check size in dollars
+  checkSizeMax?: number; // Max check size in dollars
   stage?: string[]; // ['seed', 'series_a', 'series_b']
   sectors?: string[]; // Industries they invest in
-  geography?: string[]; // Locations they invest in
+  geography?: string | string[]; // Locations they invest in
   
   // Track record
   portfolioCount?: number; // Total portfolio companies
   exits?: number; // Number of exits
   unicorns?: number; // Number of unicorns created
-  notableInvestments?: string[]; // Company names
+  notableInvestments?: any[]; // Company names or objects with details
+  totalInvestments?: number; // Total number of investments made
+  investmentPace?: number; // Investments per year
+  lastInvestmentDate?: string; // Last investment date
+  
+  // Focus & Strategy
+  focusAreas?: any[]; // Detailed focus areas beyond sectors
+  investmentThesis?: string; // Investment philosophy
+  boardSeats?: number; // Number of board seats held
+  leadsRounds?: boolean; // Whether they lead rounds
+  followsRounds?: boolean; // Whether they follow rounds
+  dryPowder?: number; // Dry powder estimate
   
   // Hot Honey specific
   hotHoneyInvestments?: number; // Investments made through Hot Honey
@@ -32,7 +46,7 @@ export interface InvestorFirm {
   twitter?: string;
   
   // Team
-  partners?: string[]; // Partner names
+  partners?: any[]; // Partner names or objects with details
   contactEmail?: string;
 }
 

@@ -1,18 +1,91 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useStore } from '../store';
+import { supabase } from '../lib/supabase';
 import { useAuth } from '../hooks/useAuth';
 import { useVotes } from '../hooks/useVotes';
+
+interface NewsArticle {
+  id: string;
+  title: string;
+  url: string;
+  summary: string;
+  published_date: string;
+  source: string;
+  sentiment?: string;
+}
 
 const StartupDetail: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const startups = useStore((state) => state.startups);
+  const [startup, setStartup] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [news, setNews] = useState<NewsArticle[]>([]);
   const { userId } = useAuth();
   const { castVote, hasVoted, removeVote, voteCounts } = useVotes(userId);
-  
-  // Ensure both are strings for comparison
-  const startup = startups.find((s) => String(s.id) === String(id));
+
+  useEffect(() => {
+    async function fetchStartup() {
+      console.log('🔍 Fetching startup from DATABASE with ID:', id);
+      
+      const { data, error } = await supabase
+        .from('startup_uploads')
+        .select('*')
+        .eq('id', id)
+        .single();
+      
+      if (error) {
+        console.error('❌ Supabase error:', error);
+        setStartup(null);
+      } else {
+        console.log('✅ Found startup:', data?.name);
+        setStartup(data);
+        
+        // Fetch mock news for startup
+        setNews([
+          {
+            id: '1',
+            title: `${data.name} Raises $${Math.floor(Math.random() * 10 + 1)}M in Seed Funding`,
+            url: '#',
+            summary: 'The startup announced a successful funding round led by top-tier VCs.',
+            published_date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+            source: 'TechCrunch',
+            sentiment: 'positive'
+          },
+          {
+            id: '2',
+            title: `${data.name} Launches Innovative Product Feature`,
+            url: '#',
+            summary: 'Company unveils breakthrough technology that could disrupt the industry.',
+            published_date: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+            source: 'VentureBeat',
+            sentiment: 'positive'
+          },
+          {
+            id: '3',
+            title: `${data.name} Expands Team with Key Hires`,
+            url: '#',
+            summary: 'Strategic additions to the executive team signal aggressive growth plans.',
+            published_date: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
+            source: 'The Information',
+            sentiment: 'positive'
+          }
+        ]);
+      }
+      setLoading(false);
+    }
+    
+    if (id) {
+      fetchStartup();
+    }
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-purple-800 to-indigo-900 flex items-center justify-center">
+        <div className="text-white text-xl">Loading...</div>
+      </div>
+    );
+  }
 
   if (!startup) {
     return (
@@ -20,16 +93,19 @@ const StartupDetail: React.FC = () => {
         <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
           <p className="text-white text-xl">Startup not found.</p>
           <button 
-            onClick={() => navigate('/vote')}
+            onClick={() => navigate('/match')}
             className="mt-4 bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-6 rounded-xl"
           >
-            ← Back to Voting
+            ← Back to Matches
           </button>
         </div>
       </div>
     );
   }
 
+  // Extract fivePoints from extracted_data
+  const fivePoints = startup.extracted_data?.fivePoints || [];
+  
   // Get user's vote for this startup
   const userVote = hasVoted(startup.id.toString());
   const voteCount = voteCounts[startup.id.toString()];
@@ -44,134 +120,228 @@ const StartupDetail: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-purple-800 to-indigo-900 p-6">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-[#1a0033] via-[#2d1b4e] to-[#1a0033] p-6 scrollbar-hide overflow-y-auto">
+      {/* Animated background blobs */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 left-20 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-20 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1.5s'}}></div>
+        <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-emerald-600/10 rounded-full blur-3xl animate-pulse" style={{animationDelay: '3s'}}></div>
+      </div>
+      <div className="max-w-5xl mx-auto relative z-10">
         {/* Back Button */}
         <button
-          onClick={() => navigate('/vote')}
-          className="mb-6 bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white font-bold py-2 px-6 rounded-xl border border-white/30 transition-all"
+          onClick={() => navigate('/match')}
+          className="group mb-6 px-6 py-3 rounded-xl bg-white/5 hover:bg-emerald-500/20 transition-all flex items-center gap-2 text-gray-300 hover:text-emerald-300"
         >
-          ← Back to Voting
+          <svg className="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+          <span className="font-medium">Back to Matches</span>
         </button>
 
         {/* Main Content Card */}
-        <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 shadow-2xl border border-white/20 mb-6">
+        <div className="bg-gradient-to-br from-[#1a0033]/95 via-[#2d1b4e]/90 to-[#3d1f5e]/85 backdrop-blur-xl rounded-3xl p-8 shadow-2xl shadow-emerald-600/20 mb-6">
           {/* Header */}
-          <div className="flex justify-between items-start mb-6">
+          <div className="flex justify-between items-start mb-8 pb-6 border-b border-emerald-400/30">
             <div className="flex-1">
-              <h2 className="text-4xl font-bold text-white mb-2">{startup.name}</h2>
-              {startup.pitch && (
-                <p className="text-xl text-purple-200 font-semibold mb-2">"{startup.pitch}"</p>
+              <h2 className="text-5xl font-extrabold bg-gradient-to-r from-emerald-400 via-cyan-400 to-purple-400 bg-clip-text text-transparent mb-4">{startup.name}</h2>
+              {startup.extracted_data?.pitch && (
+                <p className="text-2xl text-emerald-300 font-bold italic mb-3 drop-shadow-lg">"{startup.extracted_data.pitch}"</p>
               )}
               {startup.tagline && (
-                <p className="text-lg text-purple-300">{startup.tagline}</p>
+                <p className="text-xl text-purple-200">{startup.tagline}</p>
               )}
             </div>
-            <div className="text-6xl ml-4">🚀</div>
+            <div className="text-8xl ml-6 drop-shadow-2xl animate-bounce">🚀</div>
           </div>
 
           {/* Five Points */}
-          {startup.fivePoints && startup.fivePoints.length > 0 && (
-            <div className="mb-6">
-              <h3 className="text-2xl font-bold text-white mb-4">Key Points</h3>
-              <div className="space-y-3">
-                {startup.fivePoints.map((point, i) => (
-                  <div key={i} className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20">
-                    <p className="text-white text-lg">{point}</p>
-                  </div>
-                ))}
+          {fivePoints && fivePoints.length > 0 && (
+            <div className="mb-8">
+              <h3 className="text-4xl font-extrabold bg-gradient-to-r from-emerald-400 via-cyan-400 to-purple-400 bg-clip-text text-transparent mb-6 flex items-center gap-3">
+                <span className="text-5xl animate-pulse">💎</span>
+                Key Highlights
+              </h3>
+              <div className="grid gap-4">
+                {fivePoints.map((point: string, i: number) => {
+                  const colors = [
+                    'from-emerald-500/20 to-cyan-500/20 shadow-emerald-500/20',
+                    'from-purple-500/20 to-violet-500/20 shadow-purple-500/20',
+                    'from-cyan-500/20 to-blue-500/20 shadow-cyan-500/20',
+                    'from-emerald-600/20 to-green-500/20 shadow-emerald-500/20',
+                    'from-purple-600/20 to-indigo-500/20 shadow-purple-500/20'
+                  ];
+                  const icons = ['🎯', '📈', '⚡', '👥', '💰'];
+                  return (
+                    <div key={i} className={`bg-gradient-to-r ${colors[i]} backdrop-blur-sm rounded-xl p-6 shadow-lg hover:scale-105 hover:shadow-xl transition-all duration-300 cursor-pointer border border-emerald-400/20`}>
+                      <p className="text-white text-xl font-bold flex items-start gap-3">
+                        <span className="text-2xl">{icons[i]}</span>
+                        <span>{point}</span>
+                      </p>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           )}
 
           {/* Startup Details */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-            {startup.description && (
-              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20">
-                <h4 className="text-white font-bold mb-2">Value Proposition</h4>
-                <p className="text-purple-200">{startup.description}</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8">
+            {startup.extracted_data?.description && (
+              <div className="bg-gradient-to-br from-emerald-500/10 to-green-500/10 backdrop-blur-sm rounded-xl p-5 border border-emerald-400/30 shadow-lg shadow-emerald-500/10 hover:scale-105 transition-transform">
+                <h4 className="text-emerald-300 font-bold mb-2 text-lg flex items-center gap-2">
+                  <span>🎯</span> Value Proposition
+                </h4>
+                <p className="text-white/90 font-medium">{startup.extracted_data.description}</p>
               </div>
             )}
-            {startup.marketSize && (
-              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20">
-                <h4 className="text-white font-bold mb-2">Market Size</h4>
-                <p className="text-purple-200">{startup.marketSize}</p>
+            {startup.extracted_data?.market_size && (
+              <div className="bg-gradient-to-br from-purple-500/10 to-violet-500/10 backdrop-blur-sm rounded-xl p-5 border border-purple-400/30 shadow-lg shadow-purple-500/10 hover:scale-105 transition-transform">
+                <h4 className="text-purple-300 font-bold mb-2 text-lg flex items-center gap-2">
+                  <span>📈</span> Market Size
+                </h4>
+                <p className="text-white/90 font-medium">{startup.extracted_data.market_size}</p>
               </div>
             )}
-            {startup.unique && (
-              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20">
-                <h4 className="text-white font-bold mb-2">Unique Value</h4>
-                <p className="text-purple-200">{startup.unique}</p>
+            {startup.extracted_data?.unique && (
+              <div className="bg-gradient-to-br from-cyan-500/10 to-blue-500/10 backdrop-blur-sm rounded-xl p-5 border border-cyan-400/30 shadow-lg shadow-cyan-500/10 hover:scale-105 transition-transform">
+                <h4 className="text-cyan-300 font-bold mb-2 text-lg flex items-center gap-2">
+                  <span>✨</span> Unique Value
+                </h4>
+                <p className="text-white/90 font-medium">{startup.extracted_data.unique}</p>
               </div>
             )}
-            {startup.raise && (
-              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20">
-                <h4 className="text-white font-bold mb-2">Raise Amount</h4>
-                <p className="text-purple-200">{startup.raise}</p>
+            {startup.extracted_data?.raise && (
+              <div className="bg-gradient-to-br from-emerald-500/10 to-green-500/10 backdrop-blur-sm rounded-xl p-5 border border-emerald-400/30 shadow-lg shadow-emerald-500/10 hover:scale-105 transition-transform">
+                <h4 className="text-emerald-300 font-bold mb-2 text-lg flex items-center gap-2">
+                  <span>💰</span> Raise Amount
+                </h4>
+                <p className="text-white/90 font-medium text-xl">{startup.extracted_data.raise}</p>
               </div>
             )}
-            {startup.stage && (
-              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20">
-                <h4 className="text-white font-bold mb-2">Stage</h4>
-                <p className="text-purple-200">Stage {startup.stage}</p>
+            {startup.extracted_data?.stage && (
+              <div className="bg-gradient-to-br from-purple-500/10 to-indigo-500/10 backdrop-blur-sm rounded-xl p-5 border border-purple-400/30 shadow-lg shadow-purple-500/10 hover:scale-105 transition-transform">
+                <h4 className="text-purple-300 font-bold mb-2 text-lg flex items-center gap-2">
+                  <span>🎯</span> Stage
+                </h4>
+                <p className="text-white/90 font-medium">Stage {startup.extracted_data.stage}</p>
               </div>
             )}
           </div>
 
           {/* Video Link */}
           {startup.video && (
-            <div className="mb-6 bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20">
-              <h3 className="text-xl font-semibold text-white mb-2">🎥 Pitch Video</h3>
+            <div className="mb-8 bg-gradient-to-r from-emerald-500/10 to-purple-500/10 backdrop-blur-sm rounded-xl p-6 border border-emerald-400/30 shadow-lg shadow-emerald-500/10">
+              <h3 className="text-2xl font-bold text-white mb-3 flex items-center gap-2">
+                <span>🎥</span> Pitch Video
+              </h3>
               <a 
-                className="text-blue-300 hover:text-blue-200 underline text-lg" 
+                className="text-emerald-300 hover:text-emerald-200 underline text-lg font-semibold inline-flex items-center gap-2 hover:gap-3 transition-all" 
                 href={startup.video} 
                 target="_blank" 
                 rel="noopener noreferrer"
               >
-                Watch now →
+                Watch now <span>→</span>
               </a>
             </div>
           )}
 
-          {/* Vote Stats */}
-          <div className="flex gap-6 mb-6">
-            <div className="bg-green-500/20 backdrop-blur-sm rounded-lg p-4 border border-green-500/30 flex items-center gap-3">
-              <span className="text-3xl">👍</span>
-              <div>
-                <p className="text-green-200 text-sm">YES Votes</p>
-                <p className="text-white text-2xl font-bold">{voteCount?.yes_votes || startup.yesVotes || 0}</p>
+          {/* Recent News */}
+          {news.length > 0 && (
+            <div className="mb-6">
+              <h3 className="text-3xl font-extrabold bg-gradient-to-r from-emerald-400 via-cyan-400 to-purple-400 bg-clip-text text-transparent mb-6 flex items-center gap-3">
+                <span className="text-4xl">📰</span>
+                Recent News
+              </h3>
+              <div className="space-y-4">
+                {news.map((article) => {
+                  const daysAgo = Math.floor((Date.now() - new Date(article.published_date).getTime()) / (1000 * 60 * 60 * 24));
+                  return (
+                    <a
+                      key={article.id}
+                      href={article.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block group bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-sm rounded-xl p-5 border border-emerald-400/20 hover:border-emerald-400/50 transition-all hover:bg-white/15"
+                    >
+                      <div className="flex items-start gap-4">
+                        <div className="flex-shrink-0">
+                          <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center text-2xl">
+                            📰
+                          </div>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-start justify-between gap-3 mb-2">
+                            <h4 className="text-white font-bold text-lg group-hover:text-purple-300 transition-colors line-clamp-2">
+                              {article.title}
+                            </h4>
+                            <span className="flex-shrink-0 text-xs text-gray-400 bg-white/5 px-2 py-1 rounded">
+                              {daysAgo}d ago
+                            </span>
+                          </div>
+                          <p className="text-gray-400 text-sm mb-3 line-clamp-2">{article.summary}</p>
+                          <div className="flex items-center gap-3">
+                            <span className="text-xs text-cyan-400 font-medium">{article.source}</span>
+                            {article.sentiment === 'positive' && (
+                              <span className="text-xs text-green-400 bg-green-500/20 px-2 py-0.5 rounded">📈 Positive</span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </a>
+                  );
+                })}
               </div>
             </div>
-            <div className="bg-gray-500/20 backdrop-blur-sm rounded-lg p-4 border border-gray-500/30 flex items-center gap-3">
-              <span className="text-3xl">👎</span>
-              <div>
-                <p className="text-gray-200 text-sm">NO Votes</p>
-                <p className="text-white text-2xl font-bold">{voteCount?.no_votes || startup.noVotes || 0}</p>
-              </div>
-            </div>
-          </div>
+          )}
 
-          {/* Voting Buttons */}
-          <div className="flex gap-4">
+          {/* Vote Stats - Compact Version */}
+          <div className="grid grid-cols-2 gap-4">
             <button
               onClick={() => handleVote('yes')}
-              className={`flex-1 font-bold py-4 px-6 rounded-xl text-lg shadow-lg transition-all ${
+              className={`group relative overflow-hidden rounded-xl p-5 border transition-all ${
                 userVote === 'yes'
-                  ? 'bg-green-600 text-white scale-105 shadow-green-500/50'
-                  : 'bg-orange-500 hover:bg-orange-600 text-white'
+                  ? 'border-emerald-400 bg-gradient-to-br from-emerald-500/20 to-green-500/20 shadow-emerald-500/20'
+                  : 'border-emerald-400/30 bg-white/5 hover:bg-emerald-500/10 hover:border-emerald-400/50'
               }`}
             >
-              {userVote === 'yes' ? '✓ YES - You voted!' : '👍 Vote YES'}
+              <div className="flex items-center justify-between">
+                <div className="text-left">
+                  <div className="text-3xl mb-1">👍</div>
+                  <div className={`text-sm font-medium uppercase tracking-wide mb-1 ${
+                    userVote === 'yes' ? 'text-green-300' : 'text-gray-400'
+                  }`}>
+                    {userVote === 'yes' ? 'You voted YES' : 'Vote YES'}
+                  </div>
+                  <div className="text-2xl font-bold text-white">{voteCount?.yes_votes || startup.yesVotes || 0}</div>
+                </div>
+                {userVote === 'yes' && (
+                  <div className="text-green-400 text-xl">✓</div>
+                )}
+              </div>
             </button>
             <button
               onClick={() => handleVote('no')}
-              className={`flex-1 font-bold py-4 px-6 rounded-xl text-lg shadow-lg transition-all ${
+              className={`group relative overflow-hidden rounded-xl p-5 border transition-all ${
                 userVote === 'no'
-                  ? 'bg-gray-700 text-white opacity-50'
-                  : 'bg-gray-400 hover:bg-gray-500 text-gray-900'
+                  ? 'border-purple-400 bg-gradient-to-br from-purple-500/20 to-indigo-500/20 shadow-purple-500/20'
+                  : 'border-purple-400/30 bg-white/5 hover:bg-purple-500/10 hover:border-purple-400/50'
               }`}
             >
-              {userVote === 'no' ? '✓ NO - You voted' : '👎 Vote NO'}
+              <div className="flex items-center justify-between">
+                <div className="text-left">
+                  <div className="text-3xl mb-1">👎</div>
+                  <div className={`text-sm font-medium uppercase tracking-wide mb-1 ${
+                    userVote === 'no' ? 'text-gray-300' : 'text-gray-400'
+                  }`}>
+                    {userVote === 'no' ? 'You voted NO' : 'Vote NO'}
+                  </div>
+                  <div className="text-2xl font-bold text-white">{voteCount?.no_votes || startup.noVotes || 0}</div>
+                </div>
+                {userVote === 'no' && (
+                  <div className="text-gray-400 text-xl">✓</div>
+                )}
+              </div>
             </button>
           </div>
         </div>

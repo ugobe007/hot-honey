@@ -69,6 +69,15 @@ export interface Startup {
   fivePoints?: string[]; // The 5 key points for the card
   comments?: Comment[];
   hotness?: number; // Calculated hotness score out of 5.0
+  
+  // GOD Algorithm Scores (from database, 0-100 scale)
+  total_god_score?: number; // Overall GOD score (weighted average)
+  team_score?: number; // Team quality score (20% weight)
+  traction_score?: number; // Traction/growth score (18% weight)
+  market_score?: number; // Market opportunity score (15% weight)
+  product_score?: number; // Product development score (12% weight)
+  vision_score?: number; // Vision/ambition score (10% weight)
+  
   answersCount?: number; // Number of answers (questions answered)
   industries?: string[]; // Industry tags: fintech, ai, saas, deeptech, robotics, healthtech, edtech, cleantech, ecommerce, crypto, consumer, enterprise
   founders?: Founder[];
@@ -77,6 +86,11 @@ export interface Startup {
   advisors?: Advisor[];
   boardMembers?: Advisor[]; // Reuse Advisor interface for board members
   customerTraction?: CustomerTraction[];
+  
+  // Additional fields from extracted_data
+  team?: string;
+  traction?: string;
+  extracted_data?: any; // JSONB field from database
 }
 
 export interface Comment {

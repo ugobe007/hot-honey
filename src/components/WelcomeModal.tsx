@@ -7,7 +7,8 @@ interface WelcomeModalProps {
 }
 
 export default function WelcomeModal({ forceOpen = false, onClose }: WelcomeModalProps = {}) {
-  const [isOpen, setIsOpen] = useState(false);
+  // Initialize state based on forceOpen prop - never auto-show
+  const [isOpen, setIsOpen] = useState(forceOpen);
   const location = useLocation();
 
   // NEVER show modal on these pages (absolute block)
@@ -19,23 +20,15 @@ export default function WelcomeModal({ forceOpen = false, onClose }: WelcomeModa
     return null;
   }
 
-  useEffect(() => {
-    // Don't show on excluded pages unless forced
-    if (shouldExclude && !forceOpen) {
-      setIsOpen(false);
-      return;
-    }
+  // If not forced open, never render
+  if (!forceOpen) {
+    return null;
+  }
 
-    if (forceOpen) {
-      setIsOpen(true);
-    } else {
-      // Check if user has already acknowledged
-      const hasAcknowledged = localStorage.getItem('hmh_acknowledged');
-      if (!hasAcknowledged) {
-        setIsOpen(true);
-      }
-    }
-  }, [forceOpen, shouldExclude]);
+  useEffect(() => {
+    // Sync state with forceOpen prop
+    setIsOpen(forceOpen);
+  }, [forceOpen]);
 
   const handleAgree = () => {
     localStorage.setItem('hmh_acknowledged', 'true');
@@ -51,158 +44,213 @@ export default function WelcomeModal({ forceOpen = false, onClose }: WelcomeModa
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
-      <div className="bg-gradient-to-br from-amber-300 via-orange-400 to-yellow-500 rounded-3xl p-1 shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="bg-white rounded-3xl p-8">
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-[100] flex items-center justify-center p-4">
+      <div className="bg-gradient-to-br from-purple-900 via-indigo-900 to-purple-950 rounded-3xl p-2 shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto border-2 border-purple-500/50">
+        <div className="bg-gradient-to-br from-[#1a1140] via-[#2d1b69] to-[#4a2a8f] rounded-3xl p-8 relative overflow-hidden">
+          {/* Animated background effects */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            <div className="absolute top-10 left-10 w-32 h-32 bg-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
+            <div className="absolute bottom-10 right-10 w-48 h-48 bg-cyan-500/20 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
+          </div>
+
+          {/* Close button */}
+          {forceOpen && (
+            <button
+              onClick={handleClose}
+              className="absolute top-4 right-4 z-10 text-white/60 hover:text-white text-3xl transition-colors"
+            >
+              ×
+            </button>
+          )}
+
           {/* Header */}
-          <div className="text-center mb-6">
-            <div className="text-7xl mb-4 animate-bounce">🍯</div>
-            <h2 className="text-4xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent mb-2">
-              Welcome to Hot Honey!
+          <div className="text-center mb-8 relative z-10">
+            <div className="text-7xl mb-4">🔥</div>
+            <h2 className="text-5xl font-bold mb-3">
+              <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
+                Hot Money
+              </span>
             </h2>
-            <p className="text-xl text-orange-600 font-semibold">
-              Get Them While They're Hot.
+            <p className="text-2xl text-cyan-400 font-bold mb-2">
+              Where Startups Meet Smart Money
+            </p>
+            <p className="text-gray-300 text-sm">
+              The AI-powered platform connecting visionary founders with strategic investors
             </p>
           </div>
 
           {/* How It Works */}
-          <div className="bg-orange-50 rounded-2xl p-6 mb-6">
-            <h3 className="text-2xl font-bold text-orange-600 mb-4">🔥 How It Works</h3>
+          <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 mb-6 relative z-10">
+            <h3 className="text-3xl font-bold text-white mb-6 flex items-center gap-3">
+              <span className="text-4xl">⚡</span>
+              How It Works
+            </h3>
             
             {/* For Investors */}
-            <div className="mb-4">
-              <h4 className="text-lg font-bold text-gray-800 mb-2">💰 For Investors:</h4>
-              <p className="text-sm text-gray-700 mb-3 leading-relaxed">
-                Hot Honey helps identify quality investment candidates faster and with more precision. The Hot Money Process enables quick discovery without all the overhead and utilizes crowd and market intelligence to identify the winners.
+            <div className="mb-6">
+              <h4 className="text-xl font-bold text-cyan-400 mb-3 flex items-center gap-2">
+                💰 For Investors
+              </h4>
+              <p className="text-gray-300 text-sm mb-4 leading-relaxed">
+                Discover quality deals faster with AI-powered matching and crowd intelligence. Make informed decisions with our streamlined 5-point format.
               </p>
               
               {/* 5-Point Format Highlight */}
-              <div className="bg-white rounded-xl p-4 mb-3 border-2 border-orange-300">
-                <h5 className="font-bold text-orange-700 mb-2 flex items-center gap-2">
-                  📋 Our 5-Point StartupCard Format
+              <div className="bg-gradient-to-br from-purple-600/20 to-pink-600/20 backdrop-blur-sm border border-purple-400/30 rounded-xl p-4 mb-4">
+                <h5 className="font-bold text-purple-300 mb-2 flex items-center gap-2">
+                  📋 5-Point StartupCard Format
                 </h5>
-                <p className="text-xs text-gray-700 mb-2">
-                  Each startup is distilled into <strong>5 key data points</strong> for quick, informed decisions:
+                <p className="text-xs text-gray-300 mb-3">
+                  Every startup distilled into <strong>5 key data points</strong> for fast decisions:
                 </p>
-                <div className="grid grid-cols-1 gap-1 text-xs text-gray-700">
-                  <div>1️⃣ <strong>Problem</strong> - What pain point is solved?</div>
-                  <div>2️⃣ <strong>Solution</strong> - How does the startup solve it?</div>
-                  <div>3️⃣ <strong>Market Size</strong> - What's the opportunity?</div>
-                  <div>4️⃣ <strong>Team Companies</strong> - Where have founders worked?</div>
-                  <div>💰 <strong>Investment Amount</strong> - How much are they raising?</div>
+                <div className="space-y-1.5 text-xs text-gray-200">
+                  <div className="flex items-start gap-2">
+                    <span className="text-cyan-400">1️⃣</span>
+                    <span><strong className="text-white">Problem</strong> - What pain point is solved?</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span className="text-cyan-400">2️⃣</span>
+                    <span><strong className="text-white">Solution</strong> - How does the startup solve it?</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span className="text-cyan-400">3️⃣</span>
+                    <span><strong className="text-white">Market Size</strong> - What's the opportunity?</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span className="text-cyan-400">4️⃣</span>
+                    <span><strong className="text-white">Team Pedigree</strong> - Where have founders worked?</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span className="text-yellow-400">💰</span>
+                    <span><strong className="text-white">Investment Amount</strong> - How much are they raising?</span>
+                  </div>
                 </div>
               </div>
 
               {/* Investor Anonymity Highlight */}
-              <div className="bg-purple-100 rounded-xl p-4 mb-3 border-2 border-purple-300">
-                <h5 className="font-bold text-purple-700 mb-2 flex items-center gap-2">
-                  🔒 You're Incognito Until Stage 3
+              <div className="bg-gradient-to-br from-indigo-600/20 to-purple-600/20 backdrop-blur-sm border border-indigo-400/30 rounded-xl p-4 mb-4">
+                <h5 className="font-bold text-indigo-300 mb-2 flex items-center gap-2">
+                  🔒 Anonymous Browsing
                 </h5>
-                <p className="text-xs text-gray-700">
-                  <strong>Browse and vote anonymously.</strong> Your identity stays hidden until you reach Stage 3 (Reveal) and choose to disclose yourself for meetings. Enjoy unbiased review with complete privacy!
+                <p className="text-xs text-gray-300">
+                  <strong className="text-white">Your identity stays hidden</strong> until you choose to reveal yourself at Stage 3. Browse and vote with complete privacy!
                 </p>
               </div>
 
-              <ul className="space-y-2 text-gray-700 text-sm">
-                <li className="flex items-start gap-2">
-                  <span className="text-lg">👀</span>
-                  <span className="font-medium">Browse hot startup deals from the best founders</span>
+              <ul className="space-y-2.5 text-sm">
+                <li className="flex items-start gap-3">
+                  <span className="text-xl">👀</span>
+                  <span className="text-gray-200">Browse hot startup deals from top founders</span>
                 </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-lg">👍</span>
-                  <span className="font-medium">Vote YES or NO on startups that interest you</span>
+                <li className="flex items-start gap-3">
+                  <span className="text-xl">👍</span>
+                  <span className="text-gray-200">Vote YES or NO on startups instantly</span>
                 </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-lg">🍯</span>
-                  <span className="font-medium">Click the honeypot to reveal secret traction data</span>
+                <li className="flex items-start gap-3">
+                  <span className="text-xl">🍯</span>
+                  <span className="text-gray-200">Unlock secret traction data with honeypot</span>
                 </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-lg">📊</span>
-                  <span className="font-medium">Track your hot picks on your personal dashboard</span>
+                <li className="flex items-start gap-3">
+                  <span className="text-xl">📊</span>
+                  <span className="text-gray-200">Track your portfolio on personal dashboard</span>
                 </li>
               </ul>
             </div>
 
             {/* For Startups */}
             <div>
-              <h4 className="text-lg font-bold text-gray-800 mb-2">🚀 For Startups:</h4>
-              <p className="text-sm text-gray-700 mb-3 leading-relaxed">
-                <strong>Connect with investors faster and build syndicates through the Hot Honey discovery process.</strong> Our gamified approach helps you fine-tune your pitch and attract more interested investors than traditional platforms.
+              <h4 className="text-xl font-bold text-pink-400 mb-3 flex items-center gap-2 mt-6">
+                🚀 For Startups
+              </h4>
+              <p className="text-gray-300 text-sm mb-4 leading-relaxed">
+                Get discovered by strategic investors and build syndicates faster. Our AI-powered platform amplifies your reach beyond traditional fundraising.
               </p>
 
               {/* Game Play & Progressive Reveal */}
-              <div className="bg-white rounded-xl p-4 mb-3 border-2 border-green-300">
-                <h5 className="font-bold text-green-700 mb-2 flex items-center gap-2">
-                  🎮 Game Play & Information Development
+              <div className="bg-gradient-to-br from-green-600/20 to-emerald-600/20 backdrop-blur-sm border border-green-400/30 rounded-xl p-4 mb-4">
+                <h5 className="font-bold text-green-300 mb-2 flex items-center gap-2">
+                  🎮 Progressive Discovery
                 </h5>
-                <p className="text-xs text-gray-700 mb-2">
-                  Information is revealed progressively as investor interest grows. This unique approach allows you to:
+                <p className="text-xs text-gray-300 mb-2">
+                  Information reveals as interest grows. This creates momentum:
                 </p>
-                <ul className="space-y-1 text-xs text-gray-700">
-                  <li>✓ <strong>Fine-tune your pitch</strong> based on real-time investor engagement</li>
-                  <li>✓ <strong>Get noticed</strong> through a process of strategic information reveal</li>
-                  <li>✓ <strong>Build momentum</strong> as votes unlock new visibility stages</li>
-                  <li>✓ <strong>Improve your value proposition</strong> with direct market feedback</li>
+                <ul className="space-y-1.5 text-xs text-gray-200">
+                  <li className="flex items-start gap-2">
+                    <span className="text-green-400">✓</span>
+                    <span><strong className="text-white">Fine-tune</strong> your pitch with real-time engagement</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-green-400">✓</span>
+                    <span><strong className="text-white">Get noticed</strong> through strategic information reveal</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-green-400">✓</span>
+                    <span><strong className="text-white">Build momentum</strong> as votes unlock visibility</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-green-400">✓</span>
+                    <span><strong className="text-white">Improve messaging</strong> with direct feedback</span>
+                  </li>
                 </ul>
               </div>
 
               {/* Syndicate Building */}
-              <div className="bg-white rounded-xl p-4 mb-3 border-2 border-blue-300">
-                <h5 className="font-bold text-blue-700 mb-2 flex items-center gap-2">
-                  👥 Build Investor Syndicates
+              <div className="bg-gradient-to-br from-blue-600/20 to-cyan-600/20 backdrop-blur-sm border border-blue-400/30 rounded-xl p-4 mb-4">
+                <h5 className="font-bold text-blue-300 mb-2 flex items-center gap-2">
+                  👥 Build Syndicates
                 </h5>
-                <p className="text-xs text-gray-700">
-                  As your startup gains traction, you'll attract groups of investors who can form syndicates. This helps you <strong>reach funding goals faster</strong> and build a stronger investor network than traditional one-on-one approaches.
+                <p className="text-xs text-gray-300">
+                  <strong className="text-white">Attract investor groups</strong> that can form syndicates. Reach funding goals faster than one-on-one approaches.
                 </p>
               </div>
 
-              <ul className="space-y-2 text-gray-700 text-sm">
-                <li className="flex items-start gap-2">
-                  <span className="text-lg">📝</span>
-                  <span className="font-medium">Submit your startup for investor review</span>
+              <ul className="space-y-2.5 text-sm">
+                <li className="flex items-start gap-3">
+                  <span className="text-xl">📝</span>
+                  <span className="text-gray-200">Submit startup for AI-powered matching</span>
                 </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-lg">📈</span>
-                  <span className="font-medium">Progress through stages as you get more votes</span>
+                <li className="flex items-start gap-3">
+                  <span className="text-xl">📈</span>
+                  <span className="text-gray-200">Progress through stages with votes</span>
                 </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-lg">👥</span>
-                  <span className="font-medium">Connect with interested investors directly</span>
+                <li className="flex items-start gap-3">
+                  <span className="text-xl">👥</span>
+                  <span className="text-gray-200">Connect directly with interested investors</span>
                 </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-lg">💬</span>
-                  <span className="font-medium">Receive feedback and build traction</span>
+                <li className="flex items-start gap-3">
+                  <span className="text-xl">💬</span>
+                  <span className="text-gray-200">Receive feedback and build momentum</span>
                 </li>
               </ul>
             </div>
           </div>
 
           {/* Risk Warning */}
-          <div className="bg-red-50 border-2 border-red-300 rounded-2xl p-6 mb-6">
-            <h3 className="text-xl font-bold text-red-700 mb-3 flex items-center gap-2">
+          <div className="bg-red-900/30 border-2 border-red-500/50 rounded-2xl p-6 mb-6 relative z-10 backdrop-blur-sm">
+            <h3 className="text-xl font-bold text-red-400 mb-3 flex items-center gap-2">
               ⚠️ Investment Risk Disclosure
             </h3>
-            <p className="text-sm text-gray-700 leading-relaxed mb-3">
-              <strong>Investing in early-stage startups is highly risky.</strong> You may lose all of your investment. Only invest what you can afford to lose. Past performance is not indicative of future results.
+            <p className="text-sm text-gray-200 leading-relaxed mb-3">
+              <strong className="text-white">Investing in early-stage startups is highly risky.</strong> You may lose all of your investment. Only invest what you can afford to lose. Past performance is not indicative of future results.
             </p>
-            <p className="text-sm text-gray-700 leading-relaxed">
-              By using Hot Honey, you acknowledge that you understand these risks and are making your own investment decisions. We are not financial advisors. Always do your own research and consult with licensed professionals.
+            <p className="text-sm text-gray-300 leading-relaxed">
+              By using Hot Money, you acknowledge these risks and are making your own decisions. We are not financial advisors. Always do your own research.
             </p>
           </div>
 
           {/* Age Verification */}
-          <div className="bg-yellow-50 border-2 border-yellow-300 rounded-2xl p-4 mb-6">
-            <p className="text-sm text-gray-700 font-semibold text-center">
+          <div className="bg-yellow-600/20 border-2 border-yellow-500/50 rounded-2xl p-4 mb-6 relative z-10 backdrop-blur-sm">
+            <p className="text-sm text-yellow-200 font-bold text-center">
               🔞 You must be 18 years or older to use this platform
             </p>
           </div>
 
           {/* Links */}
-          <div className="flex justify-center gap-6 mb-6 text-sm">
-            <Link to="/privacy" className="text-orange-600 hover:text-orange-700 font-semibold underline">
+          <div className="flex justify-center gap-6 mb-6 text-sm relative z-10">
+            <Link to="/privacy" className="text-cyan-400 hover:text-cyan-300 font-semibold underline">
               Privacy Policy
             </Link>
-            <Link to="/about" className="text-orange-600 hover:text-orange-700 font-semibold underline">
+            <Link to="/about" className="text-cyan-400 hover:text-cyan-300 font-semibold underline">
               About Us
             </Link>
           </div>
@@ -210,7 +258,7 @@ export default function WelcomeModal({ forceOpen = false, onClose }: WelcomeModa
           {/* Agreement Button */}
           <button
             onClick={forceOpen ? handleClose : handleAgree}
-            className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-4 px-6 rounded-2xl shadow-lg transition-all text-lg"
+            className="w-full bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 hover:from-purple-700 hover:via-pink-700 hover:to-purple-700 text-white font-bold py-4 px-6 rounded-2xl shadow-lg transition-all text-lg relative z-10 border-2 border-purple-400/50"
           >
             {forceOpen ? '✅ Got It!' : '✅ I Agree - I\'m 18+ and Understand the Risks'}
           </button>

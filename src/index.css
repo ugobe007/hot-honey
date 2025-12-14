@@ -48,6 +48,16 @@ nav, [class*="fixed"] {
   .blink-text {
     animation: blinkText 2s ease-in-out infinite;
   }
+  
+  /* Hide scrollbar while maintaining scrollability */
+  .scrollbar-hide {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;  /* Chrome, Safari, Opera */
+  }
 }
 
 @keyframes blinkText {
@@ -57,4 +67,19 @@ nav, [class*="fixed"] {
   50% {
     opacity: 0;
   }
+}
+
+@keyframes float-up {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-200px) scale(1.5);
+    opacity: 0;
+  }
+}
+
+.animate-float-up {
+  animation: float-up 1s ease-out forwards;
 }

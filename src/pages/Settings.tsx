@@ -42,7 +42,13 @@ export default function Settings() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-slate-100 p-8">
+    <div className="min-h-screen bg-gradient-to-b from-[#160020] via-[#240032] to-[#330044] p-8 relative overflow-hidden">
+      {/* Animated background */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 left-10 w-64 h-64 bg-[#9400cd]/5 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-[#9400cd]/5 rounded-full blur-3xl animate-pulse"></div>
+      </div>
+
       {/* Hamburger Menu */}
       <HamburgerMenu />
 
@@ -61,63 +67,65 @@ export default function Settings() {
       </div>
 
       {/* Main Content */}
-      <div className="pt-28 px-4 max-w-4xl mx-auto">
+      <div className="pt-28 px-4 max-w-4xl mx-auto relative z-10">
         <div className="text-center mb-12">
-          <h1 className="text-6xl font-bold text-orange-600 mb-4">⚙️ Settings</h1>
-          <p className="text-xl text-slate-700">Manage your account and preferences</p>
+          <h1 className="text-6xl font-bold mb-4">
+            <span className="bg-gradient-to-r from-orange-400 via-red-500 to-yellow-400 bg-clip-text text-transparent">⚙️ Settings</span>
+          </h1>
+          <p className="text-xl text-purple-200">Manage your account and preferences</p>
         </div>
 
         {/* Settings Sections */}
         <div className="space-y-6">
           {/* Profile Section */}
-          <div className="bg-white/80 backdrop-blur-lg rounded-3xl p-8 border-2 border-orange-200">
-            <h2 className="text-3xl font-bold text-orange-600 mb-6">👤 Profile</h2>
+          <div className="bg-gradient-to-br from-purple-900/60 to-indigo-900/60 backdrop-blur-lg rounded-3xl p-8 border-2 border-purple-500/30">
+            <h2 className="text-3xl font-bold text-transparent bg-gradient-to-r from-orange-400 to-yellow-400 bg-clip-text mb-6">👤 Profile</h2>
             <div className="space-y-4">
               <div>
-                <label className="block text-slate-700 font-semibold mb-2">Name</label>
+                <label className="block text-purple-200 font-semibold mb-2">Name</label>
                 <input
                   type="text"
                   value={userProfile.name}
                   onChange={(e) => setUserProfile({...userProfile, name: e.target.value})}
                   placeholder="Your name"
-                  className="w-full px-4 py-3 rounded-xl bg-white border-2 border-orange-200 text-slate-800 placeholder-slate-400 focus:outline-none focus:border-orange-400"
+                  className="w-full px-4 py-3 rounded-xl bg-purple-900/40 border-2 border-purple-500/30 text-white placeholder-purple-300 focus:outline-none focus:border-purple-400"
                 />
               </div>
               <div>
-                <label className="block text-slate-700 font-semibold mb-2">Email</label>
+                <label className="block text-purple-200 font-semibold mb-2">Email</label>
                 <input
                   type="email"
                   value={userProfile.email}
                   onChange={(e) => setUserProfile({...userProfile, email: e.target.value})}
                   placeholder="your@email.com"
-                  className="w-full px-4 py-3 rounded-xl bg-white border-2 border-orange-200 text-slate-800 placeholder-slate-400 focus:outline-none focus:border-orange-400"
+                  className="w-full px-4 py-3 rounded-xl bg-purple-900/40 border-2 border-purple-500/30 text-white placeholder-purple-300 focus:outline-none focus:border-purple-400"
                 />
               </div>
               <div>
-                <label className="block text-slate-700 font-semibold mb-2">Investor Type</label>
+                <label className="block text-purple-200 font-semibold mb-2">Investor Type</label>
                 <select
                   value={userProfile.investorType}
                   onChange={(e) => setUserProfile({...userProfile, investorType: e.target.value})}
-                  className="w-full px-4 py-3 rounded-xl bg-white border-2 border-orange-200 text-slate-800 focus:outline-none focus:border-orange-400"
+                  className="w-full px-4 py-3 rounded-xl bg-purple-900/40 border-2 border-purple-500/30 text-white focus:outline-none focus:border-purple-400"
                 >
-                  <option value="angel" className="bg-white">👼 Angel Investor</option>
-                  <option value="vc" className="bg-white">💼 VC Fund</option>
-                  <option value="family_office" className="bg-white">🏛️ Family Office</option>
-                  <option value="syndicate" className="bg-white">🤝 Syndicate</option>
-                  <option value="other" className="bg-white">🔍 Other</option>
+                  <option value="angel" className="bg-purple-900 text-white">👼 Angel Investor</option>
+                  <option value="vc" className="bg-purple-900 text-white">💼 VC Fund</option>
+                  <option value="family_office" className="bg-purple-900 text-white">🏛️ Family Office</option>
+                  <option value="syndicate" className="bg-purple-900 text-white">🤝 Syndicate</option>
+                  <option value="other" className="bg-purple-900 text-white">🔍 Other</option>
                 </select>
               </div>
             </div>
           </div>
 
           {/* Preferences Section */}
-          <div className="bg-white/80 backdrop-blur-lg rounded-3xl p-8 border-2 border-orange-200">
-            <h2 className="text-3xl font-bold text-orange-600 mb-6">🔔 Preferences</h2>
+          <div className="bg-gradient-to-br from-purple-900/60 to-indigo-900/60 backdrop-blur-lg rounded-3xl p-8 border-2 border-purple-500/30">
+            <h2 className="text-3xl font-bold text-transparent bg-gradient-to-r from-orange-400 to-yellow-400 bg-clip-text mb-6">🔔 Preferences</h2>
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <div className="text-slate-800 font-semibold">Email Notifications</div>
-                  <div className="text-slate-600 text-sm">Get notified about new deals and updates</div>
+                  <div className="text-white font-semibold">Email Notifications</div>
+                  <div className="text-purple-300 text-sm">Get notified about new deals and updates</div>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input
@@ -131,8 +139,8 @@ export default function Settings() {
               </div>
               <div className="flex items-center justify-between">
                 <div>
-                  <div className="text-slate-800 font-semibold">Newsletter</div>
-                  <div className="text-slate-600 text-sm">Weekly digest of hot deals</div>
+                  <div className="text-white font-semibold">Newsletter</div>
+                  <div className="text-purple-300 text-sm">Weekly digest of hot deals</div>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input
@@ -148,8 +156,8 @@ export default function Settings() {
           </div>
 
           {/* Data Management Section */}
-          <div className="bg-white/80 backdrop-blur-lg rounded-3xl p-8 border-2 border-orange-200">
-            <h2 className="text-3xl font-bold text-orange-600 mb-6">🗄️ Data Management</h2>
+          <div className="bg-gradient-to-br from-purple-900/60 to-indigo-900/60 backdrop-blur-lg rounded-3xl p-8 border-2 border-purple-500/30">
+            <h2 className="text-3xl font-bold text-transparent bg-gradient-to-r from-orange-400 to-yellow-400 bg-clip-text mb-6">🗄️ Data Management</h2>
             <div className="space-y-4">
               <button
                 onClick={handleClearVotes}

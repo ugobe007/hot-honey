@@ -127,6 +127,62 @@ interface HotScore {
  * Main scoring function - evaluates startup quality
  */
 export function calculateHotScore(startup: StartupProfile): HotScore {
+  // QUICK FIX: Base score boost for all startups with ANY content
+  // This prevents scores of 0/100 and gives credit for basic presence
+  let baseBoost = 0;
+  
+  // 🔥 VIBE SCORE - Qualitative story/narrative bonus (MINIMIZED WEIGHT)
+  // VIBE = Value prop + Insight + Business model + Execution + market
+  let vibeBonus = 0;
+  const startupAny = startup as any; // Cast to access VIBE fields
+  
+  // 1. Problem/Value Proposition (0-0.2 points) - REDUCED from 0.5
+  if (startupAny.value_proposition || startupAny.problem) {
+    const problemLength = (startupAny.value_proposition || startupAny.problem || '').length;
+    if (problemLength > 100) vibeBonus += 0.2; // Detailed problem statement
+    else if (problemLength > 50) vibeBonus += 0.15;
+    else if (problemLength > 0) vibeBonus += 0.05;
+  }
+  
+  // 2. Solution (0-0.2 points) - REDUCED from 0.5
+  if (startupAny.solution) {
+    const solutionLength = startupAny.solution.length;
+    if (solutionLength > 100) vibeBonus += 0.2; // Detailed solution
+    else if (solutionLength > 50) vibeBonus += 0.15;
+    else if (solutionLength > 0) vibeBonus += 0.05;
+  }
+  
+  // 3. Market Size (0-0.2 points) - REDUCED from 0.5
+  if (startupAny.market_size && typeof startupAny.market_size === 'string' && startupAny.market_size.length > 0) {
+    vibeBonus += 0.2;
+  }
+  
+  // 4. Team Companies (0-0.2 points) - REDUCED from 0.5
+  if (startupAny.team_companies && Array.isArray(startupAny.team_companies) && startupAny.team_companies.length > 0) {
+    if (startupAny.team_companies.length >= 3) vibeBonus += 0.2; // Strong team pedigree
+    else if (startupAny.team_companies.length >= 2) vibeBonus += 0.15;
+    else vibeBonus += 0.1;
+  }
+  
+  // 5. Investment Amount (0-0.2 points) - REDUCED from 0.5
+  if (startupAny.raise_amount || startupAny.funding_needed) {
+    vibeBonus += 0.2;
+  }
+  
+  // Total VIBE bonus: 1.0 point max (reduced from 2.5) - Minimized correlation
+  baseBoost += vibeBonus;
+  
+  // Give points for having basic content
+  if (startup.team && startup.team.length > 0) baseBoost += 1;
+  if (startup.launched || startup.demo_available) baseBoost += 1;
+  if (startup.industries && startup.industries.length > 0) baseBoost += 0.5;
+  if (startup.problem || startup.solution) baseBoost += 0.5;
+  if (startup.tagline || startup.pitch) baseBoost += 0.5;
+  if (startup.founded_date) baseBoost += 0.5;
+  
+  // Minimum base boost of 5 points so startups score at least 50/100
+  baseBoost = Math.max(baseBoost, 5);
+  
   const teamScore = scoreTeam(startup);
   const tractionScore = scoreTraction(startup);
   const marketScore = scoreMarket(startup);
@@ -136,9 +192,9 @@ export function calculateHotScore(startup: StartupProfile): HotScore {
   const gritScore = scoreGrit(startup); // NEW
   const problemValidationScore = scoreProblemValidation(startup); // NEW - Your #1 criterion
   
-  // Total possible: 3 + 3 + 2 + 2 + 2 + 1.5 + 1.5 + 2 = 17 points, normalized to 10
-  const rawTotal = teamScore + tractionScore + marketScore + productScore + visionScore + ecosystemScore + gritScore + problemValidationScore;
-  const total = Math.min((rawTotal / 17) * 10, 10); // Normalize to 10-point scale
+  // Total possible: 2 (base) + 3 + 3 + 2 + 2 + 2 + 1.5 + 1.5 + 2 = 19 points, normalized to 10
+  const rawTotal = baseBoost + teamScore + tractionScore + marketScore + productScore + visionScore + ecosystemScore + gritScore + problemValidationScore;
+  const total = Math.min((rawTotal / 19) * 10, 10); // Normalize to 10-point scale (adjusted denominator)
   
   // Dynamic match count based on score
   let matchCount = 5; // Default
@@ -162,6 +218,7 @@ export function calculateHotScore(startup: StartupProfile): HotScore {
     },
     matchCount,
     reasoning: generateReasoning(startup, { 
+      baseBoost,
       teamScore, 
       tractionScore, 
       marketScore, 
@@ -193,7 +250,7 @@ function scoreTeam(startup: StartupProfile): number {
   }
   
   // Pedigree & experience (Sequoia/FF)
-  if (startup.team && startup.team.length > 0) {
+  if (startup.team && Array.isArray(startup.team) && startup.team.length > 0) {
     const hasTopTierBackground = startup.team.some(member => 
       member.previousCompanies?.some(company => 
         ['Google', 'Meta', 'Apple', 'Amazon', 'Microsoft', 'Tesla', 'SpaceX', 'Stripe', 'OpenAI'].some(
@@ -582,6 +639,11 @@ function scoreProblemValidation(startup: StartupProfile): number {
  */
 function generateReasoning(startup: StartupProfile, scores: any): string[] {
   const reasons: string[] = [];
+  
+  // Base boost acknowledgment
+  if (scores.baseBoost && scores.baseBoost >= 2) {
+    reasons.push('✅ Startup profile active with basic information');
+  }
   
   // Team highlights
   if (scores.teamScore >= 2) {

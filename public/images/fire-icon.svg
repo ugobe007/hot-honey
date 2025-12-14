@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 600" fill="none">
+  <defs>
+    <linearGradient id="outerFlame" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" style="stop-color:#DC3524;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E84C3D;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="middleFlame" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" style="stop-color:#E84C3D;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FF8C42;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="innerFlame" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFA726;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FFD54F;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="coreFlame" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFE57F;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#FFF9C4;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FFFFFF;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Outer red flame -->
+  <path d="M200 580 C140 580 90 530 70 480 C50 430 40 380 60 330 C80 280 110 240 130 200 C150 160 160 120 170 80 C180 120 190 160 210 200 C230 240 260 280 280 330 C300 380 290 430 270 480 C250 530 230 570 200 580 Z" fill="url(#outerFlame)"/>
+  
+  <!-- Left small flame -->
+  <path d="M90 380 C80 380 70 370 65 355 C60 340 60 325 65 310 C70 295 80 285 85 270 C90 255 92 240 95 225 C98 240 100 255 105 270 C110 285 120 295 125 310 C130 325 130 340 125 355 C120 370 110 380 100 390 Z" fill="url(#middleFlame)"/>
+  
+  <!-- Right small flame -->  
+  <path d="M310 380 C320 380 330 370 335 355 C340 340 340 325 335 310 C330 295 320 285 315 270 C310 255 308 240 305 225 C302 240 300 255 295 270 C290 285 280 295 275 310 C270 325 270 340 275 355 C280 370 290 380 300 390 Z" fill="url(#middleFlame)"/>
+  
+  <!-- Center top flame -->
+  <path d="M200 140 C195 140 190 135 188 127 C186 119 186 111 188 103 C190 95 195 90 197 82 C199 74 200 66 201 58 C202 66 203 74 205 82 C207 90 212 95 214 103 C216 111 216 119 214 127 C212 135 207 140 202 148 Z" fill="url(#middleFlame)"/>
+  
+  <!-- Middle orange flame -->
+  <path d="M200 530 C155 530 120 495 105 460 C90 425 85 390 100 355 C115 320 140 295 155 265 C170 235 178 205 185 175 C192 205 200 235 215 265 C230 295 255 320 270 355 C285 390 280 425 265 460 C250 495 225 525 200 530 Z" fill="url(#middleFlame)"/>
+  
+  <!-- Inner yellow flame -->
+  <path d="M200 480 C170 480 145 455 135 430 C125 405 123 380 133 355 C143 330 160 315 170 295 C180 275 185 255 190 235 C195 255 200 275 210 295 C220 315 237 330 247 355 C257 380 255 405 245 430 C235 455 215 475 200 480 Z" fill="url(#innerFlame)"/>
+  
+  <!-- Core white-yellow flame -->
+  <path d="M200 430 C185 430 172 418 168 405 C164 392 164 379 168 366 C172 353 182 345 188 333 C194 321 197 309 200 297 C203 309 206 321 212 333 C218 345 228 353 232 366 C236 379 236 392 232 405 C228 418 218 427 200 430 Z" fill="url(#coreFlame)"/>
+</svg>

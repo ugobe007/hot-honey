@@ -76,6 +76,38 @@ app.post('/api/documents', upload.single('file'), (req, res) => {
   res.json({ filename: req.file.filename, originalname: req.file.originalname });
 });
 
+// RSS refresh endpoint
+app.post('/api/rss/refresh', async (req, res) => {
+  try {
+    console.log('📡 RSS refresh triggered');
+    // This endpoint triggers a manual refresh check
+    // For now, just return success as the actual scraping happens via run-rss-scraper.js
+    res.json({ 
+      success: true, 
+      message: 'RSS refresh initiated. Run the scraper script to process feeds.',
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error('Error triggering RSS refresh:', error);
+    res.status(500).json({ error: 'Failed to refresh RSS feeds' });
+  }
+});
+
+// Discover startups from RSS endpoint
+app.post('/api/rss/discover-startups', async (req, res) => {
+  try {
+    console.log('🚀 Startup discovery triggered');
+    res.json({ 
+      success: true, 
+      message: 'Startup discovery initiated. Run discover-startups-from-rss.js to extract startups from RSS feeds.',
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error('Error triggering startup discovery:', error);
+    res.status(500).json({ error: 'Failed to start startup discovery' });
+  }
+});
+
 // 404 handler
 app.use((req, res) => {
   res.status(404).json({

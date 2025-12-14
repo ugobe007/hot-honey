@@ -6,6 +6,7 @@ import { useStore } from '../store';
 import StartupCardOfficial from '../components/StartupCardOfficial';
 import ActivityTicker from '../components/ActivityTicker';
 import HamburgerMenu from '../components/HamburgerMenu';
+import VoteTransparency from '../components/VoteTransparency';
 import { generateRecentActivities } from '../utils/activityGenerator';
 
 const Vote: React.FC = () => {
@@ -83,12 +84,20 @@ const Vote: React.FC = () => {
         <ActivityTicker activities={activities} />
       </div>
       
-      {/* Startup card */}
-      <div className="flex justify-center items-start">
-        <StartupCardOfficial
-          startup={currentStartup}
-          onVote={(vote) => vote === 'yes' ? voteYes(currentStartup) : voteNo()}
-        />
+      {/* Main Content Container */}
+      <div className="max-w-6xl mx-auto">
+        {/* Startup card */}
+        <div className="flex justify-center items-start mb-6">
+          <StartupCardOfficial
+            startup={currentStartup}
+            onVote={(vote) => vote === 'yes' ? voteYes(currentStartup) : voteNo()}
+          />
+        </div>
+
+        {/* Vote Transparency Panel */}
+        <div className="px-4">
+          <VoteTransparency startup={currentStartup} />
+        </div>
       </div>
     </div>
   );

@@ -1,0 +1,138 @@
+{
+  "vc_firms": [
+    {
+      "name": "Dealroom Top VCs",
+      "url": "https://dealroom.net/blog/top-venture-capital-firms",
+      "frequency": "monthly",
+      "priority": "high"
+    },
+    {
+      "name": "CB Insights Top 100",
+      "url": "https://www.cbinsights.com/research/best-venture-capital-firms/",
+      "frequency": "quarterly",
+      "priority": "high"
+    },
+    {
+      "name": "Forbes Midas List",
+      "url": "https://www.forbes.com/midas-list/",
+      "frequency": "yearly",
+      "priority": "high"
+    },
+    {
+      "name": "TechCrunch Top VCs",
+      "url": "https://techcrunch.com/lists/top-vcs-2024/",
+      "frequency": "yearly",
+      "priority": "medium"
+    },
+    {
+      "name": "Crunchbase VC Rankings",
+      "url": "https://www.crunchbase.com/lists/top-vcs/",
+      "frequency": "monthly",
+      "priority": "high"
+    }
+  ],
+  "angel_groups": [
+    {
+      "name": "Band of Angels",
+      "url": "https://www.bandofangels.com/members",
+      "frequency": "monthly",
+      "priority": "high"
+    },
+    {
+      "name": "Tech Coast Angels",
+      "url": "https://www.techcoastangels.com/",
+      "frequency": "monthly",
+      "priority": "medium"
+    },
+    {
+      "name": "Keiretsu Forum",
+      "url": "https://www.keiretsuforum.com/",
+      "frequency": "monthly",
+      "priority": "medium"
+    },
+    {
+      "name": "Golden Seeds",
+      "url": "https://www.goldenseeds.com/",
+      "frequency": "monthly",
+      "priority": "medium"
+    }
+  ],
+  "accelerators": [
+    {
+      "name": "Y Combinator Companies",
+      "url": "https://www.ycombinator.com/companies",
+      "frequency": "weekly",
+      "priority": "high"
+    },
+    {
+      "name": "Techstars Portfolio",
+      "url": "https://www.techstars.com/portfolio",
+      "frequency": "monthly",
+      "priority": "high"
+    },
+    {
+      "name": "500 Global Portfolio",
+      "url": "https://500.co/companies",
+      "frequency": "monthly",
+      "priority": "medium"
+    },
+    {
+      "name": "Plug and Play Portfolio",
+      "url": "https://www.plugandplaytechcenter.com/companies/",
+      "frequency": "monthly",
+      "priority": "medium"
+    }
+  ],
+  "startup_discovery": [
+    {
+      "name": "Product Hunt",
+      "url": "https://www.producthunt.com/",
+      "frequency": "daily",
+      "priority": "high"
+    },
+    {
+      "name": "TechCrunch Startups",
+      "url": "https://techcrunch.com/startups/",
+      "frequency": "daily",
+      "priority": "high"
+    },
+    {
+      "name": "Crunchbase Latest",
+      "url": "https://www.crunchbase.com/discover/organization.companies/latest",
+      "frequency": "daily",
+      "priority": "medium"
+    },
+    {
+      "name": "AngelList",
+      "url": "https://angel.co/companies",
+      "frequency": "weekly",
+      "priority": "medium"
+    }
+  ],
+  "news": [
+    {
+      "name": "TechCrunch",
+      "url": "https://techcrunch.com/",
+      "frequency": "daily",
+      "priority": "high"
+    },
+    {
+      "name": "VentureBeat",
+      "url": "https://venturebeat.com/",
+      "frequency": "daily",
+      "priority": "high"
+    },
+    {
+      "name": "Crunchbase News",
+      "url": "https://news.crunchbase.com/",
+      "frequency": "daily",
+      "priority": "high"
+    },
+    {
+      "name": "The Information",
+      "url": "https://www.theinformation.com/",
+      "frequency": "daily",
+      "priority": "medium"
+    }
+  ]
+}

@@ -1,18 +1,42 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useReactions } from '../hooks/useReactions';
 import { useAuth } from '../hooks/useAuth';
 
 interface Startup {
-  id: number;
+  id: number | string;
   name: string;
   stage?: number;
   tagline?: string;
   pitch?: string;
-  fivePoints?: string[];
-  raise?: string;
+  description?: string;
+  sectors?: string[];
+  team_size?: number;
+  revenue_annual?: number;
+  mrr?: number;
+  growth_rate_monthly?: number;
+  has_technical_cofounder?: boolean;
+  is_launched?: boolean;
+  location?: string;
+  website?: string;
+  linkedin?: string;
+  raise_amount?: string;
+  raise_type?: string;
+  total_god_score?: number;
+  team_score?: number;
+  traction_score?: number;
+  market_score?: number;
+  product_score?: number;
+  vision_score?: number;
   yesVotes?: number;
   noVotes?: number;
-  comments?: any[];
+  fivePoints?: string[];
+  // VIBE Score (qualitative - minimized weight)
+  value_proposition?: string;
+  problem?: string;
+  solution?: string;
+  market_size?: string;
+  team_companies?: string[];
 }
 
 interface Props {
@@ -24,52 +48,38 @@ interface Props {
 export default function StartupCardOfficial({ startup, onVote, onSwipeAway }: Props) {
   const [hasVoted, setHasVoted] = useState(false);
   const [voteType, setVoteType] = useState<'yes' | 'no' | null>(null);
-  const [showBubbles, setShowBubbles] = useState(false);
-  const [showSecret, setShowSecret] = useState(false);
-  const [comment, setComment] = useState('');
-  const [showCommentBox, setShowCommentBox] = useState(false);
+  const [showDetails, setShowDetails] = useState(false);
+  const [showKeyPoints, setShowKeyPoints] = useState(false);
   const [isSwipingAway, setIsSwipingAway] = useState(false);
-  const [showPuff, setShowPuff] = useState(false);
-  const [showSignUpPrompt, setShowSignUpPrompt] = useState(false);
-  const [showThumbsUpFloat, setShowThumbsUpFloat] = useState(false);
-  const [voteMessage, setVoteMessage] = useState<string>('');
   const [showVoteMessage, setShowVoteMessage] = useState(false);
-  const [hasReactedUp, setHasReactedUp] = useState(false);
-  const [hasReactedDown, setHasReactedDown] = useState(false);
+  const [voteMessage, setVoteMessage] = useState<string>('');
   
-  // Local state for anonymous reactions
+  // Reaction state
   const [localReaction, setLocalReaction] = useState<'thumbs_up' | 'thumbs_down' | null>(null);
   const [localThumbsUpCount, setLocalThumbsUpCount] = useState(0);
   const [localThumbsDownCount, setLocalThumbsDownCount] = useState(0);
+  const [hasReactedUp, setHasReactedUp] = useState(false);
+  const [hasReactedDown, setHasReactedDown] = useState(false);
+  const [showThumbsUpFloat, setShowThumbsUpFloat] = useState(false);
 
-  // Get user ID for reactions
   const { userId } = useAuth();
-
-  // Use reactions hook for authenticated users
   const { castReaction, getCounts, hasReacted, fetchUserReactions } = useReactions(startup.id.toString());
   const supabaseReactionCounts = getCounts(startup.id.toString());
   const supabaseUserReaction = hasReacted(startup.id.toString());
 
-  // Load user's reactions on mount
   useEffect(() => {
     if (userId && !userId.startsWith('anon_')) {
       fetchUserReactions(userId);
     } else {
-      // Load local reactions for anonymous users
       const localReactions = JSON.parse(localStorage.getItem('localReactions') || '{}');
       const localCounts = JSON.parse(localStorage.getItem('localReactionCounts') || '{}');
+      const userReactedStartups = JSON.parse(localStorage.getItem('userReactedStartups') || '{}');
       
-      if (localReactions[startup.id]) {
-        setLocalReaction(localReactions[startup.id]);
-      }
-      
+      if (localReactions[startup.id]) setLocalReaction(localReactions[startup.id]);
       if (localCounts[startup.id]) {
         setLocalThumbsUpCount(localCounts[startup.id].thumbs_up || 0);
         setLocalThumbsDownCount(localCounts[startup.id].thumbs_down || 0);
       }
-
-      // Check if user has already reacted (limit 1 click per startup)
-      const userReactedStartups = JSON.parse(localStorage.getItem('userReactedStartups') || '{}');
       if (userReactedStartups[startup.id]) {
         if (userReactedStartups[startup.id] === 'thumbs_up') setHasReactedUp(true);
         if (userReactedStartups[startup.id] === 'thumbs_down') setHasReactedDown(true);
@@ -77,87 +87,67 @@ export default function StartupCardOfficial({ startup, onVote, onSwipeAway }: Pr
     }
   }, [userId]);
 
-  // Determine which reaction/counts to display
   const isAnonymous = !userId || userId.startsWith('anon_');
-  const displayReaction = isAnonymous ? localReaction : supabaseUserReaction;
   const displayThumbsUpCount = isAnonymous ? localThumbsUpCount : supabaseReactionCounts.thumbs_up_count;
   const displayThumbsDownCount = isAnonymous ? localThumbsDownCount : supabaseReactionCounts.thumbs_down_count;
 
-  const getVotesNeeded = (stage: number) => (stage === 4 ? 1 : 5);
-  const votesNeeded = getVotesNeeded(startup.stage || 1);
-  const currentVotes = startup.yesVotes || 0;
-  const progress = Math.min((currentVotes / votesNeeded) * 100, 100);
+  const formatCurrency = (amount?: number) => {
+    if (!amount || amount === 0) return null;
+    if (amount >= 1000000) return `$${(amount / 1000000).toFixed(1)}M`;
+    if (amount >= 1000) return `$${(amount / 1000).toFixed(0)}K`;
+    return `$${amount}`;
+  };
 
-  // Function to clean up point text by removing common prefixes and truncate to one sentence
-  const cleanPointText = (text: string): string => {
-    if (!text) return text;
-    
-    // Remove common prefixes
-    let cleaned = text
-      .replace(/^(Problem:|Solution:|Team:|Market|Team background:|Market size:|Investment focus:|Portfolio size:|Check size:|Notable exits:)\s*/i, '')
-      .replace(/^(Problem they solve:|Their solution:)\s*/i, '')
-      .trim();
-    
-    // Truncate to first sentence (end at period, question mark, or exclamation)
-    const firstSentenceMatch = cleaned.match(/^[^.!?]+[.!?]/);
-    if (firstSentenceMatch) {
-      cleaned = firstSentenceMatch[0].trim();
-    }
-    
-    return cleaned;
+  const formatGrowthRate = (rate?: number) => {
+    if (!rate || rate === 0) return null;
+    return `${rate > 0 ? '+' : ''}${rate}%`;
+  };
+
+  const getGODScoreColor = (score?: number) => {
+    if (!score) return 'text-gray-400';
+    if (score >= 80) return 'text-green-400';
+    if (score >= 60) return 'text-yellow-400';
+    if (score >= 40) return 'text-orange-400';
+    return 'text-red-400';
+  };
+
+  const getGODScoreLabel = (score?: number) => {
+    if (!score) return '⚪ UNSCORED';
+    if (score >= 80) return '🟢 EXCELLENT';
+    if (score >= 60) return '🟡 GOOD';
+    if (score >= 40) return '🟠 FAIR';
+    return '🔴 WEAK';
   };
 
   const handleReaction = async (reactionType: 'thumbs_up' | 'thumbs_down') => {
-    const isAnonymous = !userId || userId.startsWith('anon_');
+    if (reactionType === 'thumbs_up' && hasReactedUp) return;
+    if (reactionType === 'thumbs_down' && hasReactedDown) return;
 
-    // Check if user already reacted
-    if (reactionType === 'thumbs_up' && hasReactedUp) {
-      alert('You already gave this a thumbs up! 👍');
-      return;
-    }
-    if (reactionType === 'thumbs_down' && hasReactedDown) {
-      alert('You already gave this a thumbs down! 👎');
-      return;
-    }
-
-    // Check limits before reacting
     const maxThumbsUp = 100;
     const maxThumbsDown = 75;
 
-    if (reactionType === 'thumbs_up' && displayThumbsUpCount >= maxThumbsUp) {
-      alert('👍 Max thumbs up reached (100)!');
-      return;
-    }
+    if (reactionType === 'thumbs_up' && displayThumbsUpCount >= maxThumbsUp) return;
+    if (reactionType === 'thumbs_down' && displayThumbsDownCount >= maxThumbsDown) return;
 
-    if (reactionType === 'thumbs_down' && displayThumbsDownCount >= maxThumbsDown) {
-      alert('👎 Max thumbs down reached (75)!');
-      return;
-    }
-
-    // Show floating animation only for thumbs up
     if (reactionType === 'thumbs_up') {
       setShowThumbsUpFloat(true);
       setTimeout(() => setShowThumbsUpFloat(false), 800);
       setHasReactedUp(true);
     } else {
-      // No animation for thumbs down, just register the click
       setHasReactedDown(true);
     }
 
     try {
       if (isAnonymous) {
-        // Track that user reacted (limit 1 per startup)
         const userReactedStartups = JSON.parse(localStorage.getItem('userReactedStartups') || '{}');
         userReactedStartups[startup.id] = reactionType;
         localStorage.setItem('userReactedStartups', JSON.stringify(userReactedStartups));
 
-        // For anonymous: just increment the count (no toggle)
         const localCounts = JSON.parse(localStorage.getItem('localReactionCounts') || '{}');
         if (!localCounts[startup.id]) {
           localCounts[startup.id] = { thumbs_up: 0, thumbs_down: 0 };
         }
         
-        // Increment the count
         if (reactionType === 'thumbs_up') {
           localCounts[startup.id].thumbs_up = Math.min(localCounts[startup.id].thumbs_up + 1, maxThumbsUp);
         } else {
@@ -165,14 +155,9 @@ export default function StartupCardOfficial({ startup, onVote, onSwipeAway }: Pr
         }
         
         localStorage.setItem('localReactionCounts', JSON.stringify(localCounts));
-        
-        // Update local state immediately
         setLocalThumbsUpCount(localCounts[startup.id].thumbs_up);
         setLocalThumbsDownCount(localCounts[startup.id].thumbs_down);
-        
-        console.log('Anonymous reaction saved:', reactionType);
       } else {
-        // Authenticated users: save to Supabase
         await castReaction(userId, startup.id.toString(), reactionType);
       }
     } catch (err) {
@@ -186,99 +171,30 @@ export default function StartupCardOfficial({ startup, onVote, onSwipeAway }: Pr
     setVoteType(vote);
     setHasVoted(true);
 
-    // Show vote message
     if (vote === 'yes') {
       setVoteMessage(`✅ ${startup.name} added to your portfolio!`);
-      setShowBubbles(true);
-      setTimeout(() => setShowBubbles(false), 800);
     } else {
       setVoteMessage(`❌ ${startup.name} removed from voting`);
-      // No animation for NO votes, just show button depressed
     }
 
-    // Display vote message
     setShowVoteMessage(true);
     setTimeout(() => setShowVoteMessage(false), 3000);
 
     onVote(vote, startup);
 
-    // Show sign-up prompt for anonymous users after voting
-    const isAnonymous = !userId || userId.startsWith('anon_');
-    if (isAnonymous) {
-      setTimeout(() => {
-        setShowSignUpPrompt(true);
-        setTimeout(() => setShowSignUpPrompt(false), 4000);
-      }, 600);
-    }
-
     setTimeout(() => {
-      setShowPuff(true);
+      setIsSwipingAway(true);
       setTimeout(() => {
-        setIsSwipingAway(true);
-        setTimeout(() => {
-          if (onSwipeAway) onSwipeAway();
-        }, 250);
-      }, 150);
-    }, 300);
-  };
-
-  const handleCommentSubmit = () => {
-    const badWords = ['stupid', 'dumb', 'idiot', 'hate', 'terrible', 'awful', 'sucks', 'crap', 'shit', 'fuck'];
-    const hasBadWords = badWords.some(word => comment.toLowerCase().includes(word));
-    
-    if (hasBadWords) {
-      alert('❌ Please keep comments constructive and professional.');
-      return;
-    }
-
-    if (comment.trim().length < 5) {
-      alert('❌ Comment must be at least 5 characters.');
-      return;
-    }
-
-    const isAnonymous = !userId || userId.startsWith('anon_');
-    
-    // Store comment locally
-    const localComments = JSON.parse(localStorage.getItem('localComments') || '{}');
-    if (!localComments[startup.id]) localComments[startup.id] = [];
-    localComments[startup.id].push({
-      text: comment,
-      timestamp: new Date().toISOString(),
-      anonymous: isAnonymous
-    });
-    localStorage.setItem('localComments', JSON.stringify(localComments));
-
-    if (isAnonymous) {
-      alert('💬 Comment saved locally! Sign up to save permanently across devices.');
-    } else {
-      alert('💬 Comment posted!');
-    }
-    
-    setComment('');
-    setShowCommentBox(false);
-  };
-
-  const getStageDescription = (stage: number) => {
-    switch(stage) {
-      case 1: return 'Anonymous voting • Need 5 votes to advance';
-      case 2: return 'Review materials • Need 5 votes to advance';
-      case 3: return 'Meet founder • Need 5 votes to advance';
-      case 4: return 'Deal room access • Need 1 vote to close';
-      default: return 'Voting stage';
-    }
+        if (onSwipeAway) onSwipeAway();
+      }, 250);
+    }, 500);
   };
 
   return (
-    <div className={`relative transition-all duration-250 ease-out ${isSwipingAway ? 'transform -translate-x-full opacity-0' : ''} ${showPuff ? 'animate-puff' : ''}`}>
+    <div className={`relative transition-all duration-250 ease-out ${isSwipingAway ? 'transform -translate-x-full opacity-0' : ''}`}>
       {showVoteMessage && (
         <div className="absolute -top-20 left-1/2 transform -translate-x-1/2 z-[60] bg-white border-4 border-orange-500 px-6 py-3 rounded-2xl shadow-2xl animate-bounce">
           <p className="text-base font-black text-gray-900 whitespace-nowrap">{voteMessage}</p>
-        </div>
-      )}
-
-      {showSignUpPrompt && (
-        <div className="absolute -top-16 left-1/2 transform -translate-x-1/2 z-50 bg-yellow-400 text-black px-4 py-2 rounded-lg shadow-xl animate-bounce">
-          <p className="text-sm font-bold">💾 Sign up to save your votes!</p>
         </div>
       )}
 
@@ -301,249 +217,252 @@ export default function StartupCardOfficial({ startup, onVote, onSwipeAway }: Pr
         </div>
       )}
 
-      {showBubbles && (
-        <div className="absolute inset-0 pointer-events-none z-50 overflow-hidden">
-          {[...Array(12)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute text-2xl animate-float-up"
-              style={{
-                left: `${Math.random() * 90 + 5}%`,
-                bottom: '0%',
-                animationDelay: `${i * 0.05}s`,
-                animationDuration: '0.8s'
-              }}
-            >
-              🔥
-            </div>
-          ))}
-        </div>
-      )}
-
-      {showPuff && (
-        <div className="absolute inset-0 pointer-events-none z-50 flex items-center justify-center">
-          {[...Array(6)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute text-4xl animate-puff-cloud opacity-70"
-              style={{
-                animationDelay: `${i * 0.02}s`,
-              }}
-            >
-              💨
-            </div>
-          ))}
-        </div>
-      )}
-
-      <div className="bg-gradient-to-br from-[#f87004] via-[#fb9f05] to-[#FFB402] rounded-2xl p-5 shadow-2xl border-4 border-[#ae3e07] relative w-full max-w-[360px] sm:w-[360px] h-auto min-h-[420px] flex flex-col mx-auto">
-        <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/30 to-transparent pointer-events-none"></div>
-        
-        <div className="relative flex flex-col h-full">
+      <div className="bg-gradient-to-br from-slate-100 to-slate-200 rounded-2xl shadow-2xl overflow-hidden border-2 border-purple-400/60 hover:border-orange-400 relative hover:scale-[1.02] transition-all duration-300 w-full max-w-[480px] mx-auto hover:shadow-purple-500/30">
+        {/* Header Section - Purple gradient */}
+        <div className="bg-gradient-to-r from-purple-600 to-purple-800 p-3 border-b border-purple-400">
           <div className="flex justify-between items-start mb-2">
             <div className="flex-1">
-              <h2 className="text-2xl font-black text-lime-400 tracking-tight leading-none drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
+              <h2 className="text-2xl font-black text-white mb-1 leading-tight">
                 {startup.name}
               </h2>
-              <p className="text-[#001eff] font-bold text-base mt-0.5">
-                stage #{startup.stage || 1}
-              </p>
+              {startup.tagline && (
+                <p className="text-sm text-purple-200 italic">
+                  "{startup.tagline}"
+                </p>
+              )}
             </div>
-            <button
-              onClick={() => setShowSecret(!showSecret)}
-              className="text-3xl hover:scale-110 transition-transform flex-shrink-0"
-            >
-              🍯
-            </button>
-          </div>
-
-          {showSecret && (
-            <div className="bg-yellow-200 border-2 border-yellow-400 rounded-lg p-1.5 mb-2">
-              <p className="text-[10px] font-bold text-gray-900 leading-tight">
-                🤫 {startup.fivePoints && startup.fivePoints[4] ? cleanPointText(startup.fivePoints[4]) : 'Traction data available'}
-              </p>
-            </div>
-          )}
-
-          {startup.pitch && (
-            <p className="text-lg font-black text-[#4700d6] leading-tight tracking-tight mb-3">
-              "{cleanPointText(startup.pitch)}"
-            </p>
-          )}
-
-          <div className="mb-3 space-y-1.5">
-            {(startup.fivePoints || []).slice(0, 4).map((point, i) => (
-              <p 
-                key={i} 
-                className="text-base font-black text-gray-900 leading-tight tracking-tight"
-              >
-                {cleanPointText(point)}
-              </p>
-            ))}
-            {startup.raise && (
-              <p className="text-xl font-black text-gray-900 leading-tight tracking-tight">
-                💰 {(() => {
-                  const raiseStr = startup.raise.toString();
-                  // Check if it's a number and less than $100
-                  const match = raiseStr.match(/\$?([\d.]+)/);
-                  if (match && parseFloat(match[1]) < 100 && !raiseStr.includes('M') && !raiseStr.includes('K')) {
-                    return 'N/A';
-                  }
-                  return startup.raise;
-                })()}
-              </p>
+            {startup.stage && (
+              <div className="flex-shrink-0">
+                <div className="px-3 py-1.5 bg-white/20 backdrop-blur-sm rounded-lg border border-white/30 shadow-lg">
+                  <span className="text-[9px] font-black text-white text-center leading-tight block">
+                    STAGE {startup.stage}
+                  </span>
+                </div>
+              </div>
             )}
           </div>
-
-          <div className="flex-1"></div>
-
-          <div className="flex gap-3 mb-2">
-            <button
-              onClick={() => handleReaction('thumbs_up')}
-              className="flex items-center gap-1 transition-all"
-            >
-              <span className={displayThumbsUpCount >= 10 ? "text-3xl" : "text-2xl"}>👍</span>
-              <span className="font-black text-gray-900 text-lg">{displayThumbsUpCount}</span>
-            </button>
-            
-            <button
-              onClick={() => handleReaction('thumbs_down')}
-              className="flex items-center gap-1 transition-all"
-            >
-              <span className="text-2xl">👎</span>
-              <span className="font-black text-gray-900 text-lg">{displayThumbsDownCount}</span>
-            </button>
-          </div>
-
-          <div className="flex items-center gap-2 mb-2">
-            <div className={
-              startup.stage === 1 ? "text-xl" :
-              startup.stage === 2 ? "text-2xl" :
-              startup.stage === 3 ? "text-3xl" :
-              "text-4xl"
-            }>🔥</div>
-            <button
-              onClick={() => handleVote('yes')}
-              disabled={hasVoted}
-              className={`flex-1 font-black py-2 px-3 rounded-xl text-sm shadow-lg transition-all ${
-                voteType === 'yes' ? 'bg-[#f87004] text-white scale-105 border-2 border-white' : 'bg-[#f87004] hover:bg-[#ae3e07] text-white'
-              } disabled:opacity-50 disabled:cursor-not-allowed`}
-            >
-              yes
-            </button>
-            <button
-              onClick={() => handleVote('no')}
-              disabled={hasVoted}
-              className={`flex-1 font-black py-2 px-3 rounded-xl text-sm shadow-lg transition-all ${
-                voteType === 'no' 
-                  ? 'bg-slate-400 text-white opacity-90 border-2 border-white' 
-                  : 'bg-gradient-to-br from-slate-300 via-slate-200 to-slate-400 hover:from-slate-400 hover:via-slate-300 hover:to-slate-500 text-slate-800 shadow-[inset_0_2px_4px_rgba(255,255,255,0.8)]'
-              } disabled:opacity-50 disabled:cursor-not-allowed`}
-            >
-              no
-            </button>
-          </div>
-
-          <button
-            onClick={() => setShowCommentBox(!showCommentBox)}
-            className="w-full bg-purple-800 hover:bg-purple-900 text-white font-bold py-2 px-4 rounded-xl text-xs transition-all shadow-lg"
-          >
-            comments ({startup.comments?.length || 0})
-          </button>
-
-          {showCommentBox && (
-            <div className="mt-2 bg-white rounded-xl p-2">
-              <textarea
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
-                placeholder="Share feedback..."
-                className="w-full px-2 py-1.5 border-2 border-orange-300 rounded-lg text-xs"
-                rows={2}
-                maxLength={500}
-              />
-              <div className="flex justify-between items-center mt-1">
-                <span className="text-[10px] text-gray-500">{comment.length}/500</span>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => {
-                      setComment('');
-                      setShowCommentBox(false);
-                    }}
-                    className="bg-gray-300 hover:bg-gray-400 text-gray-700 font-bold py-1 px-3 rounded-lg text-xs"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    onClick={handleCommentSubmit}
-                    className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-1 px-3 rounded-lg text-xs"
-                  >
-                    Post
-                  </button>
+          
+          {/* GOD Score - Orange accent */}
+          {startup.total_god_score && (
+            <div className="mt-2 bg-gradient-to-r from-orange-500/30 to-amber-500/30 border border-orange-400/50 rounded-lg p-2">
+              <div className="flex items-center justify-between">
+                <span className="text-orange-200 text-xs font-bold">🎯 GOD SCORE</span>
+                <div className="flex items-center gap-2">
+                  <span className={`${getGODScoreColor(startup.total_god_score)} text-lg font-black`}>
+                    {startup.total_god_score}
+                  </span>
+                  <span className="text-[10px] text-white/80">
+                    {getGODScoreLabel(startup.total_god_score)}
+                  </span>
                 </div>
               </div>
             </div>
           )}
         </div>
+
+        <div className="p-4 space-y-3">
+          {/* Key Metrics - Simple inline text */}
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
+            {startup.team_size && startup.team_size > 0 && (
+              <span className="text-slate-700">👥 <span className="font-bold">{startup.team_size} people</span></span>
+            )}
+            {formatCurrency(startup.revenue_annual) && (
+              <span className="text-orange-700">💰 <span className="font-bold">{formatCurrency(startup.revenue_annual)}/yr</span></span>
+            )}
+            {formatCurrency(startup.mrr) && (
+              <span className="text-orange-700">📊 <span className="font-bold">{formatCurrency(startup.mrr)}/mo</span></span>
+            )}
+            {formatGrowthRate(startup.growth_rate_monthly) && (
+              <span className="text-slate-700">📈 <span className="font-bold">{formatGrowthRate(startup.growth_rate_monthly)}/mo</span></span>
+            )}
+          </div>
+
+          {/* Status Indicators - Purple chips */}
+          <div className="flex gap-2 flex-wrap">
+            {startup.is_launched && (
+              <span className="bg-purple-100 border border-purple-300 text-purple-700 px-2.5 py-1 rounded-full text-[10px] font-bold">
+                🚀 LAUNCHED
+              </span>
+            )}
+            {startup.has_technical_cofounder && (
+              <span className="bg-purple-100 border border-purple-300 text-purple-700 px-2.5 py-1 rounded-full text-[10px] font-bold">
+                💻 TECH COFOUNDER
+              </span>
+            )}
+            {startup.location && (
+              <span className="bg-slate-100 border border-slate-300 text-slate-700 px-2.5 py-1 rounded-full text-[10px] font-bold">
+                📍 {startup.location}
+              </span>
+            )}
+          </div>
+
+          {/* Sectors - Orange chips */}
+          {startup.sectors && startup.sectors.length > 0 && (
+            <div>
+              <p className="text-purple-600 text-[10px] font-black mb-2">🏭 SECTORS</p>
+              <div className="flex flex-wrap gap-1.5">
+                {startup.sectors.slice(0, 3).map((sector, idx) => (
+                  <span key={idx} className="bg-orange-50 border border-orange-300 text-orange-700 px-2.5 py-1 rounded-full text-[10px] font-semibold">
+                    {sector}
+                  </span>
+                ))}
+                {startup.sectors.length > 3 && (
+                  <span className="bg-orange-50 border border-orange-300 text-orange-700 px-2.5 py-1 rounded-full text-[10px] font-semibold">
+                    +{startup.sectors.length - 3}
+                  </span>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* VIBE Score - Qualitative startup story */}
+          {(startup.value_proposition || startup.problem || startup.solution || startup.market_size || startup.team_companies || startup.raise_amount) && (
+            <div className="space-y-1 bg-purple-50 rounded-lg p-3 border border-purple-200">
+              {/* VIBE 1. Value Prop */}
+              {(startup.value_proposition || startup.problem) && (
+                <p className="text-purple-900 font-bold text-sm">
+                  {startup.value_proposition || startup.problem}
+                </p>
+              )}
+              
+              {/* 2. Market Size */}
+              {startup.market_size && (
+                <p className="text-purple-700 font-medium text-sm">
+                  {startup.market_size}
+                </p>
+              )}
+              
+              {/* 3. Solution */}
+              {startup.solution && (
+                <p className="text-purple-700 font-medium text-sm">
+                  {startup.solution}
+                </p>
+              )}
+              
+              {/* 4. Team Companies */}
+              {startup.team_companies && startup.team_companies.length > 0 && (
+                <p className="text-purple-700 font-medium text-sm">
+                  {startup.team_companies.join(', ')}
+                </p>
+              )}
+              
+              {/* 5. Investment Amount */}
+              {startup.raise_amount && (
+                <p className="text-orange-600 font-bold text-sm">
+                  💰 {startup.raise_amount}
+                  {startup.raise_type && ` ${startup.raise_type}`}
+                </p>
+              )}
+            </div>
+          )}
+
+          {/* Pitch/Description */}
+          {(startup.pitch || startup.description) && (
+            <div className="bg-white rounded-xl p-3 border border-gray-200 shadow-sm">
+              <button
+                onClick={() => setShowDetails(!showDetails)}
+                className="text-gray-600 font-black text-xs mb-1 hover:text-gray-800 transition-colors flex items-center gap-1"
+              >
+                <span>{showDetails ? '▼' : '▶'}</span>
+                <span>📋 ABOUT</span>
+              </button>
+              {showDetails && (
+                <p className="text-gray-700 text-xs leading-relaxed mt-2">
+                  {startup.pitch || startup.description}
+                </p>
+              )}
+            </div>
+          )}
+
+          {/* Five Points - Collapsible */}
+          {startup.fivePoints && startup.fivePoints.length > 0 && (
+            <div className="bg-orange-50 rounded-xl p-3 border border-orange-200">
+              <button
+                onClick={() => setShowKeyPoints(!showKeyPoints)}
+                className="text-orange-600 font-black text-xs hover:text-orange-700 transition-colors flex items-center gap-1 w-full"
+              >
+                <span>{showKeyPoints ? '▼' : '▶'}</span>
+                <span>✨ KEY POINTS ({startup.fivePoints.length})</span>
+              </button>
+              {showKeyPoints && (
+                <div className="space-y-1.5 mt-2">
+                  {startup.fivePoints.slice(0, 5).map((point, idx) => (
+                    <div key={idx} className="text-gray-700 text-xs flex items-start gap-2">
+                      <span className="text-orange-500 font-bold">•</span>
+                      <span>{point}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Navigation & Social Links */}
+          <div className="space-y-2">
+            {/* View Details Button - Always Shown */}
+            <Link
+              to={`/startup/${startup.id}`}
+              className="w-full block bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-black py-3 px-4 rounded-xl text-center transition-all shadow-lg shadow-orange-500/30 border-2 border-orange-400 text-sm"
+            >
+              📊 VIEW FULL PROFILE
+            </Link>
+
+            {/* Social Links */}
+            {(startup.website || startup.linkedin) && (
+              <div className="grid grid-cols-2 gap-2">
+                {startup.website && (
+                  <a
+                    href={startup.website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-white hover:bg-gray-50 text-gray-700 font-bold py-2.5 px-3 rounded-lg text-center transition-all text-xs border border-gray-200"
+                  >
+                    🌐 Website
+                  </a>
+                )}
+                {startup.linkedin && (
+                  <a
+                    href={startup.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2.5 px-3 rounded-lg text-center transition-all text-xs border border-blue-400"
+                  >
+                    💼 LinkedIn
+                  </a>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* Vote Buttons - Compact */}
+          {!hasVoted && (
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                onClick={() => handleVote('yes')}
+                className="bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-black py-2 px-3 rounded-lg transition-all shadow-md shadow-orange-500/30 border border-orange-400 text-xs"
+              >
+                🍯 SWEET!
+              </button>
+              <button
+                onClick={() => handleVote('no')}
+                className="bg-white hover:bg-gray-50 text-gray-600 font-black py-2 px-3 rounded-lg transition-all shadow-md border border-gray-300 text-xs"
+              >
+                👋 PASS
+              </button>
+            </div>
+          )}
+
+          {hasVoted && (
+            <div className={`text-center py-2 px-3 rounded-lg font-black text-xs ${
+              voteType === 'yes' 
+                ? 'bg-green-500/20 border border-green-400 text-green-300'
+                : 'bg-red-500/20 border border-red-400 text-red-300'
+            }`}>
+              {voteType === 'yes' ? '✅ PORTFOLIO' : '❌ PASSED'}
+            </div>
+          )}
+        </div>
       </div>
-
-      <style>{`
-        @keyframes float-up {
-          0% {
-            transform: translateY(0) scale(1);
-            opacity: 1;
-          }
-          100% {
-            transform: translateY(-300px) scale(1.5);
-            opacity: 0;
-          }
-        }
-        .animate-float-up {
-          animation: float-up 0.8s ease-out forwards;
-        }
-
-        @keyframes puff {
-          0% {
-            transform: scale(1);
-            opacity: 1;
-          }
-          50% {
-            transform: scale(1.2);
-            opacity: 0.8;
-          }
-          100% {
-            transform: scale(1.4);
-            opacity: 0;
-          }
-        }
-        .animate-puff {
-          animation: puff 0.15s ease-out;
-        }
-
-        @keyframes puff-cloud {
-          0% {
-            transform: translate(0, 0) scale(0.5);
-            opacity: 0;
-          }
-          50% {
-            opacity: 1;
-          }
-          100% {
-            transform: translate(var(--tx), var(--ty)) scale(1.8);
-            opacity: 0;
-          }
-        }
-        .animate-puff-cloud {
-          --tx: calc(cos(var(--angle)) * 60px);
-          --ty: calc(sin(var(--angle)) * 60px);
-          animation: puff-cloud 0.4s ease-out forwards;
-        }
-        .animate-puff-cloud:nth-child(1) { --angle: 0deg; }
-        .animate-puff-cloud:nth-child(2) { --angle: 60deg; }
-        .animate-puff-cloud:nth-child(3) { --angle: 120deg; }
-        .animate-puff-cloud:nth-child(4) { --angle: 180deg; }
-        .animate-puff-cloud:nth-child(5) { --angle: 240deg; }
-        .animate-puff-cloud:nth-child(6) { --angle: 300deg; }
-      `}</style>
     </div>
   );
 }

@@ -1,0 +1,71 @@
+🔥 HOT MONEY STARTUP DISCOVERY WITH VIBE FORMAT
+
+═══════════════════════════════════════════
+
+📡 Fetching active RSS sources...
+
+Found 10 active RSS sources
+
+📰 Processing: TechCrunch
+   📅 20 recent articles
+
+🤖 Using AI to extract VIBE data from 20 articles...
+   ✅ AI extracted 4 startups with VIBE data
+   ✅ Found 4 startups
+📰 Processing: VentureBeat
+   📅 7 recent articles
+
+🤖 Using AI to extract VIBE data from 7 articles...
+   ✅ AI extracted 2 startups with VIBE data
+   ✅ Found 2 startups
+📰 Processing: Crunchbase News
+   📅 10 recent articles
+
+🤖 Using AI to extract VIBE data from 10 articles...
+   ✅ AI extracted 1 startups with VIBE data
+   ✅ Found 1 startups
+📰 Processing: Startup Savant
+Error parsing feed Startup Savant: Attribute without value
+Line: 341
+Column: 142
+Char: t
+   ✅ Found 0 startups
+📰 Processing: Plug N Play 
+Error parsing feed Plug N Play : Feed not recognized as RSS 1 or 2.
+   ✅ Found 0 startups
+📰 Processing: Sky Deck
+Error parsing feed Sky Deck: Invalid character in entity name
+Line: 4
+Column: 278
+Char: &
+   ✅ Found 0 startups
+📰 Processing: Startup Lab
+Error parsing feed Startup Lab: Feed not recognized as RSS 1 or 2.
+   ✅ Found 0 startups
+📰 Processing: Columbia University
+Error parsing feed Columbia University: Invalid character in entity name
+Line: 9
+Column: 388
+Char: &
+   ✅ Found 0 startups
+📰 Processing: Tech Stars
+Error parsing feed Tech Stars: Feed not recognized as RSS 1 or 2.
+   ✅ Found 0 startups
+📰 Processing: StartX
+Error parsing feed StartX: Status code 406
+   ✅ Found 0 startups
+
+
+💾 Saving 7 startups to database...
+
+
+✅ Saved: 0 | Skipped (duplicates): 7
+
+═══════════════════════════════════════════
+✨ DISCOVERY COMPLETE!
+
+Total startups discovered: 7
+
+📊 View discovered startups:
+   Go to: http://localhost:5173/admin/discovered-startups
+

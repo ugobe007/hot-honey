@@ -1,0 +1,336 @@
+🚀 ENRICHING ALL VC PROFILES
+══════════════════════════════════════════════════════════════════════
+
+This will use OpenAI to fill in:
+  • Sector focus (AI/ML, Fintech, SaaS, etc.)
+  • Stage focus (seed, series A/B/C, growth)
+  • Portfolio size (number of companies)
+  • Notable investments (famous portfolio companies)
+  • Check sizes (M-0M ranges)
+  • Exit counts
+
+Starting enrichment...
+
+[dotenv@17.2.3] injecting env (6) from .env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
+🚀 Starting Investor Data Enrichment
+
+══════════════════════════════════════════════════════════════════════
+
+📊 Found 20 investors with incomplete data
+
+
+[1/20] Processing: Tiger Global Management
+
+🔍 Enriching data for: Tiger Global Management
+   ✅ Found 5 notable investments
+   ✅ Portfolio: 200 companies, 50 exits
+   ✅ Check size: $1M - $500M
+   ✅ Sectors: Technology, E-commerce, Financial Services, Healthcare, Consumer Internet
+   ✅ Stages: seed, series_a, series_b, growth
+   ❌ Database update error: {
+  code: 'PGRST204',
+  details: null,
+  hint: null,
+  message: "Could not find the 'sector_focus' column of 'investors' in the schema cache"
+}
+
+[2/20] Processing: Sequoia Capital
+
+🔍 Enriching data for: Sequoia Capital
+   ✅ Found 7 notable investments
+   ✅ Portfolio: 300 companies, 100 exits
+   ✅ Check size: $1M - $100M
+   ✅ Sectors: technology, healthcare, consumer, financial services, enterprise software
+   ✅ Stages: seed, series_a, series_b, growth
+   ❌ Database update error: {
+  code: 'PGRST204',
+  details: null,
+  hint: null,
+  message: "Could not find the 'sector_focus' column of 'investors' in the schema cache"
+}
+
+[3/20] Processing: Andreessen Horowitz
+
+🔍 Enriching data for: Andreessen Horowitz
+   ✅ Found 6 notable investments
+   ✅ Portfolio: 200 companies, 50 exits
+   ✅ Check size: $1M - $100M
+   ✅ Sectors: Technology, Software, Consumer Internet, Fintech, Healthcare, Cryptocurrency
+   ✅ Stages: seed, series_a, series_b, series_c, growth
+   ❌ Database update error: {
+  code: 'PGRST204',
+  details: null,
+  hint: null,
+  message: "Could not find the 'sector_focus' column of 'investors' in the schema cache"
+}
+
+[4/20] Processing: Sequoia
+
+🔍 Enriching data for: Sequoia
+   ✅ Found 6 notable investments
+   ✅ Portfolio: 300 companies, 100 exits
+   ✅ Check size: $1M - $100M
+   ✅ Sectors: technology, healthcare, financial services, consumer products
+   ✅ Stages: seed, series_a, series_b, growth
+   ❌ Database update error: {
+  code: 'PGRST204',
+  details: null,
+  hint: null,
+  message: "Could not find the 'sector_focus' column of 'investors' in the schema cache"
+}
+
+[5/20] Processing: Michael Chen
+
+🔍 Enriching data for: Michael Chen
+   ✅ Found 5 notable investments
+   ✅ Portfolio: 200 companies, 50 exits
+   ✅ Check size: $1M - $100M
+   ✅ Sectors: Artificial Intelligence, Machine Learning, Software, Consumer Technology
+   ✅ Stages: seed, series_a, series_b, series_c, series_d
+   ❌ Database update error: {
+  code: 'PGRST204',
+  details: null,
+  hint: null,
+  message: "Could not find the 'sector_focus' column of 'investors' in the schema cache"
+}
+
+[6/20] Processing: Sarah Johnson
+
+🔍 Enriching data for: Sarah Johnson
+   ✅ Found 5 notable investments
+   ✅ Portfolio: 3000 companies, 100 exits
+   ✅ Check size: $0.1M - $2M
+   ✅ Sectors: Technology, Consumer Internet, Software, Healthcare, Fintech
+   ✅ Stages: seed, series_a
+   ❌ Database update error: {
+  code: 'PGRST204',
+  details: null,
+  hint: null,
+  message: "Could not find the 'sector_focus' column of 'investors' in the schema cache"
+}
+
+[7/20] Processing: Roelof Botha
+
+🔍 Enriching data for: Roelof Botha
+   ✅ Found 5 notable investments
+   ✅ Portfolio: 300 companies, 100 exits
+   ✅ Check size: $1M - $100M
+   ✅ Sectors: Technology, Consumer Internet, Healthcare, Financial Services
+   ✅ Stages: seed, series_a, series_b, growth
+   ❌ Database update error: {
+  code: 'PGRST204',
+  details: null,
+  hint: null,
+  message: "Could not find the 'sector_focus' column of 'investors' in the schema cache"
+}
+
+[8/20] Processing: Michael Seibel
+
+🔍 Enriching data for: Michael Seibel
+   ✅ Found 5 notable investments
+   ✅ Portfolio: 2000 companies, 100 exits
+   ✅ Check size: $0.5M - $0.5M
+   ✅ Sectors: technology, software, consumer internet, fintech, healthcare
+   ✅ Stages: seed, series_a
+   ❌ Database update error: {
+  code: 'PGRST204',
+  details: null,
+  hint: null,
+  message: "Could not find the 'sector_focus' column of 'investors' in the schema cache"
+}
+
+[9/20] Processing: Mary Meeker
+
+🔍 Enriching data for: Mary Meeker
+   ✅ Found 4 notable investments
+   ✅ Portfolio: 50 companies, 10 exits
+   ✅ Check size: $1M - $50M
+   ✅ Sectors: technology, internet, software, consumer services
+   ✅ Stages: seed, series_a, series_b, series_c, series_d
+   ❌ Database update error: {
+  code: 'PGRST204',
+  details: null,
+  hint: null,
+  message: "Could not find the 'sector_focus' column of 'investors' in the schema cache"
+}
+
+[10/20] Processing: Peter Thiel
+
+🔍 Enriching data for: Peter Thiel
+   ✅ Found 5 notable investments
+   ✅ Portfolio: 200 companies, 30 exits
+   ✅ Check size: $1M - $100M
+   ✅ Sectors: technology, software, financial services, healthcare, space exploration
+   ✅ Stages: seed, series_a, series_b, series_c
+   ❌ Database update error: {
+  code: 'PGRST204',
+  details: null,
+  hint: null,
+  message: "Could not find the 'sector_focus' column of 'investors' in the schema cache"
+}
+
+[11/20] Processing: Kirsten Green
+
+🔍 Enriching data for: Kirsten Green
+   ✅ Found 5 notable investments
+   ✅ Portfolio: 50 companies, 10 exits
+   ✅ Check size: $1M - $20M
+   ✅ Sectors: e-commerce, consumer brands, retail technology
+   ✅ Stages: seed, series_a, series_b
+   ❌ Database update error: {
+  code: 'PGRST204',
+  details: null,
+  hint: null,
+  message: "Could not find the 'sector_focus' column of 'investors' in the schema cache"
+}
+
+[12/20] Processing: Josh Kopelman
+
+🔍 Enriching data for: Josh Kopelman
+   ✅ Found 5 notable investments
+   ✅ Portfolio: 300 companies, 40 exits
+   ✅ Check size: $0.5M - $5M
+   ✅ Sectors: technology, consumer internet, e-commerce, healthcare, financial services
+   ✅ Stages: seed, series_a
+   ❌ Database update error: {
+  code: 'PGRST204',
+  details: null,
+  hint: null,
+  message: "Could not find the 'sector_focus' column of 'investors' in the schema cache"
+}
+
+[13/20] Processing: Chris Sacca
+
+🔍 Enriching data for: Chris Sacca
+   ✅ Found 4 notable investments
+   ✅ Portfolio: 50 companies, 10 exits
+   ✅ Check size: $1M - $10M
+   ✅ Sectors: technology, design, consumer internet, mobile applications
+   ✅ Stages: seed, series_a, series_b
+   ❌ Database update error: {
+  code: 'PGRST204',
+  details: null,
+  hint: null,
+  message: "Could not find the 'sector_focus' column of 'investors' in the schema cache"
+}
+
+[14/20] Processing: Rebecca Lynn
+
+🔍 Enriching data for: Rebecca Lynn
+   ✅ Found 4 notable investments
+   ✅ Portfolio: 50 companies, 10 exits
+   ✅ Check size: $1M - $10M
+   ✅ Sectors: Fintech, SaaS, Healthcare, Consumer Technology
+   ✅ Stages: seed, series_a, series_b, series_c
+   ❌ Database update error: {
+  code: 'PGRST204',
+  details: null,
+  hint: null,
+  message: "Could not find the 'sector_focus' column of 'investors' in the schema cache"
+}
+
+[15/20] Processing: Alfred Lin
+
+🔍 Enriching data for: Alfred Lin
+   ✅ Found 5 notable investments
+   ✅ Portfolio: 200 companies, 50 exits
+   ✅ Check size: $1M - $100M
+   ✅ Sectors: consumer internet, marketplace, fintech
+   ✅ Stages: seed, series_a, series_b, series_c
+   ❌ Database update error: {
+  code: 'PGRST204',
+  details: null,
+  hint: null,
+  message: "Could not find the 'sector_focus' column of 'investors' in the schema cache"
+}
+
+[16/20] Processing: Legend Capital
+
+🔍 Enriching data for: Legend Capital
+   ✅ Found 3 notable investments
+   ✅ Portfolio: 200 companies, 30 exits
+   ✅ Check size: $1M - $50M
+   ✅ Sectors: technology, healthcare, consumer services, internet
+   ✅ Stages: seed, series_a, series_b, series_c
+   ❌ Database update error: {
+  code: 'PGRST204',
+  details: null,
+  hint: null,
+  message: "Could not find the 'sector_focus' column of 'investors' in the schema cache"
+}
+
+[17/20] Processing: New Enterprise Associates (NEA)
+
+🔍 Enriching data for: New Enterprise Associates (NEA)
+   ✅ Found 5 notable investments
+   ✅ Portfolio: 200 companies, 100 exits
+   ✅ Check size: $1M - $100M
+   ✅ Sectors: Technology, Healthcare, Consumer, Financial Services, Energy
+   ✅ Stages: seed, series_a, series_b, growth
+   ❌ Database update error: {
+  code: 'PGRST204',
+  details: null,
+  hint: null,
+  message: "Could not find the 'sector_focus' column of 'investors' in the schema cache"
+}
+
+[18/20] Processing: Matt Harris
+
+🔍 Enriching data for: Matt Harris
+   ✅ Found 4 notable investments
+   ✅ Portfolio: 100 companies, 25 exits
+   ✅ Check size: $1M - $50M
+   ✅ Sectors: fintech, financial services, consumer finance, payments, banking infrastructure
+   ✅ Stages: seed, series_a, series_b, series_c, series_d
+   ❌ Database update error: {
+  code: 'PGRST204',
+  details: null,
+  hint: null,
+  message: "Could not find the 'sector_focus' column of 'investors' in the schema cache"
+}
+
+[19/20] Processing: Ash Fontana
+
+🔍 Enriching data for: Ash Fontana
+   ✅ Found 4 notable investments
+   ✅ Portfolio: 30 companies, 5 exits
+   ✅ Check size: $1M - $10M
+   ✅ Sectors: Artificial Intelligence, Machine Learning, Data Analytics, Software
+   ✅ Stages: seed, series_a, series_b
+   ❌ Database update error: {
+  code: 'PGRST204',
+  details: null,
+  hint: null,
+  message: "Could not find the 'sector_focus' column of 'investors' in the schema cache"
+}
+
+[20/20] Processing: Hemant Taneja
+
+🔍 Enriching data for: Hemant Taneja
+   ✅ Found 5 notable investments
+   ✅ Portfolio: 100 companies, 20 exits
+   ✅ Check size: $1M - $100M
+   ✅ Sectors: AI, healthcare, fintech
+   ✅ Stages: seed, series_a, series_b
+   ❌ Database update error: {
+  code: 'PGRST204',
+  details: null,
+  hint: null,
+  message: "Could not find the 'sector_focus' column of 'investors' in the schema cache"
+}
+
+══════════════════════════════════════════════════════════════════════
+📈 ENRICHMENT SUMMARY
+══════════════════════════════════════════════════════════════════════
+✅ Successfully enriched: 0/20
+❌ Errors: 20/20
+📊 Success rate: 0%
+
+✨ Enrichment complete!
+
+
+══════════════════════════════════════════════════════════════════════
+✅ ENRICHMENT COMPLETE!
+
+Check your VC cards - they should now have full profiles!
+Visit: http://localhost:5173/investors

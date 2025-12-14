@@ -1,0 +1,326 @@
+[dotenv@17.2.3] injecting env (7) from .env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
+
+🔥 Discovering New Investors from VC Websites
+
+══════════════════════════════════════════════════════════════════════
+📋 Found 73 VC URLs to scrape
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📦 Batch 1/15 (URLs 1-5)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🌐 Scraping: https://a16z.com/
+   ✅ 0 new investors, 1 already exist
+
+🌐 Scraping: https://www.accel.com/
+   ✅ 0 new investors, 1 already exist
+
+🌐 Scraping: https://www.artiman.com/
+   ✅ 2 new investors, 0 already exist
+
+🌐 Scraping: https://www.baincapitalventures.com/
+   ✅ 0 new investors, 1 already exist
+
+🌐 Scraping: https://www.battery.com/
+   ✅ 0 new investors, 1 already exist
+
+⏸️  Pausing 10 seconds before next batch...
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📦 Batch 2/15 (URLs 6-10)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🌐 Scraping: https://www.bvp.com/
+   ✅ 0 new investors, 1 already exist
+
+🌐 Scraping: https://brv.com/
+   ✅ 0 new investors, 1 already exist
+
+🌐 Scraping: https://cervinventures.com/
+   ✅ 0 new investors, 1 already exist
+
+🌐 Scraping: https://www.crv.com/
+   ✅ 0 new investors, 1 already exist
+
+🌐 Scraping: https://www.crosslinkcapital.com/
+   ✅ 0 new investors, 1 already exist
+
+⏸️  Pausing 10 seconds before next batch...
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📦 Batch 3/15 (URLs 11-15)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🌐 Scraping: https://www.dcm.com/
+   ✅ 0 new investors, 1 already exist
+
+🌐 Scraping: https://www.dfj.com/
+   ⏭️  No investors found
+
+🌐 Scraping: https://www.eventures.vc/
+   ✅ 0 new investors, 1 already exist
+
+🌐 Scraping: https://www.felicis.com/
+   ✅ 1 new investors, 0 already exist
+
+🌐 Scraping: https://www.generalcatalyst.com/
+   ✅ 0 new investors, 1 already exist
+
+⏸️  Pausing 10 seconds before next batch...
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📦 Batch 4/15 (URLs 16-20)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🌐 Scraping: https://www.googleventures.com/
+   ⏭️  No investors found
+
+🌐 Scraping: https://gsvadvisors.com/
+   ⏭️  No investors found
+
+🌐 Scraping: https://www.hcp.com/
+   ✅ 0 new investors, 1 already exist
+
+🌐 Scraping: https://www.hydra-ventures.com/
+   ⏭️  No investors found
+
+🌐 Scraping: https://www.intelcapital.com/
+   ✅ 0 new investors, 1 already exist
+
+⏸️  Pausing 10 seconds before next batch...
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📦 Batch 5/15 (URLs 21-25)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🌐 Scraping: https://www.interwest.com/
+   ✅ 0 new investors, 1 already exist
+
+🌐 Scraping: https://javelinvp.com/
+   ✅ 0 new investors, 1 already exist
+
+🌐 Scraping: https://www.khoslaventures.com/
+   ✅ 0 new investors, 1 already exist
+
+🌐 Scraping: https://www.kpcb.com/
+   ✅ 0 new investors, 1 already exist
+
+🌐 Scraping: https://www.lab126.com/
+   ⏭️  No investors found
+
+⏸️  Pausing 10 seconds before next batch...
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📦 Batch 6/15 (URLs 26-30)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🌐 Scraping: https://lsvp.com/
+   ✅ 0 new investors, 1 already exist
+
+🌐 Scraping: https://www.maveron.com/
+   ✅ 0 new investors, 1 already exist
+
+🌐 Scraping: https://www.menloventures.com/
+   ⏭️  No investors found
+
+🌐 Scraping: https://www.nea.com/
+   ✅ 0 new investors, 1 already exist
+
+🌐 Scraping: https://www.newschools.org/
+   ✅ 0 new investors, 1 already exist
+
+⏸️  Pausing 10 seconds before next batch...
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📦 Batch 7/15 (URLs 31-35)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🌐 Scraping: https://www.nokiagrowthpartners.com/
+   ⏭️  No investors found
+
+🌐 Scraping: https://www.pointbonita.com/
+   ⏭️  No investors found
+
+🌐 Scraping: https://www.rhoventures.com/
+   ✅ 0 new investors, 1 already exist
+
+🌐 Scraping: https://www.rre.com/
+   ✅ 0 new investors, 1 already exist
+
+🌐 Scraping: https://www.samsungventures.com/
+   ✅ 0 new investors, 1 already exist
+
+⏸️  Pausing 10 seconds before next batch...
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📦 Batch 8/15 (URLs 36-40)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🌐 Scraping: https://www.sbcvc.com/
+   ⏭️  No investors found
+
+🌐 Scraping: https://www.sequoiacap.com/
+   ✅ 0 new investors, 1 already exist
+
+🌐 Scraping: https://www.shastaventures.com/
+   ✅ 0 new investors, 1 already exist
+
+🌐 Scraping: https://www.softbankci.com/
+   ⏭️  No investors found
+
+🌐 Scraping: https://www.sparkcapital.com/
+   ✅ 0 new investors, 1 already exist
+
+⏸️  Pausing 10 seconds before next batch...
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📦 Batch 9/15 (URLs 41-45)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🌐 Scraping: https://www.t-venture.com/
+   ⏭️  No investors found
+
+🌐 Scraping: https://www.trueventures.com/
+   ✅ 0 new investors, 1 already exist
+
+🌐 Scraping: https://www.vodafone.com/content/xone/index/ventures.html
+   ✅ 1 new investors, 0 already exist
+
+🌐 Scraping: https://www.westsummitcap.com/
+   ✅ 0 new investors, 1 already exist
+
+🌐 Scraping: https://www.wiharper.com/
+   ✅ 0 new investors, 1 already exist
+
+⏸️  Pausing 10 seconds before next batch...
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📦 Batch 10/15 (URLs 46-50)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🌐 Scraping: https://www.xg-ventures.com/
+   ✅ 0 new investors, 1 already exist
+
+🌐 Scraping: https://www.coatue.com/
+   ✅ 0 new investors, 1 already exist
+
+🌐 Scraping: https://www.generalatlantic.com/
+   ✅ 0 new investors, 1 already exist
+
+🌐 Scraping: https://www.tpg.com/
+   ✅ 0 new investors, 1 already exist
+
+🌐 Scraping: https://dragoneer.com/
+   ✅ 0 new investors, 1 already exist
+
+⏸️  Pausing 10 seconds before next batch...
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📦 Batch 11/15 (URLs 51-55)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🌐 Scraping: https://ribbitcap.com/
+   ✅ 0 new investors, 1 already exist
+
+🌐 Scraping: https://www.paradigm.xyz/
+   ✅ 0 new investors, 1 already exist
+
+🌐 Scraping: https://greylock.com/
+   ✅ 1 new investors, 0 already exist
+
+🌐 Scraping: https://www.usv.com/
+   ✅ 0 new investors, 1 already exist
+
+🌐 Scraping: https://www.luxcapital.com/
+   ✅ 0 new investors, 1 already exist
+
+⏸️  Pausing 10 seconds before next batch...
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📦 Batch 12/15 (URLs 56-60)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🌐 Scraping: https://www.fidelity.com/
+   ⏭️  No investors found
+
+🌐 Scraping: https://iconiqcapital.com/
+   ✅ 0 new investors, 1 already exist
+
+🌐 Scraping: https://www.nvp.com/
+   ✅ 0 new investors, 1 already exist
+
+🌐 Scraping: https://www.gic.com.sg/
+   ✅ 0 new investors, 1 already exist
+
+🌐 Scraping: https://www.temasek.com.sg/
+   ⏭️  No investors found
+
+⏸️  Pausing 10 seconds before next batch...
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📦 Batch 13/15 (URLs 61-65)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🌐 Scraping: https://www.archventure.com/
+   ✅ 0 new investors, 1 already exist
+
+🌐 Scraping: https://www.orbimed.com/
+   ✅ 0 new investors, 1 already exist
+
+🌐 Scraping: https://www.flagshippioneering.com/
+   ✅ 0 new investors, 1 already exist
+
+🌐 Scraping: https://www.qedinvestors.com/
+   ✅ 0 new investors, 1 already exist
+
+🌐 Scraping: https://www.tcv.com/
+   ✅ 0 new investors, 1 already exist
+
+⏸️  Pausing 10 seconds before next batch...
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📦 Batch 14/15 (URLs 66-70)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🌐 Scraping: https://sosv.com/
+   ✅ 2 new investors, 1 already exist
+
+🌐 Scraping: https://www.forerunnerventures.com/
+   ✅ 0 new investors, 1 already exist
+
+🌐 Scraping: https://firstround.com/
+   ✅ 0 new investors, 1 already exist
+
+🌐 Scraping: https://tusk.vc/
+   ✅ 0 new investors, 1 already exist
+
+🌐 Scraping: https://www.breakthroughenergy.org/
+   ⏭️  No investors found
+
+⏸️  Pausing 10 seconds before next batch...
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📦 Batch 15/15 (URLs 71-73)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🌐 Scraping: https://500.co/
+   ✅ 0 new investors, 1 already exist
+
+🌐 Scraping: https://www.atomico.com/
+   ✅ 0 new investors, 1 already exist
+
+🌐 Scraping: https://www.dst-global.com/
+   ✅ 0 new investors, 1 already exist
+
+══════════════════════════════════════════════════════════════════════
+📈 DISCOVERY SUMMARY
+══════════════════════════════════════════════════════════════════════
+✅ New investors added: 7
+⏭️  Already existed: 55
+❌ Errors: 0
+📊 URLs processed: 73
+
+✨ Discovery complete!
+
+💡 Next: Run bulk-enrich-investors.js to add details

@@ -1,0 +1,24 @@
+
+🚀 BATCH SCRAPING 27 URLs
+
+══════════════════════════════════════════════════════════════════════
+
+[1/27] https://www.coatue.com/
+✅ Done
+⏳ Waiting 3 seconds...
+
+[2/27] https://www.generalatlantic.com/
+✅ Done
+⏳ Waiting 3 seconds...
+
+[3/27] https://www.tpg.com/
+✅ Done
+⏳ Waiting 3 seconds...
+
+[4/27] https://dragoneer.com/
+✅ Done
+⏳ Waiting 3 seconds...
+
+[5/27] https://ribbitcap.com/
+✅ Done
+⏳ Waiting 3 seconds...

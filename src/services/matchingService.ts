@@ -9,6 +9,105 @@ import { getTeamReason, getTractionReason, getMarketReason, getProductReason } f
 // Debug logging controls
 const DEBUG_GOD = true; // Set to false in production
 
+/**
+ * DATA NORMALIZATION FUNCTIONS
+ * These ensure consistent field access regardless of data source (direct fields vs extracted_data)
+ */
+
+/**
+ * Normalize startup data to consistent format
+ * Handles fallback from startup.field to startup.extracted_data.field
+ */
+function normalizeStartupData(startup: any) {
+  const extracted = startup.extracted_data || {};
+  
+  return {
+    // Basic info
+    id: startup.id,
+    name: startup.name,
+    description: startup.description || startup.tagline || extracted.description || '',
+    tagline: startup.tagline || extracted.tagline || '',
+    
+    // Stage and funding
+    stage: startup.stage ?? extracted.stage ?? 0,
+    raise_amount: startup.raise_amount || startup.raise || extracted.raise || extracted.raise_amount || '',
+    funding_needed: startup.funding_needed || startup.raise || extracted.raise || '',
+    previous_funding: startup.previous_funding || startup.raised || extracted.raised || 0,
+    
+    // Team data (critical for GOD algorithm)
+    team: startup.team || extracted.team || [],
+    founders_count: startup.founders_count || extracted.founders_count || startup.team?.length || 1,
+    technical_cofounders: startup.technical_cofounders || extracted.technical_cofounders || 0,
+    
+    // Traction data (critical for GOD algorithm)
+    traction: startup.traction || extracted.traction || '',
+    revenue: startup.revenue || startup.arr || extracted.revenue || extracted.arr || 0,
+    mrr: startup.mrr || extracted.mrr || (startup.arr ? startup.arr / 12 : 0),
+    arr: startup.arr || extracted.arr || 0,
+    active_users: startup.users || startup.active_users || extracted.users || extracted.active_users || 0,
+    growth_rate: startup.growth_rate || startup.mom_growth || extracted.growth_rate || extracted.mom_growth || 0,
+    customers: startup.customers || extracted.customers || 0,
+    
+    // Market data (critical for GOD algorithm)
+    sectors: startup.sectors || startup.industries || extracted.sectors || extracted.industries || [],
+    industries: startup.industries || startup.sectors || extracted.industries || extracted.sectors || [],
+    market_size: startup.market_size || extracted.market || extracted.market_size || 0,
+    
+    // Product data
+    pitch: startup.pitch || extracted.pitch || startup.description || '',
+    problem: startup.problem || extracted.problem || '',
+    solution: startup.solution || extracted.solution || '',
+    demo_available: startup.demo_available || extracted.demo_available || false,
+    launched: startup.launched || extracted.launched || false,
+    unique_ip: startup.unique_ip || extracted.unique_ip || false,
+    defensibility: startup.defensibility || extracted.defensibility || 'medium',
+    
+    // Additional fields
+    fivePoints: extracted.fivePoints || startup.fivePoints || [],
+    location: startup.location || extracted.location || '',
+    website: startup.website || extracted.website || '',
+    backed_by: startup.backed_by || startup.investors || extracted.investors || [],
+    
+    // First Round criteria
+    contrarian_insight: startup.contrarian_insight || extracted.contrarian_insight,
+    creative_strategy: startup.creative_strategy || extracted.creative_strategy,
+    passionate_customers: startup.passionate_customers || extracted.passionate_customers || 0,
+  };
+}
+
+/**
+ * Normalize investor data to consistent format
+ * Handles different field naming conventions (checkSize vs check_size, etc.)
+ * Database columns: sector_focus, stage_focus (NOT sectors, stage)
+ */
+function normalizeInvestorData(investor: any) {
+  // Map from database column names (sector_focus, stage_focus) to normalized names
+  const sectors = investor.sector_focus || investor.sectors || [];
+  const stages = investor.stage_focus || investor.stages || investor.stage || [];
+  
+  return {
+    // Basic info
+    id: investor.id,
+    name: investor.name,
+    description: investor.description || investor.tagline || investor.bio || '',
+    tagline: investor.tagline || investor.type || '',
+    
+    // Investment criteria - use sector_focus and stage_focus from DB
+    type: investor.type || 'vc_firm',
+    sectors: Array.isArray(sectors) ? sectors : (sectors ? [sectors] : []),
+    stages: Array.isArray(stages) ? stages : (stages ? [stages] : []),
+    stage: Array.isArray(stages) ? stages : (stages ? [stages] : []),
+    
+    // Financial
+    checkSize: investor.checkSize || investor.check_size || '',
+    check_size: investor.check_size || investor.checkSize || '',
+    
+    // Geographic
+    geography: investor.geography || investor.location || '',
+    location: investor.location || investor.geography || '',
+  };
+}
+
 function logGOD(message: string, data?: any) {
   if (DEBUG_GOD) {
     if (data !== undefined) {
@@ -54,58 +153,128 @@ interface MatchPair {
  */
 export function calculateAdvancedMatchScore(startup: any, investor: any, verbose: boolean = false): number {
   try {
+    // 🚀 CRITICAL FIX: Use pre-calculated total_god_score from database
+    // The startup records already have GOD scores calculated (0-100 scale)
+    // If available, use it directly instead of recalculating
+    if (startup.total_god_score !== undefined && startup.total_god_score > 0) {
+      const baseScore = startup.total_god_score;
+      
+      if (verbose) {
+        console.log(`\n${'━'.repeat(60)}`);
+        console.log(`🧮 Using Pre-Calculated GOD Score: "${startup.name}"`);
+        console.log(`   Base Score: ${baseScore}/100 (from database)`);
+        console.log('━'.repeat(60));
+      }
+      
+      // Still apply matching bonuses with investor
+      const normalizedInvestor = normalizeInvestorData(investor);
+      let matchBonus = 0;
+      
+      // Stage match bonus
+      if (normalizedInvestor.stage && startup.stage !== undefined) {
+        const investorStages = Array.isArray(normalizedInvestor.stage) ? normalizedInvestor.stage : [normalizedInvestor.stage];
+        const stageNum = typeof startup.stage === 'number' ? startup.stage : convertStageToNumber(startup.stage);
+        let startupStageNames: string[] = [];
+        
+        if (stageNum === 0) startupStageNames = ['idea', 'pre-seed', 'preseed', '0'];
+        else if (stageNum === 1) startupStageNames = ['pre-seed', 'preseed', 'pre seed', '1'];
+        else if (stageNum === 2) startupStageNames = ['seed', '2'];
+        else if (stageNum === 3) startupStageNames = ['series a', 'series_a', 'seriesa', 'a', '3'];
+        else if (stageNum === 4) startupStageNames = ['series b', 'series_b', 'seriesb', 'b', '4'];
+        else if (stageNum === 5) startupStageNames = ['series c', 'series_c', 'seriesc', 'c', '5'];
+        
+        const stageMatch = investorStages.some((s: string) => {
+          const investorStage = String(s).toLowerCase().replace(/[_\s]/g, '');
+          return startupStageNames.some(startupStage => {
+            const normalizedStartupStage = startupStage.replace(/[_\s]/g, '');
+            return investorStage.includes(normalizedStartupStage) || 
+                   normalizedStartupStage.includes(investorStage);
+          });
+        });
+        
+        if (stageMatch) matchBonus += 10;
+      }
+      
+      // Sector match bonus
+      if (startup.industries && normalizedInvestor.sectors) {
+        const startupIndustries = Array.isArray(startup.industries) ? startup.industries : [startup.industries];
+        const investorSectors = Array.isArray(normalizedInvestor.sectors) ? normalizedInvestor.sectors : [normalizedInvestor.sectors];
+        
+        const commonSectors = startupIndustries.filter((ind: string) =>
+          investorSectors.some((sec: string) => 
+            String(sec).toLowerCase().includes(String(ind).toLowerCase()) ||
+            String(ind).toLowerCase().includes(String(sec).toLowerCase())
+          )
+        );
+        matchBonus += Math.min(commonSectors.length * 5, 10);
+      }
+      
+      const finalScore = Math.min(baseScore + matchBonus, 99);
+      
+      if (verbose) {
+        console.log(`   Match Bonus: +${matchBonus}`);
+        console.log(`   Final Score: ${finalScore}/100`);
+      }
+      
+      return Math.round(finalScore);
+    }
+    
+    // FALLBACK: Calculate GOD score if not pre-calculated
+    const normalizedStartup = normalizeStartupData(startup);
+    const normalizedInvestor = normalizeInvestorData(investor);
+    
     if (verbose) {
       console.log(`\n${'━'.repeat(60)}`);
-      console.log(`🧮 GOD Algorithm Scoring: "${startup.name}"`);
+      console.log(`🧮 GOD Algorithm Scoring: "${normalizedStartup.name}"`);
       console.log('━'.repeat(60));
       
       // Log input data for debugging
-      logGOD('Startup Input Data:', {
-        stage: startup.stage,
-        sectors: startup.industries || startup.sectors,
-        raise: startup.raise_amount || startup.funding_needed,
-        team: startup.team ? `${startup.team.length} members` : 'undefined',
-        revenue: startup.revenue || startup.arr || 'undefined',
-        traction: startup.traction ? startup.traction.substring(0, 50) + '...' : 'undefined'
+      logGOD('Normalized Startup Data:', {
+        stage: normalizedStartup.stage,
+        sectors: normalizedStartup.sectors,
+        raise: normalizedStartup.raise_amount,
+        team: normalizedStartup.team ? `${normalizedStartup.team.length} members` : 'undefined',
+        revenue: normalizedStartup.revenue || 'undefined',
+        traction: normalizedStartup.traction ? normalizedStartup.traction.substring(0, 50) + '...' : 'undefined'
       });
     }
     
-    // Convert startup data to StartupProfile format for GOD algorithm
+    // Convert normalized startup data to StartupProfile format for GOD algorithm
     const startupProfile = {
-      // Team data
-      team: startup.team || [],
-      founders_count: startup.founders_count || startup.team?.length || 1,
-      technical_cofounders: startup.technical_cofounders || 0,
+      // Team data - using normalized fields
+      team: normalizedStartup.team,
+      founders_count: normalizedStartup.founders_count,
+      technical_cofounders: normalizedStartup.technical_cofounders,
       
-      // Traction
-      revenue: startup.revenue || startup.arr || 0,
-      mrr: startup.mrr || (startup.arr ? startup.arr / 12 : 0),
-      active_users: startup.users || startup.active_users || 0,
-      growth_rate: startup.growth_rate || startup.mom_growth || 0,
-      customers: startup.customers || 0,
+      // Traction - using normalized fields
+      revenue: normalizedStartup.revenue,
+      mrr: normalizedStartup.mrr,
+      active_users: normalizedStartup.active_users,
+      growth_rate: normalizedStartup.growth_rate,
+      customers: normalizedStartup.customers,
       
-      // Product
-      demo_available: startup.demo_available || startup.launched || false,
-      launched: startup.launched || startup.stage !== 'idea',
-      unique_ip: startup.unique_ip || false,
-      defensibility: startup.defensibility || 'medium',
+      // Product - using normalized fields
+      demo_available: normalizedStartup.demo_available,
+      launched: normalizedStartup.launched,
+      unique_ip: normalizedStartup.unique_ip,
+      defensibility: normalizedStartup.defensibility,
       
-      // Market
-      market_size: startup.market_size || 0,
-      industries: startup.industries || startup.sectors || [],
-      problem: startup.problem || startup.description,
-      solution: startup.solution || startup.tagline,
+      // Market - using normalized fields
+      market_size: normalizedStartup.market_size,
+      industries: normalizedStartup.industries,
+      problem: normalizedStartup.problem,
+      solution: normalizedStartup.solution,
       
       // First Round criteria
-      contrarian_insight: startup.contrarian_insight,
-      creative_strategy: startup.creative_strategy,
-      passionate_customers: startup.passionate_customers || 0,
+      contrarian_insight: normalizedStartup.contrarian_insight,
+      creative_strategy: normalizedStartup.creative_strategy,
+      passionate_customers: normalizedStartup.passionate_customers,
       
-      // Stage & Funding
-      stage: convertStageToNumber(startup.stage),
-      previous_funding: startup.previous_funding || startup.raised || 0,
-      backed_by: startup.backed_by || startup.investors || [],
-      funding_needed: startup.funding_needed || startup.raise || 0,
+      // Stage & Funding - using normalized fields
+      stage: convertStageToNumber(normalizedStartup.stage),
+      previous_funding: normalizedStartup.previous_funding,
+      backed_by: normalizedStartup.backed_by,
+      funding_needed: normalizedStartup.funding_needed,
     };
 
     // Get GOD score
@@ -157,29 +326,29 @@ export function calculateAdvancedMatchScore(startup: any, investor: any, verbose
     let matchBonus = 0;
     
     if (verbose) {
-      console.log(`\n🎯 Matching Bonuses for "${investor.name}":`);
+      console.log(`\n🎯 Matching Bonuses for "${normalizedInvestor.name}":`);
       
       // Log investor criteria for debugging
-      logGOD('Investor Criteria:', {
-        type: investor.type,
-        stages: investor.stage,
-        sectors: investor.sectors,
-        checkSize: investor.check_size,
-        geography: investor.geography
+      logGOD('Normalized Investor Data:', {
+        type: normalizedInvestor.type,
+        stages: normalizedInvestor.stage,
+        sectors: normalizedInvestor.sectors,
+        checkSize: normalizedInvestor.checkSize,
+        geography: normalizedInvestor.geography
       });
       console.log(''); // Empty line for spacing
     }
     
-    // Stage match (0-10 bonus points)
-    if (investor.stage && startup.stage !== undefined) {
-      const investorStages = Array.isArray(investor.stage) ? investor.stage : [investor.stage];
+    // Stage match (0-10 bonus points) - using normalized data
+    if (normalizedInvestor.stage && normalizedStartup.stage !== undefined) {
+      const investorStages = Array.isArray(normalizedInvestor.stage) ? normalizedInvestor.stage : [normalizedInvestor.stage];
       
       // Convert numeric stage to name for better matching
-      let startupStageStr = String(startup.stage).toLowerCase();
+      let startupStageStr = String(normalizedStartup.stage).toLowerCase();
       let startupStageNames: string[] = [startupStageStr];
       
       // If stage is a number, add corresponding stage names
-      const stageNum = typeof startup.stage === 'number' ? startup.stage : convertStageToNumber(startup.stage);
+      const stageNum = typeof normalizedStartup.stage === 'number' ? normalizedStartup.stage : convertStageToNumber(normalizedStartup.stage);
       if (stageNum === 0) startupStageNames = ['idea', 'pre-seed', 'preseed', '0'];
       else if (stageNum === 1) startupStageNames = ['pre-seed', 'preseed', 'pre seed', '1'];
       else if (stageNum === 2) startupStageNames = ['seed', '2'];
@@ -208,10 +377,10 @@ export function calculateAdvancedMatchScore(startup: any, investor: any, verbose
       }
     }
     
-    // Sector/Industry match (0-10 bonus points)
-    if (startup.industries && investor.sectors) {
-      const startupIndustries = Array.isArray(startup.industries) ? startup.industries : [startup.industries];
-      const investorSectors = Array.isArray(investor.sectors) ? investor.sectors : [investor.sectors];
+    // Sector/Industry match (0-10 bonus points) - using normalized data
+    if (normalizedStartup.industries && normalizedInvestor.sectors) {
+      const startupIndustries = Array.isArray(normalizedStartup.industries) ? normalizedStartup.industries : [normalizedStartup.industries];
+      const investorSectors = Array.isArray(normalizedInvestor.sectors) ? normalizedInvestor.sectors : [normalizedInvestor.sectors];
       
       const commonSectors = startupIndustries.filter((ind: string) =>
         investorSectors.some((sec: string) => 
@@ -228,10 +397,10 @@ export function calculateAdvancedMatchScore(startup: any, investor: any, verbose
       }
     }
     
-    // Check size fit (0-5 bonus points)
-    if (investor.check_size && startup.raise) {
-      const raiseAmount = parseFloat(String(startup.raise).replace(/[^0-9.]/g, ''));
-      const checkSizeRange = investor.check_size || investor.checkSize;
+    // Check size fit (0-5 bonus points) - using normalized data
+    if (normalizedInvestor.checkSize && normalizedStartup.raise_amount) {
+      const raiseAmount = parseFloat(String(normalizedStartup.raise_amount).replace(/[^0-9.]/g, ''));
+      const checkSizeRange = normalizedInvestor.checkSize;
       
       if (checkSizeRange) {
         // Simple check if raise amount is mentioned in check size string
@@ -251,17 +420,17 @@ export function calculateAdvancedMatchScore(startup: any, investor: any, verbose
       }
     }
     
-    // Geography match (0-5 bonus points)
-    if (investor.geography && startup.location) {
-      const investorGeo = Array.isArray(investor.geography) ? investor.geography : [investor.geography];
+    // Geography match (0-5 bonus points) - using normalized data
+    if (normalizedInvestor.geography && normalizedStartup.location) {
+      const investorGeo = Array.isArray(normalizedInvestor.geography) ? normalizedInvestor.geography : [normalizedInvestor.geography];
       const locationMatch = investorGeo.some((geo: string) =>
-        String(startup.location).toLowerCase().includes(String(geo).toLowerCase()) ||
-        String(geo).toLowerCase().includes(String(startup.location).toLowerCase())
+        String(normalizedStartup.location).toLowerCase().includes(String(geo).toLowerCase()) ||
+        String(geo).toLowerCase().includes(String(normalizedStartup.location).toLowerCase())
       );
       if (locationMatch) {
         matchBonus += 5;
         if (verbose) {
-          console.log(`   Geography Match:    +5 (${startup.location} matches)`);
+          console.log(`   Geography Match:    +5 (${normalizedStartup.location} matches)`);
         }
       } else if (verbose) {
         console.log(`   Geography Match:    +0 (no match)`);
@@ -290,8 +459,9 @@ export function calculateAdvancedMatchScore(startup: any, investor: any, verbose
     return Math.round(finalScore);
   } catch (error) {
     console.error('Error calculating match score:', error);
-    // Return a default score if there's an error
-    return 85;
+    // Return a low default score on error - not 85 which would be misleading
+    // This makes it obvious something went wrong while not breaking the UI
+    return 30;
   }
 }
 
@@ -319,45 +489,44 @@ function convertStageToNumber(stage: string | number | undefined): number {
 
 /**
  * Generate matches with GOD algorithm integration
+ * UPDATED: Now uses pre-calculated scores from database (Option A architecture)
  */
 export function generateAdvancedMatches(startups: any[], investors: any[], limit: number = 100): MatchPair[] {
   const matchPairs: MatchPair[] = [];
   
   try {
-    // Calculate GOD scores for all startups first
+    // SIMPLIFIED: Use pre-calculated GOD scores from database instead of calculating on-the-fly
     const scoredStartups = startups.map(startup => {
-      try {
-        const profile = {
-          team: startup.team || [],
-          founders_count: startup.founders_count || 1,
-          revenue: startup.revenue || 0,
-          growth_rate: startup.growth_rate || 0,
-          industries: startup.industries || [],
-          stage: convertStageToNumber(startup.stage),
-          launched: startup.launched || false,
-        };
-        
-        const godScore = calculateHotScore(profile);
-        return { startup, godScore };
-      } catch (error) {
-        console.error(`Error scoring startup ${startup.name}:`, error);
-        // Return default score if error
-        return { 
-          startup, 
-          godScore: { 
-            total: 5, 
-            matchCount: 5,
-            reasoning: ['Default score due to error'],
-            breakdown: { team: 0, traction: 0, market: 0, product: 0, vision: 0, ecosystem: 0, grit: 0, problem_validation: 0 },
-            tier: 'warm' as const
-          } 
-        };
-      }
+      // NORMALIZE DATA FIRST - prevents field mapping bugs
+      const normalized = normalizeStartupData(startup);
+      
+      // Read pre-calculated GOD score from database (default to 50 if not set)
+      const totalScore = startup.total_god_score || 50;
+      
+      // Build godScore object for backward compatibility
+      const godScore = {
+        total: totalScore,
+        matchCount: Math.min(Math.floor(totalScore / 10), 10), // 50→5, 80→8, 90→9 matches
+        reasoning: [`Pre-calculated GOD score: ${totalScore}`],
+        breakdown: {
+          team: startup.team_score || 0,
+          traction: startup.traction_score || 0,
+          market: startup.market_score || 0,
+          product: startup.product_score || 0,
+          vision: startup.vision_score || 0,
+          ecosystem: 0,
+          grit: 0,
+          problem_validation: 0
+        },
+        tier: (totalScore >= 80 ? 'hot' : totalScore >= 60 ? 'warm' : 'cold') as 'hot' | 'warm' | 'cold'
+      };
+      
+      return { startup, normalized, godScore };
     }).sort((a, b) => b.godScore.total - a.godScore.total); // Sort by GOD score
     
     // Generate matches for top-scored startups
     for (let i = 0; i < Math.min(limit, scoredStartups.length); i++) {
-      const { startup, godScore } = scoredStartups[i];
+      const { startup, normalized, godScore } = scoredStartups[i];
       
       // Match with appropriate number of investors based on GOD score
       const investorCount = Math.min(godScore.matchCount || 5, investors.length);
@@ -377,22 +546,23 @@ export function generateAdvancedMatches(startups: any[], investors: any[], limit
       }
       
       const matchScore = calculateAdvancedMatchScore(startup, bestInvestor, i < 5);
+      const normalizedInvestor = normalizeInvestorData(bestInvestor);
       
       matchPairs.push({
         startup: {
-          id: startup.id,
-          name: startup.name,
-          description: startup.tagline || startup.description || '',
-          tags: extractTags(startup),
-          seeking: startup.raise || startup.funding_needed || '$2M Seeking',
+          id: normalized.id,
+          name: normalized.name,
+          description: normalized.tagline || normalized.description || '',
+          tags: extractTags(normalized),
+          seeking: normalized.raise_amount || normalized.funding_needed || '$2M Seeking',
           status: 'Active'
         },
         investor: {
-          id: bestInvestor.id,
-          name: bestInvestor.name,
-          description: bestInvestor.tagline || bestInvestor.type || bestInvestor.bio || '',
-          tags: bestInvestor.sectors?.slice(0, 3) || bestInvestor.stage?.slice(0, 3) || [],
-          checkSize: bestInvestor.check_size || bestInvestor.checkSize || '$1-5M',
+          id: normalizedInvestor.id,
+          name: normalizedInvestor.name,
+          description: normalizedInvestor.tagline || normalizedInvestor.description || '',
+          tags: normalizedInvestor.sectors.slice(0, 3),
+          checkSize: normalizedInvestor.checkSize || '$1-5M',
           status: 'Active'
         },
         matchScore,
@@ -407,17 +577,21 @@ export function generateAdvancedMatches(startups: any[], investors: any[], limit
 }
 
 /**
- * Extract relevant tags from startup
+ * Extract relevant tags from startup (works with normalized data)
  */
 function extractTags(startup: any): string[] {
   const tags = [];
   
-  if (startup.industries && startup.industries.length > 0) {
-    tags.push(...startup.industries.slice(0, 2));
+  // Check both direct and normalized fields
+  const industries = startup.industries || startup.sectors || [];
+  if (industries && industries.length > 0) {
+    tags.push(...industries.slice(0, 2));
   }
   
-  if (startup.stage) {
-    tags.push(startup.stage);
+  if (startup.stage !== undefined && startup.stage !== null) {
+    const stageNum = typeof startup.stage === 'number' ? startup.stage : convertStageToNumber(startup.stage);
+    const stageNames = ['Idea', 'Pre-seed', 'Seed', 'Series A', 'Series B', 'Series C+'];
+    tags.push(stageNames[stageNum] || 'Seed');
   }
   
   if (startup.launched) {

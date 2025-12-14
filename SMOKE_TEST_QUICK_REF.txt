@@ -1,0 +1,167 @@
+┌─────────────────────────────────────────────────────────────┐
+│  ⚡ HOT MONEY HONEY - 15 MINUTE SMOKE TEST CARD            │
+│  Quick Reference for Rapid Testing                         │
+└─────────────────────────────────────────────────────────────┘
+
+═══════════════════════════════════════════════════════════════
+🚀 START
+═══════════════════════════════════════════════════════════════
+
+1. npm run dev
+2. Open: http://localhost:5175/
+3. Open Console (F12)
+4. Check list below ⬇️
+
+═══════════════════════════════════════════════════════════════
+✅ CHECKLIST (Mark as you go)
+═══════════════════════════════════════════════════════════════
+
+[  ] Page loads (no white screen)
+[  ] No red errors in console
+[  ] Startup cards visible
+[  ] Investor cards visible
+[  ] Match scores showing (✨ XX% Match ✨)
+[  ] Scores are DIFFERENT (not all the same)
+[  ] Scores are NOT all 85%
+[  ] Console shows "🧮 GOD Algorithm"
+[  ] Console shows component breakdowns
+[  ] Console shows final scores
+[  ] Voting buttons work (if on /vote)
+[  ] Navigation works (/, /vote, /investors)
+
+═══════════════════════════════════════════════════════════════
+🔍 QUICK CHECKS
+═══════════════════════════════════════════════════════════════
+
+CONSOLE CHECK:
+Paste in browser console:
+┌─────────────────────────────────────────────────────────────┐
+│ const scores = [...document.querySelectorAll('*')]          │
+│   .map(el => el.textContent.match(/(\d+)%\s*Match/))       │
+│   .filter(Boolean).map(m => m[0]);                          │
+│ console.log('Scores:', scores);                             │
+│ console.log('Unique:', [...new Set(scores)].length);       │
+└─────────────────────────────────────────────────────────────┘
+
+EXPECTED: Multiple unique scores (not all 85%)
+
+═══════════════════════════════════════════════════════════════
+✅ PASS = 10+ boxes checked
+⚠️  WARN = 7-9 boxes checked
+❌ FAIL = <7 boxes checked
+═══════════════════════════════════════════════════════════════
+
+═══════════════════════════════════════════════════════════════
+🚨 CRITICAL FAILURES (Stop if you see these)
+═══════════════════════════════════════════════════════════════
+
+[  ] Page doesn't load at all
+[  ] All scores are 85% (GOD not running)
+[  ] All scores identical
+[  ] No GOD output in console
+[  ] Red errors flooding console
+
+═══════════════════════════════════════════════════════════════
+🔧 QUICK FIXES
+═══════════════════════════════════════════════════════════════
+
+All scores = 85?
+→ Check: grep "generateAdvancedMatches" src/components/MatchingEngine.tsx
+→ Should see: import and function call
+
+No console output?
+→ Check: grep "DEBUG_GOD" src/services/matchingService.ts
+→ Should see: const DEBUG_GOD = true;
+
+Page won't load?
+→ Run: npm run dev
+→ Check terminal for errors
+
+═══════════════════════════════════════════════════════════════
+📊 SCORING
+═══════════════════════════════════════════════════════════════
+
+Write down 3 scores you see:
+
+1. ______%
+2. ______%  
+3. ______%
+
+Are they different? [ ] YES  [ ] NO
+Are they NOT 85?    [ ] YES  [ ] NO
+
+If both YES → ✅ PASS
+If any NO   → ❌ FAIL
+
+═══════════════════════════════════════════════════════════════
+🎯 WHAT YOU SHOULD SEE IN CONSOLE
+═══════════════════════════════════════════════════════════════
+
+🧮 STARTING GOD ALGORITHM MATCH GENERATION
+🧮 GOD Algorithm - Match #1 of 5
+📊 Component Scores:
+   🏆 Team: 82
+   📈 Traction: 75
+   🎯 Market: 88
+   💡 Product: 78
+🎯 Matching Bonuses: +15
+📈 FINAL SCORE: 84.2 / 100
+
+═══════════════════════════════════════════════════════════════
+⏱️  TIME TRACKING
+═══════════════════════════════════════════════════════════════
+
+Start time: __________
+End time:   __________
+Duration:   __________
+
+Target: 15 minutes
+
+═══════════════════════════════════════════════════════════════
+📋 RESULT
+═══════════════════════════════════════════════════════════════
+
+Checks passed: ______ / 12
+
+Overall: [  ] ✅ PASS    [  ] ⚠️ WARN    [  ] ❌ FAIL
+
+Ready for full testing? [  ] YES    [  ] NO
+
+═══════════════════════════════════════════════════════════════
+🔗 RESOURCES
+═══════════════════════════════════════════════════════════════
+
+Diagnostic tool:     http://localhost:5175/smoke-test.html
+Full checklist:      SMOKE_TEST_RESULTS.md
+Detailed guide:      SMOKE_TEST_START.md
+Verification script: ./smoke-test-verify.sh
+
+═══════════════════════════════════════════════════════════════
+💡 TIPS
+═══════════════════════════════════════════════════════════════
+
+• Keep console open the whole time
+• Watch for GOD messages as page loads
+• Use diagnostic tool for automated checks
+• Document any failures clearly
+• If stuck, check SMOKE_TEST_START.md
+
+═══════════════════════════════════════════════════════════════
+🎉 IF YOU PASS
+═══════════════════════════════════════════════════════════════
+
+→ Proceed to full Logic Validation Test Plan
+→ Run detailed component testing
+→ Test edge cases
+→ Validate scoring accuracy
+
+═══════════════════════════════════════════════════════════════
+⚠️  IF YOU FAIL
+═══════════════════════════════════════════════════════════════
+
+→ Document all failures
+→ Fix critical issues first
+→ Re-run smoke test
+→ Only proceed after smoke test passes
+
+═══════════════════════════════════════════════════════════════

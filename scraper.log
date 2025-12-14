@@ -1,0 +1,100 @@
+🚀 Starting Continuous Scraper for Hot Money Honey
+📅 2025-12-11T16:28:34.593Z
+⏱️  RSS Scraping every 30 minutes
+🔍 Startup Discovery every 1 hour
+💼 VC Enrichment every 2 hours
+────────────────────────────────────────────────────────────
+
+============================================================
+🔄 Starting new scraping cycle
+============================================================
+
+📡 [RSS] Starting RSS feed scrape...
+⏰ 2025-12-11T16:28:34.596Z
+❌ [RSS] Feed scrape failed: spawnSync /bin/sh ETIMEDOUT
+
+🔍 [STARTUPS] Starting startup discovery...
+⏰ 2025-12-11T16:33:34.614Z
+❌ [STARTUPS] Discovery failed: spawnSync /bin/sh ETIMEDOUT
+
+💼 [VCs] Starting VC enrichment...
+⏰ 2025-12-11T16:46:58.710Z
+❌ Error fetching investors: {
+  code: '42703',
+  details: null,
+  hint: null,
+  message: 'column investors.sector_focus does not exist'
+}
+[dotenv@17.2.3] injecting env (6) from .env -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
+🚀 Starting Investor Data Enrichment
+
+══════════════════════════════════════════════════════════════════════
+
+✅ [VCs] Enrichment completed successfully
+
+✅ Scraping cycle complete
+⏳ Next cycle in 30 minutes
+────────────────────────────────────────────────────────────
+
+============================================================
+🔄 Starting new scraping cycle
+============================================================
+
+📡 [RSS] Starting RSS feed scrape...
+⏰ 2025-12-11T17:28:24.908Z
+❌ [RSS] Feed scrape failed: spawnSync /bin/sh ETIMEDOUT
+
+🔍 [STARTUPS] Starting startup discovery...
+⏰ 2025-12-11T17:33:24.915Z
+❌ [STARTUPS] Discovery failed: spawnSync /bin/sh ETIMEDOUT
+
+✅ Scraping cycle complete
+⏳ Next cycle in 30 minutes
+────────────────────────────────────────────────────────────
+
+============================================================
+🔄 Starting new scraping cycle
+============================================================
+
+📡 [RSS] Starting RSS feed scrape...
+⏰ 2025-12-11T18:04:03.932Z
+❌ [RSS] Feed scrape failed: spawnSync /bin/sh ETIMEDOUT
+
+🔍 [STARTUPS] Starting startup discovery...
+⏰ 2025-12-11T18:20:31.503Z
+❌ [STARTUPS] Discovery failed: spawnSync /bin/sh ETIMEDOUT
+
+✅ Scraping cycle complete
+⏳ Next cycle in 30 minutes
+────────────────────────────────────────────────────────────
+
+============================================================
+🔄 Starting new scraping cycle
+============================================================
+
+📡 [RSS] Starting RSS feed scrape...
+⏰ 2025-12-11T18:35:22.018Z
+❌ [RSS] Feed scrape failed: spawnSync /bin/sh ETIMEDOUT
+
+🔍 [STARTUPS] Starting startup discovery...
+⏰ 2025-12-11T18:42:10.315Z
+❌ [STARTUPS] Discovery failed: spawnSync /bin/sh ETIMEDOUT
+
+💼 [VCs] Starting VC enrichment...
+⏰ 2025-12-11T18:52:10.327Z
+❌ Error fetching investors: {
+  code: '42703',
+  details: null,
+  hint: null,
+  message: 'column investors.sector_focus does not exist'
+}
+[dotenv@17.2.3] injecting env (6) from .env -- tip: 🔐 prevent building .env in docker: https://dotenvx.com/prebuild
+🚀 Starting Investor Data Enrichment
+
+══════════════════════════════════════════════════════════════════════
+
+✅ [VCs] Enrichment completed successfully
+
+✅ Scraping cycle complete
+⏳ Next cycle in 30 minutes
+────────────────────────────────────────────────────────────

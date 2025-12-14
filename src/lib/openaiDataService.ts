@@ -42,45 +42,38 @@ export class OpenAIDataService {
   static async uploadScrapedStartup(data: ScrapedStartupData) {
     try {
       console.log('📤 Uploading startup:', data.name);
+      console.log('📦 Raw data received:', JSON.stringify(data, null, 2));
       
-      // Upload to startup_uploads table - matching exact schema from MigrateStartupData.tsx
-      const insertData = {
+      // Upload to startup_uploads table - matching actual schema
+      // Only include essential fields to avoid type mismatches
+      const insertData: any = {
         name: data.name,
-        website: data.website || '',
-        description: data.pitch || '',
-        tagline: data.pitch || '',
-        pitch: data.pitch || '',
-        raise_amount: data.funding || '',
-        raise_type: data.stage || '',
-        stage: 1, // Default to 1 (Seed stage)
-        source_type: 'manual', // Must be 'manual' - check constraint only allows specific values
-        status: 'pending', // Pending for admin review
-        extracted_data: {
-          fivePoints: data.fivePoints || [],
-          industry: data.industry || 'Technology',
-          stage: data.stage || 'Seed',
-          funding: data.funding || 'N/A',
-          pitch: data.pitch || '',
-          marketSize: data.fivePoints?.[2] || '',
-          unique: data.fivePoints?.[1] || '',
-        },
-        submitted_by: null,
+        status: 'pending',
         submitted_email: 'bulk@import.com',
+        source_type: 'manual', // Required field
       };
       
-      console.log('📝 Insert data:', insertData);
+      // Only add optional fields if they're properly formatted
+      if (data.industry) {
+        insertData.sectors = [data.industry];
+      }
       
-      const { data: startup, error } = await supabase
+      console.log('📝 Final insert data (EXACT):', JSON.stringify(insertData, null, 2));
+      console.log('🔍 Keys being inserted:', Object.keys(insertData));
+      
+      // Force the insert by explicitly specifying only the columns we're setting
+      const { data: startups, error } = await supabase
         .from('startup_uploads')
-        .insert([insertData])
-        .select()
-        .single();
+        .insert(insertData)
+        .select('id, name, status, sectors, created_at');
 
       if (error) {
         console.error('❌ Supabase error for', data.name, ':', error);
+        console.error('❌ Error details:', JSON.stringify(error, null, 2));
         throw error;
       }
 
+      const startup = Array.isArray(startups) ? startups[0] : startups;
       console.log('✅ Startup uploaded to Supabase:', startup?.name);
       
       return { success: true, startup };
@@ -94,21 +87,53 @@ export class OpenAIDataService {
   /**
    * Bulk upload multiple startups from OpenAI scraping
    * Used by BulkImport page after enrichment
+   * Optimized for large batches (500+)
    */
-  static async uploadBulkStartups(startups: ScrapedStartupData[]) {
+  static async uploadBulkStartups(
+    startups: ScrapedStartupData[], 
+    onProgress?: (current: number, total: number) => void
+  ) {
     console.log('🚀 Starting bulk upload of', startups.length, 'startups');
     
-    const results = await Promise.all(
-      startups.map(startup => this.uploadScrapedStartup(startup))
-    );
+    const BATCH_SIZE = 50; // Process 50 at a time
+    const results = [];
+    let successful = 0;
+    let failed = 0;
+    const errors: string[] = [];
 
-    const successful = results.filter(r => r.success).length;
-    const failed = results.filter(r => !r.success).length;
-    const errors = results.filter(r => !r.success).map(r => r.error);
+    // Process in batches
+    for (let i = 0; i < startups.length; i += BATCH_SIZE) {
+      const batch = startups.slice(i, i + BATCH_SIZE);
+      const batchNum = Math.floor(i / BATCH_SIZE) + 1;
+      const totalBatches = Math.ceil(startups.length / BATCH_SIZE);
+      
+      console.log(`📦 Processing batch ${batchNum}/${totalBatches} (${batch.length} startups)`);
+      
+      const batchResults = await Promise.all(
+        batch.map(startup => this.uploadScrapedStartup(startup))
+      );
+      
+      results.push(...batchResults);
+      successful += batchResults.filter(r => r.success).length;
+      failed += batchResults.filter(r => !r.success).length;
+      errors.push(...batchResults.filter(r => !r.success).map(r => r.error || 'Unknown error'));
+      
+      // Report progress
+      if (onProgress) {
+        onProgress(i + batch.length, startups.length);
+      }
+      
+      console.log(`✅ Batch ${batchNum} complete: ${batchResults.filter(r => r.success).length}/${batch.length} successful`);
+      
+      // Small delay between batches to avoid overwhelming Supabase
+      if (i + BATCH_SIZE < startups.length) {
+        await new Promise(resolve => setTimeout(resolve, 500));
+      }
+    }
 
-    console.log(`📊 Bulk upload complete: ${successful} successful, ${failed} failed`);
+    console.log(`📊 Bulk upload complete: ${successful}/${startups.length} successful, ${failed} failed`);
     if (errors.length > 0) {
-      console.error('❌ Upload errors:', errors);
+      console.error('❌ Upload errors:', errors.slice(0, 5)); // Show first 5 errors
     }
     
     return {

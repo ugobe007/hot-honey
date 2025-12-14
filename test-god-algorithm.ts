@@ -3,8 +3,8 @@
  * Run this in Node.js to validate the GOD algorithm
  */
 
-import { calculateAdvancedMatchScore, generateAdvancedMatches } from '../src/services/matchingService';
-import { validateGODAlgorithm, generateTestReport, analyzeScoreDistribution } from '../src/services/matchingHelpers';
+import { calculateAdvancedMatchScore, generateAdvancedMatches } from './src/services/matchingService';
+import { validateGODAlgorithm, generateTestReport, analyzeScoreDistribution } from './src/services/matchingHelpers';
 
 console.log('\n' + '═'.repeat(70));
 console.log('🧪 GOD ALGORITHM TEST SUITE');
