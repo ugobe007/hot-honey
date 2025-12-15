@@ -321,8 +321,237 @@ export default function TrendingPage() {
             <p className="text-gray-400">Loading trending startups by sector...</p>
           </div>
         ) : (
-          /* Sector Chart Tables */
-          <div className="space-y-6">
+          <div className="space-y-10">
+            {/* 🔥 TOP 10 HOTTEST STARTUPS - Leaderboard */}
+            <div className="bg-gradient-to-br from-orange-900/30 via-red-900/20 to-purple-900/30 backdrop-blur-lg rounded-2xl border border-orange-500/40 overflow-hidden">
+              <div className="p-5 border-b border-orange-500/30">
+                <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+                  <span className="text-3xl">🔥</span>
+                  Top 10 Hottest Startups
+                  <span className="text-sm font-normal text-orange-300 bg-orange-500/20 px-3 py-1 rounded-full">Live Rankings</span>
+                </h2>
+                <p className="text-gray-400 text-sm mt-1">Highest match scores across all sectors</p>
+              </div>
+              <div className="p-4">
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead>
+                      <tr className="text-left text-xs text-gray-500 uppercase tracking-wider border-b border-orange-500/20">
+                        <th className="pb-3 pl-2 w-16">Rank</th>
+                        <th className="pb-3">Startup</th>
+                        <th className="pb-3">Sector</th>
+                        <th className="pb-3 hidden md:table-cell">Stage/Funding</th>
+                        <th className="pb-3 hidden lg:table-cell">Location</th>
+                        <th className="pb-3 text-right pr-2">Hot Score</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-orange-500/10">
+                      {startups.slice(0, 10).map((startup, index) => {
+                        const categories = categorizeStartup(startup);
+                        const primaryCategory = CATEGORIES.find(c => c.id === categories[0]) || CATEGORIES[0];
+                        const Icon = primaryCategory.icon;
+                        return (
+                          <tr
+                            key={startup.id}
+                            onClick={() => handleStartupClick(startup)}
+                            className="hover:bg-orange-500/10 cursor-pointer transition-colors group"
+                          >
+                            <td className="py-4 pl-2">
+                              <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold text-sm ${
+                                index === 0 
+                                  ? 'bg-gradient-to-br from-yellow-400 to-amber-500 text-black shadow-lg shadow-yellow-500/30' 
+                                  : index === 1
+                                    ? 'bg-gradient-to-br from-gray-200 to-gray-400 text-black shadow-lg shadow-gray-400/20'
+                                    : index === 2
+                                      ? 'bg-gradient-to-br from-orange-500 to-orange-700 text-white shadow-lg shadow-orange-500/20'
+                                      : 'bg-white/10 text-gray-300 border border-white/20'
+                              }`}>
+                                {index === 0 ? '👑' : index + 1}
+                              </div>
+                            </td>
+                            <td className="py-4">
+                              <div className="flex items-center gap-3">
+                                <div>
+                                  <div className="font-bold text-white group-hover:text-orange-300 transition-colors flex items-center gap-2 text-lg">
+                                    {startup.name}
+                                    {index < 3 && <span className="animate-pulse">🔥</span>}
+                                  </div>
+                                  <div className="text-sm text-gray-400 truncate max-w-[200px] md:max-w-[300px]">
+                                    {startup.tagline || 'Innovative startup'}
+                                  </div>
+                                </div>
+                              </div>
+                            </td>
+                            <td className="py-4">
+                              <div className="flex items-center gap-2">
+                                <div className={`w-7 h-7 rounded-lg bg-gradient-to-br ${primaryCategory.color} flex items-center justify-center`}>
+                                  <Icon className="w-3.5 h-3.5 text-white" />
+                                </div>
+                                <span className="text-sm text-gray-300">{primaryCategory.name.split(' ')[0]}</span>
+                              </div>
+                            </td>
+                            <td className="py-4 hidden md:table-cell">
+                              <span className="px-3 py-1.5 text-xs font-medium rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                                {startup.funding || (startup.stage === 1 ? 'Seed' : startup.stage === 2 ? 'Series A' : 'Early')}
+                              </span>
+                            </td>
+                            <td className="py-4 hidden lg:table-cell text-sm text-gray-400">
+                              {startup.geography || 'Global'}
+                            </td>
+                            <td className="py-4 pr-2 text-right">
+                              <div className="inline-flex items-center gap-2">
+                                <div className="flex items-center gap-1">
+                                  <div className="w-16 h-2 bg-white/10 rounded-full overflow-hidden">
+                                    <div 
+                                      className="h-full bg-gradient-to-r from-orange-500 to-red-500 rounded-full"
+                                      style={{ width: `${startup.hotScore || 0}%` }}
+                                    />
+                                  </div>
+                                </div>
+                                <span className={`text-xl font-bold ${
+                                  (startup.hotScore || 0) >= 80 
+                                    ? 'text-orange-400' 
+                                    : (startup.hotScore || 0) >= 60 
+                                      ? 'text-yellow-400'
+                                      : 'text-gray-400'
+                                }`}>
+                                  {startup.hotScore}
+                                </span>
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            {/* 🏆 SECTOR LEADERS - Best from each category */}
+            <div className="bg-gradient-to-br from-purple-900/30 via-indigo-900/20 to-cyan-900/20 backdrop-blur-lg rounded-2xl border border-purple-500/30 overflow-hidden">
+              <div className="p-5 border-b border-purple-500/30">
+                <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+                  <Trophy className="w-7 h-7 text-yellow-400" />
+                  Sector Leaders
+                  <span className="text-sm font-normal text-purple-300 bg-purple-500/20 px-3 py-1 rounded-full">#1 in Each Category</span>
+                </h2>
+                <p className="text-gray-400 text-sm mt-1">Top-performing startup from each sector</p>
+              </div>
+              <div className="p-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {CATEGORIES.map((category) => {
+                    const topStartup = (startupsByCategory[category.id] || [])[0];
+                    if (!topStartup) return null;
+                    const Icon = category.icon;
+                    
+                    return (
+                      <div
+                        key={category.id}
+                        onClick={() => topStartup && handleStartupClick(topStartup)}
+                        className="bg-white/5 hover:bg-white/10 rounded-xl p-4 border border-white/10 hover:border-purple-500/40 transition-all cursor-pointer group"
+                      >
+                        <div className="flex items-start justify-between mb-3">
+                          <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${category.color} flex items-center justify-center shadow-lg`}>
+                            <Icon className="w-5 h-5 text-white" />
+                          </div>
+                          <div className="text-right">
+                            <div className="text-2xl font-bold text-orange-400">{topStartup.hotScore}</div>
+                            <div className="text-xs text-gray-500">Hot Score</div>
+                          </div>
+                        </div>
+                        <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">{category.name}</div>
+                        <div className="font-bold text-white group-hover:text-orange-300 transition-colors truncate">
+                          {topStartup.name}
+                        </div>
+                        <div className="text-sm text-gray-400 truncate mt-1">
+                          {topStartup.tagline || topStartup.industry || 'Leading startup'}
+                        </div>
+                        <div className="flex items-center gap-2 mt-3">
+                          <span className="text-xs px-2 py-1 rounded-full bg-white/10 text-gray-300">
+                            {topStartup.funding || 'Early Stage'}
+                          </span>
+                          <span className="text-xs text-gray-500">{topStartup.geography || 'Global'}</span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+
+            {/* 📊 SECTOR BREAKDOWN TABLE */}
+            <div className="bg-gradient-to-br from-[#1a0033]/80 to-[#2d1b4e]/80 backdrop-blur-lg rounded-2xl border border-purple-500/30 overflow-hidden">
+              <div className="p-5 border-b border-purple-500/30">
+                <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+                  <BarChart3 className="w-7 h-7 text-cyan-400" />
+                  Sector Overview
+                  <span className="text-sm font-normal text-cyan-300 bg-cyan-500/20 px-3 py-1 rounded-full">Quick Stats</span>
+                </h2>
+              </div>
+              <div className="p-4">
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead>
+                      <tr className="text-left text-xs text-gray-500 uppercase tracking-wider border-b border-purple-500/20">
+                        <th className="pb-3 pl-2">Sector</th>
+                        <th className="pb-3 text-center">Startups</th>
+                        <th className="pb-3 text-center">Avg Score</th>
+                        <th className="pb-3 text-center">Top Score</th>
+                        <th className="pb-3 hidden md:table-cell">Top Startup</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-purple-500/10">
+                      {CATEGORIES.map((category) => {
+                        const catStartups = startupsByCategory[category.id] || [];
+                        if (catStartups.length === 0) return null;
+                        const Icon = category.icon;
+                        const avgScore = Math.round(catStartups.reduce((sum, s) => sum + (s.hotScore || 0), 0) / catStartups.length);
+                        const topScore = catStartups[0]?.hotScore || 0;
+                        const topName = catStartups[0]?.name || '--';
+                        
+                        return (
+                          <tr key={category.id} className="hover:bg-white/5 transition-colors">
+                            <td className="py-3 pl-2">
+                              <div className="flex items-center gap-3">
+                                <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${category.color} flex items-center justify-center`}>
+                                  <Icon className="w-4 h-4 text-white" />
+                                </div>
+                                <span className="font-medium text-white">{category.name}</span>
+                              </div>
+                            </td>
+                            <td className="py-3 text-center">
+                              <span className="text-lg font-bold text-purple-300">{catStartups.length}</span>
+                            </td>
+                            <td className="py-3 text-center">
+                              <span className={`text-lg font-bold ${avgScore >= 70 ? 'text-green-400' : avgScore >= 55 ? 'text-yellow-400' : 'text-gray-400'}`}>
+                                {avgScore}
+                              </span>
+                            </td>
+                            <td className="py-3 text-center">
+                              <span className="text-lg font-bold text-orange-400">{topScore}</span>
+                            </td>
+                            <td className="py-3 hidden md:table-cell text-sm text-gray-300 truncate max-w-[200px]">
+                              {topName}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            {/* Divider */}
+            <div className="flex items-center gap-4 my-4">
+              <div className="flex-1 h-px bg-gradient-to-r from-transparent via-purple-500/50 to-transparent"></div>
+              <span className="text-gray-500 text-sm uppercase tracking-wider">Browse by Sector</span>
+              <div className="flex-1 h-px bg-gradient-to-r from-transparent via-purple-500/50 to-transparent"></div>
+            </div>
+
+            {/* Sector Chart Tables */}
+            <div className="space-y-6">
             {CATEGORIES.map((category) => {
               const categoryStartups = filteredCategories[category.id] || [];
               const Icon = category.icon;
@@ -458,6 +687,7 @@ export default function TrendingPage() {
                 </div>
               );
             })}
+            </div>
           </div>
         )}
 
