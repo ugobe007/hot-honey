@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { X, Brain, Rocket, Users, Zap, Target, TrendingUp, Sparkles, ChevronRight } from 'lucide-react';
+import { X, Brain, Users, Zap, Target, TrendingUp, Sparkles, ChevronRight, BarChart3, Flame, Lightbulb, Code2 } from 'lucide-react';
+import FlameIcon from './FlameIcon';
 
 interface HowItWorksModalProps {
   isOpen: boolean;
@@ -9,10 +10,12 @@ interface HowItWorksModalProps {
 const HowItWorksModal: React.FC<HowItWorksModalProps> = ({ isOpen, onClose }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [demoScores, setDemoScores] = useState({ god: 0, yc: 0, sequoia: 0, a16z: 0 });
+  const [showDemoScores, setShowDemoScores] = useState(false);
 
   const steps = [
     {
-      icon: Rocket,
+      icon: Flame,
       title: "Startups Submit",
       description: "Founders submit their pitch, team background, traction metrics, and funding goals.",
       color: "from-orange-500 to-amber-500",
@@ -33,7 +36,7 @@ const HowItWorksModal: React.FC<HowItWorksModalProps> = ({ isOpen, onClose }) =>
       details: ["Stage alignment", "Sector overlap", "Check size fit", "Geographic match"]
     },
     {
-      icon: Brain,
+      icon: Users,
       title: "Anonymous Discovery",
       description: "Investors browse matches anonymously. Identity revealed only when they engage.",
       color: "from-amber-500 to-orange-500",
@@ -45,6 +48,14 @@ const HowItWorksModal: React.FC<HowItWorksModalProps> = ({ isOpen, onClose }) =>
       description: "Scores update in real-time based on voting, funding news, and traction updates.",
       color: "from-emerald-500 to-green-500",
       details: ["User voting impact", "News integration", "Competitor tracking", "Growth signals"]
+    },
+    {
+      icon: BarChart3,
+      title: "Multi-VC Algorithm Views",
+      description: "See how top VCs would score the same startup - YC, Sequoia, A16Z styles all in one place.",
+      color: "from-pink-500 to-rose-500",
+      details: ["GOD Algorithm", "YC Smell Test", "Sequoia Style", "A16Z Style"],
+      isDemo: true
     }
   ];
 
@@ -62,28 +73,59 @@ const HowItWorksModal: React.FC<HowItWorksModalProps> = ({ isOpen, onClose }) =>
   useEffect(() => {
     if (isOpen) {
       setCurrentStep(0);
+      setShowDemoScores(false);
+      setDemoScores({ god: 0, yc: 0, sequoia: 0, a16z: 0 });
     }
   }, [isOpen]);
+
+  // Animate demo scores when on step 6
+  useEffect(() => {
+    if (currentStep === 5 && isOpen) {
+      setShowDemoScores(false);
+      setDemoScores({ god: 0, yc: 0, sequoia: 0, a16z: 0 });
+      
+      setTimeout(() => setShowDemoScores(true), 300);
+      
+      // Animate each score
+      const targetScores = { god: 94, yc: 87, sequoia: 91, a16z: 89 };
+      const keys = ['god', 'yc', 'sequoia', 'a16z'] as const;
+      
+      keys.forEach((key, index) => {
+        setTimeout(() => {
+          let current = 0;
+          const target = targetScores[key];
+          const interval = setInterval(() => {
+            current += 3;
+            if (current >= target) {
+              current = target;
+              clearInterval(interval);
+            }
+            setDemoScores(prev => ({ ...prev, [key]: current }));
+          }, 25);
+        }, index * 200);
+      });
+    }
+  }, [currentStep, isOpen]);
 
   if (!isOpen) return null;
 
   const CurrentIcon = steps[currentStep].icon;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto">
       {/* Backdrop */}
       <div 
-        className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+        className="fixed inset-0 bg-black/80 backdrop-blur-sm"
         onClick={onClose}
       />
       
       {/* Modal */}
-      <div className="relative w-full max-w-4xl bg-gradient-to-br from-gray-900 via-purple-900/50 to-gray-900 rounded-3xl border border-purple-500/30 shadow-2xl overflow-hidden">
+      <div className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-gradient-to-br from-gray-900 via-purple-900/50 to-gray-900 rounded-3xl border border-purple-500/30 shadow-2xl">
         
-        {/* Close button */}
+        {/* Close button - sticky at top right */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 z-10 p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+          className="sticky top-4 float-right mr-4 mt-4 z-20 p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors border border-white/20"
         >
           <X className="w-6 h-6 text-white" />
         </button>
@@ -98,7 +140,7 @@ const HowItWorksModal: React.FC<HowItWorksModalProps> = ({ isOpen, onClose }) =>
             How <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-500">HotMatch</span> Works
           </h2>
           <p className="text-gray-400 text-lg">
-            AI-powered matching in 5 simple steps
+            AI-powered matching in 6 simple steps
           </p>
         </div>
 
@@ -164,20 +206,51 @@ const HowItWorksModal: React.FC<HowItWorksModalProps> = ({ isOpen, onClose }) =>
                   {steps[currentStep].description}
                 </p>
                 
-                {/* Detail pills */}
-                <div className="flex flex-wrap gap-2 justify-center md:justify-start">
-                  {steps[currentStep].details.map((detail, idx) => (
-                    <span
-                      key={idx}
-                      className={`px-4 py-2 rounded-full bg-gradient-to-r ${steps[currentStep].color} bg-opacity-20 text-white text-sm font-medium border border-white/10`}
-                      style={{
-                        animation: `fadeInUp 0.3s ease-out ${idx * 0.1}s both`
-                      }}
-                    >
-                      {detail}
-                    </span>
-                  ))}
-                </div>
+                {/* Step 6: Algorithm Demo with animated scores */}
+                {currentStep === 5 && showDemoScores ? (
+                  <div className="grid grid-cols-2 gap-3">
+                    {[
+                      { key: 'god', name: 'GOD', icon: Flame, color: 'from-red-500 to-pink-500', textColor: 'text-red-400' },
+                      { key: 'yc', name: 'YC', icon: Lightbulb, color: 'from-orange-500 to-amber-500', textColor: 'text-orange-400' },
+                      { key: 'sequoia', name: 'Sequoia', icon: TrendingUp, color: 'from-emerald-500 to-green-500', textColor: 'text-emerald-400' },
+                      { key: 'a16z', name: 'A16Z', icon: Code2, color: 'from-purple-500 to-indigo-500', textColor: 'text-purple-400' },
+                    ].map((algo) => {
+                      const AlgoIcon = algo.icon;
+                      const score = demoScores[algo.key as keyof typeof demoScores];
+                      return (
+                        <div key={algo.key} className="bg-white/5 rounded-xl p-3 border border-white/10">
+                          <div className="flex items-center gap-2 mb-2">
+                            <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${algo.color} flex items-center justify-center`}>
+                              <AlgoIcon className="w-4 h-4 text-white" />
+                            </div>
+                            <span className="text-white text-sm font-semibold">{algo.name}</span>
+                          </div>
+                          <div className={`text-2xl font-bold ${algo.textColor} font-mono`}>
+                            {score > 0 ? score : '---'}<span className="text-gray-500 text-sm">/100</span>
+                          </div>
+                          <div className="h-1.5 bg-black/30 rounded-full mt-2 overflow-hidden">
+                            <div className={`h-full bg-gradient-to-r ${algo.color} transition-all duration-300`} style={{ width: `${score}%` }} />
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  /* Detail pills for other steps */
+                  <div className="flex flex-wrap gap-2 justify-center md:justify-start">
+                    {steps[currentStep].details.map((detail, idx) => (
+                      <span
+                        key={idx}
+                        className={`px-4 py-2 rounded-full bg-gradient-to-r ${steps[currentStep].color} bg-opacity-20 text-white text-sm font-medium border border-white/10`}
+                        style={{
+                          animation: `fadeInUp 0.3s ease-out ${idx * 0.1}s both`
+                        }}
+                      >
+                        {detail}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
 

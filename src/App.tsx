@@ -59,6 +59,11 @@ import InvestorEnrichmentPage from './pages/InvestorEnrichmentPage';
 import DiscoveredInvestors from './pages/DiscoveredInvestors';
 import GetMatchedPage from './pages/GetMatchedPage';
 import TrendingPage from './pages/TrendingPage';
+import ServicesPage from './pages/ServicesPage';
+import ServiceDetailPage from './pages/ServiceDetailPage';
+import CheckoutPage from './pages/CheckoutPage';
+import SubscriptionSuccessPage from './pages/SubscriptionSuccessPage';
+import StrategiesPage from './pages/StrategiesPage';
 import './App.css';
 
 // Wrapper component that redirects admins to admin dashboard
@@ -85,6 +90,11 @@ const App: React.FC = () => {
           <Route path="/" element={<LandingPage />} />
           <Route path="/home" element={<LandingPage />} />
           <Route path="/get-matched" element={<GetMatchedPage />} /> {/* ✅ Pricing & Signup */}
+          <Route path="/checkout" element={<CheckoutPage />} /> {/* 💳 Stripe Checkout */}
+          <Route path="/get-matched/success" element={<SubscriptionSuccessPage />} /> {/* ✅ Success */}
+          <Route path="/services" element={<ServicesPage />} /> {/* 🛠️ AI Services */}
+          <Route path="/services/:slug" element={<ServiceDetailPage />} /> {/* 🛠️ Service Detail */}
+          <Route path="/strategies" element={<StrategiesPage />} /> {/* 📚 Fundraising Playbook */}
           <Route path="/trending" element={<TrendingPage />} /> {/* 🔥 Trending & Discovery */}
           <Route path="/discover" element={<TrendingPage />} /> {/* 🔥 Alias for Trending */}
           <Route path="/matching-engine" element={<MatchingEngine />} />

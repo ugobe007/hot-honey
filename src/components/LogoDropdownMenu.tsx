@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { Home, Zap, Vote as VoteIcon, Briefcase, Rocket, TrendingUp, FileText, BookOpen, Settings, Crown, Activity, Search, Users, Upload, BarChart3, Shield, Sliders } from 'lucide-react';
+import { Home, Zap, Vote as VoteIcon, Briefcase, TrendingUp, FileText, BookOpen, Settings, Crown, Activity, Search, Users, Upload, BarChart3, Shield, Sliders } from 'lucide-react';
+import FlameIcon from './FlameIcon';
 
 export default function LogoDropdownMenu() {
   const [isOpen, setIsOpen] = useState(false);
@@ -53,21 +54,18 @@ export default function LogoDropdownMenu() {
 
   return (
     <div ref={menuRef} className="fixed top-6 left-6 z-50">
-      {/* Logo - Click to open dropdown */}
-      <div
+      {/* 1970s Colored Hamburger Menu */}
+      <button
         onClick={() => setIsOpen(!isOpen)}
-        className="cursor-pointer hover:scale-105 transition-all"
-        role="button"
-        tabIndex={0}
+        className="p-3 rounded-xl bg-black/40 hover:bg-black/60 backdrop-blur-sm border border-white/10 hover:border-white/20 transition-all hover:scale-105"
         aria-label="Menu"
-        onKeyDown={(e) => e.key === 'Enter' && setIsOpen(!isOpen)}
       >
-        <img 
-          src="/images/hot_match_logo.png" 
-          alt="HotMatch" 
-          className="h-24 w-auto"
-        />
-      </div>
+        <div className="flex flex-col gap-1.5 w-7">
+          <div className="h-1 rounded-full bg-gradient-to-r from-orange-500 to-amber-400" />
+          <div className="h-1 rounded-full bg-gradient-to-r from-yellow-400 to-lime-400" />
+          <div className="h-1 rounded-full bg-gradient-to-r from-teal-400 to-cyan-400" />
+        </div>
+      </button>
 
       {/* Dropdown Menu */}
       {isOpen && (
@@ -137,7 +135,7 @@ export default function LogoDropdownMenu() {
                   onClick={() => setIsOpen(false)}
                   className="group px-3 py-2.5 rounded-xl bg-gradient-to-r from-orange-600 to-orange-500 hover:from-orange-700 hover:to-orange-600 transition-all font-bold flex items-center gap-3 border border-orange-700/50 shadow-md"
                 >
-                  <Rocket className="w-4 h-4 text-orange-950" />
+                  <FlameIcon variant={8} size="sm" />
                   <span className="text-orange-950">Startups</span>
                 </Link>
                 
@@ -148,6 +146,15 @@ export default function LogoDropdownMenu() {
                 >
                   <TrendingUp className="w-4 h-4 text-red-950" />
                   <span className="text-red-950">🔥 Trending</span>
+                </Link>
+                
+                <Link
+                  to="/strategies"
+                  onClick={() => setIsOpen(false)}
+                  className="group px-3 py-2.5 rounded-xl bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 transition-all font-bold flex items-center gap-3 border border-purple-600/50 shadow-md"
+                >
+                  <BookOpen className="w-4 h-4 text-purple-100" />
+                  <span className="text-white">📚 Playbook</span>
                 </Link>
                 
                 <Link

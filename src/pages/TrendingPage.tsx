@@ -1,219 +1,277 @@
 import { useState, useEffect, useMemo } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { 
-  TrendingUp, Search, Zap, Brain, Building2, Users, 
-  ChevronRight, Star, Target, Rocket, Shield, Lock,
-  Sparkles, ArrowRight, Filter, BarChart3, Globe,
-  Cpu, Banknote, FlaskConical, Satellite, Factory,
-  Heart, ShoppingBag, GraduationCap, Leaf, Car,
-  ChevronDown, ChevronUp, Trophy, Flame
+  TrendingUp, Search, Zap, Brain, Building2,
+  ChevronRight,
+  Sparkles, ArrowRight, ChevronDown,
+  Lightbulb, Code2, CheckCircle2, Info, X,
+  Users, Target, BarChart3, Eye, Layers, Flame
 } from 'lucide-react';
+import FlameIcon from '../components/FlameIcon';
 import { supabase } from '../lib/supabase';
 import LogoDropdownMenu from '../components/LogoDropdownMenu';
+import HowItWorksModal from '../components/HowItWorksModal';
 
-// Category definitions with icons and keywords for matching
-const CATEGORIES = [
-  { id: 'ai', name: 'AI & Machine Learning', icon: Cpu, color: 'from-purple-500 to-indigo-500', keywords: ['ai', 'artificial intelligence', 'machine learning', 'ml', 'deep learning', 'generative', 'llm', 'nlp', 'computer vision', 'neural', 'gpt', 'content', 'image', 'video', 'translation', 'search', 'simulation'] },
-  { id: 'cybersecurity', name: 'Cybersecurity', icon: Shield, color: 'from-red-500 to-rose-500', keywords: ['cybersecurity', 'security', 'cyber', 'infosec', 'threat', 'privacy', 'encryption', 'identity'] },
-  { id: 'fintech', name: 'FinTech & Payments', icon: Banknote, color: 'from-emerald-500 to-teal-500', keywords: ['fintech', 'financial', 'payments', 'banking', 'insurance', 'insurtech', 'crypto', 'blockchain', 'defi', 'lending', 'wealth', 'trading', 'credit'] },
-  { id: 'healthtech', name: 'HealthTech & Digital Health', icon: Heart, color: 'from-pink-500 to-rose-500', keywords: ['health', 'healthcare', 'medical', 'medtech', 'digital health', 'telehealth', 'wellness', 'clinical', 'patient', 'diagnostic'] },
-  { id: 'climate', name: 'Climate & Clean Energy', icon: Leaf, color: 'from-green-500 to-emerald-500', keywords: ['climate', 'cleantech', 'sustainability', 'renewable', 'energy', 'solar', 'green', 'carbon', 'ev', 'electric', 'environmental', 'recycling'] },
-  { id: 'saas', name: 'SaaS & Developer Tools', icon: Building2, color: 'from-blue-500 to-cyan-500', keywords: ['saas', 'enterprise', 'b2b', 'software', 'cloud', 'productivity', 'workflow', 'crm', 'erp', 'platform', 'developer', 'devops', 'database', 'backend', 'infrastructure', 'collaboration'] },
-  { id: 'ecommerce', name: 'E-Commerce & Consumer', icon: ShoppingBag, color: 'from-orange-500 to-amber-500', keywords: ['ecommerce', 'e-commerce', 'retail', 'marketplace', 'dtc', 'consumer', 'shopping', 'commerce', 'brand', 'fashion', 'food', 'delivery', 'quick'] },
-  { id: 'edtech', name: 'EdTech & Learning', icon: GraduationCap, color: 'from-amber-500 to-yellow-500', keywords: ['edtech', 'education', 'learning', 'training', 'school', 'university', 'course', 'tutoring', 'skill'] },
-  { id: 'mobility', name: 'Mobility & Logistics', icon: Car, color: 'from-cyan-500 to-blue-500', keywords: ['mobility', 'transportation', 'automotive', 'logistics', 'delivery', 'supply chain', 'fleet', 'shipping', 'freight', 'marine'] },
-  { id: 'biotech', name: 'BioTech & Life Sciences', icon: FlaskConical, color: 'from-violet-500 to-purple-500', keywords: ['biotech', 'biotechnology', 'life sciences', 'pharma', 'drug', 'genomics', 'therapeutics'] },
-  { id: 'hardware', name: 'Hardware & Deep Tech', icon: Factory, color: 'from-slate-500 to-zinc-500', keywords: ['hardware', 'robotics', 'iot', 'devices', 'manufacturing', 'sensors', 'drones', '3d printing', 'semiconductor', 'optical', 'aerospace', 'space', 'industrial'] },
+// Algorithm Definitions
+const ALGORITHMS = [
+  {
+    id: 'god',
+    name: 'GOD Algorithm',
+    shortName: 'GOD',
+    icon: Flame,
+    color: 'from-red-500 to-pink-500',
+    bgColor: 'from-red-900/40 to-pink-900/30',
+    borderColor: 'border-red-500/40',
+    description: 'Our proprietary 14-factor scoring system: Team, Traction, Market, Product, Vision + YC Philosophy + Smell Tests.',
+    formula: 'Balanced composite (0-100)',
+    weight: { balanced: 1.0 }
+  },
+  {
+    id: 'yc',
+    name: 'YC Smell Test',
+    shortName: 'YC',
+    icon: Lightbulb,
+    color: 'from-orange-500 to-amber-500',
+    bgColor: 'from-orange-900/40 to-amber-900/30',
+    borderColor: 'border-orange-500/40',
+    description: "Paul Graham's 5 heuristics: Can 2 people build this? Users emotionally attached? Learning in public? Inevitable? Massive if works?",
+    formula: 'Smell Tests + GOD (0-100)',
+    weight: { smell_test: 20, god: 1 }
+  },
+  {
+    id: 'sequoia',
+    name: 'Sequoia Capital Style',
+    shortName: 'Sequoia',
+    icon: TrendingUp,
+    color: 'from-emerald-500 to-teal-500',
+    bgColor: 'from-emerald-900/40 to-teal-900/30',
+    borderColor: 'border-emerald-500/40',
+    description: 'Execution & market focus. Massive TAM, strong traction metrics, proven revenue growth, and market timing.',
+    formula: 'Traction + Market + Team (0-100)',
+    weight: { traction: 2.0, market: 1.5, team: 1.0 }
+  },
+  {
+    id: 'a16z',
+    name: 'Andreessen Horowitz Style',
+    shortName: 'A16Z',
+    icon: Code2,
+    color: 'from-purple-500 to-indigo-500',
+    bgColor: 'from-purple-900/40 to-indigo-900/30',
+    borderColor: 'border-purple-500/40',
+    description: 'Technical moat & vision. Product innovation, contrarian bets, technical founders, and deep tech capabilities.',
+    formula: 'Product + Vision + Team (0-100)',
+    weight: { product: 1.8, vision: 1.5, team: 1.2, tech_bonus: 20 }
+  }
 ];
 
 interface Startup {
   id: string;
   name: string;
   tagline?: string;
-  industry?: string;
-  industries?: string[];
-  stage?: number;
-  geography?: string;
-  website?: string;
-  pitch?: string;
-  funding?: string;
-  five_points?: string[];
-  hotScore?: number; // calculated client-side
-}
-
-interface Investor {
-  id: string;
-  name: string;
-  type?: string;
+  description?: string;
   sectors?: string[];
-  stage?: string[];
-  check_size?: string;
-  geography?: string;
-  portfolio_size?: number;
-  notable_investments?: string[];
+  stage?: number;
+  location?: string;
+  website?: string;
+  
+  // GOD Scores
+  total_god_score?: number;
+  team_score?: number;
+  traction_score?: number;
+  market_score?: number;
+  product_score?: number;
+  vision_score?: number;
+  
+  // Smell Tests
+  smell_test_score?: number;
+  smell_test_lean?: boolean;
+  smell_test_user_passion?: boolean;
+  smell_test_learning_public?: boolean;
+  smell_test_inevitable?: boolean;
+  smell_test_massive_if_works?: boolean;
+  
+  // Extra metrics
+  tam_estimate?: string;
+  market_timing_score?: number;
+  has_technical_cofounder?: boolean;
+  arr?: number;
+  mrr?: number;
+  customer_count?: number;
+  growth_rate_monthly?: number;
+  latest_funding_amount?: string;
+  latest_funding_round?: string;
+  
+  // Calculated scores
+  ycScore?: number;
+  sequoiaScore?: number;
+  a16zScore?: number;
 }
 
-// Calculate a hot score based on available data
-function calculateHotScore(startup: Startup): number {
-  let score = 50; // base score
-  
-  // Has funding info
-  if (startup.funding && startup.funding !== 'Unknown') {
-    const fundingMatch = startup.funding.match(/\$?([\d.]+)\s*(million|m|k|thousand)?/i);
-    if (fundingMatch) {
-      const amount = parseFloat(fundingMatch[1]);
-      const unit = fundingMatch[2]?.toLowerCase();
-      if (unit === 'million' || unit === 'm') {
-        score += Math.min(amount * 2, 30); // max 30 points from funding
-      } else if (amount > 100) {
-        score += 15;
-      }
-    }
-  }
-  
-  // Has 5 points (well-documented)
-  if (startup.five_points && startup.five_points.length >= 3) {
-    score += 10;
-  }
-  
-  // Has tagline
-  if (startup.tagline && startup.tagline.length > 20) {
-    score += 5;
-  }
-  
-  // Has website
-  if (startup.website) {
-    score += 5;
-  }
-  
-  return Math.min(Math.round(score), 99);
+// ALL SCORES NORMALIZED TO 0-100 SCALE
+
+// Calculate YC Score (normalized 0-100)
+function calculateYCScore(startup: Startup): number {
+  // Original: (smellTest × 20) + godScore = max 200
+  // Normalized: divide by 2 to get 0-100
+  const smellBonus = (startup.smell_test_score || 0) * 20;
+  const godScore = startup.total_god_score || 0;
+  return Math.round((smellBonus + godScore) / 2);
 }
 
-// Categorize a startup based on its industry/tagline/pitch
-function categorizeStartup(startup: Startup): string[] {
-  const text = `${startup.industry || ''} ${startup.tagline || ''} ${startup.pitch || ''} ${startup.name || ''} ${startup.industries?.join(' ') || ''}`.toLowerCase();
-  const matchedCategories: string[] = [];
-  
-  for (const cat of CATEGORIES) {
-    for (const keyword of cat.keywords) {
-      if (text.includes(keyword)) {
-        matchedCategories.push(cat.id);
-        break;
-      }
-    }
-  }
-  
-  return matchedCategories.length > 0 ? matchedCategories : ['other'];
+// Calculate Sequoia Score (normalized 0-100)
+function calculateSequoiaScore(startup: Startup): number {
+  // Original: traction×2 + market×1.5 + team×1 = max 450
+  // Normalized: divide by 4.5 to get 0-100
+  const traction = (startup.traction_score || 0) * 2.0;
+  const market = (startup.market_score || 0) * 1.5;
+  const team = (startup.team_score || 0) * 1.0;
+  return Math.round((traction + market + team) / 4.5);
+}
+
+// Calculate A16Z Score (normalized 0-100)
+function calculateA16ZScore(startup: Startup): number {
+  // Original: product×1.8 + vision×1.5 + team×1.2 + techBonus(20) = max 470
+  // Normalized: divide by 4.7 to get 0-100
+  const product = (startup.product_score || 0) * 1.8;
+  const vision = (startup.vision_score || 0) * 1.5;
+  const team = (startup.team_score || 0) * 1.2;
+  const techBonus = startup.has_technical_cofounder ? 20 : 0;
+  return Math.round((product + vision + team + techBonus) / 4.7);
+}
+
+// Format currency
+function formatCurrency(amount?: number): string {
+  if (!amount) return '-';
+  if (amount >= 1000000) return `$${(amount / 1000000).toFixed(1)}M`;
+  if (amount >= 1000) return `$${(amount / 1000).toFixed(0)}K`;
+  return `$${amount}`;
+}
+
+// Get TAM badge color
+function getTAMColor(tam?: string): string {
+  if (!tam) return 'bg-gray-500/20 text-gray-300';
+  if (tam.includes('100B')) return 'bg-emerald-500/20 text-emerald-300';
+  if (tam.includes('10B')) return 'bg-blue-500/20 text-blue-300';
+  if (tam.includes('1B')) return 'bg-purple-500/20 text-purple-300';
+  return 'bg-gray-500/20 text-gray-300';
 }
 
 export default function TrendingPage() {
-  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [startups, setStartups] = useState<Startup[]>([]);
-  const [investors, setInvestors] = useState<Investor[]>([]);
   const [loading, setLoading] = useState(true);
-  const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
-    ai: true,
-    fintech: true,
-    healthtech: true,
-  });
+  const [selectedAlgorithm, setSelectedAlgorithm] = useState<string>('god');
   const [showSignupPrompt, setShowSignupPrompt] = useState(false);
   const [selectedStartup, setSelectedStartup] = useState<Startup | null>(null);
+  const [stats, setStats] = useState({ startups: 0, investors: 0, matches: 0 });
+  const [showMethodology, setShowMethodology] = useState(false);
+  const [showHowItWorks, setShowHowItWorks] = useState(false);
 
   // Fetch data on mount
   useEffect(() => {
     async function fetchData() {
       setLoading(true);
       
-      // Fetch startups with actual columns
-      const { data: startupData, error: startupError } = await supabase
-        .from('startups')
-        .select('id, name, tagline, industry, industries, stage, geography, website, pitch, funding, five_points')
+      // Fetch startups with GOD scores and smell tests
+      const { data: startupData, error } = await supabase
+        .from('startup_uploads')
+        .select(`
+          id, name, tagline, description, sectors, stage, location, website,
+          total_god_score, team_score, traction_score, market_score, product_score, vision_score,
+          smell_test_score, smell_test_lean, smell_test_user_passion, smell_test_learning_public,
+          smell_test_inevitable, smell_test_massive_if_works,
+          tam_estimate, market_timing_score, has_technical_cofounder,
+          arr, mrr, customer_count, growth_rate_monthly,
+          latest_funding_amount, latest_funding_round
+        `)
+        .eq('status', 'approved')
+        .order('total_god_score', { ascending: false })
         .limit(500);
       
-      if (startupError) {
-        console.error('Error fetching startups:', startupError);
+      if (error) {
+        console.error('Error fetching startups:', error);
       }
       
-      // Calculate hot scores and add to startups
+      // Calculate all algorithm scores
       const startupsWithScores = (startupData || []).map(s => ({
         ...s,
-        hotScore: calculateHotScore(s)
-      })).sort((a, b) => (b.hotScore || 0) - (a.hotScore || 0));
-      
-      // Fetch investors
-      const { data: investorData, error: investorError } = await supabase
-        .from('investors')
-        .select('id, name, type, sectors, stage, check_size, geography, portfolio_size, notable_investments')
-        .limit(200);
-      
-      if (investorError) {
-        console.error('Error fetching investors:', investorError);
-      }
+        ycScore: calculateYCScore(s),
+        sequoiaScore: calculateSequoiaScore(s),
+        a16zScore: calculateA16ZScore(s)
+      }));
       
       setStartups(startupsWithScores);
-      setInvestors(investorData || []);
+      
+      // Fetch stats
+      const [{ count: startupCount }, { count: investorCount }, { count: matchCount }] = await Promise.all([
+        supabase.from('startup_uploads').select('*', { count: 'exact', head: true }).eq('status', 'approved'),
+        supabase.from('investors').select('*', { count: 'exact', head: true }),
+        supabase.from('startup_investor_matches').select('*', { count: 'exact', head: true })
+      ]);
+      
+      setStats({
+        startups: startupCount || 0,
+        investors: investorCount || 0,
+        matches: matchCount || 0
+      });
+      
       setLoading(false);
     }
     
     fetchData();
   }, []);
 
-  // Organize startups by category
-  const startupsByCategory = useMemo(() => {
-    const categorized: Record<string, Startup[]> = {};
+  // Sort and filter startups based on selected algorithm
+  const sortedStartups = useMemo(() => {
+    let filtered = startups;
     
-    // Initialize all categories
-    for (const cat of CATEGORIES) {
-      categorized[cat.id] = [];
-    }
-    categorized['other'] = [];
-    
-    // Categorize each startup
-    for (const startup of startups) {
-      const categories = categorizeStartup(startup);
-      for (const catId of categories) {
-        if (categorized[catId]) {
-          categorized[catId].push(startup);
-        }
-      }
-    }
-    
-    // Sort each category by hotScore and limit to top entries
-    for (const catId of Object.keys(categorized)) {
-      categorized[catId] = categorized[catId]
-        .sort((a, b) => (b.hotScore || 0) - (a.hotScore || 0))
-        .slice(0, 20); // Top 20 per category
-    }
-    
-    return categorized;
-  }, [startups]);
-
-  // Filter by search
-  const filteredCategories = useMemo(() => {
-    if (!searchQuery) return startupsByCategory;
-    
-    const query = searchQuery.toLowerCase();
-    const filtered: Record<string, Startup[]> = {};
-    
-    for (const [catId, catStartups] of Object.entries(startupsByCategory)) {
-      filtered[catId] = catStartups.filter(s => 
+    // Apply search filter
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      filtered = startups.filter(s => 
         s.name?.toLowerCase().includes(query) ||
         s.tagline?.toLowerCase().includes(query) ||
-        s.industry?.toLowerCase().includes(query)
+        s.sectors?.some(sec => sec.toLowerCase().includes(query))
       );
     }
     
-    return filtered;
-  }, [startupsByCategory, searchQuery]);
+    // Sort by selected algorithm
+    return [...filtered].sort((a, b) => {
+      switch (selectedAlgorithm) {
+        case 'god':
+          return (b.total_god_score || 0) - (a.total_god_score || 0);
+        case 'yc':
+          return (b.ycScore || 0) - (a.ycScore || 0);
+        case 'sequoia':
+          return (b.sequoiaScore || 0) - (a.sequoiaScore || 0);
+        case 'a16z':
+          return (b.a16zScore || 0) - (a.a16zScore || 0);
+        default:
+          return (b.total_god_score || 0) - (a.total_god_score || 0);
+      }
+    });
+  }, [startups, selectedAlgorithm, searchQuery]);
 
-  // Toggle section expansion
-  const toggleSection = (catId: string) => {
-    setExpandedSections(prev => ({
-      ...prev,
-      [catId]: !prev[catId]
-    }));
+  // Get score for current algorithm
+  const getScore = (startup: Startup): number => {
+    switch (selectedAlgorithm) {
+      case 'god': return startup.total_god_score || 0;
+      case 'yc': return startup.ycScore || 0;
+      case 'sequoia': return startup.sequoiaScore || 0;
+      case 'a16z': return startup.a16zScore || 0;
+      default: return startup.total_god_score || 0;
+    }
   };
+
+  // Get max score for normalization
+  const maxScore = useMemo(() => {
+    const scores = sortedStartups.map(getScore);
+    return Math.max(...scores, 1);
+  }, [sortedStartups, selectedAlgorithm]);
+
+  // Current algorithm info
+  const currentAlgo = ALGORITHMS.find(a => a.id === selectedAlgorithm) || ALGORITHMS[0];
+  const AlgoIcon = currentAlgo.icon;
 
   // Handle startup click
   const handleStartupClick = (startup: Startup) => {
@@ -221,14 +279,87 @@ export default function TrendingPage() {
     setShowSignupPrompt(true);
   };
 
-  // Generate mock match preview
-  const generateMatchTeaser = () => {
-    return [94, 91, 88];
+  // Smell test indicators
+  const SmellTestBadge = ({ startup }: { startup: Startup }) => {
+    if (selectedAlgorithm !== 'yc') return null;
+    
+    const tests = [
+      { key: 'smell_test_lean', label: 'Lean', icon: '🏃' },
+      { key: 'smell_test_user_passion', label: 'Passion', icon: '❤️' },
+      { key: 'smell_test_learning_public', label: 'Public', icon: '📢' },
+      { key: 'smell_test_inevitable', label: 'Inevitable', icon: '🎯' },
+      { key: 'smell_test_massive_if_works', label: 'Massive', icon: '🚀' }
+    ];
+    
+    return (
+      <div className="flex items-center gap-1">
+        {tests.map(test => (
+          <span
+            key={test.key}
+            className={`text-xs px-1.5 py-0.5 rounded ${
+              startup[test.key as keyof Startup] 
+                ? 'bg-green-500/20 text-green-300' 
+                : 'bg-red-500/20 text-red-400 opacity-50'
+            }`}
+            title={test.label}
+          >
+            {test.icon}
+          </span>
+        ))}
+      </div>
+    );
   };
 
-  // Count totals
-  const totalStartups = startups.length;
-  const totalInvestors = investors.length;
+  // Sequoia metrics
+  const SequoiaMetrics = ({ startup }: { startup: Startup }) => {
+    if (selectedAlgorithm !== 'sequoia') return null;
+    
+    return (
+      <div className="flex items-center gap-2 text-xs">
+        {startup.arr && (
+          <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300">
+            ARR: {formatCurrency(startup.arr)}
+          </span>
+        )}
+        {startup.growth_rate_monthly && startup.growth_rate_monthly > 0 && (
+          <span className="px-2 py-0.5 rounded bg-blue-500/20 text-blue-300">
+            +{startup.growth_rate_monthly}%/mo
+          </span>
+        )}
+        {startup.tam_estimate && (
+          <span className={`px-2 py-0.5 rounded ${getTAMColor(startup.tam_estimate)}`}>
+            TAM: {startup.tam_estimate}
+          </span>
+        )}
+      </div>
+    );
+  };
+
+  // A16Z metrics
+  const A16ZMetrics = ({ startup }: { startup: Startup }) => {
+    if (selectedAlgorithm !== 'a16z') return null;
+    
+    return (
+      <div className="flex items-center gap-2 text-xs">
+        {startup.has_technical_cofounder && (
+          <span className="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 flex items-center gap-1">
+            <Code2 className="w-3 h-3" />
+            Tech Founder
+          </span>
+        )}
+        {startup.product_score && startup.product_score >= 90 && (
+          <span className="px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300">
+            🏆 Top Product
+          </span>
+        )}
+        {startup.vision_score && startup.vision_score >= 90 && (
+          <span className="px-2 py-0.5 rounded bg-pink-500/20 text-pink-300">
+            🔮 Visionary
+          </span>
+        )}
+      </div>
+    );
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0a0015] via-[#1a0a2e] to-[#0f0520] text-white relative overflow-hidden">
@@ -236,13 +367,21 @@ export default function TrendingPage() {
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-orange-500/10 to-pink-500/10 rounded-full blur-3xl"></div>
       </div>
 
       {/* Logo Dropdown Menu */}
       <LogoDropdownMenu />
 
       {/* Navigation Buttons - Top Right */}
-      <div className="fixed top-6 right-8 z-50 flex items-center gap-4">
+      <div className="fixed top-6 right-8 z-50 flex items-center gap-3">
+        <button
+          onClick={() => setShowHowItWorks(true)}
+          className="flex items-center gap-2 px-4 py-2.5 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-xl transition-all border border-white/20"
+        >
+          <Brain className="w-4 h-4" />
+          How It Works
+        </button>
         <Link 
           to="/about" 
           className="px-5 py-2.5 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-xl transition-all border border-white/20"
@@ -251,8 +390,9 @@ export default function TrendingPage() {
         </Link>
         <Link 
           to="/get-matched" 
-          className="px-5 py-2.5 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold rounded-xl transition-all shadow-lg"
+          className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold rounded-xl transition-all shadow-lg"
         >
+          <Sparkles className="w-4 h-4" />
           Get Matched
         </Link>
       </div>
@@ -261,47 +401,95 @@ export default function TrendingPage() {
         {/* Header */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-500/20 to-red-500/20 border border-orange-500/30 rounded-full mb-4">
-            <TrendingUp className="w-4 h-4 text-orange-400" />
-            <span className="text-orange-300 text-sm font-medium">Live Rankings • Real-Time Data</span>
+            <Brain className="w-4 h-4 text-orange-400" />
+            <span className="text-orange-300 text-sm font-medium">Algorithmic Intelligence • Real-Time Rankings</span>
           </div>
           <h1 className="text-4xl md:text-5xl font-bold mb-3">
             <span className="bg-gradient-to-r from-orange-400 via-red-500 to-pink-500 bg-clip-text text-transparent">
-              🔥 Trending by Sector
+              🧠 Investor-Style Rankings
             </span>
           </h1>
-          <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-            Discover {totalStartups}+ startups ranked by Hot Score across {CATEGORIES.length} sectors
+          <p className="text-lg text-gray-300 max-w-3xl mx-auto">
+            See startups through the lens of top VCs. Compare how YC, Sequoia, and A16Z would rank the same companies using their unique investment philosophies.
           </p>
         </div>
 
         {/* Stats Bar */}
-        <div className="flex justify-center gap-6 mb-8">
+        <div className="flex justify-center gap-6 mb-8 flex-wrap items-center">
           <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-xl border border-white/10">
-            <Rocket className="w-5 h-5 text-orange-400" />
-            <span className="text-2xl font-bold text-white">{totalStartups}+</span>
+            <FlameIcon variant={8} size="sm" />
+            <span className="text-2xl font-bold text-white">{stats.startups.toLocaleString()}</span>
             <span className="text-sm text-gray-400">Startups</span>
           </div>
           <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-xl border border-white/10">
             <Building2 className="w-5 h-5 text-purple-400" />
-            <span className="text-2xl font-bold text-white">{totalInvestors}+</span>
+            <span className="text-2xl font-bold text-white">{stats.investors.toLocaleString()}</span>
             <span className="text-sm text-gray-400">Investors</span>
           </div>
           <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-xl border border-white/10">
-            <Trophy className="w-5 h-5 text-yellow-400" />
-            <span className="text-2xl font-bold text-white">{CATEGORIES.length}</span>
-            <span className="text-sm text-gray-400">Sectors</span>
+            <Zap className="w-5 h-5 text-yellow-400" />
+            <span className="text-2xl font-bold text-white">{stats.matches.toLocaleString()}</span>
+            <span className="text-sm text-gray-400">Matches</span>
+          </div>
+        </div>
+
+        {/* Algorithm Selector */}
+        <div className="mb-12">
+          <p className="text-center text-gray-400 text-sm mb-4">👆 Click an algorithm to see how top VCs would rank startups 👇</p>
+          <div className="flex flex-col md:flex-row gap-4 justify-center pb-8">
+            {ALGORITHMS.map((algo) => {
+              const Icon = algo.icon;
+              const isSelected = selectedAlgorithm === algo.id;
+              
+              return (
+                <button
+                  key={algo.id}
+                  onClick={() => setSelectedAlgorithm(algo.id)}
+                  className={`relative group flex-1 max-w-sm p-4 rounded-2xl border-2 transition-all duration-300 ${
+                    isSelected 
+                      ? `bg-gradient-to-br ${algo.bgColor} ${algo.borderColor} shadow-lg` 
+                      : 'bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/20'
+                  }`}
+                >
+                  <div className="flex items-start gap-3">
+                    <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${algo.color} flex items-center justify-center shadow-lg`}>
+                      <Icon className="w-6 h-6 text-white" />
+                    </div>
+                    <div className="flex-1 text-left">
+                      <div className="flex items-center gap-2">
+                        <h3 className="font-bold text-white">{algo.name}</h3>
+                        {isSelected && (
+                          <CheckCircle2 className="w-4 h-4 text-green-400" />
+                        )}
+                      </div>
+                      <p className="text-xs text-gray-400 mt-1 line-clamp-2">{algo.description}</p>
+                      <div className="mt-2 text-xs text-gray-500 font-mono bg-black/20 px-2 py-1 rounded">
+                        {algo.formula}
+                      </div>
+                    </div>
+                  </div>
+                  {/* Down arrow indicator when selected */}
+                  {isSelected && (
+                    <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center animate-bounce">
+                      <ChevronDown className={`w-6 h-6 bg-gradient-to-r ${algo.color} bg-clip-text text-transparent`} style={{ color: algo.id === 'yc' ? '#f97316' : algo.id === 'sequoia' ? '#10b981' : '#a855f7' }} />
+                      <span className="text-xs text-gray-400 whitespace-nowrap">See rankings below</span>
+                    </div>
+                  )}
+                </button>
+              );
+            })}
           </div>
         </div>
 
         {/* Search Bar */}
-        <div className="max-w-xl mx-auto mb-10">
+        <div className="max-w-xl mx-auto mb-8">
           <div className="relative">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search startups across all sectors..."
+              placeholder="Search startups by name, tagline, or sector..."
               className="w-full pl-12 pr-4 py-3 bg-white/10 border border-purple-500/30 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-purple-400 focus:ring-2 focus:ring-purple-500/20"
             />
             {searchQuery && (
@@ -318,403 +506,390 @@ export default function TrendingPage() {
         {loading ? (
           <div className="text-center py-20">
             <div className="animate-spin w-12 h-12 border-4 border-purple-500/30 border-t-purple-500 rounded-full mx-auto mb-4"></div>
-            <p className="text-gray-400">Loading trending startups by sector...</p>
+            <p className="text-gray-400">Loading algorithmic rankings...</p>
           </div>
         ) : (
-          <div className="space-y-10">
-            {/* 🔥 TOP 10 HOTTEST STARTUPS - Leaderboard */}
-            <div className="bg-gradient-to-br from-orange-900/30 via-red-900/20 to-purple-900/30 backdrop-blur-lg rounded-2xl border border-orange-500/40 overflow-hidden">
-              <div className="p-5 border-b border-orange-500/30">
-                <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-                  <span className="text-3xl">🔥</span>
-                  Top 10 Hottest Startups
-                  <span className="text-sm font-normal text-orange-300 bg-orange-500/20 px-3 py-1 rounded-full">Live Rankings</span>
-                </h2>
-                <p className="text-gray-400 text-sm mt-1">Highest match scores across all sectors</p>
-              </div>
-              <div className="p-4">
-                <div className="overflow-x-auto">
-                  <table className="w-full">
-                    <thead>
-                      <tr className="text-left text-xs text-gray-500 uppercase tracking-wider border-b border-orange-500/20">
-                        <th className="pb-3 pl-2 w-16">Rank</th>
-                        <th className="pb-3">Startup</th>
-                        <th className="pb-3">Sector</th>
-                        <th className="pb-3 hidden md:table-cell">Stage/Funding</th>
-                        <th className="pb-3 hidden lg:table-cell">Location</th>
-                        <th className="pb-3 text-right pr-2">Hot Score</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-orange-500/10">
-                      {startups.slice(0, 10).map((startup, index) => {
-                        const categories = categorizeStartup(startup);
-                        const primaryCategory = CATEGORIES.find(c => c.id === categories[0]) || CATEGORIES[0];
-                        const Icon = primaryCategory.icon;
-                        return (
-                          <tr
-                            key={startup.id}
-                            onClick={() => handleStartupClick(startup)}
-                            className="hover:bg-orange-500/10 cursor-pointer transition-colors group"
-                          >
-                            <td className="py-4 pl-2">
-                              <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold text-sm ${
-                                index === 0 
-                                  ? 'bg-gradient-to-br from-yellow-400 to-amber-500 text-black shadow-lg shadow-yellow-500/30' 
-                                  : index === 1
-                                    ? 'bg-gradient-to-br from-gray-200 to-gray-400 text-black shadow-lg shadow-gray-400/20'
-                                    : index === 2
-                                      ? 'bg-gradient-to-br from-orange-500 to-orange-700 text-white shadow-lg shadow-orange-500/20'
-                                      : 'bg-white/10 text-gray-300 border border-white/20'
-                              }`}>
-                                {index === 0 ? '👑' : index + 1}
-                              </div>
-                            </td>
-                            <td className="py-4">
-                              <div className="flex items-center gap-3">
-                                <div>
-                                  <div className="font-bold text-white group-hover:text-orange-300 transition-colors flex items-center gap-2 text-lg">
-                                    {startup.name}
-                                    {index < 3 && <span className="animate-pulse">🔥</span>}
-                                  </div>
-                                  <div className="text-sm text-gray-400 truncate max-w-[200px] md:max-w-[300px]">
-                                    {startup.tagline || 'Innovative startup'}
-                                  </div>
-                                </div>
-                              </div>
-                            </td>
-                            <td className="py-4">
-                              <div className="flex items-center gap-2">
-                                <div className={`w-7 h-7 rounded-lg bg-gradient-to-br ${primaryCategory.color} flex items-center justify-center`}>
-                                  <Icon className="w-3.5 h-3.5 text-white" />
-                                </div>
-                                <span className="text-sm text-gray-300">{primaryCategory.name.split(' ')[0]}</span>
-                              </div>
-                            </td>
-                            <td className="py-4 hidden md:table-cell">
-                              <span className="px-3 py-1.5 text-xs font-medium rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                                {startup.funding || (startup.stage === 1 ? 'Seed' : startup.stage === 2 ? 'Series A' : 'Early')}
-                              </span>
-                            </td>
-                            <td className="py-4 hidden lg:table-cell text-sm text-gray-400">
-                              {startup.geography || 'Global'}
-                            </td>
-                            <td className="py-4 pr-2 text-right">
-                              <div className="inline-flex items-center gap-2">
-                                <div className="flex items-center gap-1">
-                                  <div className="w-16 h-2 bg-white/10 rounded-full overflow-hidden">
-                                    <div 
-                                      className="h-full bg-gradient-to-r from-orange-500 to-red-500 rounded-full"
-                                      style={{ width: `${startup.hotScore || 0}%` }}
-                                    />
-                                  </div>
-                                </div>
-                                <span className={`text-xl font-bold ${
-                                  (startup.hotScore || 0) >= 80 
-                                    ? 'text-orange-400' 
-                                    : (startup.hotScore || 0) >= 60 
-                                      ? 'text-yellow-400'
-                                      : 'text-gray-400'
-                                }`}>
-                                  {startup.hotScore}
-                                </span>
-                              </div>
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-
-            {/* 🏆 SECTOR LEADERS - Best from each category */}
-            <div className="bg-gradient-to-br from-purple-900/30 via-indigo-900/20 to-cyan-900/20 backdrop-blur-lg rounded-2xl border border-purple-500/30 overflow-hidden">
-              <div className="p-5 border-b border-purple-500/30">
-                <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-                  <Trophy className="w-7 h-7 text-yellow-400" />
-                  Sector Leaders
-                  <span className="text-sm font-normal text-purple-300 bg-purple-500/20 px-3 py-1 rounded-full">#1 in Each Category</span>
-                </h2>
-                <p className="text-gray-400 text-sm mt-1">Top-performing startup from each sector</p>
-              </div>
-              <div className="p-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                  {CATEGORIES.map((category) => {
-                    const topStartup = (startupsByCategory[category.id] || [])[0];
-                    if (!topStartup) return null;
-                    const Icon = category.icon;
-                    
-                    return (
-                      <div
-                        key={category.id}
-                        onClick={() => topStartup && handleStartupClick(topStartup)}
-                        className="bg-white/5 hover:bg-white/10 rounded-xl p-4 border border-white/10 hover:border-purple-500/40 transition-all cursor-pointer group"
-                      >
-                        <div className="flex items-start justify-between mb-3">
-                          <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${category.color} flex items-center justify-center shadow-lg`}>
-                            <Icon className="w-5 h-5 text-white" />
-                          </div>
-                          <div className="text-right">
-                            <div className="text-2xl font-bold text-orange-400">{topStartup.hotScore}</div>
-                            <div className="text-xs text-gray-500">Hot Score</div>
-                          </div>
-                        </div>
-                        <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">{category.name}</div>
-                        <div className="font-bold text-white group-hover:text-orange-300 transition-colors truncate">
-                          {topStartup.name}
-                        </div>
-                        <div className="text-sm text-gray-400 truncate mt-1">
-                          {topStartup.tagline || topStartup.industry || 'Leading startup'}
-                        </div>
-                        <div className="flex items-center gap-2 mt-3">
-                          <span className="text-xs px-2 py-1 rounded-full bg-white/10 text-gray-300">
-                            {topStartup.funding || 'Early Stage'}
-                          </span>
-                          <span className="text-xs text-gray-500">{topStartup.geography || 'Global'}</span>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-
-            {/* 📊 SECTOR BREAKDOWN TABLE */}
-            <div className="bg-gradient-to-br from-[#1a0033]/80 to-[#2d1b4e]/80 backdrop-blur-lg rounded-2xl border border-purple-500/30 overflow-hidden">
-              <div className="p-5 border-b border-purple-500/30">
-                <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-                  <BarChart3 className="w-7 h-7 text-cyan-400" />
-                  Sector Overview
-                  <span className="text-sm font-normal text-cyan-300 bg-cyan-500/20 px-3 py-1 rounded-full">Quick Stats</span>
-                </h2>
-              </div>
-              <div className="p-4">
-                <div className="overflow-x-auto">
-                  <table className="w-full">
-                    <thead>
-                      <tr className="text-left text-xs text-gray-500 uppercase tracking-wider border-b border-purple-500/20">
-                        <th className="pb-3 pl-2">Sector</th>
-                        <th className="pb-3 text-center">Startups</th>
-                        <th className="pb-3 text-center">Avg Score</th>
-                        <th className="pb-3 text-center">Top Score</th>
-                        <th className="pb-3 hidden md:table-cell">Top Startup</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-purple-500/10">
-                      {CATEGORIES.map((category) => {
-                        const catStartups = startupsByCategory[category.id] || [];
-                        if (catStartups.length === 0) return null;
-                        const Icon = category.icon;
-                        const avgScore = Math.round(catStartups.reduce((sum, s) => sum + (s.hotScore || 0), 0) / catStartups.length);
-                        const topScore = catStartups[0]?.hotScore || 0;
-                        const topName = catStartups[0]?.name || '--';
-                        
-                        return (
-                          <tr key={category.id} className="hover:bg-white/5 transition-colors">
-                            <td className="py-3 pl-2">
-                              <div className="flex items-center gap-3">
-                                <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${category.color} flex items-center justify-center`}>
-                                  <Icon className="w-4 h-4 text-white" />
-                                </div>
-                                <span className="font-medium text-white">{category.name}</span>
-                              </div>
-                            </td>
-                            <td className="py-3 text-center">
-                              <span className="text-lg font-bold text-purple-300">{catStartups.length}</span>
-                            </td>
-                            <td className="py-3 text-center">
-                              <span className={`text-lg font-bold ${avgScore >= 70 ? 'text-green-400' : avgScore >= 55 ? 'text-yellow-400' : 'text-gray-400'}`}>
-                                {avgScore}
-                              </span>
-                            </td>
-                            <td className="py-3 text-center">
-                              <span className="text-lg font-bold text-orange-400">{topScore}</span>
-                            </td>
-                            <td className="py-3 hidden md:table-cell text-sm text-gray-300 truncate max-w-[200px]">
-                              {topName}
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-
-            {/* Divider */}
-            <div className="flex items-center gap-4 my-4">
-              <div className="flex-1 h-px bg-gradient-to-r from-transparent via-purple-500/50 to-transparent"></div>
-              <span className="text-gray-500 text-sm uppercase tracking-wider">Browse by Sector</span>
-              <div className="flex-1 h-px bg-gradient-to-r from-transparent via-purple-500/50 to-transparent"></div>
-            </div>
-
-            {/* Sector Chart Tables */}
-            <div className="space-y-6">
-            {CATEGORIES.map((category) => {
-              const categoryStartups = filteredCategories[category.id] || [];
-              const Icon = category.icon;
-              const isExpanded = expandedSections[category.id];
-              const displayCount = isExpanded ? 10 : 5;
-              const displayStartups = categoryStartups.slice(0, displayCount);
-              
-              if (categoryStartups.length === 0) return null;
-              
-              return (
-                <div 
-                  key={category.id}
-                  className="bg-gradient-to-br from-[#1a0033]/80 to-[#2d1b4e]/80 backdrop-blur-lg rounded-2xl border border-purple-500/30 overflow-hidden"
-                >
-                  {/* Section Header */}
-                  <button
-                    onClick={() => toggleSection(category.id)}
-                    className="w-full p-4 flex items-center justify-between hover:bg-white/5 transition-colors"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${category.color} flex items-center justify-center shadow-lg`}>
-                        <Icon className="w-5 h-5 text-white" />
-                      </div>
-                      <div className="text-left">
-                        <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                          {category.name}
-                          {categoryStartups.length >= 10 && <Flame className="w-4 h-4 text-orange-400" />}
-                        </h2>
-                        <p className="text-sm text-gray-400">{categoryStartups.length} hot startups</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm text-gray-400 hidden sm:inline">
-                        {isExpanded ? 'Show less' : `View top ${Math.min(10, categoryStartups.length)}`}
+          <>
+            {/* Current Algorithm Header */}
+            <div className={`mb-6 p-6 rounded-2xl bg-gradient-to-br ${currentAlgo.bgColor} border ${currentAlgo.borderColor}`}>
+              <div className="flex items-center justify-between flex-wrap gap-4">
+                <div className="flex items-center gap-4">
+                  <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${currentAlgo.color} flex items-center justify-center shadow-lg`}>
+                    <AlgoIcon className="w-7 h-7 text-white" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+                      {currentAlgo.name} Rankings
+                      <span className="text-sm font-normal bg-white/10 px-3 py-1 rounded-full">
+                        Top {Math.min(sortedStartups.length, 50)} Startups
                       </span>
-                      {isExpanded ? (
-                        <ChevronUp className="w-5 h-5 text-gray-400" />
-                      ) : (
-                        <ChevronDown className="w-5 h-5 text-gray-400" />
-                      )}
-                    </div>
-                  </button>
-
-                  {/* Table */}
-                  <div className="px-4 pb-4">
-                    <div className="overflow-x-auto">
-                      <table className="w-full">
-                        <thead>
-                          <tr className="text-left text-xs text-gray-500 uppercase tracking-wider border-b border-purple-500/20">
-                            <th className="pb-2 pl-2 w-14">Rank</th>
-                            <th className="pb-2">Startup</th>
-                            <th className="pb-2 hidden md:table-cell">Stage</th>
-                            <th className="pb-2 hidden lg:table-cell">Location</th>
-                            <th className="pb-2 text-right pr-2">Hot Score</th>
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-purple-500/10">
-                          {displayStartups.map((startup, index) => (
-                            <tr
-                              key={startup.id}
-                              onClick={() => handleStartupClick(startup)}
-                              className="hover:bg-white/5 cursor-pointer transition-colors group"
-                            >
-                              <td className="py-3 pl-2">
-                                <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs ${
-                                  index === 0 
-                                    ? 'bg-gradient-to-br from-yellow-400 to-amber-500 text-black' 
-                                    : index === 1
-                                      ? 'bg-gradient-to-br from-gray-300 to-gray-400 text-black'
-                                      : index === 2
-                                        ? 'bg-gradient-to-br from-orange-600 to-orange-700 text-white'
-                                        : 'bg-white/10 text-gray-400'
-                                }`}>
-                                  {index + 1}
-                                </div>
-                              </td>
-                              <td className="py-3">
-                                <div>
-                                  <div className="font-semibold text-white group-hover:text-orange-300 transition-colors flex items-center gap-2">
-                                    {startup.name}
-                                    {index < 3 && <span className="text-orange-400 text-sm">🔥</span>}
-                                  </div>
-                                  <div className="text-sm text-gray-400 truncate max-w-[180px] md:max-w-[280px]">
-                                    {startup.tagline || startup.industry || 'Innovative startup'}
-                                  </div>
-                                </div>
-                              </td>
-                              <td className="py-3 hidden md:table-cell">
-                                <span className={`px-2 py-1 text-xs rounded-full ${
-                                  startup.stage === 1
-                                    ? 'bg-emerald-500/20 text-emerald-300'
-                                    : startup.stage === 2
-                                      ? 'bg-blue-500/20 text-blue-300'
-                                      : startup.stage && startup.stage >= 3
-                                        ? 'bg-purple-500/20 text-purple-300'
-                                        : 'bg-gray-500/20 text-gray-300'
-                                }`}>
-                                  {startup.stage === 1 ? 'Seed' : startup.stage === 2 ? 'Series A' : startup.stage === 3 ? 'Series B' : startup.funding || 'Early'}
-                                </span>
-                              </td>
-                              <td className="py-3 hidden lg:table-cell text-sm text-gray-400">
-                                {startup.geography || 'Global'}
-                              </td>
-                              <td className="py-3 pr-2 text-right">
-                                <div className="inline-flex items-center gap-1">
-                                  <div className={`text-lg font-bold ${
-                                    (startup.hotScore || 0) >= 80 
-                                      ? 'bg-gradient-to-r from-orange-400 to-red-400' 
-                                      : (startup.hotScore || 0) >= 60 
-                                        ? 'bg-gradient-to-r from-yellow-400 to-orange-400'
-                                        : 'bg-gradient-to-r from-gray-400 to-gray-300'
-                                  } bg-clip-text text-transparent`}>
-                                    {startup.hotScore || '--'}
-                                  </div>
-                                  <ChevronRight className="w-4 h-4 text-gray-500 group-hover:text-orange-400 transition-colors" />
-                                </div>
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                    
-                    {categoryStartups.length > 5 && !isExpanded && (
-                      <button
-                        onClick={() => toggleSection(category.id)}
-                        className="mt-3 w-full py-2 text-center text-sm text-purple-300 hover:text-purple-200 transition-colors border-t border-purple-500/20"
-                      >
-                        View {Math.min(10, categoryStartups.length) - 5} more startups →
-                      </button>
-                    )}
+                    </h2>
+                    <p className="text-gray-300 text-sm mt-1">{currentAlgo.description}</p>
                   </div>
                 </div>
-              );
-            })}
+                <div className="text-right">
+                  <div className="text-3xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                    {sortedStartups.length}
+                  </div>
+                  <div className="text-xs text-gray-400">Startups Ranked</div>
+                </div>
+              </div>
             </div>
-          </div>
+
+            {/* Rankings Table */}
+            <div className="bg-gradient-to-br from-[#1a0033]/80 to-[#2d1b4e]/80 backdrop-blur-lg rounded-2xl border border-purple-500/30 overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="text-left text-xs text-gray-500 uppercase tracking-wider border-b border-purple-500/20 bg-black/20">
+                      <th className="py-4 pl-4 w-16">Rank</th>
+                      <th className="py-4">Startup</th>
+                      <th className="py-4 hidden md:table-cell">Sector</th>
+                      <th className="py-4 hidden lg:table-cell">
+                        {selectedAlgorithm === 'yc' ? 'Smell Tests' : 
+                         selectedAlgorithm === 'sequoia' ? 'Metrics' : 'Strengths'}
+                      </th>
+                      <th className="py-4 hidden xl:table-cell">GOD Score</th>
+                      <th className="py-4 text-right pr-4">{currentAlgo.shortName} Score</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-purple-500/10">
+                    {sortedStartups.slice(0, 50).map((startup, index) => {
+                      const score = getScore(startup);
+                      const normalizedScore = Math.round((score / maxScore) * 100);
+                      
+                      return (
+                        <tr
+                          key={startup.id}
+                          onClick={() => handleStartupClick(startup)}
+                          className="hover:bg-white/5 cursor-pointer transition-colors group"
+                        >
+                          {/* Rank */}
+                          <td className="py-4 pl-4">
+                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold text-sm ${
+                              index === 0 
+                                ? 'bg-gradient-to-br from-yellow-400 to-amber-500 text-black shadow-lg shadow-yellow-500/30' 
+                                : index === 1
+                                  ? 'bg-gradient-to-br from-gray-200 to-gray-400 text-black shadow-lg'
+                                  : index === 2
+                                    ? 'bg-gradient-to-br from-orange-500 to-orange-700 text-white shadow-lg'
+                                    : 'bg-white/10 text-gray-300 border border-white/20'
+                            }`}>
+                              {index === 0 ? '👑' : index + 1}
+                            </div>
+                          </td>
+                          
+                          {/* Startup Info */}
+                          <td className="py-4">
+                            <div className="flex items-center gap-3">
+                              <div>
+                                <div className="font-bold text-white group-hover:text-orange-300 transition-colors flex items-center gap-2">
+                                  {startup.name}
+                                  {index < 3 && <span className="animate-pulse">🔥</span>}
+                                  {startup.smell_test_score === 5 && selectedAlgorithm === 'yc' && (
+                                    <span className="text-xs px-2 py-0.5 rounded-full bg-green-500/20 text-green-300 border border-green-500/30">
+                                      Perfect 5/5
+                                    </span>
+                                  )}
+                                </div>
+                                <div className="text-sm text-gray-400 truncate max-w-[200px] md:max-w-[300px]">
+                                  {startup.tagline || startup.description || 'Innovative startup'}
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                          
+                          {/* Sector */}
+                          <td className="py-4 hidden md:table-cell">
+                            <div className="flex flex-wrap gap-1">
+                              {(startup.sectors || []).slice(0, 2).map((sector, i) => (
+                                <span 
+                                  key={i}
+                                  className="text-xs px-2 py-1 rounded-full bg-purple-500/20 text-purple-300"
+                                >
+                                  {sector}
+                                </span>
+                              ))}
+                            </div>
+                          </td>
+                          
+                          {/* Algorithm-specific metrics */}
+                          <td className="py-4 hidden lg:table-cell">
+                            <SmellTestBadge startup={startup} />
+                            <SequoiaMetrics startup={startup} />
+                            <A16ZMetrics startup={startup} />
+                          </td>
+                          
+                          {/* GOD Score */}
+                          <td className="py-4 hidden xl:table-cell">
+                            <div className="flex items-center gap-2">
+                              <div className="w-16 h-2 bg-white/10 rounded-full overflow-hidden">
+                                <div 
+                                  className="h-full bg-gradient-to-r from-purple-500 to-pink-500 rounded-full"
+                                  style={{ width: `${startup.total_god_score || 0}%` }}
+                                />
+                              </div>
+                              <span className="text-sm font-medium text-gray-300 w-8">
+                                {startup.total_god_score || '-'}
+                              </span>
+                            </div>
+                          </td>
+                          
+                          {/* Algorithm Score */}
+                          <td className="py-4 pr-4 text-right">
+                            <div className="inline-flex items-center gap-2">
+                              <div className="w-20 h-2 bg-white/10 rounded-full overflow-hidden">
+                                <div 
+                                  className={`h-full bg-gradient-to-r ${currentAlgo.color} rounded-full`}
+                                  style={{ width: `${normalizedScore}%` }}
+                                />
+                              </div>
+                              <span className={`text-xl font-bold bg-gradient-to-r ${currentAlgo.color} bg-clip-text text-transparent min-w-[60px]`}>
+                                {score}
+                              </span>
+                              <ChevronRight className="w-4 h-4 text-gray-500 group-hover:text-orange-400 transition-colors" />
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Algorithm Comparison Card */}
+            <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
+              {ALGORITHMS.map((algo) => {
+                const Icon = algo.icon;
+                const topStartup = [...startups].sort((a, b) => {
+                  switch (algo.id) {
+                    case 'god': return (b.total_god_score || 0) - (a.total_god_score || 0);
+                    case 'yc': return (b.ycScore || 0) - (a.ycScore || 0);
+                    case 'sequoia': return (b.sequoiaScore || 0) - (a.sequoiaScore || 0);
+                    case 'a16z': return (b.a16zScore || 0) - (a.a16zScore || 0);
+                    default: return 0;
+                  }
+                })[0];
+                
+                const topScore = topStartup ? (
+                  algo.id === 'god' ? topStartup.total_god_score :
+                  algo.id === 'yc' ? topStartup.ycScore :
+                  algo.id === 'sequoia' ? topStartup.sequoiaScore :
+                  topStartup.a16zScore
+                ) : 0;
+                
+                return (
+                  <div
+                    key={algo.id}
+                    className={`p-5 rounded-2xl border cursor-pointer transition-all ${
+                      selectedAlgorithm === algo.id 
+                        ? `bg-gradient-to-br ${algo.bgColor} ${algo.borderColor}` 
+                        : 'bg-white/5 border-white/10 hover:bg-white/10'
+                    }`}
+                    onClick={() => setSelectedAlgorithm(algo.id)}
+                  >
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${algo.color} flex items-center justify-center`}>
+                        <Icon className="w-5 h-5 text-white" />
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-white text-sm">{algo.shortName} #1</h3>
+                        <p className="text-xs text-gray-400">Top Ranked</p>
+                      </div>
+                    </div>
+                    {topStartup && (
+                      <div>
+                        <div className="font-semibold text-white truncate">{topStartup.name}</div>
+                        <div className="text-xs text-gray-400 truncate">{topStartup.tagline}</div>
+                        <div className={`mt-2 text-2xl font-bold bg-gradient-to-r ${algo.color} bg-clip-text text-transparent`}>
+                          {topScore}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </>
         )}
 
         {/* CTA Section */}
         <div className="mt-12 text-center">
           <div className="bg-gradient-to-br from-purple-900/50 to-indigo-900/50 backdrop-blur-lg rounded-2xl p-8 border border-purple-500/30 max-w-2xl mx-auto">
             <Brain className="w-12 h-12 text-purple-400 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold text-white mb-2">Want AI-Powered Investor Matches?</h2>
+            <h2 className="text-2xl font-bold text-white mb-2">Experience the Full Power</h2>
             <p className="text-gray-300 mb-6">
-              Get personalized investor recommendations with our Spark Engine™ - find your perfect match in 60 seconds.
+              These rankings demonstrate our GOD Algorithm in action. Get personalized investor matches with our Spark Engine™.
             </p>
-            <Link
-              to="/get-matched"
-              className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold rounded-xl transition-all shadow-lg"
-            >
-              <Zap className="w-5 h-5" />
-              Get Matched Now
-              <ArrowRight className="w-5 h-5" />
-            </Link>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <button
+                onClick={() => setShowMethodology(true)}
+                className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-xl transition-all border border-white/20"
+              >
+                <Info className="w-5 h-5" />
+                How Our Scoring Works
+              </button>
+              <Link
+                to="/get-matched"
+                className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold rounded-xl transition-all shadow-lg"
+              >
+                <Zap className="w-5 h-5" />
+                Get Matched Now
+                <ArrowRight className="w-5 h-5" />
+              </Link>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Match Preview Modal */}
+      {/* Methodology Modal */}
+      {showMethodology && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-gradient-to-br from-[#1a0033] to-[#2d1b4e] rounded-2xl border border-purple-500/30 max-w-4xl w-full p-6 relative max-h-[90vh] overflow-y-auto">
+            <button
+              onClick={() => setShowMethodology(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-white p-2 hover:bg-white/10 rounded-lg transition-colors"
+            >
+              <X className="w-6 h-6" />
+            </button>
+
+            <div className="text-center mb-8">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-red-500 to-pink-500 flex items-center justify-center mx-auto mb-4">
+                <Brain className="w-8 h-8 text-white" />
+              </div>
+              <h2 className="text-3xl font-bold text-white mb-2">GOD Algorithm</h2>
+              <p className="text-gray-400">Our proprietary 14-factor startup scoring & investor matching system</p>
+            </div>
+
+            {/* GOD Score Components */}
+            <div className="mb-8">
+              <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                <Flame className="w-5 h-5 text-red-400" />
+                GOD Score Components (0-100)
+              </h3>
+              <div className="grid md:grid-cols-5 gap-3">
+                {[
+                  { name: 'Team', icon: Users, color: 'from-blue-500 to-cyan-500', factors: ['Technical founders', 'Domain expertise', 'Team size', 'Prior exits'] },
+                  { name: 'Traction', icon: TrendingUp, color: 'from-green-500 to-emerald-500', factors: ['ARR/MRR', 'Growth rate', 'Customer count', 'NRR'] },
+                  { name: 'Market', icon: Target, color: 'from-purple-500 to-pink-500', factors: ['TAM estimate', 'Market timing', 'Competition', 'Winner-take-all'] },
+                  { name: 'Product', icon: Layers, color: 'from-orange-500 to-red-500', factors: ['Launch status', 'Demo ready', 'NPS score', 'User engagement'] },
+                  { name: 'Vision', icon: Eye, color: 'from-indigo-500 to-violet-500', factors: ['Contrarian belief', 'Why now', 'Unfair advantage', '10x potential'] },
+                ].map((component) => (
+                  <div key={component.name} className="bg-black/30 rounded-xl p-4 border border-white/10">
+                    <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${component.color} flex items-center justify-center mb-3`}>
+                      <component.icon className="w-5 h-5 text-white" />
+                    </div>
+                    <h4 className="font-bold text-white mb-2">{component.name}</h4>
+                    <ul className="text-xs text-gray-400 space-y-1">
+                      {component.factors.map((f, i) => (
+                        <li key={i} className="flex items-center gap-1">
+                          <span className="text-green-400">✓</span> {f}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* YC Smell Tests */}
+            <div className="mb-8">
+              <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                <Lightbulb className="w-5 h-5 text-orange-400" />
+                YC Smell Tests (5 Binary Tests)
+              </h3>
+              <div className="bg-black/30 rounded-xl p-4 border border-orange-500/20">
+                <p className="text-gray-300 text-sm mb-4">Paul Graham's quick heuristics for evaluating early-stage startups:</p>
+                <div className="grid md:grid-cols-5 gap-3">
+                  {[
+                    { icon: '🏃', test: 'Lean Build', q: 'Could 2 people build this MVP in 3 months?' },
+                    { icon: '❤️', test: 'User Passion', q: 'Do users sound emotionally attached?' },
+                    { icon: '📢', test: 'Learning Public', q: 'Is the founder learning in public?' },
+                    { icon: '🎯', test: 'Inevitable', q: 'Does this feel early but inevitable?' },
+                    { icon: '🚀', test: 'Massive If Works', q: 'Could this be massive if it works?' },
+                  ].map((test, i) => (
+                    <div key={i} className="text-center">
+                      <div className="text-2xl mb-2">{test.icon}</div>
+                      <div className="font-semibold text-white text-sm">{test.test}</div>
+                      <div className="text-xs text-gray-400 mt-1">{test.q}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Investor Matching */}
+            <div className="mb-8">
+              <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                <Zap className="w-5 h-5 text-yellow-400" />
+                Investor Matching Algorithm
+              </h3>
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="bg-black/30 rounded-xl p-4 border border-white/10">
+                  <h4 className="font-bold text-white mb-3">Matching Factors</h4>
+                  <ul className="text-sm text-gray-300 space-y-2">
+                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-green-400" /> Sector alignment (AI, Fintech, etc.)</li>
+                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-green-400" /> Stage fit (Pre-seed to Series B)</li>
+                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-green-400" /> Check size compatibility</li>
+                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-green-400" /> Geographic preferences</li>
+                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-green-400" /> Portfolio fit analysis</li>
+                    <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-green-400" /> Investment thesis alignment</li>
+                  </ul>
+                </div>
+                <div className="bg-black/30 rounded-xl p-4 border border-white/10">
+                  <h4 className="font-bold text-white mb-3">Investor Tiers</h4>
+                  <ul className="text-sm space-y-2">
+                    <li className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-gradient-to-r from-yellow-400 to-amber-500"></span> <span className="text-yellow-400 font-semibold">Elite</span> <span className="text-gray-400">- Top-tier VCs, proven track record</span></li>
+                    <li className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-gradient-to-r from-purple-400 to-pink-500"></span> <span className="text-purple-400 font-semibold">Strong</span> <span className="text-gray-400">- Active investors, good portfolios</span></li>
+                    <li className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-gradient-to-r from-blue-400 to-cyan-500"></span> <span className="text-blue-400 font-semibold">Solid</span> <span className="text-gray-400">- Reliable, sector-focused</span></li>
+                    <li className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-gradient-to-r from-green-400 to-emerald-500"></span> <span className="text-green-400 font-semibold">Emerging</span> <span className="text-gray-400">- New funds, angels</span></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            {/* Algorithm Styles */}
+            <div className="mb-6">
+              <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                <BarChart3 className="w-5 h-5 text-cyan-400" />
+                VC-Style Weightings
+              </h3>
+              <div className="grid md:grid-cols-4 gap-3">
+                {ALGORITHMS.map((algo) => {
+                  const Icon = algo.icon;
+                  return (
+                    <div key={algo.id} className={`p-4 rounded-xl border bg-gradient-to-br ${algo.bgColor} ${algo.borderColor}`}>
+                      <div className="flex items-center gap-2 mb-2">
+                        <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${algo.color} flex items-center justify-center`}>
+                          <Icon className="w-4 h-4 text-white" />
+                        </div>
+                        <span className="font-bold text-white text-sm">{algo.shortName}</span>
+                      </div>
+                      <p className="text-xs text-gray-400 mb-2">{algo.description}</p>
+                      <code className="text-xs text-gray-500 bg-black/30 px-2 py-1 rounded block">{algo.formula}</code>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="text-center">
+              <button
+                onClick={() => setShowMethodology(false)}
+                className="px-8 py-3 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold rounded-xl transition-all"
+              >
+                Got It!
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Startup Detail Modal */}
       {showSignupPrompt && selectedStartup && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-gradient-to-br from-[#1a0033] to-[#2d1b4e] rounded-2xl border border-purple-500/30 max-w-md w-full p-6 relative">
+          <div className="bg-gradient-to-br from-[#1a0033] to-[#2d1b4e] rounded-2xl border border-purple-500/30 max-w-lg w-full p-6 relative max-h-[90vh] overflow-y-auto">
             <button
               onClick={() => {
                 setShowSignupPrompt(false);
@@ -726,56 +901,114 @@ export default function TrendingPage() {
             </button>
 
             <div className="text-center mb-5">
-              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center mx-auto mb-3">
-                <Rocket className="w-7 h-7 text-white" />
+              <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${currentAlgo.color} flex items-center justify-center mx-auto mb-3`}>
+                <FlameIcon variant={5} size="xl" />
               </div>
               <h2 className="text-xl font-bold text-white mb-1">{selectedStartup.name}</h2>
-              <p className="text-gray-400 text-sm">{selectedStartup.tagline || selectedStartup.industry}</p>
-              <div className="mt-2 inline-flex items-center gap-2 px-3 py-1 bg-orange-500/20 rounded-full">
-                <Flame className="w-4 h-4 text-orange-400" />
-                <span className="text-orange-400 font-bold">{selectedStartup.hotScore || 85}</span>
-                <span className="text-orange-300 text-sm">Hot Score</span>
+              <p className="text-gray-400 text-sm">{selectedStartup.tagline}</p>
+            </div>
+
+            {/* Score Cards */}
+            <div className="grid grid-cols-3 gap-3 mb-5">
+              <div className="bg-orange-500/10 rounded-xl p-3 text-center border border-orange-500/20">
+                <div className="text-2xl font-bold text-orange-400">{selectedStartup.ycScore}</div>
+                <div className="text-xs text-gray-400">YC Score</div>
+              </div>
+              <div className="bg-emerald-500/10 rounded-xl p-3 text-center border border-emerald-500/20">
+                <div className="text-2xl font-bold text-emerald-400">{selectedStartup.sequoiaScore}</div>
+                <div className="text-xs text-gray-400">Sequoia</div>
+              </div>
+              <div className="bg-purple-500/10 rounded-xl p-3 text-center border border-purple-500/20">
+                <div className="text-2xl font-bold text-purple-400">{selectedStartup.a16zScore}</div>
+                <div className="text-xs text-gray-400">A16Z</div>
               </div>
             </div>
 
-            {/* Match Preview */}
+            {/* GOD Score Breakdown */}
             <div className="bg-black/30 rounded-xl p-4 mb-5">
               <h3 className="text-sm font-semibold text-purple-300 mb-3 flex items-center gap-2">
                 <Brain className="w-4 h-4" />
-                Top Investor Matches
+                GOD Score Breakdown
               </h3>
               <div className="space-y-2">
-                {generateMatchTeaser().map((score, i) => (
-                  <div key={i} className="flex items-center gap-3">
+                {[
+                  { label: 'Team', score: selectedStartup.team_score, color: 'from-blue-500 to-cyan-500' },
+                  { label: 'Traction', score: selectedStartup.traction_score, color: 'from-green-500 to-emerald-500' },
+                  { label: 'Market', score: selectedStartup.market_score, color: 'from-purple-500 to-pink-500' },
+                  { label: 'Product', score: selectedStartup.product_score, color: 'from-orange-500 to-red-500' },
+                  { label: 'Vision', score: selectedStartup.vision_score, color: 'from-indigo-500 to-violet-500' },
+                ].map((item) => (
+                  <div key={item.label} className="flex items-center gap-3">
+                    <span className="text-xs text-gray-400 w-16">{item.label}</span>
                     <div className="flex-1 h-2 bg-white/10 rounded-full overflow-hidden">
                       <div 
-                        className="h-full bg-gradient-to-r from-purple-500 to-pink-500 rounded-full"
-                        style={{ width: `${score}%` }}
+                        className={`h-full bg-gradient-to-r ${item.color} rounded-full`}
+                        style={{ width: `${item.score || 0}%` }}
                       />
                     </div>
-                    <span className="text-sm font-bold text-purple-300 w-10">{score}%</span>
-                    <Lock className="w-4 h-4 text-gray-500" />
+                    <span className="text-sm font-bold text-gray-300 w-8">{item.score || '-'}</span>
                   </div>
                 ))}
-                <p className="text-xs text-gray-500 mt-2">+ 7 more matches hidden</p>
+              </div>
+              <div className="mt-3 pt-3 border-t border-white/10 flex justify-between">
+                <span className="text-sm text-gray-400">Total GOD Score</span>
+                <span className="text-lg font-bold text-white">{selectedStartup.total_god_score}</span>
               </div>
             </div>
 
+            {/* Smell Tests */}
+            {selectedStartup.smell_test_score !== undefined && (
+              <div className="bg-black/30 rounded-xl p-4 mb-5">
+                <h3 className="text-sm font-semibold text-orange-300 mb-3 flex items-center gap-2">
+                  <Lightbulb className="w-4 h-4" />
+                  YC Smell Tests ({selectedStartup.smell_test_score}/5)
+                </h3>
+                <div className="grid grid-cols-1 gap-2">
+                  {[
+                    { key: 'smell_test_lean', label: 'Can 2 people build in 3mo?', icon: '🏃' },
+                    { key: 'smell_test_user_passion', label: 'Users emotionally attached?', icon: '❤️' },
+                    { key: 'smell_test_learning_public', label: 'Learning in public?', icon: '📢' },
+                    { key: 'smell_test_inevitable', label: 'Feels early but inevitable?', icon: '🎯' },
+                    { key: 'smell_test_massive_if_works', label: 'Massive if it works?', icon: '🚀' },
+                  ].map((test) => (
+                    <div 
+                      key={test.key}
+                      className={`flex items-center gap-2 px-3 py-2 rounded-lg ${
+                        selectedStartup[test.key as keyof Startup] 
+                          ? 'bg-green-500/20 text-green-300' 
+                          : 'bg-red-500/10 text-red-400/60'
+                      }`}
+                    >
+                      <span>{test.icon}</span>
+                      <span className="text-xs flex-1">{test.label}</span>
+                      <span className="text-sm font-bold">{selectedStartup[test.key as keyof Startup] ? '✓' : '✗'}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             <div className="text-center">
               <p className="text-gray-300 text-sm mb-4">
-                Sign up to see your top investor matches with approach strategies
+                Want to see which investors match best with {selectedStartup.name}?
               </p>
               <Link
                 to="/get-matched"
                 className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold rounded-xl transition-all shadow-lg w-full justify-center"
               >
                 <Sparkles className="w-5 h-5" />
-                Unlock Matches
+                Find Matching Investors
               </Link>
             </div>
           </div>
         </div>
       )}
+
+      {/* How It Works Modal */}
+      <HowItWorksModal 
+        isOpen={showHowItWorks} 
+        onClose={() => setShowHowItWorks(false)} 
+      />
     </div>
   );
 }

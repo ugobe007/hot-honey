@@ -1,92 +1,50 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Zap, Check, X, Sparkles, Users, Building2, ArrowRight, Star, Shield, Clock } from 'lucide-react';
+import { 
+  Zap, Check, X, Sparkles, Building2, ArrowRight, Star, Shield, Clock,
+  Crown, Brain, Target, TrendingUp, MessageSquare, Lightbulb,
+  FileText, BarChart3, Users2, Handshake, Headphones, Lock
+} from 'lucide-react';
+import FlameIcon from '../components/FlameIcon';
 import { supabase } from '../lib/supabase';
 import LogoDropdownMenu from '../components/LogoDropdownMenu';
 
 type UserType = 'startup' | 'investor';
-type PlanType = 'free' | 'pro' | 'enterprise';
+type PlanType = 'spark' | 'flame' | 'inferno' | 'scout' | 'dealflow_pro';
 
-interface PricingPlan {
-  id: PlanType;
+interface Service {
   name: string;
-  price: number;
-  period: string;
-  description: string;
-  features: string[];
-  limitations: string[];
-  matchLimit: number;
-  cta: string;
-  popular?: boolean;
+  icon: any;
+  spark: boolean;
+  flame: boolean;
+  inferno: boolean;
 }
 
-const pricingPlans: PricingPlan[] = [
-  {
-    id: 'free',
-    name: 'Free',
-    price: 0,
-    period: 'forever',
-    description: 'Perfect for exploring the platform',
-    features: [
-      '3 matches per month',
-      'Basic startup/investor profiles',
-      'View match compatibility scores',
-      'Email notifications',
-    ],
-    limitations: [
-      'Limited to 3 matches',
-      'No advanced filters',
-      'No priority support',
-    ],
-    matchLimit: 3,
-    cta: 'Get Started Free',
-  },
-  {
-    id: 'pro',
-    name: 'Pro',
-    price: 99,
-    period: 'per month',
-    description: 'For serious founders & investors',
-    features: [
-      'Unlimited matches',
-      'Advanced compatibility filters',
-      'Priority matching algorithm',
-      'Direct intro requests',
-      'Match analytics & insights',
-      'Priority email support',
-      'Custom deal flow alerts',
-    ],
-    limitations: [],
-    matchLimit: -1, // unlimited
-    cta: 'Start Pro Trial',
-    popular: true,
-  },
-  {
-    id: 'enterprise',
-    name: 'Enterprise',
-    price: 499,
-    period: 'per month',
-    description: 'For VC firms & accelerators',
-    features: [
-      'Everything in Pro',
-      'Team collaboration (5 seats)',
-      'API access',
-      'Custom integrations',
-      'Dedicated account manager',
-      'White-label options',
-      'Custom reporting',
-      'SLA guarantee',
-    ],
-    limitations: [],
-    matchLimit: -1,
-    cta: 'Contact Sales',
-  },
+const startupServices: Service[] = [
+  { name: 'Browse Trending Rankings', icon: TrendingUp, spark: true, flame: true, inferno: true },
+  { name: 'Preview 3 Investor Matches', icon: Target, spark: true, flame: true, inferno: true },
+  { name: 'Basic GOD Score', icon: Brain, spark: true, flame: true, inferno: true },
+  { name: 'Unlimited Investor Matches', icon: Sparkles, spark: false, flame: true, inferno: true },
+  { name: 'Full GOD Score Breakdown', icon: BarChart3, spark: false, flame: true, inferno: true },
+  { name: 'Match Reasoning (5 reasons)', icon: Lightbulb, spark: false, flame: true, inferno: true },
+  { name: 'VC Approach Playbook', icon: Target, spark: false, flame: true, inferno: true },
+  { name: 'Pitch Deck Analyzer', icon: FileText, spark: false, flame: true, inferno: true },
+  { name: 'Value Prop Sharpener', icon: MessageSquare, spark: false, flame: true, inferno: true },
+  { name: 'Warm Intro Path Finder', icon: Handshake, spark: false, flame: true, inferno: true },
+  { name: 'Product-Market Fit Analysis', icon: Target, spark: false, flame: false, inferno: true },
+  { name: 'Team & Advisor Gap Analysis', icon: Users2, spark: false, flame: false, inferno: true },
+  { name: 'Traction Improvement Plan', icon: TrendingUp, spark: false, flame: false, inferno: true },
+  { name: 'Funding Strategy Roadmap', icon: TrendingUp, spark: false, flame: false, inferno: true },
+  { name: 'Partnership Opportunities', icon: Handshake, spark: false, flame: false, inferno: true },
+  { name: 'Competitive Intelligence', icon: Brain, spark: false, flame: false, inferno: true },
+  { name: 'Monthly Office Hours', icon: Headphones, spark: false, flame: false, inferno: true },
+  { name: 'Priority Support', icon: Crown, spark: false, flame: false, inferno: true },
 ];
 
 export default function GetMatchedPage() {
   const navigate = useNavigate();
-  const [step, setStep] = useState<'pricing' | 'signup'>('pricing');
-  const [selectedPlan, setSelectedPlan] = useState<PlanType>('free');
+  const [step, setStep] = useState<'type' | 'pricing' | 'signup'>('type');
+  const [selectedPlan, setSelectedPlan] = useState<PlanType>('spark');
   const [userType, setUserType] = useState<UserType>('startup');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -99,13 +57,13 @@ export default function GetMatchedPage() {
     description: '',
   });
 
+  const handleTypeSelect = (type: UserType) => {
+    setUserType(type);
+    setStep('pricing');
+  };
+
   const handlePlanSelect = (planId: PlanType) => {
     setSelectedPlan(planId);
-    if (planId === 'enterprise') {
-      // For enterprise, redirect to contact
-      window.location.href = 'mailto:hello@hotmoney.co?subject=Enterprise%20Plan%20Inquiry';
-      return;
-    }
     setStep('signup');
   };
 
@@ -128,11 +86,30 @@ export default function GetMatchedPage() {
       });
 
       if (authError) {
-        // If Supabase auth fails, fall back to localStorage
         console.warn('Supabase auth failed, using localStorage:', authError);
       }
 
-      // Create user profile in database
+      // Create subscription record
+      const subscription = {
+        user_id: authData?.user?.id,
+        email: formData.email,
+        tier: selectedPlan,
+        user_type: userType,
+        status: 'active',
+        matches_viewed_count: 0,
+        matches_limit: selectedPlan === 'spark' ? 3 : -1,
+      };
+
+      // Try to save to Supabase
+      const { error: subError } = await supabase
+        .from('user_subscriptions')
+        .insert(subscription);
+
+      if (subError) {
+        console.warn('Subscription save failed:', subError);
+      }
+
+      // Create user profile
       const userProfile = {
         id: authData?.user?.id || `user-${Date.now()}`,
         name: formData.name,
@@ -142,35 +119,34 @@ export default function GetMatchedPage() {
         website: formData.website,
         description: formData.description,
         plan: selectedPlan,
-        matches_remaining: selectedPlan === 'free' ? 3 : -1,
+        matches_remaining: selectedPlan === 'spark' ? 3 : -1,
         matches_used: 0,
         created_at: new Date().toISOString(),
       };
-
-      // Try to save to Supabase
-      const { error: dbError } = await supabase
-        .from('user_profiles')
-        .upsert(userProfile);
-
-      if (dbError) {
-        console.warn('Database save failed, using localStorage:', dbError);
-      }
 
       // Always save to localStorage as backup
       localStorage.setItem('currentUser', JSON.stringify(userProfile));
       localStorage.setItem('isLoggedIn', 'true');
       localStorage.setItem('userPlan', selectedPlan);
-      localStorage.setItem('matchesRemaining', selectedPlan === 'free' ? '3' : '-1');
+      localStorage.setItem('userType', userType);
+      localStorage.setItem('matchesRemaining', selectedPlan === 'spark' ? '3' : '-1');
 
-      // Show success and redirect
-      const plan = pricingPlans.find(p => p.id === selectedPlan);
-      alert(`🎉 Welcome to Hot Match!\n\nPlan: ${plan?.name}\n${selectedPlan === 'free' ? '✨ You have 3 free matches to start!' : '✨ Unlimited matches activated!'}`);
+      // Show success
+      const tierNames: Record<PlanType, string> = {
+        spark: 'Spark (Free)',
+        flame: 'Flame ($49/mo)',
+        inferno: 'Inferno ($199/mo)',
+        scout: 'Scout ($99/mo)',
+        dealflow_pro: 'Dealflow Pro ($499/mo)',
+      };
+      
+      alert(`🎉 Welcome to Hot Match!\n\nPlan: ${tierNames[selectedPlan]}\n${selectedPlan === 'spark' ? '✨ You have 3 free matches to start!' : '✨ Full access activated!'}`);
 
       // Redirect based on user type
       if (userType === 'investor') {
-        navigate('/matching');
+        navigate('/trending');
       } else {
-        navigate('/submit');
+        navigate('/matching');
       }
 
     } catch (err) {
@@ -186,311 +162,468 @@ export default function GetMatchedPage() {
       {/* Background Effects */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
-        <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-pink-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-orange-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
       </div>
 
       {/* Logo Dropdown Menu */}
       <LogoDropdownMenu />
 
       {/* Navigation Buttons - Top Right */}
-      <div className="fixed top-6 right-8 z-50 flex items-center gap-4">
+      <div className="fixed top-6 right-8 z-50 flex items-center gap-3">
         <Link 
-          to="/about" 
-          className="px-5 py-2.5 bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-500 hover:to-amber-600 text-purple-900 font-bold rounded-xl transition-all shadow-lg"
+          to="/trending" 
+          className="px-5 py-2.5 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-xl transition-all border border-white/20"
         >
-          About
+          Trending
         </Link>
         <Link 
-          to="/login" 
-          className="px-5 py-2.5 bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-500 hover:to-amber-600 text-purple-900 font-bold rounded-xl transition-all shadow-lg"
+          to="/matching" 
+          className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold rounded-xl transition-all shadow-lg"
         >
-          Log In
+          <Sparkles className="w-4 h-4" />
+          Try Demo
         </Link>
       </div>
 
-      <div className="relative z-10 container mx-auto px-8 py-8">
-        {step === 'pricing' ? (
+      <div className="relative z-10 container mx-auto px-8 py-8 pt-24">
+        
+        {/* Step 1: Choose User Type */}
+        {step === 'type' && (
           <>
-            {/* Header */}
-            <div className="text-center mb-16">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-500/20 to-cyan-500/20 border border-purple-500/30 rounded-full mb-6">
-                <Sparkles className="w-4 h-4 text-purple-400" />
-                <span className="text-purple-300 text-sm font-medium">AI-Powered Matching</span>
+            <div className="text-center mb-12">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-500/20 to-red-500/20 border border-orange-500/30 rounded-full mb-6">
+                <Sparkles className="w-4 h-4 text-orange-400" />
+                <span className="text-orange-300 text-sm font-medium">Choose Your Path</span>
               </div>
               <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
-                Get <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">Matched</span>
+                Are you a <span className="bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent">Startup</span> or <span className="bg-gradient-to-r from-purple-400 to-indigo-500 bg-clip-text text-transparent">Investor</span>?
               </h1>
               <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-                Connect with the perfect investors or startups using our AI-powered matching algorithm. 
-                Start free, upgrade when you're ready.
+                We have different tools and services tailored for each
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+              {/* Startup Card */}
+              <button
+                onClick={() => handleTypeSelect('startup')}
+                className="group bg-gradient-to-br from-orange-900/40 to-red-900/30 border-2 border-orange-500/30 hover:border-orange-500/60 rounded-3xl p-10 text-left transition-all hover:scale-105"
+              >
+                <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center mb-6">
+                  <FlameIcon variant={5} size="3xl" />
+                </div>
+                <h2 className="text-3xl font-bold text-white mb-3">I'm a Startup</h2>
+                <p className="text-gray-300 mb-6">
+                  Find investors who match your stage, sector, and vision. Get strategic tools to improve your fundraise.
+                </p>
+                <div className="flex items-center gap-2 text-orange-400 group-hover:text-orange-300">
+                  <span className="font-semibold">Get Matched with Investors</span>
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </div>
+              </button>
+
+              {/* Investor Card */}
+              <button
+                onClick={() => handleTypeSelect('investor')}
+                className="group bg-gradient-to-br from-purple-900/40 to-indigo-900/30 border-2 border-purple-500/30 hover:border-purple-500/60 rounded-3xl p-10 text-left transition-all hover:scale-105"
+              >
+                <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-purple-500 to-indigo-500 flex items-center justify-center mb-6">
+                  <Building2 className="w-10 h-10 text-white" />
+                </div>
+                <h2 className="text-3xl font-bold text-white mb-3">I'm an Investor</h2>
+                <p className="text-gray-300 mb-6">
+                  Discover pre-vetted startups with AI-powered scoring. Streamline your deal flow with smart tools.
+                </p>
+                <div className="flex items-center gap-2 text-purple-400 group-hover:text-purple-300">
+                  <span className="font-semibold">Discover Startups</span>
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </div>
+              </button>
+            </div>
+          </>
+        )}
+
+        {/* Step 2: Pricing for Startups */}
+        {step === 'pricing' && userType === 'startup' && (
+          <>
+            <button 
+              onClick={() => setStep('type')}
+              className="text-orange-400 hover:text-orange-300 mb-6 flex items-center gap-2"
+            >
+              ← Back
+            </button>
+
+            <div className="text-center mb-12">
+              <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+                🔥 Choose Your <span className="bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent">Hot Match</span> Plan
+              </h1>
+              <p className="text-xl text-gray-300">
+                Unlock AI-powered tools to supercharge your fundraise
               </p>
             </div>
 
             {/* Pricing Cards */}
-            <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto mb-16">
-              {pricingPlans.map((plan) => (
-                <div
-                  key={plan.id}
-                  className={`relative bg-gradient-to-br ${
-                    plan.popular 
-                      ? 'from-purple-900/60 via-pink-900/40 to-cyan-900/60 border-2 border-purple-500/50' 
-                      : 'from-gray-900/60 to-gray-800/60 border border-gray-700/50'
-                  } backdrop-blur-xl rounded-3xl p-8 transition-all hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/20`}
+            <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto mb-12">
+              
+              {/* SPARK - Free */}
+              <div className="bg-gradient-to-br from-gray-900/60 to-gray-800/60 border border-gray-700/50 rounded-3xl p-8 transition-all hover:border-gray-600/50">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-12 h-12 rounded-xl bg-gray-700 flex items-center justify-center">
+                    <Zap className="w-6 h-6 text-yellow-400" />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-bold text-white">Spark</h3>
+                    <p className="text-gray-400 text-sm">Explore & Discover</p>
+                  </div>
+                </div>
+                
+                <div className="mb-6">
+                  <span className="text-4xl font-bold text-white">Free</span>
+                  <span className="text-gray-400 ml-2">forever</span>
+                </div>
+
+                <ul className="space-y-3 mb-8 text-sm">
+                  {startupServices.slice(0, 3).map((service, idx) => (
+                    <li key={idx} className="flex items-center gap-3">
+                      <Check className="w-4 h-4 text-green-400" />
+                      <span className="text-gray-300">{service.name}</span>
+                    </li>
+                  ))}
+                  <li className="flex items-center gap-3 opacity-50">
+                    <Lock className="w-4 h-4 text-gray-500" />
+                    <span className="text-gray-500">Limited to 3 matches</span>
+                  </li>
+                </ul>
+
+                <button
+                  onClick={() => handlePlanSelect('spark')}
+                  className="w-full py-3 rounded-xl font-bold bg-gray-700 hover:bg-gray-600 text-white transition-all"
                 >
-                  {plan.popular && (
-                    <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                      <span className="px-4 py-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-sm font-bold rounded-full">
-                        Most Popular
-                      </span>
-                    </div>
-                  )}
+                  Get Started Free
+                </button>
+              </div>
 
-                  <div className="mb-6">
-                    <h3 className="text-2xl font-bold text-white mb-2">{plan.name}</h3>
-                    <p className="text-gray-400 text-sm">{plan.description}</p>
-                  </div>
-
-                  <div className="mb-6">
-                    <span className="text-5xl font-bold text-white">
-                      {plan.price === 0 ? 'Free' : `$${plan.price}`}
-                    </span>
-                    {plan.price > 0 && (
-                      <span className="text-gray-400 ml-2">/{plan.period}</span>
-                    )}
-                  </div>
-
-                  <ul className="space-y-3 mb-8">
-                    {plan.features.map((feature, idx) => (
-                      <li key={idx} className="flex items-start gap-3">
-                        <Check className="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5" />
-                        <span className="text-gray-300 text-sm">{feature}</span>
-                      </li>
-                    ))}
-                    {plan.limitations.map((limitation, idx) => (
-                      <li key={idx} className="flex items-start gap-3 opacity-60">
-                        <X className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
-                        <span className="text-gray-400 text-sm">{limitation}</span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  <button
-                    onClick={() => handlePlanSelect(plan.id)}
-                    className={`w-full py-4 rounded-xl font-bold transition-all ${
-                      plan.popular
-                        ? 'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white shadow-lg shadow-purple-500/30'
-                        : 'bg-gray-700 hover:bg-gray-600 text-white'
-                    }`}
-                  >
-                    {plan.cta}
-                  </button>
+              {/* FLAME - $49 */}
+              <div className="relative bg-gradient-to-br from-orange-900/40 via-red-900/30 to-amber-900/40 border-2 border-orange-500/50 rounded-3xl p-8 transition-all hover:border-orange-500/70 scale-105">
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                  <span className="px-4 py-1 bg-gradient-to-r from-orange-500 to-red-500 text-white text-sm font-bold rounded-full">
+                    🔥 Most Popular
+                  </span>
                 </div>
-              ))}
+
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center">
+                    <Flame className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-bold text-white">Flame</h3>
+                    <p className="text-orange-300 text-sm">Active Fundraising</p>
+                  </div>
+                </div>
+                
+                <div className="mb-6">
+                  <span className="text-4xl font-bold text-white">$49</span>
+                  <span className="text-gray-300 ml-2">/month</span>
+                </div>
+
+                <ul className="space-y-2 mb-8 text-sm">
+                  {startupServices.filter(s => s.flame).slice(0, 10).map((service, idx) => (
+                    <li key={idx} className="flex items-center gap-2">
+                      <Check className="w-4 h-4 text-orange-400 flex-shrink-0" />
+                      <span className="text-gray-200">{service.name}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <button
+                  onClick={() => handlePlanSelect('flame')}
+                  className="w-full py-3 rounded-xl font-bold bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white transition-all shadow-lg"
+                >
+                  Start 7-Day Free Trial
+                </button>
+              </div>
+
+              {/* INFERNO - $199 */}
+              <div className="bg-gradient-to-br from-purple-900/40 to-indigo-900/30 border border-purple-500/30 rounded-3xl p-8 transition-all hover:border-purple-500/50">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-indigo-500 flex items-center justify-center">
+                    <Crown className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-bold text-white">Inferno</h3>
+                    <p className="text-purple-300 text-sm">Full Stack Fundraising</p>
+                  </div>
+                </div>
+                
+                <div className="mb-6">
+                  <span className="text-4xl font-bold text-white">$199</span>
+                  <span className="text-gray-300 ml-2">/month</span>
+                </div>
+
+                <ul className="space-y-2 mb-8 text-sm">
+                  <li className="flex items-center gap-2 text-purple-300 font-medium">
+                    <Sparkles className="w-4 h-4" />
+                    Everything in Flame, plus:
+                  </li>
+                  {startupServices.filter(s => s.inferno && !s.flame).map((service, idx) => (
+                    <li key={idx} className="flex items-center gap-2">
+                      <Check className="w-4 h-4 text-purple-400 flex-shrink-0" />
+                      <span className="text-gray-200">{service.name}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <button
+                  onClick={() => handlePlanSelect('inferno')}
+                  className="w-full py-3 rounded-xl font-bold bg-purple-600 hover:bg-purple-500 text-white transition-all"
+                >
+                  Start 7-Day Free Trial
+                </button>
+              </div>
             </div>
 
-            {/* Trust Badges */}
-            <div className="flex flex-wrap justify-center gap-8 mb-16">
-              <div className="flex items-center gap-2 text-gray-400">
-                <Shield className="w-5 h-5" />
-                <span>Bank-level security</span>
-              </div>
-              <div className="flex items-center gap-2 text-gray-400">
-                <Clock className="w-5 h-5" />
-                <span>Cancel anytime</span>
-              </div>
-              <div className="flex items-center gap-2 text-gray-400">
-                <Star className="w-5 h-5" />
-                <span>500+ successful matches</span>
-              </div>
-            </div>
-
-            {/* How It Works */}
-            <div className="max-w-4xl mx-auto">
-              <h2 className="text-3xl font-bold text-white text-center mb-12">How Hot Match Works</h2>
-              <div className="grid md:grid-cols-3 gap-8">
-                <div className="text-center">
-                  <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30 rounded-2xl flex items-center justify-center">
-                    <Building2 className="w-8 h-8 text-purple-400" />
-                  </div>
-                  <h3 className="text-xl font-bold text-white mb-2">1. Create Profile</h3>
-                  <p className="text-gray-400">Tell us about your startup or investment thesis</p>
-                </div>
-                <div className="text-center">
-                  <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-500/30 rounded-2xl flex items-center justify-center">
-                    <Zap className="w-8 h-8 text-cyan-400" />
-                  </div>
-                  <h3 className="text-xl font-bold text-white mb-2">2. AI Matching</h3>
-                  <p className="text-gray-400">Our algorithm finds your perfect matches</p>
-                </div>
-                <div className="text-center">
-                  <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-green-500/20 to-emerald-500/20 border border-green-500/30 rounded-2xl flex items-center justify-center">
-                    <Users className="w-8 h-8 text-green-400" />
-                  </div>
-                  <h3 className="text-xl font-bold text-white mb-2">3. Connect</h3>
-                  <p className="text-gray-400">Get warm intros to your best matches</p>
-                </div>
+            {/* Feature Comparison Table */}
+            <div className="max-w-4xl mx-auto bg-black/30 rounded-2xl p-8 border border-white/10">
+              <h3 className="text-xl font-bold text-white mb-6 text-center">Full Feature Comparison</h3>
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b border-white/10">
+                      <th className="text-left py-3 text-gray-400 font-medium">Service</th>
+                      <th className="text-center py-3 text-gray-400 font-medium w-24">Spark</th>
+                      <th className="text-center py-3 text-orange-400 font-medium w-24">Flame</th>
+                      <th className="text-center py-3 text-purple-400 font-medium w-24">Inferno</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {startupServices.map((service, idx) => (
+                      <tr key={idx} className="border-b border-white/5">
+                        <td className="py-3 text-gray-300 flex items-center gap-2">
+                          <service.icon className="w-4 h-4 text-gray-500" />
+                          {service.name}
+                        </td>
+                        <td className="text-center py-3">
+                          {service.spark ? <Check className="w-5 h-5 text-green-400 mx-auto" /> : <X className="w-5 h-5 text-gray-600 mx-auto" />}
+                        </td>
+                        <td className="text-center py-3">
+                          {service.flame ? <Check className="w-5 h-5 text-orange-400 mx-auto" /> : <X className="w-5 h-5 text-gray-600 mx-auto" />}
+                        </td>
+                        <td className="text-center py-3">
+                          {service.inferno ? <Check className="w-5 h-5 text-purple-400 mx-auto" /> : <X className="w-5 h-5 text-gray-600 mx-auto" />}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </div>
           </>
-        ) : (
-          /* Signup Form */
-          <div className="max-w-xl mx-auto">
-            <button
-              onClick={() => setStep('pricing')}
-              className="flex items-center gap-2 text-gray-400 hover:text-white mb-8 transition-colors"
+        )}
+
+        {/* Step 2: Pricing for Investors */}
+        {step === 'pricing' && userType === 'investor' && (
+          <>
+            <button 
+              onClick={() => setStep('type')}
+              className="text-purple-400 hover:text-purple-300 mb-6 flex items-center gap-2"
             >
-              ← Back to pricing
+              ← Back
             </button>
 
-            <div className="bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-xl border border-gray-700/50 rounded-3xl p-8">
+            <div className="text-center mb-12">
+              <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+                🔍 <span className="bg-gradient-to-r from-purple-400 to-indigo-500 bg-clip-text text-transparent">Investor</span> Plans
+              </h1>
+              <p className="text-xl text-gray-300">
+                Discover pre-vetted, AI-scored startups for your portfolio
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+              {/* Scout */}
+              <div className="bg-gradient-to-br from-gray-900/60 to-gray-800/60 border border-gray-700/50 rounded-3xl p-8">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center">
+                    <Target className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-bold text-white">Scout</h3>
+                    <p className="text-gray-400 text-sm">Angels & Solo GPs</p>
+                  </div>
+                </div>
+                
+                <div className="mb-6">
+                  <span className="text-4xl font-bold text-white">$99</span>
+                  <span className="text-gray-300 ml-2">/month</span>
+                </div>
+
+                <ul className="space-y-3 mb-8">
+                  <li className="flex items-center gap-3"><Check className="w-4 h-4 text-cyan-400" /><span className="text-gray-300">Full startup database access</span></li>
+                  <li className="flex items-center gap-3"><Check className="w-4 h-4 text-cyan-400" /><span className="text-gray-300">GOD Score filtering</span></li>
+                  <li className="flex items-center gap-3"><Check className="w-4 h-4 text-cyan-400" /><span className="text-gray-300">Save & organize pipeline</span></li>
+                  <li className="flex items-center gap-3"><Check className="w-4 h-4 text-cyan-400" /><span className="text-gray-300">Weekly hot startups digest</span></li>
+                  <li className="flex items-center gap-3"><Check className="w-4 h-4 text-cyan-400" /><span className="text-gray-300">Founder contact requests</span></li>
+                </ul>
+
+                <button
+                  onClick={() => handlePlanSelect('scout')}
+                  className="w-full py-3 rounded-xl font-bold bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white transition-all"
+                >
+                  Start Free Trial
+                </button>
+              </div>
+
+              {/* Dealflow Pro */}
+              <div className="relative bg-gradient-to-br from-purple-900/40 to-indigo-900/30 border-2 border-purple-500/50 rounded-3xl p-8">
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                  <span className="px-4 py-1 bg-gradient-to-r from-purple-500 to-indigo-500 text-white text-sm font-bold rounded-full">
+                    For VC Firms
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-indigo-500 flex items-center justify-center">
+                    <Crown className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-bold text-white">Dealflow Pro</h3>
+                    <p className="text-purple-300 text-sm">VC Firms & Family Offices</p>
+                  </div>
+                </div>
+                
+                <div className="mb-6">
+                  <span className="text-4xl font-bold text-white">$499</span>
+                  <span className="text-gray-300 ml-2">/month</span>
+                </div>
+
+                <ul className="space-y-3 mb-8">
+                  <li className="flex items-center gap-3 text-purple-300 font-medium"><Sparkles className="w-4 h-4" />Everything in Scout, plus:</li>
+                  <li className="flex items-center gap-3"><Check className="w-4 h-4 text-purple-400" /><span className="text-gray-300">Team seats (up to 5)</span></li>
+                  <li className="flex items-center gap-3"><Check className="w-4 h-4 text-purple-400" /><span className="text-gray-300">API access for CRM</span></li>
+                  <li className="flex items-center gap-3"><Check className="w-4 h-4 text-purple-400" /><span className="text-gray-300">Custom scoring weights</span></li>
+                  <li className="flex items-center gap-3"><Check className="w-4 h-4 text-purple-400" /><span className="text-gray-300">First look at new startups</span></li>
+                  <li className="flex items-center gap-3"><Check className="w-4 h-4 text-purple-400" /><span className="text-gray-300">White-label deal memos</span></li>
+                </ul>
+
+                <button
+                  onClick={() => handlePlanSelect('dealflow_pro')}
+                  className="w-full py-3 rounded-xl font-bold bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white transition-all"
+                >
+                  Contact Sales
+                </button>
+              </div>
+            </div>
+          </>
+        )}
+
+        {/* Step 3: Signup Form */}
+        {step === 'signup' && (
+          <>
+            <button 
+              onClick={() => setStep('pricing')}
+              className="text-orange-400 hover:text-orange-300 mb-6 flex items-center gap-2"
+            >
+              ← Back to Plans
+            </button>
+
+            <div className="max-w-md mx-auto">
               <div className="text-center mb-8">
-                <h2 className="text-3xl font-bold text-white mb-2">Create Your Account</h2>
+                <h1 className="text-3xl font-bold text-white mb-2">
+                  Create Your Account
+                </h1>
                 <p className="text-gray-400">
-                  {selectedPlan === 'free' 
-                    ? '🎉 Start with 3 free matches!' 
-                    : '🚀 Unlimited matches await!'}
+                  {selectedPlan === 'spark' ? 'Start with 3 free matches' : 'Start your 7-day free trial'}
                 </p>
               </div>
 
-              {/* User Type Toggle */}
-              <div className="flex justify-center mb-8">
-                <div className="bg-gray-800/50 rounded-xl p-1 flex gap-1">
-                  <button
-                    onClick={() => setUserType('startup')}
-                    className={`px-6 py-3 rounded-lg font-semibold transition-all flex items-center gap-2 ${
-                      userType === 'startup'
-                        ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white'
-                        : 'text-gray-400 hover:text-white'
-                    }`}
-                  >
-                    <Building2 className="w-4 h-4" />
-                    I'm a Startup
-                  </button>
-                  <button
-                    onClick={() => setUserType('investor')}
-                    className={`px-6 py-3 rounded-lg font-semibold transition-all flex items-center gap-2 ${
-                      userType === 'investor'
-                        ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white'
-                        : 'text-gray-400 hover:text-white'
-                    }`}
-                  >
-                    <Users className="w-4 h-4" />
-                    I'm an Investor
-                  </button>
-                </div>
-              </div>
+              <form onSubmit={handleSignUp} className="bg-black/30 rounded-2xl p-8 border border-white/10">
+                {error && (
+                  <div className="mb-4 p-3 bg-red-500/20 border border-red-500/50 rounded-lg text-red-300 text-sm">
+                    {error}
+                  </div>
+                )}
 
-              {error && (
-                <div className="mb-6 p-4 bg-red-500/20 border border-red-500/50 rounded-xl">
-                  <p className="text-red-300 text-center">{error}</p>
-                </div>
-              )}
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">Your Name</label>
+                    <input
+                      type="text"
+                      required
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-orange-500"
+                      placeholder="John Smith"
+                    />
+                  </div>
 
-              <form onSubmit={handleSignUp} className="space-y-6">
-                <div>
-                  <label className="block text-gray-300 text-sm font-medium mb-2">Your Name</label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 transition-colors"
-                    placeholder="John Smith"
-                  />
-                </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">Email</label>
+                    <input
+                      type="email"
+                      required
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-orange-500"
+                      placeholder="john@startup.com"
+                    />
+                  </div>
 
-                <div>
-                  <label className="block text-gray-300 text-sm font-medium mb-2">Email</label>
-                  <input
-                    type="email"
-                    required
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 transition-colors"
-                    placeholder="john@example.com"
-                  />
-                </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">Password</label>
+                    <input
+                      type="password"
+                      required
+                      minLength={6}
+                      value={formData.password}
+                      onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-orange-500"
+                      placeholder="••••••••"
+                    />
+                  </div>
 
-                <div>
-                  <label className="block text-gray-300 text-sm font-medium mb-2">Password</label>
-                  <input
-                    type="password"
-                    required
-                    minLength={6}
-                    value={formData.password}
-                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                    className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 transition-colors"
-                    placeholder="••••••••"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-gray-300 text-sm font-medium mb-2">
-                    {userType === 'startup' ? 'Startup Name' : 'Fund/Firm Name'}
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.companyName}
-                    onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
-                    className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 transition-colors"
-                    placeholder={userType === 'startup' ? 'Acme Inc.' : 'Sequoia Capital'}
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-gray-300 text-sm font-medium mb-2">Website (optional)</label>
-                  <input
-                    type="url"
-                    value={formData.website}
-                    onChange={(e) => setFormData({ ...formData, website: e.target.value })}
-                    className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 transition-colors"
-                    placeholder="https://example.com"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-gray-300 text-sm font-medium mb-2">
-                    {userType === 'startup' ? 'Brief Description' : 'Investment Thesis'}
-                  </label>
-                  <textarea
-                    rows={3}
-                    value={formData.description}
-                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 transition-colors resize-none"
-                    placeholder={userType === 'startup' 
-                      ? 'We are building AI-powered...' 
-                      : 'We invest in early-stage B2B SaaS...'}
-                  />
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">Company Name</label>
+                    <input
+                      type="text"
+                      value={formData.companyName}
+                      onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
+                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-orange-500"
+                      placeholder="Acme Inc."
+                    />
+                  </div>
                 </div>
 
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-4 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 disabled:from-gray-600 disabled:to-gray-700 text-white rounded-xl font-bold transition-all shadow-lg shadow-purple-500/30 flex items-center justify-center gap-2"
+                  className="w-full mt-6 py-4 rounded-xl font-bold bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white transition-all disabled:opacity-50"
                 >
-                  {loading ? (
-                    <>
-                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                      Creating Account...
-                    </>
-                  ) : (
-                    <>
-                      Create Account
-                      <ArrowRight className="w-5 h-5" />
-                    </>
-                  )}
+                  {loading ? 'Creating Account...' : 'Create Account'}
                 </button>
 
-                <p className="text-center text-gray-500 text-sm">
-                  By signing up, you agree to our{' '}
-                  <Link to="/privacy" className="text-purple-400 hover:underline">Terms & Privacy Policy</Link>
+                <p className="text-center text-gray-500 text-sm mt-4">
+                  Already have an account? <Link to="/login" className="text-orange-400 hover:underline">Log in</Link>
                 </p>
               </form>
             </div>
-          </div>
+          </>
         )}
+
+        {/* Trust Section */}
+        <div className="flex flex-wrap justify-center gap-8 mt-16 text-gray-500">
+          <div className="flex items-center gap-2">
+            <Shield className="w-5 h-5" />
+            <span>Bank-level Security</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Clock className="w-5 h-5" />
+            <span>Cancel Anytime</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Star className="w-5 h-5" />
+            <span>7-Day Free Trial</span>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import { Zap, Target, Users, Brain, Rocket, Shield, Star, TrendingUp, Heart, ArrowRight, CheckCircle2, Sparkles } from 'lucide-react';
+import { Zap, Target, Users, Brain, Shield, Star, TrendingUp, Heart, ArrowRight, CheckCircle2, Sparkles } from 'lucide-react';
+import FlameIcon from '../components/FlameIcon';
 import LogoDropdownMenu from '../components/LogoDropdownMenu';
 
 export default function About() {
@@ -208,7 +209,7 @@ export default function About() {
             <div className="bg-gradient-to-br from-emerald-900/40 to-cyan-900/40 backdrop-blur-lg rounded-3xl p-8 border border-emerald-500/30">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-cyan-500 flex items-center justify-center">
-                  <Rocket className="w-6 h-6 text-white" />
+                  <FlameIcon variant={8} size="lg" />
                 </div>
                 <h3 className="text-2xl font-bold text-white">For Startups</h3>
               </div>
