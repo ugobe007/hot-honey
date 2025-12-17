@@ -42,15 +42,15 @@ const iconMap: Record<string, any> = {
 };
 
 const categoryColors: Record<string, { bg: string; border: string; text: string }> = {
-  pitch: { bg: 'from-orange-500/20 to-red-500/20', border: 'border-orange-500/30', text: 'text-orange-400' },
-  strategy: { bg: 'from-purple-500/20 to-indigo-500/20', border: 'border-purple-500/30', text: 'text-purple-400' },
-  traction: { bg: 'from-emerald-500/20 to-teal-500/20', border: 'border-emerald-500/30', text: 'text-emerald-400' },
-  team: { bg: 'from-blue-500/20 to-cyan-500/20', border: 'border-blue-500/30', text: 'text-blue-400' },
-  pmf: { bg: 'from-pink-500/20 to-rose-500/20', border: 'border-pink-500/30', text: 'text-pink-400' },
-  partnerships: { bg: 'from-amber-500/20 to-yellow-500/20', border: 'border-amber-500/30', text: 'text-amber-400' },
-  talent: { bg: 'from-cyan-500/20 to-blue-500/20', border: 'border-cyan-500/30', text: 'text-cyan-400' },
-  ecosystem: { bg: 'from-green-500/20 to-emerald-500/20', border: 'border-green-500/30', text: 'text-green-400' },
-  growth: { bg: 'from-rose-500/20 to-pink-500/20', border: 'border-rose-500/30', text: 'text-rose-400' },
+  pitch: { bg: 'from-orange-500/40 to-red-500/40', border: 'border-orange-400/50', text: 'text-orange-300' },
+  strategy: { bg: 'from-purple-500/40 to-indigo-500/40', border: 'border-purple-400/50', text: 'text-purple-300' },
+  traction: { bg: 'from-emerald-500/40 to-teal-500/40', border: 'border-emerald-400/50', text: 'text-emerald-300' },
+  team: { bg: 'from-blue-500/40 to-cyan-500/40', border: 'border-blue-400/50', text: 'text-blue-300' },
+  pmf: { bg: 'from-pink-500/40 to-rose-500/40', border: 'border-pink-400/50', text: 'text-pink-300' },
+  partnerships: { bg: 'from-amber-500/40 to-yellow-500/40', border: 'border-amber-400/50', text: 'text-amber-300' },
+  talent: { bg: 'from-cyan-500/40 to-blue-500/40', border: 'border-cyan-400/50', text: 'text-cyan-300' },
+  ecosystem: { bg: 'from-green-500/40 to-emerald-500/40', border: 'border-green-400/50', text: 'text-green-300' },
+  growth: { bg: 'from-rose-500/40 to-pink-500/40', border: 'border-rose-400/50', text: 'text-rose-300' },
 };
 
 const tierBadges: Record<string, { label: string; color: string }> = {
@@ -146,7 +146,7 @@ export default function ServicesPage() {
       <div className="fixed top-6 right-8 z-50 flex items-center gap-3">
         <Link 
           to="/trending" 
-          className="px-5 py-2.5 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-xl transition-all border border-white/20"
+          className="px-5 py-2.5 bg-gradient-to-r from-purple-600/60 to-indigo-600/60 hover:from-purple-500 hover:to-indigo-500 text-white font-semibold rounded-xl transition-all border border-purple-400/50"
         >
           Trending
         </Link>
@@ -190,8 +190,8 @@ export default function ServicesPage() {
               onClick={() => setSelectedCategory(cat)}
               className={`px-4 py-2 rounded-xl font-medium transition-all ${
                 selectedCategory === cat
-                  ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white'
-                  : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white'
+                  ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-lg shadow-orange-500/30'
+                  : 'bg-gradient-to-r from-purple-600/40 to-indigo-600/40 text-white hover:from-purple-500/60 hover:to-indigo-500/60 border border-purple-400/30'
               }`}
             >
               {cat === 'all' ? 'All Services' : cat.charAt(0).toUpperCase() + cat.slice(1)}

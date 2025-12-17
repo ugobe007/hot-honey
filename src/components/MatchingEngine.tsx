@@ -839,10 +839,10 @@ export default function MatchingEngine() {
       <div className="fixed top-8 right-8 z-50">
         <Link
           to="/get-matched"
-          className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 via-violet-600 to-indigo-600 hover:from-purple-700 hover:via-violet-700 hover:to-indigo-700 text-white rounded-xl font-bold shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50 transition-all animate-pulse hover:animate-none"
+          className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold rounded-xl transition-all shadow-lg"
         >
           <Sparkles className="w-5 h-5" />
-          Get Matched!
+          Get Matched
         </Link>
       </div>
 

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Brain, TrendingUp, Target, Zap, AlertCircle, CheckCircle, Clock, BarChart3 } from 'lucide-react';
+import { useNavigate, Link } from 'react-router-dom';
+import { Brain, TrendingUp, Target, Zap, AlertCircle, CheckCircle, Clock, BarChart3, Sparkles } from 'lucide-react';
+import LogoDropdownMenu from '../components/LogoDropdownMenu';
 
 interface MLMetric {
   period_start: string;
@@ -177,7 +178,27 @@ export default function MLDashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#1a1140] via-[#2d1b69] to-[#4a2a8f] py-12 px-4">
-      <div className="max-w-7xl mx-auto">
+      {/* Logo Dropdown Menu */}
+      <LogoDropdownMenu />
+
+      {/* Navigation Buttons - Top Right */}
+      <div className="fixed top-6 right-8 z-50 flex items-center gap-3">
+        <Link 
+          to="/trending" 
+          className="px-5 py-2.5 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-xl transition-all border border-white/20"
+        >
+          Trending
+        </Link>
+        <Link 
+          to="/get-matched" 
+          className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold rounded-xl transition-all shadow-lg"
+        >
+          <Sparkles className="w-4 h-4" />
+          Get Matched
+        </Link>
+      </div>
+
+      <div className="max-w-7xl mx-auto pt-16">
         {/* Header */}
         <div className="mb-8">
           <button

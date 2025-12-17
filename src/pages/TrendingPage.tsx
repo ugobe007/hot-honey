@@ -377,14 +377,14 @@ export default function TrendingPage() {
       <div className="fixed top-6 right-8 z-50 flex items-center gap-3">
         <button
           onClick={() => setShowHowItWorks(true)}
-          className="flex items-center gap-2 px-4 py-2.5 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-xl transition-all border border-white/20"
+          className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-purple-600/60 to-indigo-600/60 hover:from-purple-500 hover:to-indigo-500 text-white font-semibold rounded-xl transition-all border border-purple-400/50"
         >
           <FlameIcon variant={3} size="sm" />
           How It Works
         </button>
         <Link 
           to="/about" 
-          className="px-5 py-2.5 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-xl transition-all border border-white/20"
+          className="px-5 py-2.5 bg-gradient-to-r from-slate-600/60 to-gray-600/60 hover:from-slate-500 hover:to-gray-500 text-white font-semibold rounded-xl transition-all border border-slate-400/50"
         >
           About
         </Link>
@@ -725,7 +725,7 @@ export default function TrendingPage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button
                 onClick={() => setShowMethodology(true)}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-xl transition-all border border-white/20"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600/60 to-indigo-600/60 hover:from-purple-500 hover:to-indigo-500 text-white font-semibold rounded-xl transition-all border border-purple-400/50"
               >
                 <Info className="w-5 h-5" />
                 How Our Scoring Works

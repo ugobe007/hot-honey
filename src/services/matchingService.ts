@@ -1,10 +1,16 @@
 /**
  * INTEGRATED MATCHING SERVICE
  * Combines GOD algorithm (startup scoring) with AI-powered investor matching
+ * 
+ * MATCHING MODES:
+ * 1. GOD Algorithm Only - Rule-based scoring (default)
+ * 2. Semantic Matching - Vector embedding similarity (Option 2)
+ * 3. Hybrid - 60% GOD + 40% Semantic (best results)
  */
 
 import { calculateHotScore } from '../../server/services/startupScoringService';
 import { getTeamReason, getTractionReason, getMarketReason, getProductReason } from './matchingHelpers';
+import { findSemanticInvestorMatches, hasEmbedding } from './semanticMatchingService';
 
 // Debug logging controls
 const DEBUG_GOD = true; // Set to false in production
@@ -599,4 +605,224 @@ function extractTags(startup: any): string[] {
   }
   
   return tags.slice(0, 3);
+}
+
+// ============================================
+// HYBRID MATCHING (GOD + SEMANTIC)
+// ============================================
+
+/**
+ * Get matches using hybrid approach:
+ * - If startup has embedding: 60% GOD score + 40% semantic similarity
+ * - If no embedding: 100% GOD score (fallback)
+ */
+export async function getHybridMatches(
+  startupId: string,
+  investors: any[],
+  limit: number = 10
+): Promise<Array<{
+  investor: any;
+  matchScore: number;
+  semanticScore: number;
+  godScore: number;
+  matchType: 'hybrid' | 'god-only';
+}>> {
+  // Check if startup has embedding for semantic matching
+  const canUseSemanticMatching = await hasEmbedding(startupId);
+  
+  if (canUseSemanticMatching) {
+    console.log('🧠 Using HYBRID matching (GOD + Semantic)');
+    
+    // Get semantic matches
+    const semanticMatches = await findSemanticInvestorMatches(startupId, limit * 2);
+    
+    if (semanticMatches.length > 0) {
+      // Create investor lookup map
+      const investorMap = new Map(investors.map(i => [i.id, i]));
+      
+      // Combine semantic matches with full investor data
+      const hybridMatches = semanticMatches
+        .map(sm => {
+          const investor = investorMap.get(sm.investorId);
+          if (!investor) return null;
+          
+          return {
+            investor,
+            matchScore: Math.round(sm.combinedScore),
+            semanticScore: Math.round(sm.similarityScore * 100),
+            godScore: Math.round(sm.combinedScore / 0.6 - sm.similarityScore * 100 * 0.4 / 0.6),
+            matchType: 'hybrid' as const
+          };
+        })
+        .filter(m => m !== null)
+        .slice(0, limit);
+      
+      if (hybridMatches.length > 0) {
+        return hybridMatches as any;
+      }
+    }
+  }
+  
+  console.log('🎯 Using GOD-only matching (no embedding available)');
+  
+  // Fallback to GOD-only scoring
+  return investors.slice(0, limit).map(investor => ({
+    investor,
+    matchScore: 50, // Will be calculated by existing GOD algorithm
+    semanticScore: 0,
+    godScore: 50,
+    matchType: 'god-only' as const
+  }));
+}
+
+/**
+ * Enhanced match score that combines GOD algorithm with semantic similarity
+ */
+export function calculateHybridMatchScore(
+  godScore: number,
+  semanticSimilarity: number,
+  godWeight: number = 0.6
+): number {
+  const semanticWeight = 1 - godWeight;
+  const combinedScore = (godScore * godWeight) + (semanticSimilarity * 100 * semanticWeight);
+  return Math.round(Math.min(Math.max(combinedScore, 0), 99));
+}
+
+// ============================================
+// VC GOD ALGORITHM INTEGRATION
+// ============================================
+
+/**
+ * Calculate a combined match quality score that factors in:
+ * 1. Startup quality (GOD score)
+ * 2. Investor quality (VC GOD score)
+ * 3. Startup-Investor fit
+ * 
+ * This creates a truly bidirectional matching system where
+ * high-quality startups are matched with high-quality VCs.
+ */
+export function calculateBidirectionalMatchScore(
+  startup: any,
+  investor: any,
+  verbose: boolean = false
+): {
+  totalScore: number;
+  startupScore: number;
+  investorScore: number;
+  fitScore: number;
+  tier: 'platinum' | 'gold' | 'silver' | 'bronze';
+  reasoning: string[];
+} {
+  const reasoning: string[] = [];
+  
+  // 1. STARTUP QUALITY (0-100, from GOD algorithm)
+  const startupScore = startup.total_god_score || 50;
+  reasoning.push(`Startup GOD Score: ${startupScore}/100`);
+  
+  // 2. INVESTOR QUALITY (0-10, from VC GOD algorithm)
+  const investorScoreRaw = investor.investor_score || 2; // Default low if not scored
+  const investorScore = investorScoreRaw * 10; // Convert to 0-100 scale
+  const investorTier = investor.investor_tier || 'emerging';
+  reasoning.push(`Investor Score: ${investorScoreRaw}/10 (${investorTier})`);
+  
+  // 3. FIT SCORE (calculated from match criteria)
+  const baseFitScore = calculateAdvancedMatchScore(startup, investor, false);
+  const fitScore = baseFitScore;
+  reasoning.push(`Fit Score: ${fitScore}/100`);
+  
+  // 4. COMBINED SCORE CALCULATION
+  // Weights: 40% startup quality + 20% investor quality + 40% fit
+  // This ensures high-quality startups get priority but fit is still crucial
+  const weights = {
+    startup: 0.4,
+    investor: 0.2,
+    fit: 0.4
+  };
+  
+  const rawTotal = 
+    (startupScore * weights.startup) +
+    (investorScore * weights.investor) +
+    (fitScore * weights.fit);
+  
+  const totalScore = Math.round(Math.min(rawTotal, 99));
+  
+  // Determine tier based on combined quality
+  let tier: 'platinum' | 'gold' | 'silver' | 'bronze';
+  if (startupScore >= 80 && investorScore >= 60 && fitScore >= 70) {
+    tier = 'platinum'; // Top startup + Top VC + Great fit
+    reasoning.push('🏆 Platinum match: Top startup meets elite VC with strong fit');
+  } else if (startupScore >= 60 && investorScore >= 40 && fitScore >= 60) {
+    tier = 'gold';
+    reasoning.push('🥇 Gold match: Quality startup meets solid VC');
+  } else if (fitScore >= 70) {
+    tier = 'silver';
+    reasoning.push('🥈 Silver match: Good fit despite lower quality scores');
+  } else {
+    tier = 'bronze';
+    reasoning.push('🥉 Bronze match: Potential but needs validation');
+  }
+  
+  if (verbose) {
+    console.log(`\n${'═'.repeat(60)}`);
+    console.log(`🎯 BIDIRECTIONAL MATCH: ${startup.name} ↔ ${investor.name || investor.firm}`);
+    console.log('═'.repeat(60));
+    console.log(`   Startup Quality:  ${startupScore}/100 (GOD algorithm)`);
+    console.log(`   Investor Quality: ${investorScoreRaw}/10 (${investorTier})`);
+    console.log(`   Fit Score:        ${fitScore}/100`);
+    console.log(`   ─────────────────────────────`);
+    console.log(`   TOTAL SCORE:      ${totalScore}/100 [${tier.toUpperCase()}]`);
+    reasoning.forEach(r => console.log(`   • ${r}`));
+    console.log('═'.repeat(60) + '\n');
+  }
+  
+  return {
+    totalScore,
+    startupScore,
+    investorScore,
+    fitScore,
+    tier,
+    reasoning
+  };
+}
+
+/**
+ * Generate matches sorted by bidirectional quality
+ * High-quality startups get matched with high-quality investors first
+ */
+export function generateBidirectionalMatches(
+  startups: any[],
+  investors: any[],
+  limit: number = 100
+): Array<{
+  startup: any;
+  investor: any;
+  score: ReturnType<typeof calculateBidirectionalMatchScore>;
+}> {
+  const allMatches: Array<{
+    startup: any;
+    investor: any;
+    score: ReturnType<typeof calculateBidirectionalMatchScore>;
+  }> = [];
+  
+  // Score all possible startup-investor pairs
+  for (const startup of startups) {
+    for (const investor of investors) {
+      const score = calculateBidirectionalMatchScore(startup, investor, false);
+      allMatches.push({ startup, investor, score });
+    }
+  }
+  
+  // Sort by total score (best matches first)
+  allMatches.sort((a, b) => b.score.totalScore - a.score.totalScore);
+  
+  // Return top matches (avoiding duplicate startups if desired)
+  const seen = new Set<string>();
+  const uniqueMatches = allMatches.filter(m => {
+    const key = `${m.startup.id}-${m.investor.id}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+  
+  return uniqueMatches.slice(0, limit);
 }

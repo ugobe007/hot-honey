@@ -82,16 +82,16 @@ export default function HamburgerMenu() {
             <Link
               to="/"
               onClick={() => setIsOpen(false)}
-              className="group px-4 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-all font-bold flex items-center gap-3 border-2 border-white/30 hover:border-white/50 shadow-lg"
+              className="group px-4 py-3 rounded-xl bg-gradient-to-r from-purple-600/40 to-indigo-600/40 hover:from-purple-500/60 hover:to-indigo-500/60 text-white transition-all font-bold flex items-center gap-3 border border-purple-400/50 hover:border-purple-300 shadow-lg"
             >
-              <Home className="w-5 h-5 text-white" />
+              <Home className="w-5 h-5 text-purple-300" />
               <span className="text-white">Home</span>
             </Link>
             
             <Link
               to="/match"
               onClick={() => setIsOpen(false)}
-              className="group px-4 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-all font-bold flex items-center gap-3 border-2 border-white/30 hover:border-white/50 shadow-lg"
+              className="group px-4 py-3 rounded-xl bg-gradient-to-r from-orange-600/40 to-red-600/40 hover:from-orange-500/60 hover:to-red-500/60 text-white transition-all font-bold flex items-center gap-3 border border-orange-400/50 hover:border-orange-300 shadow-lg"
             >
               <Zap className="w-5 h-5 text-yellow-300" />
               <span className="text-white">AI Matching</span>
@@ -100,7 +100,7 @@ export default function HamburgerMenu() {
             <Link
               to="/saved-matches"
               onClick={() => setIsOpen(false)}
-              className="group px-4 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-all font-bold flex items-center gap-3 border-2 border-white/30 hover:border-white/50 shadow-lg"
+              className="group px-4 py-3 rounded-xl bg-gradient-to-r from-rose-600/40 to-pink-600/40 hover:from-rose-500/60 hover:to-pink-500/60 text-white transition-all font-bold flex items-center gap-3 border border-rose-400/50 hover:border-rose-300 shadow-lg"
             >
               <img src="/images/fire-icon.svg" alt="Hot" className="w-5 h-5" />
               <span className="text-white">Saved Matches</span>
@@ -109,7 +109,7 @@ export default function HamburgerMenu() {
             <Link
               to="/vote"
               onClick={() => setIsOpen(false)}
-              className="group px-4 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-all font-bold flex items-center gap-3 border-2 border-white/30 hover:border-white/50 shadow-lg"
+              className="group px-4 py-3 rounded-xl bg-gradient-to-r from-green-600/40 to-emerald-600/40 hover:from-green-500/60 hover:to-emerald-500/60 text-white transition-all font-bold flex items-center gap-3 border border-green-400/50 hover:border-green-300 shadow-lg"
             >
               <VoteIcon className="w-5 h-5 text-green-300" />
               <span className="text-white">Vote</span>
@@ -118,7 +118,7 @@ export default function HamburgerMenu() {
             <Link
               to="/investors"
               onClick={() => setIsOpen(false)}
-              className="group px-4 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-all font-bold flex items-center gap-3 border-2 border-white/30 hover:border-white/50 shadow-lg"
+              className="group px-4 py-3 rounded-xl bg-gradient-to-r from-cyan-600/40 to-blue-600/40 hover:from-cyan-500/60 hover:to-blue-500/60 text-white transition-all font-bold flex items-center gap-3 border border-cyan-400/50 hover:border-cyan-300 shadow-lg"
             >
               <Briefcase className="w-5 h-5 text-cyan-300" />
               <span className="text-white">Investors</span>
@@ -127,7 +127,7 @@ export default function HamburgerMenu() {
             <Link
               to="/dashboard"
               onClick={() => setIsOpen(false)}
-              className="group px-4 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-all font-bold flex items-center gap-3 border-2 border-white/30 hover:border-white/50 shadow-lg"
+              className="group px-4 py-3 rounded-xl bg-gradient-to-r from-pink-600/40 to-fuchsia-600/40 hover:from-pink-500/60 hover:to-fuchsia-500/60 text-white transition-all font-bold flex items-center gap-3 border border-pink-400/50 hover:border-pink-300 shadow-lg"
             >
               <Rocket className="w-5 h-5 text-pink-300" />
               <span className="text-white">Startups</span>
@@ -136,7 +136,7 @@ export default function HamburgerMenu() {
             <Link
               to="/analytics"
               onClick={() => setIsOpen(false)}
-              className="group px-4 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-all font-bold flex items-center gap-3 border-2 border-white/30 hover:border-white/50 shadow-lg"
+              className="group px-4 py-3 rounded-xl bg-gradient-to-r from-blue-600/40 to-indigo-600/40 hover:from-blue-500/60 hover:to-indigo-500/60 text-white transition-all font-bold flex items-center gap-3 border border-blue-400/50 hover:border-blue-300 shadow-lg"
             >
               <TrendingUp className="w-5 h-5 text-blue-300" />
               <span className="text-white">Analytics</span>
@@ -145,7 +145,7 @@ export default function HamburgerMenu() {
             <Link
               to="/submit"
               onClick={() => setIsOpen(false)}
-              className="group px-4 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-all font-bold flex items-center gap-3 border-2 border-white/30 hover:border-white/50 shadow-lg"
+              className="group px-4 py-3 rounded-xl bg-gradient-to-r from-amber-600/40 to-orange-600/40 hover:from-amber-500/60 hover:to-orange-500/60 text-white transition-all font-bold flex items-center gap-3 border border-amber-400/50 hover:border-amber-300 shadow-lg"
             >
               <FileText className="w-5 h-5 text-amber-300" />
               <span className="text-white">Submit Startup</span>
@@ -158,25 +158,25 @@ export default function HamburgerMenu() {
             <Link
               to="/about"
               onClick={() => setIsOpen(false)}
-              className="group px-4 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-all font-bold flex items-center gap-3 border-2 border-white/30 hover:border-white/50 shadow-lg"
+              className="group px-4 py-3 rounded-xl bg-gradient-to-r from-slate-600/40 to-gray-600/40 hover:from-slate-500/60 hover:to-gray-500/60 text-white transition-all font-bold flex items-center gap-3 border border-slate-400/50 hover:border-slate-300 shadow-lg"
             >
-              <BookOpen className="w-5 h-5 text-white" />
+              <BookOpen className="w-5 h-5 text-slate-300" />
               <span className="text-white">About</span>
             </Link>
             
             <Link
               to="/settings"
               onClick={() => setIsOpen(false)}
-              className="group px-4 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-all font-bold flex items-center gap-3 border-2 border-white/30 hover:border-white/50 shadow-lg"
+              className="group px-4 py-3 rounded-xl bg-gradient-to-r from-slate-600/40 to-gray-600/40 hover:from-slate-500/60 hover:to-gray-500/60 text-white transition-all font-bold flex items-center gap-3 border border-slate-400/50 hover:border-slate-300 shadow-lg"
             >
-              <Settings className="w-5 h-5 text-white" />
+              <Settings className="w-5 h-5 text-slate-300" />
               <span className="text-white">Settings</span>
             </Link>
             
             <Link
               to="/admin/dashboard"
               onClick={() => setIsOpen(false)}
-              className="group px-4 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-all font-bold flex items-center gap-3 border-2 border-white/30 hover:border-white/50 shadow-lg"
+              className="group px-4 py-3 rounded-xl bg-gradient-to-r from-yellow-600/40 to-amber-600/40 hover:from-yellow-500/60 hover:to-amber-500/60 text-white transition-all font-bold flex items-center gap-3 border border-yellow-400/50 hover:border-yellow-300 shadow-lg"
             >
               <Crown className="w-5 h-5 text-yellow-300" />
               <span className="text-white">Admin Dashboard</span>

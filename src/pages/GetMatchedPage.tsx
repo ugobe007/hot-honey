@@ -172,7 +172,7 @@ export default function GetMatchedPage() {
       <div className="fixed top-6 right-8 z-50 flex items-center gap-3">
         <Link 
           to="/trending" 
-          className="px-5 py-2.5 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-xl transition-all border border-white/20"
+          className="px-5 py-2.5 bg-gradient-to-r from-purple-600/60 to-indigo-600/60 hover:from-purple-500 hover:to-indigo-500 text-white font-semibold rounded-xl transition-all border border-purple-400/50"
         >
           Trending
         </Link>
