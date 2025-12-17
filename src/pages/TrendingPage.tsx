@@ -406,7 +406,7 @@ export default function TrendingPage() {
           </div>
           <h1 className="text-4xl md:text-5xl font-bold mb-3">
             <span className="bg-gradient-to-r from-orange-400 via-red-500 to-pink-500 bg-clip-text text-transparent">
-              🧠 Investor-Style Rankings
+              🔥 Hot Startup Rankings
             </span>
           </h1>
           <p className="text-lg text-gray-300 max-w-3xl mx-auto">
