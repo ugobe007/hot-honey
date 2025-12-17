@@ -34,6 +34,11 @@ const iconMap: Record<string, any> = {
   '🧠': Brain,
   '🔍': Target,
   '🤝': Handshake,
+  '🎓': Lightbulb,
+  '🚀': TrendingUp,
+  '⚖️': FileText,
+  '🏢': Target,
+  '📰': FileText,
 };
 
 const categoryColors: Record<string, { bg: string; border: string; text: string }> = {
@@ -43,6 +48,9 @@ const categoryColors: Record<string, { bg: string; border: string; text: string 
   team: { bg: 'from-blue-500/20 to-cyan-500/20', border: 'border-blue-500/30', text: 'text-blue-400' },
   pmf: { bg: 'from-pink-500/20 to-rose-500/20', border: 'border-pink-500/30', text: 'text-pink-400' },
   partnerships: { bg: 'from-amber-500/20 to-yellow-500/20', border: 'border-amber-500/30', text: 'text-amber-400' },
+  talent: { bg: 'from-cyan-500/20 to-blue-500/20', border: 'border-cyan-500/30', text: 'text-cyan-400' },
+  ecosystem: { bg: 'from-green-500/20 to-emerald-500/20', border: 'border-green-500/30', text: 'text-green-400' },
+  growth: { bg: 'from-rose-500/20 to-pink-500/20', border: 'border-rose-500/30', text: 'text-rose-400' },
 };
 
 const tierBadges: Record<string, { label: string; color: string }> = {
