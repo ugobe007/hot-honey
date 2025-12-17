@@ -379,7 +379,7 @@ export default function TrendingPage() {
           onClick={() => setShowHowItWorks(true)}
           className="flex items-center gap-2 px-4 py-2.5 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-xl transition-all border border-white/20"
         >
-          <Brain className="w-4 h-4" />
+          <FlameIcon variant={3} size="sm" />
           How It Works
         </button>
         <Link 
@@ -401,7 +401,7 @@ export default function TrendingPage() {
         {/* Header */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-500/20 to-red-500/20 border border-orange-500/30 rounded-full mb-4">
-            <Brain className="w-4 h-4 text-orange-400" />
+            <FlameIcon variant={1} size="sm" />
             <span className="text-orange-300 text-sm font-medium">Algorithmic Intelligence • Real-Time Rankings</span>
           </div>
           <h1 className="text-4xl md:text-5xl font-bold mb-3">
@@ -717,7 +717,7 @@ export default function TrendingPage() {
         {/* CTA Section */}
         <div className="mt-12 text-center">
           <div className="bg-gradient-to-br from-purple-900/50 to-indigo-900/50 backdrop-blur-lg rounded-2xl p-8 border border-purple-500/30 max-w-2xl mx-auto">
-            <Brain className="w-12 h-12 text-purple-400 mx-auto mb-4" />
+            <FlameIcon variant={5} size="3xl" className="mx-auto mb-4" />
             <h2 className="text-2xl font-bold text-white mb-2">Experience the Full Power</h2>
             <p className="text-gray-300 mb-6">
               These rankings demonstrate our GOD Algorithm in action. Get personalized investor matches with our Spark Engine™.
@@ -756,7 +756,7 @@ export default function TrendingPage() {
 
             <div className="text-center mb-8">
               <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-red-500 to-pink-500 flex items-center justify-center mx-auto mb-4">
-                <Brain className="w-8 h-8 text-white" />
+                <FlameIcon variant={7} size="xl" />
               </div>
               <h2 className="text-3xl font-bold text-white mb-2">GOD Algorithm</h2>
               <p className="text-gray-400">Our proprietary 14-factor startup scoring & investor matching system</p>
@@ -927,7 +927,7 @@ export default function TrendingPage() {
             {/* GOD Score Breakdown */}
             <div className="bg-black/30 rounded-xl p-4 mb-5">
               <h3 className="text-sm font-semibold text-purple-300 mb-3 flex items-center gap-2">
-                <Brain className="w-4 h-4" />
+                <FlameIcon variant={6} size="sm" />
                 GOD Score Breakdown
               </h3>
               <div className="space-y-2">

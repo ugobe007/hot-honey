@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useReactions } from '../hooks/useReactions';
 import { useAuth } from '../hooks/useAuth';
+import FlameIcon from './FlameIcon';
 
 interface Startup {
   id: number | string;
@@ -217,36 +218,45 @@ export default function StartupCardOfficial({ startup, onVote, onSwipeAway }: Pr
         </div>
       )}
 
-      <div className="bg-gradient-to-br from-slate-100 to-slate-200 rounded-2xl shadow-2xl overflow-hidden border-2 border-purple-400/60 hover:border-orange-400 relative hover:scale-[1.02] transition-all duration-300 w-full max-w-[480px] mx-auto hover:shadow-purple-500/30">
-        {/* Header Section - Purple gradient */}
-        <div className="bg-gradient-to-r from-purple-600 to-purple-800 p-3 border-b border-purple-400">
-          <div className="flex justify-between items-start mb-2">
-            <div className="flex-1">
-              <h2 className="text-2xl font-black text-white mb-1 leading-tight">
+      <div className="bg-gradient-to-br from-[#1a0033] via-[#2d1b4e] to-[#0f0f23] rounded-3xl shadow-2xl overflow-hidden border border-purple-500/30 hover:border-orange-400/60 relative hover:scale-[1.01] transition-all duration-300 w-full max-w-[420px] mx-auto">
+        {/* Hero Header with Flame */}
+        <div className="relative bg-gradient-to-r from-orange-600 via-red-500 to-pink-600 p-4">
+          <div className="absolute inset-0 bg-black/20"></div>
+          <div className="relative flex items-start gap-3">
+            {/* Flame Icon */}
+            <div className="flex-shrink-0">
+              <div className="w-14 h-14 rounded-2xl bg-black/30 backdrop-blur-sm flex items-center justify-center border border-white/20">
+                <FlameIcon variant={Math.min(9, Math.max(1, Math.ceil((startup.total_god_score || 50) / 12))) as 1|2|3|4|5|6|7|8|9} size="xl" />
+              </div>
+            </div>
+            {/* Name & Tagline */}
+            <div className="flex-1 min-w-0">
+              <h2 className="text-xl font-black text-white truncate">
                 {startup.name}
               </h2>
               {startup.tagline && (
-                <p className="text-sm text-purple-200 italic">
-                  "{startup.tagline}"
+                <p className="text-sm text-white/80 line-clamp-2 mt-0.5">
+                  {startup.tagline}
                 </p>
               )}
             </div>
+            {/* Stage Badge */}
             {startup.stage && (
               <div className="flex-shrink-0">
-                <div className="px-3 py-1.5 bg-white/20 backdrop-blur-sm rounded-lg border border-white/30 shadow-lg">
-                  <span className="text-[9px] font-black text-white text-center leading-tight block">
-                    STAGE {startup.stage}
-                  </span>
+                <div className="px-2.5 py-1 bg-black/30 backdrop-blur-sm rounded-lg border border-white/20">
+                  <span className="text-[10px] font-bold text-white">STAGE {startup.stage}</span>
                 </div>
               </div>
             )}
           </div>
           
-          {/* GOD Score - Orange accent */}
+          {/* GOD Score Bar */}
           {startup.total_god_score && (
-            <div className="mt-2 bg-gradient-to-r from-orange-500/30 to-amber-500/30 border border-orange-400/50 rounded-lg p-2">
-              <div className="flex items-center justify-between">
-                <span className="text-orange-200 text-xs font-bold">🎯 GOD SCORE</span>
+            <div className="mt-3 bg-black/30 backdrop-blur-sm rounded-xl p-2.5 border border-white/10">
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="text-white/80 text-xs font-semibold flex items-center gap-1.5">
+                  <FlameIcon variant={5} size="xs" /> GOD SCORE
+                </span>
                 <div className="flex items-center gap-2">
                   <span className={`${getGODScoreColor(startup.total_god_score)} text-lg font-black`}>
                     {startup.total_god_score}
@@ -256,118 +266,141 @@ export default function StartupCardOfficial({ startup, onVote, onSwipeAway }: Pr
                   </span>
                 </div>
               </div>
+              {/* Score Progress Bar */}
+              <div className="h-2 bg-black/30 rounded-full overflow-hidden">
+                <div 
+                  className={`h-full rounded-full transition-all duration-500 ${
+                    startup.total_god_score >= 80 ? 'bg-gradient-to-r from-green-400 to-emerald-500' :
+                    startup.total_god_score >= 60 ? 'bg-gradient-to-r from-yellow-400 to-amber-500' :
+                    startup.total_god_score >= 40 ? 'bg-gradient-to-r from-orange-400 to-red-500' :
+                    'bg-gradient-to-r from-red-400 to-pink-500'
+                  }`}
+                  style={{ width: `${startup.total_god_score}%` }}
+                />
+              </div>
             </div>
           )}
         </div>
 
-        <div className="p-4 space-y-3">
-          {/* Key Metrics - Simple inline text */}
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
+        <div className="p-4 pt-0 space-y-3">
+          {/* Key Metrics Grid */}
+          <div className="grid grid-cols-2 gap-2">
             {startup.team_size && startup.team_size > 0 && (
-              <span className="text-slate-700">👥 <span className="font-bold">{startup.team_size} people</span></span>
+              <div className="bg-white/5 rounded-lg px-3 py-2 border border-white/10">
+                <div className="text-gray-400 text-[10px] mb-0.5">TEAM SIZE</div>
+                <div className="text-white font-bold text-sm">👥 {startup.team_size} people</div>
+              </div>
             )}
             {formatCurrency(startup.revenue_annual) && (
-              <span className="text-orange-700">💰 <span className="font-bold">{formatCurrency(startup.revenue_annual)}/yr</span></span>
+              <div className="bg-white/5 rounded-lg px-3 py-2 border border-white/10">
+                <div className="text-gray-400 text-[10px] mb-0.5">REVENUE</div>
+                <div className="text-green-400 font-bold text-sm">💰 {formatCurrency(startup.revenue_annual)}/yr</div>
+              </div>
             )}
             {formatCurrency(startup.mrr) && (
-              <span className="text-orange-700">📊 <span className="font-bold">{formatCurrency(startup.mrr)}/mo</span></span>
+              <div className="bg-white/5 rounded-lg px-3 py-2 border border-white/10">
+                <div className="text-gray-400 text-[10px] mb-0.5">MRR</div>
+                <div className="text-green-400 font-bold text-sm">📊 {formatCurrency(startup.mrr)}</div>
+              </div>
             )}
             {formatGrowthRate(startup.growth_rate_monthly) && (
-              <span className="text-slate-700">📈 <span className="font-bold">{formatGrowthRate(startup.growth_rate_monthly)}/mo</span></span>
+              <div className="bg-white/5 rounded-lg px-3 py-2 border border-white/10">
+                <div className="text-gray-400 text-[10px] mb-0.5">GROWTH</div>
+                <div className="text-orange-400 font-bold text-sm">📈 {formatGrowthRate(startup.growth_rate_monthly)}/mo</div>
+              </div>
             )}
           </div>
 
-          {/* Status Indicators - Purple chips */}
+          {/* Status Badges */}
           <div className="flex gap-2 flex-wrap">
             {startup.is_launched && (
-              <span className="bg-purple-100 border border-purple-300 text-purple-700 px-2.5 py-1 rounded-full text-[10px] font-bold">
-                🚀 LAUNCHED
+              <span className="bg-green-500/20 border border-green-500/30 text-green-300 px-2.5 py-1 rounded-full text-[10px] font-bold flex items-center gap-1">
+                <FlameIcon variant={2} size="xs" /> LAUNCHED
               </span>
             )}
             {startup.has_technical_cofounder && (
-              <span className="bg-purple-100 border border-purple-300 text-purple-700 px-2.5 py-1 rounded-full text-[10px] font-bold">
+              <span className="bg-blue-500/20 border border-blue-500/30 text-blue-300 px-2.5 py-1 rounded-full text-[10px] font-bold">
                 💻 TECH COFOUNDER
               </span>
             )}
             {startup.location && (
-              <span className="bg-slate-100 border border-slate-300 text-slate-700 px-2.5 py-1 rounded-full text-[10px] font-bold">
+              <span className="bg-purple-500/20 border border-purple-500/30 text-purple-300 px-2.5 py-1 rounded-full text-[10px] font-bold">
                 📍 {startup.location}
               </span>
             )}
           </div>
 
-          {/* Sectors - Orange chips */}
+          {/* Sectors */}
           {startup.sectors && startup.sectors.length > 0 && (
             <div>
-              <p className="text-purple-600 text-[10px] font-black mb-2">🏭 SECTORS</p>
               <div className="flex flex-wrap gap-1.5">
-                {startup.sectors.slice(0, 3).map((sector, idx) => (
-                  <span key={idx} className="bg-orange-50 border border-orange-300 text-orange-700 px-2.5 py-1 rounded-full text-[10px] font-semibold">
+                {startup.sectors.slice(0, 4).map((sector, idx) => (
+                  <span key={idx} className="bg-orange-500/20 border border-orange-500/30 text-orange-300 px-2 py-0.5 rounded-md text-[10px] font-medium">
                     {sector}
                   </span>
                 ))}
-                {startup.sectors.length > 3 && (
-                  <span className="bg-orange-50 border border-orange-300 text-orange-700 px-2.5 py-1 rounded-full text-[10px] font-semibold">
-                    +{startup.sectors.length - 3}
+                {startup.sectors.length > 4 && (
+                  <span className="bg-orange-500/20 border border-orange-500/30 text-orange-300 px-2 py-0.5 rounded-md text-[10px] font-medium">
+                    +{startup.sectors.length - 4}
                   </span>
                 )}
               </div>
             </div>
           )}
 
-          {/* VIBE Score - Qualitative startup story */}
+          {/* Key Insights / VIBE */}
           {(startup.value_proposition || startup.problem || startup.solution || startup.market_size || startup.team_companies || startup.raise_amount) && (
-            <div className="space-y-1 bg-purple-50 rounded-lg p-3 border border-purple-200">
-              {/* VIBE 1. Value Prop */}
+            <div className="bg-gradient-to-br from-purple-500/10 to-indigo-500/10 rounded-xl p-3 border border-purple-500/20">
+              {/* Value Prop */}
               {(startup.value_proposition || startup.problem) && (
-                <p className="text-purple-900 font-bold text-sm">
+                <p className="text-white font-semibold text-sm mb-1">
                   {startup.value_proposition || startup.problem}
                 </p>
               )}
               
-              {/* 2. Market Size */}
+              {/* Market Size */}
               {startup.market_size && (
-                <p className="text-purple-700 font-medium text-sm">
-                  {startup.market_size}
+                <p className="text-purple-300 text-xs">
+                  📊 {startup.market_size}
                 </p>
               )}
               
-              {/* 3. Solution */}
+              {/* Solution */}
               {startup.solution && (
-                <p className="text-purple-700 font-medium text-sm">
+                <p className="text-gray-300 text-xs mt-1">
                   {startup.solution}
                 </p>
               )}
               
-              {/* 4. Team Companies */}
+              {/* Team Companies */}
               {startup.team_companies && startup.team_companies.length > 0 && (
-                <p className="text-purple-700 font-medium text-sm">
-                  {startup.team_companies.join(', ')}
+                <p className="text-blue-300 text-xs mt-1">
+                  🏢 Team from: {startup.team_companies.join(', ')}
                 </p>
               )}
               
-              {/* 5. Investment Amount */}
+              {/* Investment Amount */}
               {startup.raise_amount && (
-                <p className="text-orange-600 font-bold text-sm">
-                  💰 {startup.raise_amount}
-                  {startup.raise_type && ` ${startup.raise_type}`}
+                <p className="text-green-400 font-bold text-sm mt-2">
+                  💰 Raising {startup.raise_amount}
+                  {startup.raise_type && ` • ${startup.raise_type}`}
                 </p>
               )}
             </div>
           )}
 
-          {/* Pitch/Description */}
+          {/* Pitch/Description - Collapsible */}
           {(startup.pitch || startup.description) && (
-            <div className="bg-white rounded-xl p-3 border border-gray-200 shadow-sm">
+            <div className="bg-white/5 rounded-xl p-3 border border-white/10">
               <button
                 onClick={() => setShowDetails(!showDetails)}
-                className="text-gray-600 font-black text-xs mb-1 hover:text-gray-800 transition-colors flex items-center gap-1"
+                className="text-gray-300 font-semibold text-xs hover:text-white transition-colors flex items-center gap-1 w-full"
               >
-                <span>{showDetails ? '▼' : '▶'}</span>
+                <span className="text-orange-400">{showDetails ? '▼' : '▶'}</span>
                 <span>📋 ABOUT</span>
               </button>
               {showDetails && (
-                <p className="text-gray-700 text-xs leading-relaxed mt-2">
+                <p className="text-gray-400 text-xs leading-relaxed mt-2">
                   {startup.pitch || startup.description}
                 </p>
               )}
@@ -376,19 +409,20 @@ export default function StartupCardOfficial({ startup, onVote, onSwipeAway }: Pr
 
           {/* Five Points - Collapsible */}
           {startup.fivePoints && startup.fivePoints.length > 0 && (
-            <div className="bg-orange-50 rounded-xl p-3 border border-orange-200">
+            <div className="bg-orange-500/10 rounded-xl p-3 border border-orange-500/20">
               <button
                 onClick={() => setShowKeyPoints(!showKeyPoints)}
-                className="text-orange-600 font-black text-xs hover:text-orange-700 transition-colors flex items-center gap-1 w-full"
+                className="text-orange-300 font-semibold text-xs hover:text-orange-200 transition-colors flex items-center gap-1 w-full"
               >
                 <span>{showKeyPoints ? '▼' : '▶'}</span>
-                <span>✨ KEY POINTS ({startup.fivePoints.length})</span>
+                <FlameIcon variant={4} size="xs" />
+                <span>KEY POINTS ({startup.fivePoints.length})</span>
               </button>
               {showKeyPoints && (
                 <div className="space-y-1.5 mt-2">
                   {startup.fivePoints.slice(0, 5).map((point, idx) => (
-                    <div key={idx} className="text-gray-700 text-xs flex items-start gap-2">
-                      <span className="text-orange-500 font-bold">•</span>
+                    <div key={idx} className="text-gray-300 text-xs flex items-start gap-2">
+                      <span className="text-orange-400 font-bold">•</span>
                       <span>{point}</span>
                     </div>
                   ))}
@@ -397,14 +431,15 @@ export default function StartupCardOfficial({ startup, onVote, onSwipeAway }: Pr
             </div>
           )}
 
-          {/* Navigation & Social Links */}
-          <div className="space-y-2">
-            {/* View Details Button - Always Shown */}
+          {/* Action Buttons */}
+          <div className="space-y-2 pt-1">
+            {/* View Profile */}
             <Link
               to={`/startup/${startup.id}`}
-              className="w-full block bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-black py-3 px-4 rounded-xl text-center transition-all shadow-lg shadow-orange-500/30 border-2 border-orange-400 text-sm"
+              className="w-full block bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold py-2.5 px-4 rounded-xl text-center transition-all text-sm border border-purple-400/50"
             >
-              📊 VIEW FULL PROFILE
+              <FlameIcon variant={9} size="xs" className="inline mr-1.5" />
+              VIEW FULL PROFILE
             </Link>
 
             {/* Social Links */}
@@ -415,7 +450,7 @@ export default function StartupCardOfficial({ startup, onVote, onSwipeAway }: Pr
                     href={startup.website}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="bg-white hover:bg-gray-50 text-gray-700 font-bold py-2.5 px-3 rounded-lg text-center transition-all text-xs border border-gray-200"
+                    className="bg-white/10 hover:bg-white/20 text-white font-semibold py-2 px-3 rounded-lg text-center transition-all text-xs border border-white/20"
                   >
                     🌐 Website
                   </a>
@@ -425,7 +460,7 @@ export default function StartupCardOfficial({ startup, onVote, onSwipeAway }: Pr
                     href={startup.linkedin}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2.5 px-3 rounded-lg text-center transition-all text-xs border border-blue-400"
+                    className="bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 font-semibold py-2 px-3 rounded-lg text-center transition-all text-xs border border-blue-500/30"
                   >
                     💼 LinkedIn
                   </a>
@@ -434,18 +469,19 @@ export default function StartupCardOfficial({ startup, onVote, onSwipeAway }: Pr
             )}
           </div>
 
-          {/* Vote Buttons - Compact */}
+          {/* Vote Buttons */}
           {!hasVoted && (
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-3 pt-2">
               <button
                 onClick={() => handleVote('yes')}
-                className="bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-black py-2 px-3 rounded-lg transition-all shadow-md shadow-orange-500/30 border border-orange-400 text-xs"
+                className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-400 hover:to-red-400 text-white font-bold py-3 px-4 rounded-xl transition-all shadow-lg shadow-orange-500/30 border border-orange-400/50 text-sm flex items-center justify-center gap-2"
               >
-                🍯 SWEET!
+                <FlameIcon variant={1} size="sm" />
+                HOT!
               </button>
               <button
                 onClick={() => handleVote('no')}
-                className="bg-white hover:bg-gray-50 text-gray-600 font-black py-2 px-3 rounded-lg transition-all shadow-md border border-gray-300 text-xs"
+                className="bg-white/10 hover:bg-white/20 text-gray-300 font-bold py-3 px-4 rounded-xl transition-all border border-white/20 text-sm"
               >
                 👋 PASS
               </button>
@@ -453,12 +489,17 @@ export default function StartupCardOfficial({ startup, onVote, onSwipeAway }: Pr
           )}
 
           {hasVoted && (
-            <div className={`text-center py-2 px-3 rounded-lg font-black text-xs ${
+            <div className={`text-center py-3 px-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2 ${
               voteType === 'yes' 
-                ? 'bg-green-500/20 border border-green-400 text-green-300'
-                : 'bg-red-500/20 border border-red-400 text-red-300'
+                ? 'bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/30 text-green-300'
+                : 'bg-red-500/20 border border-red-500/30 text-red-300'
             }`}>
-              {voteType === 'yes' ? '✅ PORTFOLIO' : '❌ PASSED'}
+              {voteType === 'yes' ? (
+                <>
+                  <FlameIcon variant={2} size="sm" />
+                  ADDED TO PORTFOLIO
+                </>
+              ) : '❌ PASSED'}
             </div>
           )}
         </div>
