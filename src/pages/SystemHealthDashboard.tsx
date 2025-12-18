@@ -24,9 +24,11 @@ export default function SystemHealthDashboard() {
   const [stats, setStats] = useState<SystemStats | null>(null);
   const [checks, setChecks] = useState<HealthCheck[]>([]);
   const [recentLogs, setRecentLogs] = useState<any[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   const loadSystemHealth = async () => {
     setRefreshing(true);
+    setError(null);
     
     try {
       // Get startup stats
@@ -207,8 +209,9 @@ export default function SystemHealthDashboard() {
       setChecks(newChecks);
       setLastUpdated(new Date());
       
-    } catch (error) {
-      console.error('Failed to load health data:', error);
+    } catch (err) {
+      console.error('Failed to load health data:', err);
+      setError(err instanceof Error ? err.message : 'Failed to load health data');
     }
     
     setLoading(false);
@@ -239,6 +242,24 @@ export default function SystemHealthDashboard() {
         <div className="text-white text-xl flex items-center gap-3">
           <RefreshCw className="animate-spin" />
           Loading system health...
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+        <div className="text-center">
+          <XCircle className="text-red-500 mx-auto mb-4" size={48} />
+          <h2 className="text-white text-xl mb-2">Failed to load health data</h2>
+          <p className="text-gray-400 mb-4">{error}</p>
+          <button 
+            onClick={loadSystemHealth}
+            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-white"
+          >
+            Retry
+          </button>
         </div>
       </div>
     );
