@@ -212,7 +212,7 @@ export default function TransparencyPanel({ matchScore, breakdown, startup, inve
                 )}
 
                 {breakdown?.geographyMatch && (
-                  <div className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/30 rounded-xl p-4">
+                  <div className="bg-gradient-to-r from-purple-500/10 to-violet-500/10 border border-purple-500/30 rounded-xl p-4">
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-purple-300 font-semibold">Geography Match</span>
                       <span className="text-xl font-bold text-purple-400">+{breakdown.geographyMatch}</span>

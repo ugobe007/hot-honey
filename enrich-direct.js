@@ -45,11 +45,12 @@ Return ONLY valid JSON (no markdown):
     const data = JSON.parse(completion.choices[0].message.content);
     
     // Update using service role (bypasses RLS and PostgREST cache)
+    // NOTE: DB columns are 'sectors' and 'total_investments', not 'sector_focus' and 'portfolio_size'
     const { error } = await supabase
       .from('investors')
       .update({
-        sector_focus: data.sector_focus || null,
-        portfolio_size: data.portfolio_size || null,
+        sectors: data.sector_focus || null,
+        total_investments: data.portfolio_size || null,
         notable_investments: data.notable_investments || null
       })
       .eq('id', investor.id);
@@ -71,11 +72,11 @@ async function main() {
   console.log('🚀 Direct PostgreSQL Enrichment (Bypassing PostgREST Cache)\n');
   console.log('═'.repeat(70));
   
-  // Get investors with missing data
+  // Get investors with missing data (using correct column names)
   const { data: investors, error } = await supabase
     .from('investors')
-    .select('id, name, firm, bio, sector_focus, portfolio_size')
-    .or('sector_focus.is.null,portfolio_size.is.null')
+    .select('id, name, firm, bio, sectors, total_investments')
+    .or('sectors.is.null,total_investments.is.null')
     .limit(25);
 
   if (error || !investors) {

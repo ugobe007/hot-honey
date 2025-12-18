@@ -75,14 +75,14 @@ const StrategiesPage: React.FC = () => {
     setLoading(true);
     try {
       const [strategiesRes, benchmarksRes, metricsRes] = await Promise.all([
-        supabase.from('funding_strategies').select('*'),
-        supabase.from('funding_benchmarks').select('*').order('stage').order('metric_category'),
-        supabase.from('metric_definitions').select('*').order('category')
+        (supabase.from as any)('funding_strategies').select('*'),
+        (supabase.from as any)('funding_benchmarks').select('*').order('stage').order('metric_category'),
+        (supabase.from as any)('metric_definitions').select('*').order('category')
       ]);
 
-      if (strategiesRes.data) setStrategies(strategiesRes.data);
-      if (benchmarksRes.data) setBenchmarks(benchmarksRes.data);
-      if (metricsRes.data) setMetrics(metricsRes.data);
+      if (strategiesRes.data) setStrategies(strategiesRes.data as FundingStrategy[]);
+      if (benchmarksRes.data) setBenchmarks(benchmarksRes.data as FundingBenchmark[]);
+      if (metricsRes.data) setMetrics(metricsRes.data as MetricDefinition[]);
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
@@ -111,7 +111,7 @@ const StrategiesPage: React.FC = () => {
     users: 'from-purple-500 to-violet-600',
     retention: 'from-orange-500 to-red-500',
     unit_economics: 'from-yellow-500 to-amber-600',
-    burn: 'from-red-500 to-pink-600',
+    burn: 'from-red-500 to-orange-600',
     engagement: 'from-indigo-500 to-purple-600',
   };
 

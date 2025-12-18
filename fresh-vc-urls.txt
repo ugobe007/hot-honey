@@ -1,0 +1,107 @@
+# Fresh VC/Investor URLs to Scrape
+# Add URLs here - one per line
+# The super-scraper will process these
+
+# Emerging/Micro VCs (less likely to be scraped already)
+https://www.precursorvc.com/team
+https://www.uncorkcapital.com/team
+https://www.signalfire.com/team
+https://www.craftventures.com/team
+https://www.boldstart.vc/team
+https://www.worklifevc.com/team
+https://www.nextviewventures.com/team
+https://www.foundationcap.com/team
+https://www.matrixpartners.com/team
+https://www.sapphireventures.com/team/
+https://www.scalevp.com/team
+https://www.upfrontvc.com/team
+https://www.canaan.com/team
+https://www.ntventures.com/team
+https://www.felicis.com/team
+https://www.redbadgevc.com/
+https://www.amplifypartners.com/team
+https://www.costanoavc.com/team
+https://www.boltvc.com/team
+https://www.menlovc.com/team/
+
+# International VCs
+https://www.balderton.com/team/
+https://www.atomico.com/team
+https://www.actoncp.com/team
+https://www.founders.vc/
+https://www.norwest.com/team
+https://www.blumbergcapital.com/team
+https://www.morganstanley.com/what-we-do/investing-financing/morgan-stanley-investment-management/venture
+https://www.bainbridge.vc/team
+https://www.gv.com/team/
+https://www.capitalg.com/team
+
+# Healthcare/Bio VCs
+https://www.archventure.com/team
+https://www.nea.com/bio
+https://www.orbitvs.com/team
+https://www.northpondventures.com/team
+https://www.section32.com/team
+https://www.versantventures.com/team
+
+# Fintech VCs
+https://www.qed.vc/team
+https://www.nyca.com/team
+https://www.finvc.co/team
+https://www.villageglobal.vc/team
+
+# AI/Deep Tech VCs
+https://www.dcvc.com/team
+https://www.aicapital.co/
+https://www.radicalventures.com/team
+https://www.playground.vc/team
+https://www.conviction.vc/team
+
+# Climate/Impact VCs
+https://www.breakthrough.energy/team
+https://www.congruent.vc/team
+https://www.lowercarboncapital.com/team
+https://www.energyimpactpartners.com/team
+
+# Enterprise/B2B VCs
+https://www.batteryventures.com/team
+https://www.emergence.com/team
+https://www.salesforceventures.com/team
+https://www.workday-vc.com/team
+
+# Consumer VCs
+https://www.forerunnervntures.com/team
+https://www.maveron.com/team
+https://www.firstmark.com/team
+
+# Angel Groups & Syndicates
+https://www.hustle.fund/team
+https://www.haystack.vc/team
+https://www.seedcamp.com/team
+https://www.launchfund.com/
+
+# Corporate VCs
+https://www.intel.com/content/www/us/en/intel-capital/overview.html
+https://www.qualcomm.com/company/ventures
+https://www.cisco.com/c/en/us/about/csr/impact/cisco-investments.html
+https://www.nvidia.com/en-us/about-nvidia/ventures/
+https://www.microsoft.com/en-us/m12
+
+# Crypto/Web3 VCs
+https://www.paradigm.xyz/team
+https://www.polychain.capital/team
+https://www.panteracapital.com/team
+https://www.multicoin.capital/team
+https://www.blocktower.com/team
+
+# LatAm VCs
+https://www.kazventures.com/team
+https://www.monashees.com.br/team
+https://www.valor.vc/team
+
+# European VCs
+https://www.creandum.com/team
+https://www.cherry.vc/team
+https://www.speedinvest.com/team
+https://www.eqtventures.com/team
+https://www.northzone.com/team

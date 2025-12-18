@@ -160,10 +160,10 @@ export default function AdminWorkflowDashboard() {
       ] = await Promise.all([
         supabase.from('startup_uploads').select('id, status, total_god_score'),
         supabase.from('investors').select('id, status'),
-        supabase.from('ai_logs').select('id, status, created_at'),
-        supabase.from('rss_articles').select('id, processed, published_at'),
-        supabase.from('score_history').select('id, new_score, created_at'),
-        supabase.from('ml_jobs').select('id, status, started_at')
+        (supabase.from as any)('ai_logs').select('id, status, created_at'),
+        (supabase.from as any)('rss_articles').select('id, processed, published_at'),
+        (supabase.from as any)('score_history').select('id, new_score, created_at'),
+        (supabase.from as any)('ml_jobs').select('id, status, started_at')
       ]);
 
       const startups = startupsRes.data || [];
@@ -182,9 +182,9 @@ export default function AdminWorkflowDashboard() {
       const today = new Date();
       today.setHours(0, 0, 0, 0);
       const todayActivity = [
-        ...aiLogs.filter(l => new Date(l.created_at) >= today),
-        ...rssArticles.filter(a => new Date(a.published_at) >= today),
-        ...scores.filter(s => new Date(s.created_at) >= today)
+        ...aiLogs.filter((l: any) => new Date(l.created_at) >= today),
+        ...rssArticles.filter((a: any) => new Date(a.published_at) >= today),
+        ...scores.filter((s: any) => new Date(s.created_at) >= today)
       ].length;
 
       setSummary({
@@ -214,7 +214,7 @@ export default function AdminWorkflowDashboard() {
       updatedStages[2].status = rssArticles.length > 0 ? 'success' : 'idle';
       
       // AI stage
-      const runningAI = aiLogs.filter(l => l.status === 'running').length;
+      const runningAI = aiLogs.filter((l: any) => l.status === 'running').length;
       updatedStages[3].count = aiLogs.length;
       updatedStages[3].status = runningAI > 0 ? 'running' : aiLogs.length > 0 ? 'success' : 'idle';
       if (aiLogs.length > 0) {
@@ -222,7 +222,7 @@ export default function AdminWorkflowDashboard() {
       }
       
       // GOD Score stage
-      const runningML = mlJobs.filter(j => j.status === 'running').length;
+      const runningML = mlJobs.filter((j: any) => j.status === 'running').length;
       updatedStages[4].count = approvedStartups.length;
       updatedStages[4].status = runningML > 0 ? 'running' : scores.length > 0 ? 'success' : 'idle';
       if (mlJobs.length > 0) {
@@ -330,6 +330,8 @@ export default function AdminWorkflowDashboard() {
             <span className="text-gray-600">|</span>
             <Link to="/admin/control" className="text-gray-400 hover:text-white transition-all">⚙️ Admin</Link>
             <span className="text-gray-600">|</span>
+            <Link to="/admin/analytics" className="text-orange-400 hover:text-orange-300 transition-all font-bold">📊 Analytics</Link>
+            <span className="text-gray-600">|</span>
             <Link to="/admin/operations" className="text-gray-400 hover:text-white transition-all">🎛️ Operations</Link>
             <span className="text-gray-600">|</span>
             <Link to="/bulkupload" className="text-gray-400 hover:text-white transition-all">📤 Bulk Upload</Link>
@@ -359,7 +361,7 @@ export default function AdminWorkflowDashboard() {
               {/* HOME button */}
               <button
                 onClick={() => navigate('/')}
-                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-lg transition-all shadow-lg"
+                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-700 hover:to-violet-700 text-white rounded-lg transition-all shadow-lg"
               >
                 <Home className="w-4 h-4" />
                 HOME

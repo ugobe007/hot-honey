@@ -1,0 +1,88 @@
+# MEGA SOURCE LIST - Startup & VC News
+# Updated: December 17, 2025
+# These are the best sources for discovering startups and investors
+
+# ═══════════════════════════════════════════════════════════════════════════
+# TIER 1: TOP TECH NEWS (Daily updates, high volume)
+# ═══════════════════════════════════════════════════════════════════════════
+https://techcrunch.com/
+https://techcrunch.com/category/startups/
+https://techcrunch.com/tag/funding/
+https://news.crunchbase.com/
+https://venturebeat.com/
+https://www.businessinsider.com/startups
+https://www.forbes.com/entrepreneurship/
+https://www.inc.com/
+https://www.entrepreneur.com/
+
+# ═══════════════════════════════════════════════════════════════════════════
+# TIER 2: FUNDING-FOCUSED NEWS
+# ═══════════════════════════════════════════════════════════════════════════
+https://techfundingnews.com/
+https://www.finsmes.com/
+https://vcnewsdaily.com/
+https://strictlyvc.com/
+https://fortune.com/newsletter/term-sheet/
+https://www.axios.com/newsletters/axios-pro-rata-cea14920-e2e0-4ca5-90de-dbd757663716
+https://pitchbook.com/news
+
+# ═══════════════════════════════════════════════════════════════════════════
+# TIER 3: REGIONAL STARTUP NEWS
+# ═══════════════════════════════════════════════════════════════════════════
+# Europe
+https://sifted.eu/
+https://www.eu-startups.com/
+https://www.startups.co.uk/
+https://thenextweb.com/
+
+# Asia
+https://e27.co/
+https://www.techinasia.com/
+https://www.dealstreetasia.com/
+https://inc42.com/
+https://indianstartupnews.com/
+
+# US Regional
+https://www.geekwire.com/
+https://dot.la/
+https://www.xconomy.com/
+
+# ═══════════════════════════════════════════════════════════════════════════
+# TIER 4: VC BLOGS & INSIGHTS (Great for investor discovery)
+# ═══════════════════════════════════════════════════════════════════════════
+https://a16z.com/news-content/
+https://review.firstround.com/
+https://avc.com/
+https://tomtunguz.com/
+https://www.generalist.com/
+https://www.nfx.com/insights/
+https://nvca.org/
+https://visible.vc/blog/
+https://angel.co/blog/
+https://www.saastr.com/
+
+# ═══════════════════════════════════════════════════════════════════════════
+# TIER 5: PRODUCT & COMMUNITY SOURCES
+# ═══════════════════════════════════════════════════════════════════════════
+https://www.producthunt.com/
+https://www.indiehackers.com/
+https://www.reddit.com/r/startups/
+https://thehustle.co/
+https://startupbeat.com/
+https://growthlist.co/
+https://producthabits.com/
+https://productpsychology.com/
+
+# ═══════════════════════════════════════════════════════════════════════════
+# TIER 6: DATABASES & DIRECTORIES
+# ═══════════════════════════════════════════════════════════════════════════
+https://www.crunchbase.com/
+https://www.startupblink.com/
+https://www.startupaccelerator.directory/
+https://confluencevc.com/
+
+# ═══════════════════════════════════════════════════════════════════════════
+# TIER 7: SECTOR-SPECIFIC
+# ═══════════════════════════════════════════════════════════════════════════
+https://fintechweekly.com/
+https://www.vccircle.com/

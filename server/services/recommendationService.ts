@@ -1,4 +1,9 @@
-import { supabase } from '../config/supabase';
+import { createClient } from '@supabase/supabase-js';
+
+// Initialize Supabase client for server-side use
+const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || '';
+const supabaseKey = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY || '';
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 interface WeightUpdate {
   component: string;
@@ -154,12 +159,12 @@ export class RecommendationService {
 
     const totalMatches = matches.length;
     // Use status column - 'funded' or 'meeting_scheduled' are successful
-    const successfulMatches = matches.filter(m => 
+    const successfulMatches = matches.filter((m: any) => 
       m.status === 'funded' || m.status === 'meeting_scheduled'
     ).length;
 
-    const avgMatchScore = matches.reduce((sum, m) => sum + (m.match_score || 0), 0) / totalMatches;
-    const avgSuccessScore = matches.reduce((sum, m) => sum + (m.success_score || 0), 0) / totalMatches;
+    const avgMatchScore = matches.reduce((sum: number, m: any) => sum + (m.match_score || 0), 0) / totalMatches;
+    const avgSuccessScore = matches.reduce((sum: number, m: any) => sum + (m.success_score || 0), 0) / totalMatches;
 
     return {
       total_matches: totalMatches,

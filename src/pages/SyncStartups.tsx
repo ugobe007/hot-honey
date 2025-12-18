@@ -79,6 +79,7 @@ export default function SyncStartups() {
               name: startup.name,
               pitch: startup.pitch,
               tagline: startup.tagline,
+              source_type: 'manual',
               extracted_data: {
                 fivePoints: startup.fivePoints,
                 problem: startup.fivePoints?.[0] || '',
@@ -109,7 +110,7 @@ export default function SyncStartups() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 p-8">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-violet-900 p-8">
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-5xl font-bold text-white">🔄 Sync Startups</h1>
@@ -172,7 +173,7 @@ export default function SyncStartups() {
         </div>
 
         {/* Sync Button */}
-        <div className="bg-gradient-to-r from-orange-500 to-pink-500 rounded-2xl p-8 text-center">
+        <div className="bg-gradient-to-r from-orange-500 to-amber-500 rounded-2xl p-8 text-center">
           <h3 className="text-3xl font-bold text-white mb-4">
             Sync Local → Database
           </h3>

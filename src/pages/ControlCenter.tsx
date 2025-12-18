@@ -552,7 +552,7 @@ export default function ControlCenter() {
 
           <button
             onClick={() => navigate('/admin/ml-dashboard')}
-            className="bg-gradient-to-br from-purple-500/20 to-pink-500/20 hover:from-purple-500/30 hover:to-pink-500/30 rounded-xl p-6 border border-purple-400/30 transition-all text-left group"
+            className="bg-gradient-to-br from-purple-500/20 to-violet-500/20 hover:from-purple-500/30 hover:to-violet-500/30 rounded-xl p-6 border border-purple-400/30 transition-all text-left group"
           >
             <Brain className="w-10 h-10 text-purple-400 mb-3 group-hover:scale-110 transition-transform" />
             <h3 className="text-xl font-bold text-white mb-2">ML Training</h3>
@@ -595,7 +595,7 @@ export default function ControlCenter() {
             {/* Step 2: Review */}
             <button
               onClick={() => navigate('/admin/edit-startups')}
-              className="bg-gradient-to-br from-purple-500/20 to-pink-500/20 hover:from-purple-500/30 hover:to-pink-500/30 rounded-lg p-6 border border-purple-400/30 transition-all text-left group relative"
+              className="bg-gradient-to-br from-purple-500/20 to-violet-500/20 hover:from-purple-500/30 hover:to-violet-500/30 rounded-lg p-6 border border-purple-400/30 transition-all text-left group relative"
             >
               <div className="absolute top-2 right-2 bg-purple-500 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">2</div>
               <FileText className="w-10 h-10 text-purple-400 mb-3 group-hover:scale-110 transition-transform" />
@@ -670,7 +670,7 @@ export default function ControlCenter() {
               onClick={() => navigate('/admin/diagnostic')}
               className="bg-white/5 hover:bg-white/10 rounded-lg p-4 border border-white/10 transition-all text-left group"
             >
-              <Activity className="w-8 h-8 text-pink-400 mb-2 group-hover:scale-110 transition-transform" />
+              <Activity className="w-8 h-8 text-orange-400 mb-2 group-hover:scale-110 transition-transform" />
               <h4 className="text-white font-semibold">Diagnostics</h4>
               <p className="text-gray-400 text-xs mt-1">System health</p>
             </button>

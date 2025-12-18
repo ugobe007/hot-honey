@@ -90,7 +90,7 @@ const MatchScoreBreakdown: React.FC<MatchScoreBreakdownProps> = ({
         {/* Overall Score */}
         <div className="bg-white/10 rounded-2xl p-6 mb-8 border border-white/20">
           <div className="text-center">
-            <div className="text-6xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-2">
+            <div className="text-6xl font-bold bg-gradient-to-r from-purple-400 to-violet-400 bg-clip-text text-transparent mb-2">
               {matchScore}%
             </div>
             <div className={`text-xl font-semibold ${quality.color} mb-2`}>

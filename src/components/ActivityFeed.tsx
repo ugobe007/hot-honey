@@ -24,7 +24,7 @@ const ActivityFeed: React.FC = () => {
 
   // Sample activity templates for realistic feed
   const activityTemplates = [
-    { type: 'match', template: 'matched with', icon: '✨', color: 'from-purple-500 to-pink-500' },
+    { type: 'match', template: 'matched with', icon: '✨', color: 'from-purple-500 to-violet-500' },
     { type: 'funding', template: 'just funded', icon: '💰', color: 'from-yellow-500 to-orange-500' },
     { type: 'trending', template: 'trending in', icon: '🔥', color: 'from-red-500 to-orange-500' },
   ];
@@ -194,7 +194,7 @@ const ActivityFeed: React.FC = () => {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold py-3 px-6 rounded-xl transition-all shadow-lg hover:shadow-purple-500/50 flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-700 hover:to-violet-700 text-white font-bold py-3 px-6 rounded-xl transition-all shadow-lg hover:shadow-purple-500/50 flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isSubmitting ? (
                       <span>Getting Started...</span>

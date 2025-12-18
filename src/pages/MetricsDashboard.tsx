@@ -132,7 +132,7 @@ export default function MetricsDashboard() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-6xl font-bold text-white mb-4">
-            Hot Match <span className="bg-gradient-to-r from-orange-400 via-pink-400 to-purple-400 bg-clip-text text-transparent">Metrics</span>
+            Hot Match <span className="bg-gradient-to-r from-orange-400 via-amber-400 to-purple-400 bg-clip-text text-transparent">Metrics</span>
           </h1>
           <p className="text-2xl text-gray-300 mb-2">
             AI-Powered Startup-Investor Matching Platform
@@ -195,7 +195,7 @@ export default function MetricsDashboard() {
                 </div>
                 <div className="h-4 bg-white/10 rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-gradient-to-r from-purple-400 to-pink-400 rounded-full"
+                    className="h-full bg-gradient-to-r from-purple-400 to-violet-400 rounded-full"
                     style={{ width: `${performanceData.matchQuality}%` }}
                   />
                 </div>

@@ -1,28 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { 
-  Home, Database, Users, Briefcase, Brain, Zap, Activity, 
-  Settings, FileText, TrendingUp, Rss, Upload, Eye, Play,
-  BarChart3, Target, Search, CheckCircle, Clock, Wrench, RefreshCw, ArrowRight
-} from 'lucide-react';
+import { RefreshCw, ExternalLink } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
 interface QuickStat {
   label: string;
   value: number | string;
-  change?: string;
-  icon: any;
   color: string;
 }
 
-interface ToolCard {
+interface ToolRow {
   id: string;
   name: string;
   description: string;
-  icon: any;
   route: string;
   category: 'primary' | 'data' | 'tools' | 'admin';
-  color: string;
   status?: 'active' | 'legacy' | 'new';
 }
 
@@ -32,194 +24,36 @@ export default function MasterControlCenter() {
   const [stats, setStats] = useState<QuickStat[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
 
-  const tools: ToolCard[] = [
+  const tools: ToolRow[] = [
     // PRIMARY DASHBOARDS
-    {
-      id: 'workflow',
-      name: 'Workflow Dashboard',
-      description: 'Main pipeline view - startups, investors, AI, matching',
-      icon: Activity,
-      route: '/admin/dashboard',
-      category: 'primary',
-      color: 'purple',
-      status: 'active'
-    },
-    {
-      id: 'operations',
-      name: 'Operations Center',
-      description: 'System operations and quick actions',
-      icon: Target,
-      route: '/admin/operations',
-      category: 'primary',
-      color: 'cyan',
-      status: 'active'
-    },
-    {
-      id: 'ml',
-      name: 'ML Dashboard',
-      description: 'Machine learning, recommendations, training',
-      icon: Brain,
-      route: '/admin/ml-dashboard',
-      category: 'primary',
-      color: 'purple',
-      status: 'active'
-    },
-    {
-      id: 'ai-intelligence',
-      name: 'AI Intelligence',
-      description: 'AI analysis and insights',
-      icon: Zap,
-      route: '/admin/ai-intelligence',
-      category: 'primary',
-      color: 'yellow',
-      status: 'active'
-    },
+    { id: 'workflow', name: 'Workflow Dashboard', description: 'Main pipeline view - startups, investors, AI, matching', route: '/admin/dashboard', category: 'primary', status: 'active' },
+    { id: 'operations', name: 'Operations Center', description: 'System operations and quick actions', route: '/admin/operations', category: 'primary', status: 'active' },
+    { id: 'analytics', name: 'Admin Analytics', description: 'Data quality, enrichment tools, operational metrics', route: '/admin/analytics', category: 'primary', status: 'new' },
+    { id: 'agent', name: 'AI Agent Dashboard', description: 'Monitor AI agent, watchdog, system health', route: '/admin/agent', category: 'primary', status: 'new' },
+    { id: 'ml', name: 'ML Dashboard', description: 'Machine learning, recommendations, training', route: '/admin/ml-dashboard', category: 'primary', status: 'active' },
+    { id: 'ai-intelligence', name: 'AI Intelligence', description: 'AI analysis and insights', route: '/admin/ai-intelligence', category: 'primary', status: 'active' },
 
     // DATA MANAGEMENT
-    {
-      id: 'discovered',
-      name: 'Discovered Startups',
-      description: '421 startups scraped from RSS - pending review',
-      icon: Search,
-      route: '/admin/discovered-startups',
-      category: 'data',
-      color: 'orange',
-      status: 'active'
-    },
-    {
-      id: 'edit-startups',
-      name: 'Edit Startups',
-      description: 'Manage all startups - approve, edit, bulk actions',
-      icon: FileText,
-      route: '/admin/edit-startups',
-      category: 'data',
-      color: 'blue',
-      status: 'active'
-    },
-    {
-      id: 'investors',
-      name: 'Investor Directory',
-      description: '166 investors - view, search, edit profiles',
-      icon: Users,
-      route: '/investors',
-      category: 'data',
-      color: 'cyan',
-      status: 'active'
-    },
-    {
-      id: 'investor-enrichment',
-      name: 'Investor Enrichment',
-      description: 'NEW: Track investor discovery & enrichment status',
-      icon: TrendingUp,
-      route: '/admin/investor-enrichment',
-      category: 'data',
-      color: 'green',
-      status: 'new'
-    },
-    {
-      id: 'rss',
-      name: 'RSS Manager',
-      description: 'Manage RSS feeds for startup discovery',
-      icon: Rss,
-      route: '/admin/rss-manager',
-      category: 'data',
-      color: 'blue',
-      status: 'active'
-    },
+    { id: 'discovered', name: 'Discovered Startups', description: 'Startups scraped from RSS - pending review', route: '/admin/discovered-startups', category: 'data', status: 'active' },
+    { id: 'edit-startups', name: 'Edit Startups', description: 'Manage all startups - approve, edit, bulk actions', route: '/admin/edit-startups', category: 'data', status: 'active' },
+    { id: 'investors', name: 'Investor Directory', description: 'View, search, edit investor profiles', route: '/investors', category: 'data', status: 'active' },
+    { id: 'investor-enrichment', name: 'Investor Enrichment', description: 'Track investor discovery & enrichment status', route: '/admin/investor-enrichment', category: 'data', status: 'new' },
+    { id: 'rss', name: 'RSS Manager', description: 'Manage RSS feeds for startup discovery', route: '/admin/rss-manager', category: 'data', status: 'active' },
+    { id: 'market-trends', name: 'Market Trends', description: 'Sector analysis, supply/demand, top performers', route: '/market-trends', category: 'data', status: 'active' },
 
     // TOOLS & ACTIONS
-    {
-      id: 'review',
-      name: 'Review Queue',
-      description: 'Review pending startup submissions',
-      icon: CheckCircle,
-      route: '/admin/review',
-      category: 'tools',
-      color: 'green',
-      status: 'active'
-    },
-    {
-      id: 'bulk-import',
-      name: 'Bulk Import',
-      description: 'Upload multiple startups from spreadsheet',
-      icon: Upload,
-      route: '/admin/bulk-import',
-      category: 'tools',
-      color: 'orange',
-      status: 'active'
-    },
-    {
-      id: 'add-investor',
-      name: 'Add Investor',
-      description: 'Quickly add new investor with AI research',
-      icon: Users,
-      route: '/invite-investor',
-      category: 'tools',
-      color: 'green',
-      status: 'active'
-    },
-    {
-      id: 'god-scores',
-      name: 'GOD Scores',
-      description: 'View and manage GOD algorithm scores',
-      icon: Zap,
-      route: '/admin/god-scores',
-      category: 'tools',
-      color: 'yellow',
-      status: 'active'
-    },
-    {
-      id: 'ai-logs',
-      name: 'AI Logs',
-      description: 'View AI processing logs and history',
-      icon: Eye,
-      route: '/admin/ai-logs',
-      category: 'tools',
-      color: 'purple',
-      status: 'active'
-    },
+    { id: 'review', name: 'Review Queue', description: 'Review pending startup submissions', route: '/admin/review', category: 'tools', status: 'active' },
+    { id: 'bulk-import', name: 'Bulk Import', description: 'Upload multiple startups from spreadsheet', route: '/admin/bulk-import', category: 'tools', status: 'active' },
+    { id: 'add-investor', name: 'Add Investor', description: 'Quickly add new investor with AI research', route: '/invite-investor', category: 'tools', status: 'active' },
+    { id: 'god-scores', name: 'GOD Scores', description: 'View and manage GOD algorithm scores', route: '/admin/god-scores', category: 'tools', status: 'active' },
+    { id: 'ai-logs', name: 'AI Logs', description: 'View AI processing logs and history', route: '/admin/ai-logs', category: 'tools', status: 'active' },
+    { id: 'matching', name: 'Matching Engine', description: 'Run AI-powered startup-investor matching', route: '/matching', category: 'tools', status: 'active' },
 
     // ADMIN & SETUP
-    {
-      id: 'setup',
-      name: 'Database Setup',
-      description: 'Initial setup, seed data, manage duplicates',
-      icon: Database,
-      route: '/admin/setup',
-      category: 'admin',
-      color: 'gray',
-      status: 'active'
-    },
-    {
-      id: 'diagnostic',
-      name: 'Diagnostic',
-      description: 'System health check and troubleshooting',
-      icon: Wrench,
-      route: '/admin/diagnostic',
-      category: 'admin',
-      color: 'gray',
-      status: 'active'
-    },
-    {
-      id: 'metrics',
-      name: 'Public Metrics',
-      description: 'Public-facing metrics dashboard',
-      icon: BarChart3,
-      route: '/metrics',
-      category: 'admin',
-      color: 'blue',
-      status: 'active'
-    },
-    {
-      id: 'instructions',
-      name: 'Instructions',
-      description: 'Admin help and documentation',
-      icon: FileText,
-      route: '/admin/instructions',
-      category: 'admin',
-      color: 'gray',
-      status: 'active'
-    }
+    { id: 'setup', name: 'Database Setup', description: 'Initial setup, seed data, manage duplicates', route: '/admin/setup', category: 'admin', status: 'active' },
+    { id: 'diagnostic', name: 'Diagnostic', description: 'System health check and troubleshooting', route: '/admin/diagnostic', category: 'admin', status: 'active' },
+    { id: 'metrics', name: 'Public Metrics', description: 'Public-facing metrics dashboard', route: '/metrics', category: 'admin', status: 'active' },
+    { id: 'instructions', name: 'Instructions', description: 'Admin help and documentation', route: '/admin/instructions', category: 'admin', status: 'active' }
   ];
 
   useEffect(() => {
@@ -228,47 +62,23 @@ export default function MasterControlCenter() {
 
   const loadStats = async () => {
     try {
-      const [startupsRes, investorsRes, discoveredRes, aiLogsRes] = await Promise.all([
+      const [startupsRes, investorsRes, discoveredRes, matchesRes] = await Promise.all([
         supabase.from('startup_uploads').select('id, status'),
-        supabase.from('investors').select('id, last_enrichment_date, partners'),
+        supabase.from('investors').select('id'),
         supabase.from('discovered_startups').select('id, imported_to_startups'),
-        supabase.from('ai_logs').select('id, status')
+        supabase.from('startup_investor_matches').select('id')
       ]);
 
       const startups = startupsRes.data || [];
       const investors = investorsRes.data || [];
       const discovered = discoveredRes.data || [];
-      const aiLogs = aiLogsRes.data || [];
+      const matches = matchesRes.data || [];
 
       setStats([
-        {
-          label: 'Total Startups',
-          value: startups.length,
-          change: '+12 this week',
-          icon: Briefcase,
-          color: 'orange'
-        },
-        {
-          label: 'Total Investors',
-          value: investors.length,
-          change: `${investors.filter(i => i.partners).length} enriched`,
-          icon: Users,
-          color: 'cyan'
-        },
-        {
-          label: 'Pending Discovery',
-          value: discovered.filter(d => !d.imported_to_startups).length,
-          change: 'Need review',
-          icon: Search,
-          color: 'purple'
-        },
-        {
-          label: 'AI Operations',
-          value: aiLogs.length,
-          change: `${aiLogs.filter(l => l.status === 'running').length} running`,
-          icon: Brain,
-          color: 'green'
-        }
+        { label: 'Startups', value: startups.length, color: 'orange' },
+        { label: 'Investors', value: investors.length, color: 'violet' },
+        { label: 'Matches', value: matches.length.toLocaleString(), color: 'green' },
+        { label: 'Pending Review', value: discovered.filter(d => !d.imported_to_startups).length, color: 'yellow' }
       ]);
 
       setLoading(false);
@@ -278,207 +88,165 @@ export default function MasterControlCenter() {
     }
   };
 
-  const getColorClasses = (color: string) => {
-    const colors: Record<string, { bg: string; border: string; text: string; hover: string }> = {
-      orange: { bg: 'from-orange-600/40 to-amber-600/40', border: 'border-orange-400/70', text: 'text-orange-300', hover: 'hover:border-orange-300' },
-      cyan: { bg: 'from-cyan-600/40 to-blue-500/40', border: 'border-cyan-400/70', text: 'text-cyan-300', hover: 'hover:border-cyan-300' },
-      purple: { bg: 'from-purple-600/40 to-indigo-600/40', border: 'border-purple-400/70', text: 'text-purple-300', hover: 'hover:border-purple-300' },
-      blue: { bg: 'from-blue-500/40 to-cyan-500/40', border: 'border-blue-400/70', text: 'text-blue-300', hover: 'hover:border-blue-300' },
-      green: { bg: 'from-emerald-600/40 to-green-600/40', border: 'border-emerald-400/70', text: 'text-emerald-300', hover: 'hover:border-emerald-300' },
-      yellow: { bg: 'from-yellow-500/40 to-amber-500/40', border: 'border-yellow-400/70', text: 'text-yellow-300', hover: 'hover:border-yellow-300' },
-      gray: { bg: 'from-slate-600/40 to-gray-600/40', border: 'border-slate-400/70', text: 'text-slate-300', hover: 'hover:border-slate-300' }
-    };
-    return colors[color] || colors.orange;
-  };
-
   const categories = [
-    { id: 'all', label: 'All Tools', icon: Home },
-    { id: 'primary', label: 'Dashboards', icon: BarChart3 },
-    { id: 'data', label: 'Data Management', icon: Database },
-    { id: 'tools', label: 'Tools & Actions', icon: Wrench },
-    { id: 'admin', label: 'Admin & Setup', icon: Settings }
+    { id: 'all', label: 'All Tools' },
+    { id: 'primary', label: 'Dashboards' },
+    { id: 'data', label: 'Data Management' },
+    { id: 'tools', label: 'Tools & Actions' },
+    { id: 'admin', label: 'Admin & Setup' }
   ];
 
   const filteredTools = selectedCategory === 'all' 
     ? tools 
     : tools.filter(t => t.category === selectedCategory);
 
+  const getCategoryColor = (cat: string) => {
+    switch (cat) {
+      case 'primary': return 'text-purple-400';
+      case 'data': return 'text-cyan-400';
+      case 'tools': return 'text-orange-400';
+      case 'admin': return 'text-gray-400';
+      default: return 'text-gray-400';
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#1a1140] via-[#2d1b69] to-[#4a2a8f] relative overflow-hidden">
-      {/* Navigation Bar */}
-      <div className="bg-white/5 backdrop-blur-lg border-b border-white/10 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-center gap-2 text-sm">
-          <button onClick={() => navigate(-1)} className="text-gray-400 hover:text-white transition-all">← Back</button>
-          <span className="text-gray-600">|</span>
-          <Link to="/" className="text-gray-400 hover:text-white transition-all">🏠 Home</Link>
-          <span className="text-gray-600">|</span>
-          <Link to="/admin/dashboard" className="text-gray-400 hover:text-white transition-all">📊 Workflow</Link>
-          <span className="text-gray-600">|</span>
-          <Link to="/admin/operations" className="text-gray-400 hover:text-white transition-all">🎛️ Operations</Link>
-          <span className="text-gray-600">|</span>
-          <Link to="/bulkupload" className="text-gray-400 hover:text-white transition-all">📤 Bulk Upload</Link>
-          <span className="text-gray-600">|</span>
-          <Link to="/admin/startups" className="text-gray-400 hover:text-white transition-all">🚀 Startups</Link>
-          <span className="text-gray-600">|</span>
-          <Link to="/admin/investors" className="text-gray-400 hover:text-white transition-all">👥 Investors</Link>
-          <span className="text-gray-600">|</span>
-          <Link to="/admin/investor-enrichment" className="text-gray-400 hover:text-white transition-all">🔄 Enrichment</Link>
-          <span className="text-gray-600">|</span>
-          <Link to="/vote" className="text-orange-400 hover:text-orange-300 transition-all font-bold">⚡ Match</Link>
+    <div className="min-h-screen bg-gray-900 text-gray-100">
+      {/* Compact Header */}
+      <div className="border-b border-gray-800 bg-gray-900/95 sticky top-0 z-40">
+        <div className="max-w-[1800px] mx-auto px-4 py-2 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <h1 className="text-lg font-bold text-white">🎛️ Admin Control Center</h1>
+          </div>
+          <div className="flex items-center gap-4 text-xs">
+            <Link to="/" className="text-gray-400 hover:text-white">Home</Link>
+            <Link to="/admin/dashboard" className="text-gray-400 hover:text-white">Workflow</Link>
+            <Link to="/admin/analytics" className="text-orange-400 hover:text-orange-300">Analytics</Link>
+            <Link to="/market-trends" className="text-gray-400 hover:text-white">Trends</Link>
+            <Link to="/matching" className="text-orange-400 hover:text-orange-300 font-bold">⚡ Match</Link>
+            <button onClick={loadStats} className="text-gray-400 hover:text-white">
+              <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Animated background orbs */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
-      </div>
-      
-      <div className="relative z-10 container mx-auto px-8 py-12">
-        {/* Header */}
-        <div className="mb-12">
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h1 className="text-5xl font-bold text-white mb-3">
-                Admin <span className="bg-gradient-to-r from-orange-400 to-amber-400 bg-clip-text text-transparent">Control Center</span>
-              </h1>
-              <p className="text-gray-300 text-lg">Direct access to all Hot Money tools and operations</p>
+      <div className="max-w-[1800px] mx-auto p-4 space-y-4">
+        {/* Stats Row */}
+        <div className="grid grid-cols-4 gap-3 text-xs">
+          {stats.map((stat, i) => (
+            <div key={i} className="bg-gray-800/50 rounded-lg px-4 py-3 border border-gray-700">
+              <div className={`text-2xl font-bold font-mono ${stat.color === 'orange' ? 'text-orange-400' : stat.color === 'violet' ? 'text-violet-400' : stat.color === 'green' ? 'text-green-400' : 'text-yellow-400'}`}>
+                {stat.value}
+              </div>
+              <div className="text-gray-500">{stat.label}</div>
             </div>
-            
-            <div className="flex items-center gap-3">
-              <button
-                onClick={() => navigate('/')}
-                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-bold rounded-lg transition-all shadow-lg"
-              >
-                <Home className="w-5 h-5" />
-                HOME
-              </button>
-              <button
-                onClick={loadStats}
-                className="flex items-center gap-2 px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white font-bold rounded-lg transition-all"
-              >
-                <RefreshCw className="w-5 h-5" />
-                Refresh
-              </button>
-            </div>
-          </div>
+          ))}
         </div>
 
-        {/* Quick Stats */}
-        <div className="bg-gradient-to-br from-gray-900/80 to-orange-900/50 backdrop-blur-lg border-2 border-orange-500/30 rounded-3xl p-8 shadow-2xl mb-12">
-          <div className="flex items-center gap-3 mb-6">
-            <BarChart3 className="w-8 h-8 text-orange-400" />
-            <h2 className="text-3xl font-bold text-white">System Overview</h2>
-          </div>
-          <div className="grid grid-cols-4 gap-6">
-            {stats.map((stat, i) => {
-              const Icon = stat.icon;
-              return (
-                <div key={i} className="bg-white/5 rounded-xl p-6 border border-white/10">
-                  <div className="flex items-center gap-3 mb-2">
-                    <Icon className="w-6 h-6 text-orange-400" />
-                    <h3 className="text-gray-300 text-sm uppercase tracking-wide">{stat.label}</h3>
-                  </div>
-                  <div className="text-4xl font-bold text-white mb-1">{stat.value}</div>
-                  {stat.change && <div className="text-sm text-gray-400">{stat.change}</div>}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Category Filter */}
-        <div className="flex gap-4 mb-8 overflow-x-auto pb-2">
-          {categories.map(cat => {
-            const Icon = cat.icon;
-            const isActive = selectedCategory === cat.id;
-            return (
-              <button
-                key={cat.id}
-                onClick={() => setSelectedCategory(cat.id)}
-                className={`flex items-center gap-2 px-6 py-3 rounded-lg font-bold transition-all whitespace-nowrap border-2 ${
-                  isActive
-                    ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white border-orange-400 shadow-lg'
-                    : 'bg-gray-800/50 text-gray-300 border-gray-600 hover:bg-gray-700/50 hover:border-gray-500'
-                }`}
-              >
-                <Icon className="w-5 h-5" />
-                {cat.label}
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Tools Grid */}
-        <div className="grid grid-cols-3 gap-6">
-          {filteredTools.map(tool => {
-            const Icon = tool.icon;
-            const colors = getColorClasses(tool.color);
-            return (
-              <button
-                key={tool.id}
-                onClick={() => navigate(tool.route)}
-                className={`bg-gradient-to-br ${colors.bg} backdrop-blur-lg border-2 ${colors.border} rounded-xl p-6 hover:scale-105 transition-all text-left group shadow-lg`}
-              >
-                {tool.status === 'new' && (
-                  <div className="absolute top-4 right-4 px-3 py-1 bg-green-500 text-white text-xs font-bold rounded-full uppercase">
-                    NEW
-                  </div>
-                )}
-
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="w-12 h-12 rounded-lg bg-black/30 border border-white/10 flex items-center justify-center flex-shrink-0">
-                    <Icon className={`w-6 h-6 ${colors.text}`} />
-                  </div>
-                  <h3 className="text-white font-bold text-xl">
-                    {tool.name}
-                  </h3>
-                </div>
-
-                <p className="text-gray-300 text-sm mb-4">
-                  {tool.description}
-                </p>
-
-                <div className="flex items-center gap-2 text-orange-400 font-bold text-sm group-hover:gap-3 transition-all">
-                  <span>Launch</span>
-                  <ArrowRight className="w-4 h-4" />
-                </div>
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Quick Access */}
-        <div className="mt-12 bg-gradient-to-br from-gray-900/80 to-amber-900/50 backdrop-blur-lg border-2 border-amber-500/30 rounded-3xl p-8 shadow-2xl">
-          <div className="flex items-center gap-3 mb-6">
-            <Zap className="w-8 h-8 text-amber-400" />
-            <h2 className="text-3xl font-bold text-white">Quick Actions</h2>
-          </div>
-          <div className="grid grid-cols-4 gap-4">
+        {/* Category Tabs - Minimal */}
+        <div className="flex gap-2 text-xs border-b border-gray-800 pb-2">
+          {categories.map(cat => (
             <button
-              onClick={() => navigate('/matching')}
-              className="bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-bold py-4 px-6 rounded-xl transition-all shadow-lg"
+              key={cat.id}
+              onClick={() => setSelectedCategory(cat.id)}
+              className={`px-3 py-1.5 rounded transition-all ${
+                selectedCategory === cat.id
+                  ? 'bg-orange-500/20 text-orange-400 border border-orange-500/50'
+                  : 'text-gray-400 hover:text-white hover:bg-gray-800'
+              }`}
             >
+              {cat.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Tools Table */}
+        <div className="bg-gray-800/50 rounded-lg border border-gray-700 overflow-hidden">
+          <table className="w-full text-sm">
+            <thead className="bg-gray-700/50">
+              <tr>
+                <th className="text-left px-4 py-3 text-gray-400 font-medium">Tool</th>
+                <th className="text-left px-4 py-3 text-gray-400 font-medium">Description</th>
+                <th className="text-center px-4 py-3 text-gray-400 font-medium">Category</th>
+                <th className="text-center px-4 py-3 text-gray-400 font-medium">Status</th>
+                <th className="text-right px-4 py-3 text-gray-400 font-medium">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredTools.map((tool) => (
+                <tr 
+                  key={tool.id} 
+                  className="border-t border-gray-700/50 hover:bg-gray-700/30 cursor-pointer"
+                  onClick={() => navigate(tool.route)}
+                >
+                  <td className="px-4 py-3">
+                    <Link to={tool.route} className="text-white font-medium hover:text-orange-400 flex items-center gap-2">
+                      {tool.name}
+                      {tool.status === 'new' && (
+                        <span className="px-1.5 py-0.5 bg-green-500/20 text-green-400 text-[10px] rounded uppercase">New</span>
+                      )}
+                    </Link>
+                  </td>
+                  <td className="px-4 py-3 text-gray-400">{tool.description}</td>
+                  <td className={`px-4 py-3 text-center ${getCategoryColor(tool.category)}`}>
+                    {tool.category === 'primary' ? '📊 Dashboard' : 
+                     tool.category === 'data' ? '📁 Data' : 
+                     tool.category === 'tools' ? '🛠️ Tool' : 
+                     '⚙️ Admin'}
+                  </td>
+                  <td className="px-4 py-3 text-center">
+                    <span className="px-2 py-0.5 bg-green-500/20 text-green-400 text-xs rounded">Active</span>
+                  </td>
+                  <td className="px-4 py-3 text-right">
+                    <Link 
+                      to={tool.route} 
+                      className="text-orange-400 hover:text-orange-300 flex items-center gap-1 justify-end"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      Open <ExternalLink className="w-3 h-3" />
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Quick Links */}
+        <div className="bg-gray-800/50 rounded-lg border border-gray-700 p-4">
+          <h3 className="text-sm font-semibold text-white mb-3">⚡ Quick Navigation</h3>
+          <div className="grid grid-cols-6 gap-3 text-xs">
+            <Link to="/matching" className="px-3 py-2 bg-orange-500/20 border border-orange-500/30 rounded text-orange-400 hover:bg-orange-500/30 text-center">
               🔥 Matching Engine
-            </button>
-            <button
-              onClick={() => navigate('/admin/dashboard')}
-              className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold py-4 px-6 rounded-xl transition-all shadow-lg"
-            >
-              📊 Workflow Dashboard
-            </button>
-            <button
-              onClick={() => navigate('/investors')}
-              className="bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white font-bold py-4 px-6 rounded-xl transition-all shadow-lg"
-            >
-              💰 View Investors
-            </button>
-            <button
-              onClick={() => navigate('/startups')}
-              className="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white font-bold py-4 px-6 rounded-xl transition-all shadow-lg"
-            >
-              🚀 Browse Startups
-            </button>
+            </Link>
+            <Link to="/admin/analytics" className="px-3 py-2 bg-violet-500/20 border border-violet-500/30 rounded text-violet-400 hover:bg-violet-500/30 text-center">
+              📊 Analytics
+            </Link>
+            <Link to="/market-trends" className="px-3 py-2 bg-cyan-500/20 border border-cyan-500/30 rounded text-cyan-400 hover:bg-cyan-500/30 text-center">
+              📈 Market Trends
+            </Link>
+            <Link to="/investors" className="px-3 py-2 bg-green-500/20 border border-green-500/30 rounded text-green-400 hover:bg-green-500/30 text-center">
+              💰 Investors
+            </Link>
+            <Link to="/startups" className="px-3 py-2 bg-blue-500/20 border border-blue-500/30 rounded text-blue-400 hover:bg-blue-500/30 text-center">
+              🚀 Startups
+            </Link>
+            <Link to="/admin/bulk-import" className="px-3 py-2 bg-amber-500/20 border border-amber-500/30 rounded text-amber-400 hover:bg-amber-500/30 text-center">
+              📤 Bulk Import
+            </Link>
+          </div>
+        </div>
+
+        {/* All Admin Routes Reference */}
+        <div className="bg-gray-800/30 rounded-lg border border-gray-700/50 p-4">
+          <h3 className="text-xs font-semibold text-gray-500 mb-2">All Routes</h3>
+          <div className="flex flex-wrap gap-2 text-[10px]">
+            {tools.map(t => (
+              <Link key={t.id} to={t.route} className="text-gray-500 hover:text-orange-400">
+                {t.route}
+              </Link>
+            ))}
           </div>
         </div>
       </div>

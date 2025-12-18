@@ -203,8 +203,8 @@ export default function DiagnosticPage() {
                 )}
               </div>
 
-              <div className="bg-pink-900/20 border-2 border-pink-500/40 rounded-xl p-4">
-                <h3 className="text-pink-300 font-bold text-xl mb-2">
+              <div className="bg-red-900/20 border-2 border-red-500/40 rounded-xl p-4">
+                <h3 className="text-red-300 font-bold text-xl mb-2">
                   ❤️ Your YES Votes: {localStorageData?.myYesVotes.length || 0}
                 </h3>
               </div>
@@ -277,7 +277,7 @@ export default function DiagnosticPage() {
               </button>
               <button
                 onClick={() => navigate('/admin/ml-dashboard')}
-                className="py-3 bg-gradient-to-r from-pink-600 to-pink-700 hover:from-pink-500 hover:to-pink-600 text-white font-semibold rounded-xl transition-all shadow-lg hover:shadow-pink-500/30"
+                className="py-3 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500 text-white font-semibold rounded-xl transition-all shadow-lg hover:shadow-orange-500/30"
               >
                 🤖 ML Dashboard
               </button>

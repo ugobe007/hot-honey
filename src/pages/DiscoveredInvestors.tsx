@@ -6,15 +6,15 @@ import { supabase } from '../lib/supabase';
 interface DiscoveredInvestor {
   id: string;
   name: string;
-  type: string;
-  website: string | null;
-  description: string | null;
-  check_size: string | null;
-  sectors: string[] | null;
-  stage: string[] | null;
-  geography: string | null;
-  notable_investments: string[] | null;
-  created_at: string;
+  type?: string | null;
+  website?: string | null;
+  description?: string | null;
+  check_size?: string | null;
+  sectors?: string[] | null;
+  stage?: string[] | null;
+  geography?: string | null;
+  notable_investments?: string[] | null;
+  created_at?: string | null;
 }
 
 export default function DiscoveredInvestors() {
@@ -50,7 +50,7 @@ export default function DiscoveredInvestors() {
         return;
       }
 
-      setInvestors(data || []);
+      setInvestors((data || []) as DiscoveredInvestor[]);
     } catch (error) {
       console.error('Error:', error);
     } finally {

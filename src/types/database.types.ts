@@ -1,12 +1,11 @@
 /**
- * AUTO-GENERATED DATABASE TYPES FROM SUPABASE SCHEMA
- * DO NOT EDIT MANUALLY - Regenerate using Supabase CLI or MCP tool
+ * DATABASE TYPES - Type-safe database access
  * 
  * This file provides type-safe database access and prevents column/table name mismatches.
  * 
  * CORRECT USAGE:
- * - Table names: Use DB_TABLES constant (e.g., DB_TABLES.STARTUP_UPLOADS, not 'startups')
- * - Investor columns: Use investor.sector_focus (not investor.sectors)
+ * - Table names: Use DB_TABLES constant (e.g., DB_TABLES.STARTUP_UPLOADS)
+ * - Investor columns: Use investor.sectors and investor.stage (correct DB column names)
  * - Match status: Use MATCH_STATUS constant (e.g., MATCH_STATUS.FUNDED, not investment_made)
  */
 
@@ -76,10 +75,10 @@ export type MatchStatus = typeof MATCH_STATUS[keyof typeof MATCH_STATUS];
 // INVESTOR TABLE - CORRECT COLUMN NAMES
 // ============================================
 /**
- * IMPORTANT: The database uses:
- * - sector_focus (NOT sectors)
- * - stage_focus (NOT stage)
- * - check_size_min / check_size_max (NOT check_size)
+ * Database columns are:
+ * - sectors (array of strings)
+ * - stage (array of strings)
+ * - check_size_min / check_size_max (numbers)
  */
 export interface Investor {
   id: string;
@@ -87,10 +86,10 @@ export interface Investor {
   firm: string | null;
   type: string | null;
   
-  // CORRECT column names - DO NOT use 'sectors', 'stage', or 'check_size'
-  sector_focus: string[] | null;  // NOT sectors
-  stage_focus: string[] | null;   // NOT stage
-  check_size_min: number | null;  // NOT check_size
+  // Correct column names
+  sectors: string[] | null;       // Array of sector strings
+  stage: string[] | null;         // Array of stage strings
+  check_size_min: number | null;
   check_size_max: number | null;
   
   // Other fields
@@ -233,16 +232,15 @@ export interface StartupInvestorMatch {
 // ============================================
 
 /**
- * Normalize investor data to handle both old and new column naming conventions.
- * Use this when reading investor data that might come from different sources.
+ * Normalize investor data. DB uses 'sectors' and 'stage' directly.
  */
 export function normalizeInvestorData(rawInvestor: any): Partial<Investor> {
   return {
     ...rawInvestor,
-    // Map old column names to new ones
-    sector_focus: rawInvestor.sector_focus || rawInvestor.sectors || null,
-    stage_focus: rawInvestor.stage_focus || rawInvestor.stage || null,
-    check_size_min: rawInvestor.check_size_min ?? (typeof rawInvestor.check_size === 'number' ? rawInvestor.check_size : null),
+    // Use correct column names
+    sectors: rawInvestor.sectors || null,
+    stage: rawInvestor.stage || null,
+    check_size_min: rawInvestor.check_size_min ?? null,
     check_size_max: rawInvestor.check_size_max ?? null,
   };
 }

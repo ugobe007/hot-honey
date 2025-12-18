@@ -22,7 +22,7 @@ export default function GetMatchedButton({
   };
 
   const variantClasses = {
-    primary: 'bg-gradient-to-r from-purple-500 via-pink-500 to-cyan-500 hover:from-purple-600 hover:via-pink-600 hover:to-cyan-600 text-white shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50',
+    primary: 'bg-gradient-to-r from-purple-500 via-violet-500 to-cyan-500 hover:from-purple-600 hover:via-violet-600 hover:to-cyan-600 text-white shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50',
     outline: 'bg-transparent border-2 border-purple-500 text-purple-400 hover:bg-purple-500/10',
     ghost: 'bg-purple-500/10 text-purple-400 hover:bg-purple-500/20',
   };

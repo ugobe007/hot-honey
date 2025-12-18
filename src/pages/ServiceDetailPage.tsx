@@ -61,25 +61,37 @@ const ServiceDetailPage: React.FC = () => {
     setLoading(true);
     try {
       // Fetch service template
-      const { data: serviceData, error: serviceError } = await supabase
-        .from('service_templates')
+      const { data: serviceData, error: serviceError } = await (supabase.from as any)('service_templates')
         .select('*')
-        .eq('slug', slug)
+        .eq('slug', slug || '')
         .eq('is_active', true)
         .single();
 
       if (serviceError) throw serviceError;
-      setService(serviceData);
+      setService(serviceData as ServiceTemplate);
 
-      // Fetch user's startups (for demo, fetch recent startups)
+      // Fetch user's startups (for demo, fetch recent startup_uploads)
       const { data: startupData, error: startupError } = await supabase
-        .from('startups')
-        .select('id, company_name, description, pitch, industry, stage, traction, team_background, ask_amount, location')
+        .from('startup_uploads')
+        .select('id, name, description, sectors, stage, traction, team_background, latest_funding_amount, location')
         .limit(20)
         .order('created_at', { ascending: false });
 
       if (startupError) throw startupError;
-      setStartups(startupData || []);
+      // Map to expected format
+      const mappedStartups = (startupData || []).map((s: any) => ({
+        id: s.id,
+        company_name: s.name,
+        description: s.description,
+        pitch: s.description,
+        industry: s.sectors?.[0] || '',
+        stage: s.stage,
+        traction: s.traction,
+        team_background: s.team_background,
+        ask_amount: s.latest_funding_amount,
+        location: s.location
+      }));
+      setStartups(mappedStartups);
 
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -272,7 +284,7 @@ ${startup.description || 'Based on the information provided, here are our recomm
 
     // Save result to database
     try {
-      await supabase.from('service_results').insert({
+      await (supabase.from as any)('service_results').insert({
         startup_id: selectedStartup,
         template_id: service.id,
         generated_content: { markdown: analysisResult },

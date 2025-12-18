@@ -187,7 +187,7 @@ function generateMatchReasoning(scores, startup, investor) {
   const reasons = [];
   
   if (scores.sector > 20) {
-    reasons.push(`Strong sector alignment in ${investor.sector_focus?.slice(0, 2).join(', ') || 'target sectors'}`);
+    reasons.push(`Strong sector alignment in ${investor.sectors?.slice(0, 2).join(', ') || 'target sectors'}`);
   } else if (scores.sector > 10) {
     reasons.push('Partial sector overlap');
   }

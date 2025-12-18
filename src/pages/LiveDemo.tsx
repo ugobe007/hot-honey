@@ -60,13 +60,13 @@ export default function LiveDemo() {
       // Get random startup and investor
       const { data: startups } = await supabase
         .from('startup_uploads')
-        .select('name, industries, stage')
+        .select('name, sectors, stage')
         .eq('status', 'approved')
         .limit(50);
 
       const { data: investors } = await supabase
         .from('investors')
-        .select('name, sector_focus')
+        .select('name, sectors')
         .limit(50);
 
       if (startups && startups.length > 0 && investors && investors.length > 0) {
@@ -83,7 +83,7 @@ export default function LiveDemo() {
           score,
           reasoning: [
             `🎯 Stage Alignment: ${randomStartup.stage || 'Early Stage'}`,
-            `🤝 Sector Match: ${(randomStartup.industries || ['Technology'])[0]}`,
+            `🤝 Sector Match: ${(randomStartup.sectors || ['Technology'])[0]}`,
             `📊 GOD Score: ${score}/100`,
             `⚡ Check Size Fit: Optimal`,
             `🌍 Geography: Compatible`
@@ -111,7 +111,7 @@ export default function LiveDemo() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-6xl font-bold text-white mb-4">
-            <span className="bg-gradient-to-r from-orange-400 via-pink-400 to-purple-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-orange-400 via-amber-400 to-purple-400 bg-clip-text text-transparent">
               Hot Match
             </span>{' '}
             Live Demo
@@ -174,7 +174,7 @@ export default function LiveDemo() {
 
                     <div className="flex items-center justify-center mb-6">
                       <div className="text-center">
-                        <div className="text-6xl font-bold bg-gradient-to-r from-orange-400 to-pink-400 bg-clip-text text-transparent mb-2">
+                        <div className="text-6xl font-bold bg-gradient-to-r from-orange-400 to-amber-400 bg-clip-text text-transparent mb-2">
                           {currentMatch.score}%
                         </div>
                         <div className="text-gray-400">Match Quality Score</div>

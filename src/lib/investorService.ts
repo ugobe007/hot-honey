@@ -2,8 +2,8 @@ import { supabase } from './supabase';
 
 /**
  * Database column mapping:
- * - sector_focus (DB) -> sectors (frontend)
- * - stage_focus (DB) -> stage (frontend)
+ * - sectors (DB) -> sectors (frontend)
+ * - stage (DB) -> stage (frontend)
  * - check_size_min/check_size_max (DB) -> checkSizeMin/checkSizeMax (frontend)
  */
 
@@ -24,8 +24,8 @@ export interface InvestorDB {
   check_size_min?: number;
   check_size_max?: number;
   // Database columns (correct names)
-  stage_focus?: string[];  // NOT 'stage'
-  sector_focus?: string[]; // NOT 'sectors'
+  stage?: string[];   // Correct DB column name
+  sectors?: string[]; // Correct DB column name
   geography?: string;
   portfolio_size?: number;  // DB uses 'portfolio_size' not 'portfolio_count'
   exits?: number;
@@ -52,8 +52,8 @@ export interface InvestorFrontend {
   fundSize?: string;
   checkSizeMin?: number;
   checkSizeMax?: number;
-  stage?: string[];    // Mapped from stage_focus
-  sectors?: string[];  // Mapped from sector_focus
+  stage?: string[];    // Direct from DB
+  sectors?: string[];  // Direct from DB
   geography?: string;
   portfolioCount?: number;
   exits?: number;
@@ -79,9 +79,9 @@ function mapInvestorToFrontend(dbInvestor: any): InvestorFrontend {
     fundSize: dbInvestor.fund_size,
     checkSizeMin: dbInvestor.check_size_min,
     checkSizeMax: dbInvestor.check_size_max,
-    // Map DB columns to frontend names
-    stage: dbInvestor.stage_focus || dbInvestor.stage || [],
-    sectors: dbInvestor.sector_focus || dbInvestor.sectors || [],
+    // Use correct DB column names
+    stage: dbInvestor.stage || [],
+    sectors: dbInvestor.sectors || [],
     geography: dbInvestor.geography,
     portfolioCount: dbInvestor.portfolio_size,
     exits: dbInvestor.exits,

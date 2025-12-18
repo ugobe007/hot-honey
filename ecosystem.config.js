@@ -57,6 +57,86 @@ module.exports = {
       },
       // Disabled by default since automation-engine handles this
       enabled: false
+    },
+    
+    // Watchdog - Health monitoring & auto-fixes
+    {
+      name: 'watchdog',
+      script: 'npx',
+      args: 'tsx scripts/watchdog.ts',
+      cwd: '/Users/leguplabs/Desktop/hot-honey',
+      cron_restart: '*/5 * * * *',  // Every 5 minutes
+      autorestart: false,
+      watch: false,
+      env: {
+        NODE_ENV: 'production'
+      }
+    },
+    
+    // Scraper manager
+    {
+      name: 'scraper',
+      script: 'node',
+      args: 'scripts/scraper-manager.js',
+      cwd: '/Users/leguplabs/Desktop/hot-honey',
+      autorestart: true,
+      max_restarts: 10,
+      restart_delay: 60000,  // 1 minute between restarts
+      watch: false
+    },
+    
+    // GOD Score recalculator (hourly)
+    {
+      name: 'score-recalc',
+      script: 'npx',
+      args: 'tsx scripts/recalculate-scores.ts',
+      cwd: '/Users/leguplabs/Desktop/hot-honey',
+      cron_restart: '0 * * * *',  // Every hour
+      autorestart: false,
+      watch: false
+    },
+    
+    // AI Agent - Intelligent monitoring & self-healing
+    {
+      name: 'ai-agent',
+      script: 'npx',
+      args: 'tsx scripts/ai-agent.ts',
+      cwd: '/Users/leguplabs/Desktop/hot-honey',
+      cron_restart: '*/15 * * * *',  // Every 15 minutes
+      autorestart: false,
+      watch: false,
+      env: {
+        NODE_ENV: 'production',
+        ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY
+      }
+    },
+    
+    // Daily Report Generator - Sends daily summary via Slack/Email
+    {
+      name: 'daily-report',
+      script: 'npx',
+      args: 'tsx scripts/daily-report.ts',
+      cwd: '/Users/leguplabs/Desktop/hot-honey',
+      cron_restart: '0 9 * * *',  // Every day at 9 AM
+      autorestart: false,
+      watch: false,
+      env: {
+        NODE_ENV: 'production'
+      }
+    },
+    
+    // Automation Pipeline - Full discovery → scoring → matching
+    {
+      name: 'automation-pipeline',
+      script: 'node',
+      args: 'automation-pipeline.js',
+      cwd: '/Users/leguplabs/Desktop/hot-honey',
+      cron_restart: '0 */6 * * *',  // Every 6 hours
+      autorestart: false,
+      watch: false,
+      env: {
+        NODE_ENV: 'production'
+      }
     }
   ]
 };

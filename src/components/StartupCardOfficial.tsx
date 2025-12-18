@@ -220,7 +220,7 @@ export default function StartupCardOfficial({ startup, onVote, onSwipeAway }: Pr
 
       <div className="bg-gradient-to-br from-[#1a0033] via-[#2d1b4e] to-[#0f0f23] rounded-3xl shadow-2xl overflow-hidden border border-purple-500/30 hover:border-orange-400/60 relative hover:scale-[1.01] transition-all duration-300 w-full max-w-[420px] mx-auto">
         {/* Hero Header with Flame */}
-        <div className="relative bg-gradient-to-r from-orange-600 via-red-500 to-pink-600 p-4">
+        <div className="relative bg-gradient-to-r from-orange-600 via-red-500 to-amber-600 p-4">
           <div className="absolute inset-0 bg-black/20"></div>
           <div className="relative flex items-start gap-3">
             {/* Flame Icon */}
@@ -273,7 +273,7 @@ export default function StartupCardOfficial({ startup, onVote, onSwipeAway }: Pr
                     startup.total_god_score >= 80 ? 'bg-gradient-to-r from-green-400 to-emerald-500' :
                     startup.total_god_score >= 60 ? 'bg-gradient-to-r from-yellow-400 to-amber-500' :
                     startup.total_god_score >= 40 ? 'bg-gradient-to-r from-orange-400 to-red-500' :
-                    'bg-gradient-to-r from-red-400 to-pink-500'
+                    'bg-gradient-to-r from-red-400 to-orange-500'
                   }`}
                   style={{ width: `${startup.total_god_score}%` }}
                 />

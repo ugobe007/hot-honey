@@ -10,7 +10,7 @@ export default function About() {
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
-        <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-pink-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
       </div>
 
       {/* Logo Dropdown Menu */}
@@ -74,7 +74,7 @@ export default function About() {
           <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {/* Step 1 */}
             <div className="group relative">
-              <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-pink-600 rounded-3xl blur opacity-25 group-hover:opacity-50 transition-opacity"></div>
+              <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-violet-600 rounded-3xl blur opacity-25 group-hover:opacity-50 transition-opacity"></div>
               <div className="relative bg-gradient-to-br from-[#1a0033] to-[#2d1b4e] rounded-3xl p-8 border border-purple-500/30 h-full">
                 <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500 to-violet-600 flex items-center justify-center mb-6 shadow-lg">
                   <span className="text-2xl font-bold text-white">1</span>
@@ -193,7 +193,7 @@ export default function About() {
               <p className="text-gray-400 text-sm">500+ investors, 700+ startups in our network</p>
             </div>
             <div className="bg-gradient-to-br from-[#1a0033]/80 to-[#2d1b4e]/80 backdrop-blur-lg rounded-2xl p-6 border border-purple-500/20 text-center hover:scale-105 transition-all">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center mx-auto mb-4 shadow-lg">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-red-500 to-orange-500 flex items-center justify-center mx-auto mb-4 shadow-lg">
                 <Heart className="w-6 h-6 text-white" />
               </div>
               <h3 className="text-lg font-bold text-white mb-2">Human Touch</h3>

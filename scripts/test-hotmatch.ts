@@ -84,11 +84,11 @@ async function testInvestorsTable() {
       .select('*', { count: 'exact', head: true })
       .or('status.eq.active,status.eq.Active');
 
-    // Count with sector_focus (correct column name)
+    // Count with sectors (correct column name)
     const { count: withSectors } = await supabase
       .from('investors')
       .select('*', { count: 'exact', head: true })
-      .not('sector_focus', 'is', null);
+      .not('sectors', 'is', null);
 
     log('Investors - Total', total ? 'PASS' : 'FAIL', `${total || 0} investors in database`);
     log('Investors - Active', (active || 0) >= 10 ? 'PASS' : 'FAIL', `${active || 0} active`);
@@ -172,10 +172,10 @@ async function testMatchingData() {
       .not('total_god_score', 'is', null)
       .limit(5);
 
-    // Get sample investor - use sector_focus not sectors
+    // Get sample investor - use sectors not sectors
     const { data: investors } = await supabase
       .from('investors')
-      .select('id, name, sector_focus, stage_focus, check_size_min, check_size_max')
+      .select('id, name, sectors, stage, check_size_min, check_size_max')
       .or('status.eq.active,status.eq.Active')
       .limit(5);
 
@@ -192,9 +192,9 @@ async function testMatchingData() {
     log('Matching - Startups Ready', 'PASS', `${startups.length} startups available for matching`);
     log('Matching - Investors Ready', 'PASS', `${investors.length} investors available for matching`);
 
-    // Check for sector overlap potential - investors use sector_focus
+    // Check for sector overlap potential - investors use sectors
     const startupSectors = new Set(startups.flatMap(s => s.sectors || []));
-    const investorSectors = new Set(investors.flatMap(i => i.sector_focus || []));
+    const investorSectors = new Set(investors.flatMap(i => i.sectors || []));
     const overlap = [...startupSectors].filter(s => investorSectors.has(s));
 
     log('Matching - Sector Overlap', overlap.length > 0 ? 'PASS' : 'FAIL', 
@@ -250,12 +250,12 @@ async function testSchemaIntegrity() {
     // Test investor required fields (correct column names)
     const { data: investor } = await supabase
       .from('investors')
-      .select('name, firm, stage_focus, sector_focus')
+      .select('name, firm, stage, sectors')
       .limit(1)
       .single();
 
     if (investor) {
-      log('Schema - Investor Fields', 'PASS', 'name, firm, stage_focus, sector_focus accessible');
+      log('Schema - Investor Fields', 'PASS', 'name, firm, stage, sectors accessible');
     }
 
   } catch (err: any) {

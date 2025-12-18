@@ -72,7 +72,7 @@ const CheckoutPage: React.FC = () => {
 
         // Create subscription record
         if (authData.user) {
-          await supabase.from('user_subscriptions').insert({
+          await (supabase.from as any)('user_subscriptions').insert({
             user_id: authData.user.id,
             tier: 'spark',
             status: 'active',

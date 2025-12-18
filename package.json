@@ -16,6 +16,7 @@
     "enrich:vc": "npx tsx enrich-investor-data.ts"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.71.2",
     "@lottiefiles/dotlottie-web": "^0.57.0",
     "@supabase/supabase-js": "^2.76.1",
     "@types/cheerio": "^0.22.35",
@@ -37,7 +38,7 @@
     "react-dom": "^19.1.0",
     "react-icons": "^5.5.0",
     "react-router-dom": "^7.6.3",
-    "resend": "^6.5.2",
+    "resend": "^6.6.0",
     "rss-parser": "^3.13.0",
     "sentiment": "^5.0.2",
     "zustand": "^5.0.6"

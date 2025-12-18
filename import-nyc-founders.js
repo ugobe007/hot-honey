@@ -162,11 +162,11 @@ async function importInvestors() {
     });
 
     if (existing && existing.length > 0) {
-      // Update existing - use correct column names: stage_focus, sector_focus
+      // Update existing - use correct column names: stage, sectors
       const updateQuery = `
         UPDATE investors SET
-          stage_focus = ARRAY[${stages.map(s => `'${s}'`).join(',')}]::text[],
-          sector_focus = ARRAY[${sectors.map(s => `'${s.replace(/'/g, "''")}'`).join(',')}]::text[],
+          stage = ARRAY[${stages.map(s => `'${s}'`).join(',')}]::text[],
+          sectors = ARRAY[${sectors.map(s => `'${s.replace(/'/g, "''")}'`).join(',')}]::text[],
           geography = '${inv.location}',
           embedding = '[${embedding.join(',')}]'::vector,
           updated_at = NOW()
@@ -182,9 +182,9 @@ async function importInvestors() {
         errors++;
       }
     } else {
-      // Insert new - use correct column names: stage_focus, sector_focus, geography
+      // Insert new - use correct column names: stage, sectors, geography
       const insertQuery = `
-        INSERT INTO investors (firm, name, stage_focus, sector_focus, geography, embedding)
+        INSERT INTO investors (firm, name, stage, sectors, geography, embedding)
         VALUES (
           '${inv.firm.replace(/'/g, "''")}',
           '${inv.firm.replace(/'/g, "''")}',

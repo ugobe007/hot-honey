@@ -13,6 +13,7 @@ import {
   Users,
   ExternalLink
 } from 'lucide-react';
+import FlameIcon from './FlameIcon';
 
 interface Investor {
   id: string;
@@ -107,9 +108,9 @@ const EnhancedInvestorCard: React.FC<EnhancedInvestorCardProps> = ({
                   <h3 className="text-2xl font-bold text-cyan-400 flex-1">
                     {investor.name}
                   </h3>
-                  {/* Fire Icon - Larger */}
+                  {/* Official Flame Icon */}
                   <div className="flex-shrink-0">
-                    <img src="/images/fire-icon.svg" alt="Hot" className="w-12 h-12" />
+                    <FlameIcon variant={7} size="lg" />
                   </div>
                 </div>
             <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold text-white bg-green-500/90">
@@ -318,7 +319,7 @@ const EnhancedInvestorCard: React.FC<EnhancedInvestorCardProps> = ({
       {/* Match score badge (if provided) */}
       {matchScore && (
         <div className="absolute -top-3 -right-3">
-          <div className="px-4 py-2 rounded-full bg-gradient-to-r from-orange-500 to-pink-500 text-white font-bold shadow-lg">
+          <div className="px-4 py-2 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 text-white font-bold shadow-lg">
             {matchScore}% Match
           </div>
         </div>

@@ -53,7 +53,7 @@ const HowItWorksModal: React.FC<HowItWorksModalProps> = ({ isOpen, onClose }) =>
       icon: BarChart3,
       title: "Multi-VC Algorithm Views",
       description: "See how top VCs would score the same startup - YC, Sequoia, A16Z styles all in one place.",
-      color: "from-pink-500 to-rose-500",
+      color: "from-amber-500 to-orange-500",
       details: ["GOD Algorithm", "YC Smell Test", "Sequoia Style", "A16Z Style"],
       isDemo: true
     }
@@ -159,7 +159,7 @@ const HowItWorksModal: React.FC<HowItWorksModalProps> = ({ isOpen, onClose }) =>
                 }}
                 className={`h-2 rounded-full transition-all duration-300 ${
                   index === currentStep 
-                    ? 'w-8 bg-gradient-to-r from-orange-500 to-pink-500' 
+                    ? 'w-8 bg-gradient-to-r from-orange-500 to-amber-500' 
                     : 'w-2 bg-gray-600 hover:bg-gray-500'
                 }`}
               />
@@ -210,7 +210,7 @@ const HowItWorksModal: React.FC<HowItWorksModalProps> = ({ isOpen, onClose }) =>
                 {currentStep === 5 && showDemoScores ? (
                   <div className="grid grid-cols-2 gap-3">
                     {[
-                      { key: 'god', name: 'GOD', icon: Flame, color: 'from-red-500 to-pink-500', textColor: 'text-red-400' },
+                      { key: 'god', name: 'GOD', icon: Flame, color: 'from-red-500 to-amber-500', textColor: 'text-red-400' },
                       { key: 'yc', name: 'YC', icon: Lightbulb, color: 'from-orange-500 to-amber-500', textColor: 'text-orange-400' },
                       { key: 'sequoia', name: 'Sequoia', icon: TrendingUp, color: 'from-emerald-500 to-green-500', textColor: 'text-emerald-400' },
                       { key: 'a16z', name: 'A16Z', icon: Code2, color: 'from-purple-500 to-indigo-500', textColor: 'text-purple-400' },

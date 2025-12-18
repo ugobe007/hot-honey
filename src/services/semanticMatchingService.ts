@@ -58,7 +58,7 @@ export async function findSemanticInvestorMatches(
   limit: number = 10
 ): Promise<SemanticMatch[]> {
   try {
-    const { data, error } = await supabase.rpc('find_investor_matches_by_embedding', {
+    const { data, error } = await (supabase.rpc as any)('find_investor_matches_by_embedding', {
       startup_uuid: startupId,
       match_count: limit
     });
@@ -72,8 +72,8 @@ export async function findSemanticInvestorMatches(
       investorId: row.investor_id,
       investorName: row.investor_name,
       investorType: row.investor_type,
-      sectorFocus: row.sector_focus || [],
-      stageFocus: row.stage_focus || [],
+      sectorFocus: row.sectors || [],
+      stageFocus: row.stage || [],
       similarityScore: row.similarity_score,
       combinedScore: row.combined_score
     }));
@@ -103,7 +103,7 @@ export async function findSimilarStartups(
       return [];
     }
 
-    const { data, error } = await supabase.rpc('find_similar_startups', {
+    const { data, error } = await (supabase.rpc as any)('find_similar_startups', {
       query_embedding: startup.embedding,
       match_threshold: 0.5,
       match_count: limit + 1 // +1 to exclude self
@@ -152,7 +152,7 @@ export async function findSimilarInvestors(
       return [];
     }
 
-    const { data, error } = await supabase.rpc('find_similar_investors', {
+    const { data, error } = await (supabase.rpc as any)('find_similar_investors', {
       query_embedding: investor.embedding,
       match_threshold: 0.5,
       match_count: limit + 1
@@ -171,8 +171,8 @@ export async function findSimilarInvestors(
         name: row.name,
         firm: row.firm || '',
         type: row.type || 'VC',
-        sectorFocus: row.sector_focus || [],
-        stageFocus: row.stage_focus || [],
+        sectorFocus: row.sectors || [],
+        stageFocus: row.stage || [],
         similarity: row.similarity
       }));
   } catch (error) {

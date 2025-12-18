@@ -43,7 +43,7 @@ export default function InvestorEnrichmentPage() {
 
       const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
       const recentlyAdded = investors.filter(
-        i => new Date(i.created_at) > oneHourAgo
+        i => i.created_at && new Date(i.created_at) > oneHourAgo
       ).length;
 
       const enriched = investors.filter(i => i.last_enrichment_date).length;
@@ -273,7 +273,7 @@ export default function InvestorEnrichmentPage() {
         </div>
 
         {/* Action Buttons */}
-        <div className="bg-gradient-to-br from-purple-900/80 to-pink-900/80 backdrop-blur-lg border-2 border-purple-400/60 rounded-3xl p-8 shadow-2xl">
+        <div className="bg-gradient-to-br from-purple-900/80 to-violet-900/80 backdrop-blur-lg border-2 border-purple-400/60 rounded-3xl p-8 shadow-2xl">
           <div className="flex items-center gap-3 mb-6">
             <Play className="w-8 h-8 text-purple-300" />
             <h2 className="text-3xl font-bold text-white">Quick Actions</h2>

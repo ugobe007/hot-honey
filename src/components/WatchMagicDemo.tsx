@@ -234,7 +234,7 @@ export default function WatchMagicDemo({ isOpen, onClose }: Props) {
                     <div key={index} className="flex flex-col items-center">
                       <div className={`w-14 h-14 rounded-xl flex items-center justify-center transition-all duration-300 ${
                         isActive 
-                          ? 'bg-gradient-to-br from-purple-500 to-pink-500 shadow-lg shadow-purple-500/30' 
+                          ? 'bg-gradient-to-br from-purple-500 to-violet-500 shadow-lg shadow-purple-500/30' 
                           : 'bg-white/10'
                       } ${isCurrent ? 'scale-110 animate-pulse' : ''}`}>
                         <Icon className={`w-7 h-7 ${isActive ? 'text-white' : 'text-gray-500'}`} />
@@ -252,7 +252,7 @@ export default function WatchMagicDemo({ isOpen, onClose }: Props) {
               {/* Processing bar */}
               <div className="h-2 bg-white/10 rounded-full overflow-hidden">
                 <div 
-                  className="h-full bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 transition-all duration-500"
+                  className="h-full bg-gradient-to-r from-purple-500 via-amber-500 to-orange-500 transition-all duration-500"
                   style={{ width: `${(animationStep / (ANIMATION_STEPS.length - 1)) * 100}%` }}
                 />
               </div>
@@ -277,7 +277,7 @@ export default function WatchMagicDemo({ isOpen, onClose }: Props) {
                 </div>
 
                 {/* Investor Card */}
-                <div className="p-5 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-2xl border border-purple-500/30">
+                <div className="p-5 bg-gradient-to-br from-purple-500/20 to-violet-500/20 rounded-2xl border border-purple-500/30">
                   <div className="flex items-center gap-2 text-purple-400 text-sm mb-3">
                     <Users className="w-4 h-4" />
                     INVESTOR

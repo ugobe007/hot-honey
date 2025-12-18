@@ -157,10 +157,10 @@ export default function SavedMatches() {
                   </div>
                   <button
                     onClick={() => handleUnsave(match)}
-                    className="text-pink-500 hover:text-pink-400 transition-colors"
+                    className="text-red-500 hover:text-red-400 transition-colors"
                     title="Remove from saved"
                   >
-                    <Heart className="w-6 h-6 fill-pink-500" />
+                    <Heart className="w-6 h-6 fill-red-500" />
                   </button>
                 </div>
 

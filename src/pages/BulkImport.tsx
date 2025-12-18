@@ -1,875 +1,220 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { OpenAIDataService } from '../lib/openaiDataService';
+import { Link } from 'react-router-dom';
+import { RefreshCw, Upload, Trash2, Sparkles, ExternalLink } from 'lucide-react';
+import { supabase } from '../lib/supabase';
 
-interface ScrapedCompany {
+interface ImportItem {
+  id: string;
   name: string;
   website: string;
-  tagline?: string;
-  vcSource?: string;
-  entityType?: 'startup' | 'vc_firm' | 'accelerator';
-}
-
-interface EnrichedCompany extends ScrapedCompany {
-  pitch: string;
-  fivePoints: string[];
-  industry: string;
-  funding: string;
-  stage: string;
-  entityType: 'startup' | 'vc_firm' | 'accelerator';
-}
-
-interface SavedSource {
-  id: number;
-  name: string;
-  url: string;
-  type: 'vc_portfolio' | 'accelerator' | 'manual';
-  cssSelector?: string;
-  lastScraped?: string;
-  companyCount?: number;
-  autoRefresh?: boolean;
+  status: 'pending' | 'enriching' | 'done' | 'error';
+  enriched?: any;
 }
 
 export default function BulkImport() {
-  const navigate = useNavigate();
-  const [vcUrl, setVcUrl] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [scrapedCompanies, setScrapedCompanies] = useState<ScrapedCompany[]>([]);
-  const [enrichedCompanies, setEnrichedCompanies] = useState<EnrichedCompany[]>([]);
-  const [currentStep, setCurrentStep] = useState<'input' | 'scraping' | 'enriching' | 'review' | 'sources'>('input');
+  const [urls, setUrls] = useState('');
+  const [items, setItems] = useState<ImportItem[]>([]);
+  const [importing, setImporting] = useState(false);
   const [progress, setProgress] = useState({ current: 0, total: 0 });
-  const [enrichmentProgress, setEnrichmentProgress] = useState(0);
-  const [uploadProgress, setUploadProgress] = useState(0);
-  const [isEnriching, setIsEnriching] = useState(false);
-  const [savedSources, setSavedSources] = useState<SavedSource[]>([]);
-  const [showAddSource, setShowAddSource] = useState(false);
-  const [newSource, setNewSource] = useState({ name: '', url: '', type: 'vc_portfolio' as const, autoRefresh: true });
 
-  // Load saved sources on mount
-  useEffect(() => {
-    const sources = localStorage.getItem('bulkImportSources');
-    if (sources) {
-      setSavedSources(JSON.parse(sources));
-    }
-  }, []);
-
-  const saveSources = (sources: SavedSource[]) => {
-    localStorage.setItem('bulkImportSources', JSON.stringify(sources));
-    setSavedSources(sources);
-  };
-
-  const handleAddSource = () => {
-    if (!newSource.name || !newSource.url) {
-      alert('Please enter both name and URL');
-      return;
-    }
-
-    const source: SavedSource = {
-      id: Date.now(),
-      name: newSource.name,
-      url: newSource.url,
-      type: newSource.type,
-      autoRefresh: newSource.autoRefresh,
-      companyCount: 0,
-      lastScraped: new Date().toISOString()
-    };
-
-    saveSources([...savedSources, source]);
-    setNewSource({ name: '', url: '', type: 'vc_portfolio', autoRefresh: true });
-    setShowAddSource(false);
-    alert('✅ Source saved! AI will learn to scrape this automatically.');
-  };
-
-  const handleDeleteSource = (id: number) => {
-    if (confirm('Delete this source?')) {
-      saveSources(savedSources.filter(s => s.id !== id));
-    }
-  };
-
-  const handleRefreshSource = async (source: SavedSource) => {
-    alert(`🔄 In production, this would:\n\n1. Visit ${source.url}\n2. Extract company URLs using AI-learned patterns\n3. Enrich each company with the 5-point format\n4. Update your database\n\nFor now, manually copy URLs from this source and paste them in the manual input section.`);
-  };
-
-  const handleRefreshAll = async () => {
-    const autoRefreshSources = savedSources.filter(s => s.autoRefresh);
-    if (autoRefreshSources.length === 0) {
-      alert('No sources with auto-refresh enabled.');
-      return;
-    }
-
-    alert(`🤖 Automated Refresh:\n\nThis would scrape ${autoRefreshSources.length} sources:\n${autoRefreshSources.map(s => `• ${s.name}`).join('\n')}\n\nIn production:\n• Runs weekly via cron job\n• AI extracts company URLs\n• Enriches with 5-point format\n• Auto-updates database\n\nFor MVP: Use manual input below`);
-  };
-
-  const vcTemplates = [
-    { name: 'Y Combinator', url: 'https://www.ycombinator.com/companies', selector: '.company-card' },
-    { name: 'a16z Portfolio', url: 'https://a16z.com/portfolio/', selector: '.portfolio-company' },
-    { name: 'Sequoia', url: 'https://www.sequoiacap.com/companies/', selector: '.company-item' },
-  ];
-
-  const handleManualInput = () => {
-    const urls = vcUrl.split('\n').filter(url => url.trim());
-    console.log('📋 Parsed URLs:', urls);
-    const companies = urls.map(url => {
-      const entityType = detectEntityType(url);
-      return {
-        name: extractNameFromUrl(url),
-        website: url.trim(),
-        vcSource: 'Manual Input',
-        entityType
-      };
-    });
-    console.log('✅ Companies created:', companies);
-    setScrapedCompanies(companies);
-    setCurrentStep('review');
-  };
-
-  const detectEntityType = (url: string): 'startup' | 'vc_firm' | 'accelerator' => {
-    const lowerUrl = url.toLowerCase();
-    const lowerName = extractNameFromUrl(url).toLowerCase();
-    
-    // VC firm indicators
-    const vcKeywords = ['ycombinator', 'y-combinator', 'yc.com', 'techstars', 'sequoia', 
-                        'andreessen', 'a16z', 'greylock', 'benchmark', 'accel', 'founders fund',
-                        'khosla', 'index ventures', 'lightspeed', 'nea', 'redpoint', 'spark capital',
-                        'venturecapital', 'vc.com', 'ventures.com'];
-    
-    // Accelerator indicators  
-    const acceleratorKeywords = ['accelerator', 'incubator', 'hax', 'plug and play', '500startups',
-                                  'techstars', 'ycombinator', 'y-combinator'];
-    
-    // Check for accelerators first (more specific)
-    if (acceleratorKeywords.some(keyword => lowerUrl.includes(keyword) || lowerName.includes(keyword))) {
-      return 'accelerator';
-    }
-    
-    // Check for VC firms
-    if (vcKeywords.some(keyword => lowerUrl.includes(keyword) || lowerName.includes(keyword))) {
-      return 'vc_firm';
-    }
-    
-    // Default to startup
-    return 'startup';
-  };
-
-  const extractNameFromUrl = (url: string): string => {
+  const extractName = (url: string): string => {
     try {
       const domain = new URL(url).hostname.replace('www.', '');
       const name = domain.split('.')[0];
       return name.charAt(0).toUpperCase() + name.slice(1);
-    } catch {
-      return 'Unknown';
-    }
+    } catch { return 'Unknown'; }
   };
 
-  const enrichWithAI = async (company: ScrapedCompany): Promise<EnrichedCompany> => {
+  const parseUrls = () => {
+    const parsed = urls.split('\n').filter(u => u.trim()).map(u => ({
+      id: Math.random().toString(36).slice(2),
+      name: extractName(u.trim()),
+      website: u.trim(),
+      status: 'pending' as const
+    }));
+    setItems(parsed);
+  };
+
+  const enrichAndImport = async () => {
+    if (!items.length) return;
+    setImporting(true);
     const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
-    const entityType = company.entityType || 'startup';
-    
-    if (!apiKey || apiKey === 'your-openai-api-key-here') {
-      // Fallback without AI based on entity type
-      if (entityType === 'vc_firm' || entityType === 'accelerator') {
-        return {
-          ...company,
-          entityType,
-          pitch: `${company.name} - ${entityType === 'vc_firm' ? 'Venture Capital Firm' : 'Startup Accelerator'}`,
-          fivePoints: [
-            'Investment focus and thesis',
-            'Portfolio company count',
-            'Average check size and stage',
-            'Notable portfolio exits',
-            'Geographic presence'
-          ],
-          industry: 'Venture Capital',
-          funding: 'N/A',
-          stage: 'N/A'
-        };
-      }
-      
-      return {
-        ...company,
-        entityType: 'startup',
-        pitch: `${company.name} - Innovative startup`,
-        fivePoints: [
-          'Solving a major industry problem',
-          'Innovative technology solution',
-          'Large addressable market',
-          'Experienced founding team',
-          '$2M Seed'
-        ],
-        industry: 'Technology',
-        funding: '$2M Seed',
-        stage: 'Seed'
-      };
-    }
 
-    try {
-      const websitePrompt = `${entityType === 'startup' ? 'Company' : entityType === 'vc_firm' ? 'VC Firm' : 'Accelerator'}: ${company.name}\nWebsite: ${company.website}\n${company.tagline || ''}`;
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+      setProgress({ current: i + 1, total: items.length });
+      setItems(prev => prev.map(it => it.id === item.id ? { ...it, status: 'enriching' } : it));
 
-      const systemPrompt = entityType === 'startup' 
-        ? `Create a 5-point StartupCard for this company. Return JSON with: pitch (catchy tagline as string), fivePoints (array of 5 SHORT strings - max 12 words each - following this format: ["Problem: one line", "Solution: one line", "Market: one line with $ size only", "Team: former employers only (e.g. 'Ex-Google, Meta')", "Funding: amount only"]), industry (string), stage (string), funding (string). Keep team to ONE line focusing on notable former employers. Keep market size to ONE line with $ amount only.`
-        : `Create a 5-point profile for this ${entityType === 'vc_firm' ? 'venture capital firm' : 'accelerator'}. Return JSON with: pitch (description as string), fivePoints (array of 5 SHORT strings like ["Investment focus", "Portfolio size", "Check size", "Notable exits", "Geographic presence"]), industry (set to "Venture Capital"), stage (set to "N/A"), funding (set to "N/A")`;
-
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKey}`
-        },
-        body: JSON.stringify({
-          model: 'gpt-4o-mini',
-          messages: [
-            {
-              role: 'system',
-              content: systemPrompt
-            },
-            {
-              role: 'user',
-              content: `Research or infer details about:\n\n${websitePrompt}\n\nCreate a compelling 5-point card.`
-            }
-          ],
-          response_format: { type: 'json_object' },
-          temperature: 0.8,
-          max_tokens: 1000
-        })
-      });
-
-      if (!response.ok) throw new Error('AI enrichment failed');
-
-      const data = await response.json();
-      const parsed = JSON.parse(data.choices[0].message.content);
-
-      // Ensure fivePoints is an array of strings, not objects
-      let fivePoints = parsed.fivePoints || [];
-      if (fivePoints.length > 0 && typeof fivePoints[0] === 'object') {
-        // Convert objects to strings (e.g., {problem: "text"} becomes "text")
-        fivePoints = fivePoints.map((point: any) => {
-          if (typeof point === 'string') return point;
-          // Get the first value from the object
-          const values = Object.values(point);
-          return values[0] || '';
+      try {
+        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
+          body: JSON.stringify({
+            model: 'gpt-4o-mini',
+            messages: [
+              { role: 'system', content: 'Research this company. Return JSON: { pitch, fivePoints (5 strings), industry, stage, funding }' },
+              { role: 'user', content: `Company: ${item.name}\nWebsite: ${item.website}` }
+            ],
+            response_format: { type: 'json_object' },
+            temperature: 0.8
+          })
         });
-      }
 
-      return {
-        ...company,
-        entityType,
-        pitch: parsed.pitch || company.tagline || `${company.name} - ${entityType === 'startup' ? 'Innovative startup' : entityType === 'vc_firm' ? 'VC Firm' : 'Accelerator'}`,
-        fivePoints: fivePoints,
-        industry: parsed.industry || (entityType === 'startup' ? 'Technology' : 'Venture Capital'),
-        funding: parsed.funding || (entityType === 'startup' ? '$2M Seed' : 'N/A'),
-        stage: parsed.stage || (entityType === 'startup' ? 'Seed' : 'N/A')
-      };
-    } catch (error) {
-      console.error('AI enrichment error:', error);
-      // Fallback
-      return {
-        ...company,
-        entityType,
-        pitch: company.tagline || `${company.name} - ${entityType === 'startup' ? 'Innovative startup' : entityType === 'vc_firm' ? 'VC Firm' : 'Accelerator'}`,
-        fivePoints: [
-          entityType === 'startup' ? 'Solving a major industry problem' : 'Investment focus and thesis',
-          entityType === 'startup' ? 'Innovative technology solution' : 'Portfolio company count',
-          entityType === 'startup' ? 'Large addressable market' : 'Average check size and stage',
-          entityType === 'startup' ? 'Experienced founding team' : 'Notable portfolio exits',
-          entityType === 'startup' ? '$2M Seed' : 'Geographic presence'
-        ],
-        industry: entityType === 'startup' ? 'Technology' : 'Venture Capital',
-        funding: entityType === 'startup' ? '$2M Seed' : 'N/A',
-        stage: entityType === 'startup' ? 'Seed' : 'N/A'
-      };
-    }
-  };
+        if (response.ok) {
+          const data = await response.json();
+          const enriched = JSON.parse(data.choices[0].message.content);
 
-  const handleEnrichAll = async () => {
-    console.log('🤖 Starting enrichment for', scrapedCompanies.length, 'companies');
-    console.log('📋 Companies to enrich:', scrapedCompanies);
-    console.log('🔑 API Key exists:', !!import.meta.env.VITE_OPENAI_API_KEY);
-    console.log('🔍 Current step BEFORE:', currentStep);
-    
-    setIsEnriching(true);
-    const enriched: EnrichedCompany[] = [];
-    let errors = 0;
+          await supabase.from('startup_uploads').insert({
+            name: item.name,
+            tagline: enriched.pitch?.slice(0, 200),
+            pitch: enriched.pitch,
+            status: 'pending',
+            extracted_data: { fivePoints: enriched.fivePoints, industry: enriched.industry, stage: enriched.stage, funding: enriched.funding }
+          });
 
-    console.log('🔍 Current step AFTER setIsEnriching:', currentStep);
-
-    // Process in batches of 10 for better performance
-    const BATCH_SIZE = 10;
-    const totalBatches = Math.ceil(scrapedCompanies.length / BATCH_SIZE);
-
-    for (let batchIndex = 0; batchIndex < totalBatches; batchIndex++) {
-      const start = batchIndex * BATCH_SIZE;
-      const end = Math.min(start + BATCH_SIZE, scrapedCompanies.length);
-      const batch = scrapedCompanies.slice(start, end);
-      
-      console.log(`📦 Processing batch ${batchIndex + 1}/${totalBatches} (companies ${start + 1}-${end})`);
-
-      // Process batch in parallel
-      const batchPromises = batch.map(async (company, idx) => {
-        const globalIdx = start + idx;
-        console.log(`📊 Enriching ${globalIdx + 1}/${scrapedCompanies.length}: ${company.name}`);
-        
-        try {
-          const enrichedData = await enrichWithAI(company);
-          console.log('✅ Enriched:', enrichedData.name);
-          return { success: true, data: enrichedData };
-        } catch (error) {
-          console.error(`❌ Error enriching ${company.name}:`, error);
-          return { success: false, error: String(error), company };
-        }
-      });
-
-      const batchResults = await Promise.all(batchPromises);
-      
-      // Process results
-      batchResults.forEach((result) => {
-        if (result.success && result.data) {
-          enriched.push(result.data);
+          setItems(prev => prev.map(it => it.id === item.id ? { ...it, status: 'done', enriched } : it));
         } else {
-          errors++;
+          setItems(prev => prev.map(it => it.id === item.id ? { ...it, status: 'error' } : it));
         }
-      });
-
-      // Update progress
-      setEnrichmentProgress((end / scrapedCompanies.length) * 100);
-      setEnrichedCompanies([...enriched]);
-      
-      console.log(`✅ Batch ${batchIndex + 1} complete: ${batchResults.filter(r => r.success).length}/${batch.length} successful`);
-      console.log(`📊 Total enriched so far: ${enriched.length}/${scrapedCompanies.length}`);
-      
-      // Small delay between batches to avoid rate limits
-      if (batchIndex < totalBatches - 1) {
-        console.log('⏱️ Waiting 1 second before next batch...');
-        await new Promise(resolve => setTimeout(resolve, 1000));
+      } catch {
+        setItems(prev => prev.map(it => it.id === item.id ? { ...it, status: 'error' } : it));
       }
     }
-
-    console.log('✅ All enrichment complete:', enriched.length, 'companies');
-    console.log('📦 Final enriched data:', enriched);
-    
-    if (enriched.length === 0) {
-      alert('❌ No companies were successfully enriched. Check your OpenAI API key and try again.');
-      setIsEnriching(false);
-      setCurrentStep('review');
-      return;
-    }
-    
-    // Final state update
-    setEnrichedCompanies(enriched);
-    setIsEnriching(false);
-    setCurrentStep('review');
-    
-    if (errors > 0) {
-      alert(`⚠️ Enrichment complete with ${errors} error(s).\n✅ Successfully enriched: ${enriched.length} companies`);
-    }
-    
-    // Force a small delay to ensure state updates
-    setTimeout(() => {
-      console.log('🔍 Current state - enrichedCompanies.length:', enriched.length);
-      console.log('🔍 Current step:', 'review');
-    }, 100);
+    setImporting(false);
   };
 
-  const handleImportAll = async () => {
-    console.log('🚀 Starting import of', enrichedCompanies.length, 'companies');
-    console.log('📦 Data to upload:', enrichedCompanies);
-    
-    setLoading(true);
-    setUploadProgress(0);
-    
-    try {
-      // Upload to Supabase using OpenAIDataService with progress tracking
-      const results = await OpenAIDataService.uploadBulkStartups(
-        enrichedCompanies.map(company => ({
-          name: company.name,
-          website: company.website,
-          pitch: company.pitch,
-          fivePoints: company.fivePoints,
-          stage: company.stage,
-          funding: company.funding,
-          industry: company.industry,
-          entityType: company.entityType || 'startup',
-          scraped_by: company.vcSource || vcUrl
-        })),
-        // Progress callback
-        (current: number, total: number) => {
-          setUploadProgress((current / total) * 100);
-          console.log(`📤 Upload progress: ${current}/${total}`);
-        }
-      );
-      
-      console.log(`✅ Upload results:`, results);
-      console.log(`✅ Uploaded ${results.successful}/${results.total} to Supabase`);
-      
-      if (results.successful === 0) {
-        const errorDetails = results.errors?.join('\n') || 'Unknown error';
-        alert(`❌ Failed to upload any startups!\n\nErrors:\n${errorDetails}\n\nCheck the browser console (F12) for more details.`);
-        setLoading(false);
-        return;
-      }
-      
-      if (results.failed > 0) {
-        const errorDetails = results.errors?.slice(0, 3).join('\n') || 'Some uploads failed';
-        alert(`⚠️ Partial success:\n✅ ${results.successful} uploaded\n❌ ${results.failed} failed\n\nFirst errors:\n${errorDetails}`);
-      }
-      
-      // Count entities
-      const startupCount = enrichedCompanies.filter(c => c.entityType === 'startup').length;
-      const vcCount = enrichedCompanies.filter(c => c.entityType === 'vc_firm').length;
-      const acceleratorCount = enrichedCompanies.filter(c => c.entityType === 'accelerator').length;
-      
-      // Show detailed workflow explanation
-      let message = `🎉 SUBMISSION SUCCESSFUL!\n\n`;
-      message += `✅ Saved to Database:\n`;
-      if (startupCount > 0) message += `   • ${startupCount} startup${startupCount > 1 ? 's' : ''}\n`;
-      if (vcCount > 0) message += `   • ${vcCount} VC firm${vcCount > 1 ? 's' : ''}\n`;
-      if (acceleratorCount > 0) message += `   • ${acceleratorCount} accelerator${acceleratorCount > 1 ? 's' : ''}\n`;
-      message += `\n📍 WHERE YOU ARE NOW:\n`;
-      message += `   Step 1 ✅ Upload Complete\n`;
-      message += `   Step 2 ⏳ Pending Admin Review\n`;
-      message += `   Step 3 ⏸️ Approval (not yet)\n`;
-      message += `   Step 4 ⏸️ Goes Live for Voting\n\n`;
-      message += `🔄 WHAT HAPPENS NEXT:\n`;
-      message += `   1. Admin reviews all submissions\n`;
-      message += `   2. Admin approves quality startups\n`;
-      message += `   3. Approved startups appear on voting page\n`;
-      message += `   4. Investors vote YES/NO on each startup\n`;
-      message += `   5. Top startups advance through 4 stages\n`;
-      message += `   6. Stage 4 startups get funded!\n\n`;
-      message += `⏱️ TIMELINE:\n`;
-      message += `   • Review: 1-2 business days\n`;
-      message += `   • Goes live after approval\n\n`;
-      message += `🎯 NEXT STEP:\n`;
-      message += `   Click OK to go to Edit Startups\n`;
-      message += `   Then click: "🚀 Bulk Approve" button`;
-      
-      alert(message);
-      navigate('/admin/edit-startups');
-      
-    } catch (error) {
-      console.error('❌ Failed to import:', error);
-      alert('Failed to import startups. Check console for details.');
-    } finally {
-      setLoading(false);
-    }
+  const removeItem = (id: string) => setItems(prev => prev.filter(it => it.id !== id));
+  const clearAll = () => { setItems([]); setUrls(''); };
+
+  const counts = {
+    total: items.length,
+    pending: items.filter(i => i.status === 'pending').length,
+    done: items.filter(i => i.status === 'done').length,
+    error: items.filter(i => i.status === 'error').length
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-purple-950 p-8">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="flex justify-between items-center mb-8">
-          <div>
-            <div className="flex items-center gap-3 mb-2">
-              <span className="bg-blue-500 text-white text-sm font-bold px-3 py-1 rounded-full">STEP 1</span>
-              <h1 className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-500">🚀 Bulk Import Startups</h1>
-            </div>
-            <p className="text-gray-300 font-semibold">Automated VC portfolio scraping & enrichment</p>
+    <div className="min-h-screen bg-gray-900 text-gray-100">
+      {/* Header */}
+      <div className="border-b border-gray-800 bg-gray-900/95 sticky top-0 z-40">
+        <div className="max-w-[1800px] mx-auto px-4 py-2 flex items-center justify-between">
+          <h1 className="text-lg font-bold text-white">📤 Bulk Import</h1>
+          <div className="flex items-center gap-4 text-xs">
+            <Link to="/" className="text-gray-400 hover:text-white">Home</Link>
+            <Link to="/admin" className="text-gray-400 hover:text-white">Control Center</Link>
+            <Link to="/admin/edit-startups" className="text-cyan-400 hover:text-cyan-300">Edit</Link>
+            <Link to="/matching" className="text-orange-400 hover:text-orange-300 font-bold">⚡ Match</Link>
           </div>
-          <div className="flex gap-3">
-            <button
-              onClick={() => navigate('/admin/edit-startups')}
-              className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-3 px-6 rounded-2xl transition-all shadow-lg hover:shadow-purple-500/50 flex items-center gap-2"
-            >
-              Next: Review & Approve →
+        </div>
+      </div>
+
+      <div className="max-w-[1800px] mx-auto p-4 space-y-4">
+        {/* Input Area */}
+        <div className="bg-gray-800/50 rounded-lg border border-gray-700 p-4">
+          <h3 className="text-sm font-semibold text-white mb-2">Paste Website URLs (one per line)</h3>
+          <textarea
+            value={urls}
+            onChange={(e) => setUrls(e.target.value)}
+            placeholder="https://company1.com&#10;https://company2.com&#10;https://company3.com"
+            className="w-full h-32 bg-gray-700 border border-gray-600 rounded-lg p-3 text-white text-sm font-mono resize-none"
+          />
+          <div className="flex gap-2 mt-3">
+            <button onClick={parseUrls} className="px-4 py-2 bg-blue-500/20 text-blue-400 rounded hover:bg-blue-500/30 text-sm flex items-center gap-2">
+              <Upload className="w-4 h-4" /> Parse URLs
             </button>
-            <button
-              onClick={() => navigate('/admin/instructions')}
-              className="bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-bold py-3 px-6 rounded-2xl transition-all shadow-lg hover:shadow-pink-500/50"
-            >
-              📚 Instructions
-            </button>
-            <button
-              onClick={() => navigate('/admin/operations')}
-              className="bg-gradient-to-r from-purple-500 to-cyan-500 hover:from-purple-600 hover:to-cyan-600 text-white font-bold py-3 px-6 rounded-2xl transition-all shadow-lg hover:shadow-purple-500/50"
-            >
-              🏠 Admin Home
-            </button>
-            <button
-              onClick={() => setCurrentStep(currentStep === 'sources' ? 'input' : 'sources')}
-              className="bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white font-bold py-3 px-6 rounded-2xl transition-all shadow-lg hover:shadow-purple-500/50"
-            >
-              {currentStep === 'sources' ? '← Back to Import' : '⚙️ Manage Sources'}
-            </button>
-            <button
-              onClick={() => navigate('/submit')}
-              className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-bold py-3 px-6 rounded-2xl transition-all shadow-lg hover:shadow-cyan-500/50"
-            >
-              ← Submit Page
+            <button onClick={clearAll} className="px-4 py-2 bg-gray-600/50 text-gray-400 rounded hover:bg-gray-600 text-sm">
+              Clear All
             </button>
           </div>
         </div>
 
-        {/* Sources Management Page */}
-        {currentStep === 'sources' && (
-          <div className="space-y-6">
-            {/* Auto-Refresh Info */}
-            <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-6 border-2 border-green-400/50 shadow-xl">
-              <h2 className="text-2xl font-bold text-white mb-3">🤖 Automated Weekly Refresh</h2>
-              <p className="text-gray-300 mb-4">
-                AI learns to scrape these sources automatically. Enable auto-refresh for weekly updates of fresh startup data.
-              </p>
-              <button
-                onClick={handleRefreshAll}
-                className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-3 px-6 rounded-xl transition-all"
-              >
-                🔄 Refresh All Sources Now
-              </button>
+        {/* Stats & Actions */}
+        {items.length > 0 && (
+          <div className="grid grid-cols-5 gap-3 text-xs">
+            <div className="bg-gray-800/50 rounded-lg px-3 py-2 border border-gray-700">
+              <div className="text-xl font-bold font-mono text-white">{counts.total}</div>
+              <div className="text-gray-500 text-[10px]">Total</div>
             </div>
-
-            {/* Saved Sources */}
-            <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-8 border-2 border-orange-400/50 shadow-xl">
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-3xl font-bold text-white">📚 Saved Sources ({savedSources.length})</h2>
-                <button
-                  onClick={() => setShowAddSource(!showAddSource)}
-                  className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-2 px-4 rounded-xl transition-all"
-                >
-                  {showAddSource ? '✕ Cancel' : '+ Add Source'}
-                </button>
-              </div>
-
-              {/* Add Source Form */}
-              {showAddSource && (
-                <div className="bg-amber-50 border-2 border-amber-400 rounded-xl p-6 mb-6">
-                  <h3 className="text-slate-800 font-bold mb-4">Add New Source</h3>
-                  <div className="space-y-4">
-                    <div>
-                      <label className="block text-slate-700 mb-2 font-semibold">Source Name</label>
-                      <input
-                        type="text"
-                        value={newSource.name}
-                        onChange={(e) => setNewSource({...newSource, name: e.target.value})}
-                        placeholder="e.g., Y Combinator W24"
-                        className="w-full px-4 py-2 bg-white border-2 border-orange-300 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-orange-500"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-700 mb-2 font-semibold">Portfolio URL</label>
-                      <input
-                        type="text"
-                        value={newSource.url}
-                        onChange={(e) => setNewSource({...newSource, url: e.target.value})}
-                        placeholder="https://www.ycombinator.com/companies"
-                        className="w-full px-4 py-2 bg-white border-2 border-orange-300 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:border-orange-500"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-700 mb-2 font-semibold">Type</label>
-                      <select
-                        value={newSource.type}
-                        onChange={(e) => setNewSource({...newSource, type: e.target.value as any})}
-                        className="w-full px-4 py-2 bg-white border-2 border-orange-300 rounded-lg text-slate-800"
-                      >
-                        <option value="vc_portfolio">VC Portfolio</option>
-                        <option value="accelerator">Accelerator</option>
-                        <option value="manual">Manual List</option>
-                      </select>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <input
-                        type="checkbox"
-                        checked={newSource.autoRefresh}
-                        onChange={(e) => setNewSource({...newSource, autoRefresh: e.target.checked})}
-                        className="w-5 h-5"
-                      />
-                      <label className="text-slate-700">Enable weekly auto-refresh</label>
-                    </div>
-                    <button
-                      onClick={handleAddSource}
-                      className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-3 px-6 rounded-xl w-full transition-all"
-                    >
-                      ✅ Save Source
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {/* Sources List */}
-              <div className="space-y-3">
-                {savedSources.length === 0 ? (
-                  <p className="text-slate-600 text-center py-8">No saved sources yet. Add your first VC portfolio or accelerator!</p>
-                ) : (
-                  savedSources.map((source) => (
-                    <div key={source.id} className="bg-orange-50 border-2 border-orange-200 rounded-xl p-4 flex justify-between items-center">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-3 mb-2">
-                          <h3 className="text-slate-800 font-bold text-lg">{source.name}</h3>
-                          <span className={`px-3 py-1 rounded-full text-xs font-bold ${
-                            source.type === 'vc_portfolio' ? 'bg-blue-500' :
-                            source.type === 'accelerator' ? 'bg-green-500' : 'bg-gray-500'
-                          } text-white`}>
-                            {source.type.replace('_', ' ').toUpperCase()}
-                          </span>
-                          {source.autoRefresh && (
-                            <span className="bg-amber-500 text-white px-2 py-1 rounded-full text-xs font-bold">
-                              🤖 AUTO
-                            </span>
-                          )}
-                        </div>
-                        <p className="text-slate-600 text-sm mb-1">{source.url}</p>
-                        {source.lastScraped && (
-                          <p className="text-slate-500 text-xs">
-                            Last scraped: {new Date(source.lastScraped).toLocaleDateString()}
-                          </p>
-                        )}
-                      </div>
-                      <div className="flex gap-2">
-                        <button
-                          onClick={() => handleRefreshSource(source)}
-                          className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-2 px-4 rounded-lg transition-all text-sm"
-                        >
-                          🔄 Refresh
-                        </button>
-                        <button
-                          onClick={() => handleDeleteSource(source.id)}
-                          className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-bold py-2 px-4 rounded-lg transition-all text-sm"
-                        >
-                          🗑️
-                        </button>
-                      </div>
-                    </div>
-                  ))
-                )}
-              </div>
+            <div className="bg-gray-800/50 rounded-lg px-3 py-2 border border-gray-700">
+              <div className="text-xl font-bold font-mono text-yellow-400">{counts.pending}</div>
+              <div className="text-gray-500 text-[10px]">Pending</div>
             </div>
-
-            {/* Instructions */}
-            <div className="bg-white rounded-3xl p-8 border-2 border-orange-400">
-              <h2 className="text-2xl font-bold text-slate-800 mb-4">💡 How It Works</h2>
-              <div className="space-y-3 text-slate-700">
-                <p><strong className="text-orange-600">1. Add Sources:</strong> Input VC portfolio URLs, accelerator sites, or startup lists</p>
-                <p><strong className="text-orange-600">2. AI Learns:</strong> System learns HTML patterns to extract company URLs automatically</p>
-                <p><strong className="text-orange-600">3. Auto-Refresh:</strong> Weekly cron job scrapes sources, enriches with 5-point format</p>
-                <p><strong className="text-orange-600">4. Fresh Data:</strong> Your startup database stays current with latest YC batch, new funding rounds</p>
-              </div>
+            <div className="bg-gray-800/50 rounded-lg px-3 py-2 border border-gray-700">
+              <div className="text-xl font-bold font-mono text-green-400">{counts.done}</div>
+              <div className="text-gray-500 text-[10px]">Done</div>
             </div>
-          </div>
-        )}
-
-        {/* Step 1: Input */}
-        {currentStep === 'input' && (
-          <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-8 border-2 border-orange-400/50 shadow-xl">
-            <h2 className="text-3xl font-bold text-white mb-6">📋 Enter Company Websites</h2>
-            
-            {/* Quick Templates */}
-            <div className="mb-6">
-              <p className="text-slate-700 mb-3 font-semibold">Quick Start Templates:</p>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {vcTemplates.map((template) => (
-                  <div key={template.name} className="bg-orange-50 border-2 border-orange-200 rounded-xl p-4">
-                    <h3 className="text-slate-800 font-bold mb-2">{template.name}</h3>
-                    <p className="text-slate-600 text-sm mb-3">Scrape their portfolio page</p>
-                    <button
-                      onClick={() => setVcUrl(template.url)}
-                      className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-2 px-4 rounded-lg text-sm transition-all w-full"
-                    >
-                      Use Template
-                    </button>
-                  </div>
-                ))}
-              </div>
+            <div className="bg-gray-800/50 rounded-lg px-3 py-2 border border-gray-700">
+              <div className="text-xl font-bold font-mono text-red-400">{counts.error}</div>
+              <div className="text-gray-500 text-[10px]">Errors</div>
             </div>
-
-            {/* Manual Input */}
-            <div className="mb-6">
-              <div className="bg-blue-50 border-2 border-blue-400 rounded-xl p-4 mb-4">
-                <h3 className="text-slate-800 font-bold mb-2">📋 Current Workflow (MVP)</h3>
-                <ol className="text-slate-700 text-sm space-y-1 list-decimal list-inside">
-                  <li>Visit a VC portfolio page (e.g., YC, a16z)</li>
-                  <li>Manually copy company website URLs</li>
-                  <li>Paste them below (one per line)</li>
-                  <li>✅ AI will enrich each with 5-point format</li>
-                </ol>
-              </div>
-
-              <label className="block text-slate-800 font-bold mb-3">
-                Paste Company Websites (one per line):
-              </label>
-              <textarea
-                value={vcUrl}
-                onChange={(e) => setVcUrl(e.target.value)}
-                placeholder="https://airbnb.com&#10;https://stripe.com&#10;https://coinbase.com&#10;https://figma.com&#10;https://notion.so"
-                rows={10}
-                className="w-full px-4 py-3 bg-white border-2 border-orange-300 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:border-orange-500 font-mono text-sm"
-              />
-              <div className="flex justify-between items-center mt-2">
-                <p className="text-slate-600 text-sm">
-                  💡 Manually copy URLs from any VC portfolio page
-                </p>
-                <p className="text-orange-600 text-sm font-bold">
-                  {vcUrl.split('\n').filter(u => u.trim()).length} URLs ready
-                </p>
-              </div>
-            </div>
-
             <button
-              onClick={handleManualInput}
-              disabled={!vcUrl.trim()}
-              className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-4 px-8 rounded-2xl shadow-lg transition-all text-lg disabled:opacity-50 disabled:cursor-not-allowed w-full"
+              onClick={enrichAndImport}
+              disabled={importing || counts.pending === 0}
+              className="bg-green-500/20 border border-green-500/30 rounded-lg px-3 py-2 text-green-400 hover:bg-green-500/30 disabled:opacity-50"
             >
-              ✨ AI Enrich {vcUrl.split('\n').filter(u => u.trim()).length} Companies →
+              <div className="text-xl font-bold">{importing ? '⏳' : <Sparkles className="w-5 h-5 mx-auto" />}</div>
+              <div className="text-[10px]">{importing ? `${progress.current}/${progress.total}` : 'Enrich & Import'}</div>
             </button>
-
-            {/* Future Feature Notice */}
-            <div className="mt-6 bg-amber-50 border-2 border-amber-400 rounded-xl p-4">
-              <h3 className="text-slate-800 font-bold mb-2">🚀 Future: Automated Scraping</h3>
-              <p className="text-slate-700 text-sm mb-2">
-                In production, AI will automatically:
-              </p>
-              <ul className="text-slate-700 text-sm space-y-1 list-disc list-inside">
-                <li>Scrape portfolio pages for company URLs</li>
-                <li>Run weekly to get fresh startups</li>
-                <li>Use the "Manage Sources" feature above</li>
-              </ul>
-              <p className="text-amber-700 text-xs mt-2 font-semibold">
-                ⚠️ Requires backend server with Puppeteer/Playwright
-              </p>
-            </div>
           </div>
         )}
 
-        {/* Step 2: Review & Enrich */}
-        {currentStep === 'review' && scrapedCompanies.length > 0 && (
-          <div className="space-y-6" key="review-section">
-            <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-8 border-2 border-orange-400/50 shadow-xl">
-              <h2 className="text-3xl font-bold text-white mb-4">
-                ✅ Found {scrapedCompanies.length} Companies
-              </h2>
-              
-              <div className="mb-6 max-h-96 overflow-y-auto space-y-2" key="companies-list">
-                {scrapedCompanies.map((company, i) => {
-                  const entityType = company.entityType || 'startup';
-                  const entityIcon = entityType === 'vc_firm' ? '💼' : entityType === 'accelerator' ? '🚀' : '🏢';
-                  const entityLabel = entityType === 'vc_firm' ? 'VC Firm' : entityType === 'accelerator' ? 'Accelerator' : 'Startup';
-                  
-                  return (
-                    <div key={i} className="bg-orange-50 border-2 border-orange-200 rounded-lg p-4 flex justify-between items-center">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-1">
-                          <h3 className="text-slate-800 font-bold">{company.name}</h3>
-                          <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${
-                            entityType === 'vc_firm' ? 'bg-lime-400 text-gray-900' :
-                            entityType === 'accelerator' ? 'bg-lime-500 text-gray-900' :
-                            'bg-blue-400 text-white'
-                          }`}>
-                            {entityIcon} {entityLabel}
-                          </span>
-                        </div>
-                        <p className="text-slate-600 text-sm">{company.website}</p>
-                      </div>
-                      {enrichedCompanies[i] && (
-                        <span className="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-bold">
-                          ✓ Enriched with AI
-                        </span>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-
-              {/* Progress notification - always show when enriching */}
-              {isEnriching && (
-                <div className="mb-6 bg-orange-50 border-2 border-orange-400 rounded-2xl p-6 text-center animate-pulse">
-                  <h3 className="text-slate-800 text-2xl font-bold mb-2">
-                    🤖 AI is analyzing companies in batches of 10...
-                  </h3>
-                  <p className="text-orange-700 mb-3">
-                    Processing {scrapedCompanies.length} companies in parallel batches
-                  </p>
-                  <div className="text-3xl font-bold text-orange-600">
-                    {enrichedCompanies.length} / {scrapedCompanies.length} completed
-                  </div>
-                  <div className="text-sm text-slate-600 mt-2">
-                    ⚡ Estimated time: {Math.ceil(scrapedCompanies.length / 10)} seconds
-                  </div>
-                </div>
-              )}
-
-              {/* Show Enrich button only when not enriching and no enriched companies */}
-              {!isEnriching && enrichedCompanies.length === 0 && (
-                <button
-                  onClick={handleEnrichAll}
-                  className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-4 px-8 rounded-2xl shadow-lg transition-all text-lg w-full"
-                >
-                  🤖 Enrich All with AI (Creates 5 Points)
-                </button>
-              )}
-
-              {/* Show Import button only when done enriching and have enriched companies */}
-              {!isEnriching && enrichedCompanies.length > 0 && (
-                <button
-                  onClick={handleImportAll}
-                  className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-4 px-8 rounded-2xl shadow-lg transition-all text-lg w-full"
-                >
-                  🔥 Import All {enrichedCompanies.length} Startups
-                </button>
-              )}
-            </div>
-
-            {/* Progress Bar */}
-            {isEnriching && (
-              <div className="bg-white rounded-3xl p-8 border-2 border-orange-400">
-                <h3 className="text-slate-800 font-bold mb-4">
-                  Enriching: {Math.round(enrichmentProgress)}%
-                </h3>
-                <div className="w-full bg-slate-200 rounded-full h-4">
-                  <div 
-                    className="bg-gradient-to-r from-orange-500 to-orange-600 h-4 rounded-full transition-all duration-500"
-                    style={{ width: `${enrichmentProgress}%` }}
-                  />
-                </div>
-                <p className="text-slate-600 text-sm mt-3">
-                  ⚡ Processing 10 companies per batch with 1s delay between batches
-                </p>
-              </div>
-            )}
-
-            {/* Upload Progress Bar */}
-            {loading && uploadProgress > 0 && (
-              <div className="bg-white rounded-3xl p-8 border-2 border-blue-400 mt-6">
-                <h3 className="text-slate-800 font-bold mb-4">
-                  Uploading to Database: {Math.round(uploadProgress)}%
-                </h3>
-                <div className="w-full bg-slate-200 rounded-full h-4">
-                  <div 
-                    className="bg-gradient-to-r from-blue-500 to-blue-600 h-4 rounded-full transition-all duration-500"
-                    style={{ width: `${uploadProgress}%` }}
-                  />
-                </div>
-                <p className="text-slate-600 text-sm mt-3">
-                  📤 Uploading in batches of 50 startups
-                </p>
-              </div>
-            )}
-
-            {/* Preview Enriched Companies */}
-            {enrichedCompanies.length > 0 && (
-              <div className="bg-white rounded-3xl p-8 border-2 border-green-400">
-                <h2 className="text-3xl font-bold text-slate-800 mb-6">👀 Preview</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-96 overflow-y-auto">
-                  {enrichedCompanies.slice(0, 6).map((company, i) => (
-                    <div key={i} className="bg-gradient-to-br from-orange-400 to-orange-500 rounded-xl p-4">
-                      <h3 className="text-2xl font-black text-gray-900 mb-2">{company.name}</h3>
-                      <p className="text-sm font-bold text-gray-800 mb-2">"{company.pitch}"</p>
-                      <div className="space-y-1">
-                        {company.fivePoints.map((point, j) => (
-                          <p key={j} className="text-xs text-gray-900 font-semibold">
-                            {j + 1}. {point}
-                          </p>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                {enrichedCompanies.length > 6 && (
-                  <p className="text-slate-600 text-center mt-4">
-                    ...and {enrichedCompanies.length - 6} more
-                  </p>
-                )}
-              </div>
-            )}
+        {/* Table */}
+        {items.length > 0 && (
+          <div className="bg-gray-800/50 rounded-lg border border-gray-700 overflow-hidden">
+            <table className="w-full text-sm">
+              <thead className="bg-gray-700/50">
+                <tr>
+                  <th className="text-left px-4 py-2 text-gray-400 font-medium">Company</th>
+                  <th className="text-left px-4 py-2 text-gray-400 font-medium">Website</th>
+                  <th className="text-center px-4 py-2 text-gray-400 font-medium">Status</th>
+                  <th className="text-left px-4 py-2 text-gray-400 font-medium">Result</th>
+                  <th className="text-center px-4 py-2 text-gray-400 font-medium w-20">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {items.map((item) => (
+                  <tr key={item.id} className="border-t border-gray-700/50 hover:bg-gray-700/30">
+                    <td className="px-4 py-2 text-white font-medium">{item.name}</td>
+                    <td className="px-4 py-2">
+                      <a href={item.website} target="_blank" rel="noopener" className="text-gray-400 hover:text-blue-400 text-xs truncate max-w-64 block flex items-center gap-1">
+                        {item.website.replace(/https?:\/\//, '').slice(0, 40)}
+                        <ExternalLink className="w-3 h-3" />
+                      </a>
+                    </td>
+                    <td className="px-4 py-2 text-center">
+                      <span className={`px-2 py-0.5 rounded text-xs ${
+                        item.status === 'done' ? 'bg-green-500/20 text-green-400' :
+                        item.status === 'enriching' ? 'bg-blue-500/20 text-blue-400 animate-pulse' :
+                        item.status === 'error' ? 'bg-red-500/20 text-red-400' :
+                        'bg-yellow-500/20 text-yellow-400'
+                      }`}>
+                        {item.status === 'enriching' ? '⏳ enriching...' : item.status}
+                      </span>
+                    </td>
+                    <td className="px-4 py-2 text-gray-400 text-xs">
+                      {item.enriched?.pitch?.slice(0, 50) || '-'}
+                    </td>
+                    <td className="px-4 py-2 text-center">
+                      <button onClick={() => removeItem(item.id)} className="p-1 hover:bg-red-500/20 rounded text-red-400">
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         )}
+
+        {/* Quick Links */}
+        <div className="bg-gray-800/30 rounded-lg border border-gray-700/50 p-4">
+          <h3 className="text-sm font-semibold text-white mb-3">⚡ Quick Actions</h3>
+          <div className="flex flex-wrap gap-2 text-xs">
+            <Link to="/admin/discovered-startups" className="px-3 py-1.5 bg-cyan-500/20 border border-cyan-500/30 rounded text-cyan-400 hover:bg-cyan-500/30">🔍 RSS Discoveries</Link>
+            <Link to="/admin/edit-startups" className="px-3 py-1.5 bg-orange-500/20 border border-orange-500/30 rounded text-orange-400 hover:bg-orange-500/30">✏️ Edit Startups</Link>
+            <Link to="/admin/dashboard" className="px-3 py-1.5 bg-violet-500/20 border border-violet-500/30 rounded text-violet-400 hover:bg-violet-500/30">📊 Dashboard</Link>
+          </div>
+        </div>
       </div>
     </div>
   );

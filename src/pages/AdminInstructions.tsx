@@ -15,7 +15,7 @@ export default function AdminInstructions() {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent mb-2">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-amber-500 bg-clip-text text-transparent mb-2">
             📚 Admin Instructions
           </h1>
           <p className="text-gray-400">Complete guide to using Hot Money admin tools</p>
@@ -95,9 +95,9 @@ export default function AdminInstructions() {
                 </div>
               </div>
               <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-8 h-8 bg-pink-500 rounded-full flex items-center justify-center font-bold">5</div>
+                <div className="flex-shrink-0 w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center font-bold">5</div>
                 <div>
-                  <h3 className="font-semibold text-pink-400">Goes Live</h3>
+                  <h3 className="font-semibold text-orange-400">Goes Live</h3>
                   <p className="text-gray-400">Approved startups appear on main site for users to vote</p>
                   <p className="text-sm text-gray-500 mt-1">Published status = visible to public</p>
                 </div>
@@ -183,8 +183,8 @@ export default function AdminInstructions() {
               </div>
 
               {/* Bulk Import */}
-              <div className="border-l-4 border-pink-500 pl-4">
-                <h3 className="text-xl font-semibold text-pink-400 mb-2">📤 Bulk Import</h3>
+              <div className="border-l-4 border-orange-500 pl-4">
+                <h3 className="text-xl font-semibold text-orange-400 mb-2">📤 Bulk Import</h3>
                 <p className="text-gray-300 mb-2"><strong>What:</strong> Upload many startups at once via CSV file</p>
                 <p className="text-gray-300 mb-2"><strong>Where:</strong> <code className="bg-black/30 px-2 py-1 rounded">/admin/bulk-import</code></p>
                 <p className="text-gray-300 mb-2"><strong>What you can do:</strong></p>
@@ -236,7 +236,7 @@ export default function AdminInstructions() {
               </div>
 
               <div>
-                <h3 className="font-semibold text-pink-400 mb-2">How do I upload multiple startups?</h3>
+                <h3 className="font-semibold text-orange-400 mb-2">How do I upload multiple startups?</h3>
                 <p className="text-gray-300">Bulk Import (/admin/bulk-import) → Download template → Fill CSV → Upload</p>
               </div>
 
@@ -282,7 +282,7 @@ export default function AdminInstructions() {
           </section>
 
           {/* Documentation Links */}
-          <section className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 backdrop-blur-sm rounded-xl p-6 border border-purple-500/30">
+          <section className="bg-gradient-to-r from-purple-500/20 to-violet-500/20 backdrop-blur-sm rounded-xl p-6 border border-purple-500/30">
             <h2 className="text-2xl font-bold mb-4">📖 More Documentation</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <div className="bg-black/30 p-3 rounded-lg">

@@ -180,7 +180,7 @@ export default function InvestorsPage() {
         <div className="text-center mb-8 sm:mb-12">
           <div className="text-6xl sm:text-8xl mb-4">💼</div>
           <h1 className="text-4xl sm:text-6xl font-bold mb-2 sm:mb-4">
-            <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-purple-400 via-amber-400 to-orange-400 bg-clip-text text-transparent">
               Investor Network
             </span>
           </h1>
@@ -265,7 +265,7 @@ export default function InvestorsPage() {
             <div className="text-3xl font-bold text-green-300">{investors.filter(i => i.type === 'accelerator').length}</div>
             <div className="text-green-100 text-sm font-semibold">Accelerators</div>
           </div>
-          <div className="bg-gradient-to-br from-purple-500/20 to-pink-500/20 backdrop-blur-md rounded-2xl p-6 text-center border-2 border-purple-400/50 hover:scale-105 transition-transform">
+          <div className="bg-gradient-to-br from-purple-500/20 to-violet-500/20 backdrop-blur-md rounded-2xl p-6 text-center border-2 border-purple-400/50 hover:scale-105 transition-transform">
             <div className="text-4xl mb-2">🦄</div>
             <div className="text-3xl font-bold text-purple-300">{investors.reduce((sum, i) => sum + (i.unicorns || 0), 0)}</div>
             <div className="text-purple-100 text-sm font-semibold">Unicorns Created</div>

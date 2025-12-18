@@ -1,0 +1,129 @@
+# INVESTOR NEWS SOURCES - For finding VCs and Angels
+# These sites publish news about investors, funding rounds, and VC activities
+# Updated: December 17, 2025
+
+# ═══════════════════════════════════════════════════════════════════════════
+# TIER 1: VC/PE NEWS (High signal for investor discovery)
+# ═══════════════════════════════════════════════════════════════════════════
+https://strictlyvc.com/
+https://www.venturecapitaljournal.com/
+https://www.pehub.com/
+https://www.privateequityinternational.com/
+https://www.penews.com/
+https://www.axios.com/newsletters/pro-rata
+https://fortune.com/newsletter/term-sheet/
+https://vcnewsdaily.com/
+https://www.finsmes.com/
+
+# ═══════════════════════════════════════════════════════════════════════════
+# TIER 2: INDUSTRY ASSOCIATIONS (Directories of investors)
+# ═══════════════════════════════════════════════════════════════════════════
+https://angelcapitalassociation.org/
+https://nvca.org/
+https://nvca.org/research/nvca-member-directory/
+
+# ═══════════════════════════════════════════════════════════════════════════
+# TIER 3: VC PARTNER BLOGS (Individual investor insights)
+# ═══════════════════════════════════════════════════════════════════════════
+https://bothsidesofthetable.com/
+https://feld.com/
+https://avc.com/
+https://www.vccafe.com/
+https://tomtunguz.com/
+https://www.generalist.com/
+https://cdixon.org/
+https://signal.nfx.com/
+
+# ═══════════════════════════════════════════════════════════════════════════
+# TIER 4: VC FIRM BLOGS & INSIGHTS
+# ═══════════════════════════════════════════════════════════════════════════
+https://a16z.com/
+https://a16z.com/news-content/
+https://www.sequoiacap.com/articles/
+https://firstround.com/review/
+https://www.bvp.com/atlas
+https://www.accel.com/insights
+https://greylock.com/category/perspectives/
+https://www.indexventures.com/perspectives/
+https://www.nfx.com/insights/
+https://confluencevc.com/
+
+# ═══════════════════════════════════════════════════════════════════════════
+# TIER 5: VC FIRM TEAM PAGES (Direct investor discovery)
+# ═══════════════════════════════════════════════════════════════════════════
+https://a16z.com/about/
+https://www.sequoiacap.com/people/
+https://firstround.com/team/
+https://www.bvp.com/team
+https://www.accel.com/people
+https://greylock.com/team/
+https://www.indexventures.com/team/
+https://www.nea.com/team
+https://www.generalcatalyst.com/team/
+https://lsvp.com/team/
+https://www.benchmark.com/
+https://www.khoslaventures.com/team/
+https://www.foundationcap.com/team/
+https://www.matrixpartners.com/team/
+https://www.dcvc.com/team
+https://www.usv.com/team/
+https://www.sparkcapital.com/team/
+https://www.ribbitcap.com/team
+https://www.coatue.com/team
+https://www.tigerglobal.com/
+https://www.insightpartners.com/team/
+https://www.batteryventures.com/team
+https://www.emergence.com/team
+https://www.felicis.com/team
+https://www.floodgate.com/
+https://initialized.com/team
+https://www.svangel.com/
+https://www.lererhippeau.com/team
+https://forerunnerventures.com/team/
+
+# ═══════════════════════════════════════════════════════════════════════════
+# TIER 6: ANGEL NETWORKS & SYNDICATES
+# ═══════════════════════════════════════════════════════════════════════════
+https://angel.co/syndicates
+https://www.angellist.com/
+https://www.hustle.fund/team
+https://www.haystack.vc/team
+https://www.seedcamp.com/team
+https://www.launchfund.com/
+https://www.villageglobal.vc/team
+https://www.precursorvc.com/team
+https://www.uncorkcapital.com/team
+https://www.boldstart.vc/team
+https://www.nextviewventures.com/team
+
+# ═══════════════════════════════════════════════════════════════════════════
+# TIER 7: SECTOR-SPECIFIC VCs
+# ═══════════════════════════════════════════════════════════════════════════
+# Fintech
+https://www.qed.vc/team
+https://www.nyca.com/team
+https://www.ribbitcap.com/
+
+# Healthcare/Bio
+https://www.archventure.com/team
+https://www.section32.com/team
+https://www.versantventures.com/team
+https://www.northpondventures.com/team
+
+# AI/Deep Tech
+https://www.dcvc.com/team
+https://www.radicalventures.com/team
+https://www.playground.vc/team
+https://www.conviction.vc/team
+
+# Climate
+https://www.breakthrough.energy/team
+https://www.lowercarboncapital.com/team
+https://www.congruent.vc/team
+
+# Crypto/Web3
+https://a16zcrypto.com/team/
+https://www.paradigm.xyz/team
+https://www.polychain.capital/team
+https://www.panteracapital.com/team
+https://www.multicoin.capital/team

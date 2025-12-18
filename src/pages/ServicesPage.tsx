@@ -46,11 +46,11 @@ const categoryColors: Record<string, { bg: string; border: string; text: string 
   strategy: { bg: 'from-purple-500/40 to-indigo-500/40', border: 'border-purple-400/50', text: 'text-purple-300' },
   traction: { bg: 'from-emerald-500/40 to-teal-500/40', border: 'border-emerald-400/50', text: 'text-emerald-300' },
   team: { bg: 'from-blue-500/40 to-cyan-500/40', border: 'border-blue-400/50', text: 'text-blue-300' },
-  pmf: { bg: 'from-pink-500/40 to-rose-500/40', border: 'border-pink-400/50', text: 'text-pink-300' },
+  pmf: { bg: 'from-red-500/40 to-orange-500/40', border: 'border-red-400/50', text: 'text-red-300' },
   partnerships: { bg: 'from-amber-500/40 to-yellow-500/40', border: 'border-amber-400/50', text: 'text-amber-300' },
   talent: { bg: 'from-cyan-500/40 to-blue-500/40', border: 'border-cyan-400/50', text: 'text-cyan-300' },
   ecosystem: { bg: 'from-green-500/40 to-emerald-500/40', border: 'border-green-400/50', text: 'text-green-300' },
-  growth: { bg: 'from-rose-500/40 to-pink-500/40', border: 'border-rose-400/50', text: 'text-rose-300' },
+  growth: { bg: 'from-amber-500/40 to-orange-500/40', border: 'border-amber-400/50', text: 'text-amber-300' },
 };
 
 const tierBadges: Record<string, { label: string; color: string }> = {
@@ -74,8 +74,7 @@ export default function ServicesPage() {
 
   const loadServices = async () => {
     setLoading(true);
-    const { data, error } = await supabase
-      .from('service_templates')
+    const { data, error } = await (supabase.from as any)('service_templates')
       .select('*')
       .eq('is_active', true)
       .order('sort_order');
@@ -94,7 +93,7 @@ export default function ServicesPage() {
         { id: '8', slug: 'partnership-opportunities', name: 'Partnership Finder', description: 'Identify strategic partnership opportunities to accelerate growth.', category: 'partnerships', tier_required: 'inferno', icon: '🤝', estimated_time: '3-5 min', is_active: true },
       ]);
     } else {
-      setServices(data || []);
+      setServices((data || []) as ServiceTemplate[]);
     }
     setLoading(false);
   };

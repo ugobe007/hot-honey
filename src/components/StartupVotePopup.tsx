@@ -24,10 +24,9 @@ export default function StartupVotePopup({ isOpen, onClose, startup }: StartupVo
     
     try {
       // Insert vote into database
-      const { error } = await supabase
-        .from('votes')
+      const { error } = await (supabase.from as any)('votes')
         .insert({
-          startup_id: startup.id,
+          startup_id: String(startup.id),
           vote_type: vote,
           created_at: new Date().toISOString()
         });

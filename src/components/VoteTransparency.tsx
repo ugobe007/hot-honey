@@ -56,9 +56,9 @@ export default function VoteTransparency({ startup, currentVotes }: VoteTranspar
           <div className="text-green-300 text-sm mt-2 font-semibold">{yesPercentage}% of community</div>
         </div>
 
-        <div className="bg-gradient-to-br from-red-500/20 to-pink-500/20 border border-red-500/50 rounded-xl p-4">
+        <div className="bg-gradient-to-br from-red-500/20 to-orange-500/20 border border-red-500/50 rounded-xl p-4">
           <div className="flex items-center gap-3 mb-2">
-            <div className="bg-gradient-to-r from-red-500 to-pink-500 p-2 rounded-lg">
+            <div className="bg-gradient-to-r from-red-500 to-orange-500 p-2 rounded-lg">
               <ThumbsDown className="w-5 h-5 text-white" />
             </div>
             <div>
@@ -68,7 +68,7 @@ export default function VoteTransparency({ startup, currentVotes }: VoteTranspar
           </div>
           <div className="w-full bg-black/40 rounded-full h-2 mt-2">
             <div 
-              className="bg-gradient-to-r from-red-400 to-pink-400 h-2 rounded-full transition-all"
+              className="bg-gradient-to-r from-red-400 to-orange-400 h-2 rounded-full transition-all"
               style={{ width: `${noPercentage}%` }}
             ></div>
           </div>

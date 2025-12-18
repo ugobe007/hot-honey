@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { 
   Zap, Check, X, Sparkles, Building2, ArrowRight, Star, Shield, Clock,
   Crown, Brain, Target, TrendingUp, MessageSquare, Lightbulb,
-  FileText, BarChart3, Users2, Handshake, Headphones, Lock
+  FileText, BarChart3, Users2, Handshake, Headphones, Lock, Flame
 } from 'lucide-react';
 import FlameIcon from '../components/FlameIcon';
 import { supabase } from '../lib/supabase';
@@ -101,8 +101,7 @@ export default function GetMatchedPage() {
       };
 
       // Try to save to Supabase
-      const { error: subError } = await supabase
-        .from('user_subscriptions')
+      const { error: subError } = await (supabase.from as any)('user_subscriptions')
         .insert(subscription);
 
       if (subError) {

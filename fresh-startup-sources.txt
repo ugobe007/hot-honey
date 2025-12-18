@@ -1,0 +1,86 @@
+# Fresh Startup Sources
+# These are sources that update frequently with NEW startups
+
+# Accelerator Demo Days (check these weekly)
+https://www.ycombinator.com/companies?batch=W24
+https://www.ycombinator.com/companies?batch=S24
+https://www.techstars.com/portfolio?program=2024
+https://500.co/startups/batch-33
+
+# Product Hunt (fresh daily)
+https://www.producthunt.com/
+https://www.producthunt.com/time-travel
+https://www.producthunt.com/topics/artificial-intelligence
+https://www.producthunt.com/topics/developer-tools  
+https://www.producthunt.com/topics/fintech
+https://www.producthunt.com/topics/health
+https://www.producthunt.com/topics/productivity
+https://www.producthunt.com/topics/design-tools
+https://www.producthunt.com/topics/saas
+https://www.producthunt.com/topics/marketing
+
+# Startup Lists & Directories
+https://wellfound.com/discover/startups
+https://wellfound.com/jobs
+https://www.f6s.com/programs
+https://www.startupranking.com/top/united-states
+https://www.startupblink.com/startups
+
+# Funding News (check daily for funding announcements)
+https://techcrunch.com/tag/funding/
+https://techcrunch.com/category/startups/
+https://news.crunchbase.com/venture/
+https://pitchbook.com/news/venture-capital
+https://venturebeat.com/category/business/
+
+# Hacker News (startups launch here)
+https://news.ycombinator.com/show
+https://news.ycombinator.com/newest
+
+# Reddit Startup Communities
+https://www.reddit.com/r/startups/hot/
+https://www.reddit.com/r/SaaS/hot/
+https://www.reddit.com/r/Entrepreneur/hot/
+
+# LinkedIn Startup Pages
+https://www.linkedin.com/feed/hashtag/startup/
+https://www.linkedin.com/feed/hashtag/funding/
+
+# Indie Hackers (bootstrapped startups)
+https://www.indiehackers.com/products
+https://www.indiehackers.com/feed
+
+# European Startups
+https://eu-startups.com/
+https://tech.eu/brief
+
+# LatAm Startups
+https://contxto.com/en/
+https://lavca.org/industry-data/
+
+# African Startups
+https://disrupt-africa.com/
+https://techcabal.com/
+
+# Asian Startups  
+https://kr-asia.com/
+https://www.techinasia.com/
+
+# AI-Specific Sources
+https://theresanaiforthat.com/new/
+https://www.aitools.directory/
+https://www.futuretools.io/
+https://www.topai.tools/
+
+# SaaS Directories
+https://www.g2.com/products/new
+https://www.capterra.com/browse/A/
+https://www.getapp.com/
+
+# Climate/Impact Startups
+https://www.climatetechlist.com/
+https://www.goodjobs.eu/companies
+
+# Blockchain/Web3
+https://www.defillama.com/raises
+https://cryptorank.io/funding-rounds

@@ -554,21 +554,21 @@ export default function Analytics() {
         </div>
 
         {/* Top Performers */}
-        <div className="mt-8 bg-white/80 backdrop-blur-md rounded-3xl p-6 border-2 border-pink-300">
-          <h2 className="text-2xl font-black text-pink-700 mb-4">🏆 Top Performers</h2>
+        <div className="mt-8 bg-white/80 backdrop-blur-md rounded-3xl p-6 border-2 border-orange-300">
+          <h2 className="text-2xl font-black text-orange-700 mb-4">🏆 Top Performers</h2>
           <div className="space-y-3">
             {analytics.topPerformers.slice(0, 5).map((startup, i) => (
-              <div key={startup.id} className="bg-pink-100 rounded-xl p-4 flex items-center justify-between">
+              <div key={startup.id} className="bg-orange-100 rounded-xl p-4 flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                  <div className="text-3xl font-black text-pink-700">#{i + 1}</div>
+                  <div className="text-3xl font-black text-orange-700">#{i + 1}</div>
                   <div>
                     <h3 className="text-slate-800 font-bold text-lg">{startup.name}</h3>
-                    <p className="text-pink-700 text-sm">{startup.pitch}</p>
+                    <p className="text-orange-700 text-sm">{startup.pitch}</p>
                   </div>
                 </div>
                 <div className="text-right">
                   <div className="text-2xl font-black text-slate-800">{startup.hotness || 0}🔥</div>
-                  <div className="text-pink-700 text-xs">
+                  <div className="text-orange-700 text-xs">
                     👍 {startup.yesVotes || 0} | 👎 {startup.noVotes || 0}
                   </div>
                 </div>

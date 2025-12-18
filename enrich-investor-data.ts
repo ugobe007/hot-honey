@@ -131,10 +131,10 @@ async function updateInvestorInDatabase(investorId: string, enrichment: Investor
     updateData.notable_investments = enrichment.notable_investments;
   }
   if (enrichment.sector_focus && enrichment.sector_focus.length > 0) {
-    updateData.sector_focus = enrichment.sector_focus;
+    updateData.sectors = enrichment.sector_focus; // DB column is 'sectors'
   }
   if (enrichment.stage_focus && enrichment.stage_focus.length > 0) {
-    updateData.stage_focus = enrichment.stage_focus;
+    updateData.stage = enrichment.stage_focus; // DB column is 'stage'
   }
   if (enrichment.check_size_min) {
     updateData.check_size_min = enrichment.check_size_min;

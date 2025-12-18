@@ -64,6 +64,9 @@ import ServiceDetailPage from './pages/ServiceDetailPage';
 import CheckoutPage from './pages/CheckoutPage';
 import SubscriptionSuccessPage from './pages/SubscriptionSuccessPage';
 import StrategiesPage from './pages/StrategiesPage';
+import MarketTrends from './pages/MarketTrends';
+import AdminAnalytics from './pages/AdminAnalytics';
+import AgentDashboard from './components/admin/AgentDashboard';
 import './App.css';
 
 // Wrapper component that redirects admins to admin dashboard
@@ -155,9 +158,13 @@ const App: React.FC = () => {
           <Route path="/admin/migrate-data" element={<MigrateStartupData />} />
           <Route path="/admin/diagnostic" element={<DiagnosticPage />} />
           <Route path="/admin/database-check" element={<DatabaseDiagnostic />} />
+          <Route path="/admin/analytics" element={<AdminAnalytics />} /> {/* 📊 Admin Analytics Dashboard */}
+          <Route path="/admin/agent" element={<AgentDashboard />} /> {/* 🤖 AI Agent Dashboard */}
           <Route path="/data-intelligence" element={<DataIntelligence />} />
           <Route path="/setup" element={<SetupPage />} /> {/* ✅ Setup shortcut */}
           <Route path="/analytics" element={<Analytics />} />
+          <Route path="/market-trends" element={<MarketTrends />} /> {/* 📈 Public Market Trends */}
+          <Route path="/trends" element={<MarketTrends />} /> {/* 📈 Alias for Market Trends */}
         </Routes>
       </main>
 
@@ -175,7 +182,7 @@ const App: React.FC = () => {
             Privacy Policy
           </Link>
           <span className="text-slate-400">•</span>
-          <Link to="/startups" className="text-orange-600 hover:text-orange-700 font-semibold hover:underline transition-colors">
+          <Link to="/get-matched" className="text-orange-600 hover:text-orange-700 font-semibold hover:underline transition-colors">
             For Startups
           </Link>
         </div>

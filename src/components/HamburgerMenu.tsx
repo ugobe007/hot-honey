@@ -100,7 +100,7 @@ export default function HamburgerMenu() {
             <Link
               to="/saved-matches"
               onClick={() => setIsOpen(false)}
-              className="group px-4 py-3 rounded-xl bg-gradient-to-r from-rose-600/40 to-pink-600/40 hover:from-rose-500/60 hover:to-pink-500/60 text-white transition-all font-bold flex items-center gap-3 border border-rose-400/50 hover:border-rose-300 shadow-lg"
+              className="group px-4 py-3 rounded-xl bg-gradient-to-r from-red-600/40 to-orange-600/40 hover:from-red-500/60 hover:to-orange-500/60 text-white transition-all font-bold flex items-center gap-3 border border-red-400/50 hover:border-red-300 shadow-lg"
             >
               <img src="/images/fire-icon.svg" alt="Hot" className="w-5 h-5" />
               <span className="text-white">Saved Matches</span>
@@ -127,19 +127,19 @@ export default function HamburgerMenu() {
             <Link
               to="/dashboard"
               onClick={() => setIsOpen(false)}
-              className="group px-4 py-3 rounded-xl bg-gradient-to-r from-pink-600/40 to-fuchsia-600/40 hover:from-pink-500/60 hover:to-fuchsia-500/60 text-white transition-all font-bold flex items-center gap-3 border border-pink-400/50 hover:border-pink-300 shadow-lg"
+              className="group px-4 py-3 rounded-xl bg-gradient-to-r from-violet-600/40 to-purple-600/40 hover:from-violet-500/60 hover:to-purple-500/60 text-white transition-all font-bold flex items-center gap-3 border border-violet-400/50 hover:border-violet-300 shadow-lg"
             >
-              <Rocket className="w-5 h-5 text-pink-300" />
+              <Rocket className="w-5 h-5 text-violet-300" />
               <span className="text-white">Startups</span>
             </Link>
             
             <Link
-              to="/analytics"
+              to="/market-trends"
               onClick={() => setIsOpen(false)}
               className="group px-4 py-3 rounded-xl bg-gradient-to-r from-blue-600/40 to-indigo-600/40 hover:from-blue-500/60 hover:to-indigo-500/60 text-white transition-all font-bold flex items-center gap-3 border border-blue-400/50 hover:border-blue-300 shadow-lg"
             >
               <TrendingUp className="w-5 h-5 text-blue-300" />
-              <span className="text-white">Analytics</span>
+              <span className="text-white">Market Trends</span>
             </Link>
             
             <Link

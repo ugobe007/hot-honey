@@ -84,12 +84,12 @@ function normalizeStartupData(startup: any) {
 /**
  * Normalize investor data to consistent format
  * Handles different field naming conventions (checkSize vs check_size, etc.)
- * Database columns: sector_focus, stage_focus (NOT sectors, stage)
+ * Database columns: sectors, stage (correct names)
  */
 function normalizeInvestorData(investor: any) {
-  // Map from database column names (sector_focus, stage_focus) to normalized names
-  const sectors = investor.sector_focus || investor.sectors || [];
-  const stages = investor.stage_focus || investor.stages || investor.stage || [];
+  // Use correct database column names: sectors, stage
+  const sectors = investor.sectors || [];
+  const stages = investor.stage || investor.stages || [];
   
   return {
     // Basic info
@@ -98,7 +98,7 @@ function normalizeInvestorData(investor: any) {
     description: investor.description || investor.tagline || investor.bio || '',
     tagline: investor.tagline || investor.type || '',
     
-    // Investment criteria - use sector_focus and stage_focus from DB
+    // Investment criteria - use sectors and stage from DB
     type: investor.type || 'vc_firm',
     sectors: Array.isArray(sectors) ? sectors : (sectors ? [sectors] : []),
     stages: Array.isArray(stages) ? stages : (stages ? [stages] : []),

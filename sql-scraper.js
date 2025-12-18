@@ -26,8 +26,8 @@
  * - name: text (required)
  * - firm: text
  * - type: text
- * - sector_focus: text[]
- * - stage_focus: text[]
+ * - sectors: text[]
+ * - stage: text[]
  * - check_size_min: bigint
  * - check_size_max: bigint
  * - geography: text (default 'Global')
@@ -350,8 +350,8 @@ async function scrapeInvestors() {
         name,
         firm: name,
         type: 'VC',
-        sector_focus: sectors,
-        stage_focus: ['Seed', 'Series A'],
+        sectors: sectors,
+        stage: ['Seed', 'Series A'],
         check_size_min: checkSize?.min || 500000,
         check_size_max: checkSize?.max || 10000000,
         bio: `Discovered from: ${article.title}`.substring(0, 400)
@@ -386,8 +386,8 @@ async function scrapeInvestors() {
         name: inv.name,
         firm: inv.firm,
         type: inv.type,
-        sector_focus: inv.sector_focus,
-        stage_focus: inv.stage_focus,
+        sectors: inv.sectors,
+        stage: inv.stage,
         check_size_min: inv.check_size_min,
         check_size_max: inv.check_size_max,
         bio: inv.bio,

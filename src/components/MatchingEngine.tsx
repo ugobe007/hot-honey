@@ -502,8 +502,8 @@ export default function MatchingEngine() {
             name: investor.name,
             checkSizeMin: investor.checkSizeMin,
             checkSizeMax: investor.checkSizeMax,
-            sectors: investor.sectors,   // Mapped from sector_focus
-            stage: investor.stage,       // Mapped from stage_focus
+            sectors: investor.sectors,   // Direct from DB 'sectors' column
+            stage: investor.stage,       // Direct from DB 'stage' column
             notableInvestments: investor.notableInvestments,
             portfolioCount: investor.portfolioCount,
             description: investor.description
@@ -520,8 +520,8 @@ export default function MatchingEngine() {
         // Calculate matching bonuses based on investor criteria
         let matchBonus = 0;
         
-        // Get investor data from MAPPED frontend fields: stage and sectors
-        // These are mapped from stage_focus and sector_focus in investorService.ts
+        // Get investor data from frontend fields: stage and sectors
+        // These come directly from DB columns 'stage' and 'sectors'
         const investorStages = investor.stage || [];
         const investorSectors = investor.sectors || [];
         
@@ -567,8 +567,8 @@ export default function MatchingEngine() {
         const team = fivePoints[3] || 'Experienced founding team';
         const investment = fivePoints[4] || startup.raise || 'Seeking investment';
         
-        // FIX: Extract investor data using MAPPED frontend field names ✅
-        // Service maps: sector_focus -> sectors, stage_focus -> stage
+        // FIX: Extract investor data using correct DB column names ✅
+        // DB uses: sectors, stage (directly)
         const investorSectorsFromDB = investor.sectors || [];
         const investorStagesFromDB = investor.stage || [];
         
@@ -851,7 +851,7 @@ export default function MatchingEngine() {
         <div className="text-center">
           <h2 className="text-6xl md:text-7xl font-bold mb-3">
             <span className="text-white text-4xl md:text-5xl">Find Your </span>
-            <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-amber-400 bg-clip-text text-transparent">
               Perfect Match
             </span>
           </h2>
@@ -1074,7 +1074,7 @@ export default function MatchingEngine() {
                   {/* Energy particles */}
                   <div className="absolute -top-2 left-1/2 w-3 h-3 bg-yellow-400 rounded-full animate-ping"></div>
                   <div className="absolute -bottom-2 -right-2 w-2 h-2 bg-cyan-400 rounded-full animate-ping" style={{animationDelay: '0.5s'}}></div>
-                  <div className="absolute top-1/2 -left-2 w-2 h-2 bg-pink-400 rounded-full animate-ping" style={{animationDelay: '1s'}}></div>
+                  <div className="absolute top-1/2 -left-2 w-2 h-2 bg-orange-400 rounded-full animate-ping" style={{animationDelay: '1s'}}></div>
                 </button>
               </div>
 
@@ -1126,7 +1126,7 @@ export default function MatchingEngine() {
           {/* Section Header */}
           <div className="text-center mb-12">
             <h2 className="text-5xl font-bold text-white mb-4">
-              Watch the <span className="bg-gradient-to-r from-orange-400 via-pink-400 to-purple-400 bg-clip-text text-transparent">Magic</span> Happen
+              Watch the <span className="bg-gradient-to-r from-orange-400 via-amber-400 to-purple-400 bg-clip-text text-transparent">Magic</span> Happen
             </h2>
             <p className="text-xl text-gray-400 max-w-3xl mx-auto">
               Our <span className="text-yellow-400 font-semibold">GOD Algorithm™</span> processes 20+ compatibility factors in real-time
@@ -1166,7 +1166,7 @@ export default function MatchingEngine() {
                 <div className="w-40 text-white font-semibold text-sm">Industry Fit</div>
                 <div className="flex-1 h-3 bg-white/10 rounded-full overflow-hidden">
                   <div 
-                    className="h-full bg-gradient-to-r from-purple-500 to-pink-500 rounded-full transition-all duration-1000 ease-out"
+                    className="h-full bg-gradient-to-r from-purple-500 to-violet-500 rounded-full transition-all duration-1000 ease-out"
                     style={{ width: `${Math.min(95, match.matchScore + 5)}%` }}
                   />
                 </div>
@@ -1266,9 +1266,9 @@ export default function MatchingEngine() {
 
           {/* Algorithm Insights */}
           <div className="grid md:grid-cols-2 gap-6">
-            <div className="bg-gradient-to-br from-purple-900/30 to-pink-900/30 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/30 hover:border-purple-400/50 transition-all">
+            <div className="bg-gradient-to-br from-purple-900/30 to-violet-900/30 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/30 hover:border-purple-400/50 transition-all">
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center flex-shrink-0">
+                <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-violet-500 rounded-xl flex items-center justify-center flex-shrink-0">
                   <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                   </svg>

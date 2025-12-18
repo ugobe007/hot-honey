@@ -173,7 +173,7 @@ export default function SetupPage() {
               <button
                 onClick={removeDuplicates}
                 disabled={removingDupes}
-                className="px-8 py-4 bg-gradient-to-r from-red-500 to-pink-500 text-white font-bold text-xl rounded-xl shadow-xl hover:from-red-600 hover:to-pink-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-8 py-4 bg-gradient-to-r from-red-500 to-orange-500 text-white font-bold text-xl rounded-xl shadow-xl hover:from-red-600 hover:to-orange-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {removingDupes ? '🗑️ Removing...' : '🗑️ Remove Duplicates'}
               </button>

@@ -19,8 +19,8 @@ const ALGORITHMS = [
     name: 'GOD Algorithm',
     shortName: 'GOD',
     icon: Flame,
-    color: 'from-red-500 to-pink-500',
-    bgColor: 'from-red-900/40 to-pink-900/30',
+    color: 'from-red-500 to-amber-500',
+    bgColor: 'from-red-900/40 to-amber-900/30',
     borderColor: 'border-red-500/40',
     description: 'Our proprietary 14-factor scoring system: Team, Traction, Market, Product, Vision + YC Philosophy + Smell Tests.',
     formula: 'Balanced composite (0-100)',
@@ -178,8 +178,6 @@ export default function TrendingPage() {
         .select(`
           id, name, tagline, description, sectors, stage, location, website,
           total_god_score, team_score, traction_score, market_score, product_score, vision_score,
-          smell_test_score, smell_test_lean, smell_test_user_passion, smell_test_learning_public,
-          smell_test_inevitable, smell_test_massive_if_works,
           tam_estimate, market_timing_score, has_technical_cofounder,
           arr, mrr, customer_count, growth_rate_monthly,
           latest_funding_amount, latest_funding_round
@@ -193,12 +191,13 @@ export default function TrendingPage() {
       }
       
       // Calculate all algorithm scores
-      const startupsWithScores = (startupData || []).map(s => ({
+      const typedData = (startupData || []) as any[];
+      const startupsWithScores = typedData.map((s: any) => ({
         ...s,
         ycScore: calculateYCScore(s),
         sequoiaScore: calculateSequoiaScore(s),
         a16zScore: calculateA16ZScore(s)
-      }));
+      }))
       
       setStartups(startupsWithScores);
       
@@ -353,7 +352,7 @@ export default function TrendingPage() {
           </span>
         )}
         {startup.vision_score && startup.vision_score >= 90 && (
-          <span className="px-2 py-0.5 rounded bg-pink-500/20 text-pink-300">
+          <span className="px-2 py-0.5 rounded bg-violet-500/20 text-violet-300">
             🔮 Visionary
           </span>
         )}
@@ -367,7 +366,7 @@ export default function TrendingPage() {
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-orange-500/10 to-pink-500/10 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-orange-500/10 to-amber-500/10 rounded-full blur-3xl"></div>
       </div>
 
       {/* Logo Dropdown Menu */}
@@ -404,10 +403,12 @@ export default function TrendingPage() {
             <FlameIcon variant={1} size="sm" />
             <span className="text-orange-300 text-sm font-medium">Algorithmic Intelligence • Real-Time Rankings</span>
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-3">
-            <span className="bg-gradient-to-r from-orange-400 via-red-500 to-pink-500 bg-clip-text text-transparent">
-              🔥 Hot Startup Rankings
+          <h1 className="text-4xl md:text-5xl font-bold mb-3 flex items-center justify-center gap-3">
+            <FlameIcon variant={1} size="xl" />
+            <span className="bg-gradient-to-r from-orange-400 via-red-500 to-amber-500 bg-clip-text text-transparent">
+              Hot Startup Rankings
             </span>
+            <FlameIcon variant={9} size="xl" />
           </h1>
           <p className="text-lg text-gray-300 max-w-3xl mx-auto">
             See startups through the lens of top VCs. Compare how YC, Sequoia, and A16Z would rank the same companies using their unique investment philosophies.
@@ -625,7 +626,7 @@ export default function TrendingPage() {
                             <div className="flex items-center gap-2">
                               <div className="w-16 h-2 bg-white/10 rounded-full overflow-hidden">
                                 <div 
-                                  className="h-full bg-gradient-to-r from-purple-500 to-pink-500 rounded-full"
+                                  className="h-full bg-gradient-to-r from-purple-500 to-violet-500 rounded-full"
                                   style={{ width: `${startup.total_god_score || 0}%` }}
                                 />
                               </div>
@@ -755,7 +756,7 @@ export default function TrendingPage() {
             </button>
 
             <div className="text-center mb-8">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-red-500 to-pink-500 flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-red-500 to-amber-500 flex items-center justify-center mx-auto mb-4">
                 <FlameIcon variant={7} size="xl" />
               </div>
               <h2 className="text-3xl font-bold text-white mb-2">GOD Algorithm</h2>
@@ -772,7 +773,7 @@ export default function TrendingPage() {
                 {[
                   { name: 'Team', icon: Users, color: 'from-blue-500 to-cyan-500', factors: ['Technical founders', 'Domain expertise', 'Team size', 'Prior exits'] },
                   { name: 'Traction', icon: TrendingUp, color: 'from-green-500 to-emerald-500', factors: ['ARR/MRR', 'Growth rate', 'Customer count', 'NRR'] },
-                  { name: 'Market', icon: Target, color: 'from-purple-500 to-pink-500', factors: ['TAM estimate', 'Market timing', 'Competition', 'Winner-take-all'] },
+                  { name: 'Market', icon: Target, color: 'from-purple-500 to-violet-500', factors: ['TAM estimate', 'Market timing', 'Competition', 'Winner-take-all'] },
                   { name: 'Product', icon: Layers, color: 'from-orange-500 to-red-500', factors: ['Launch status', 'Demo ready', 'NPS score', 'User engagement'] },
                   { name: 'Vision', icon: Eye, color: 'from-indigo-500 to-violet-500', factors: ['Contrarian belief', 'Why now', 'Unfair advantage', '10x potential'] },
                 ].map((component) => (
@@ -841,7 +842,7 @@ export default function TrendingPage() {
                   <h4 className="font-bold text-white mb-3">Investor Tiers</h4>
                   <ul className="text-sm space-y-2">
                     <li className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-gradient-to-r from-yellow-400 to-amber-500"></span> <span className="text-yellow-400 font-semibold">Elite</span> <span className="text-gray-400">- Top-tier VCs, proven track record</span></li>
-                    <li className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-gradient-to-r from-purple-400 to-pink-500"></span> <span className="text-purple-400 font-semibold">Strong</span> <span className="text-gray-400">- Active investors, good portfolios</span></li>
+                    <li className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-gradient-to-r from-purple-400 to-violet-500"></span> <span className="text-purple-400 font-semibold">Strong</span> <span className="text-gray-400">- Active investors, good portfolios</span></li>
                     <li className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-gradient-to-r from-blue-400 to-cyan-500"></span> <span className="text-blue-400 font-semibold">Solid</span> <span className="text-gray-400">- Reliable, sector-focused</span></li>
                     <li className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-gradient-to-r from-green-400 to-emerald-500"></span> <span className="text-green-400 font-semibold">Emerging</span> <span className="text-gray-400">- New funds, angels</span></li>
                   </ul>
@@ -877,7 +878,7 @@ export default function TrendingPage() {
             <div className="text-center">
               <button
                 onClick={() => setShowMethodology(false)}
-                className="px-8 py-3 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold rounded-xl transition-all"
+                className="px-8 py-3 bg-gradient-to-r from-purple-500 to-violet-500 hover:from-purple-600 hover:to-violet-600 text-white font-bold rounded-xl transition-all"
               >
                 Got It!
               </button>
@@ -934,7 +935,7 @@ export default function TrendingPage() {
                 {[
                   { label: 'Team', score: selectedStartup.team_score, color: 'from-blue-500 to-cyan-500' },
                   { label: 'Traction', score: selectedStartup.traction_score, color: 'from-green-500 to-emerald-500' },
-                  { label: 'Market', score: selectedStartup.market_score, color: 'from-purple-500 to-pink-500' },
+                  { label: 'Market', score: selectedStartup.market_score, color: 'from-purple-500 to-violet-500' },
                   { label: 'Product', score: selectedStartup.product_score, color: 'from-orange-500 to-red-500' },
                   { label: 'Vision', score: selectedStartup.vision_score, color: 'from-indigo-500 to-violet-500' },
                 ].map((item) => (

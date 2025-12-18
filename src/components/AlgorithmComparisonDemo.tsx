@@ -71,7 +71,7 @@ const ALGORITHMS = [
     id: 'god',
     name: 'GOD Algorithm',
     icon: Flame,
-    color: 'from-red-500 to-pink-500',
+    color: 'from-red-500 to-amber-500',
     bgColor: 'bg-red-500/20',
     borderColor: 'border-red-500/40',
     textColor: 'text-red-400',
@@ -344,7 +344,7 @@ export default function AlgorithmComparisonDemo({ isOpen, onClose }: Props) {
           {/* Startup Info Card */}
           <div className="mb-6 p-4 bg-white/5 rounded-xl border border-white/10">
             <div className="flex items-start gap-4">
-              <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-2xl font-bold text-white">
+              <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-purple-500 to-violet-500 flex items-center justify-center text-2xl font-bold text-white">
                 {currentStartup.name.charAt(0)}
               </div>
               <div className="flex-1">
@@ -448,7 +448,7 @@ export default function AlgorithmComparisonDemo({ isOpen, onClose }: Props) {
                   { label: 'Team', score: currentStartup.teamScore, color: 'from-blue-500 to-blue-600' },
                   { label: 'Traction', score: currentStartup.tractionScore, color: 'from-green-500 to-green-600' },
                   { label: 'Market', score: currentStartup.marketScore, color: 'from-purple-500 to-purple-600' },
-                  { label: 'Product', score: currentStartup.productScore, color: 'from-pink-500 to-pink-600' },
+                  { label: 'Product', score: currentStartup.productScore, color: 'from-orange-500 to-amber-600' },
                   { label: 'Vision', score: currentStartup.visionScore, color: 'from-orange-500 to-orange-600' },
                   { label: 'Smell', score: currentStartup.smellTestScore * 20, color: 'from-yellow-500 to-yellow-600' },
                 ].map((item) => (
