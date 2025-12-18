@@ -26,7 +26,10 @@ export default function SystemHealthDashboard() {
   const [recentLogs, setRecentLogs] = useState<any[]>([]);
   const [error, setError] = useState<string | null>(null);
 
+  console.log('[SystemHealthDashboard] Component rendered, loading:', loading, 'error:', error);
+
   const loadSystemHealth = async () => {
+    console.log('[SystemHealthDashboard] Starting loadSystemHealth');
     setRefreshing(true);
     setError(null);
     
@@ -119,7 +122,7 @@ export default function SystemHealthDashboard() {
       }
       
       // Get recent guardian logs
-      const { data: guardianLogs } = await supabase
+      const { data: guardianLogs } = await (supabase as any)
         .from('ai_logs')
         .select('*')
         .eq('type', 'guardian')
