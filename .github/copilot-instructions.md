@@ -63,16 +63,51 @@ npm run scrape:check # Health check on scraper
 pm2 start ecosystem.config.js  # Start all background processes
 pm2 logs             # View all process logs
 npx tsx scripts/recalculate-scores.ts  # Recalculate GOD scores
+node system-guardian.js  # Run health check
+node match-regenerator.js  # Regenerate all matches
+node calibrate-god-scores.js --apply  # Recalibrate GOD scores
 ```
+
+## 🛡️ System Guardian (IMPORTANT)
+The System Guardian monitors all critical system components. **Read [SYSTEM_GUARDIAN.md](../SYSTEM_GUARDIAN.md) for full documentation.**
+
+### Quick Health Check
+```bash
+node system-guardian.js
+```
+
+### What Guardian Monitors
+| Check | Description |
+|-------|-------------|
+| Scraper Health | PM2 process status, error rates |
+| GOD Scores | Distribution balance, bias detection |
+| Database Integrity | Required columns, FK relationships |
+| Match Quality | Count, score distribution |
+| ML Pipeline | Embedding coverage |
+| Data Freshness | Last update times |
+
+### Key Thresholds (in system-guardian.js)
+- GOD Score avg should be 45-75 (currently calibrated to ~60)
+- Match count must be > 5,000 (auto-regenerates if < 1,000)
+- Data staleness: 48h for startups, 72h for investors
+
+### Auto-Healing
+Guardian automatically:
+- Triggers `match-regenerator.js` if matches < 1,000
+- Restarts stuck scraper processes
+- Logs all health checks to `ai_logs` table
 
 ## Database Tables (Supabase)
 | Table | Purpose |
 |-------|---------|
 | `startup_uploads` | Main startups with GOD scores, status workflow |
 | `investors` | VC/Angel profiles with investment criteria |
-| `matches` | Startup-investor match pairs |
+| `startup_investor_matches` | **Primary match table** - startup-investor pairs with scores |
 | `discovered_startups` | Scraped but not yet reviewed |
 | `rss_sources` | News feed sources for scraping |
+| `ai_logs` | System logs including Guardian health checks |
+
+> ⚠️ **Note:** The old `matches` table was removed due to FK issues. Use `startup_investor_matches` only.
 
 ## Conventions
 - **UUID IDs**: All Supabase records use UUIDs, not numeric IDs

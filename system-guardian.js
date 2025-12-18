@@ -26,27 +26,56 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_KEY
 );
 
-// Thresholds for alerts (calibrated for real-world data quality)
+/**
+ * THRESHOLD CONFIGURATION
+ * =======================
+ * These thresholds control when the Guardian triggers warnings/errors.
+ * 
+ * Adjust based on:
+ * - Data volume (more data = stricter thresholds)
+ * - Growth phase (startup phase = looser, mature = stricter)
+ * - Data quality (high-quality sources = stricter GOD score thresholds)
+ * 
+ * See SYSTEM_GUARDIAN.md for detailed documentation.
+ */
 const THRESHOLDS = {
-  // Scraper
-  SCRAPER_ERROR_RATE_MAX: 0.3,        // 30% error rate triggers alert
-  SCRAPER_STUCK_MINUTES: 60,          // No activity for 1 hour
+  // ─── SCRAPER HEALTH ───────────────────────────────────────────────────
+  SCRAPER_ERROR_RATE_MAX: 0.3,        // Max 30% RSS sources can fail
+  SCRAPER_STUCK_MINUTES: 60,          // Alert if no discoveries for 60 min
+  SCRAPER_RESTART_WARN: 50,           // Warn if PM2 restart count > 50
   
-  // GOD Scores (calibrated post-recalibration)
-  GOD_SCORE_MIN_AVG: 45,              // Average should be above this
-  GOD_SCORE_MAX_AVG: 75,              // Average should be below this (bias detection)
-  GOD_SCORE_LOW_PERCENT_MAX: 0.3,     // Max 30% can be below 50 (was 60%)
+  // ─── GOD SCORES ───────────────────────────────────────────────────────
+  // Scores calibrated after running calibrate-god-scores.js
+  // Expected distribution: avg ~60, 70% in 50-70 range
+  GOD_SCORE_MIN_AVG: 45,              // Avg below this = too harsh scoring
+  GOD_SCORE_MAX_AVG: 75,              // Avg above this = score inflation
+  GOD_SCORE_LOW_PERCENT_MAX: 0.3,     // Max 30% can score below 50
+  GOD_SCORE_ELITE_MIN_PERCENT: 0.005, // At least 0.5% should be 85+
   
-  // Matches (realistic for sector-based matching)
-  MATCH_MIN_COUNT: 5000,              // Minimum matches required
-  MATCH_HIGH_QUALITY_MIN: 0.002,      // At least 0.2% should be 70+ (sector matches are rare)
-  MATCH_LOW_QUALITY_MAX: 0.95,        // Max 95% can be below 50 (most pairs don't align)
+  // ─── MATCH QUALITY ────────────────────────────────────────────────────
+  // Match scores depend on sector alignment (rare perfect matches)
+  MATCH_MIN_COUNT: 5000,              // Error if fewer matches than this
+  MATCH_CRITICAL_COUNT: 1000,         // Trigger auto-regen below this
+  MATCH_HIGH_QUALITY_MIN: 0.002,      // At least 0.2% should score 70+
+  MATCH_LOW_QUALITY_MAX: 0.95,        // Max 95% can score below 50
   
-  // Data freshness
-  STALE_HOURS: 48,                    // Data older than 48h is stale (was 24)
+  // ─── DATA FRESHNESS ───────────────────────────────────────────────────
+  STALE_STARTUP_HOURS: 48,            // No new startups for 48h = stale
+  STALE_INVESTOR_HOURS: 72,           // Investor data can be older
+  STALE_MATCH_HOURS: 6,               // Matches refresh every 4h
   
-  // ML
-  ML_EMBEDDING_MIN_PERCENT: 0.1,      // 10% of entities should have embeddings
+  // ─── ML PIPELINE ──────────────────────────────────────────────────────
+  ML_STARTUP_EMBEDDING_MIN: 0.1,      // 10% startups should have embeddings
+  ML_INVESTOR_EMBEDDING_MIN: 0.1,     // 10% investors should have embeddings
+  
+  // ─── DATABASE INTEGRITY ───────────────────────────────────────────────
+  DB_REQUIRED_TABLES: [
+    'startup_uploads',
+    'investors', 
+    'startup_investor_matches',
+    'discovered_startups',
+    'rss_sources'
+  ],
 };
 
 const COLORS = {
