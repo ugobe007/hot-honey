@@ -13,7 +13,8 @@ import {
   Database,
   ChevronLeft,
   ChevronRight,
-  Sparkles
+  Sparkles,
+  Shield
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
@@ -27,6 +28,7 @@ const navItems = [
     section: 'Main',
     items: [
       { path: '/admin/control', label: 'Control Center', icon: LayoutDashboard },
+      { path: '/admin/health', label: 'System Health', icon: Shield },
       { path: '/admin/review', label: 'AI Review Queue', icon: ClipboardCheck, badge: 'pending' },
     ]
   },

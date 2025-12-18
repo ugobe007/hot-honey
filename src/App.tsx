@@ -57,6 +57,7 @@ import LiveDemo from './pages/LiveDemo';
 import MasterControlCenter from './pages/MasterControlCenter';
 import InvestorEnrichmentPage from './pages/InvestorEnrichmentPage';
 import DiscoveredInvestors from './pages/DiscoveredInvestors';
+import SystemHealthDashboard from './pages/SystemHealthDashboard';
 import GetMatchedPage from './pages/GetMatchedPage';
 import TrendingPage from './pages/TrendingPage';
 import ServicesPage from './pages/ServicesPage';
@@ -153,6 +154,7 @@ const App: React.FC = () => {
             <Route path="edit-startups" element={<EditStartups />} />
             <Route path="investors/add" element={<QuickAddInvestor />} />
             <Route path="instructions" element={<AdminInstructions />} />
+            <Route path="health" element={<SystemHealthDashboard />} />
             {/* Legacy routes - keeping for backwards compatibility */}
             <Route path="operations" element={<ControlCenter />} />
             <Route path="dashboard" element={<AdminWorkflowDashboard />} />

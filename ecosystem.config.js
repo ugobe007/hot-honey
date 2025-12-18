@@ -151,6 +151,20 @@ module.exports = {
       env: {
         NODE_ENV: 'production'
       }
+    },
+    
+    // System Guardian - Comprehensive health monitoring (10 min)
+    {
+      name: 'system-guardian',
+      script: 'node',
+      args: 'system-guardian.js',
+      cwd: '/Users/leguplabs/Desktop/hot-honey',
+      cron_restart: '*/10 * * * *',  // Every 10 minutes
+      autorestart: false,
+      watch: false,
+      env: {
+        NODE_ENV: 'production'
+      }
     }
   ]
 };

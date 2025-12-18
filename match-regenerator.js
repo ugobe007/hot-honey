@@ -18,11 +18,11 @@ const supabase = createClient(
 
 // Matching configuration
 const CONFIG = {
-  SECTOR_MATCH: 30,
+  SECTOR_MATCH: 35,      // Increased: sector alignment is critical
   STAGE_MATCH: 20,
   GEO_MATCH: 10,
-  INVESTOR_QUALITY: 25,
-  STARTUP_QUALITY: 15,
+  INVESTOR_QUALITY: 20,  // Reduced slightly 
+  STARTUP_QUALITY: 25,   // Increased: GOD score matters more
   MIN_MATCH_SCORE: 35,
   BATCH_SIZE: 500
 };
@@ -91,8 +91,11 @@ function calculateInvestorQuality(score, tier) {
 }
 
 function calculateStartupQuality(godScore) {
-  if (!godScore) return 5;
-  return Math.min(Math.round(godScore * 0.15), CONFIG.STARTUP_QUALITY);
+  if (!godScore) return 8;
+  // Map GOD score 40-100 to quality 10-25
+  // This gives calibrated startups proper representation
+  const normalized = Math.max(0, (godScore - 40) / 60); // 0-1 scale
+  return Math.round(10 + normalized * 15); // 10-25 range
 }
 
 async function regenerateMatches() {
