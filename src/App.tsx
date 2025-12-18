@@ -67,6 +67,7 @@ import StrategiesPage from './pages/StrategiesPage';
 import MarketTrends from './pages/MarketTrends';
 import AdminAnalytics from './pages/AdminAnalytics';
 import AgentDashboard from './components/admin/AgentDashboard';
+import AdminRouteWrapper from './components/AdminRouteWrapper';
 import './App.css';
 
 // Wrapper component that redirects admins to admin dashboard
@@ -128,38 +129,44 @@ const App: React.FC = () => {
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/settings" element={<Settings />} />
-          <Route path="/admin" element={<Navigate to="/admin/control" replace />} />
-          <Route path="/admin/control" element={<MasterControlCenter />} />
-          <Route path="/admin/operations" element={<ControlCenter />} />
-          <Route path="/admin/investor-enrichment" element={<InvestorEnrichmentPage />} />
-          <Route path="/admin/bulk-upload" element={<BulkUpload />} />
-          <Route path="/admin/bulk-import" element={<BulkImport />} />
-          <Route path="/admin/document-upload" element={<DocumentUpload />} />
-          <Route path="/admin/review" element={<AdminReview />} /> {/* Legacy */}
-          <Route path="/admin/dashboard" element={<AdminWorkflowDashboard />} />
-          <Route path="/admin/command-center" element={<CommandCenter />} />
-          <Route path="/admin/rss-manager" element={<RSSManager />} />
-          <Route path="/admin/discovered-startups" element={<DiscoveredStartups />} />
-          <Route path="/admin/discovered-investors" element={<DiscoveredInvestors />} />
-          <Route path="/admin/startups" element={<DiscoveredStartups />} /> {/* Alias for discovered-startups */}
-          <Route path="/admin/investors" element={<DiscoveredInvestors />} /> {/* Alias for discovered-investors */}
+          
+          {/* Admin Routes with Sidebar */}
+          <Route path="/admin" element={<AdminRouteWrapper />}>
+            <Route index element={<Navigate to="/admin/control" replace />} />
+            <Route path="control" element={<MasterControlCenter />} />
+            <Route path="review" element={<AdminReview />} />
+            <Route path="rss-manager" element={<RSSManager />} />
+            <Route path="discovered-startups" element={<DiscoveredStartups />} />
+            <Route path="discovered-investors" element={<DiscoveredInvestors />} />
+            <Route path="startups" element={<DiscoveredStartups />} />
+            <Route path="investors" element={<DiscoveredInvestors />} />
+            <Route path="bulk-upload" element={<BulkUpload />} />
+            <Route path="god-scores" element={<GODScoresPage />} />
+            <Route path="investor-enrichment" element={<InvestorEnrichmentPage />} />
+            <Route path="ai-logs" element={<AILogsPage />} />
+            <Route path="diagnostic" element={<DiagnosticPage />} />
+            <Route path="database-check" element={<DatabaseDiagnostic />} />
+            <Route path="ai-intelligence" element={<AIIntelligenceDashboard />} />
+            <Route path="ml-dashboard" element={<MLDashboard />} />
+            <Route path="analytics" element={<AdminAnalytics />} />
+            <Route path="agent" element={<AgentDashboard />} />
+            <Route path="edit-startups" element={<EditStartups />} />
+            <Route path="investors/add" element={<QuickAddInvestor />} />
+            <Route path="instructions" element={<AdminInstructions />} />
+            {/* Legacy routes - keeping for backwards compatibility */}
+            <Route path="operations" element={<ControlCenter />} />
+            <Route path="dashboard" element={<AdminWorkflowDashboard />} />
+            <Route path="command-center" element={<CommandCenter />} />
+            <Route path="bulk-import" element={<BulkImport />} />
+            <Route path="document-upload" element={<DocumentUpload />} />
+            <Route path="legacy-dashboard" element={<AdminDashboard />} />
+            <Route path="setup" element={<SetupPage />} />
+            <Route path="sync" element={<SyncStartups />} />
+            <Route path="migrate" element={<MigrateLocalStorage />} />
+            <Route path="migrate-data" element={<MigrateStartupData />} />
+          </Route>
+          
           <Route path="/bulkupload" element={<BulkUpload />} /> {/* ✅ Public bulk upload shortcut */}
-          <Route path="/admin/ai-logs" element={<AILogsPage />} />
-          <Route path="/admin/god-scores" element={<GODScoresPage />} />
-          <Route path="/admin/ml-dashboard" element={<MLDashboard />} />
-          <Route path="/admin/legacy-dashboard" element={<AdminDashboard />} /> {/* Legacy */}
-          <Route path="/admin/instructions" element={<AdminInstructions />} />
-          <Route path="/admin/ai-intelligence" element={<AIIntelligenceDashboard />} />
-          <Route path="/admin/investors/add" element={<QuickAddInvestor />} />
-          <Route path="/admin/setup" element={<SetupPage />} />
-          <Route path="/admin/edit-startups" element={<EditStartups />} />
-          <Route path="/admin/sync" element={<SyncStartups />} />
-          <Route path="/admin/migrate" element={<MigrateLocalStorage />} />
-          <Route path="/admin/migrate-data" element={<MigrateStartupData />} />
-          <Route path="/admin/diagnostic" element={<DiagnosticPage />} />
-          <Route path="/admin/database-check" element={<DatabaseDiagnostic />} />
-          <Route path="/admin/analytics" element={<AdminAnalytics />} /> {/* 📊 Admin Analytics Dashboard */}
-          <Route path="/admin/agent" element={<AgentDashboard />} /> {/* 🤖 AI Agent Dashboard */}
           <Route path="/data-intelligence" element={<DataIntelligence />} />
           <Route path="/setup" element={<SetupPage />} /> {/* ✅ Setup shortcut */}
           <Route path="/analytics" element={<Analytics />} />
@@ -167,27 +174,6 @@ const App: React.FC = () => {
           <Route path="/trends" element={<MarketTrends />} /> {/* 📈 Alias for Market Trends */}
         </Routes>
       </main>
-
-      <footer className="bg-[#0f0a1a] text-center text-sm py-8">
-        <div className="flex justify-center items-center gap-6 mb-3 flex-wrap">
-          <Link to="/about" className="text-orange-600 hover:text-orange-700 font-semibold hover:underline transition-colors">
-            About Us
-          </Link>
-          <span className="text-slate-400">•</span>
-          <Link to="/contact" className="text-orange-600 hover:text-orange-700 font-semibold hover:underline transition-colors">
-            Contact Us
-          </Link>
-          <span className="text-slate-400">•</span>
-          <Link to="/privacy" className="text-orange-600 hover:text-orange-700 font-semibold hover:underline transition-colors">
-            Privacy Policy
-          </Link>
-          <span className="text-slate-400">•</span>
-          <Link to="/get-matched" className="text-orange-600 hover:text-orange-700 font-semibold hover:underline transition-colors">
-            For Startups
-          </Link>
-        </div>
-        <p className="text-slate-600">&copy; {new Date().getFullYear()} Hot Money. All rights reserved.</p>
-      </footer>
       </div>
     </AuthProvider>
   );

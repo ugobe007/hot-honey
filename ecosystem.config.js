@@ -137,6 +137,20 @@ module.exports = {
       env: {
         NODE_ENV: 'production'
       }
+    },
+    
+    // Match Regenerator - Keeps matches fresh every 4 hours
+    {
+      name: 'match-regen',
+      script: 'node',
+      args: 'match-regenerator.js',
+      cwd: '/Users/leguplabs/Desktop/hot-honey',
+      cron_restart: '0 0,4,8,12,16,20 * * *',  // Every 4 hours
+      autorestart: false,
+      watch: false,
+      env: {
+        NODE_ENV: 'production'
+      }
     }
   ]
 };

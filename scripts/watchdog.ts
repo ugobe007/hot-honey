@@ -41,6 +41,7 @@ interface HealthReport {
     stale_startups: number;
     pending_matches: number;
     errors_24h: number;
+    matches?: number;
   };
   actions_taken: string[];
 }
@@ -210,10 +211,44 @@ async function runWatchdog(): Promise<void> {
   if (unstuck > 0) {
     actions.push(`Cleared ${unstuck} stuck processing states`);
   }
+  
+  // 6. CHECK MATCH COUNT - Critical health indicator
+  const { count: matchCount } = await supabase
+    .from('startup_investor_matches')
+    .select('*', { count: 'exact', head: true });
+  
+  const { count: startupCount } = await supabase
+    .from('startup_uploads')
+    .select('*', { count: 'exact', head: true })
+    .eq('status', 'approved');
+  
+  const { count: investorCount } = await supabase
+    .from('investors')
+    .select('*', { count: 'exact', head: true });
+  
+  // If we have startups & investors but < 1000 matches, something is wrong
+  const hasData = (startupCount || 0) > 10 && (investorCount || 0) > 10;
+  const matchesMissing = hasData && (matchCount || 0) < 1000;
+  
+  if (matchesMissing) {
+    console.log('🚨 CRITICAL: Matches table is nearly empty!');
+    console.log(`   Startups: ${startupCount}, Investors: ${investorCount}, Matches: ${matchCount}`);
+    console.log('🔄 Triggering match regeneration...');
+    
+    // Spawn match regeneration
+    const { spawn } = await import('child_process');
+    spawn('node', ['match-regenerator.js'], {
+      cwd: '/Users/leguplabs/Desktop/hot-honey',
+      detached: true,
+      stdio: 'ignore'
+    }).unref();
+    
+    actions.push(`Triggered match regeneration (${matchCount} matches → expected ${(startupCount || 0) * (investorCount || 0) * 0.4}+)`);
+  }
 
   // Determine overall status
   let status: 'healthy' | 'warning' | 'critical' = 'healthy';
-  if (!dbOk) status = 'critical';
+  if (!dbOk || matchesMissing) status = 'critical';
   else if (rssStatus.failed > 5 || staleStatus.count > 100) status = 'warning';
 
   const report: HealthReport = {
@@ -224,7 +259,8 @@ async function runWatchdog(): Promise<void> {
       rss_sources: { active: rssStatus.active, failed: rssStatus.failed },
       stale_startups: staleStatus.count,
       pending_matches: pendingMatches,
-      errors_24h: 0
+      errors_24h: 0,
+      matches: matchCount || 0  // Add match count to report
     },
     actions_taken: actions
   };

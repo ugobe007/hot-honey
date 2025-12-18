@@ -145,6 +145,20 @@ export default function AdminReview() {
           <p className="text-xl text-gray-300">
             {pending.length} startup{pending.length !== 1 ? 's' : ''} pending approval • Scraped by AI, optimized by ML
           </p>
+          {pending.length > 0 && (
+            <button
+              onClick={() => {
+                if (selectedIds.size === pending.length) {
+                  setSelectedIds(new Set());
+                } else {
+                  setSelectedIds(new Set(pending.map(s => s.id)));
+                }
+              }}
+              className="mt-4 px-6 py-2 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-bold rounded-xl transition-all"
+            >
+              {selectedIds.size === pending.length ? '☐ Deselect All' : '☑ Select All'} ({pending.length})
+            </button>
+          )}
         </div>
 
         {/* Bulk Actions Bar */}
