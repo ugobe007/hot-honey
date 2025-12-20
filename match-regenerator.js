@@ -18,9 +18,9 @@ const supabase = createClient(
 
 // Matching configuration
 const CONFIG = {
-  SECTOR_MATCH: 35,      // Increased: sector alignment is critical
+  SECTOR_MATCH: 40,      // Increased: sector alignment is most critical
   STAGE_MATCH: 20,
-  GEO_MATCH: 10,
+  GEO_MATCH: 5,          // Reduced: geography less important (modern VC is global)
   INVESTOR_QUALITY: 20,  // Reduced slightly 
   STARTUP_QUALITY: 25,   // Increased: GOD score matters more
   MIN_MATCH_SCORE: 35,

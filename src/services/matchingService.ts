@@ -426,7 +426,7 @@ export function calculateAdvancedMatchScore(startup: any, investor: any, verbose
       }
     }
     
-    // Geography match (0-5 bonus points) - using normalized data
+    // Geography match (0-2 bonus points) - Reduced: modern VCs invest globally, remote work is standard
     if (normalizedInvestor.geography && normalizedStartup.location) {
       const investorGeo = Array.isArray(normalizedInvestor.geography) ? normalizedInvestor.geography : [normalizedInvestor.geography];
       const locationMatch = investorGeo.some((geo: string) =>
@@ -434,12 +434,12 @@ export function calculateAdvancedMatchScore(startup: any, investor: any, verbose
         String(geo).toLowerCase().includes(String(normalizedStartup.location).toLowerCase())
       );
       if (locationMatch) {
-        matchBonus += 5;
+        matchBonus += 2;  // Small bonus only - geography is less important
         if (verbose) {
-          console.log(`   Geography Match:    +5 (${normalizedStartup.location} matches)`);
+          console.log(`   Geography Match:    +2 (${normalizedStartup.location} matches - minor factor)`);
         }
       } else if (verbose) {
-        console.log(`   Geography Match:    +0 (no match)`);
+        console.log(`   Geography Match:    +0 (no match - not penalized, modern VC is global)`);
       }
     }
     

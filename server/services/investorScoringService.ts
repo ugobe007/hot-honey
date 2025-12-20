@@ -350,20 +350,21 @@ export function calculateStartupInvestorFit(
     reasons.push('Check size close to range');
   }
   
-  // Geography alignment (0-15 points)
+  // Geography alignment (0-5 points) - Reduced importance: modern VCs invest globally
   const startupGeo = normalizeGeography(startupProfile.location || startupProfile.geography);
   const investorGeos = (investorProfile.geography_focus || []).map(g => normalizeGeography(g));
   
   if (investorGeos.length === 0 || investorGeos.includes('global')) {
-    fitScore += 15;
+    fitScore += 5;  // Small bonus for global investors
     reasons.push('Global investor - geography flexible');
   } else if (investorGeos.includes(startupGeo)) {
-    fitScore += 15;
+    fitScore += 5;  // Small bonus for exact match
     reasons.push(`Geography match: ${startupGeo}`);
   } else if (investorGeos.some(g => g.includes('us') && startupGeo.includes('us'))) {
-    fitScore += 10;
+    fitScore += 3;  // Very small bonus for regional match
     reasons.push('US-based investor');
   }
+  // No penalty for geography mismatch - modern VC is global
   
   // Lead investor fit (0-15 points)
   if (investorProfile.leads_rounds && startupProfile.seeking_lead) {

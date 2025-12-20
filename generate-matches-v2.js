@@ -27,9 +27,9 @@ const supabase = createClient(
 // Matching configuration
 const CONFIG = {
   // Fit score weights (sum = 60)
-  SECTOR_MATCH: 30,
+  SECTOR_MATCH: 35,  // Increased: sector alignment is most critical
   STAGE_MATCH: 20,
-  GEO_MATCH: 10,
+  GEO_MATCH: 5,      // Reduced: geography less important in modern VC (remote work, global investing)
   
   // Quality score weights (sum = 40)
   INVESTOR_QUALITY: 25,  // NEW: Investor GOD score contribution
