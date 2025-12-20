@@ -2277,19 +2277,176 @@ Press Ctrl+C to stop
     '    ',
   timeout: 'NO'
 }
-ing: Match Generation
-  {"command":"node generate-matches.js"}
-[2025-12-20T01:34:17.105Z] [ERROR] ❌ Failed: Match Generation (0.1s)
-  {"error":"Command failed: node generate-matches.js\n/Users/leguplabs/Desktop/hot-honey/node_modules/@supabase/supabase-js/dist/main/lib/helpers.js:50\n        throw new Error('supabaseUrl is required.');\n        ","timeout":"NO"}
-[2025-12-20T01:34:19.107Z] [INFO] ▶️  Starting: Health Check
-  {"command":"node system-health-check.js"}
-[2025-12-20T01:34:19.181Z] [ERROR] ❌ Failed: Health Check (0.1s)
-  {"error":"Command failed: node system-health-check.js\n/Users/leguplabs/Desktop/hot-honey/node_modules/@supabase/supabase-js/dist/main/lib/helpers.js:50\n        throw new Error('supabaseUrl is required.');\n     ","timeout":"NO"}
-[2025-12-20T01:34:21.182Z] [INFO] ▶️  Starting: Embedding Generation
+[2025-12-20T01:35:08.735Z] [INFO] ▶️  Starting: RSS Scraping
+   { command: 'node run-rss-scraper.js' }
+[2025-12-20T01:35:08.838Z] [ERROR] ❌ Failed: RSS Scraping (0.1s)
+   {
+  error: 'Command failed: node run-rss-scraper.js\n' +
+    '\n' +
+    '❌ MISSING SUPABASE_SERVICE_KEY!\n' +
+    '\n' +
+    'The RSS scraper needs the SERVICE KEY to insert articles.\n' +
+    'The anon key has Row Level Security restrictions.\n' +
+    '\n' +
+    'To fix this:\n' +
+    '1. G',
+  timeout: 'NO'
+}
+[2025-12-20T01:35:10.839Z] [INFO] ▶️  Starting: Startup Discovery
+   { command: 'node discover-startups-from-rss.js' }
+[2025-12-20T01:35:10.937Z] [ERROR] ❌ Failed: Startup Discovery (0.1s)
+   {
+  error: 'Command failed: node discover-startups-from-rss.js\n' +
+    '❌ Missing required environment variables:\n' +
+    '   SUPABASE_URL (or VITE_SUPABASE_URL) and SUPABASE_SERVICE_KEY must be set in .env file\n' +
+    '   Found: SUPABASE',
+  timeout: 'NO'
+}
+[2025-12-20T01:35:12.938Z] [INFO] ▶️  Starting: Investor Scoring
+   { command: 'node calculate-investor-scores-v2.js' }
+[2025-12-20T01:35:13.007Z] [ERROR] ❌ Failed: Investor Scoring (0.1s)
+   {
+  error: 'Command failed: node calculate-investor-scores-v2.js\n' +
+    '/Users/leguplabs/Desktop/hot-honey/node_modules/@supabase/supabase-js/dist/main/lib/helpers.js:50\n' +
+    "        throw new Error('supabaseUrl is required.",
+  timeout: 'NO'
+}
+[2025-12-20T01:35:15.008Z] [INFO] ▶️  Starting: News Score Update
+   { command: 'node update-scores-from-news.js' }
+[2025-12-20T01:35:15.094Z] [ERROR] ❌ Failed: News Score Update (0.1s)
+   {
+  error: 'Command failed: node update-scores-from-news.js\n' +
+    '/Users/leguplabs/Desktop/hot-honey/node_modules/@supabase/supabase-js/dist/main/lib/helpers.js:50\n' +
+    "        throw new Error('supabaseUrl is required.');\n" +
+    ' ',
+  timeout: 'NO'
+}
+[2025-12-20T01:35:17.095Z] [INFO] ▶️  Starting: Match Generation
+   { command: 'node generate-matches.js' }
+[2025-12-20T01:35:17.176Z] [ERROR] ❌ Failed: Match Generation (0.1s)
+   {
+  error: 'Command failed: node generate-matches.js\n' +
+    '/Users/leguplabs/Desktop/hot-honey/node_modules/@supabase/supabase-js/dist/main/lib/helpers.js:50\n' +
+    "        throw new Error('supabaseUrl is required.');\n" +
+    '        ',
+  timeout: 'NO'
+}
+[2025-12-20T01:35:19.177Z] [INFO] ▶️  Starting: Health Check
+   { command: 'node system-health-check.js' }
+[2025-12-20T01:35:19.242Z] [ERROR] ❌ Failed: Health Check (0.1s)
+   {
+  error: 'Command failed: node system-health-check.js\n' +
+    '/Users/leguplabs/Desktop/hot-honey/node_modules/@supabase/supabase-js/dist/main/lib/helpers.js:50\n' +
+    "        throw new Error('supabaseUrl is required.');\n" +
+    '     ',
+  timeout: 'NO'
+}
+[2025-12-20T01:35:21.244Z] [INFO] ▶️  Starting: Embedding Generation
+   { command: 'node generate-embeddings.js' }
+[2025-12-20T01:35:21.356Z] [ERROR] ❌ Failed: Embedding Generation (0.1s)
+   {
+  error: 'Command failed: node generate-embeddings.js\n' +
+    '❌ Missing credentials. Need SUPABASE_URL, SUPABASE_SERVICE_KEY, OPENAI_API_KEY\n',
+  timeout: 'NO'
+}
+[2025-12-20T01:35:23.358Z] [INFO] ▶️  Starting: Auto-Import Startups
+   { command: 'node auto-import-pipeline.js' }
+[2025-12-20T01:35:23.432Z] [ERROR] ❌ Failed: Auto-Import Startups (0.1s)
+   {
+  error: 'Command failed: node auto-import-pipeline.js\n' +
+    '/Users/leguplabs/Desktop/hot-honey/node_modules/@supabase/supabase-js/dist/main/lib/helpers.js:50\n' +
+    "        throw new Error('supabaseUrl is required.');\n" +
+    '    ',
+  timeout: 'NO'
+}
+[2025-12-20T01:36:08.737Z] [INFO] ▶️  Starting: RSS Scraping
+   { command: 'node run-rss-scraper.js' }
+[2025-12-20T01:36:08.828Z] [ERROR] ❌ Failed: RSS Scraping (0.1s)
+   {
+  error: 'Command failed: node run-rss-scraper.js\n' +
+    '\n' +
+    '❌ MISSING SUPABASE_SERVICE_KEY!\n' +
+    '\n' +
+    'The RSS scraper needs the SERVICE KEY to insert articles.\n' +
+    'The anon key has Row Level Security restrictions.\n' +
+    '\n' +
+    'To fix this:\n' +
+    '1. G',
+  timeout: 'NO'
+}
+[2025-12-20T01:36:10.829Z] [INFO] ▶️  Starting: Startup Discovery
+   { command: 'node discover-startups-from-rss.js' }
+[2025-12-20T01:36:10.927Z] [ERROR] ❌ Failed: Startup Discovery (0.1s)
+   {
+  error: 'Command failed: node discover-startups-from-rss.js\n' +
+    '❌ Missing required environment variables:\n' +
+    '   SUPABASE_URL (or VITE_SUPABASE_URL) and SUPABASE_SERVICE_KEY must be set in .env file\n' +
+    '   Found: SUPABASE',
+  timeout: 'NO'
+}
+[2025-12-20T01:36:12.928Z] [INFO] ▶️  Starting: Investor Scoring
+   { command: 'node calculate-investor-scores-v2.js' }
+[2025-12-20T01:36:13.004Z] [ERROR] ❌ Failed: Investor Scoring (0.1s)
+   {
+  error: 'Command failed: node calculate-investor-scores-v2.js\n' +
+    '/Users/leguplabs/Desktop/hot-honey/node_modules/@supabase/supabase-js/dist/main/lib/helpers.js:50\n' +
+    "        throw new Error('supabaseUrl is required.",
+  timeout: 'NO'
+}
+[2025-12-20T01:36:15.006Z] [INFO] ▶️  Starting: News Score Update
+   { command: 'node update-scores-from-news.js' }
+[2025-12-20T01:36:15.086Z] [ERROR] ❌ Failed: News Score Update (0.1s)
+   {
+  error: 'Command failed: node update-scores-from-news.js\n' +
+    '/Users/leguplabs/Desktop/hot-honey/node_modules/@supabase/supabase-js/dist/main/lib/helpers.js:50\n' +
+    "        throw new Error('supabaseUrl is required.');\n" +
+    ' ',
+  timeout: 'NO'
+}
+[2025-12-20T01:36:17.087Z] [INFO] ▶️  Starting: Match Generation
+   { command: 'node generate-matches.js' }
+[2025-12-20T01:36:17.152Z] [ERROR] ❌ Failed: Match Generation (0.1s)
+   {
+  error: 'Command failed: node generate-matches.js\n' +
+    '/Users/leguplabs/Desktop/hot-honey/node_modules/@supabase/supabase-js/dist/main/lib/helpers.js:50\n' +
+    "        throw new Error('supabaseUrl is required.');\n" +
+    '        ',
+  timeout: 'NO'
+}
+[2025-12-20T01:36:19.153Z] [INFO] ▶️  Starting: Health Check
+   { command: 'node system-health-check.js' }
+[2025-12-20T01:36:19.227Z] [ERROR] ❌ Failed: Health Check (0.1s)
+   {
+  error: 'Command failed: node system-health-check.js\n' +
+    '/Users/leguplabs/Desktop/hot-honey/node_modules/@supabase/supabase-js/dist/main/lib/helpers.js:50\n' +
+    "        throw new Error('supabaseUrl is required.');\n" +
+    '     ',
+  timeout: 'NO'
+}
+[2025-12-20T01:36:21.228Z] [INFO] ▶️  Starting: Embedding Generation
+   { command: 'node generate-embeddings.js' }
+[2025-12-20T01:36:21.323Z] [ERROR] ❌ Failed: Embedding Generation (0.1s)
+   {
+  error: 'Command failed: node generate-embeddings.js\n' +
+    '❌ Missing credentials. Need SUPABASE_URL, SUPABASE_SERVICE_KEY, OPENAI_API_KEY\n',
+  timeout: 'NO'
+}
+[2025-12-20T01:36:23.324Z] [INFO] ▶️  Starting: Auto-Import Startups
+   { command: 'node auto-import-pipeline.js' }
+[2025-12-20T01:36:23.401Z] [ERROR] ❌ Failed: Auto-Import Startups (0.1s)
+   {
+  error: 'Command failed: node auto-import-pipeline.js\n' +
+    '/Users/leguplabs/Desktop/hot-honey/node_modules/@supabase/supabase-js/dist/main/lib/helpers.js:50\n' +
+    "        throw new Error('supabaseUrl is required.');\n" +
+    '    ',
+  timeout: 'NO'
+}
+js\n/Users/leguplabs/Desktop/hot-honey/node_modules/@supabase/supabase-js/dist/main/lib/helpers.js:50\n        throw new Error('supabaseUrl is required.');\n     ","timeout":"NO"}
+[2025-12-20T01:36:21.228Z] [INFO] ▶️  Starting: Embedding Generation
   {"command":"node generate-embeddings.js"}
-[2025-12-20T01:34:21.305Z] [ERROR] ❌ Failed: Embedding Generation (0.1s)
+[2025-12-20T01:36:21.323Z] [ERROR] ❌ Failed: Embedding Generation (0.1s)
   {"error":"Command failed: node generate-embeddings.js\n❌ Missing credentials. Need SUPABASE_URL, SUPABASE_SERVICE_KEY, OPENAI_API_KEY\n","timeout":"NO"}
-[2025-12-20T01:34:23.306Z] [INFO] ▶️  Starting: Auto-Import Startups
+[2025-12-20T01:36:23.324Z] [INFO] ▶️  Starting: Auto-Import Startups
   {"command":"node auto-import-pipeline.js"}
-[2025-12-20T01:34:23.378Z] [ERROR] ❌ Failed: Auto-Import Startups (0.1s)
+[2025-12-20T01:36:23.401Z] [ERROR] ❌ Failed: Auto-Import Startups (0.1s)
   {"error":"Command failed: node auto-import-pipeline.js\n/Users/leguplabs/Desktop/hot-honey/node_modules/@supabase/supabase-js/dist/main/lib/helpers.js:50\n        throw new Error('supabaseUrl is required.');\n    ","timeout":"NO"}
