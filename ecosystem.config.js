@@ -165,6 +165,34 @@ module.exports = {
       env: {
         NODE_ENV: 'production'
       }
+    },
+    
+    // Auto-Import Pipeline - Imports discovered startups, scores, and matches
+    {
+      name: 'auto-import',
+      script: 'node',
+      args: 'auto-import-pipeline.js',
+      cwd: '/Users/leguplabs/Desktop/hot-honey',
+      cron_restart: '0 */2 * * *',  // Every 2 hours
+      autorestart: false,
+      watch: false,
+      env: {
+        NODE_ENV: 'production'
+      }
+    },
+    
+    // RSS Discovery - Fetches startups from news feeds (uses Anthropic)
+    {
+      name: 'rss-discovery',
+      script: 'node',
+      args: 'discover-startups-from-rss.js',
+      cwd: '/Users/leguplabs/Desktop/hot-honey',
+      cron_restart: '30 */4 * * *',  // Every 4 hours at :30
+      autorestart: false,
+      watch: false,
+      env: {
+        NODE_ENV: 'production'
+      }
     }
   ]
 };

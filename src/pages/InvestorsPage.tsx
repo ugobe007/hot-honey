@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import InvestorCard from '../components/InvestorCard';
-import HamburgerMenu from '../components/HamburgerMenu';
+import LogoDropdownMenu from '../components/LogoDropdownMenu';
 import investorData, { InvestorFirm } from '../data/investorData';
 import { getAllInvestors, searchInvestors } from '../lib/investorService';
 
@@ -145,8 +145,8 @@ export default function InvestorsPage() {
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-[#9400cd]/5 rounded-full blur-3xl animate-pulse"></div>
       </div>
 
-      {/* Hamburger Menu */}
-      <HamburgerMenu />
+      {/* Logo Dropdown Menu */}
+      <LogoDropdownMenu />
 
       {/* Home Button */}
       <div className="fixed top-6 left-1/2 transform -translate-x-1/2 z-40">

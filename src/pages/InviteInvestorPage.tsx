@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import AdminNav from '../components/AdminNav';
+import LogoDropdownMenu from '../components/LogoDropdownMenu';
 import { createInvestor } from '../lib/investorService';
 import { researchInvestor } from '../lib/aiResearch';
 
@@ -291,8 +291,8 @@ export default function InviteInvestorPage() {
         </div>
       </div>
       
-      {/* Admin Navigation */}
-      <AdminNav currentPage="invite" />
+      {/* Navigation */}
+      <LogoDropdownMenu />
     </div>
   );
 }

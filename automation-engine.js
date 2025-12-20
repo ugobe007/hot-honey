@@ -28,13 +28,14 @@ const path = require('path');
 const CONFIG = {
   // Schedule intervals (in minutes)
   intervals: {
-    rss_scrape: 30,           // Scrape RSS feeds
-    startup_discovery: 120,    // Discover new startups
+    rss_scrape: 30,           // Scrape RSS feeds (every 30 min)
+    startup_discovery: 30,     // Discover new startups (every 30 min for 100+/day)
     investor_scoring: 360,     // Recalculate investor scores
     news_score_update: 60,     // Update scores from news
-    match_generation: 240,     // Generate new matches
+    match_generation: 60,      // Generate new matches (increased frequency for ML)
     health_check: 15,          // System health check
     embedding_generation: 180, // Generate embeddings
+    auto_import: 15,           // Auto-import discovered startups (every 15 min)
   },
   
   // Logging
@@ -54,6 +55,7 @@ const CONFIG = {
     match_generation: true,
     health_check: true,
     embedding_generation: true,
+    auto_import: true,
   }
 };
 
@@ -106,15 +108,15 @@ const JOBS = {
   rss_scrape: {
     name: 'RSS Scraping',
     command: 'node run-rss-scraper.js',
-    timeout: 180000,
+    timeout: 300000, // Increased to 5 minutes to handle multiple feeds
     description: 'Scrape RSS feeds for startup news'
   },
   
   startup_discovery: {
     name: 'Startup Discovery',
-    command: 'node scrape-startup-sources.js 1', // Priority 1 only for automation
-    timeout: 300000,
-    description: 'Discover new startups from sources'
+    command: 'node discover-startups-from-rss.js', // RSS discovery with AI extraction
+    timeout: 600000, // 10 minutes (AI processing takes time)
+    description: 'Discover new startups from RSS feeds (100+/day target)'
   },
   
   investor_scoring: {
@@ -147,9 +149,16 @@ const JOBS = {
   
   embedding_generation: {
     name: 'Embedding Generation',
-    command: 'node scripts/generate-embeddings.js',
+    command: 'node generate-embeddings.js',
     timeout: 600000,
     description: 'Generate vector embeddings'
+  },
+  
+  auto_import: {
+    name: 'Auto-Import Startups',
+    command: 'node auto-import-pipeline.js',
+    timeout: 300000,
+    description: 'Auto-import discovered startups (no manual approval)'
   }
 };
 
@@ -207,10 +216,23 @@ async function runJob(jobId) {
     } catch (error) {
       const duration = ((Date.now() - startTime) / 1000).toFixed(1);
       state.stats.jobsFailed++;
-      state.stats.errors.push({ job: jobId, error: error.message, time: new Date() });
+      
+      // Check if it's a timeout error
+      const isTimeout = error.message?.includes('ETIMEDOUT') || 
+                        error.message?.includes('timeout') ||
+                        error.signal === 'SIGTERM';
+      
+      const errorMsg = isTimeout 
+        ? `Timeout after ${(job.timeout / 1000).toFixed(0)}s - consider increasing timeout or checking network`
+        : error.message?.substring(0, 200) || 'Unknown error';
+      
+      state.stats.errors.push({ job: jobId, error: errorMsg, time: new Date() });
       state.running[jobId] = false;
       
-      log('error', `❌ Failed: ${job.name} (${duration}s)`, { error: error.message?.substring(0, 200) });
+      log('error', `❌ Failed: ${job.name} (${duration}s)`, { 
+        error: errorMsg,
+        timeout: isTimeout ? 'YES' : 'NO'
+      });
       
       resolve(false);
     }

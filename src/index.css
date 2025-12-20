@@ -2,6 +2,38 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ════════════════════════════════════════════════════════════════════════════
+   🔥 HOT HONEY - CSS CUSTOM PROPERTIES (Hybrid Palette)
+   ════════════════════════════════════════════════════════════════════════════ */
+:root {
+  /* Primary: Warm Accents */
+  --hh-fire: #FF5A09;
+  --hh-coral: #F3843E;
+  --hh-amber: #FF9900;
+  --hh-honey: #FFB402;
+  
+  /* Neutrals: Muted Grays */
+  --hh-charcoal: #393939;
+  --hh-charcoal-light: #454545;
+  --hh-charcoal-dark: #2d2d2d;
+  --hh-steel: #6E6E6E;
+  --hh-slate: #8A8A8A;
+  --hh-silver: #B0B0B0;
+  
+  /* Secondary: Cool Accents */
+  --hh-teal: #00B4B4;
+  --hh-cyan: #00CED1;
+  --hh-blue: #3B82F6;
+  --hh-indigo: #6366F1;
+  --hh-purple: #8B5CF6;
+  
+  /* Semantic */
+  --hh-success: #22C55E;
+  --hh-warning: #F59E0B;
+  --hh-error: #EF4444;
+  --hh-info: #00B4B4;
+}
+
 /* Base styles */
 body {
   margin: 0;

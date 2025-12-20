@@ -14,7 +14,9 @@ import { Resend } from 'resend';
 
 dotenv.config();
 
-const resend = new Resend(process.env.RESEND_API_KEY || '');
+// Guard against missing API key - Resend throws if initialized with empty string
+const RESEND_API_KEY = process.env.RESEND_API_KEY;
+const resend = RESEND_API_KEY ? new Resend(RESEND_API_KEY) : null;
 
 export interface Alert {
   level: 'info' | 'warning' | 'critical';
@@ -123,10 +125,9 @@ export async function sendHealthAlert(status: 'healthy' | 'warning' | 'critical'
  * Send email alert using Resend
  */
 export async function sendEmailAlert(alert: Alert): Promise<boolean> {
-  const apiKey = process.env.RESEND_API_KEY;
   const toEmail = process.env.ALERT_EMAIL;
   
-  if (!apiKey || !toEmail) {
+  if (!resend || !toEmail) {
     console.log('⚠️  RESEND_API_KEY or ALERT_EMAIL not set, skipping email');
     return false;
   }

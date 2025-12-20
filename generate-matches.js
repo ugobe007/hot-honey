@@ -115,13 +115,15 @@ async function generateMatches() {
   let mediumConfidence = 0;
   let lowConfidence = 0;
   
-  // Generate matches for each startup
+  // Generate matches for each startup (increased for ML training)
   for (const startup of startups) {
+    let startupMatchCount = 0;
     for (const investor of investors) {
       const match = calculateMatch(startup, investor);
       
-      // Only save matches with score > 20
-      if (match.score > 20) {
+      // Lower threshold and increase match count for ML training (was > 20, now > 10)
+      // Generate up to 50 matches per startup (was unlimited)
+      if (match.score > 10 && startupMatchCount < 50) {
         matches.push({
           startup_id: startup.id,
           investor_id: investor.id,
@@ -139,6 +141,8 @@ async function generateMatches() {
         if (match.confidence === 'high') highConfidence++;
         else if (match.confidence === 'medium') mediumConfidence++;
         else lowConfidence++;
+        
+        startupMatchCount++;
       }
     }
   }

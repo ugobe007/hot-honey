@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import AdminNav from '../components/AdminNav';
+import LogoDropdownMenu from '../components/LogoDropdownMenu';
 import { seedInitialInvestors, findDuplicateInvestors, removeDuplicateInvestors } from '../lib/investorService';
 
 export default function SetupPage() {
@@ -227,8 +227,8 @@ export default function SetupPage() {
         </div>
       </div>
       
-      {/* Admin Navigation */}
-      <AdminNav currentPage="setup" />
+      {/* Navigation */}
+      <LogoDropdownMenu />
     </div>
   );
 }

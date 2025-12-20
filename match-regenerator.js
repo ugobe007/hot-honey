@@ -180,9 +180,13 @@ async function regenerateMatches() {
     for (let i = 0; i < allMatches.length; i += CONFIG.BATCH_SIZE) {
       const batch = allMatches.slice(i, i + CONFIG.BATCH_SIZE);
       
+      // Use upsert to handle any duplicate key conflicts
       const { error: insErr } = await supabase
         .from('startup_investor_matches')
-        .insert(batch);
+        .upsert(batch, { 
+          onConflict: 'startup_id,investor_id',
+          ignoreDuplicates: false 
+        });
       
       if (insErr) {
         console.error(`   Batch ${Math.floor(i/CONFIG.BATCH_SIZE)+1} error:`, insErr.message);

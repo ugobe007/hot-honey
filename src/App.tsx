@@ -58,6 +58,7 @@ import MasterControlCenter from './pages/MasterControlCenter';
 import InvestorEnrichmentPage from './pages/InvestorEnrichmentPage';
 import DiscoveredInvestors from './pages/DiscoveredInvestors';
 import SystemHealthDashboard from './pages/SystemHealthDashboard';
+import MasterNavigation from './pages/MasterNavigation';
 import GetMatchedPage from './pages/GetMatchedPage';
 import TrendingPage from './pages/TrendingPage';
 import ServicesPage from './pages/ServicesPage';
@@ -130,6 +131,8 @@ const App: React.FC = () => {
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/navigation" element={<MasterNavigation />} /> {/* 🗺️ Master Navigation Directory */}
+          <Route path="/sitemap" element={<MasterNavigation />} /> {/* 🗺️ Alias */}
           
           {/* Admin Routes with Sidebar */}
           <Route path="/admin" element={<AdminRouteWrapper />}>

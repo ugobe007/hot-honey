@@ -1,0 +1,239 @@
+[dotenv@17.2.3] injecting env (12) from .env -- tip: ✅ audit secrets and track compliance: https://dotenvx.com/ops
+🚀 HOT MONEY HONEY - Startup Discovery Tool
+
+═══════════════════════════════════════════
+
+Starting RSS scraping for startup discovery...
+
+📡 Fetching active RSS sources...
+
+Found 53 active RSS sources
+
+📰 Processing: Forbes Innovation
+   📅 25 recent articles
+   ✅ Found 2 startups
+
+📰 Processing: Fortune Venture
+   📅 10 recent articles
+   ✅ Found 7 startups
+
+📰 Processing: TechCrunch - Venture
+   📅 20 recent articles
+   ✅ Found 8 startups
+
+📰 Processing: PitchBook News
+Error parsing feed PitchBook News: Status code 403
+   ✅ Found 0 startups
+
+📰 Processing: Fortune Term Sheet
+Error parsing feed Fortune Term Sheet: Status code 404
+   ✅ Found 0 startups
+
+📰 Processing: CB Insights
+   📅 3 recent articles
+   ✅ Found 1 startups
+
+📰 Processing: Sequoia Arc
+   📅 6 recent articles
+   ✅ Found 4 startups
+
+📰 Processing: Y Combinator Blog
+   📅 2 recent articles
+   ✅ Found 1 startups
+
+📰 Processing: Union Square Ventures
+   📅 3 recent articles
+   ✅ Found 3 startups
+
+📰 Processing: Paul Graham Essays
+   📅 219 recent articles
+   ✅ Found 0 startups
+
+📰 Processing: Sam Altman Blog
+Error parsing feed Sam Altman Blog: Status code 404
+   ✅ Found 0 startups
+
+📰 Processing: Product Hunt Daily
+   📅 47 recent articles
+   ✅ Found 15 startups
+
+📰 Processing: Hacker News Best
+   📅 30 recent articles
+   ✅ Found 5 startups
+
+📰 Processing: Hacker News Show HN
+   📅 20 recent articles
+   ✅ Found 11 startups
+
+📰 Processing: AI News - VentureBeat
+   📅 7 recent articles
+   ✅ Found 4 startups
+
+📰 Processing: Fintech - TechCrunch
+   📅 2 recent articles
+   ✅ Found 2 startups
+
+📰 Processing: Healthcare - Rock Health
+   ✅ Found 0 startups
+
+📰 Processing: Climate Tech - CTVC
+   📅 6 recent articles
+   ✅ Found 0 startups
+
+📰 Processing: StrictlyVC
+   ✅ Found 0 startups
+
+📰 Processing: Mattermark Daily
+   ✅ Found 0 startups
+
+📰 Processing: This Week in Startups
+Error parsing feed This Week in Startups: Status code 404
+   ✅ Found 0 startups
+
+📰 Processing: TechCrunch
+   📅 20 recent articles
+   ✅ Found 6 startups
+
+📰 Processing: TechCrunch - Startups
+   📅 20 recent articles
+   ✅ Found 10 startups
+
+📰 Processing: Crunchbase News
+   📅 10 recent articles
+   ✅ Found 4 startups
+
+📰 Processing: VentureBeat
+   📅 7 recent articles
+   ✅ Found 3 startups
+
+📰 Processing: EU Startups
+   📅 10 recent articles
+   ✅ Found 9 startups
+
+📰 Processing: a16z Blog
+Error parsing feed a16z Blog: Status code 404
+   ✅ Found 0 startups
+
+📰 Processing: First Round Review
+Error parsing feed First Round Review: Status code 404
+   ✅ Found 0 startups
+
+📰 Processing: AVC Blog
+   ✅ Found 0 startups
+
+📰 Processing: SaaStr Blog
+   📅 7 recent articles
+   ✅ Found 14 startups
+
+📰 Processing: Both Sides of Table
+Error parsing feed Both Sides of Table: unable to verify the first certificate; if the root CA is installed locally, try running Node.js with --use-system-ca
+   ✅ Found 0 startups
+
+📰 Processing: ArcticStartup
+   📅 10 recent articles
+   ✅ Found 9 startups
+
+📰 Processing: Bessemer Blog
+Error parsing feed Bessemer Blog: Status code 404
+   ✅ Found 0 startups
+
+📰 Processing: Greylock
+   📅 4 recent articles
+   ✅ Found 2 startups
+
+📰 Processing: PitchBook
+Error parsing feed PitchBook: Status code 403
+   ✅ Found 0 startups
+
+📰 Processing: The Information
+Error parsing feed The Information: Status code 403
+   ✅ Found 0 startups
+
+📰 Processing: TechCrunch Funding
+   ✅ Found 0 startups
+
+📰 Processing: FinSMEs
+   📅 30 recent articles
+   ✅ Found 14 startups
+
+📰 Processing: VC News Daily
+Error parsing feed VC News Daily: Status code 404
+   ✅ Found 0 startups
+
+📰 Processing: Sifted EU
+   📅 24 recent articles
+   ✅ Found 4 startups
+
+📰 Processing: GeekWire
+   📅 35 recent articles
+   ✅ Found 9 startups
+
+📰 Processing: The Next Web
+   📅 3 recent articles
+   ✅ Found 2 startups
+
+📰 Processing: e27 Asia
+Error parsing feed e27 Asia: Status code 403
+   ✅ Found 0 startups
+
+📰 Processing: Tech in Asia
+Error parsing feed Tech in Asia: Status code 403
+   ✅ Found 0 startups
+
+📰 Processing: Inc42 India
+   📅 24 recent articles
+   ✅ Found 14 startups
+
+📰 Processing: Tomasz Tunguz
+Error parsing feed Tomasz Tunguz: Status code 404
+   ✅ Found 0 startups
+
+📰 Processing: NFX Insights
+Error parsing feed NFX Insights: Status code 404
+   ✅ Found 0 startups
+
+📰 Processing: The Hustle
+Error parsing feed The Hustle: Status code 404
+   ✅ Found 0 startups
+
+📰 Processing: StrictlyVC
+   ✅ Found 0 startups
+
+📰 Processing: PE Hub
+   📅 10 recent articles
+   ✅ Found 9 startups
+
+📰 Processing: Feld Thoughts
+   📅 6 recent articles
+   ✅ Found 1 startups
+
+📰 Processing: VC Cafe
+   📅 6 recent articles
+   ✅ Found 0 startups
+
+📰 Processing: Chris Dixon
+Error parsing feed Chris Dixon: Status code 404
+   ✅ Found 0 startups
+
+
+✨ Total startups discovered: 173
+
+💾 Saving 173 discovered startups to database...
+
+✅ Saved: 106 | Skipped (duplicates): 67
+
+═══════════════════════════════════════════
+✨ DISCOVERY COMPLETE!
+
+Total startups discovered: 173
+
+📊 View discovered startups:
+   Go to: http://localhost:5173/admin/discovered-startups
+
+💡 Next steps:
+   1. Review discovered startups in the admin panel
+   2. Select startups to import into main database
+   3. Export to CSV and bulk upload
+
+═══════════════════════════════════════════
+

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import HamburgerMenu from '../components/HamburgerMenu';
+import LogoDropdownMenu from '../components/LogoDropdownMenu';
 
 export default function Settings() {
   const navigate = useNavigate();
@@ -49,8 +49,8 @@ export default function Settings() {
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-[#9400cd]/5 rounded-full blur-3xl animate-pulse"></div>
       </div>
 
-      {/* Hamburger Menu */}
-      <HamburgerMenu />
+      {/* Logo Dropdown Menu */}
+      <LogoDropdownMenu />
 
       {/* Current Page Button */}
       <div className="fixed top-6 left-1/2 transform -translate-x-1/2 z-40">

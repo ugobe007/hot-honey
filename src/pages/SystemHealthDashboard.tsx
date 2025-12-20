@@ -121,13 +121,17 @@ export default function SystemHealthDashboard() {
         });
       }
       
-      // Get recent guardian logs
-      const { data: guardianLogs } = await (supabase as any)
+      // Get recent guardian logs - note: ai_logs uses 'operation' column, not 'type'
+      // Using type assertion since ai_logs isn't in generated types yet
+      const { data: guardianLogs, error: logsError } = await (supabase as any)
         .from('ai_logs')
         .select('*')
-        .eq('type', 'guardian')
         .order('created_at', { ascending: false })
         .limit(5);
+      
+      if (logsError) {
+        console.log('[SystemHealthDashboard] ai_logs query error (non-fatal):', logsError.message);
+      }
       
       setRecentLogs(guardianLogs || []);
       

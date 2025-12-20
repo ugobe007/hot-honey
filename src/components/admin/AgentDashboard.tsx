@@ -335,39 +335,39 @@ const AgentDashboard: React.FC = () => {
 
         {selectedTab === 'overview' && (
           <>
-            {/* Stats Grid */}
+            {/* Stats Grid - All Clickable to Source */}
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-6">
-              <StatCard icon={Briefcase} label="Total Startups" value={metrics?.totalStartups || 0} color="from-purple-500 to-indigo-500" />
-              <StatCard icon={Users} label="Total Investors" value={metrics?.totalInvestors || 0} color="from-cyan-500 to-blue-500" />
-              <StatCard icon={TrendingUp} label="Total Matches" value={metrics?.totalMatches?.toLocaleString() || '0'} color="from-green-500 to-emerald-500" />
-              <StatCard icon={Target} label="Avg GOD Score" value={metrics?.avgGODScore || 0} color="from-orange-500 to-amber-500" />
+              <StatCard icon={Briefcase} label="Total Startups" value={metrics?.totalStartups || 0} color="from-purple-500 to-indigo-500" link="/admin/edit-startups" />
+              <StatCard icon={Users} label="Total Investors" value={metrics?.totalInvestors || 0} color="from-cyan-500 to-blue-500" link="/investors" />
+              <StatCard icon={TrendingUp} label="Total Matches" value={metrics?.totalMatches?.toLocaleString() || '0'} color="from-green-500 to-emerald-500" link="/matching" />
+              <StatCard icon={Target} label="Avg GOD Score" value={metrics?.avgGODScore || 0} color="from-orange-500 to-amber-500" link="/admin/god-scores" />
               <StatCard icon={Zap} label="Auto-Fixes" value={totalFixes} color="from-pink-500 to-rose-500" />
               <StatCard icon={AlertTriangle} label="Escalations" value={totalEscalations} color="from-red-500 to-orange-500" />
             </div>
 
-            {/* Today's Activity */}
+            {/* Today's Activity - All Clickable to Source */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-              <div className="bg-gradient-to-br from-green-500/20 to-emerald-500/20 rounded-xl p-4 border border-green-500/30">
+              <a href="/admin/edit-startups" className="bg-gradient-to-br from-green-500/20 to-emerald-500/20 rounded-xl p-4 border border-green-500/30 hover:border-green-500/50 hover:scale-105 transition-all cursor-pointer">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm text-gray-400">New Startups Today</span>
                   <Briefcase className="w-5 h-5 text-green-400" />
                 </div>
                 <div className="text-3xl font-bold text-green-400">{metrics?.newStartupsToday || 0}</div>
-              </div>
-              <div className="bg-gradient-to-br from-blue-500/20 to-cyan-500/20 rounded-xl p-4 border border-blue-500/30">
+              </a>
+              <a href="/investors" className="bg-gradient-to-br from-blue-500/20 to-cyan-500/20 rounded-xl p-4 border border-blue-500/30 hover:border-blue-500/50 hover:scale-105 transition-all cursor-pointer">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm text-gray-400">New Investors Today</span>
                   <Users className="w-5 h-5 text-blue-400" />
                 </div>
                 <div className="text-3xl font-bold text-blue-400">{metrics?.newInvestorsToday || 0}</div>
-              </div>
-              <div className="bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-xl p-4 border border-purple-500/30">
+              </a>
+              <a href="/matching" className="bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-xl p-4 border border-purple-500/30 hover:border-purple-500/50 hover:scale-105 transition-all cursor-pointer">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm text-gray-400">New Matches Today</span>
                   <TrendingUp className="w-5 h-5 text-purple-400" />
                 </div>
                 <div className="text-3xl font-bold text-purple-400">{metrics?.newMatchesToday || 0}</div>
-              </div>
+              </a>
             </div>
 
             {/* Services Status */}

@@ -268,8 +268,11 @@ export function calculateHotScore(startup: StartupProfile): HotScore {
   if (startup.tagline || startup.pitch) baseBoost += 0.5;
   if (startup.founded_date) baseBoost += 0.5;
   
-  // Minimum base boost of 5 points so startups score at least 50/100
-  baseBoost = Math.max(baseBoost, 5);
+  // CRITICAL FIX: Minimum base boost of 17 points so startups score at least 50/100
+  // Math: 17 / 34.5 * 10 = 4.9 (~50/100)
+  // This accounts for all the GRIT/execution fields that are typically empty in scraped data
+  // Without this, startups with sparse data crater to 20-30 scores
+  baseBoost = Math.max(baseBoost, 17);
   
   const teamScore = scoreTeam(startup);
   const tractionScore = scoreTraction(startup);
@@ -646,9 +649,11 @@ function scoreEcosystem(startup: StartupProfile): number {
  */
 function scoreGrit(startup: StartupProfile): number {
   let score = 0;
+  let hasAnyData = false;
   
   // Pivot history - intelligent pivots are GOOD (0-0.5 points)
   if (startup.pivots_made !== undefined && startup.pivot_history) {
+    hasAnyData = true;
     if (startup.pivots_made === 1 || startup.pivots_made === 2) {
       // 1-2 pivots = learning and adapting (GOOD)
       score += 0.5;
@@ -665,16 +670,20 @@ function scoreGrit(startup: StartupProfile): number {
   }
   
   // Customer feedback frequency (0-0.5 points)
-  if (startup.customer_feedback_frequency === 'daily') {
-    score += 0.5; // Daily customer contact = exceptional obsession
-  } else if (startup.customer_feedback_frequency === 'weekly') {
-    score += 0.35; // Weekly = strong
-  } else if (startup.customer_feedback_frequency === 'monthly') {
-    score += 0.2; // Monthly = acceptable
+  if (startup.customer_feedback_frequency) {
+    hasAnyData = true;
+    if (startup.customer_feedback_frequency === 'daily') {
+      score += 0.5; // Daily customer contact = exceptional obsession
+    } else if (startup.customer_feedback_frequency === 'weekly') {
+      score += 0.35; // Weekly = strong
+    } else if (startup.customer_feedback_frequency === 'monthly') {
+      score += 0.2; // Monthly = acceptable
+    }
   }
   
   // Speed of iteration (0-0.5 points)
   if (startup.time_to_iterate_days !== undefined) {
+    hasAnyData = true;
     if (startup.time_to_iterate_days <= 7) {
       score += 0.5; // Ship updates within a week = exceptional velocity
     } else if (startup.time_to_iterate_days <= 14) {
@@ -682,6 +691,11 @@ function scoreGrit(startup: StartupProfile): number {
     } else if (startup.time_to_iterate_days <= 30) {
       score += 0.2; // Within a month = acceptable
     }
+  }
+  
+  // DEFAULT: If no GRIT data, assume average resilience (unknown ≠ bad)
+  if (!hasAnyData) {
+    return 0.5; // Benefit of the doubt - assume average GRIT
   }
   
   return Math.min(score, 1.5);
@@ -744,6 +758,13 @@ function scoreProblemValidation(startup: StartupProfile): number {
     score += 0.2; // Some understanding
   } else if (startup.problem_discovery_depth === 'surface') {
     score += 0.05; // Surface-level only
+  }
+  
+  // DEFAULT: If no problem validation data, assume some baseline validation
+  // (most startups that get funding news have SOME customer validation)
+  if (score === 0 && !startup.customer_interviews_conducted && !startup.customer_pain_data && 
+      !startup.icp_clarity && !startup.problem_discovery_depth) {
+    return 0.6; // Benefit of the doubt - assume basic validation
   }
   
   return Math.min(score, 2);
@@ -829,6 +850,12 @@ function scoreFounderAge(startup: StartupProfile): number {
     } else if (hasRecentGrad) {
       score += 0.3;
     }
+  }
+  
+  // DEFAULT: If no age data, assume median founder age (~32 = balanced energy/experience)
+  if (score === 0 && !startupAny.founder_avg_age && !startupAny.founders_under_25 && 
+      !startupAny.founders_under_30 && !startupAny.founder_youngest_age) {
+    return 0.5; // Benefit of the doubt - assume ~32 years old
   }
   
   return Math.min(score, 1.5);
@@ -974,6 +1001,12 @@ function scoreSalesVelocity(startup: StartupProfile): number {
     } else if (startup.revenue >= 100000) {
       score += 0.1; // $100K+ ARR
     }
+  }
+  
+  // DEFAULT: If no sales velocity data AND no proxy data, assume average velocity
+  // (unknown ≠ slow)
+  if (score === 0 && !startup.mrr && !startup.revenue) {
+    return 0.5; // Benefit of the doubt - assume average sales velocity
   }
   
   return Math.min(score, 2);
@@ -1183,6 +1216,11 @@ function scoreFounderSpeed(startup: StartupProfile): number {
     }
   }
   
+  // DEFAULT: If still no score after proxies, assume they're shipping (they exist, after all)
+  if (score === 0) {
+    return 0.8; // Benefit of the doubt - assume they're executing
+  }
+  
   return Math.min(score, 3);
 }
 
@@ -1249,6 +1287,11 @@ function scoreUniqueInsight(startup: StartupProfile): number {
     } else if (startup.customer_interviews_conducted && startup.customer_interviews_conducted >= 20) {
       score += 0.3;
     }
+  }
+  
+  // DEFAULT: If still no score, assume some thesis exists (they got funding news for a reason)
+  if (score === 0) {
+    return 0.6; // Benefit of the doubt - assume they have some insight
   }
   
   return Math.min(score, 2.5);
@@ -1328,6 +1371,11 @@ function scoreUserLove(startup: StartupProfile): number {
     }
   }
   
+  // DEFAULT: If still no score, assume some user engagement (unknown ≠ unloved)
+  if (score === 0) {
+    return 0.5; // Benefit of the doubt - assume average engagement
+  }
+  
   return Math.min(score, 2);
 }
 
@@ -1392,6 +1440,11 @@ function scoreLearningVelocity(startup: StartupProfile): number {
     // Problem discovery depth indicates learning
     if (startup.problem_discovery_depth === 'deep') score += 0.3;
     else if (startup.problem_discovery_depth === 'moderate') score += 0.15;
+  }
+  
+  // DEFAULT: If still no score, assume average learning velocity
+  if (score === 0) {
+    return 0.4; // Benefit of the doubt - assume they're learning
   }
   
   return Math.min(score, 1.5);

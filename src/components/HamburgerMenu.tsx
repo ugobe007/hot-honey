@@ -1,8 +1,18 @@
+/**
+ * @deprecated This component is DEPRECATED. Use LogoDropdownMenu instead.
+ * LogoDropdownMenu is the single source of truth for navigation per the design system.
+ * This file is kept for reference only and will be removed in a future release.
+ * 
+ * Migration: Replace `import HamburgerMenu from './HamburgerMenu'` with
+ *            `import LogoDropdownMenu from './LogoDropdownMenu'`
+ */
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Menu, X, Home, Zap, Vote as VoteIcon, Briefcase, Rocket, TrendingUp, FileText, BookOpen, Settings, Crown, Activity } from 'lucide-react';
 
+/** @deprecated Use LogoDropdownMenu instead */
 export default function HamburgerMenu() {
+  console.warn('HamburgerMenu is deprecated. Please use LogoDropdownMenu instead.');
   const [isOpen, setIsOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
 

@@ -6,7 +6,7 @@
  * Goal: Find 100+ startups and investors per run
  * 
  * Run: node mega-scraper.js
- * Schedule with PM2: pm2 start mega-scraper.js --cron-restart="0 0,6,12,18 * * *"
+ * PM2: pm2 start mega-scraper.js --cron-restart="0 0,6,12,18 * * *"
  */
 
 require('dotenv').config();

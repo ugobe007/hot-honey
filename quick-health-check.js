@@ -218,7 +218,7 @@ async function runHealthCheck() {
       issues.push({
         severity: 'MEDIUM',
         issue: `${noGod} startups without GOD scores`,
-        fix: 'Run: node recalculate-god-scores.js'
+        fix: 'Run: npx tsx scripts/recalculate-scores.ts'
       });
     }
   }

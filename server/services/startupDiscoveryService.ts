@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
-import OpenAI from 'openai';
+import Anthropic from '@anthropic-ai/sdk';
 import Parser from 'rss-parser';
 
 const supabase = createClient(
@@ -7,8 +7,9 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_KEY!
 );
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+// Using Anthropic Claude instead of OpenAI for market intelligence extraction
+const anthropic = new Anthropic({
+  apiKey: process.env.ANTHROPIC_API_KEY,
 });
 
 const parser = new Parser({
@@ -210,23 +211,20 @@ RESPONSE FORMAT (JSON only, no markdown):
 }`;
 
     try {
-      const completion = await openai.chat.completions.create({
-        model: 'gpt-4o-mini',
+      // Using Anthropic Claude for market intelligence extraction
+      const message = await anthropic.messages.create({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 4000,
+        system: 'You are a startup discovery expert. Extract startup information from articles and return ONLY valid JSON. Be aggressive in extraction - capture every startup mentioned.',
         messages: [
-          {
-            role: 'system',
-            content: 'You are a startup discovery expert. Extract startup information from articles and return ONLY valid JSON. Be aggressive in extraction - capture every startup mentioned.',
-          },
           {
             role: 'user',
             content: prompt,
           },
         ],
-        temperature: 0.3,
-        max_tokens: 3000,
       });
 
-      const result = completion.choices[0]?.message?.content?.trim();
+      const result = message.content[0]?.type === 'text' ? message.content[0].text.trim() : '';
       
       if (!result) {
         return [];

@@ -119,11 +119,11 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-100">
+    <div className="min-h-screen bg-gray-900 text-gray-100 overflow-auto">
       {/* Header */}
-      <div className="border-b border-gray-800 bg-gray-900/95 sticky top-0 z-40">
+      <div className="border-b border-gray-800 bg-gray-900/95 sticky top-0 z-30">
         <div className="max-w-[1800px] mx-auto px-4 py-2 flex items-center justify-between">
-          <h1 className="text-lg font-bold text-white">👑 Admin Dashboard</h1>
+          <h1 className="text-lg font-bold text-white pl-20">👑 Admin Dashboard</h1>
           <div className="flex items-center gap-4 text-xs">
             <Link to="/" className="text-gray-400 hover:text-white">Home</Link>
             <Link to="/admin" className="text-gray-400 hover:text-white">Control Center</Link>
@@ -138,18 +138,25 @@ export default function AdminDashboard() {
       </div>
 
       <div className="max-w-[1800px] mx-auto p-4 space-y-4">
-        {/* Stats */}
+        {/* Stats - All Clickable to Source */}
         <div className="grid grid-cols-4 gap-3 text-xs">
           {[
-            { label: 'Total Startups', value: stats.totalStartups, color: 'text-orange-400' },
-            { label: 'Pending Review', value: stats.pendingStartups, color: 'text-yellow-400' },
-            { label: 'Approved', value: stats.approvedStartups, color: 'text-green-400' },
-            { label: 'Avg GOD Score', value: stats.avgGodScore, color: 'text-cyan-400' }
+            { label: 'Total Startups', value: stats.totalStartups, color: 'text-orange-400', link: '/admin/edit-startups' },
+            { label: 'Pending Review', value: stats.pendingStartups, color: 'text-yellow-400', link: '/admin/edit-startups?status=pending' },
+            { label: 'Approved', value: stats.approvedStartups, color: 'text-green-400', link: '/admin/edit-startups?status=approved' },
+            { label: 'Avg GOD Score', value: stats.avgGodScore, color: 'text-cyan-400', link: '/admin/god-scores' }
           ].map((s, i) => (
-            <div key={i} className="bg-gray-800/50 rounded-lg px-4 py-3 border border-gray-700">
-              <div className={`text-2xl font-bold font-mono ${s.color}`}>{s.value}</div>
-              <div className="text-gray-500">{s.label}</div>
-            </div>
+            <Link 
+              key={i} 
+              to={s.link}
+              className="bg-gray-800/50 rounded-lg px-4 py-3 border border-gray-700 hover:bg-gray-800/70 hover:border-gray-600 cursor-pointer transition-all group"
+            >
+              <div className={`text-2xl font-bold font-mono ${s.color} group-hover:scale-105 transition-transform`}>{s.value}</div>
+              <div className="text-gray-500 group-hover:text-gray-400 flex items-center gap-1">
+                {s.label}
+                <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+              </div>
+            </Link>
           ))}
         </div>
 

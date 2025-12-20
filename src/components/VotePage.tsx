@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import StartupCardOfficial from './StartupCardOfficial';
 import VCFirmCard from './VCFirmCard';
-import HamburgerMenu from './HamburgerMenu';
+import LogoDropdownMenu from './LogoDropdownMenu';
 import { loadApprovedStartups } from '../store';
 import { saveVote, hasVoted, getYesVotes } from '../lib/voteService';
 import { awardPoints } from '../utils/firePointsManager';
@@ -174,8 +174,8 @@ const VotePage: React.FC = () => {
   if (unvotedStartups.length === 0) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-slate-100">
-        {/* Hamburger Menu */}
-        <HamburgerMenu />
+        {/* Logo Dropdown Menu */}
+        <LogoDropdownMenu />
 
         {/* Current Page Button Only */}
         <div className="fixed top-6 left-1/2 transform -translate-x-1/2 z-40">
@@ -225,8 +225,8 @@ const VotePage: React.FC = () => {
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-[#9400cd]/5 rounded-full blur-3xl animate-pulse"></div>
       </div>
 
-      {/* Hamburger Menu */}
-      <HamburgerMenu />
+      {/* Logo Dropdown Menu */}
+      <LogoDropdownMenu />
 
       {/* Vote Button - Links to Home */}
       <div className="fixed top-6 left-1/2 transform -translate-x-1/2 z-40">

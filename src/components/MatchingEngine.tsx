@@ -818,32 +818,32 @@ export default function MatchingEngine() {
 
   if (!match) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#1a1140] via-[#2d1b69] to-[#4a2a8f] flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-[#0c0c0c] via-[#171717] to-[#1e1e1e] flex items-center justify-center">
         <div className="text-white text-2xl">Loading matches...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#160020] via-[#240032] to-[#330044] relative overflow-hidden">
-      {/* Animated background */}
+    <div className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#141414] to-[#1a1a1a] relative overflow-hidden">
+      {/* Animated background - subtle orange/amber glows */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-64 h-64 bg-[#9400cd]/5 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-[#9400cd]/5 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute top-20 left-10 w-64 h-64 bg-orange-500/5 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl animate-pulse"></div>
       </div>
 
       {/* Logo Dropdown Menu (replaces hamburger + separate logo) */}
       <LogoDropdownMenu />
 
       {/* Get Matched Button - Top Right */}
-      <div className="fixed top-8 right-8 z-50">
-        <Link
-          to="/get-matched"
-          className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold rounded-xl transition-all shadow-lg"
+      <div className="fixed top-20 right-8 z-50">
+        <button
+          onClick={() => setShowHowItWorks(true)}
+          className="flex items-center gap-2 px-5 py-2.5 bg-[#1a1a1a] hover:bg-[#222222] text-orange-400 hover:text-orange-300 font-bold rounded-xl transition-all border-2 border-orange-500/60 hover:border-orange-400 shadow-lg shadow-black/30"
         >
           <Sparkles className="w-5 h-5" />
           Get Matched
-        </Link>
+        </button>
       </div>
 
       {/* Main Headline - AT TOP */}
@@ -851,7 +851,7 @@ export default function MatchingEngine() {
         <div className="text-center">
           <h2 className="text-6xl md:text-7xl font-bold mb-3">
             <span className="text-white text-4xl md:text-5xl">Find Your </span>
-            <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-amber-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-orange-400 via-amber-400 to-yellow-400 bg-clip-text text-transparent">
               Perfect Match
             </span>
           </h2>
@@ -878,7 +878,7 @@ export default function MatchingEngine() {
             </div>
             <Link
               to="/trending"
-              className="group flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-[#1a0033] to-[#2d1b4e] hover:from-[#2d1b4e] hover:to-[#3d2a5e] text-white font-semibold rounded-xl border border-orange-500/50 hover:border-orange-400 shadow-md shadow-purple-900/50 hover:shadow-orange-500/30 transition-all hover:scale-105"
+              className="group flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-[#1a1a1a] to-[#2a2a2a] hover:from-[#2a2a2a] hover:to-[#333333] text-white font-semibold rounded-xl border border-orange-500/50 hover:border-orange-400 shadow-md shadow-black/50 hover:shadow-orange-500/30 transition-all hover:scale-105"
             >
               <Search className="w-4 h-4 text-orange-400 group-hover:text-orange-300" />
               <span className="text-sm bg-gradient-to-r from-orange-400 to-yellow-400 bg-clip-text text-transparent">
@@ -891,13 +891,13 @@ export default function MatchingEngine() {
           <div className="relative">
             {/* Cards Grid - CENTERED */}
             <div className="grid md:grid-cols-[1fr,auto,1fr] gap-12 items-center justify-items-center max-w-7xl mx-auto">
-              {/* Startup Card - DEEP PURPLE GRADIENT with Kelly Green Stroke */}
+              {/* Startup Card - DARK CHARCOAL with Kelly Green Stroke */}
               <div className={`relative w-full max-w-[400px] transition-all duration-400 ${cardFadeOut ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}>
                 {/* Kelly green glow effect */}
                 <div className="absolute -inset-4 bg-gradient-to-r from-emerald-500 via-green-500 to-emerald-500 rounded-[2.5rem] blur-2xl opacity-60 hover:opacity-80 transition-opacity"></div>
                 
                 <div 
-                  className="relative group cursor-pointer bg-gradient-to-br from-[#1a0033] via-[#2d1b4e] to-[#3d1f5e] backdrop-blur-md border-4 border-emerald-500/60 hover:border-emerald-400/80 rounded-3xl p-2 shadow-2xl shadow-emerald-600/40 transition-all duration-300 h-[420px] flex flex-col hover:scale-[1.03]"
+                  className="relative group cursor-pointer bg-gradient-to-br from-[#1a1a1a] via-[#222222] to-[#2a2a2a] backdrop-blur-md border-4 border-emerald-500/60 hover:border-emerald-400/80 rounded-3xl p-2 shadow-2xl shadow-emerald-600/40 transition-all duration-300 h-[420px] flex flex-col hover:scale-[1.03]"
                 >
                 {/* Fire Icon in Upper Right - Click to reveal secret */}
                 <div className="absolute top-4 right-4 z-20">
@@ -920,7 +920,7 @@ export default function MatchingEngine() {
                   </div>
                 </div>
 
-                {/* INNER GRADIENT PANEL - DEEP PURPLE */}
+                {/* INNER GRADIENT PANEL - DARK CHARCOAL */}
                 <div 
                   onClick={() => {
                     // Safety check: Only navigate if ID looks valid (UUID format, not numeric fallback)
@@ -934,11 +934,11 @@ export default function MatchingEngine() {
                       alert('Startup details unavailable - database connection issue');
                     }
                   }}
-                  className="bg-gradient-to-br from-[#1a0033]/95 via-[#2d1b4e]/90 to-[#3d1f5e]/85 rounded-2xl p-6 h-full flex flex-col backdrop-blur-sm border-2 border-emerald-400/40 shadow-inner"
+                  className="bg-gradient-to-br from-[#141414]/95 via-[#1a1a1a]/90 to-[#222222]/85 rounded-2xl p-6 h-full flex flex-col backdrop-blur-sm border-2 border-emerald-400/40 shadow-inner"
                 >
                   {/* Icon + Name + Value Prop */}
                   <div className="flex items-start gap-3 mb-3">
-                    <div className="bg-gradient-to-br from-[#8b5cf6] to-[#6366f1] p-4 rounded-xl shadow-2xl flex-shrink-0">
+                    <div className="bg-gradient-to-br from-orange-500 to-amber-600 p-4 rounded-xl shadow-2xl shadow-orange-500/30 flex-shrink-0">
                       <span className="text-4xl">🚀</span>
                     </div>
                     <div className="flex-1 min-w-0">
@@ -965,7 +965,7 @@ export default function MatchingEngine() {
                       </span>
                     ))}
                     {/* Stage Tag */}
-                    <span className="bg-purple-600/50 text-white px-3 py-1 rounded-full text-sm font-bold">
+                    <span className="bg-teal-600/50 text-white px-3 py-1 rounded-full text-sm font-bold">
                       {match.startup.tags[match.startup.tags.length - 1] || 'Seed'}
                     </span>
                   </div>
@@ -1021,27 +1021,27 @@ export default function MatchingEngine() {
                     strokeDasharray="8,8"
                     style={{ animationDelay: '0.3s' }}
                   />
-                  {/* Gradient definitions */}
+                  {/* Gradient definitions - Orange/Amber energy */}
                   <defs>
                     <linearGradient id="gradient-left" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#ec4899" stopOpacity="0.1" />
-                      <stop offset="50%" stopColor="#a855f7" stopOpacity="0.8" />
-                      <stop offset="100%" stopColor="#ec4899" stopOpacity="1" />
+                      <stop offset="0%" stopColor="#22c55e" stopOpacity="0.1" />
+                      <stop offset="50%" stopColor="#f97316" stopOpacity="0.8" />
+                      <stop offset="100%" stopColor="#22c55e" stopOpacity="1" />
                     </linearGradient>
                     <linearGradient id="gradient-right" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#06b6d4" stopOpacity="1" />
-                      <stop offset="50%" stopColor="#8b5cf6" stopOpacity="0.8" />
-                      <stop offset="100%" stopColor="#06b6d4" stopOpacity="0.1" />
+                      <stop offset="0%" stopColor="#f97316" stopOpacity="1" />
+                      <stop offset="50%" stopColor="#f59e0b" stopOpacity="0.8" />
+                      <stop offset="100%" stopColor="#f97316" stopOpacity="0.1" />
                     </linearGradient>
                   </defs>
                 </svg>
 
                 <button onClick={() => setShowHowItWorks(true)} className="relative z-10 cursor-pointer hover:scale-110 transition-transform">
-                  {/* Pulsing glow background */}
-                  <div className="absolute inset-0 bg-purple-500/40 rounded-full blur-3xl animate-pulse"></div>
+                  {/* Pulsing glow background - ORANGE for hot deals */}
+                  <div className="absolute inset-0 bg-orange-500/40 rounded-full blur-3xl animate-pulse"></div>
                   
-                  {/* Brain Icon Image with animation */}
-                  <div className={`relative transition-all duration-700 ${brainSpin ? 'scale-150 drop-shadow-[0_0_50px_rgba(168,85,247,1)]' : matchPulse ? 'scale-125 drop-shadow-[0_0_40px_rgba(168,85,247,1)]' : 'scale-100 drop-shadow-[0_0_25px_rgba(168,85,247,0.8)]'}`}>
+                  {/* Brain Icon Image with animation - orange glow */}
+                  <div className={`relative transition-all duration-700 ${brainSpin ? 'scale-150 drop-shadow-[0_0_50px_rgba(255,90,9,1)]' : matchPulse ? 'scale-125 drop-shadow-[0_0_40px_rgba(255,90,9,1)]' : 'scale-100 drop-shadow-[0_0_25px_rgba(255,90,9,0.8)]'}`}>
                     <img 
                       src="/images/brain-icon.png" 
                       alt="AI Brain" 
@@ -1080,8 +1080,8 @@ export default function MatchingEngine() {
 
               {/* Investor Card - Enhanced Component with Glow and Stroke */}
               <div className={`relative w-full max-w-[400px] transition-all duration-400 ${cardFadeOut ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}>
-                {/* Dark purple glow effect */}
-                <div className="absolute -inset-4 bg-gradient-to-r from-purple-600 via-violet-600 to-purple-600 rounded-[2.5rem] blur-2xl opacity-60 hover:opacity-80 transition-opacity"></div>
+                {/* Hot amber/orange glow effect - fintech deal vibes */}
+                <div className="absolute -inset-4 bg-gradient-to-r from-amber-500 via-orange-500 to-amber-500 rounded-[2.5rem] blur-2xl opacity-50 hover:opacity-70 transition-opacity"></div>
                 
                 {/* Remove clipped border wrapper - apply border directly */}
                 <div className="relative">
@@ -1099,7 +1099,7 @@ export default function MatchingEngine() {
                       setSelectedInvestor(match.investor);
                       setShowVCPopup(true);
                     }}
-                    className="absolute bottom-6 left-6 flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-purple-800 to-purple-950 text-white font-semibold hover:from-purple-900 hover:to-purple-950 transition-all shadow-lg hover:scale-105 z-20"
+                    className="absolute bottom-6 left-6 flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-teal-700 to-teal-900 text-white font-semibold hover:from-teal-600 hover:to-teal-800 transition-all shadow-lg hover:scale-105 z-20"
                   >
                     <Info className="w-4 h-4" />
                     Learn More
@@ -1126,15 +1126,15 @@ export default function MatchingEngine() {
           {/* Section Header */}
           <div className="text-center mb-12">
             <h2 className="text-5xl font-bold text-white mb-4">
-              Watch the <span className="bg-gradient-to-r from-orange-400 via-amber-400 to-purple-400 bg-clip-text text-transparent">Magic</span> Happen
+              Watch the <span className="bg-gradient-to-r from-orange-400 via-amber-400 to-yellow-400 bg-clip-text text-transparent">Magic</span> Happen
             </h2>
             <p className="text-xl text-gray-400 max-w-3xl mx-auto">
               Our <span className="text-yellow-400 font-semibold">GOD Algorithm™</span> processes 20+ compatibility factors in real-time
             </p>
           </div>
 
-          {/* Live Processing Dashboard */}
-          <div className="bg-gradient-to-br from-purple-900/40 via-indigo-900/40 to-blue-900/40 backdrop-blur-xl rounded-3xl p-8 border border-purple-500/30 shadow-[0_0_80px_rgba(168,85,247,0.3)] mb-12">
+          {/* Live Processing Dashboard - Dark stage with orange glow */}
+          <div className="bg-gradient-to-br from-[#1a1a1a]/90 via-[#222222]/90 to-[#1a1a1a]/90 backdrop-blur-xl rounded-3xl p-8 border border-orange-500/30 shadow-[0_0_60px_rgba(255,90,9,0.2)] mb-12">
             {/* Real-time Status */}
             <div className="flex items-center justify-between mb-8 pb-6 border-b border-white/10">
               <div className="flex items-center gap-3">
@@ -1150,7 +1150,7 @@ export default function MatchingEngine() {
                   <div className="text-xs text-gray-400 uppercase tracking-wide">Active Matches</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-purple-400">{match.matchScore}%</div>
+                  <div className="text-3xl font-bold text-amber-400">{match.matchScore}%</div>
                   <div className="text-xs text-gray-400 uppercase tracking-wide">Match Score</div>
                 </div>
                 <div className="text-center">
@@ -1166,11 +1166,11 @@ export default function MatchingEngine() {
                 <div className="w-40 text-white font-semibold text-sm">Industry Fit</div>
                 <div className="flex-1 h-3 bg-white/10 rounded-full overflow-hidden">
                   <div 
-                    className="h-full bg-gradient-to-r from-purple-500 to-violet-500 rounded-full transition-all duration-1000 ease-out"
+                    className="h-full bg-gradient-to-r from-orange-500 to-amber-500 rounded-full transition-all duration-1000 ease-out"
                     style={{ width: `${Math.min(95, match.matchScore + 5)}%` }}
                   />
                 </div>
-                <div className="w-12 text-right text-cyan-400 font-bold">{Math.min(95, match.matchScore + 5)}%</div>
+                <div className="w-12 text-right text-amber-400 font-bold">{Math.min(95, match.matchScore + 5)}%</div>
               </div>
 
               <div className="flex items-center gap-4">
@@ -1210,11 +1210,11 @@ export default function MatchingEngine() {
                 <div className="w-40 text-white font-semibold text-sm">Thesis Alignment</div>
                 <div className="flex-1 h-3 bg-white/10 rounded-full overflow-hidden">
                   <div 
-                    className="h-full bg-gradient-to-r from-violet-500 to-purple-500 rounded-full transition-all duration-1000 ease-out delay-600"
+                    className="h-full bg-gradient-to-r from-teal-500 to-cyan-500 rounded-full transition-all duration-1000 ease-out delay-600"
                     style={{ width: `${Math.min(87, match.matchScore - 5)}%` }}
                   />
                 </div>
-                <div className="w-12 text-right text-cyan-400 font-bold">{Math.min(87, match.matchScore - 5)}%</div>
+                <div className="w-12 text-right text-teal-400 font-bold">{Math.min(87, match.matchScore - 5)}%</div>
               </div>
             </div>
 
@@ -1222,7 +1222,7 @@ export default function MatchingEngine() {
             <div className="mt-8 pt-6 border-t border-white/10">
               <div className="grid grid-cols-4 gap-4">
                 <div className="text-center">
-                  <div className="w-12 h-12 mx-auto bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center mb-2 shadow-lg shadow-purple-500/50">
+                  <div className="w-12 h-12 mx-auto bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center mb-2 shadow-lg shadow-orange-500/50">
                     <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
@@ -1266,9 +1266,9 @@ export default function MatchingEngine() {
 
           {/* Algorithm Insights */}
           <div className="grid md:grid-cols-2 gap-6">
-            <div className="bg-gradient-to-br from-purple-900/30 to-violet-900/30 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/30 hover:border-purple-400/50 transition-all">
+            <div className="bg-gradient-to-br from-[#1a1a1a]/80 to-[#222222]/80 backdrop-blur-sm rounded-2xl p-6 border border-orange-500/30 hover:border-orange-400/50 transition-all">
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-violet-500 rounded-xl flex items-center justify-center flex-shrink-0">
+                <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-amber-500 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-orange-500/30">
                   <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                   </svg>
@@ -1299,7 +1299,7 @@ export default function MatchingEngine() {
         {/* Feature Panel Cards - RESTORED FULL DESIGN */}
         <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto mb-16 px-4">
           {/* I'm a Founder Panel */}
-          <div className="bg-gradient-to-br from-purple-900/60 to-indigo-900/60 backdrop-blur-sm rounded-3xl p-8 border-2 border-purple-500/40 shadow-[0_20px_60px_rgba(124,58,237,0.4)]">
+          <div className="bg-gradient-to-br from-[#1a1a1a]/90 to-[#222222]/90 backdrop-blur-sm rounded-3xl p-8 border-2 border-orange-500/40 shadow-[0_20px_60px_rgba(255,90,9,0.3)]">
             <div className="text-6xl mb-4">🚀</div>
             <h2 className="text-3xl font-bold text-white mb-8">I'm a Founder</h2>
             
@@ -1337,7 +1337,7 @@ export default function MatchingEngine() {
               </div>
             </div>
 
-            <div className="bg-gradient-to-r from-[#673ab7]/20 to-[#9c27b0]/20 border border-[#673ab7]/30 rounded-xl p-4 mb-4 hover:border-[#673ab7]/50 transition-all">
+            <div className="bg-gradient-to-r from-orange-500/20 to-amber-500/20 border border-orange-500/30 rounded-xl p-4 mb-4 hover:border-orange-500/50 transition-all">
               <div className="flex items-center gap-2">
                 <span className="text-2xl">💎</span>
                 <span className="text-yellow-400 font-bold text-lg">Premium Strategy Service</span>
@@ -1346,14 +1346,14 @@ export default function MatchingEngine() {
 
             <button 
               onClick={() => navigate('/submit')}
-              className="group w-full text-left px-6 py-4 rounded-xl transition-all hover:bg-white/5 border border-white/10 hover:border-purple-400/50"
+              className="group w-full text-left px-6 py-4 rounded-xl transition-all hover:bg-white/5 border border-white/10 hover:border-orange-400/50"
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <div className="text-purple-300 font-semibold text-lg mb-1 group-hover:text-purple-200 transition-colors">Get Started</div>
+                  <div className="text-orange-300 font-semibold text-lg mb-1 group-hover:text-orange-200 transition-colors">Get Started</div>
                   <div className="text-gray-400 text-sm">Find your perfect investors</div>
                 </div>
-                <svg className="w-6 h-6 text-purple-400 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-6 h-6 text-orange-400 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </div>
@@ -1432,11 +1432,11 @@ export default function MatchingEngine() {
         {/* Info modal */}
         {showInfoModal && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50" onClick={() => setShowInfoModal(false)}>
-          <div className="bg-gradient-to-br from-[#2a1845] to-[#1a1030] border border-purple-500/50 rounded-3xl p-8 max-w-md mx-4 shadow-[0_0_50px_rgba(168,85,247,0.4)]" onClick={e => e.stopPropagation()}>
+          <div className="bg-gradient-to-br from-[#1a1a1a] to-[#222222] border border-orange-500/50 rounded-3xl p-8 max-w-md mx-4 shadow-[0_0_50px_rgba(255,90,9,0.3)]" onClick={e => e.stopPropagation()}>
             <div className="text-center mb-6">
               <span className="text-6xl">🧠</span>
               <h2 className="text-3xl font-bold text-white mt-4">How Hot Money Works</h2>
-              <p className="text-purple-400 mt-2">AI-Powered Startup-Investor Matching</p>
+              <p className="text-orange-400 mt-2">AI-Powered Startup-Investor Matching</p>
             </div>
             
             <p className="text-gray-300 mb-6 text-center">
@@ -1537,7 +1537,7 @@ export default function MatchingEngine() {
           onClick={() => setShowHotMatchInfo(false)}
         >
           <div 
-            className="bg-gradient-to-br from-purple-900 to-blue-900 rounded-3xl p-8 max-w-2xl w-full border-2 border-purple-500 shadow-2xl"
+            className="bg-gradient-to-br from-[#1a1a1a] to-[#222222] rounded-3xl p-8 max-w-2xl w-full border-2 border-orange-500/50 shadow-2xl shadow-orange-500/20"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-center mb-6">

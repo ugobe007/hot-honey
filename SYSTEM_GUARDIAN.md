@@ -80,9 +80,10 @@ The **System Guardian** is Hot Match's master health monitoring and auto-healing
 - Zero startups reaching "elite" status (85+)
 
 **Resolution:**
-- Run `node calibrate-god-scores.js --apply` to recalibrate
+- Run `npx tsx scripts/recalculate-scores.ts` to recalculate using single source of truth
 - Check if scoring service is applying proper weights
 - Verify startup data quality (team, traction, market fields)
+- NOTE: Database trigger now prevents scores below 40
 
 ---
 
@@ -274,10 +275,11 @@ const THRESHOLDS = {
 ## Related Files
 
 | File | Purpose |
-|------|---------|
+|------|---------||
 | [system-guardian.js](system-guardian.js) | Main guardian script |
 | [match-regenerator.js](match-regenerator.js) | Match regeneration (triggered by guardian) |
-| [calibrate-god-scores.js](calibrate-god-scores.js) | GOD score recalibration |
+| [scripts/recalculate-scores.ts](scripts/recalculate-scores.ts) | GOD score recalculation (SINGLE SOURCE OF TRUTH) |
+| [server/services/startupScoringService.ts](server/services/startupScoringService.ts) | Core scoring algorithm |
 | [src/pages/SystemHealthDashboard.tsx](src/pages/SystemHealthDashboard.tsx) | Admin health UI |
 | [ecosystem.config.js](ecosystem.config.js) | PM2 process configuration |
 | [scripts/watchdog.ts](scripts/watchdog.ts) | Secondary health monitor |
@@ -322,7 +324,7 @@ node system-guardian.js
 | Symptom | Fix |
 |---------|-----|
 | Matches empty | `node match-regenerator.js` |
-| Low GOD scores | `node calibrate-god-scores.js --apply` |
+| Low GOD scores | `npx tsx scripts/recalculate-scores.ts` |
 | Scraper stuck | `pm2 restart mega-scraper` |
 | Stale data | Check PM2 processes, restart as needed |
 

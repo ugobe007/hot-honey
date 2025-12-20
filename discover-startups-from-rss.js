@@ -9,13 +9,13 @@
 
 require('dotenv').config();
 const { createClient } = require('@supabase/supabase-js');
-const OpenAI = require('openai').default;
+const Anthropic = require('@anthropic-ai/sdk').default;
 const Parser = require('rss-parser');
 
 // Check environment variables (support both VITE_ prefixed and non-prefixed)
 const SUPABASE_URL = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
 const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY || process.env.VITE_OPENAI_API_KEY;
+const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 
 if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
   console.error('❌ Missing required environment variables:');
@@ -24,15 +24,15 @@ if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
   process.exit(1);
 }
 
-if (!OPENAI_API_KEY) {
-  console.error('❌ Missing OPENAI_API_KEY (or VITE_OPENAI_API_KEY) in .env file');
+if (!ANTHROPIC_API_KEY) {
+  console.error('❌ Missing ANTHROPIC_API_KEY in .env file');
   process.exit(1);
 }
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
 
-const openai = new OpenAI({
-  apiKey: OPENAI_API_KEY,
+const anthropic = new Anthropic({
+  apiKey: ANTHROPIC_API_KEY,
 });
 
 const parser = new Parser({
@@ -65,18 +65,32 @@ async function discoverStartupsFromRSS() {
 
   const allStartups = [];
 
-  // Process each RSS source
-  for (const source of sources) {
-    try {
-      console.log(`📰 Processing: ${source.name}`);
-      const startups = await processRSSSource(source);
-      allStartups.push(...startups);
-      console.log(`   ✅ Found ${startups.length} startups\n`);
-
-      // Be respectful - wait between feeds
-      await new Promise(resolve => setTimeout(resolve, 2000));
-    } catch (error) {
-      console.error(`   ❌ Error processing ${source.name}:`, error.message);
+  // Process RSS sources in parallel batches of 5 (faster discovery)
+  const BATCH_SIZE = 5;
+  for (let i = 0; i < sources.length; i += BATCH_SIZE) {
+    const batch = sources.slice(i, i + BATCH_SIZE);
+    console.log(`\n📦 Processing batch ${Math.floor(i/BATCH_SIZE) + 1} (${batch.length} sources)...`);
+    
+    // Process batch in parallel
+    const batchPromises = batch.map(async (source) => {
+      try {
+        console.log(`📰 Processing: ${source.name}`);
+        const startups = await processRSSSource(source);
+        console.log(`   ✅ Found ${startups.length} startups from ${source.name}`);
+        return startups;
+      } catch (error) {
+        console.error(`   ❌ Error processing ${source.name}:`, error.message);
+        return [];
+      }
+    });
+    
+    // Wait for batch to complete
+    const batchResults = await Promise.all(batchPromises);
+    batchResults.forEach(startups => allStartups.push(...startups));
+    
+    // Small delay between batches
+    if (i + BATCH_SIZE < sources.length) {
+      await new Promise(resolve => setTimeout(resolve, 1000));
     }
   }
 
@@ -95,13 +109,13 @@ async function processRSSSource(source) {
     // Parse RSS feed
     const feedData = await parser.parseURL(source.url);
     
-    // Filter recent articles (last 30 days)
-    const thirtyDaysAgo = new Date();
-    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+    // Filter recent articles (last 7 days for faster processing, more frequent runs)
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
     const recentArticles = feedData.items.filter((item) => {
       const pubDate = item.pubDate ? new Date(item.pubDate) : null;
-      return !pubDate || pubDate >= thirtyDaysAgo;
+      return !pubDate || pubDate >= sevenDaysAgo;
     });
 
     if (recentArticles.length === 0) {
@@ -122,9 +136,9 @@ async function processRSSSource(source) {
 }
 
 async function extractStartupsFromArticles(articles, sourceName) {
-  // Prepare articles text for AI
+  // Prepare articles text for AI (increased from 15 to 25 for more startups per run)
   const articlesText = articles
-    .slice(0, 15)
+    .slice(0, 25)
     .map((item, i) => {
       const content = item.content || item.description || item.title || '';
       const cleanContent = content.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
@@ -174,23 +188,18 @@ RESPONSE FORMAT (JSON only):
 }`;
 
   try {
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-4o-mini',
+    const message = await anthropic.messages.create({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 3000,
       messages: [
         {
-          role: 'system',
-          content: 'You are a startup discovery expert. Extract startup information and return ONLY valid JSON.',
-        },
-        {
           role: 'user',
-          content: prompt,
+          content: `You are a startup discovery expert. Extract startup information and return ONLY valid JSON.\n\n${prompt}`,
         },
       ],
-      temperature: 0.3,
-      max_tokens: 3000,
     });
 
-    const result = completion.choices[0]?.message?.content?.trim();
+    const result = message.content[0]?.text?.trim();
     
     if (!result) {
       return [];
@@ -281,6 +290,21 @@ async function saveDiscoveredStartups(startups) {
   }
 
   console.log(`\n✅ Saved: ${saved} | Skipped (duplicates): ${skipped}`);
+  
+  // Auto-import immediately after discovery (for ML training)
+  if (saved > 0) {
+    console.log(`\n🔄 Auto-importing ${saved} newly discovered startups...`);
+    try {
+      const { execSync } = require('child_process');
+      execSync('node auto-import-pipeline.js', { 
+        stdio: 'inherit',
+        cwd: __dirname 
+      });
+      console.log('✅ Auto-import complete');
+    } catch (error) {
+      console.log('⚠️  Auto-import failed (will retry via automation-engine):', error.message);
+    }
+  }
 }
 
 async function main() {

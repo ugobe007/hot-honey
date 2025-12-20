@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { X, Brain, Users, Zap, Target, TrendingUp, Sparkles, ChevronRight, BarChart3, Flame, Lightbulb, Code2 } from 'lucide-react';
 import FlameIcon from './FlameIcon';
 
 interface HowItWorksModalProps {
   isOpen: boolean;
   onClose: () => void;
+  showSignupButton?: boolean; // Option to show "Get Started" button that goes to signup
 }
 
-const HowItWorksModal: React.FC<HowItWorksModalProps> = ({ isOpen, onClose }) => {
+const HowItWorksModal: React.FC<HowItWorksModalProps> = ({ isOpen, onClose, showSignupButton = true }) => {
+  const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const [demoScores, setDemoScores] = useState({ god: 0, yc: 0, sequoia: 0, a16z: 0 });
@@ -308,6 +311,17 @@ const HowItWorksModal: React.FC<HowItWorksModalProps> = ({ isOpen, onClose }) =>
             >
               Start Matching
             </button>
+            {showSignupButton && (
+              <button
+                onClick={() => {
+                  onClose();
+                  navigate('/get-matched');
+                }}
+                className="px-8 py-3 rounded-xl bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-bold text-lg hover:from-purple-600 hover:to-indigo-600 transition-all shadow-lg hover:shadow-purple-500/25 hover:scale-105"
+              >
+                Get Started →
+              </button>
+            )}
             <button
               onClick={() => setCurrentStep((prev) => (prev + 1) % steps.length)}
               className="px-8 py-3 rounded-xl border border-white/20 text-white font-medium hover:bg-white/10 transition-all"

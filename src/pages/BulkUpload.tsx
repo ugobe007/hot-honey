@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Upload, ExternalLink, CheckCircle2, XCircle, RefreshCw, Sparkles, Globe, Trash2 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
-import AdminNavBar from '../components/AdminNavBar';
+import LogoDropdownMenu from '../components/LogoDropdownMenu';
 
 interface ImportResult {
   url: string;
@@ -209,8 +209,8 @@ export default function BulkUpload() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-purple-950 text-white">
-      {/* Navigation Bar */}
-      <AdminNavBar currentPage="/bulkupload" />
+      {/* Navigation */}
+      <LogoDropdownMenu />
 
       <div className="max-w-4xl mx-auto px-6 py-12">
         {/* Header */}
@@ -364,13 +364,43 @@ www.company.ai`}
             </div>
 
             {!importing && successCount > 0 && (
-              <div className="mt-6 pt-4 border-t border-white/10 flex justify-center">
-                <button
-                  onClick={() => navigate('/admin/edit-startups')}
-                  className="px-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 rounded-xl font-bold transition flex items-center gap-2"
-                >
-                  View Imported Startups →
-                </button>
+              <div className="mt-6 pt-4 border-t border-white/10">
+                {/* Success Banner */}
+                <div className="bg-green-500/20 border border-green-500/40 rounded-xl p-4 mb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-green-500/30 flex items-center justify-center">
+                      <CheckCircle2 className="w-6 h-6 text-green-400" />
+                    </div>
+                    <div>
+                      <p className="font-bold text-green-400">🎉 Import Complete!</p>
+                      <p className="text-sm text-green-300/80">
+                        {successCount} startup{successCount > 1 ? 's' : ''} imported successfully. 
+                        {successCount > 0 && ' Review and approve them to make them visible in matching.'}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Action Buttons */}
+                <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                  <button
+                    onClick={() => navigate('/admin/edit-startups?filter=pending')}
+                    className="px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 rounded-xl font-bold transition flex items-center justify-center gap-2"
+                  >
+                    <CheckCircle2 className="w-5 h-5" />
+                    Review & Approve ({successCount} pending)
+                  </button>
+                  <button
+                    onClick={() => {
+                      clearResults();
+                      setUrls('');
+                    }}
+                    className="px-6 py-3 bg-white/10 hover:bg-white/20 rounded-xl font-medium transition flex items-center justify-center gap-2"
+                  >
+                    <Upload className="w-5 h-5" />
+                    Import More
+                  </button>
+                </div>
               </div>
             )}
           </div>

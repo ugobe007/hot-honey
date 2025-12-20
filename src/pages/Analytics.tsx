@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import HamburgerMenu from '../components/HamburgerMenu';
+import LogoDropdownMenu from '../components/LogoDropdownMenu';
 
 interface AnalyticsData {
   totalStartups: number;
@@ -299,8 +299,8 @@ export default function Analytics() {
   if (!analytics) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-slate-100 p-8">
-        {/* Hamburger Menu */}
-        <HamburgerMenu />
+        {/* Logo Dropdown Menu */}
+        <LogoDropdownMenu />
 
         {/* Current Page Button */}
         <div className="fixed top-6 left-1/2 transform -translate-x-1/2 z-40">
@@ -342,8 +342,8 @@ export default function Analytics() {
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-[#9400cd]/5 rounded-full blur-3xl animate-pulse"></div>
       </div>
 
-      {/* Hamburger Menu */}
-      <HamburgerMenu />
+      {/* Logo Dropdown Menu */}
+      <LogoDropdownMenu />
 
       {/* Current Page Button */}
       <div className="fixed top-6 left-1/2 transform -translate-x-1/2 z-40">

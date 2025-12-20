@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { RefreshCw, Check, Play, Clock } from 'lucide-react';
+import { RefreshCw, Check, Play, Clock, ExternalLink } from 'lucide-react';
 
 interface MLMetric {
   total_matches: number;
@@ -111,11 +111,11 @@ export default function MLDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-100">
+    <div className="min-h-screen bg-gray-900 text-gray-100 overflow-auto">
       {/* Header */}
-      <div className="border-b border-gray-800 bg-gray-900/95 sticky top-0 z-40">
+      <div className="border-b border-gray-800 bg-gray-900/95 sticky top-0 z-30">
         <div className="max-w-[1800px] mx-auto px-4 py-2 flex items-center justify-between">
-          <h1 className="text-lg font-bold text-white">🧠 ML Dashboard</h1>
+          <h1 className="text-lg font-bold text-white pl-20">🧠 ML Dashboard</h1>
           <div className="flex items-center gap-4 text-xs">
             <Link to="/" className="text-gray-400 hover:text-white">Home</Link>
             <Link to="/admin" className="text-gray-400 hover:text-white">Control Center</Link>
@@ -130,22 +130,33 @@ export default function MLDashboard() {
       </div>
 
       <div className="max-w-[1800px] mx-auto p-4 space-y-4">
-        {/* Stats */}
+        {/* Stats - All Clickable to Source */}
         {metrics && (
           <div className="grid grid-cols-6 gap-3 text-xs">
             {[
-              { label: 'Total Matches', value: metrics.total_matches, color: 'text-orange-400' },
-              { label: 'Successful', value: metrics.successful_matches, color: 'text-green-400' },
-              { label: 'Success Rate', value: `${(metrics.conversion_rate * 100).toFixed(1)}%`, color: 'text-cyan-400' },
-              { label: 'Avg Match Score', value: metrics.avg_match_score.toFixed(1), color: 'text-purple-400' },
-              { label: 'Avg GOD Score', value: metrics.avg_god_score.toFixed(1), color: 'text-amber-400' },
-              { label: 'Training Status', value: trainingStatus === 'running' ? '🔄 Running' : trainingStatus === 'complete' ? '✅ Done' : '⏸️ Idle', color: 'text-blue-400' }
-            ].map((s, i) => (
-              <div key={i} className="bg-gray-800/50 rounded-lg px-3 py-2 border border-gray-700">
-                <div className={`text-xl font-bold font-mono ${s.color}`}>{s.value}</div>
-                <div className="text-gray-500 text-[10px]">{s.label}</div>
-              </div>
-            ))}
+              { label: 'Total Matches', value: metrics.total_matches, color: 'text-orange-400', link: '/matching' },
+              { label: 'Successful', value: metrics.successful_matches, color: 'text-green-400', link: '/matching' },
+              { label: 'Success Rate', value: `${(metrics.conversion_rate * 100).toFixed(1)}%`, color: 'text-cyan-400', link: '/matching' },
+              { label: 'Avg Match Score', value: metrics.avg_match_score.toFixed(1), color: 'text-purple-400', link: '/matching' },
+              { label: 'Avg GOD Score', value: metrics.avg_god_score.toFixed(1), color: 'text-amber-400', link: '/admin/god-scores' },
+              { label: 'Training Status', value: trainingStatus === 'running' ? '🔄 Running' : trainingStatus === 'complete' ? '✅ Done' : '⏸️ Idle', color: 'text-blue-400', link: null }
+            ].map((s, i) => {
+              const StatBox = s.link ? Link : 'div';
+              const statProps = s.link ? { to: s.link } : {};
+              return (
+                <StatBox 
+                  key={i} 
+                  {...statProps}
+                  className={`bg-gray-800/50 rounded-lg px-3 py-2 border border-gray-700 ${s.link ? 'hover:bg-gray-800/70 hover:border-gray-600 cursor-pointer transition-all group' : ''}`}
+                >
+                  <div className={`text-xl font-bold font-mono ${s.color} ${s.link ? 'group-hover:scale-105 transition-transform' : ''}`}>{s.value}</div>
+                  <div className={`text-gray-500 text-[10px] ${s.link ? 'group-hover:text-gray-400 flex items-center gap-1' : ''}`}>
+                    {s.label}
+                    {s.link && <ExternalLink className="w-2 h-2 opacity-0 group-hover:opacity-100 transition-opacity" />}
+                  </div>
+                </StatBox>
+              );
+            })}
           </div>
         )}
 

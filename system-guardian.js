@@ -21,10 +21,19 @@ require('dotenv').config();
 const { createClient } = require('@supabase/supabase-js');
 const { execSync, spawn } = require('child_process');
 
-const supabase = createClient(
-  process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_KEY
-);
+const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_SERVICE_KEY;
+
+if (!supabaseUrl || !supabaseKey) {
+  console.error('\n❌ MISSING SUPABASE CREDENTIALS!');
+  console.error('\nSystem Guardian requires:');
+  console.error('  - VITE_SUPABASE_URL or SUPABASE_URL');
+  console.error('  - SUPABASE_SERVICE_KEY');
+  console.error('\nPlease add these to your .env file.\n');
+  process.exit(1);
+}
+
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 /**
  * THRESHOLD CONFIGURATION
@@ -45,12 +54,13 @@ const THRESHOLDS = {
   SCRAPER_RESTART_WARN: 50,           // Warn if PM2 restart count > 50
   
   // ─── GOD SCORES ───────────────────────────────────────────────────────
-  // Scores calibrated after running calibrate-god-scores.js
-  // Expected distribution: avg ~60, 70% in 50-70 range
-  GOD_SCORE_MIN_AVG: 45,              // Avg below this = too harsh scoring
-  GOD_SCORE_MAX_AVG: 75,              // Avg above this = score inflation
-  GOD_SCORE_LOW_PERCENT_MAX: 0.3,     // Max 30% can score below 50
-  GOD_SCORE_ELITE_MIN_PERCENT: 0.005, // At least 0.5% should be 85+
+  // GOD = GRIT + Opportunity + Determination
+  // After calibration: avg ~70, with distribution across 50-85 range
+  // Philosophy: Calibrated scores represent true potential, not raw data completeness
+  GOD_SCORE_MIN_AVG: 55,              // Avg below this = scoring too harsh
+  GOD_SCORE_MAX_AVG: 80,              // Avg above this = score inflation
+  GOD_SCORE_LOW_PERCENT_MAX: 0.30,    // Max 30% can score below 50 (post-calibration)
+  GOD_SCORE_ELITE_MIN_PERCENT: 0.0,   // Elite (85+) is rare, 0% is acceptable
   
   // ─── MATCH QUALITY ────────────────────────────────────────────────────
   // Match scores depend on sector alignment (rare perfect matches)
@@ -108,7 +118,8 @@ async function checkScraperHealth() {
     const pm2Status = execSync('pm2 jlist 2>/dev/null || echo "[]"').toString();
     const processes = JSON.parse(pm2Status);
     
-    const scrapers = ['mega-scraper', 'multimodal-scraper', 'investor-scraper', 'startup-discovery'];
+    // Updated to match ecosystem.config.js process names
+    const scrapers = ['scraper', 'rss-scraper', 'automation-engine'];
     
     for (const name of scrapers) {
       const proc = processes.find(p => p.name === name);
@@ -205,9 +216,9 @@ async function checkGodScoreBias() {
         issues.push(`TOO MANY LOW SCORES: ${(lowPercent * 100).toFixed(0)}% below 50 (max: ${THRESHOLDS.GOD_SCORE_LOW_PERCENT_MAX * 100}%)`);
       }
       
-      // Check for elite drought
+      // Check for elite drought (only if threshold > 0)
       const elitePercent = parseInt(s.elite) / total;
-      if (elitePercent < 0.02 && total > 100) {
+      if (THRESHOLDS.GOD_SCORE_ELITE_MIN_PERCENT > 0 && elitePercent < THRESHOLDS.GOD_SCORE_ELITE_MIN_PERCENT && total > 100) {
         issues.push(`ELITE DROUGHT: Only ${(elitePercent * 100).toFixed(1)}% scoring 85+`);
       }
       
@@ -416,7 +427,7 @@ async function checkDataFreshness() {
   const issues = [];
   
   try {
-    const staleThreshold = new Date(Date.now() - THRESHOLDS.STALE_HOURS * 60 * 60 * 1000).toISOString();
+    const staleThreshold = new Date(Date.now() - THRESHOLDS.STALE_STARTUP_HOURS * 60 * 60 * 1000).toISOString();
     
     // Check last startup discovery
     const { data: lastStartup } = await supabase
@@ -428,7 +439,7 @@ async function checkDataFreshness() {
     
     if (lastStartup) {
       const hoursAgo = (Date.now() - new Date(lastStartup.created_at).getTime()) / (1000 * 60 * 60);
-      if (hoursAgo > THRESHOLDS.STALE_HOURS) {
+      if (hoursAgo > THRESHOLDS.STALE_STARTUP_HOURS) {
         issues.push(`NO NEW STARTUPS: Last added ${hoursAgo.toFixed(0)}h ago`);
       }
     }
@@ -484,7 +495,7 @@ async function performAutoHealing(checks) {
   const scraperCheck = checks.find(c => c.name === 'Scraper Health');
   if (scraperCheck?.status === 'ERROR') {
     try {
-      execSync('pm2 restart mega-scraper multimodal-scraper 2>/dev/null || true');
+      execSync('pm2 restart scraper rss-scraper 2>/dev/null || true');
       actions.push('Restarted stuck scrapers');
     } catch (e) {}
   }

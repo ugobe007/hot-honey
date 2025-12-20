@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import StartupCardOfficial from '../components/StartupCardOfficial';
-import HamburgerMenu from '../components/HamburgerMenu';
+import LogoDropdownMenu from '../components/LogoDropdownMenu';
 import { NotificationBell } from '../components/NotificationBell';
 import startupData from '../data/startupData';
 import { useAuth } from '../hooks/useAuth';
@@ -162,8 +162,8 @@ export default function PortfolioPage() {
     <>
       {/* Main content container */}
       <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-slate-100 p-4 sm:p-8">
-        {/* Hamburger Menu */}
-        <HamburgerMenu />
+        {/* Logo Dropdown Menu */}
+        <LogoDropdownMenu />
 
         {/* Current Page Button */}
         <div className="fixed top-6 left-1/2 transform -translate-x-1/2 z-40">

@@ -1,17 +1,17 @@
 /**
  * HOT MATCH SCORE RECALCULATOR
  * ============================
- * Recalculates GOD scores for startups.
- * Runs hourly via PM2 cron.
+ * Recalculates GOD scores for startups using the SINGLE SOURCE OF TRUTH:
+ * ../server/services/startupScoringService.ts
  * 
- * Features:
- * - Batch processing
- * - Priority for pending approvals
- * - Score history tracking
+ * ⚠️  DO NOT ADD SCORING LOGIC HERE - use startupScoringService instead!
+ * 
+ * Runs hourly via PM2 cron.
  */
 
 import { createClient } from '@supabase/supabase-js';
 import dotenv from 'dotenv';
+import { calculateHotScore } from '../server/services/startupScoringService';
 
 dotenv.config();
 
@@ -25,28 +25,6 @@ if (!supabaseUrl || !supabaseKey) {
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-interface Startup {
-  id: string;
-  name: string;
-  tagline?: string | null;
-  problem?: string | null;
-  solution?: string | null;
-  market_size?: string | null;
-  team_size?: number | null;
-  team_companies?: string[] | null;
-  has_technical_cofounder?: boolean | null;
-  mrr?: number | null;
-  growth_rate_monthly?: number | null;
-  is_launched?: boolean | null;
-  has_demo?: boolean | null;
-  total_god_score?: number | null;
-  market_score?: number | null;
-  team_score?: number | null;
-  traction_score?: number | null;
-  product_score?: number | null;
-  vision_score?: number | null;
-}
-
 interface ScoreBreakdown {
   market_score: number;
   team_score: number;
@@ -56,79 +34,61 @@ interface ScoreBreakdown {
   total_god_score: number;
 }
 
-function calculateGODScore(startup: Startup): ScoreBreakdown {
-  // Market Score (0-20)
-  let market_score = 5;
-  if (startup.market_size) {
-    const size = startup.market_size.toLowerCase();
-    if (size.includes('billion') || size.includes('b')) market_score = 18;
-    else if (size.includes('million') || size.includes('m')) market_score = 12;
-    else market_score = 8;
-  }
-  if (startup.problem && startup.problem.length > 50) market_score += 2;
-  market_score = Math.min(20, market_score);
-
-  // Team Score (0-20)
-  let team_score = 5;
-  if (startup.team_size && startup.team_size >= 2) team_score += 5;
-  if (startup.has_technical_cofounder) team_score += 5;
-  if (startup.team_companies && startup.team_companies.length > 0) {
-    const tier1 = ['google', 'meta', 'apple', 'amazon', 'microsoft', 'stripe', 'airbnb'];
-    const hasT1 = startup.team_companies.some(c => 
-      tier1.some(t1 => c.toLowerCase().includes(t1))
-    );
-    if (hasT1) team_score += 5;
-    else team_score += 3;
-  }
-  team_score = Math.min(20, team_score);
-
-  // Traction Score (0-20)
-  let traction_score = 5;
-  if (startup.mrr) {
-    if (startup.mrr >= 100000) traction_score = 20;
-    else if (startup.mrr >= 50000) traction_score = 17;
-    else if (startup.mrr >= 10000) traction_score = 14;
-    else if (startup.mrr >= 1000) traction_score = 10;
-    else traction_score = 7;
-  }
-  if (startup.growth_rate_monthly && startup.growth_rate_monthly > 15) traction_score += 2;
-  if (startup.is_launched) traction_score += 1;
-  traction_score = Math.min(20, traction_score);
-
-  // Product Score (0-20)
-  let product_score = 5;
-  if (startup.is_launched) product_score += 5;
-  if (startup.has_demo) product_score += 5;
-  if (startup.solution && startup.solution.length > 50) product_score += 3;
-  if (startup.tagline && startup.tagline.length > 10) product_score += 2;
-  product_score = Math.min(20, product_score);
-
-  // Vision Score (0-20)
-  let vision_score = 5;
-  if (startup.problem && startup.problem.length > 100) vision_score += 5;
-  if (startup.solution && startup.solution.length > 100) vision_score += 5;
-  if (startup.market_size) vision_score += 3;
-  if (startup.tagline && startup.tagline.length > 20) vision_score += 2;
-  vision_score = Math.min(20, vision_score);
-
-  // Total GOD Score (0-100)
-  const total_god_score = market_score + team_score + traction_score + product_score + vision_score;
-
+/**
+ * Convert startup DB row to profile format for scoring service
+ */
+function toScoringProfile(startup: any): any {
   return {
-    market_score,
-    team_score,
-    traction_score,
-    product_score,
-    vision_score,
-    total_god_score
+    tagline: startup.tagline,
+    pitch: startup.description,
+    problem: startup.problem,
+    solution: startup.solution,
+    market_size: startup.market_size,
+    industries: startup.industries || startup.sectors || [],
+    team: startup.team_companies ? startup.team_companies.map((c: string) => ({
+      name: 'Team Member',
+      previousCompanies: [c]
+    })) : [],
+    founders_count: startup.team_size || 1,
+    technical_cofounders: startup.has_technical_cofounder ? 1 : 0,
+    mrr: startup.mrr,
+    revenue: startup.arr || startup.revenue,
+    growth_rate: startup.growth_rate_monthly,
+    launched: startup.is_launched,
+    demo_available: startup.has_demo,
+    founded_date: startup.founded_date || startup.created_at,
+    value_proposition: startup.value_proposition || startup.tagline,
+    // Pass through any additional fields that might exist
+    ...startup
+  };
+}
+
+/**
+ * Use the SINGLE SOURCE OF TRUTH scoring service
+ * ⚠️  ALL SCORING LOGIC LIVES IN startupScoringService.ts - NOT HERE!
+ */
+function calculateGODScore(startup: any): ScoreBreakdown {
+  const profile = toScoringProfile(startup);
+  const result = calculateHotScore(profile);
+  
+  // Convert from 10-point scale to 100-point scale
+  const total = Math.round(result.total * 10);
+  
+  // Map breakdown to 20-point categories
+  return {
+    market_score: Math.round((result.breakdown.market / 2) * 20),
+    team_score: Math.round((result.breakdown.team / 3) * 20),
+    traction_score: Math.round((result.breakdown.traction / 3) * 20),
+    product_score: Math.round((result.breakdown.product / 2) * 20),
+    vision_score: Math.round((result.breakdown.vision / 2) * 20),
+    total_god_score: total
   };
 }
 
 async function recalculateScores(): Promise<void> {
-  console.log('🔢 Starting GOD Score recalculation...');
+  console.log('🔢 Starting GOD Score recalculation (using SINGLE SOURCE OF TRUTH)...');
   
   // Get startups that need recalculation
-  // Priority: pending, then approved, then recently updated
   const { data: startups, error } = await supabase
     .from('startup_uploads')
     .select('*')

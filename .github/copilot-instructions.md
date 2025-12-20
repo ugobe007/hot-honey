@@ -62,10 +62,10 @@ npm run scrape       # Run RSS scraper once
 npm run scrape:check # Health check on scraper
 pm2 start ecosystem.config.js  # Start all background processes
 pm2 logs             # View all process logs
-npx tsx scripts/recalculate-scores.ts  # Recalculate GOD scores
+npx tsx scripts/recalculate-scores.ts  # Recalculate GOD scores (SINGLE SOURCE OF TRUTH)
 node system-guardian.js  # Run health check
 node match-regenerator.js  # Regenerate all matches
-node calibrate-god-scores.js --apply  # Recalibrate GOD scores
+# NOTE: calibrate-god-scores.js was REMOVED - use recalculate-scores.ts instead
 ```
 
 ## 🛡️ System Guardian (IMPORTANT)
@@ -106,8 +106,9 @@ Guardian automatically:
 | `discovered_startups` | Scraped but not yet reviewed |
 | `rss_sources` | News feed sources for scraping |
 | `ai_logs` | System logs including Guardian health checks |
+| `score_history` | Tracks GOD score changes over time |
 
-> ⚠️ **Note:** The old `matches` table was removed due to FK issues. Use `startup_investor_matches` only.
+> ⚠️ **CLEANED UP (Dec 19, 2025):** Old tables removed: `startups` (replaced by `startup_uploads`), `investor_matches` (replaced by `startup_investor_matches`), `users`, `votes`, `syndicates`, `watchdog_reports`, etc. Database trigger now prevents GOD scores below 40.
 
 ## Conventions
 - **UUID IDs**: All Supabase records use UUIDs, not numeric IDs

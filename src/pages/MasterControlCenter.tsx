@@ -111,23 +111,16 @@ export default function MasterControlCenter() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-100">
-      {/* Compact Header */}
-      <div className="border-b border-gray-800 bg-gray-900/95 sticky top-0 z-40">
-        <div className="max-w-[1800px] mx-auto px-4 py-2 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <h1 className="text-lg font-bold text-white">🎛️ Admin Control Center</h1>
+    <div className="min-h-screen bg-gray-900 text-gray-100 pt-4">
+      {/* Page Header */}
+      <div className="border-b border-gray-800 bg-gray-900/95 sticky top-0 z-30">
+        <div className="max-w-[1800px] mx-auto px-4 py-3 flex items-center justify-between">
+          <div className="flex items-center gap-4 pl-20">
+            <h1 className="text-xl font-bold text-white">🎛️ Admin Control Center</h1>
           </div>
-          <div className="flex items-center gap-4 text-xs">
-            <Link to="/" className="text-gray-400 hover:text-white">Home</Link>
-            <Link to="/admin/dashboard" className="text-gray-400 hover:text-white">Workflow</Link>
-            <Link to="/admin/analytics" className="text-orange-400 hover:text-orange-300">Analytics</Link>
-            <Link to="/market-trends" className="text-gray-400 hover:text-white">Trends</Link>
-            <Link to="/matching" className="text-orange-400 hover:text-orange-300 font-bold">⚡ Match</Link>
-            <button onClick={loadStats} className="text-gray-400 hover:text-white">
-              <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
-            </button>
-          </div>
+          <button onClick={loadStats} className="text-gray-400 hover:text-white p-2">
+            <RefreshCw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
+          </button>
         </div>
       </div>
 

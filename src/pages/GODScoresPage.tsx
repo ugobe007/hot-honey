@@ -50,11 +50,11 @@ export default function GODScoresPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-100">
+    <div className="min-h-screen bg-gray-900 text-gray-100 overflow-auto">
       {/* Header */}
-      <div className="border-b border-gray-800 bg-gray-900/95 sticky top-0 z-40">
+      <div className="border-b border-gray-800 bg-gray-900/95 sticky top-0 z-30">
         <div className="max-w-[1800px] mx-auto px-4 py-2 flex items-center justify-between">
-          <h1 className="text-lg font-bold text-white">🏆 GOD Scores</h1>
+          <h1 className="text-lg font-bold text-white pl-20">🎯 GOD Scores</h1>
           <div className="flex items-center gap-4 text-xs">
             <Link to="/" className="text-gray-400 hover:text-white">Home</Link>
             <Link to="/admin" className="text-gray-400 hover:text-white">Control Center</Link>

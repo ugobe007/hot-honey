@@ -445,31 +445,31 @@ export default function AdminWorkflowDashboard() {
                 <div className="text-sm text-gray-500 mt-1">Out of 100</div>
               </div>
 
-              {/* Active Matches */}
-              <div className="bg-white/5 rounded-xl p-6 border border-white/10">
+              {/* Active Matches - Clickable */}
+              <Link to="/matching" className="bg-white/5 rounded-xl p-6 border border-white/10 hover:bg-white/10 hover:border-white/20 cursor-pointer transition-all group">
                 <div className="flex items-center gap-3 mb-2">
                   <Activity className="w-6 h-6 text-green-400" />
-                  <h3 className="text-gray-400 text-sm uppercase tracking-wide">Matches</h3>
+                  <h3 className="text-gray-400 text-sm uppercase tracking-wide group-hover:text-gray-300">Matches</h3>
                 </div>
-                <div className="text-4xl font-bold text-white">{summary.activeMatches}</div>
+                <div className="text-4xl font-bold text-white group-hover:scale-105 transition-transform">{summary.activeMatches}</div>
                 <div className="text-sm text-gray-500 mt-1">Generated pairs</div>
-              </div>
+              </Link>
             </div>
 
             {/* Activity stats */}
             <div className="grid grid-cols-4 gap-6 mt-6">
-              <div className="bg-purple-500/10 rounded-lg p-4 border border-purple-500/30">
-                <div className="text-sm text-gray-400">AI Operations</div>
-                <div className="text-2xl font-bold text-purple-400">{summary.aiOperations}</div>
-              </div>
-              <div className="bg-blue-500/10 rounded-lg p-4 border border-blue-500/30">
-                <div className="text-sm text-gray-400">RSS Articles</div>
-                <div className="text-2xl font-bold text-blue-400">{summary.rssArticles}</div>
-              </div>
-              <div className="bg-green-500/10 rounded-lg p-4 border border-green-500/30">
-                <div className="text-sm text-gray-400">Today's Activity</div>
-                <div className="text-2xl font-bold text-green-400">{summary.todayActivity}</div>
-              </div>
+              <Link to="/admin/ai-intelligence" className="bg-purple-500/10 rounded-lg p-4 border border-purple-500/30 hover:bg-purple-500/20 hover:border-purple-500/50 cursor-pointer transition-all group">
+                <div className="text-sm text-gray-400 group-hover:text-gray-300">AI Operations</div>
+                <div className="text-2xl font-bold text-purple-400 group-hover:scale-105 transition-transform">{summary.aiOperations}</div>
+              </Link>
+              <Link to="/admin/rss-manager" className="bg-blue-500/10 rounded-lg p-4 border border-blue-500/30 hover:bg-blue-500/20 hover:border-blue-500/50 cursor-pointer transition-all group">
+                <div className="text-sm text-gray-400 group-hover:text-gray-300">RSS Articles</div>
+                <div className="text-2xl font-bold text-blue-400 group-hover:scale-105 transition-transform">{summary.rssArticles}</div>
+              </Link>
+              <Link to="/admin/operations" className="bg-green-500/10 rounded-lg p-4 border border-green-500/30 hover:bg-green-500/20 hover:border-green-500/50 cursor-pointer transition-all group">
+                <div className="text-sm text-gray-400 group-hover:text-gray-300">Today's Activity</div>
+                <div className="text-2xl font-bold text-green-400 group-hover:scale-105 transition-transform">{summary.todayActivity}</div>
+              </Link>
               <div className="bg-orange-500/10 rounded-lg p-4 border border-orange-500/30">
                 <div className="text-sm text-gray-400">Pipeline Health</div>
                 <div className="text-2xl font-bold text-orange-400">

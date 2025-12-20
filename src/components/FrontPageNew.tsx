@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import StartupCardOfficial from './StartupCardOfficial';
 import NewsUpdate from './NewsUpdate';
-import HamburgerMenu from './HamburgerMenu';
+import LogoDropdownMenu from './LogoDropdownMenu';
 import startupData from '../data/startupData';
 import { loadApprovedStartups } from '../store';
 
@@ -183,8 +183,8 @@ const FrontPageNew: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-slate-100">
-      {/* Hamburger Menu */}
-      <HamburgerMenu />
+      {/* Logo Dropdown Menu */}
+      <LogoDropdownMenu />
 
       {/* Centered Buttons at Top */}
       <div className="fixed top-6 left-1/2 transform -translate-x-1/2 z-40 flex items-center gap-2">

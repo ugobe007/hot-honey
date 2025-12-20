@@ -1,15 +1,15 @@
 import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Home, ArrowLeft, Database, Brain, Zap, Target, Rss, Trophy } from 'lucide-react';
-import AdminNavBar from '../components/AdminNavBar';
+import LogoDropdownMenu from '../components/LogoDropdownMenu';
 
 export default function AdminInstructions() {
   const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white">
-      {/* Navigation Bar */}
-      <AdminNavBar currentPage="/admin/instructions" />
+      {/* Navigation */}
+      <LogoDropdownMenu />
 
       <div className="p-8">
       <div className="max-w-6xl mx-auto">

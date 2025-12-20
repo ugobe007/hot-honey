@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import AdminNav from '../components/AdminNav';
+import LogoDropdownMenu from '../components/LogoDropdownMenu';
 import { getInvestorById } from '../lib/investorService';
 import { supabase } from '../lib/supabase';
 import { researchInvestor } from '../lib/aiResearch';
@@ -441,7 +441,7 @@ export default function EditInvestorPage() {
         </form>
       </div>
 
-      <AdminNav currentPage="investors" />
+      <LogoDropdownMenu />
     </div>
   );
 }

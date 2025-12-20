@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useStore } from '../store';
 import StartupCardOfficial from '../components/StartupCardOfficial';
 import ActivityTicker from '../components/ActivityTicker';
-import HamburgerMenu from '../components/HamburgerMenu';
+import LogoDropdownMenu from '../components/LogoDropdownMenu';
 import VoteTransparency from '../components/VoteTransparency';
 import { generateRecentActivities } from '../utils/activityGenerator';
 
@@ -71,8 +71,8 @@ const Vote: React.FC = () => {
         <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-gradient-to-r from-purple-500/10 to-transparent rounded-full blur-3xl"></div>
       </div>
       
-      {/* Hamburger Menu */}
-      <HamburgerMenu />
+      {/* Logo Dropdown Menu */}
+      <LogoDropdownMenu />
 
       {/* Vote Button - Links to Home */}
       <div className="fixed top-6 left-1/2 transform -translate-x-1/2 z-40">
