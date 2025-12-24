@@ -96,6 +96,20 @@ module.exports = {
       watch: false
     },
     
+    // GOD Score Monitor - Alerts if average exceeds thresholds (hourly, 15 min after recalculation)
+    {
+      name: 'god-score-monitor',
+      script: 'npx',
+      args: 'tsx scripts/monitor-god-scores.ts',
+      cwd: '/Users/leguplabs/Desktop/hot-honey',
+      cron_restart: '15 * * * *',  // Every hour at :15 (15 min after score-recalc)
+      autorestart: false,
+      watch: false,
+      env: {
+        NODE_ENV: 'production'
+      }
+    },
+    
     // AI Agent - Intelligent monitoring & self-healing
     {
       name: 'ai-agent',
@@ -192,6 +206,56 @@ module.exports = {
       watch: false,
       env: {
         NODE_ENV: 'production'
+      }
+    },
+    
+    // Auto-Enrichment Pipeline - Enriches sparse records with AI + generates embeddings
+    {
+      name: 'enrichment-pipeline',
+      script: 'node',
+      args: 'services/auto-enrichment-pipeline.js',
+      cwd: '/Users/leguplabs/Desktop/hot-honey',
+      instances: 1,
+      autorestart: true,
+      max_restarts: 5,
+      restart_delay: 60000,  // 1 minute delay between restarts
+      watch: false,
+      env: {
+        NODE_ENV: 'production',
+        ENRICHMENT_DAILY_LIMIT: 500,
+        ENRICHMENT_BATCH_SIZE: 10,
+        ENRICHMENT_INTERVAL_MS: 300000  // 5 minutes between batches
+      }
+    },
+    
+    // Inference Enrichment - Populates extracted_data for GOD scoring (runs every 2 hours)
+    {
+      name: 'inference-enrichment',
+      script: 'node',
+      args: 'scripts/enrich-startups-inference.js --limit 100 --missing',
+      cwd: '/Users/leguplabs/Desktop/hot-honey',
+      cron_restart: '0 */2 * * *',  // Every 2 hours
+      autorestart: false,
+      watch: false,
+      env: {
+        NODE_ENV: 'production',
+        ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY
+      }
+    },
+
+    // Match Health Monitor - Checks match count health and alerts on drops (every 2 hours)
+    {
+      name: 'match-health-monitor',
+      script: 'npx',
+      args: 'tsx scripts/monitor-match-health.ts',
+      cwd: '/Users/leguplabs/Desktop/hot-honey',
+      cron_restart: '0 */2 * * *', // Every 2 hours
+      autorestart: false,
+      watch: false,
+      env: {
+        NODE_ENV: 'production',
+        SUPABASE_URL: process.env.SUPABASE_URL,
+        SUPABASE_SERVICE_KEY: process.env.SUPABASE_SERVICE_KEY
       }
     }
   ]

@@ -146,18 +146,19 @@ export async function gatherDailyReportData(): Promise<DailyReportData> {
     .limit(5);
 
   // === STARTUPS ===
+  // SSOT: Use startup_uploads table (not 'startups')
   const { count: totalStartups } = await supabase
-    .from('startups')
+    .from('startup_uploads')
     .select('*', { count: 'exact', head: true });
 
   const { count: newStartupsToday } = await supabase
-    .from('startups')
+    .from('startup_uploads')
     .select('*', { count: 'exact', head: true })
     .gte('created_at', start)
     .lte('created_at', end);
 
   const { data: recentStartups } = await supabase
-    .from('startups')
+    .from('startup_uploads')
     .select('id, name, tagline, created_at')
     .order('created_at', { ascending: false })
     .limit(5);
@@ -213,12 +214,13 @@ export async function gatherDailyReportData(): Promise<DailyReportData> {
 
   // === FUNDING NEWS ===
   // Get recent startups with funding info (from last 7 days for more content)
+  // SSOT: Use startup_uploads table (not 'startups')
   const weekAgo = new Date();
   weekAgo.setDate(weekAgo.getDate() - 7);
   
   const { data: recentFundingDeals } = await supabase
-    .from('startups')
-    .select('name, tagline, raise_amount, funding_stage, created_at')
+    .from('startup_uploads')
+    .select('name, tagline, raise_amount, stage, created_at')
     .not('raise_amount', 'is', null)
     .gte('created_at', weekAgo.toISOString())
     .order('created_at', { ascending: false })
@@ -231,9 +233,10 @@ export async function gatherDailyReportData(): Promise<DailyReportData> {
   }, 0);
 
   // Get top funding rounds
+  // SSOT: Use startup_uploads table (not 'startups')
   const { data: topFundingRounds } = await supabase
-    .from('startups')
-    .select('name, tagline, raise_amount, funding_stage, created_at')
+    .from('startup_uploads')
+    .select('name, tagline, raise_amount, stage, created_at')
     .not('raise_amount', 'is', null)
     .gte('created_at', weekAgo.toISOString())
     .order('raise_amount', { ascending: false })

@@ -55,7 +55,6 @@ const adminPages: NavSection[] = [
       { path: '/admin', label: 'Admin Home', icon: Shield, description: 'Admin dashboard overview' },
       { path: '/admin/control', label: 'Control Center', icon: Sliders, description: 'System controls and automation' },
       { path: '/admin/health', label: 'System Health', icon: Activity, description: 'Monitor system status' },
-      { path: '/admin/operations', label: 'Operations', icon: BarChart3, description: 'Operations dashboard' },
     ]
   },
   {

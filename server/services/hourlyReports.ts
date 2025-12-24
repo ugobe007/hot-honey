@@ -41,39 +41,43 @@ async function generateHourlyReport(): Promise<HourlyReport> {
   console.log('='.repeat(60));
 
   // Get new startups in last hour
+  // SSOT: Use startup_uploads table (not 'startups')
   const { data: newStartups } = await supabase
-    .from('startups')
+    .from('startup_uploads')
     .select('id, name, status, created_at')
     .gte('created_at', oneHourAgo.toISOString());
 
   // Get new matches in last hour
+  // SSOT: Use startup_investor_matches table and startup_uploads (not 'startups')
   const { data: newMatches } = await supabase
-    .from('investor_startup_matches')
+    .from('startup_investor_matches')
     .select(`
       id,
       match_score,
-      startup:startups!investor_startup_matches_startup_id_fkey(name),
-      investor:investors!investor_startup_matches_investor_id_fkey(name, firm)
+      startup:startup_uploads!startup_investor_matches_startup_id_fkey(name),
+      investor:investors!startup_investor_matches_investor_id_fkey(name, firm)
     `)
     .gte('created_at', oneHourAgo.toISOString())
     .order('match_score', { ascending: false })
     .limit(10);
 
   // Get pending review count
+  // SSOT: Use startup_uploads table (not 'startups')
   const { data: pendingStartups } = await supabase
-    .from('startups')
+    .from('startup_uploads')
     .select('id')
     .eq('status', 'pending');
 
   // Get qualified startups (approved + has matches)
   const { data: qualifiedStartups } = await supabase
-    .from('startups')
+    .from('startup_uploads')
     .select('id')
     .eq('status', 'approved')
     .gte('created_at', oneHourAgo.toISOString());
 
   // System health metrics
-  const { data: allStartups } = await supabase.from('startups').select('id');
+  // SSOT: Use startup_uploads table (not 'startups')
+  const { data: allStartups } = await supabase.from('startup_uploads').select('id');
   const { data: allInvestors } = await supabase.from('investors').select('id');
   const { data: allMatches } = await supabase
     .from('investor_startup_matches')

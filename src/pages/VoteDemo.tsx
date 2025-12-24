@@ -1,12 +1,40 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import StartupCardOfficial from '../components/StartupCardOfficial';
-import startupData from '../data/startupData';
+import StartupCard from '../components/StartupCard';
+import { loadApprovedStartups } from '../store';
+import { StartupComponent } from '../types';
 
 export default function VoteDemo() {
   const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [startups, setStartups] = useState(startupData);
+  const [startups, setStartups] = useState<StartupComponent[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadStartups() {
+      setLoading(true);
+      const data = await loadApprovedStartups(50, 0);
+      setStartups(data);
+      setLoading(false);
+    }
+    loadStartups();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-800 via-purple-700 to-indigo-800 p-8 flex items-center justify-center">
+        <div className="text-white text-xl">Loading startups...</div>
+      </div>
+    );
+  }
+
+  if (startups.length === 0) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-800 via-purple-700 to-indigo-800 p-8 flex items-center justify-center">
+        <div className="text-white text-xl">No startups available. Please add some startups to the database.</div>
+      </div>
+    );
+  }
 
   const currentStartup = startups[currentIndex];
 
@@ -46,9 +74,10 @@ export default function VoteDemo() {
           </div>
         </div>
 
-        <StartupCardOfficial
+        <StartupCard
           startup={currentStartup}
-          onVote={handleVote}
+          variant="detailed"
+          onVote={(startupId, vote) => handleVote(vote, currentStartup)}
           onSwipeAway={handleSwipeAway}
         />
 

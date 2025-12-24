@@ -1,3 +1,13 @@
+/**
+ * @deprecated Use InvestorCard with variant="enhanced" instead
+ * 
+ * Migration:
+ *   import InvestorCard from './InvestorCard';
+ *   <InvestorCard investor={investor} variant="enhanced" matchScore={score} />
+ * 
+ * This component will be removed in a future version.
+ */
+
 import React, { useState } from 'react';
 import { 
   Star, 

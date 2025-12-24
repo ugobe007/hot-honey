@@ -11,6 +11,7 @@ import FlameIcon from '../components/FlameIcon';
 import { supabase } from '../lib/supabase';
 import LogoDropdownMenu from '../components/LogoDropdownMenu';
 import HowItWorksModal from '../components/HowItWorksModal';
+import TrendingAnalytics from '../components/TrendingAnalytics';
 
 // Algorithm Definitions
 const ALGORITHMS = [
@@ -111,32 +112,131 @@ interface Startup {
 
 // Calculate YC Score (normalized 0-100)
 function calculateYCScore(startup: Startup): number {
-  // Original: (smellTest × 20) + godScore = max 200
-  // Normalized: divide by 2 to get 0-100
-  const smellBonus = (startup.smell_test_score || 0) * 20;
   const godScore = startup.total_god_score || 0;
-  return Math.round((smellBonus + godScore) / 2);
+  const smellTestScore = startup.smell_test_score;
+  
+  // If smell test score exists, use the combined formula
+  if (smellTestScore !== null && smellTestScore !== undefined) {
+    // Original: (smellTest × 20) + godScore = max 200
+    // Normalized: divide by 2 to get 0-100
+    const smellBonus = smellTestScore * 20;
+    return Math.round((smellBonus + godScore) / 2);
+  }
+  
+  // If no smell test data, use GOD score directly but apply YC-style weighting
+  // YC values speed, insight, user love - these are already in GOD score
+  // So we use GOD score as base, but don't penalize for missing smell tests
+  // Add a small bonus to account for YC's preference for execution over polish
+  return Math.min(Math.round(godScore * 1.1), 100); // 10% boost, cap at 100
 }
 
 // Calculate Sequoia Score (normalized 0-100)
+// Sequoia focuses on: Traction (execution) > Market (TAM) > Team
 function calculateSequoiaScore(startup: Startup): number {
-  // Original: traction×2 + market×1.5 + team×1 = max 450
-  // Normalized: divide by 4.5 to get 0-100
-  const traction = (startup.traction_score || 0) * 2.0;
-  const market = (startup.market_score || 0) * 1.5;
-  const team = (startup.team_score || 0) * 1.0;
-  return Math.round((traction + market + team) / 4.5);
+  const traction = startup.traction_score;
+  const market = startup.market_score;
+  const team = startup.team_score;
+  
+  // If component scores exist, use the original formula
+  if (traction !== null && traction !== undefined && 
+      market !== null && market !== undefined && 
+      team !== null && team !== undefined) {
+    // Original: traction×2 + market×1.5 + team×1 = max 450
+    // Normalized: divide by 4.5 to get 0-100
+    return Math.round((traction * 2.0 + market * 1.5 + team * 1.0) / 4.5);
+  }
+  
+  // If component scores don't exist, derive from available data
+  // Sequoia heavily weights traction (execution), then market size, then team
+  const godScore = startup.total_god_score || 0;
+  
+  // Derive traction signal from available data
+  let tractionSignal = 0;
+  if (startup.mrr && startup.mrr > 0) tractionSignal += 30;
+  if (startup.arr && startup.arr > 100000) tractionSignal += 20;
+  if (startup.growth_rate_monthly && startup.growth_rate_monthly > 10) tractionSignal += 20;
+  if (startup.customer_count && startup.customer_count > 100) tractionSignal += 10;
+  tractionSignal = Math.min(tractionSignal, 100);
+  
+  // Derive market signal
+  let marketSignal = 0;
+  const hotSectors = ['AI', 'ML', 'Fintech', 'Healthcare', 'Climate', 'Enterprise', 'SaaS'];
+  if (startup.sectors?.some(s => hotSectors.some(h => s.includes(h)))) marketSignal += 30;
+  if (startup.sectors && startup.sectors.length >= 2) marketSignal += 10;
+  marketSignal = Math.min(marketSignal, 100);
+  
+  // Derive team signal
+  let teamSignal = 0;
+  if (startup.technical_cofounders && startup.technical_cofounders > 0) teamSignal += 20;
+  if (startup.team_size && startup.team_size >= 3) teamSignal += 10;
+  teamSignal = Math.min(teamSignal, 100);
+  
+  // Sequoia formula: traction×2 + market×1.5 + team×1
+  // If we have derived signals, use them; otherwise fall back to GOD score
+  if (tractionSignal > 0 || marketSignal > 0 || teamSignal > 0) {
+    return Math.round((tractionSignal * 2.0 + marketSignal * 1.5 + teamSignal * 1.0) / 4.5);
+  }
+  
+  // Final fallback: use GOD score but penalize slightly (Sequoia is more selective)
+  return Math.min(Math.round(godScore * 0.90), 100);
 }
 
 // Calculate A16Z Score (normalized 0-100)
+// A16Z focuses on: Product (technical moat) > Vision (contrarian bets) > Team (technical founders)
 function calculateA16ZScore(startup: Startup): number {
-  // Original: product×1.8 + vision×1.5 + team×1.2 + techBonus(20) = max 470
-  // Normalized: divide by 4.7 to get 0-100
-  const product = (startup.product_score || 0) * 1.8;
-  const vision = (startup.vision_score || 0) * 1.5;
-  const team = (startup.team_score || 0) * 1.2;
-  const techBonus = startup.has_technical_cofounder ? 20 : 0;
-  return Math.round((product + vision + team + techBonus) / 4.7);
+  const product = startup.product_score;
+  const vision = startup.vision_score;
+  const team = startup.team_score;
+  
+  // If component scores exist, use the original formula
+  if (product !== null && product !== undefined && 
+      vision !== null && vision !== undefined && 
+      team !== null && team !== undefined) {
+    // Original: product×1.8 + vision×1.5 + team×1.2 + techBonus(20) = max 470
+    // Normalized: divide by 4.7 to get 0-100
+    const techBonus = startup.has_technical_cofounder ? 20 : 0;
+    return Math.round((product * 1.8 + vision * 1.5 + team * 1.2 + techBonus) / 4.7);
+  }
+  
+  // If component scores don't exist, derive from available data
+  // A16Z heavily weights product (technical innovation), then vision (contrarian), then team
+  const godScore = startup.total_god_score || 0;
+  
+  // Derive product signal (technical moat, innovation)
+  let productSignal = 0;
+  if (startup.has_demo) productSignal += 25;
+  if (startup.is_launched) productSignal += 20;
+  const techKeywords = ['AI', 'ML', 'blockchain', 'crypto', 'quantum', 'biotech', 'hardware'];
+  if (startup.sectors?.some(s => techKeywords.some(k => s.includes(k)))) productSignal += 25;
+  if (startup.description?.toLowerCase().includes('patent') || startup.description?.toLowerCase().includes('proprietary')) productSignal += 15;
+  productSignal = Math.min(productSignal, 100);
+  
+  // Derive vision signal (contrarian bets, category creation)
+  let visionSignal = 0;
+  const visionKeywords = ['revolutionary', 'disrupt', 'transform', 'new category', 'contrarian', 'bold'];
+  if (startup.pitch && visionKeywords.some(k => startup.pitch.toLowerCase().includes(k))) visionSignal += 30;
+  if (startup.tagline && visionKeywords.some(k => startup.tagline.toLowerCase().includes(k))) visionSignal += 20;
+  if (startup.stage && ['Pre-seed', 'Seed'].includes(startup.stage)) visionSignal += 15; // Early stage = bold vision
+  visionSignal = Math.min(visionSignal, 100);
+  
+  // Derive team signal (technical founders)
+  let teamSignal = 0;
+  if (startup.technical_cofounders && startup.technical_cofounders > 0) teamSignal += 30;
+  if (startup.team_size && startup.team_size >= 3) teamSignal += 10;
+  teamSignal = Math.min(teamSignal, 100);
+  
+  // Tech bonus (A16Z loves technical innovation)
+  const techBonus = (startup.technical_cofounders && startup.technical_cofounders > 0) ? 20 : 0;
+  
+  // A16Z formula: product×1.8 + vision×1.5 + team×1.2 + techBonus(20)
+  // If we have derived signals, use them; otherwise fall back to GOD score
+  if (productSignal > 0 || visionSignal > 0 || teamSignal > 0) {
+    return Math.round((productSignal * 1.8 + visionSignal * 1.5 + teamSignal * 1.2 + techBonus) / 4.7);
+  }
+  
+  // Final fallback: use GOD score with tech boost (A16Z values technical innovation)
+  const finalTechBonus = (startup.technical_cofounder || startup.technical_cofounders > 0) ? 4 : 0;
+  return Math.min(Math.round(godScore * 1.05 + finalTechBonus), 100);
 }
 
 // Format currency
@@ -373,7 +473,7 @@ export default function TrendingPage() {
       <LogoDropdownMenu />
 
       {/* Navigation Buttons - Top Right */}
-      <div className="fixed top-6 right-8 z-50 flex items-center gap-3">
+      <div className="fixed top-6 right-8 z-50 flex items-center gap-3 flex-wrap">
         <button
           onClick={() => setShowHowItWorks(true)}
           className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-purple-600/60 to-indigo-600/60 hover:from-purple-500 hover:to-indigo-500 text-white font-semibold rounded-xl transition-all border border-purple-400/50"
@@ -482,6 +582,19 @@ export default function TrendingPage() {
           </div>
         </div>
 
+        {/* Analytics Section */}
+        {!loading && startups.length > 0 && (
+          <div className="mb-12">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+                <BarChart3 className="w-6 h-6 text-purple-400" />
+                Analytics & Insights
+              </h2>
+            </div>
+            <TrendingAnalytics startups={startups} selectedAlgorithm={selectedAlgorithm} />
+          </div>
+        )}
+
         {/* Search Bar */}
         <div className="max-w-xl mx-auto mb-8">
           <div className="relative">
@@ -552,6 +665,7 @@ export default function TrendingPage() {
                       </th>
                       <th className="py-4 hidden xl:table-cell">GOD Score</th>
                       <th className="py-4 text-right pr-4">{currentAlgo.shortName} Score</th>
+                      <th className="py-4 text-center pr-4">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-purple-500/10">
@@ -650,6 +764,21 @@ export default function TrendingPage() {
                               </span>
                               <ChevronRight className="w-4 h-4 text-gray-500 group-hover:text-orange-400 transition-colors" />
                             </div>
+                          </td>
+                          
+                          {/* Actions */}
+                          <td className="py-4 pr-4 text-center">
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                window.location.href = `/startup/${startup.id}/matches`;
+                              }}
+                              className="px-3 py-1.5 bg-purple-500/20 hover:bg-purple-500/30 rounded-lg text-purple-300 text-xs flex items-center gap-1.5 border border-purple-500/30"
+                              title="View Matches"
+                            >
+                              <Target className="w-3 h-3" />
+                              Matches
+                            </button>
                           </td>
                         </tr>
                       );

@@ -7,35 +7,38 @@ module.exports = {
     extend: {
       colors: {
         // ════════════════════════════════════════════════════════════════
-        // 🔥 HOT HONEY - OFFICIAL HYBRID PALETTE
+        // 🔥 HOT HONEY - BLACK & GOLD ELEGANCE PALETTE
         // ════════════════════════════════════════════════════════════════
         
-        // ── PRIMARY: Warm Accent Colors (Brand Identity) ──
-        'hh-fire': '#FF5A09',         // Primary CTA, buttons, links
-        'hh-coral': '#F3843E',        // Secondary accents, hover states
-        'hh-amber': '#FF9900',        // Highlights, active states, badges
-        'hh-honey': '#FFB402',        // Subtle warmth, icons
+        // ── PRIMARY: Black & Gold Elegance ──
+        'hh-gold': '#FCA311',         // Primary accent, CTAs, highlights
+        'hh-gold-light': '#FDBC4B',   // Hover states, secondary accent
+        'hh-gold-dark': '#E59200',    // Pressed states
+        'hh-navy': '#14213D',         // Primary dark, headers, nav
+        'hh-navy-light': '#1D3461',   // Cards, elevated surfaces
+        'hh-navy-dark': '#0D1527',    // Deepest backgrounds
         
-        // ── NEUTRALS: Muted Grays (Professional Base) ──
-        'hh-charcoal': '#393939',     // Primary backgrounds
-        'hh-charcoal-light': '#454545', // Cards, elevated surfaces
-        'hh-charcoal-dark': '#2d2d2d',  // Deeper backgrounds
-        'hh-steel': '#6E6E6E',        // Borders, muted text
-        'hh-slate': '#8A8A8A',        // Secondary text
-        'hh-silver': '#B0B0B0',       // Disabled states
+        // ── NEUTRALS: Clean Whites & Grays ──
+        'hh-white': '#FFFFFF',        // Pure white backgrounds
+        'hh-gray': '#E5E5E5',         // Borders, secondary backgrounds
+        'hh-gray-dark': '#CCCCCC',    // Muted elements
+        'hh-black': '#000000',        // Text, maximum contrast
+        'hh-charcoal': '#1A1A1A',     // Near-black backgrounds
         
-        // ── SECONDARY: Cool Accents (Data Viz, Info States) ──
-        'hh-teal': '#00B4B4',         // Info badges, charts
-        'hh-cyan': '#00CED1',         // Data visualization primary
-        'hh-blue': '#3B82F6',         // Links in content, info states
-        'hh-indigo': '#6366F1',       // Charts secondary
-        'hh-purple': '#8B5CF6',       // Premium/special features
+        // ── ACCENT: Purple & Green (Glistening) ──
+        'hh-purple': '#8B5CF6',       // Premium features, special
+        'hh-purple-light': '#A78BFA', // Purple hover
+        'hh-purple-dark': '#7C3AED',  // Purple pressed
+        'hh-green': '#10B981',        // Glistening green, success
+        'hh-green-light': '#34D399',  // Green hover, highlights
+        'hh-green-dark': '#059669',   // Green pressed
+        'hh-emerald': '#00D9A5',      // Bright glistening accent
         
         // ── SEMANTIC: Status Colors ──
-        'hh-success': '#22C55E',      // Success states
-        'hh-warning': '#F59E0B',      // Warning (uses amber family)
+        'hh-success': '#10B981',      // Success states (green)
+        'hh-warning': '#FCA311',      // Warning (gold)
         'hh-error': '#EF4444',        // Error states
-        'hh-info': '#00B4B4',         // Info states (teal)
+        'hh-info': '#8B5CF6',         // Info states (purple)
         
         // ════════════════════════════════════════════════════════════════
         // 🎨 LEGACY: Hot Money Spectrum (Keep for compatibility)

@@ -35,10 +35,10 @@ const CONFIG = {
   INVESTOR_QUALITY: 25,  // NEW: Investor GOD score contribution
   STARTUP_QUALITY: 15,   // Startup GOD score contribution
   
-  // Thresholds
-  MIN_MATCH_SCORE: 35,
-  HIGH_CONFIDENCE: 70,
-  MEDIUM_CONFIDENCE: 50,
+  // Thresholds (increased for better selectivity)
+  MIN_MATCH_SCORE: 60,  // Increased from 35 to 60
+  HIGH_CONFIDENCE: 75,  // Increased from 70 to 75
+  MEDIUM_CONFIDENCE: 60, // Increased from 50 to 60
   
   // Investor tier boost factors
   TIER_BOOSTS: {
@@ -217,8 +217,9 @@ async function generateMatches() {
   console.log('NEW: Using Investor GOD Scores for quality-weighted matches\n');
   
   // Get startups via RPC - use startup_uploads which has GOD scores and FK relationship
+  // BUG FIX: Removed LIMIT 1000 - must process ALL startups to avoid deleting matches
   const { data: startupResult, error: startupError } = await supabase.rpc('exec_sql_rows', {
-    sql_query: `SELECT id, name, sectors, stage, total_god_score FROM startup_uploads WHERE status = 'approved' LIMIT 1000`
+    sql_query: `SELECT id, name, sectors, stage, total_god_score FROM startup_uploads WHERE status = 'approved'`
   });
   
   if (startupError) {
@@ -264,11 +265,9 @@ async function generateMatches() {
     return;
   }
   
-  // Clear existing matches
-  const { data: deleteResult } = await supabase.rpc('exec_sql_modify', {
-    sql_query: 'DELETE FROM startup_investor_matches'
-  });
-  console.log('🗑️  Cleared existing matches\n');
+  // BUG FIX: DO NOT delete existing matches - use upsert to preserve them
+  // This prevents loss of matches when script only processes a subset
+  console.log('💾 Using upsert to update existing matches (preserving all matches)\n');
   
   let totalMatches = 0;
   let highConfidence = 0;
@@ -344,11 +343,21 @@ async function generateMatches() {
       `('${m.startup_id}', '${m.investor_id}', ${m.match_score}, '${m.confidence_level}', '${m.reasoning.replace(/'/g, "''")}', '${JSON.stringify(m.fit_analysis).replace(/'/g, "''")}', NOW())`
     ).join(',\n');
     
+    // BUG FIX: Use INSERT ... ON CONFLICT to handle duplicates (upsert behavior)
+    // This preserves existing matches and only updates when conflict occurs
     const { error } = await supabase.rpc('exec_sql_modify', {
       sql_query: `
         INSERT INTO startup_investor_matches 
         (startup_id, investor_id, match_score, confidence_level, reasoning, fit_analysis, created_at)
         VALUES ${values}
+        ON CONFLICT (startup_id, investor_id) 
+        DO UPDATE SET 
+          match_score = EXCLUDED.match_score,
+          confidence_level = EXCLUDED.confidence_level,
+          reasoning = EXCLUDED.reasoning,
+          fit_analysis = EXCLUDED.fit_analysis,
+          updated_at = NOW()
+        -- NOTE: created_at is NOT updated - preserves original creation time
       `
     });
     

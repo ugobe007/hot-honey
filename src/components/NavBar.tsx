@@ -100,6 +100,7 @@ export default function NavBar() {
 
             {isLoggedIn && (
               <>
+
                 {/* Dashboard Button - Larger and Light Blue */}
                 <button
                   onClick={() => navigate('/dashboard')}
@@ -112,6 +113,18 @@ export default function NavBar() {
                   }`}
                 >
                   📊 Dashboard
+                </button>
+
+                {/* Benchmarks Button - Orange/Amber */}
+                <button
+                  onClick={() => navigate('/benchmarks')}
+                  className={`font-bold rounded-full transition-all ${getButtonSize('/benchmarks')} ${
+                    isActive('/benchmarks')
+                      ? 'bg-gradient-to-r from-amber-400 to-orange-500 text-white shadow-lg scale-110'
+                      : 'bg-purple-700 hover:bg-orange-500 text-amber-300'
+                  }`}
+                >
+                  📈 Benchmarks
                 </button>
 
                 <button

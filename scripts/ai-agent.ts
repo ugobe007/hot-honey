@@ -17,7 +17,10 @@
 import { createClient } from '@supabase/supabase-js';
 import Anthropic from '@anthropic-ai/sdk';
 import dotenv from 'dotenv';
-import { sendEscalationAlert, sendHealthAlert } from './notifications.js';
+// PATCHED: notifications module missing, bypassed for embedding generation
+// import { sendEscalationAlert, sendHealthAlert } from './notifications.js';
+const sendEscalationAlert = (..._args: any[]) => {/* notifications bypassed */};
+const sendHealthAlert = (..._args: any[]) => {/* notifications bypassed */};
 
 dotenv.config();
 
@@ -37,7 +40,7 @@ const anthropic = new Anthropic({
 
 const AGENT_CONFIG = {
   // AI Settings
-  MODEL: 'claude-sonnet-4-20250514',
+  MODEL: 'claude-3-5-haiku-latest',
   MAX_TOKENS: 2000,
   
   // Thresholds
@@ -369,9 +372,43 @@ async function fixRestartScraper(): Promise<{ success: boolean; message: string 
 }
 
 async function fixRebuildEmbeddings(): Promise<{ success: boolean; message: string }> {
-  // Placeholder - would trigger embedding regeneration
-  console.log('   → Embedding rebuild would be triggered here');
-  return { success: true, message: 'Embedding rebuild queued' };
+  // Generate embeddings for all startups missing them
+  console.log('   → Generating embeddings for startups missing them...');
+  const { data: startups, error } = await supabase
+    .from('startup_uploads')
+    .select('id, name, description, embedding')
+    .is('embedding', null)
+    .eq('status', 'approved');
+
+  if (error) {
+    console.error('Error fetching startups:', error.message);
+    return { success: false, message: 'Failed to fetch startups' };
+  }
+  if (!startups || startups.length === 0) {
+    console.log('   → No startups missing embeddings.');
+    return { success: true, message: 'No startups missing embeddings' };
+  }
+
+  // Try to import embedding generator
+  let generateStartupEmbedding;
+  try {
+    ({ generateStartupEmbedding } = await import('../server/services/embeddingGenerator'));
+  } catch (e) {
+    console.error('   → Could not import embedding generator:', e.message);
+    return { success: false, message: 'Embedding generator not found' };
+  }
+
+  let successCount = 0;
+  for (const startup of startups) {
+    try {
+      await generateStartupEmbedding(startup.id);
+      console.log(`   ✅ Embedded: ${startup.name} (${startup.id})`);
+      successCount++;
+    } catch (err) {
+      console.error(`   ❌ Failed to embed ${startup.name} (${startup.id}):`, err.message);
+    }
+  }
+  return { success: true, message: `Generated embeddings for ${successCount} startups` };
 }
 
 async function fixClearStaleMatches(): Promise<{ success: boolean; message: string }> {
@@ -665,5 +702,24 @@ async function runAgent(): Promise<AgentReport> {
   return report;
 }
 
-// Run
-runAgent().catch(console.error);
+// CLI: allow direct fix command execution
+const cliArg = process.argv[2];
+if (cliArg && [
+  'recalculate_god_scores',
+  'normalize_stages',
+  'clean_rss_feeds',
+  'restart_scraper',
+  'rebuild_embeddings',
+  'clear_stale_matches',
+  'refresh_investor_data'
+].includes(cliArg)) {
+  executeFixCommand(cliArg).then(result => {
+    console.log(`\n${cliArg} result:`, result.message);
+    if (!result.success) process.exit(1);
+  }).catch(err => {
+    console.error(err);
+    process.exit(1);
+  });
+} else {
+  runAgent().catch(console.error);
+}

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
-import { RefreshCw, ExternalLink, ChevronDown, ChevronUp } from 'lucide-react';
+import { RefreshCw, ExternalLink, ChevronDown, ChevronUp, Target } from 'lucide-react';
 
 interface SectorData {
   sector: string;
@@ -408,13 +408,14 @@ export default function MarketTrends() {
                     GOD Score {sortField === 'total_god_score' && (sortDir === 'asc' ? <ChevronUp className="w-3 h-3 inline" /> : <ChevronDown className="w-3 h-3 inline" />)}
                   </th>
                   <th className="text-right px-3 py-2 text-gray-400">Added</th>
+                  <th className="text-center px-3 py-2 text-gray-400">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {sortedStartups.map((s, i) => (
-                  <tr key={s.id} className="border-t border-gray-700/50 hover:bg-gray-700/30 cursor-pointer" onClick={() => navigate(`/startup/${s.id}`)}>
+                  <tr key={s.id} className="border-t border-gray-700/50 hover:bg-gray-700/30">
                     <td className="px-3 py-1.5 text-gray-500">{i + 1}</td>
-                    <td className="px-2 py-1.5 text-white font-medium">{s.name}</td>
+                    <td className="px-2 py-1.5 text-white font-medium cursor-pointer hover:text-orange-400" onClick={() => navigate(`/startup/${s.id}`)}>{s.name}</td>
                     <td className="px-2 py-1.5 text-gray-400 truncate max-w-48">{s.tagline}</td>
                     <td className="px-2 py-1.5">
                       <div className="flex gap-1 flex-wrap">
@@ -434,6 +435,19 @@ export default function MarketTrends() {
                       {s.total_god_score}
                     </td>
                     <td className="px-3 py-1.5 text-right text-gray-500">{formatDate(s.created_at)}</td>
+                    <td className="px-3 py-1.5 text-center">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          navigate(`/startup/${s.id}/matches`);
+                        }}
+                        className="px-2 py-1 bg-purple-500/20 hover:bg-purple-500/30 rounded text-purple-400 text-xs flex items-center gap-1"
+                        title="View Matches"
+                      >
+                        <Target className="w-3 h-3" />
+                        Matches
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>

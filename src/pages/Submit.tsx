@@ -160,6 +160,13 @@ Return valid JSON with: name, pitch, fivePoints (array of 5 strings), industry, 
       
       const data = await response.json();
       console.log('✅ OpenAI Response:', data);
+      
+      // Check if response has expected structure
+      if (!data || !data.choices || !data.choices[0] || !data.choices[0].message || !data.choices[0].message.content) {
+        console.error('❌ Invalid OpenAI response structure:', data);
+        throw new Error('Invalid API response format - missing choices[0].message.content');
+      }
+      
       const parsed = JSON.parse(data.choices[0].message.content);
       console.log('📊 Parsed data:', parsed);
       
@@ -368,6 +375,13 @@ Fill ONLY the EMPTY fields with your research. Return JSON with ALL fields fille
       });
 
       const data = await response.json();
+      
+      // Check if response has expected structure
+      if (!data || !data.choices || !data.choices[0] || !data.choices[0].message || !data.choices[0].message.content) {
+        console.error('❌ Invalid OpenAI response structure:', data);
+        throw new Error('Invalid API response format - missing choices[0].message.content');
+      }
+      
       const aiData = JSON.parse(data.choices[0].message.content);
 
       // Only update empty fields

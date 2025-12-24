@@ -15,7 +15,7 @@ export default function Login() {
     // Check if admin and redirect accordingly
     const isAdmin = email.includes('admin') || email.includes('ugobe');
     if (isAdmin) {
-      navigate('/admin/dashboard');
+      navigate('/admin/control');
     } else {
       navigate('/');
     }

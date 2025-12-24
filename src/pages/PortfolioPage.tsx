@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import StartupCardOfficial from '../components/StartupCardOfficial';
+import StartupCard from '../components/StartupCard';
 import LogoDropdownMenu from '../components/LogoDropdownMenu';
 import { NotificationBell } from '../components/NotificationBell';
-import startupData from '../data/startupData';
 import { useAuth } from '../hooks/useAuth';
 import { useVotes } from '../hooks/useVotes';
+import { supabase } from '../lib/supabase';
+import { adaptStartupForComponent } from '../utils/startupAdapters';
+import { StartupComponent } from '../types';
 
 export default function PortfolioPage() {
   const navigate = useNavigate();
@@ -50,46 +52,78 @@ export default function PortfolioPage() {
   useEffect(() => {
     if (authLoading || votesLoading) return;
 
-    const isAnonymous = !userId || userId.startsWith('anon_');
-    
-    if (isAnonymous) {
-      // For anonymous users, load from localStorage
-      const myYesVotesStr = localStorage.getItem('myYesVotes');
-      if (myYesVotesStr) {
-        try {
-          const yesVotesArray = JSON.parse(myYesVotesStr);
-          
-          // Deduplicate by ID
-          const uniqueVotesMap = new Map();
-          yesVotesArray.forEach((vote: any) => {
-            if (vote && vote.id !== undefined) {
-              uniqueVotesMap.set(vote.id, vote);
+    const loadPortfolio = async () => {
+      try {
+        const isAnonymous = !userId || userId.startsWith('anon_');
+        
+        if (isAnonymous) {
+          // For anonymous users, load from localStorage
+          const myYesVotesStr = localStorage.getItem('myYesVotes');
+          if (myYesVotesStr) {
+            try {
+              const yesVotesArray = JSON.parse(myYesVotesStr);
+              
+              // Deduplicate by ID
+              const uniqueVotesMap = new Map();
+              yesVotesArray.forEach((vote: any) => {
+                if (vote && vote.id !== undefined) {
+                  uniqueVotesMap.set(vote.id, vote);
+                }
+              });
+              
+              setMyYesVotes(Array.from(uniqueVotesMap.values()));
+            } catch (e) {
+              console.error('Error loading votes from localStorage:', e);
+              setMyYesVotes([]);
             }
-          });
+          } else {
+            setMyYesVotes([]);
+          }
+        } else {
+          // For authenticated users, get YES vote startup IDs from Supabase
+          const yesVoteIds = getYesVotes();
           
-          setMyYesVotes(Array.from(uniqueVotesMap.values()));
-        } catch (e) {
-          console.error('Error loading votes from localStorage:', e);
+          if (yesVoteIds.length === 0) {
+            setMyYesVotes([]);
+            return;
+          }
+          
+          // SSOT: Fetch full startup data from Supabase
+          const enrichedVotes = await Promise.all(
+            yesVoteIds.map(async (id) => {
+              try {
+                const { data, error } = await supabase
+                  .from('startup_uploads')
+                  .select('*')
+                  .eq('id', id)
+                  .single();
+                
+                if (error || !data) {
+                  console.warn(`Startup ${id} not found in database`);
+                  return null;
+                }
+                
+                const componentStartup = adaptStartupForComponent(data);
+                return {
+                  ...componentStartup,
+                  votedAt: votes.find(v => v.startup_id === id)?.created_at || new Date().toISOString(),
+                };
+              } catch (error) {
+                console.error(`Error fetching startup ${id}:`, error);
+                return null;
+              }
+            })
+          );
+          
+          setMyYesVotes(enrichedVotes.filter(Boolean) as StartupComponent[]);
         }
+      } catch (error) {
+        console.error('Error loading portfolio:', error);
+        setMyYesVotes([]);
       }
-    } else {
-      // For authenticated users, get YES vote startup IDs from Supabase
-      const yesVoteIds = getYesVotes();
-      
-      // Enrich with full startup data
-      const enrichedVotes = yesVoteIds.map(id => {
-        const startup = startupData.find(s => s.id.toString() === id);
-        if (startup) {
-          return {
-            ...startup,
-            votedAt: votes.find(v => v.startup_id === id)?.created_at || new Date().toISOString(),
-          };
-        }
-        return null;
-      }).filter(Boolean);
-      
-      setMyYesVotes(enrichedVotes);
-    }
+    };
+
+    loadPortfolio();
 
     // Check admin status
     const userProfile = localStorage.getItem('userProfile');
@@ -97,7 +131,7 @@ export default function PortfolioPage() {
       const profile = JSON.parse(userProfile);
       setIsAdmin(profile.email === 'admin@hotmoneyhoney.com' || profile.isAdmin);
     }
-  }, [authLoading, votesLoading, votes, userId]); // Added userId to dependencies
+  }, [authLoading, votesLoading, votes, userId]); // Removed getYesVotes from dependencies (it's a function)
 
   const handleVote = (vote: 'yes' | 'no', startup?: any) => {
     if (vote === 'no' && startup) {
@@ -249,9 +283,10 @@ export default function PortfolioPage() {
                       {notification.message}
                     </div>
 
-                    <StartupCardOfficial
+                    <StartupCard
                       startup={startup}
-                      onVote={handleVote}
+                      variant="detailed"
+                      onVote={(startupId, vote) => handleVote(startup, vote)}
                     />
                     
                     {/* Action Buttons */}

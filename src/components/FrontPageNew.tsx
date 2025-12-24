@@ -1,52 +1,43 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import StartupCardOfficial from './StartupCardOfficial';
+import StartupCard from './StartupCard';
 import NewsUpdate from './NewsUpdate';
 import LogoDropdownMenu from './LogoDropdownMenu';
-import startupData from '../data/startupData';
 import { loadApprovedStartups } from '../store';
+import { StartupComponent } from '../types';
 
 const FrontPageNew: React.FC = () => {
   const navigate = useNavigate();
   const { isLoggedIn, user, logout } = useAuth();
   const [currentStartupIndices, setCurrentStartupIndices] = useState([0, 1, 2]);
-  const [startups, setStartups] = useState(startupData);
-  const [votedStartupIds, setVotedStartupIds] = useState<Set<number>>(new Set());
+  const [startups, setStartups] = useState<StartupComponent[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [votedStartupIds, setVotedStartupIds] = useState<Set<string | number>>(new Set());
   const [nextAvailableIndex, setNextAvailableIndex] = useState(3);
   const [slidingCards, setSlidingCards] = useState<number[]>([]);
 
   // Load approved startups from database on mount and load voted IDs
   useEffect(() => {
     const loadStartups = async () => {
-      const approvedStartups = await loadApprovedStartups();
-      const allStartups = [...startupData, ...approvedStartups];
+      setLoading(true);
+      // SSOT: Only use Supabase - no static data fallback
+      const approvedStartups = await loadApprovedStartups(100, 0);
       
-      // Check for duplicate IDs and log them
-      const idCounts = new Map<number, number>();
-      allStartups.forEach(startup => {
-        idCounts.set(startup.id, (idCounts.get(startup.id) || 0) + 1);
-      });
+      console.log('📊 Total startups loaded from Supabase:', approvedStartups.length);
       
-      const duplicates = Array.from(idCounts.entries()).filter(([_, count]) => count > 1);
-      if (duplicates.length > 0) {
-        console.warn('⚠️ Duplicate startup IDs found:', duplicates);
-      }
+      setStartups(approvedStartups);
       
-      console.log('📊 Total startups loaded:', allStartups.length);
-      console.log('📦 From static data:', startupData.length);
-      console.log('📦 From database:', approvedStartups.length);
-      
-      setStartups(allStartups);
+      setLoading(false);
       
       // Load previously voted startup IDs from localStorage
       const votedIds = JSON.parse(localStorage.getItem('votedStartups') || '[]');
-      setVotedStartupIds(new Set(votedIds.map((id: string) => parseInt(id))));
+      setVotedStartupIds(new Set(votedIds));
       
       // Find first 3 unvoted startup indices
       const unvotedIndices: number[] = [];
-      for (let i = 0; i < allStartups.length && unvotedIndices.length < 3; i++) {
-        if (!votedIds.includes(allStartups[i].id.toString())) {
+      for (let i = 0; i < approvedStartups.length && unvotedIndices.length < 3; i++) {
+        if (!votedIds.includes(approvedStartups[i].id.toString())) {
           unvotedIndices.push(i);
         }
       }
@@ -278,9 +269,10 @@ const FrontPageNew: React.FC = () => {
                     slidingCards.includes(position) ? 'animate-slide-left' : ''
                   }`}
                 >
-                  <StartupCardOfficial
+                  <StartupCard
                     startup={startup}
-                    onVote={(vote) => handleVote(startup.id, vote, position)}
+                    variant="detailed"
+                    onVote={(startupId, vote) => handleVote(startup.id, vote, position)}
                     onSwipeAway={() => handleSwipeAway(position)}
                   />
                 </div>

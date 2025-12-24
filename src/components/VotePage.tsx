@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import StartupCardOfficial from './StartupCardOfficial';
-import VCFirmCard from './VCFirmCard';
+import StartupCard from './StartupCard';
+import InvestorCard from './InvestorCard';
 import LogoDropdownMenu from './LogoDropdownMenu';
 import { loadApprovedStartups } from '../store';
 import { saveVote, hasVoted, getYesVotes } from '../lib/voteService';
@@ -294,29 +294,30 @@ const VotePage: React.FC = () => {
             {unvotedStartups.map((startup) => {
               const entityType = (startup as any).entityType;
               
-              // Render VCFirmCard for VC firms and accelerators
+              // Render InvestorCard for VC firms and accelerators
               if (entityType === 'vc_firm' || entityType === 'accelerator') {
                 return (
-                  <VCFirmCard
+                  <InvestorCard
                     key={startup.id}
-                    company={{
+                    investor={{
                       id: startup.id,
                       name: startup.name,
-                      pitch: startup.pitch || startup.tagline || '',
-                      fivePoints: (startup as any).fivePoints || [],
-                      entityType: entityType,
+                      tagline: startup.pitch || startup.tagline || '',
+                      type: entityType as any,
                       website: (startup as any).website
                     }}
+                    variant="vc"
                   />
                 );
               }
               
-              // Render StartupCardOfficial for startups
+              // Render StartupCard for startups
               return (
-                <StartupCardOfficial
+                <StartupCard
                   key={startup.id}
                   startup={startup}
-                  onVote={(vote) => handleVote(startup.id, vote)}
+                  variant="detailed"
+                  onVote={(startupId, vote) => handleVote(startup.id, vote)}
                 />
               );
             })}

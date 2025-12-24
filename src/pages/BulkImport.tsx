@@ -40,6 +40,12 @@ export default function BulkImport() {
     setImporting(true);
     const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
 
+    if (!apiKey) {
+      alert('❌ OpenAI API key not found. Please set VITE_OPENAI_API_KEY in your .env file.');
+      setImporting(false);
+      return;
+    }
+
     for (let i = 0; i < items.length; i++) {
       const item = items[i];
       setProgress({ current: i + 1, total: items.length });
@@ -60,9 +66,23 @@ export default function BulkImport() {
           })
         });
 
-        if (response.ok) {
-          const data = await response.json();
-          const enriched = JSON.parse(data.choices[0].message.content);
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error('❌ OpenAI API error:', response.status, errorText);
+          setItems(prev => prev.map(it => it.id === item.id ? { ...it, status: 'error' } : it));
+          continue;
+        }
+
+        const data = await response.json();
+        
+        // Check if response has expected structure
+        if (!data || !data.choices || !data.choices[0] || !data.choices[0].message || !data.choices[0].message.content) {
+          console.error('❌ Invalid OpenAI response structure:', data);
+          setItems(prev => prev.map(it => it.id === item.id ? { ...it, status: 'error' } : it));
+          continue;
+        }
+        
+        const enriched = JSON.parse(data.choices[0].message.content);
 
           await supabase.from('startup_uploads').insert({
             name: item.name,
@@ -73,10 +93,8 @@ export default function BulkImport() {
           });
 
           setItems(prev => prev.map(it => it.id === item.id ? { ...it, status: 'done', enriched } : it));
-        } else {
-          setItems(prev => prev.map(it => it.id === item.id ? { ...it, status: 'error' } : it));
-        }
-      } catch {
+      } catch (error: any) {
+        console.error(`❌ Error enriching ${item.name}:`, error);
         setItems(prev => prev.map(it => it.id === item.id ? { ...it, status: 'error' } : it));
       }
     }
@@ -212,7 +230,7 @@ export default function BulkImport() {
           <div className="flex flex-wrap gap-2 text-xs">
             <Link to="/admin/discovered-startups" className="px-3 py-1.5 bg-cyan-500/20 border border-cyan-500/30 rounded text-cyan-400 hover:bg-cyan-500/30">🔍 RSS Discoveries</Link>
             <Link to="/admin/edit-startups" className="px-3 py-1.5 bg-orange-500/20 border border-orange-500/30 rounded text-orange-400 hover:bg-orange-500/30">✏️ Edit Startups</Link>
-            <Link to="/admin/dashboard" className="px-3 py-1.5 bg-violet-500/20 border border-violet-500/30 rounded text-violet-400 hover:bg-violet-500/30">📊 Dashboard</Link>
+            <Link to="/admin/control" className="px-3 py-1.5 bg-violet-500/20 border border-violet-500/30 rounded text-violet-400 hover:bg-violet-500/30">🎛️ Control Center</Link>
           </div>
         </div>
       </div>

@@ -33,11 +33,12 @@ export default function DiscoveredInvestors() {
     try {
       setLoading(true);
       
+      // Load all investors (up to 1000 to handle 800+)
       let query = supabase
         .from('investors')
         .select('*')
         .order('created_at', { ascending: false })
-        .limit(100);
+        .limit(1000); // Increased from 100 to show all 800+ investors
 
       if (filter !== 'all') {
         query = query.ilike('type', `%${filter}%`);
@@ -122,11 +123,7 @@ export default function DiscoveredInvestors() {
             <span className="text-gray-600">|</span>
             <Link to="/" className="text-gray-400 hover:text-white transition-all">🏠 Home</Link>
             <span className="text-gray-600">|</span>
-            <Link to="/admin/control" className="text-gray-400 hover:text-white transition-all">⚙️ Admin</Link>
-            <span className="text-gray-600">|</span>
-            <Link to="/admin/dashboard" className="text-gray-400 hover:text-white transition-all">📊 Workflow</Link>
-            <span className="text-gray-600">|</span>
-            <Link to="/admin/operations" className="text-gray-400 hover:text-white transition-all">🎛️ Operations</Link>
+            <Link to="/admin/control" className="text-gray-400 hover:text-white transition-all">⚙️ Control Center</Link>
             <span className="text-gray-600">|</span>
             <Link to="/bulkupload" className="text-gray-400 hover:text-white transition-all">📤 Bulk Upload</Link>
             <span className="text-gray-600">|</span>

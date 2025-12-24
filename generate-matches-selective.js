@@ -879,9 +879,9 @@ async function generateSelectiveMatches() {
     return;
   }
   
-  // Truncate existing matches
-  await supabase.rpc('exec_sql_modify', { sql_query: 'TRUNCATE TABLE startup_investor_matches' });
-  console.log('🗑️  Cleared existing matches\n');
+  // BUG FIX: DO NOT truncate - use upsert to preserve existing matches
+  // This prevents loss of matches when script only processes a subset
+  console.log('💾 Using upsert to update matches (preserving all existing matches)\n');
   
   // Track statistics
   const stats = {
@@ -950,11 +950,21 @@ async function generateSelectiveMatches() {
       `('${m.startup_id}', '${m.investor_id}', ${m.match_score}, '${m.confidence_level}', '${m.reasoning.replace(/'/g, "''")}', '${JSON.stringify(m.fit_analysis).replace(/'/g, "''")}', NOW())`
     ).join(',\n');
     
+    // BUG FIX: Use INSERT ... ON CONFLICT to handle duplicates (upsert behavior)
+    // This preserves existing matches and only updates when conflict occurs
     await supabase.rpc('exec_sql_modify', {
       sql_query: `
         INSERT INTO startup_investor_matches 
         (startup_id, investor_id, match_score, confidence_level, reasoning, fit_analysis, created_at)
         VALUES ${values}
+        ON CONFLICT (startup_id, investor_id) 
+        DO UPDATE SET 
+          match_score = EXCLUDED.match_score,
+          confidence_level = EXCLUDED.confidence_level,
+          reasoning = EXCLUDED.reasoning,
+          fit_analysis = EXCLUDED.fit_analysis,
+          updated_at = NOW()
+        -- NOTE: created_at is NOT updated - preserves original creation time
       `
     });
     

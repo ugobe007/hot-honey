@@ -22,7 +22,8 @@ export default function EditInvestorPage() {
     contact_email: '',
     aum: '',
     fund_size: '',
-    check_size: '',
+    check_size_min: 0,
+    check_size_max: 0,
     stage: [] as string[],
     sectors: [] as string[],
     geography: '',
@@ -59,11 +60,12 @@ export default function EditInvestorPage() {
       contact_email: data.contact_email || '',
       aum: data.aum || '',
       fund_size: data.fund_size || '',
-      check_size: data.check_size || '',
+      check_size_min: data.checkSizeMin || data.check_size_min || 0,
+      check_size_max: data.checkSizeMax || data.check_size_max || 0,
       stage: data.stage || [],
       sectors: data.sectors || [],
       geography: data.geography || '',
-      portfolio_count: data.portfolio_count || 0,
+      portfolio_count: data.total_investments || data.portfolioCount || 0, // SSOT: Map from total_investments
       exits: data.exits || 0,
       unicorns: data.unicorns || 0,
       notable_investments: data.notable_investments || [],
@@ -98,7 +100,8 @@ export default function EditInvestorPage() {
         contact_email: researchedData.contactEmail || prev.contact_email,
         aum: researchedData.aum || prev.aum,
         fund_size: researchedData.fundSize || prev.fund_size,
-        check_size: researchedData.checkSize || prev.check_size,
+        check_size_min: researchedData.checkSizeMin || prev.check_size_min,
+        check_size_max: researchedData.checkSizeMax || prev.check_size_max,
         stage: researchedData.stage && researchedData.stage.length > 0 ? researchedData.stage : prev.stage,
         sectors: researchedData.sectors && researchedData.sectors.length > 0 ? researchedData.sectors : prev.sectors,
         geography: researchedData.geography || prev.geography,
@@ -136,12 +139,13 @@ export default function EditInvestorPage() {
           contact_email: formData.contact_email || null,
           aum: formData.aum || null,
           fund_size: formData.fund_size || null,
-          check_size: formData.check_size || null,
+          check_size_min: formData.check_size_min || null, // SSOT: Use check_size_min/max, not check_size
+          check_size_max: formData.check_size_max || null,
           stage: formData.stage.length > 0 ? formData.stage : null,
           sectors: formData.sectors.length > 0 ? formData.sectors : null,
           geography: formData.geography || null,
-          portfolio_count: formData.portfolio_count || null,
-          exits: formData.exits || null,
+          total_investments: formData.portfolio_count || null, // SSOT: Database uses total_investments, not portfolio_count
+          successful_exits: formData.exits || null, // SSOT: Database uses successful_exits, not exits
           unicorns: formData.unicorns || null,
           notable_investments: formData.notable_investments.length > 0 ? formData.notable_investments : null,
           updated_at: new Date().toISOString(),
@@ -325,15 +329,27 @@ export default function EditInvestorPage() {
               />
             </div>
 
-            <div>
-              <label className="block text-white font-bold mb-2">Check Size</label>
-              <input
-                type="text"
-                value={formData.check_size}
-                onChange={(e) => setFormData({...formData, check_size: e.target.value})}
-                className="w-full px-4 py-3 rounded-xl bg-white/20 text-white border-2 border-purple-300/50 focus:border-yellow-400 focus:outline-none"
-                placeholder="e.g., $1M - $10M"
-              />
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-white font-bold mb-2">Check Size Min ($)</label>
+                <input
+                  type="number"
+                  value={formData.check_size_min || ''}
+                  onChange={(e) => setFormData({...formData, check_size_min: parseInt(e.target.value) || 0})}
+                  className="w-full px-4 py-3 rounded-xl bg-white/20 text-white border-2 border-purple-300/50 focus:border-yellow-400 focus:outline-none"
+                  placeholder="e.g., 1000000"
+                />
+              </div>
+              <div>
+                <label className="block text-white font-bold mb-2">Check Size Max ($)</label>
+                <input
+                  type="number"
+                  value={formData.check_size_max || ''}
+                  onChange={(e) => setFormData({...formData, check_size_max: parseInt(e.target.value) || 0})}
+                  className="w-full px-4 py-3 rounded-xl bg-white/20 text-white border-2 border-purple-300/50 focus:border-yellow-400 focus:outline-none"
+                  placeholder="e.g., 10000000"
+                />
+              </div>
             </div>
           </div>
 

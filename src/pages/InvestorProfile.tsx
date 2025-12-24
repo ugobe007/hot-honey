@@ -17,7 +17,7 @@ interface Investor {
   investment_thesis: string;
   linkedin_url: string;
   type: string;
-  portfolio_size: number;
+  total_investments: number | null; // SSOT: Database uses total_investments, not portfolio_size
 }
 
 interface NewsArticle {
@@ -98,7 +98,7 @@ export default function InvestorProfile() {
       <div className="min-h-screen bg-gradient-to-br from-[#0f0729] via-[#1a0f3a] to-[#2d1558] flex flex-col items-center justify-center gap-4">
         <div className="text-red-400 text-xl">Investor not found</div>
         <button 
-          onClick={() => navigate('/match')} 
+          onClick={() => navigate('/matching-engine')} 
           className="bg-gradient-to-r from-cyan-600 to-blue-600 text-white px-6 py-3 rounded-xl font-bold hover:scale-105 transition-all"
         >
           ← Back to Matches
@@ -212,7 +212,7 @@ export default function InvestorProfile() {
                 <span className="text-4xl">📊</span>
                 <p className="text-purple-300 text-sm font-bold uppercase tracking-wide">Portfolio</p>
               </div>
-              <p className="text-white text-2xl font-extrabold">{investor.portfolio_size || 'N/A'} companies</p>
+              <p className="text-white text-2xl font-extrabold">{investor.total_investments || 'N/A'} companies</p>
             </div>
 
             {/* Investment Type */}

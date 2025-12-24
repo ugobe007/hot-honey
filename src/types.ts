@@ -1,13 +1,15 @@
+// Re-export everything from types/index for backwards compatibility
+export * from './types/index';
 
 export interface StoreState {
-  startups: Startup[];
+  startups: import('./types/index').StartupComponent[];
   currentIndex: number;
-  portfolio: Startup[];
-  voteYes: (startup: Startup) => void;
+  portfolio: import('./types/index').StartupComponent[];
+  voteYes: (startup: import('./types/index').StartupComponent) => void;
   voteNo: () => void;
   rateStartup: (index: number, rating: number) => void;
   resetVoting: () => void;
-  unvote: (startup: Startup) => void;
+  unvote: (startup: import('./types/index').StartupComponent) => void;
   loadStartupsFromDatabase: () => Promise<void>;
 }
 // FIXED types.ts
@@ -48,6 +50,11 @@ export interface CustomerTraction {
   description?: string;
 }
 
+/**
+ * @deprecated Use `Startup` from '@/types' or '@/lib/database.types' instead
+ * This interface is kept for backward compatibility but will be removed in a future version.
+ * Use adaptStartupForComponent() from '@/utils/startupAdapters' to convert database types.
+ */
 export interface Startup {
   id: number;
   name: string;

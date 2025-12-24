@@ -1,24 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
-import { RefreshCw, AlertTriangle, CheckCircle, Clock, XCircle, Trash2, Check, Play, ExternalLink, Database, Zap, Globe } from 'lucide-react';
-
-interface PendingStartup {
-  id: string;
-  name: string;
-  tagline: string | null;
-  sectors: string[] | null;
-  total_god_score: number | null;
-  created_at: string | null;
-}
-
-interface RecentActivity {
-  type: 'startup' | 'investor' | 'match' | 'article';
-  action: string;
-  name: string;
-  id: string;
-  created_at: string | null;
-}
+import { RefreshCw, AlertTriangle, CheckCircle, Clock, XCircle, Trash2, Check, Play, ExternalLink, Database, Zap, Globe, Target } from 'lucide-react';
 
 interface DataQuality {
   table: string;
@@ -71,15 +54,11 @@ export default function AdminAnalytics() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [pendingStartups, setPendingStartups] = useState<PendingStartup[]>([]);
   const [matchQueue, setMatchQueue] = useState<MatchQueueItem[]>([]);
-  const [recentActivity, setRecentActivity] = useState<RecentActivity[]>([]);
   const [dataQuality, setDataQuality] = useState<DataQuality[]>([]);
   const [startupGaps, setStartupGaps] = useState<StartupDataGaps | null>(null);
   const [incompleteStartups, setIncompleteStartups] = useState<IncompleteStartup[]>([]);
   const [systemHealth, setSystemHealth] = useState<SystemHealth | null>(null);
-  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
-  const [processing, setProcessing] = useState(false);
   const [enriching, setEnriching] = useState(false);
 
   useEffect(() => {
@@ -89,9 +68,7 @@ export default function AdminAnalytics() {
   const loadAllData = async () => {
     setLoading(true);
     await Promise.all([
-      loadPendingStartups(),
       loadMatchQueue(),
-      loadRecentActivity(),
       loadDataQuality(),
       loadStartupGaps(),
       loadIncompleteStartups(),
@@ -106,23 +83,19 @@ export default function AdminAnalytics() {
     setRefreshing(false);
   };
 
-  const loadPendingStartups = async () => {
-    const { data } = await supabase
-      .from('startup_uploads')
-      .select('id, name, tagline, sectors, total_god_score, created_at')
-      .eq('status', 'pending')
-      .order('created_at', { ascending: false })
-      .limit(50);
-    setPendingStartups(data || []);
-  };
-
   const loadMatchQueue = async () => {
-    const { data: matches } = await supabase
+    // Get high-score matches (top matches by score, regardless of status)
+    const { data: matches, error } = await supabase
       .from('startup_investor_matches')
       .select('id, startup_id, investor_id, match_score, status, created_at')
-      .in('status', ['pending', 'new'])
       .order('match_score', { ascending: false })
       .limit(50);
+
+    if (error) {
+      console.error('Error loading match queue:', error);
+      setMatchQueue([]);
+      return;
+    }
 
     if (!matches?.length) {
       setMatchQueue([]);
@@ -152,28 +125,27 @@ export default function AdminAnalytics() {
     })));
   };
 
-  const loadRecentActivity = async () => {
-    const [startups, investors, matches] = await Promise.all([
-      supabase.from('startup_uploads').select('id, name, created_at').order('created_at', { ascending: false }).limit(10),
-      supabase.from('investors').select('id, name, created_at').order('created_at', { ascending: false }).limit(10),
-      supabase.from('startup_investor_matches').select('id, created_at').order('created_at', { ascending: false }).limit(10)
+  const loadDataQuality = async () => {
+    // Get total counts using count queries (not limited to 1000)
+    const [
+      { count: totalStartups },
+      { count: totalInvestors },
+      { count: totalMatches },
+      { count: totalDiscovered }
+    ] = await Promise.all([
+      supabase.from('startup_uploads').select('*', { count: 'exact', head: true }),
+      supabase.from('investors').select('*', { count: 'exact', head: true }),
+      supabase.from('startup_investor_matches').select('*', { count: 'exact', head: true }),
+      supabase.from('discovered_startups').select('*', { count: 'exact', head: true })
     ]);
 
-    const activity: RecentActivity[] = [
-      ...(startups.data || []).map(s => ({ type: 'startup' as const, action: 'Added', name: s.name, id: s.id, created_at: s.created_at })),
-      ...(investors.data || []).map(i => ({ type: 'investor' as const, action: 'Added', name: i.name, id: i.id, created_at: i.created_at })),
-      ...(matches.data || []).map(m => ({ type: 'match' as const, action: 'Created', name: `Match #${m.id.slice(0, 8)}`, id: m.id, created_at: m.created_at }))
-    ].sort((a, b) => new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime()).slice(0, 30);
-
-    setRecentActivity(activity);
-  };
-
-  const loadDataQuality = async () => {
+    // Get sample data for quality analysis (using pagination to get representative sample)
+    // For large tables, we'll sample the first 1000 rows for quality metrics
     const [startupsRes, investorsRes, matchesRes, discoveredRes] = await Promise.all([
-      supabase.from('startup_uploads').select('id, name, tagline, sectors, website, total_god_score, created_at'),
-      supabase.from('investors').select('id, name, firm, sectors, check_size_min, created_at'),
-      supabase.from('startup_investor_matches').select('id, match_score, created_at'),
-      supabase.from('discovered_startups').select('id, name, article_url, created_at')
+      supabase.from('startup_uploads').select('id, name, tagline, sectors, website, total_god_score, created_at').order('created_at', { ascending: false }).limit(1000),
+      supabase.from('investors').select('id, name, firm, sectors, check_size_min, created_at').order('created_at', { ascending: false }).limit(1000),
+      supabase.from('startup_investor_matches').select('id, match_score, created_at').order('created_at', { ascending: false }).limit(1000),
+      supabase.from('discovered_startups').select('id, name, article_url, created_at').order('created_at', { ascending: false }).limit(1000)
     ]);
 
     const startups = startupsRes.data || [];
@@ -181,33 +153,53 @@ export default function AdminAnalytics() {
     const matches = matchesRes.data || [];
     const discovered = discoveredRes.data || [];
 
+    // Calculate quality percentages from sample, then apply to total
+    const startupQualityRate = startups.length > 0 
+      ? startups.filter(s => s.name && s.tagline && s.sectors?.length && s.website).length / startups.length
+      : 0;
+    const investorQualityRate = investors.length > 0
+      ? investors.filter(i => i.name && i.firm && i.sectors?.length && i.check_size_min).length / investors.length
+      : 0;
+    const matchQualityRate = matches.length > 0
+      ? matches.filter(m => (m.match_score ?? 0) > 0).length / matches.length
+      : 0;
+    const discoveredQualityRate = discovered.length > 0
+      ? discovered.filter(d => d.name && d.article_url).length / discovered.length
+      : 0;
+
+    // Calculate estimated complete/missing based on quality rates
+    const startupComplete = Math.round((totalStartups || 0) * startupQualityRate);
+    const investorComplete = Math.round((totalInvestors || 0) * investorQualityRate);
+    const matchComplete = Math.round((totalMatches || 0) * matchQualityRate);
+    const discoveredComplete = Math.round((totalDiscovered || 0) * discoveredQualityRate);
+
     setDataQuality([
       {
         table: 'startup_uploads',
-        total: startups.length,
-        complete: startups.filter(s => s.name && s.tagline && s.sectors?.length && s.website).length,
-        missing_key_fields: startups.filter(s => !s.tagline || !s.sectors?.length).length,
+        total: totalStartups || 0,
+        complete: startupComplete,
+        missing_key_fields: (totalStartups || 0) - startupComplete,
         last_updated: startups[0]?.created_at || '-'
       },
       {
         table: 'investors',
-        total: investors.length,
-        complete: investors.filter(i => i.name && i.firm && i.sectors?.length && i.check_size_min).length,
-        missing_key_fields: investors.filter(i => !i.firm || !i.sectors?.length).length,
+        total: totalInvestors || 0,
+        complete: investorComplete,
+        missing_key_fields: (totalInvestors || 0) - investorComplete,
         last_updated: investors[0]?.created_at || '-'
       },
       {
         table: 'matches',
-        total: matches.length,
-        complete: matches.filter(m => (m.match_score ?? 0) > 0).length,
-        missing_key_fields: matches.filter(m => !m.match_score).length,
+        total: totalMatches || 0,
+        complete: matchComplete,
+        missing_key_fields: (totalMatches || 0) - matchComplete,
         last_updated: matches[0]?.created_at || '-'
       },
       {
         table: 'discovered_startups',
-        total: discovered.length,
-        complete: discovered.filter(d => d.name && d.article_url).length,
-        missing_key_fields: discovered.filter(d => !d.article_url).length,
+        total: totalDiscovered || 0,
+        complete: discoveredComplete,
+        missing_key_fields: (totalDiscovered || 0) - discoveredComplete,
         last_updated: discovered[0]?.created_at || '-'
       }
     ]);
@@ -264,77 +256,115 @@ export default function AdminAnalytics() {
   };
 
   // AI Enrichment - Generate description from tagline AND infer sectors
+  // Uses keyword-based inference (no OpenAI API needed)
   const enrichWithAI = async (startup: IncompleteStartup) => {
-    if (!startup.tagline) return;
+    if (!startup.tagline) {
+      throw new Error(`Startup ${startup.name} has no tagline for enrichment`);
+    }
     
-    // Sector inference keywords
-    const sectorKeywords: Record<string, string[]> = {
-      'FinTech': ['fintech', 'finance', 'banking', 'payment', 'crypto', 'defi', 'insurance', 'lending', 'trading', 'wallet', 'neobank', 'regtech', 'money', 'transaction', 'wealth'],
-      'AI/ML': ['ai', 'artificial intelligence', 'machine learning', 'deep learning', 'neural', 'nlp', 'gpt', 'llm', 'automation', 'cognitive', 'predictive'],
-      'SaaS': ['saas', 'cloud', 'platform', 'software', 'api', 'dashboard', 'tool', 'workflow', 'productivity', 'enterprise', 'b2b'],
-      'HealthTech': ['health', 'healthcare', 'medical', 'clinical', 'patient', 'doctor', 'hospital', 'pharma', 'biotech', 'wellness', 'mental health', 'telemedicine', 'diagnosis'],
-      'EdTech': ['education', 'learning', 'course', 'student', 'school', 'teach', 'training', 'skill', 'tutor', 'academic'],
-      'Sustainability': ['climate', 'carbon', 'green', 'sustainable', 'environment', 'renewable', 'clean', 'eco', 'solar', 'energy'],
-      'E-commerce': ['ecommerce', 'shop', 'retail', 'marketplace', 'commerce', 'store', 'merchant', 'brand', 'direct-to-consumer', 'd2c'],
-      'Cybersecurity': ['security', 'cyber', 'privacy', 'encryption', 'authentication', 'threat', 'fraud', 'identity', 'compliance'],
-      'PropTech': ['real estate', 'property', 'housing', 'rental', 'mortgage', 'home', 'construction', 'tenant'],
-      'FoodTech': ['food', 'restaurant', 'delivery', 'kitchen', 'meal', 'grocery', 'farming', 'agriculture'],
-      'Developer Tools': ['developer', 'dev', 'code', 'infrastructure', 'devops', 'sdk', 'api', 'testing', 'deployment', 'git'],
-      'Marketing': ['marketing', 'advertising', 'brand', 'content', 'social media', 'influencer', 'seo', 'analytics', 'campaign'],
-      'HR/Talent': ['hr', 'hiring', 'recruiting', 'talent', 'employee', 'workforce', 'payroll', 'benefit', 'career', 'job'],
-      'Logistics': ['logistics', 'supply chain', 'shipping', 'delivery', 'warehouse', 'freight', 'fleet', 'tracking'],
-      'Consumer': ['consumer', 'app', 'social', 'community', 'creator', 'entertainment', 'gaming', 'lifestyle', 'subscription']
-    };
+    try {
+      // Sector inference keywords
+      const sectorKeywords: Record<string, string[]> = {
+        'FinTech': ['fintech', 'finance', 'banking', 'payment', 'crypto', 'defi', 'insurance', 'lending', 'trading', 'wallet', 'neobank', 'regtech', 'money', 'transaction', 'wealth'],
+        'AI/ML': ['ai', 'artificial intelligence', 'machine learning', 'deep learning', 'neural', 'nlp', 'gpt', 'llm', 'automation', 'cognitive', 'predictive'],
+        'SaaS': ['saas', 'cloud', 'platform', 'software', 'api', 'dashboard', 'tool', 'workflow', 'productivity', 'enterprise', 'b2b'],
+        'HealthTech': ['health', 'healthcare', 'medical', 'clinical', 'patient', 'doctor', 'hospital', 'pharma', 'biotech', 'wellness', 'mental health', 'telemedicine', 'diagnosis'],
+        'EdTech': ['education', 'learning', 'course', 'student', 'school', 'teach', 'training', 'skill', 'tutor', 'academic'],
+        'Sustainability': ['climate', 'carbon', 'green', 'sustainable', 'environment', 'renewable', 'clean', 'eco', 'solar', 'energy'],
+        'E-commerce': ['ecommerce', 'shop', 'retail', 'marketplace', 'commerce', 'store', 'merchant', 'brand', 'direct-to-consumer', 'd2c'],
+        'Cybersecurity': ['security', 'cyber', 'privacy', 'encryption', 'authentication', 'threat', 'fraud', 'identity', 'compliance'],
+        'PropTech': ['real estate', 'property', 'housing', 'rental', 'mortgage', 'home', 'construction', 'tenant'],
+        'FoodTech': ['food', 'restaurant', 'delivery', 'kitchen', 'meal', 'grocery', 'farming', 'agriculture'],
+        'Developer Tools': ['developer', 'dev', 'code', 'infrastructure', 'devops', 'sdk', 'api', 'testing', 'deployment', 'git'],
+        'Marketing': ['marketing', 'advertising', 'brand', 'content', 'social media', 'influencer', 'seo', 'analytics', 'campaign'],
+        'HR/Talent': ['hr', 'hiring', 'recruiting', 'talent', 'employee', 'workforce', 'payroll', 'benefit', 'career', 'job'],
+        'Logistics': ['logistics', 'supply chain', 'shipping', 'delivery', 'warehouse', 'freight', 'fleet', 'tracking'],
+        'Consumer': ['consumer', 'app', 'social', 'community', 'creator', 'entertainment', 'gaming', 'lifestyle', 'subscription']
+      };
 
-    // Infer sectors from tagline and name
-    const textToAnalyze = `${startup.name} ${startup.tagline}`.toLowerCase();
-    const inferredSectors: string[] = [];
-    
-    for (const [sector, keywords] of Object.entries(sectorKeywords)) {
-      for (const keyword of keywords) {
-        if (textToAnalyze.includes(keyword) && !inferredSectors.includes(sector)) {
-          inferredSectors.push(sector);
-          break;
+      // Infer sectors from tagline and name
+      const textToAnalyze = `${startup.name} ${startup.tagline}`.toLowerCase();
+      const inferredSectors: string[] = [];
+      
+      for (const [sector, keywords] of Object.entries(sectorKeywords)) {
+        for (const keyword of keywords) {
+          if (textToAnalyze.includes(keyword) && !inferredSectors.includes(sector)) {
+            inferredSectors.push(sector);
+            break;
+          }
         }
       }
-    }
-    
-    // Default to SaaS if no sectors found
-    if (inferredSectors.length === 0) {
-      inferredSectors.push('SaaS');
-    }
-    
-    // Generate description
-    const description = `${startup.name} is ${startup.tagline.toLowerCase()}. The company is focused on delivering innovative solutions in this space, helping customers achieve better outcomes through technology-driven approaches.`;
-    
-    const updateData: any = { description };
-    
-    // Only update sectors if startup doesn't have any
-    if (!startup.has_sectors) {
-      updateData.sectors = inferredSectors.slice(0, 3);
-    }
-    
-    const { error } = await supabase
-      .from('startup_uploads')
-      .update(updateData)
-      .eq('id', startup.id);
+      
+      // Default to SaaS if no sectors found
+      if (inferredSectors.length === 0) {
+        inferredSectors.push('SaaS');
+      }
+      
+      // Generate description
+      const description = `${startup.name} is ${startup.tagline.toLowerCase()}. The company is focused on delivering innovative solutions in this space, helping customers achieve better outcomes through technology-driven approaches.`;
+      
+      const updateData: any = { description };
+      
+      // Only update sectors if startup doesn't have any
+      if (!startup.has_sectors) {
+        updateData.sectors = inferredSectors.slice(0, 3);
+      }
+      
+      const { error } = await supabase
+        .from('startup_uploads')
+        .update(updateData)
+        .eq('id', startup.id);
 
-    if (!error) {
-      await loadIncompleteStartups();
-      await loadStartupGaps();
+      if (error) {
+        throw new Error(`Database update failed: ${error.message}`);
+      }
+    } catch (error: any) {
+      console.error(`Error enriching startup ${startup.name}:`, error);
+      // Provide more helpful error message
+      const errorMessage = error?.message || 'Unknown error occurred';
+      throw new Error(`Failed to enrich ${startup.name}: ${errorMessage}`);
     }
   };
 
   // Bulk AI enrichment - enriches both description AND sectors
   const bulkEnrichAI = async () => {
-    setEnriching(true);
-    const toEnrich = incompleteStartups.filter(s => (!s.has_description || !s.has_sectors) && s.tagline);
-    
-    for (const startup of toEnrich.slice(0, 20)) {
-      await enrichWithAI(startup);
+    try {
+      setEnriching(true);
+      const toEnrich = incompleteStartups.filter(s => (!s.has_description || !s.has_sectors) && s.tagline);
+      
+      if (toEnrich.length === 0) {
+        alert('No startups available for enrichment. They need a tagline and missing description or sectors.');
+        setEnriching(false);
+        return;
+      }
+      
+      const batch = toEnrich.slice(0, 20);
+      let successCount = 0;
+      let errorCount = 0;
+      
+      for (const startup of batch) {
+        try {
+          await enrichWithAI(startup);
+          successCount++;
+          // Small delay to avoid overwhelming the database
+          await new Promise(resolve => setTimeout(resolve, 100));
+        } catch (error) {
+          console.error(`Error enriching ${startup.name}:`, error);
+          errorCount++;
+        }
+      }
+      
+      // Refresh data after enrichment
+      await loadIncompleteStartups();
+      await loadStartupGaps();
+      
+      alert(`✅ Enrichment complete!\n\nSuccessfully enriched: ${successCount}\nErrors: ${errorCount}`);
+    } catch (error) {
+      console.error('Error in bulk enrichment:', error);
+      alert(`❌ Error during enrichment: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    } finally {
+      setEnriching(false);
     }
-    
-    setEnriching(false);
   };
 
   const loadSystemHealth = async () => {
@@ -346,54 +376,8 @@ export default function AdminAnalytics() {
       last_scrape: new Date().toISOString(),
       rss_sources_active: activeRss,
       errors_today: 0,
-      queue_size: pendingStartups.length
+      queue_size: 0
     });
-  };
-
-  // Bulk Actions
-  const approveSelected = async () => {
-    if (selectedIds.size === 0) return;
-    setProcessing(true);
-    const ids = Array.from(selectedIds);
-    await supabase.from('startup_uploads').update({ status: 'approved' }).in('id', ids);
-    setSelectedIds(new Set());
-    await loadPendingStartups();
-    setProcessing(false);
-  };
-
-  const rejectSelected = async () => {
-    if (selectedIds.size === 0) return;
-    setProcessing(true);
-    const ids = Array.from(selectedIds);
-    await supabase.from('startup_uploads').update({ status: 'rejected' }).in('id', ids);
-    setSelectedIds(new Set());
-    await loadPendingStartups();
-    setProcessing(false);
-  };
-
-  const approveStartup = async (id: string) => {
-    await supabase.from('startup_uploads').update({ status: 'approved' }).eq('id', id);
-    await loadPendingStartups();
-  };
-
-  const rejectStartup = async (id: string) => {
-    await supabase.from('startup_uploads').update({ status: 'rejected' }).eq('id', id);
-    await loadPendingStartups();
-  };
-
-  const toggleSelect = (id: string) => {
-    const newSet = new Set(selectedIds);
-    if (newSet.has(id)) newSet.delete(id);
-    else newSet.add(id);
-    setSelectedIds(newSet);
-  };
-
-  const selectAll = () => {
-    if (selectedIds.size === pendingStartups.length) {
-      setSelectedIds(new Set());
-    } else {
-      setSelectedIds(new Set(pendingStartups.map(s => s.id)));
-    }
   };
 
   const formatTime = (d: string) => {
@@ -411,16 +395,6 @@ export default function AdminAnalytics() {
     if (score >= 80) return 'text-orange-400 font-semibold';
     if (score >= 70) return 'text-yellow-400';
     return 'text-gray-400';
-  };
-
-  const getTypeIcon = (type: string) => {
-    switch (type) {
-      case 'startup': return '🚀';
-      case 'investor': return '💰';
-      case 'match': return '🔥';
-      case 'article': return '📰';
-      default: return '•';
-    }
   };
 
   if (loading) {
@@ -441,8 +415,7 @@ export default function AdminAnalytics() {
           </div>
           <div className="flex items-center gap-4 text-xs">
             <Link to="/" className="text-gray-400 hover:text-white">Home</Link>
-            <Link to="/admin" className="text-gray-400 hover:text-white">Control Center</Link>
-            <Link to="/admin/dashboard" className="text-gray-400 hover:text-white">Workflow</Link>
+            <Link to="/admin/control" className="text-gray-400 hover:text-white">Control Center</Link>
             <Link to="/market-trends" className="text-gray-400 hover:text-white">Trends</Link>
             <Link to="/matching" className="text-orange-400 hover:text-orange-300 font-bold">⚡ Match</Link>
             <span className="text-gray-600">|</span>
@@ -458,116 +431,13 @@ export default function AdminAnalytics() {
         {/* System Health Row */}
         <div className="grid grid-cols-5 gap-2 text-xs">
           <HealthCell icon={<CheckCircle className="w-3 h-3" />} label="Active RSS" value={systemHealth?.rss_sources_active || 0} status="good" />
-          <HealthCell icon={<Clock className="w-3 h-3" />} label="Pending Review" value={pendingStartups.length} status={pendingStartups.length > 20 ? 'warning' : 'good'} />
           <HealthCell icon={<AlertTriangle className="w-3 h-3" />} label="Match Queue" value={matchQueue.length} status={matchQueue.length > 100 ? 'warning' : 'good'} />
           <HealthCell icon={<CheckCircle className="w-3 h-3" />} label="Data Quality" value={`${Math.round((dataQuality[0]?.complete || 0) / (dataQuality[0]?.total || 1) * 100)}%`} status="good" />
           <HealthCell icon={<XCircle className="w-3 h-3" />} label="Missing Data" value={dataQuality.reduce((sum, d) => sum + d.missing_key_fields, 0)} status={dataQuality.reduce((sum, d) => sum + d.missing_key_fields, 0) > 50 ? 'error' : 'warning'} />
+          <HealthCell icon={<Database className="w-3 h-3" />} label="Incomplete" value={startupGaps ? startupGaps.total - startupGaps.has_all_data : 0} status={startupGaps && (startupGaps.total - startupGaps.has_all_data) > 100 ? 'warning' : 'good'} />
         </div>
 
-        {/* Main Grid */}
-        <div className="grid lg:grid-cols-3 gap-4">
-          {/* Pending Approval Queue - With Actions */}
-          <div className="lg:col-span-2 bg-gray-800/50 rounded-lg border border-gray-700 overflow-hidden">
-            <div className="px-3 py-2 border-b border-gray-700 bg-gray-800/80 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <h2 className="text-sm font-semibold text-white">🚀 Pending Approval ({pendingStartups.length})</h2>
-                {selectedIds.size > 0 && (
-                  <span className="text-xs text-orange-400">{selectedIds.size} selected</span>
-                )}
-              </div>
-              <div className="flex items-center gap-2">
-                {selectedIds.size > 0 && (
-                  <>
-                    <button onClick={approveSelected} disabled={processing} className="px-2 py-1 bg-green-600 hover:bg-green-500 rounded text-xs flex items-center gap-1">
-                      <Check className="w-3 h-3" /> Approve
-                    </button>
-                    <button onClick={rejectSelected} disabled={processing} className="px-2 py-1 bg-red-600 hover:bg-red-500 rounded text-xs flex items-center gap-1">
-                      <XCircle className="w-3 h-3" /> Reject
-                    </button>
-                  </>
-                )}
-              </div>
-            </div>
-            <div className="overflow-x-auto max-h-96">
-              <table className="w-full text-xs">
-                <thead className="bg-gray-700/50 sticky top-0">
-                  <tr>
-                    <th className="px-2 py-2 w-8">
-                      <input type="checkbox" checked={selectedIds.size === pendingStartups.length && pendingStartups.length > 0} onChange={selectAll} className="rounded" />
-                    </th>
-                    <th className="text-left px-2 py-2 text-gray-400">Startup</th>
-                    <th className="text-left px-2 py-2 text-gray-400">Tagline</th>
-                    <th className="text-left px-2 py-2 text-gray-400">Sectors</th>
-                    <th className="text-right px-2 py-2 text-gray-400">GOD</th>
-                    <th className="text-right px-2 py-2 text-gray-400">Age</th>
-                    <th className="text-center px-2 py-2 text-gray-400 w-20">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {pendingStartups.map((s) => (
-                    <tr key={s.id} className="border-t border-gray-700/50 hover:bg-gray-700/30">
-                      <td className="px-2 py-1.5 text-center">
-                        <input type="checkbox" checked={selectedIds.has(s.id)} onChange={() => toggleSelect(s.id)} className="rounded" />
-                      </td>
-                      <td className="px-2 py-1.5">
-                        <Link to={`/startup/${s.id}`} className="text-white hover:text-orange-400 font-medium">
-                          {s.name}
-                        </Link>
-                      </td>
-                      <td className="px-2 py-1.5 text-gray-400 truncate max-w-40">{s.tagline || '-'}</td>
-                      <td className="px-2 py-1.5">
-                        <div className="flex gap-1">
-                          {(s.sectors || []).slice(0, 2).map(sec => (
-                            <span key={sec} className="px-1 py-0.5 bg-gray-700 rounded text-gray-300 text-[10px]">{sec}</span>
-                          ))}
-                        </div>
-                      </td>
-                      <td className={`px-2 py-1.5 text-right font-mono ${getScoreClass(s.total_god_score || 0)}`}>
-                        {s.total_god_score || '-'}
-                      </td>
-                      <td className="px-2 py-1.5 text-right text-gray-500">{formatTime(s.created_at || '')}</td>
-                      <td className="px-2 py-1.5">
-                        <div className="flex gap-1 justify-center">
-                          <button onClick={() => approveStartup(s.id)} className="p-1 hover:bg-green-500/20 rounded text-green-400" title="Approve">
-                            <Check className="w-3 h-3" />
-                          </button>
-                          <button onClick={() => rejectStartup(s.id)} className="p-1 hover:bg-red-500/20 rounded text-red-400" title="Reject">
-                            <XCircle className="w-3 h-3" />
-                          </button>
-                          <button onClick={() => navigate(`/startup/${s.id}`)} className="p-1 hover:bg-blue-500/20 rounded text-blue-400" title="View">
-                            <ExternalLink className="w-3 h-3" />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                  {pendingStartups.length === 0 && (
-                    <tr><td colSpan={7} className="px-4 py-8 text-center text-gray-500">No pending startups 🎉</td></tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          {/* Recent Activity Feed */}
-          <div className="bg-gray-800/50 rounded-lg border border-gray-700 overflow-hidden">
-            <div className="px-3 py-2 border-b border-gray-700 bg-gray-800/80">
-              <h2 className="text-sm font-semibold text-white">📋 Recent Activity</h2>
-            </div>
-            <div className="max-h-96 overflow-y-auto">
-              {recentActivity.map((a, i) => (
-                <div key={`${a.type}-${a.id}-${i}`} className="px-3 py-1.5 border-b border-gray-700/30 hover:bg-gray-700/20 flex items-center gap-2 text-xs">
-                  <span>{getTypeIcon(a.type)}</span>
-                  <span className="text-gray-400">{a.action}</span>
-                  <span className="text-white truncate flex-1">{a.name}</span>
-                  <span className="text-gray-600">{formatTime(a.created_at || '')}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Second Row */}
+        {/* Main Content Grid */}
         <div className="grid lg:grid-cols-2 gap-4">
           {/* Match Queue */}
           <div className="bg-gray-800/50 rounded-lg border border-gray-700 overflow-hidden">
@@ -586,18 +456,26 @@ export default function AdminAnalytics() {
                   </tr>
                 </thead>
                 <tbody>
-                  {matchQueue.slice(0, 15).map((m) => (
-                    <tr key={m.id} className="border-t border-gray-700/50 hover:bg-gray-700/30">
-                      <td className="px-3 py-1.5">
-                        <Link to={`/startup/${m.startup_id}`} className="text-white hover:text-orange-400">{m.startup_name}</Link>
+                  {matchQueue.length === 0 ? (
+                    <tr>
+                      <td colSpan={4} className="px-4 py-8 text-center text-gray-500">
+                        No high-score matches found
                       </td>
-                      <td className="px-2 py-1.5">
-                        <Link to={`/investor/${m.investor_id}`} className="text-gray-300 hover:text-violet-400">{m.investor_name}</Link>
-                      </td>
-                      <td className={`px-2 py-1.5 text-right font-mono ${getScoreClass(m.match_score)}`}>{m.match_score}%</td>
-                      <td className="px-3 py-1.5 text-right text-gray-500">{formatTime(m.created_at)}</td>
                     </tr>
-                  ))}
+                  ) : (
+                    matchQueue.slice(0, 15).map((m) => (
+                      <tr key={m.id} className="border-t border-gray-700/50 hover:bg-gray-700/30">
+                        <td className="px-3 py-1.5">
+                          <Link to={`/startup/${m.startup_id}`} className="text-white hover:text-orange-400">{m.startup_name}</Link>
+                        </td>
+                        <td className="px-2 py-1.5">
+                          <Link to={`/investor/${m.investor_id}`} className="text-gray-300 hover:text-violet-400">{m.investor_name}</Link>
+                        </td>
+                        <td className={`px-2 py-1.5 text-right font-mono ${getScoreClass(m.match_score)}`}>{m.match_score}%</td>
+                        <td className="px-3 py-1.5 text-right text-gray-500">{formatTime(m.created_at)}</td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>
@@ -731,15 +609,36 @@ export default function AdminAnalytics() {
                         {s.total_god_score}
                       </td>
                       <td className="px-3 py-1.5 text-center">
-                        {((!s.has_description || !s.has_sectors) && s.tagline) && (
-                          <button 
-                            onClick={() => enrichWithAI(s)}
-                            className="px-1.5 py-0.5 bg-orange-500/20 hover:bg-orange-500/40 rounded text-orange-400 text-[10px]"
-                            title="Generate description + infer sectors from tagline"
+                        <div className="flex items-center justify-center gap-1">
+                          <Link
+                            to={`/startup/${s.id}/matches`}
+                            onClick={(e) => e.stopPropagation()}
+                            className="px-1.5 py-0.5 bg-purple-500/20 hover:bg-purple-500/40 rounded text-purple-400 text-[10px]"
+                            title="View Matches"
                           >
-                            <Zap className="w-3 h-3 inline" /> AI
-                          </button>
-                        )}
+                            <Target className="w-3 h-3 inline" />
+                          </Link>
+                          {((!s.has_description || !s.has_sectors) && s.tagline) && (
+                            <button 
+                              onClick={async (e) => {
+                                e.stopPropagation();
+                                try {
+                                  await enrichWithAI(s);
+                                  alert(`✅ Successfully enriched ${s.name}`);
+                                  await loadIncompleteStartups();
+                                  await loadStartupGaps();
+                                } catch (error: any) {
+                                  console.error('Enrichment error:', error);
+                                  alert(`❌ Failed to enrich ${s.name}: ${error?.message || 'Unknown error'}`);
+                                }
+                              }}
+                              className="px-1.5 py-0.5 bg-orange-500/20 hover:bg-orange-500/40 rounded text-orange-400 text-[10px]"
+                              title="Generate description + infer sectors from tagline"
+                            >
+                              <Zap className="w-3 h-3 inline" /> AI
+                            </button>
+                          )}
+                        </div>
                       </td>
                     </tr>
                   ))}

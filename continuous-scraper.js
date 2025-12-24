@@ -33,29 +33,44 @@ console.log('💼 VC Enrichment every 2 hours');
 console.log('─'.repeat(60));
 
 /**
- * Run modern startup discovery (replaces broken RSS)
+ * Run enhanced startup discovery using dynamic parser
  */
 async function scrapeRSSFeeds() {
-  console.log('\n📡 [STARTUP DISCOVERY] Scraping startup databases...');
+  console.log('\n📡 [STARTUP DISCOVERY] Using Enhanced Discovery with Dynamic Parser...');
   console.log('⏰', new Date().toISOString());
-  console.log('ℹ️  Replaced broken RSS feeds with direct database scraping');
+  console.log('ℹ️  Using Parse.bot-style AI extraction for richer data');
   
   try {
+    // Try enhanced discovery first
+    const fs = require('fs');
+    if (fs.existsSync('./enhanced-startup-discovery.js')) {
+      const output = execSync('node enhanced-startup-discovery.js --limit 5', {
+        cwd: __dirname,
+        encoding: 'utf-8',
+        timeout: 15 * 60 * 1000,
+        maxBuffer: 10 * 1024 * 1024
+      });
+      console.log(output);
+      console.log('✅ [ENHANCED] Discovery completed successfully');
+      return true;
+    }
+    
+    // Fall back to modern discovery if enhanced not available
     const output = execSync('node modern-startup-discovery.js', {
       cwd: __dirname,
       encoding: 'utf-8',
-      timeout: 15 * 60 * 1000, // 15 minute timeout
-      maxBuffer: 10 * 1024 * 1024 // 10MB buffer for large output
+      timeout: 15 * 60 * 1000,
+      maxBuffer: 10 * 1024 * 1024
     });
     
     console.log(output);
     console.log('✅ [RSS] Feed scrape completed successfully');
     return true;
   } catch (error) {
-    console.error('❌ [RSS] Feed scrape failed:', error.message);
+    console.error('❌ [DISCOVERY] Scrape failed:', error.message);
     console.log('ℹ️  This is normal if scraping takes a long time');
     console.log('💡 Check discovered_startups table for results');
-    return false; // Don't crash, just log the error
+    return false;
   }
 }
 

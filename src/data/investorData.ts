@@ -1,3 +1,17 @@
+/**
+ * @deprecated This static data file is kept for backward compatibility only.
+ * 
+ * SSOT: Use database (investors table) as single source of truth.
+ * 
+ * Migration:
+ *   - Use getAllInvestors() from '@/lib/investorService' instead
+ *   - Remove fallback logic from services
+ *   - This file will be removed once all fallbacks are removed
+ * 
+ * Current usage: Used as fallback when database is empty or fails.
+ * This is a temporary measure until database is fully populated.
+ */
+
 // Investment firms and accelerators data
 
 export interface InvestorFirm {

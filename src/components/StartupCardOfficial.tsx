@@ -1,3 +1,13 @@
+/**
+ * @deprecated Use StartupCard with variant="detailed" instead
+ * 
+ * Migration:
+ *   import StartupCard from './StartupCard';
+ *   <StartupCard startup={startup} variant="detailed" onVote={handleVote} />
+ * 
+ * This component will be removed in a future version.
+ */
+
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useReactions } from '../hooks/useReactions';

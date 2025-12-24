@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { RefreshCw, Plus, Edit2, Trash2, Check, X, ExternalLink, Rss } from 'lucide-react';
+import { RefreshCw, Plus, Edit2, Trash2, Check, X, ExternalLink, Rss, Activity, Database, AlertCircle, CheckCircle, Clock } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
 interface RSSSource {
@@ -13,6 +13,21 @@ interface RSSSource {
   articles_count?: number;
 }
 
+interface ScraperActivity {
+  id: string;
+  type: string;
+  source: string;
+  status: string;
+  timestamp: string;
+  details: string;
+}
+
+interface ParserHealth {
+  status: string;
+  issues: string[];
+  tableMatches: { table: string; matched: boolean; count: number }[];
+}
+
 export default function RSSManager() {
   const [sources, setSources] = useState<RSSSource[]>([]);
   const [loading, setLoading] = useState(true);
@@ -21,8 +36,20 @@ export default function RSSManager() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editData, setEditData] = useState<any>(null);
   const [newSource, setNewSource] = useState({ name: '', url: '', category: 'Tech News', active: true });
+  const [scraperActivity, setScraperActivity] = useState<ScraperActivity[]>([]);
+  const [parserHealth, setParserHealth] = useState<ParserHealth>({ status: 'unknown', issues: [], tableMatches: [] });
 
-  useEffect(() => { loadSources(); }, []);
+  useEffect(() => { 
+    loadSources();
+    loadScraperActivity();
+    loadParserHealth();
+    // Refresh activity every 30 seconds
+    const interval = setInterval(() => {
+      loadScraperActivity();
+      loadParserHealth();
+    }, 30000);
+    return () => clearInterval(interval);
+  }, []);
 
   const loadSources = async () => {
     setLoading(true);
@@ -78,6 +105,133 @@ export default function RSSManager() {
     const hrs = Math.floor(mins / 60);
     if (hrs < 24) return `${hrs}h ago`;
     return `${Math.floor(hrs / 24)}d ago`;
+  };
+
+  const formatTimeAgo = (timestamp: string) => {
+    const diff = Date.now() - new Date(timestamp).getTime();
+    const mins = Math.floor(diff / 60000);
+    if (mins < 1) return 'Just now';
+    if (mins < 60) return `${mins}m ago`;
+    const hrs = Math.floor(mins / 60);
+    if (hrs < 24) return `${hrs}h ago`;
+    return `${Math.floor(hrs / 24)}d ago`;
+  };
+
+  const loadScraperActivity = async () => {
+    try {
+      const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+      
+      // Get scraper runs from ai_logs
+      const { data: scraperLogs } = await (supabase.from as any)('ai_logs')
+        .select('id, type, status, created_at, input, output')
+        .eq('type', 'rss_scraper')
+        .gte('created_at', oneDayAgo)
+        .order('created_at', { ascending: false })
+        .limit(50);
+      
+      // Get recent articles
+      const { data: recentArticles } = await (supabase.from as any)('rss_articles')
+        .select('id, title, source, created_at')
+        .gte('created_at', oneDayAgo)
+        .order('created_at', { ascending: false })
+        .limit(30);
+      
+      const activity: ScraperActivity[] = [
+        ...(scraperLogs || []).map((log: any) => ({
+          id: log.id,
+          type: 'scraper_run',
+          source: log.input?.source || 'Unknown',
+          status: log.status,
+          timestamp: log.created_at,
+          details: log.status === 'success' ? 'Scraped successfully' : log.output?.error || 'Failed'
+        })),
+        ...(recentArticles || []).map((article: any) => ({
+          id: article.id,
+          type: 'article_scraped',
+          source: article.source,
+          status: 'success',
+          timestamp: article.created_at,
+          details: article.title || 'Article scraped'
+        }))
+      ].sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()).slice(0, 20);
+      
+      setScraperActivity(activity);
+    } catch (error) {
+      console.error('Error loading scraper activity:', error);
+      setScraperActivity([]);
+    }
+  };
+
+  const loadParserHealth = async () => {
+    try {
+      const issues: string[] = [];
+      const tableMatches: { table: string; matched: boolean; count: number }[] = [];
+      
+      // Check RSS articles table
+      const { count: articlesCount, error: articlesError } = await (supabase.from as any)('rss_articles')
+        .select('*', { count: 'exact', head: true });
+      
+      if (articlesError) {
+        issues.push(`RSS articles table: ${articlesError.message}`);
+        tableMatches.push({ table: 'rss_articles', matched: false, count: 0 });
+      } else {
+        tableMatches.push({ table: 'rss_articles', matched: true, count: articlesCount || 0 });
+      }
+      
+      // Check discovered_startups table
+      const { count: discoveredCount, error: discoveredError } = await (supabase.from as any)('discovered_startups')
+        .select('*', { count: 'exact', head: true });
+      
+      if (discoveredError) {
+        issues.push(`Discovered startups table: ${discoveredError.message}`);
+        tableMatches.push({ table: 'discovered_startups', matched: false, count: 0 });
+      } else {
+        tableMatches.push({ table: 'discovered_startups', matched: true, count: discoveredCount || 0 });
+      }
+      
+      // Check startup_uploads table
+      const { count: startupsCount, error: startupsError } = await supabase
+        .from('startup_uploads')
+        .select('*', { count: 'exact', head: true });
+      
+      if (startupsError) {
+        issues.push(`Startup uploads table: ${startupsError.message}`);
+        tableMatches.push({ table: 'startup_uploads', matched: false, count: 0 });
+      } else {
+        tableMatches.push({ table: 'startup_uploads', matched: true, count: startupsCount || 0 });
+      }
+      
+      // Check if articles are being matched to discovered_startups
+      const { data: recentArticles } = await (supabase.from as any)('rss_articles')
+        .select('id, source, created_at')
+        .gte('created_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString())
+        .limit(100);
+      
+      const { data: recentDiscoveries } = await (supabase.from as any)('discovered_startups')
+        .select('id, rss_source, created_at')
+        .gte('created_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString())
+        .limit(100);
+      
+      if (recentArticles && recentDiscoveries) {
+        const articlesWithMatches = recentArticles.filter((a: any) => 
+          recentDiscoveries.some((d: any) => d.rss_source === a.source)
+        );
+        const matchRate = recentArticles.length > 0 ? (articlesWithMatches.length / recentArticles.length) * 100 : 0;
+        
+        if (matchRate < 10 && recentArticles.length > 10) {
+          issues.push(`Low parser match rate: ${matchRate.toFixed(1)}% of articles matched to discoveries`);
+        }
+      }
+      
+      setParserHealth({
+        status: issues.length === 0 ? 'healthy' : 'issues',
+        issues,
+        tableMatches
+      });
+    } catch (error) {
+      console.error('Error loading parser health:', error);
+      setParserHealth({ status: 'unknown', issues: ['Unable to check parser health'], tableMatches: [] });
+    }
   };
 
   const stats = {
@@ -240,13 +394,110 @@ export default function RSSManager() {
           )}
         </div>
 
+        {/* Live Scraper Activity Feed */}
+        <div className="bg-gray-800/50 rounded-lg border border-blue-500/30 p-4">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-sm font-semibold text-white flex items-center gap-2">
+              <Activity className="w-4 h-4 text-blue-400" />
+              Live Scraper Activity (Last 24h)
+            </h3>
+            <button onClick={loadScraperActivity} className="text-xs text-gray-400 hover:text-white">
+              <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
+            </button>
+          </div>
+          <div className="space-y-2 max-h-64 overflow-y-auto">
+            {scraperActivity.length > 0 ? (
+              scraperActivity.map((activity) => (
+                <div key={activity.id} className="flex items-center justify-between text-xs p-2 bg-gray-700/30 rounded border border-gray-600/30">
+                  <div className="flex items-center gap-2 flex-1 min-w-0">
+                    <div className={`w-2 h-2 rounded-full ${
+                      activity.status === 'success' ? 'bg-green-400' : 'bg-red-400'
+                    }`} />
+                    <span className="text-gray-300 font-medium truncate">{activity.source}</span>
+                    <span className="text-gray-500 text-[10px]">{activity.type === 'scraper_run' ? 'Run' : 'Article'}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-gray-500 text-[10px] truncate max-w-32">{activity.details}</span>
+                    <span className="text-gray-600 text-[10px]">{formatTimeAgo(activity.timestamp)}</span>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="text-xs text-gray-500 text-center py-4">No recent scraper activity</div>
+            )}
+          </div>
+        </div>
+
+        {/* Parser Health & Database Table Matching */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="bg-gray-800/50 rounded-lg border border-red-500/30 p-4">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-sm font-semibold text-white flex items-center gap-2">
+                <Database className="w-4 h-4 text-red-400" />
+                Parser Health
+              </h3>
+              <div className={`flex items-center gap-1 text-xs ${
+                parserHealth.status === 'healthy' ? 'text-green-400' : 
+                parserHealth.status === 'issues' ? 'text-red-400' : 'text-gray-400'
+              }`}>
+                {parserHealth.status === 'healthy' ? (
+                  <><CheckCircle className="w-4 h-4" /> Healthy</>
+                ) : parserHealth.status === 'issues' ? (
+                  <><AlertCircle className="w-4 h-4" /> Issues</>
+                ) : (
+                  <><Clock className="w-4 h-4" /> Unknown</>
+                )}
+              </div>
+            </div>
+            {parserHealth.issues.length > 0 ? (
+              <div className="space-y-1">
+                {parserHealth.issues.map((issue, idx) => (
+                  <div key={idx} className="text-xs text-red-400 bg-red-500/10 p-2 rounded border border-red-500/20">
+                    {issue}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-xs text-green-400 bg-green-500/10 p-2 rounded border border-green-500/20">
+                ✓ All parser checks passed
+              </div>
+            )}
+          </div>
+
+          <div className="bg-gray-800/50 rounded-lg border border-purple-500/30 p-4">
+            <h3 className="text-sm font-semibold text-white flex items-center gap-2 mb-3">
+              <Database className="w-4 h-4 text-purple-400" />
+              Database Table Matching
+            </h3>
+            <div className="space-y-2">
+              {parserHealth.tableMatches.map((match, idx) => (
+                <div key={idx} className="flex items-center justify-between text-xs p-2 bg-gray-700/30 rounded border border-gray-600/30">
+                  <div className="flex items-center gap-2">
+                    {match.matched ? (
+                      <CheckCircle className="w-3 h-3 text-green-400" />
+                    ) : (
+                      <AlertCircle className="w-3 h-3 text-red-400" />
+                    )}
+                    <span className="text-gray-300 font-mono text-[10px]">{match.table}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className={`text-xs ${match.matched ? 'text-green-400' : 'text-red-400'}`}>
+                      {match.matched ? '✓' : '✗'}
+                    </span>
+                    <span className="text-gray-500 text-[10px]">{match.count.toLocaleString()} records</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
         {/* Quick Links */}
         <div className="bg-gray-800/30 rounded-lg border border-gray-700/50 p-4">
           <h3 className="text-sm font-semibold text-white mb-3">⚡ Quick Actions</h3>
           <div className="flex flex-wrap gap-2 text-xs">
             <Link to="/admin/discovered-startups" className="px-3 py-1.5 bg-cyan-500/20 border border-cyan-500/30 rounded text-cyan-400 hover:bg-cyan-500/30">🔍 View Discoveries</Link>
-            <Link to="/admin/operations" className="px-3 py-1.5 bg-violet-500/20 border border-violet-500/30 rounded text-violet-400 hover:bg-violet-500/30">⚙️ Operations</Link>
-            <Link to="/admin/dashboard" className="px-3 py-1.5 bg-orange-500/20 border border-orange-500/30 rounded text-orange-400 hover:bg-orange-500/30">📊 Dashboard</Link>
+            <Link to="/admin/control" className="px-3 py-1.5 bg-violet-500/20 border border-violet-500/30 rounded text-violet-400 hover:bg-violet-500/30">🎛️ Control Center</Link>
           </div>
         </div>
       </div>

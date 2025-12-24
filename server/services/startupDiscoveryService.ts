@@ -213,7 +213,7 @@ RESPONSE FORMAT (JSON only, no markdown):
     try {
       // Using Anthropic Claude for market intelligence extraction
       const message = await anthropic.messages.create({
-        model: 'claude-sonnet-4-20250514',
+        model: 'claude-3-5-haiku-latest',
         max_tokens: 4000,
         system: 'You are a startup discovery expert. Extract startup information from articles and return ONLY valid JSON. Be aggressive in extraction - capture every startup mentioned.',
         messages: [

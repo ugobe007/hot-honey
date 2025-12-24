@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useStore } from '../store';
-import StartupCardOfficial from '../components/StartupCardOfficial';
+import StartupCard from '../components/StartupCard';
 import ActivityTicker from '../components/ActivityTicker';
 import LogoDropdownMenu from '../components/LogoDropdownMenu';
 import VoteTransparency from '../components/VoteTransparency';
@@ -97,9 +97,10 @@ const Vote: React.FC = () => {
       <div className="max-w-6xl mx-auto relative z-10">
         {/* Startup card */}
         <div className="flex justify-center items-start mb-6">
-          <StartupCardOfficial
+          <StartupCard
             startup={currentStartup}
-            onVote={(vote) => vote === 'yes' ? voteYes(currentStartup) : voteNo()}
+            variant="detailed"
+            onVote={(startupId, vote) => vote === 'yes' ? voteYes(currentStartup) : voteNo()}
           />
         </div>
 

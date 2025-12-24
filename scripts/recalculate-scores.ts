@@ -38,28 +38,46 @@ interface ScoreBreakdown {
  * Convert startup DB row to profile format for scoring service
  */
 function toScoringProfile(startup: any): any {
+  // Extract data from extracted_data JSONB column if available
+  const extracted = startup.extracted_data || {};
+  
   return {
-    tagline: startup.tagline,
-    pitch: startup.description,
-    problem: startup.problem,
-    solution: startup.solution,
-    market_size: startup.market_size,
-    industries: startup.industries || startup.sectors || [],
+    tagline: startup.tagline || extracted.tagline,
+    pitch: startup.description || startup.pitch || extracted.pitch || extracted.description,
+    problem: startup.problem || extracted.problem,
+    solution: startup.solution || extracted.solution,
+    market_size: startup.market_size || extracted.market_size,
+    industries: startup.industries || startup.sectors || extracted.industries || extracted.sectors || [],
     team: startup.team_companies ? startup.team_companies.map((c: string) => ({
       name: 'Team Member',
       previousCompanies: [c]
-    })) : [],
-    founders_count: startup.team_size || 1,
-    technical_cofounders: startup.has_technical_cofounder ? 1 : 0,
-    mrr: startup.mrr,
-    revenue: startup.arr || startup.revenue,
-    growth_rate: startup.growth_rate_monthly,
-    launched: startup.is_launched,
-    demo_available: startup.has_demo,
-    founded_date: startup.founded_date || startup.created_at,
-    value_proposition: startup.value_proposition || startup.tagline,
+    })) : (extracted.team || []),
+    founders_count: startup.team_size || extracted.team_size || 1,
+    technical_cofounders: (startup.has_technical_cofounder ? 1 : 0) || (extracted.has_technical_cofounder ? 1 : 0),
+    mrr: startup.mrr || extracted.mrr,
+    revenue: startup.arr || startup.revenue || extracted.revenue || extracted.arr,
+    growth_rate: startup.growth_rate_monthly || extracted.growth_rate || extracted.growth_rate_monthly,
+    customers: startup.customer_count || extracted.customers || extracted.customer_count,
+    active_users: extracted.active_users || extracted.users,
+    launched: startup.is_launched || extracted.is_launched || extracted.launched,
+    demo_available: startup.has_demo || extracted.has_demo || extracted.demo_available,
+    founded_date: startup.founded_date || startup.created_at || extracted.founded_date,
+    value_proposition: startup.value_proposition || startup.tagline || extracted.value_proposition,
+    // Additional traction data
+    gmv: extracted.gmv,
+    retention_rate: extracted.retention_rate,
+    churn_rate: extracted.churn_rate,
+    prepaying_customers: extracted.prepaying_customers,
+    signed_contracts: extracted.signed_contracts,
+    // Additional product data
+    unique_ip: extracted.unique_ip,
+    defensibility: extracted.defensibility,
+    mvp_stage: extracted.mvp_stage,
+    // Additional market data
+    backed_by: startup.backed_by || extracted.backed_by || extracted.investors,
     // Pass through any additional fields that might exist
-    ...startup
+    ...startup,
+    ...extracted
   };
 }
 
@@ -74,13 +92,26 @@ function calculateGODScore(startup: any): ScoreBreakdown {
   // Convert from 10-point scale to 100-point scale
   const total = Math.round(result.total * 10);
   
-  // Map breakdown to 20-point categories
+  // Map breakdown to 0-100 scale
+  // Breakdown structure: team_execution (0-3), product_vision (0-2), traction (0-3), market (0-2), product (0-2)
+  // Also includes: founder_courage (0-1.5), market_insight (0-1.5), team_age (0-1)
+  // 
+  // For component scores, we combine related components:
+  // - team_score = team_execution + team_age (max 4, scale to 0-100)
+  // - vision_score = product_vision (0-2, scale to 0-100)
+  // - traction_score = traction (0-3, scale to 0-100)
+  // - market_score = market + market_insight (max 3.5, scale to 0-100)
+  // - product_score = product (0-2, scale to 0-100)
+  
+  const teamCombined = (result.breakdown.team_execution || 0) + (result.breakdown.team_age || 0);
+  const marketCombined = (result.breakdown.market || 0) + (result.breakdown.market_insight || 0);
+  
   return {
-    market_score: Math.round((result.breakdown.market / 2) * 20),
-    team_score: Math.round((result.breakdown.team / 3) * 20),
-    traction_score: Math.round((result.breakdown.traction / 3) * 20),
-    product_score: Math.round((result.breakdown.product / 2) * 20),
-    vision_score: Math.round((result.breakdown.vision / 2) * 20),
+    team_score: Math.round((teamCombined / 4) * 100), // team_execution (0-3) + team_age (0-1) = max 4
+    traction_score: Math.round(((result.breakdown.traction || 0) / 3) * 100), // traction (0-3)
+    market_score: Math.round((marketCombined / 3.5) * 100), // market (0-2) + market_insight (0-1.5) = max 3.5
+    product_score: Math.round(((result.breakdown.product || 0) / 2) * 100), // product (0-2)
+    vision_score: Math.round(((result.breakdown.product_vision || 0) / 2) * 100), // product_vision (0-2)
     total_god_score: total
   };
 }
@@ -89,12 +120,12 @@ async function recalculateScores(): Promise<void> {
   console.log('🔢 Starting GOD Score recalculation (using SINGLE SOURCE OF TRUTH)...');
   
   // Get startups that need recalculation
+  // Process all approved/pending startups (removed limit to recalculate all)
   const { data: startups, error } = await supabase
     .from('startup_uploads')
     .select('*')
     .in('status', ['pending', 'approved'])
-    .order('updated_at', { ascending: true })
-    .limit(100);
+    .order('updated_at', { ascending: true });
 
   if (error) {
     console.error('Error fetching startups:', error);

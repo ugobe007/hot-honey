@@ -93,6 +93,14 @@ export default function DiscoveredStartups() {
         
         if (response.ok) {
           const data = await response.json();
+          
+          // Check if response has expected structure
+          if (!data || !data.choices || !data.choices[0] || !data.choices[0].message || !data.choices[0].message.content) {
+            console.error('❌ Invalid OpenAI response structure:', data);
+            alert('❌ AI enrichment failed: Invalid API response format');
+            return;
+          }
+          
           const enriched = JSON.parse(data.choices[0].message.content);
           
           await supabase.from('startup_uploads').insert({
@@ -139,7 +147,7 @@ export default function DiscoveredStartups() {
           <div className="flex items-center gap-4 text-xs">
             <Link to="/" className="text-gray-400 hover:text-white">Home</Link>
             <Link to="/admin" className="text-gray-400 hover:text-white">Control Center</Link>
-            <Link to="/admin/dashboard" className="text-gray-400 hover:text-white">Dashboard</Link>
+            <Link to="/admin/control" className="text-gray-400 hover:text-white">Control Center</Link>
             <Link to="/admin/edit-startups" className="text-cyan-400 hover:text-cyan-300">Manual Uploads</Link>
             <Link to="/matching" className="text-orange-400 hover:text-orange-300 font-bold">⚡ Match</Link>
             <button onClick={refresh} className="text-gray-400 hover:text-white">
@@ -256,7 +264,7 @@ export default function DiscoveredStartups() {
           <div className="flex flex-wrap gap-2 text-xs">
             <Link to="/admin/rss-manager" className="px-3 py-1.5 bg-blue-500/20 border border-blue-500/30 rounded text-blue-400 hover:bg-blue-500/30">📡 RSS Manager</Link>
             <Link to="/admin/edit-startups" className="px-3 py-1.5 bg-orange-500/20 border border-orange-500/30 rounded text-orange-400 hover:bg-orange-500/30">✏️ Manual Uploads</Link>
-            <Link to="/admin/dashboard" className="px-3 py-1.5 bg-violet-500/20 border border-violet-500/30 rounded text-violet-400 hover:bg-violet-500/30">📊 Dashboard</Link>
+            <Link to="/admin/control" className="px-3 py-1.5 bg-violet-500/20 border border-violet-500/30 rounded text-violet-400 hover:bg-violet-500/30">🎛️ Control Center</Link>
             <Link to="/matching" className="px-3 py-1.5 bg-green-500/20 border border-green-500/30 rounded text-green-400 hover:bg-green-500/30">🔥 View Matches</Link>
           </div>
         </div>

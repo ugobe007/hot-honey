@@ -15,6 +15,7 @@
 // PM2: pm2 start automation-pipeline.js --name pipeline --cron "0 */6 * * *"
 
 const { createClient } = require('@supabase/supabase-js');
+const { extractInferenceData } = require('./lib/inference-extractor');
 require('dotenv').config();
 
 const SUPABASE_URL = process.env.VITE_SUPABASE_URL;
@@ -78,7 +79,29 @@ async function importDiscoveredStartups() {
       continue;
     }
     
-    // Create new startup_upload record
+    // Run inference extraction on description to populate extracted_data
+    const textToAnalyze = [
+      startup.name,
+      startup.description,
+      startup.tagline,
+      startup.pitch
+    ].filter(Boolean).join('. ');
+    
+    // Use existing inference extractor (pattern-based, FREE, no AI cost)
+    const inferenceData = textToAnalyze.length > 50 
+      ? extractInferenceData(textToAnalyze, startup.article_url || startup.source_url || '')
+      : null;
+    
+    // Merge with any existing extracted_data from discovered_startups
+    const discoveredData = startup.extracted_data || {};
+    const extractedData = {
+      ...discoveredData,
+      ...(inferenceData || {}),
+      source: 'discovered_startups',
+      imported_at: new Date().toISOString()
+    };
+    
+    // Create new startup_upload record WITH extracted_data populated
     const { data: newStartup, error: insertError } = await supabase
       .from('startup_uploads')
       .insert({
@@ -88,6 +111,10 @@ async function importDiscoveredStartups() {
         status: 'pending',
         source: startup.rss_source || 'discovery',
         source_url: startup.article_url || '',
+        // CRITICAL: Populate extracted_data with inference results
+        extracted_data: extractedData,
+        // Use inference data for sectors if available
+        sectors: extractedData.sectors || discoveredData.sectors || ['Technology']
       })
       .select()
       .single();
@@ -122,30 +149,73 @@ async function enrichStartups() {
     .limit(CONFIG.BATCH_SIZE);
   
   if (!needsEnrichment || needsEnrichment.length === 0) {
-    console.log('   ✅ No startups need enrichment');
+    console.log('   ✅ No startups need basic enrichment');
+  } else {
+    console.log(`   Found ${needsEnrichment.length} startups needing basic enrichment`);
+    
+    let enriched = 0;
+    for (const startup of needsEnrichment) {
+      // Add a placeholder description if missing
+      if (!startup.description || startup.description.length < CONFIG.MIN_DESCRIPTION_LENGTH) {
+        const description = `${startup.name} is an innovative startup. Visit ${startup.website || 'their website'} to learn more.`;
+        
+        await supabase
+          .from('startup_uploads')
+          .update({ description })
+          .eq('id', startup.id);
+        
+        enriched++;
+      }
+    }
+    
+    console.log(`   ✅ Basic enrichment: ${enriched} startups`);
+  }
+  
+  // Now run AI inference enrichment for extracted_data
+  return await enrichStartupsWithInference();
+}
+
+/**
+ * Use AI inference to populate extracted_data for GOD scoring
+ */
+async function enrichStartupsWithInference() {
+  console.log('\n   🤖 Running AI inference enrichment...');
+  
+  try {
+    const { execSync } = require('child_process');
+    const path = require('path');
+    
+    // Run the Node.js wrapper script
+    const scriptPath = path.join(__dirname, 'scripts', 'enrich-startups-inference.js');
+    const result = execSync(
+      `node "${scriptPath}" --limit ${CONFIG.BATCH_SIZE} --missing`,
+      { 
+        encoding: 'utf-8',
+        stdio: 'pipe',
+        env: {
+          ...process.env,
+          SUPABASE_URL: SUPABASE_URL,
+          SUPABASE_SERVICE_KEY: SUPABASE_KEY
+        }
+      }
+    );
+    
+    // Parse result to get enriched count
+    const match = result.match(/✅ Enriched: (\d+)/);
+    const enriched = match ? parseInt(match[1]) : 0;
+    
+    if (enriched > 0) {
+      console.log(`   ✅ Inference enrichment: ${enriched} startups enriched`);
+    } else {
+      console.log('   ✅ No startups needed inference enrichment');
+    }
+    
+    return enriched;
+  } catch (error) {
+    console.error('   ⚠️  Inference enrichment failed (non-critical):', error.message);
+    // Don't fail the pipeline if enrichment fails - it's handled by PM2 job
     return 0;
   }
-  
-  console.log(`   Found ${needsEnrichment.length} startups to enrich`);
-  
-  let enriched = 0;
-  for (const startup of needsEnrichment) {
-    // For now, add a placeholder description if missing
-    // In production, you'd call an AI or scraping service here
-    if (!startup.description || startup.description.length < CONFIG.MIN_DESCRIPTION_LENGTH) {
-      const description = `${startup.name} is an innovative startup. Visit ${startup.website || 'their website'} to learn more.`;
-      
-      await supabase
-        .from('startup_uploads')
-        .update({ description })
-        .eq('id', startup.id);
-      
-      enriched++;
-    }
-  }
-  
-  console.log(`   ✅ Enriched ${enriched} startups`);
-  return enriched;
 }
 
 // ============================================================================

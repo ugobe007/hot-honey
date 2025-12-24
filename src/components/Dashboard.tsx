@@ -60,9 +60,11 @@ const Dashboard: React.FC = () => {
       setLoading(true);
       
       // Fetch recent hot startups
+      // SSOT: Use startup_uploads table (not 'startups')
       const { data: startupData, count: startupCount } = await supabase
-        .from('startups')
-        .select('id, name, tagline, industry, funding', { count: 'exact' })
+        .from('startup_uploads')
+        .select('id, name, tagline, sectors, raise_amount', { count: 'exact' })
+        .eq('status', 'approved')
         .limit(5);
       
       const { count: investorCount } = await supabase
@@ -73,9 +75,9 @@ const Dashboard: React.FC = () => {
       const startupsWithScores = (startupData || []).map(s => ({
         id: s.id,
         name: s.name,
-        tagline: s.tagline,
-        industry: s.industry,
-        hotScore: Math.floor(60 + Math.random() * 35)
+        tagline: s.tagline || '',
+        industry: Array.isArray(s.sectors) ? s.sectors[0] : s.sectors || '',
+        hotScore: s.total_god_score || Math.floor(60 + Math.random() * 35)
       }));
       
       setRecentStartups(startupsWithScores);
@@ -276,6 +278,20 @@ const Dashboard: React.FC = () => {
                   <p className="text-sm text-gray-400">Get AI-powered investor matches</p>
                 </div>
                 <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-purple-400 transition-colors" />
+              </div>
+            </Link>
+
+            {/* My Matches Card - Link to match search (will need startup/investor ID from profile) */}
+            <Link to="/matching" className="block bg-gradient-to-br from-blue-600/30 to-cyan-600/30 backdrop-blur-lg rounded-2xl border border-blue-500/30 p-5 hover:border-blue-400/50 transition-all group">
+              <div className="flex items-center gap-4">
+                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <Target className="w-7 h-7 text-white" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-bold text-white mb-1">My Matches</h3>
+                  <p className="text-sm text-gray-400">Search & filter your matches</p>
+                </div>
+                <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-blue-400 transition-colors" />
               </div>
             </Link>
 

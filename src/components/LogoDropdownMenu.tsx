@@ -103,12 +103,12 @@ export default function LogoDropdownMenu() {
               <span className="text-sm">📊</span>
             </Link>
             
-            {/* Operations */}
+            {/* Forecasts - NEW */}
             <Link
-              to="/admin/operations"
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all ${isActive('/admin/operations') ? 'bg-orange-500/30 text-orange-400' : 'bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white'}`}
+              to="/admin/forecasts"
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all ${isActive('/admin/forecasts') ? 'bg-orange-500/30 text-orange-400' : 'bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white'}`}
             >
-              <span className="text-sm">🔧</span>
+              <span className="text-sm">🔮</span>
             </Link>
             
             {/* Bulk Upload */}
@@ -312,21 +312,21 @@ export default function LogoDropdownMenu() {
                 </Link>
                 
                 <Link
-                  to="/admin/dashboard"
+                  to="/admin/forecasts"
                   onClick={() => setIsOpen(false)}
                   className="group px-4 py-2.5 rounded-lg bg-[#1f1f1f] hover:bg-[#2a2a2a] border-l-2 border-l-transparent hover:border-l-[#FF5A09] transition-all font-medium flex items-center gap-3"
                 >
-                  <BarChart3 className="w-5 h-5 text-[#FF5A09]" />
-                  <span className="text-base text-[#e0e0e0] group-hover:text-[#FF9900]">Workflow</span>
+                  <ChartBar className="w-5 h-5 text-[#FF5A09]" />
+                  <span className="text-base text-[#e0e0e0] group-hover:text-[#FF9900]">🔮 Forecasts</span>
                 </Link>
                 
                 <Link
-                  to="/admin/operations"
+                  to="/admin/pipeline"
                   onClick={() => setIsOpen(false)}
                   className="group px-4 py-2.5 rounded-lg bg-[#1f1f1f] hover:bg-[#2a2a2a] border-l-2 border-l-transparent hover:border-l-[#FF5A09] transition-all font-medium flex items-center gap-3"
                 >
                   <Activity className="w-5 h-5 text-[#FF5A09]" />
-                  <span className="text-base text-[#e0e0e0] group-hover:text-[#FF9900]">Operations</span>
+                  <span className="text-base text-[#e0e0e0] group-hover:text-[#FF9900]">Pipeline</span>
                 </Link>
                 
                 <Link

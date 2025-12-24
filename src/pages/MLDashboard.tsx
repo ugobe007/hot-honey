@@ -94,11 +94,40 @@ export default function MLDashboard() {
   };
 
   const runTraining = async () => {
-    setTrainingStatus('running');
-    setTimeout(() => {
-      setTrainingStatus('complete');
-      setTimeout(() => setTrainingStatus('idle'), 2000);
-    }, 2000);
+    try {
+      setTrainingStatus('running');
+      
+      const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3002';
+      const response = await fetch(`${API_BASE}/api/ml/training/run`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Training failed: ${response.statusText}`);
+      }
+
+      const result = await response.json();
+      
+      // Show success message
+      alert(`✅ ${result.message}\n\nTraining is running in the background. Check server logs for detailed progress.\n\nTraining will:\n1. Collect match outcomes\n2. Extract success patterns\n3. Analyze success factors\n4. Generate recommendations\n5. Track performance metrics\n\nRefresh this page in a few minutes to see updated recommendations.`);
+      
+      // Update status after a delay (training runs in background)
+      setTimeout(() => {
+        setTrainingStatus('complete');
+        // Refresh data after training completes
+        setTimeout(() => {
+          loadMLData();
+        }, 5000);
+      }, 2000);
+      
+    } catch (error) {
+      console.error('Error running ML training:', error);
+      setTrainingStatus('idle');
+      alert(`❌ Failed to start ML training: ${error.message}\n\nYou can also run training manually:\n  node run-ml-training.js`);
+    }
   };
 
   const applyRecommendation = async (id: string) => {
@@ -118,9 +147,7 @@ export default function MLDashboard() {
           <h1 className="text-lg font-bold text-white pl-20">🧠 ML Dashboard</h1>
           <div className="flex items-center gap-4 text-xs">
             <Link to="/" className="text-gray-400 hover:text-white">Home</Link>
-            <Link to="/admin" className="text-gray-400 hover:text-white">Control Center</Link>
-            <Link to="/admin/operations" className="text-gray-400 hover:text-white">Operations</Link>
-            <Link to="/admin/dashboard" className="text-gray-400 hover:text-white">Dashboard</Link>
+            <Link to="/admin/control" className="text-gray-400 hover:text-white">Control Center</Link>
             <Link to="/matching" className="text-orange-400 hover:text-orange-300 font-bold">⚡ Match</Link>
             <button onClick={refresh} className="text-gray-400 hover:text-white">
               <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
@@ -139,7 +166,7 @@ export default function MLDashboard() {
               { label: 'Success Rate', value: `${(metrics.conversion_rate * 100).toFixed(1)}%`, color: 'text-cyan-400', link: '/matching' },
               { label: 'Avg Match Score', value: metrics.avg_match_score.toFixed(1), color: 'text-purple-400', link: '/matching' },
               { label: 'Avg GOD Score', value: metrics.avg_god_score.toFixed(1), color: 'text-amber-400', link: '/admin/god-scores' },
-              { label: 'Training Status', value: trainingStatus === 'running' ? '🔄 Running' : trainingStatus === 'complete' ? '✅ Done' : '⏸️ Idle', color: 'text-blue-400', link: null }
+              { label: 'Training Status', value: trainingStatus === 'running' ? '🔄 Running' : trainingStatus === 'complete' ? '✅ Done' : '⏸️ Idle', color: 'text-blue-400', link: null, hasButton: true }
             ].map((s, i) => {
               const StatBox = s.link ? Link : 'div';
               const statProps = s.link ? { to: s.link } : {};
@@ -147,13 +174,25 @@ export default function MLDashboard() {
                 <StatBox 
                   key={i} 
                   {...statProps}
-                  className={`bg-gray-800/50 rounded-lg px-3 py-2 border border-gray-700 ${s.link ? 'hover:bg-gray-800/70 hover:border-gray-600 cursor-pointer transition-all group' : ''}`}
+                  className={`bg-gray-800/50 rounded-lg px-3 py-2 border border-gray-700 ${s.link ? 'hover:bg-gray-800/70 hover:border-gray-600 cursor-pointer transition-all group' : ''} ${s.hasButton ? 'relative' : ''}`}
                 >
                   <div className={`text-xl font-bold font-mono ${s.color} ${s.link ? 'group-hover:scale-105 transition-transform' : ''}`}>{s.value}</div>
                   <div className={`text-gray-500 text-[10px] ${s.link ? 'group-hover:text-gray-400 flex items-center gap-1' : ''}`}>
                     {s.label}
                     {s.link && <ExternalLink className="w-2 h-2 opacity-0 group-hover:opacity-100 transition-opacity" />}
                   </div>
+                  {s.hasButton && (
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        runTraining();
+                      }}
+                      className="absolute top-2 right-2 px-2 py-1 bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 rounded text-[10px] border border-blue-500/30 transition-all font-medium"
+                    >
+                      View Training
+                    </button>
+                  )}
                 </StatBox>
               );
             })}
@@ -163,20 +202,8 @@ export default function MLDashboard() {
         {/* Score Distribution */}
         {metrics && (
           <div className="bg-gray-800/50 rounded-lg border border-gray-700 overflow-hidden">
-            <div className="px-4 py-2 border-b border-gray-700 bg-gray-700/30 flex justify-between items-center">
+            <div className="px-4 py-2 border-b border-gray-700 bg-gray-700/30">
               <h3 className="text-sm font-semibold text-white">📊 Score Distribution</h3>
-              <button
-                onClick={runTraining}
-                disabled={trainingStatus === 'running'}
-                className={`px-3 py-1 rounded text-xs flex items-center gap-1 ${
-                  trainingStatus === 'running' ? 'bg-yellow-500/20 text-yellow-400' :
-                  trainingStatus === 'complete' ? 'bg-green-500/20 text-green-400' :
-                  'bg-purple-500/20 text-purple-400 hover:bg-purple-500/30'
-                }`}
-              >
-                {trainingStatus === 'running' ? <Clock className="w-3 h-3 animate-spin" /> : <Play className="w-3 h-3" />}
-                {trainingStatus === 'running' ? 'Training...' : trainingStatus === 'complete' ? 'Complete!' : 'Run Training'}
-              </button>
             </div>
             <table className="w-full text-sm">
               <thead className="bg-gray-700/50">

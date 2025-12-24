@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { 
@@ -68,8 +68,14 @@ interface MatchOptimization {
 export default function AIIntelligenceDashboard() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [autoRefresh, setAutoRefresh] = useState(true);
   const [selectedTab, setSelectedTab] = useState<'rss' | 'ml' | 'trends' | 'profiles' | 'matches'>('rss');
+  
+  // Debug: Log component mount
+  useEffect(() => {
+    console.log('AIIntelligenceDashboard mounted');
+  }, []);
   
   // RSS Data Stream
   const [rssData, setRssData] = useState<RSSDataPoint[]>([]);
@@ -98,16 +104,8 @@ export default function AIIntelligenceDashboard() {
   // Match Optimizations
   const [matchOptimizations, setMatchOptimizations] = useState<MatchOptimization[]>([]);
 
-  useEffect(() => {
-    loadAIIntelligence();
-    
-    if (autoRefresh) {
-      const interval = setInterval(loadAIIntelligence, 10000); // 10 seconds
-      return () => clearInterval(interval);
-    }
-  }, [autoRefresh]);
-
-  const loadAIIntelligence = async () => {
+  const loadAIIntelligence = useCallback(async () => {
+    setLoading(true);
     try {
       // Simulate RSS data stream (in production, pull from actual RSS scraper logs)
       const mockRSSData: RSSDataPoint[] = [
@@ -172,15 +170,26 @@ export default function AIIntelligenceDashboard() {
       });
 
       // ML Model Metrics (would come from training pipeline)
-      const { data: startups } = await supabase
-        .from('startup_uploads')
-        .select('id', { count: 'exact' });
+      // Fetch startups count - don't block if it fails
+      let dataPoints = 0;
+      try {
+        const { count, error: startupsError } = await supabase
+          .from('startup_uploads')
+          .select('*', { count: 'exact', head: true });
+        
+        if (!startupsError && count !== null) {
+          dataPoints = count;
+        }
+      } catch (err) {
+        console.warn('Error in startups query:', err);
+        // Continue with default value of 0
+      }
 
       setMlMetrics({
         model_version: 'v2.5.3',
         accuracy: 94.7,
         last_training: new Date(Date.now() - 1000 * 60 * 60 * 2), // 2 hours ago
-        data_points: startups?.length || 0,
+        data_points: dataPoints,
         improvement_rate: 3.2
       });
 
@@ -300,11 +309,22 @@ export default function AIIntelligenceDashboard() {
       ]);
 
       setLoading(false);
+      setError(null);
     } catch (error) {
       console.error('Error loading AI intelligence:', error);
+      setError(error instanceof Error ? error.message : 'Failed to load AI intelligence data');
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    loadAIIntelligence();
+    
+    if (autoRefresh) {
+      const interval = setInterval(loadAIIntelligence, 10000); // 10 seconds
+      return () => clearInterval(interval);
+    }
+  }, [autoRefresh, loadAIIntelligence]);
 
   const getTrendColor = (trend: string) => {
     switch (trend) {
@@ -344,6 +364,28 @@ export default function AIIntelligenceDashboard() {
     );
   }
 
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-[#0f0729] via-[#1a0f3a] to-[#2d1558] flex items-center justify-center p-8">
+        <div className="text-center max-w-md">
+          <AlertCircle className="w-16 h-16 text-red-400 mx-auto mb-4" />
+          <h2 className="text-2xl font-bold text-white mb-2">Error Loading Dashboard</h2>
+          <p className="text-gray-300 mb-4">{error}</p>
+          <button
+            onClick={() => {
+              setError(null);
+              setLoading(true);
+              loadAIIntelligence();
+            }}
+            className="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-semibold"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0f0729] via-[#1a0f3a] to-[#2d1558] text-white p-8 relative overflow-hidden">
       {/* Quick Navigation Bar */}
@@ -355,7 +397,7 @@ export default function AIIntelligenceDashboard() {
           📚 Instructions
         </button>
         <button
-          onClick={() => navigate('/admin/operations')}
+          onClick={() => navigate('/admin/control')}
           className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-semibold shadow-lg transition-all"
         >
           🏠 Admin Home
@@ -379,7 +421,7 @@ export default function AIIntelligenceDashboard() {
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-4">
             <button
-              onClick={() => navigate('/admin/operations')}
+              onClick={() => navigate('/admin/control')}
               className="p-2 rounded-xl bg-white/5 hover:bg-white/10 transition-colors"
             >
               <ArrowLeft className="w-6 h-6" />
@@ -422,23 +464,36 @@ export default function AIIntelligenceDashboard() {
             <div className="text-xs text-purple-400 mt-1">+{rssStats.new_today} today</div>
           </button>
 
-          <div className="bg-gradient-to-br from-cyan-900/60 to-blue-900/60 backdrop-blur-xl border-2 border-cyan-500/50 rounded-xl p-6 shadow-lg shadow-cyan-900/50">
+          <button
+            onClick={() => navigate('/admin/ml-dashboard')}
+            className="bg-gradient-to-br from-cyan-900/60 to-blue-900/60 backdrop-blur-xl border-2 border-cyan-500/50 rounded-xl p-6 shadow-lg shadow-cyan-900/50 hover:scale-105 transition-all cursor-pointer text-left"
+          >
             <div className="flex items-center justify-between mb-2">
               <BarChart3 className="w-8 h-8 text-cyan-400" />
               <span className="text-3xl font-bold text-white">{mlMetrics.accuracy}%</span>
             </div>
             <div className="text-sm text-gray-300">ML Model Accuracy</div>
             <div className="text-xs text-cyan-400 mt-1">+{mlMetrics.improvement_rate}% this week</div>
-          </div>
+          </button>
 
-          <div className="bg-gradient-to-br from-orange-900/60 to-red-900/60 backdrop-blur-xl border-2 border-orange-500/50 rounded-xl p-6 shadow-lg shadow-orange-900/50">
+          <button
+            onClick={() => {
+              setSelectedTab('trends');
+              // Scroll to trends section
+              setTimeout(() => {
+                const element = document.getElementById('trends-section');
+                element?.scrollIntoView({ behavior: 'smooth' });
+              }, 100);
+            }}
+            className="bg-gradient-to-br from-orange-900/60 to-red-900/60 backdrop-blur-xl border-2 border-orange-500/50 rounded-xl p-6 shadow-lg shadow-orange-900/50 hover:scale-105 transition-all cursor-pointer text-left"
+          >
             <div className="flex items-center justify-between mb-2">
               <TrendingUp className="w-8 h-8 text-orange-400" />
               <span className="text-3xl font-bold text-white">{trends.filter(t => t.trend === 'hot').length}</span>
             </div>
             <div className="text-sm text-gray-300">Hot Sectors Detected</div>
             <div className="text-xs text-orange-400 mt-1">{rssStats.unique_sectors} total sectors</div>
-          </div>
+          </button>
 
           <button
             onClick={() => navigate('/admin/edit-startups')}
@@ -491,9 +546,10 @@ export default function AIIntelligenceDashboard() {
 
               <div className="space-y-3">
                 {rssData.map((item, idx) => (
-                  <div
+                  <button
                     key={idx}
-                    className="bg-purple-950/40 backdrop-blur-sm border-2 border-purple-400/30 rounded-lg p-4 hover:border-purple-400/60 transition-all shadow-lg"
+                    onClick={() => navigate('/admin/discovered-startups', { state: { search: item.company } })}
+                    className="w-full bg-purple-950/40 backdrop-blur-sm border-2 border-purple-400/30 rounded-lg p-4 hover:border-purple-400/60 hover:bg-purple-950/60 transition-all shadow-lg text-left"
                   >
                     <div className="flex items-start justify-between mb-2">
                       <div className="flex items-center gap-3">
@@ -549,7 +605,7 @@ export default function AIIntelligenceDashboard() {
                         </span>
                       </div>
                     </div>
-                  </div>
+                  </button>
                 ))}
               </div>
 
@@ -566,6 +622,15 @@ export default function AIIntelligenceDashboard() {
                     </ul>
                   </div>
                 </div>
+              </div>
+              
+              <div className="mt-6 flex justify-end">
+                <button
+                  onClick={() => navigate('/admin/discovered-startups')}
+                  className="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-semibold transition-all flex items-center gap-2"
+                >
+                  View All RSS Discoveries →
+                </button>
               </div>
             </div>
           </div>
@@ -703,11 +768,12 @@ export default function AIIntelligenceDashboard() {
                 These insights give Hot Money users an edge in spotting opportunities before competitors.
               </p>
 
-              <div className="space-y-3">
+              <div className="space-y-3" id="trends-section">
                 {trends.map((trend, idx) => (
-                  <div
+                  <button
                     key={idx}
-                    className={`border rounded-lg p-5 ${getTrendColor(trend.trend)}`}
+                    onClick={() => navigate('/admin/discovered-startups', { state: { filterSector: trend.sector } })}
+                    className={`w-full border rounded-lg p-5 text-left hover:scale-[1.02] transition-all ${getTrendColor(trend.trend)}`}
                   >
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center gap-3">
@@ -746,7 +812,7 @@ export default function AIIntelligenceDashboard() {
                         {trend.trend === 'cooling' && 'Funding activity slowing, exercise caution'}
                       </span>
                     </div>
-                  </div>
+                  </button>
                 ))}
               </div>
 
@@ -762,6 +828,20 @@ export default function AIIntelligenceDashboard() {
                     </p>
                   </div>
                 </div>
+              </div>
+              
+              <div className="mt-6 flex justify-end">
+                <button
+                  onClick={() => {
+                    setSelectedTab('trends');
+                    setTimeout(() => {
+                      document.getElementById('trends-section')?.scrollIntoView({ behavior: 'smooth' });
+                    }, 100);
+                  }}
+                  className="px-6 py-3 bg-orange-600 hover:bg-orange-700 text-white rounded-lg font-semibold transition-all flex items-center gap-2"
+                >
+                  View All Trends →
+                </button>
               </div>
             </div>
           </div>
@@ -782,9 +862,16 @@ export default function AIIntelligenceDashboard() {
 
               <div className="space-y-3">
                 {profileUpdates.map((update, idx) => (
-                  <div
+                  <button
                     key={idx}
-                    className="bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/30 rounded-lg p-4"
+                    onClick={() => {
+                      if (update.entity_type === 'startup') {
+                        navigate('/admin/edit-startups', { state: { search: update.entity_name } });
+                      } else {
+                        navigate('/admin/investor-enrichment', { state: { search: update.entity_name } });
+                      }
+                    }}
+                    className="w-full bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/30 rounded-lg p-4 hover:border-green-500/60 hover:from-green-500/20 hover:to-emerald-500/20 transition-all text-left"
                   >
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex items-center gap-3">
@@ -826,7 +913,7 @@ export default function AIIntelligenceDashboard() {
                         <strong className="text-white">AI Reasoning:</strong> {update.reason}
                       </span>
                     </div>
-                  </div>
+                  </button>
                 ))}
               </div>
 
@@ -847,6 +934,21 @@ export default function AIIntelligenceDashboard() {
                   </div>
                 </div>
               </div>
+              
+              <div className="mt-6 flex justify-end gap-3">
+                <button
+                  onClick={() => navigate('/admin/edit-startups')}
+                  className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-semibold transition-all flex items-center gap-2"
+                >
+                  View All Startups →
+                </button>
+                <button
+                  onClick={() => navigate('/admin/investor-enrichment')}
+                  className="px-6 py-3 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg font-semibold transition-all flex items-center gap-2"
+                >
+                  View All Investors →
+                </button>
+              </div>
             </div>
           </div>
         )}
@@ -866,9 +968,10 @@ export default function AIIntelligenceDashboard() {
 
               <div className="space-y-3">
                 {matchOptimizations.map((opt, idx) => (
-                  <div
+                  <button
                     key={idx}
-                    className="bg-gradient-to-r from-pink-500/10 to-purple-500/10 border border-pink-500/30 rounded-lg p-5"
+                    onClick={() => navigate('/admin/edit-startups', { state: { search: opt.startup, investor: opt.investor } })}
+                    className="w-full bg-gradient-to-r from-pink-500/10 to-purple-500/10 border border-pink-500/30 rounded-lg p-5 hover:border-pink-500/60 hover:from-pink-500/20 hover:to-purple-500/20 transition-all text-left"
                   >
                     <div className="grid grid-cols-[1fr,auto,1fr] gap-4 items-center mb-4">
                       {/* Startup */}
@@ -928,7 +1031,7 @@ export default function AIIntelligenceDashboard() {
                       <Database className="w-3 h-3" />
                       <span>Data Source: {opt.data_source}</span>
                     </div>
-                  </div>
+                  </button>
                 ))}
               </div>
 
@@ -959,6 +1062,15 @@ export default function AIIntelligenceDashboard() {
                     </div>
                   </div>
                 </div>
+              </div>
+              
+              <div className="mt-6 flex justify-end">
+                <button
+                  onClick={() => navigate('/admin/edit-startups')}
+                  className="px-6 py-3 bg-pink-600 hover:bg-pink-700 text-white rounded-lg font-semibold transition-all flex items-center gap-2"
+                >
+                  View All Matches →
+                </button>
               </div>
             </div>
           </div>

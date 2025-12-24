@@ -77,11 +77,7 @@ export default function InvestorEnrichmentPage() {
           <span className="text-gray-600">|</span>
           <Link to="/" className="text-gray-400 hover:text-white transition-all">🏠 Home</Link>
           <span className="text-gray-600">|</span>
-          <Link to="/admin/control" className="text-gray-400 hover:text-white transition-all">⚙️ Admin</Link>
-          <span className="text-gray-600">|</span>
-          <Link to="/admin/dashboard" className="text-gray-400 hover:text-white transition-all">📊 Workflow</Link>
-          <span className="text-gray-600">|</span>
-          <Link to="/admin/operations" className="text-gray-400 hover:text-white transition-all">🎛️ Operations</Link>
+          <Link to="/admin/control" className="text-gray-400 hover:text-white transition-all">⚙️ Control Center</Link>
           <span className="text-gray-600">|</span>
           <Link to="/bulkupload" className="text-gray-400 hover:text-white transition-all">📤 Bulk Upload</Link>
           <span className="text-gray-600">|</span>
@@ -292,7 +288,7 @@ export default function InvestorEnrichmentPage() {
               ← Control Center
             </button>
             <button
-              onClick={() => navigate('/admin/dashboard')}
+                onClick={() => navigate('/admin/control')}
               className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-4 px-6 rounded-xl transition-all"
             >
               📊 Workflow Dashboard

@@ -45,7 +45,26 @@ app.get('/api', (req, res) => {
       'POST /upload',
       'POST /syndicate',
       'POST /api/syndicates',
-      'POST /api/documents'
+      'POST /api/documents',
+      'GET /api/matches/startup/:startupId',
+      'GET /api/matches/investor/:investorId',
+      'GET /api/matches/:matchId/breakdown',
+      'GET /api/matches/:entityType/:entityId/insights',
+      'GET /api/matches/:entityType/:entityId/report',
+      'GET /api/matches/:entityType/:entityId/export',
+      'POST /api/ml/training/run',
+      'POST /api/rss/refresh',
+      'POST /api/rss/discover-startups',
+      'POST /api/investors/scrape',
+      'POST /api/god-scores/calculate',
+      'GET /api/talent/matches/:startupId',
+      'POST /api/talent/matches/:startupId/:talentId',
+      'GET /api/talent/pool',
+      'POST /api/talent/pool',
+      'GET /api/market-intelligence/sector-performance',
+      'GET /api/market-intelligence/founder-patterns',
+      'GET /api/market-intelligence/benchmark/:startupId',
+      'GET /api/market-intelligence/key-variables'
     ]
   });
 });
@@ -76,35 +95,184 @@ app.post('/api/documents', upload.single('file'), (req, res) => {
   res.json({ filename: req.file.filename, originalname: req.file.originalname });
 });
 
-// RSS refresh endpoint
+// Match API routes
+const matchesRouter = require('./routes/matches');
+app.use('/api/matches', matchesRouter);
+
+// Talent matching API routes
+const talentRouter = require('./routes/talent');
+app.use('/api/talent', talentRouter);
+
+// Market intelligence API routes
+const marketIntelligenceRouter = require('./routes/marketIntelligence');
+app.use('/api/market-intelligence', marketIntelligenceRouter);
+
+// Helper function to spawn automation scripts
+function spawnAutomationScript(scriptName, description) {
+  const { spawn } = require('child_process');
+  const path = require('path');
+  const rootDir = path.join(__dirname, '..');
+  const scriptPath = path.join(rootDir, scriptName);
+  
+  const process = spawn('node', [scriptPath], {
+    cwd: rootDir,
+    stdio: ['ignore', 'pipe', 'pipe'],
+    detached: true,
+    shell: true
+  });
+  
+  process.stdout.on('data', (data) => {
+    console.log(`[${description}] ${data.toString()}`);
+  });
+  
+  process.stderr.on('data', (data) => {
+    console.error(`[${description} Error] ${data.toString()}`);
+  });
+  
+  process.on('close', (code) => {
+    if (code === 0) {
+      console.log(`✅ ${description} completed successfully`);
+    } else {
+      console.error(`❌ ${description} exited with code ${code}`);
+    }
+  });
+  
+  process.unref();
+  return process;
+}
+
+// RSS refresh endpoint - actually runs the scraper
 app.post('/api/rss/refresh', async (req, res) => {
   try {
     console.log('📡 RSS refresh triggered');
-    // This endpoint triggers a manual refresh check
-    // For now, just return success as the actual scraping happens via run-rss-scraper.js
+    spawnAutomationScript('run-rss-scraper.js', 'RSS Scraper');
     res.json({ 
       success: true, 
-      message: 'RSS refresh initiated. Run the scraper script to process feeds.',
+      message: 'RSS scraper started. Check server logs for progress.',
       timestamp: new Date().toISOString()
     });
   } catch (error) {
     console.error('Error triggering RSS refresh:', error);
-    res.status(500).json({ error: 'Failed to refresh RSS feeds' });
+    res.status(500).json({ error: 'Failed to refresh RSS feeds', message: error.message });
   }
 });
 
-// Discover startups from RSS endpoint
+// Discover startups from RSS endpoint - actually runs the discovery script
 app.post('/api/rss/discover-startups', async (req, res) => {
   try {
     console.log('🚀 Startup discovery triggered');
+    spawnAutomationScript('discover-startups-from-rss.js', 'Startup Discovery');
     res.json({ 
       success: true, 
-      message: 'Startup discovery initiated. Run discover-startups-from-rss.js to extract startups from RSS feeds.',
+      message: 'Startup discovery started. Check server logs for progress.',
       timestamp: new Date().toISOString()
     });
   } catch (error) {
     console.error('Error triggering startup discovery:', error);
-    res.status(500).json({ error: 'Failed to start startup discovery' });
+    res.status(500).json({ error: 'Failed to start startup discovery', message: error.message });
+  }
+});
+
+// Investor scraper endpoint
+app.post('/api/investors/scrape', async (req, res) => {
+  try {
+    console.log('💼 Investor scraper triggered');
+    spawnAutomationScript('investor-mega-scraper.js', 'Investor Scraper');
+    res.json({ 
+      success: true, 
+      message: 'Investor scraper started. Check server logs for progress.',
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error('Error triggering investor scraper:', error);
+    res.status(500).json({ error: 'Failed to start investor scraper', message: error.message });
+  }
+});
+
+// GOD score calculation endpoint
+app.post('/api/god-scores/calculate', async (req, res) => {
+  try {
+    console.log('⚡ GOD score calculation triggered');
+    spawnAutomationScript('calculate-component-scores.js', 'GOD Score Calculation');
+    res.json({ 
+      success: true, 
+      message: 'GOD score calculation started. Check server logs for progress.',
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error('Error triggering GOD score calculation:', error);
+    res.status(500).json({ error: 'Failed to start GOD score calculation', message: error.message });
+  }
+});
+
+// ML Training endpoint
+app.post('/api/ml/training/run', async (req, res) => {
+  try {
+    console.log('🤖 ML Training triggered via API');
+    
+    const { spawn } = require('child_process');
+    const path = require('path');
+    const fs = require('fs');
+    
+    // Get the root directory (one level up from server/)
+    const rootDir = path.join(__dirname, '..');
+    const trainingScript = path.join(rootDir, 'run-ml-training.js');
+    
+    // Check if tsx is available (for TypeScript support)
+    const rootPackageJson = path.join(rootDir, 'package.json');
+    let useTsx = false;
+    if (fs.existsSync(rootPackageJson)) {
+      const pkg = JSON.parse(fs.readFileSync(rootPackageJson, 'utf8'));
+      if (pkg.dependencies && (pkg.dependencies['tsx'] || pkg.devDependencies && pkg.devDependencies['tsx'])) {
+        useTsx = true;
+      }
+    }
+    
+    // Try to use tsx if available, otherwise use node
+    // If the script uses ES modules, we might need tsx
+    const command = useTsx ? 'npx' : 'node';
+    const args = useTsx ? ['tsx', trainingScript] : [trainingScript];
+    
+    // Spawn the training script as a child process
+    const trainingProcess = spawn(command, args, {
+      cwd: rootDir,
+      stdio: ['ignore', 'pipe', 'pipe'],
+      detached: true,
+      shell: true // Use shell for npx to work
+    });
+    
+    // Log output from the training process
+    trainingProcess.stdout.on('data', (data) => {
+      console.log(`[ML Training] ${data.toString()}`);
+    });
+    
+    trainingProcess.stderr.on('data', (data) => {
+      console.error(`[ML Training Error] ${data.toString()}`);
+    });
+    
+    trainingProcess.on('close', (code) => {
+      if (code === 0) {
+        console.log('✅ ML Training cycle completed successfully');
+      } else {
+        console.error(`❌ ML Training cycle exited with code ${code}`);
+      }
+    });
+    
+    // Don't wait for the process - let it run in background
+    trainingProcess.unref();
+    
+    // Return immediately - training runs in background
+    res.json({ 
+      success: true, 
+      message: 'ML training cycle started. Check server logs for progress.',
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error('Error starting ML training:', error);
+    res.status(500).json({ 
+      error: 'Failed to start ML training',
+      message: error.message 
+    });
   }
 });
 

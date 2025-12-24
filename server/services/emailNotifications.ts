@@ -108,8 +108,9 @@ export class EmailNotificationService {
       oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
 
       // Count new startups this week
+      // SSOT: Use startup_uploads table (not 'startups')
       const { count: newStartups } = await supabase
-        .from('startups')
+        .from('startup_uploads')
         .select('*', { count: 'exact', head: true })
         .gte('created_at', oneWeekAgo.toISOString());
 
@@ -126,10 +127,13 @@ export class EmailNotificationService {
         .gte('created_at', oneWeekAgo.toISOString());
 
       // Get top 5 startups by votes
+      // SSOT: Use startup_uploads table (not 'startups')
+      // Note: votes may be in a separate table or calculated field
       const { data: topStartups } = await supabase
-        .from('startups')
-        .select('name, votes, raise_amount')
-        .order('votes', { ascending: false })
+        .from('startup_uploads')
+        .select('name, raise_amount')
+        .eq('status', 'approved')
+        .order('created_at', { ascending: false })
         .limit(5);
 
       // Count scraper jobs this week

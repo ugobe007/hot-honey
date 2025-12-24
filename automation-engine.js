@@ -36,6 +36,16 @@ const CONFIG = {
     health_check: 15,          // System health check
     embedding_generation: 180, // Generate embeddings
     auto_import: 15,           // Auto-import discovered startups (every 15 min)
+    data_validation: 10080,    // Validate scraper data (weekly - 7 days * 24 hours * 60 min)
+    enrichment_pipeline: 1440, // Run enrichment (daily - 24 hours * 60 min)
+    exit_detection: 1440,      // Detect exits (daily - 24 hours * 60 min)
+    portfolio_performance: 1440, // Update portfolio performance (daily - 24 hours * 60 min)
+    funding_extraction: 120,   // Extract funding rounds (every 2 hours)
+    market_intelligence: 1440,  // Calculate market intelligence metrics (daily)
+    talent_matching: 360,      // Auto-match talent with startups (every 6 hours)
+    smell_test_enrichment: 1440, // Enrich startups with YC smell tests (daily)
+    component_scores: 1440,    // Calculate and store component scores (daily)
+    investor_scraping: 360,    // Scrape investors from news sources and VC sites (every 6 hours)
   },
   
   // Logging
@@ -56,6 +66,16 @@ const CONFIG = {
     health_check: true,
     embedding_generation: true,
     auto_import: true,
+    data_validation: true,
+    enrichment_pipeline: true,
+    exit_detection: true,
+    portfolio_performance: true,
+    funding_extraction: true,
+    market_intelligence: true,
+    talent_matching: true,
+    smell_test_enrichment: true,
+    component_scores: true,
+    investor_scraping: true,
   }
 };
 
@@ -159,6 +179,76 @@ const JOBS = {
     command: 'node auto-import-pipeline.js',
     timeout: 300000,
     description: 'Auto-import discovered startups (no manual approval)'
+  },
+  
+  data_validation: {
+    name: 'Data Validation',
+    command: 'node validate-scraper-data.js',
+    timeout: 120000,
+    description: 'Validate scraper data quality and schema compliance'
+  },
+  
+  enrichment_pipeline: {
+    name: 'Data Enrichment',
+    command: 'node run-all-enrichment.js',
+    timeout: 600000, // 10 minutes (AI processing takes time)
+    description: 'Enrich websites, locations, taglines, and pitches'
+  },
+  
+  exit_detection: {
+    name: 'Exit Detection',
+    command: 'node detect-startup-exits.js',
+    timeout: 600000, // 10 minutes (AI processing)
+    description: 'Detect startup exits (acquisitions, mergers, IPOs)'
+  },
+  
+  portfolio_performance: {
+    name: 'Portfolio Performance',
+    command: 'node update-investor-portfolio-performance.js',
+    timeout: 300000, // 5 minutes
+    description: 'Update investor portfolio performance metrics'
+  },
+  
+  funding_extraction: {
+    name: 'Funding Rounds Extraction',
+    command: 'node extract-funding-rounds.js',
+    timeout: 300000, // 5 minutes
+    description: 'Extract funding rounds from RSS articles and save to funding_rounds table'
+  },
+  
+  market_intelligence: {
+    name: 'Market Intelligence',
+    command: 'node calculate-market-intelligence.js',
+    timeout: 300000, // 5 minutes
+    description: 'Calculate and store market intelligence metrics (sector performance, founder patterns, funding velocity)'
+  },
+  
+  talent_matching: {
+    name: 'Talent Matching',
+    command: 'node auto-match-talent.js',
+    timeout: 300000, // 5 minutes
+    description: 'Automatically match startups with available talent in the pool'
+  },
+  
+  smell_test_enrichment: {
+    name: 'YC Smell Test Enrichment',
+    command: 'node enrich-smell-tests.js',
+    timeout: 600000, // 10 minutes
+    description: 'Enrich startups with YC smell test scores (lean, user passion, learning in public, inevitable, massive if works)'
+  },
+  
+  component_scores: {
+    name: 'Component Scores Calculation',
+    command: 'node calculate-component-scores.js',
+    timeout: 600000, // 10 minutes
+    description: 'Calculate and store component scores (team, traction, market, product, vision) for Sequoia and A16Z algorithms'
+  },
+  
+  investor_scraping: {
+    name: 'Investor Mega Scraper',
+    command: 'node investor-mega-scraper.js',
+    timeout: 1800000, // 30 minutes (scraping multiple sources takes time)
+    description: 'Scrape investors from news sources, VC sites, and investor directories'
   }
 };
 

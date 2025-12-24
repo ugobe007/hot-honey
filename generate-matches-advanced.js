@@ -100,7 +100,7 @@ async function generateMatches() {
     SELECT id, name, sectors, stage, total_god_score, created_at, status
     FROM startup_uploads
     WHERE status = 'approved'
-    LIMIT 100
+    -- BUG FIX: Removed LIMIT 100 - must process ALL startups
   `);
   
   // Get enriched investors
@@ -115,8 +115,9 @@ async function generateMatches() {
   let matchCount = 0;
   let highQualityMatches = 0;
   
-  // Clear existing matches
-  await client.query('DELETE FROM startup_investor_matches');
+  // BUG FIX: DO NOT delete existing matches - use upsert to preserve them
+  // This prevents loss of matches when script only processes a subset
+  console.log('💾 Using upsert to update matches (preserving all existing matches)\n');
   
   for (const startup of startups) {
     let startupMatches = 0;
@@ -141,10 +142,18 @@ async function generateMatches() {
         if (godBonus > 0) reasons.push(`Strong GOD score (${Math.round(godBonus)}pts)`);
         if (portfolioScore > 0) reasons.push(`Active portfolio (${Math.round(portfolioScore)}pts)`);
         
+        // BUG FIX: Use INSERT ... ON CONFLICT to handle duplicates (upsert behavior)
         await client.query(`
           INSERT INTO startup_investor_matches 
           (startup_id, investor_id, match_score, confidence_level, match_reasoning, created_at)
           VALUES ($1, $2, $3, $4, $5, NOW())
+          ON CONFLICT (startup_id, investor_id) 
+          DO UPDATE SET 
+            match_score = EXCLUDED.match_score,
+            confidence_level = EXCLUDED.confidence_level,
+            match_reasoning = EXCLUDED.match_reasoning,
+            updated_at = NOW()
+          -- NOTE: created_at is NOT updated - preserves original creation time
         `, [startup.id, investor.id, totalScore, confidence, reasons.join('; ')]);
         
         matchCount++;

@@ -2,16 +2,15 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import InvestorCard from '../components/InvestorCard';
 import LogoDropdownMenu from '../components/LogoDropdownMenu';
-import investorData, { InvestorFirm } from '../data/investorData';
 import { getAllInvestors, searchInvestors } from '../lib/investorService';
+import { InvestorComponent } from '../types';
 
 export default function InvestorsPage() {
   const navigate = useNavigate();
   const [filterType, setFilterType] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const [investors, setInvestors] = useState<InvestorFirm[]>(investorData);
+  const [investors, setInvestors] = useState<InvestorComponent[]>([]);
   const [loading, setLoading] = useState(true);
-  const [useDatabase, setUseDatabase] = useState(false);
 
   useEffect(() => {
     loadInvestors();
@@ -21,119 +20,44 @@ export default function InvestorsPage() {
     setLoading(true);
     const { data, error } = await getAllInvestors();
     
-    if (!error && data && data.length > 0) {
-      // Data is already mapped by investorService, just need to format checkSize
-      const mappedData: InvestorFirm[] = data.map((inv: any) => ({
-        id: inv.id,
-        name: inv.name,
-        type: inv.type,
-        tagline: inv.tagline,
-        description: inv.description,
-        website: inv.website,
-        logo: inv.logo,
-        linkedin: inv.linkedin,
-        twitter: inv.twitter,
-        partners: inv.partners || [],
-        contactEmail: inv.contactEmail,
-        aum: inv.aum,
-        fundSize: inv.fundSize,
-        activeFundSize: inv.activeFundSize,
-        // Format check size from min/max
-        checkSize: inv.checkSizeMin && inv.checkSizeMax 
-          ? `$${(inv.checkSizeMin/1000000).toFixed(1)}M-$${(inv.checkSizeMax/1000000).toFixed(1)}M` 
-          : inv.fundSize || inv.aum || null,
-        checkSizeMin: inv.checkSizeMin,
-        checkSizeMax: inv.checkSizeMax,
-        stage: inv.stage || [],
-        sectors: inv.sectors || [],
-        geography: inv.geography || [],
-        portfolioCount: inv.portfolioCount || 0,
-        exits: inv.exits || 0,
-        unicorns: inv.unicorns || 0,
-        notableInvestments: inv.notableInvestments || [],
-        totalInvestments: inv.totalInvestments,
-        investmentPace: inv.investmentPace,
-        lastInvestmentDate: inv.lastInvestmentDate,
-        focusAreas: inv.focusAreas || [],
-        investmentThesis: inv.investmentThesis,
-        boardSeats: inv.boardSeats,
-        leadsRounds: inv.leadsRounds,
-        followsRounds: inv.followsRounds,
-        dryPowder: inv.dryPowder,
-        hotHoneyInvestments: inv.hotHoneyInvestments || 0,
-        hotHoneyStartups: inv.hotHoneyStartups || [],
-      }));
-      setInvestors(mappedData);
-      setUseDatabase(true);
+    // SSOT: Supabase is the single source of truth - no fallback to static data
+    if (error) {
+      console.error('❌ Error fetching investors:', error);
+      console.error('💡 SSOT: All data must come from Supabase. Please check database connection.');
+      setInvestors([]);
+    } else if (!data || data.length === 0) {
+      console.warn('⚠️ No investors found in database');
+      console.warn('💡 SSOT: No fallback data. Please populate investors table in Supabase.');
+      setInvestors([]);
     } else {
-      // Fallback to static data
-      setInvestors(investorData);
-      setUseDatabase(false);
+      // Data is already mapped by investorService using adaptInvestorForComponent
+      setInvestors(data);
     }
     setLoading(false);
   };
 
   const handleSearch = async () => {
-    if (useDatabase) {
-      setLoading(true);
-      const { data, error } = await searchInvestors(searchQuery, filterType);
-      if (!error && data) {
-        const mappedData: InvestorFirm[] = data.map((inv: any) => ({
-          id: inv.id,
-          name: inv.name,
-          type: inv.type,
-          tagline: inv.tagline,
-          description: inv.description || inv.bio,
-          website: inv.website,
-          logo: inv.logo,
-          linkedin: inv.linkedin_url,
-          twitter: inv.twitter_url,
-          partners: inv.partners || [],
-          contactEmail: inv.contact_email || inv.email,
-          aum: inv.aum,
-          fundSize: inv.fund_size,
-          activeFundSize: inv.active_fund_size,
-          checkSize: inv.check_size || (inv.check_size_min && inv.check_size_max ? `$${(inv.check_size_min/1000).toFixed(0)}K-$${(inv.check_size_max/1000000).toFixed(1)}M` : null),
-          checkSizeMin: inv.check_size_min,
-          checkSizeMax: inv.check_size_max,
-          stage: inv.stage || [],
-          sectors: inv.sectors || [],
-          geography: inv.geography || inv.geography_focus || [],
-          portfolioCount: inv.portfolio_count || inv.portfolio_companies?.length || 0,
-          exits: inv.exits || inv.successful_exits || 0,
-          unicorns: inv.unicorns || 0,
-          notableInvestments: inv.notable_investments || [],
-          totalInvestments: inv.total_investments,
-          investmentPace: inv.investment_pace_per_year,
-          lastInvestmentDate: inv.last_investment_date,
-          focusAreas: inv.focus_areas || [],
-          investmentThesis: inv.investment_thesis,
-          boardSeats: inv.board_seats,
-          leadsRounds: inv.leads_rounds,
-          followsRounds: inv.follows_rounds,
-          dryPowder: inv.dry_powder_estimate,
-          hotHoneyInvestments: inv.hot_honey_investments || 0,
-          hotHoneyStartups: inv.hot_honey_startups || [],
-        }));
-        setInvestors(mappedData);
-      }
-      setLoading(false);
+    setLoading(true);
+    const { data, error } = await searchInvestors(searchQuery, filterType);
+    if (!error && data) {
+      // Data is already mapped by investorService using adaptInvestorForComponent
+      setInvestors(data);
     }
+    setLoading(false);
   };
 
   useEffect(() => {
-    if (useDatabase) {
-      const timer = setTimeout(() => {
-        handleSearch();
-      }, 300);
-      return () => clearTimeout(timer);
-    }
+    // SSOT: Always use database
+    const timer = setTimeout(() => {
+      handleSearch();
+    }, 300);
+    return () => clearTimeout(timer);
   }, [searchQuery, filterType]);
 
-  const filteredInvestors = useDatabase ? investors : investors.filter((investor) => {
-    const matchesType = filterType === 'all' || investor.type === filterType;
+  const filteredInvestors = investors.filter((investor) => {
+    const matchesType = filterType === 'all' || investor.investor_tier === filterType;
     const matchesSearch = investor.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         investor.tagline?.toLowerCase().includes(searchQuery.toLowerCase());
+                         investor.investment_thesis?.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesType && matchesSearch;
   });
 
@@ -188,14 +112,6 @@ export default function InvestorsPage() {
             Connect with {investors.length}+ VCs, Accelerators & Angel Networks
           </p>
           <div className="mt-4 flex gap-4 justify-center items-center flex-wrap">
-            {!useDatabase && (
-              <Link 
-                to="/admin/setup" 
-                className="inline-block px-4 py-2 bg-yellow-100 border-2 border-yellow-500 text-yellow-700 rounded-full text-sm hover:bg-yellow-200 transition-all"
-              >
-                ⚠️ Using static data - Click to setup database
-              </Link>
-            )}
             <Link
               to="/bulkupload"
               className="inline-block px-6 py-3 bg-gradient-to-r from-orange-500 to-amber-600 text-white font-bold rounded-full text-sm hover:from-orange-600 hover:to-amber-700 transition-all shadow-lg"
@@ -257,13 +173,13 @@ export default function InvestorsPage() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           <div className="bg-gradient-to-br from-amber-500/20 to-orange-500/20 backdrop-blur-md rounded-2xl p-6 text-center border-2 border-amber-400/50 hover:scale-105 transition-transform">
             <div className="text-4xl mb-2">💼</div>
-            <div className="text-3xl font-bold text-amber-300">{investors.filter(i => i.type === 'vc_firm').length}</div>
-            <div className="text-amber-100 text-sm font-semibold">VC Firms</div>
+            <div className="text-3xl font-bold text-amber-300">{investors.filter(i => i.investor_tier === 'elite' || i.investor_tier === 'established').length}</div>
+            <div className="text-amber-100 text-sm font-semibold">Top VCs</div>
           </div>
           <div className="bg-gradient-to-br from-green-500/20 to-emerald-500/20 backdrop-blur-md rounded-2xl p-6 text-center border-2 border-green-400/50 hover:scale-105 transition-transform">
             <div className="text-4xl mb-2">🚀</div>
-            <div className="text-3xl font-bold text-green-300">{investors.filter(i => i.type === 'accelerator').length}</div>
-            <div className="text-green-100 text-sm font-semibold">Accelerators</div>
+            <div className="text-3xl font-bold text-green-300">{investors.filter(i => i.investor_tier === 'emerging').length}</div>
+            <div className="text-green-100 text-sm font-semibold">Emerging VCs</div>
           </div>
           <div className="bg-gradient-to-br from-purple-500/20 to-violet-500/20 backdrop-blur-md rounded-2xl p-6 text-center border-2 border-purple-400/50 hover:scale-105 transition-transform">
             <div className="text-4xl mb-2">🦄</div>

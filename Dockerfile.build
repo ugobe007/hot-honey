@@ -13,9 +13,10 @@ RUN npm ci
 COPY . .
 
 # Fly.io secrets are available as environment variables during build
-# No need for ARG/ENV - they're already available
+# They're automatically injected by Fly.io, but we need to verify they're set
+# Vite will read VITE_* prefixed env vars and embed them at build time
 
-# Build the app
+# Build the app (Vite will use VITE_* env vars automatically from Fly.io secrets)
 RUN npm run build
 
 # Production stage

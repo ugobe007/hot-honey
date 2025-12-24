@@ -128,127 +128,117 @@ const AdminDashboard: React.FC = () => {
   const [activeModal, setActiveModal] = useState<'ai' | 'rss' | 'ml' | 'god' | 'matching' | null>(null);
   const [actionLoading, setActionLoading] = useState(false);
 
-  // Simulate running ML job
+  // Run ML training job - actually triggers the process
   const runMLJob = async () => {
     setActionLoading(true);
     try {
-      // Insert a test ML job
-      const { error } = await supabase
-        .from(TABLES.ML_JOBS)
-        .insert({
-          job_type: 'god_score_calculation',
-          status: 'running',
-          records_total: stats.totals.startups,
-          records_processed: 0,
-          started_at: new Date().toISOString()
-        });
-
-      if (error) throw error;
-
-      // Simulate processing
+      const response = await fetch('/api/ml/training/run', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to start ML training');
+      }
+      
+      alert(`✅ ${data.message || 'ML training started successfully!'}`);
+      
+      // Refresh data after a delay
       setTimeout(async () => {
         await loadDashboardData();
-      }, 2000);
-    } catch (error) {
+      }, 3000);
+    } catch (error: any) {
       console.error('Error running ML job:', error);
+      alert(`❌ Error: ${error.message || 'Failed to start ML training'}`);
     } finally {
       setActionLoading(false);
     }
   };
 
-  // Generate test AI log
-  const generateTestAILog = async () => {
+  // Run RSS scraper - actually triggers the process
+  const runRSSScraper = async () => {
     setActionLoading(true);
     try {
-      const { error } = await supabase
-        .from(TABLES.AI_LOGS)
-        .insert({
-          operation: 'startup_analysis',
-          model: 'gpt-4',
-          input_tokens: Math.floor(Math.random() * 1000) + 500,
-          output_tokens: Math.floor(Math.random() * 500) + 200,
-          status: Math.random() > 0.1 ? 'success' : 'failed',
-          created_at: new Date().toISOString()
-        });
-
-      if (error) throw error;
-      await loadDashboardData();
-    } catch (error) {
-      console.error('Error generating test AI log:', error);
-    } finally {
-      setActionLoading(false);
-    }
-  };
-
-  // Generate test RSS article
-  const generateTestRSSArticle = async () => {
-    setActionLoading(true);
-    try {
-      const headlines = [
-        'Startup Raises $50M Series B Led by Top VC',
-        'New AI Platform Disrupts Traditional Industry',
-        'Tech Company Announces Major Product Launch',
-        'Unicorn Startup Files for IPO',
-        'Revolutionary SaaS Solution Gains Traction'
-      ];
+      const response = await fetch('/api/rss/refresh', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
       
-      const sources = ['TechCrunch', 'VentureBeat', 'The Information', 'Bloomberg'];
+      const data = await response.json();
       
-      const { error } = await supabase
-        .from(TABLES.RSS_ARTICLES)
-        .insert({
-          headline: headlines[Math.floor(Math.random() * headlines.length)],
-          source: sources[Math.floor(Math.random() * sources.length)],
-          processed: Math.random() > 0.5,
-          published_at: new Date().toISOString(),
-          created_at: new Date().toISOString()
-        });
-
-      if (error) throw error;
-      await loadDashboardData();
-    } catch (error) {
-      console.error('Error generating test RSS article:', error);
-    } finally {
-      setActionLoading(false);
-    }
-  };
-
-  // Update a random startup score
-  const updateRandomScore = async () => {
-    setActionLoading(true);
-    try {
-      if (stats.startups.length === 0) {
-        alert('No startups available to update');
-        return;
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to start RSS scraper');
       }
+      
+      alert(`✅ ${data.message || 'RSS scraper started successfully!'}`);
+      
+      // Refresh data after a delay
+      setTimeout(async () => {
+        await loadDashboardData();
+      }, 3000);
+    } catch (error: any) {
+      console.error('Error running RSS scraper:', error);
+      alert(`❌ Error: ${error.message || 'Failed to start RSS scraper'}`);
+    } finally {
+      setActionLoading(false);
+    }
+  };
 
-      const randomStartup = stats.startups[Math.floor(Math.random() * stats.startups.length)];
-      const oldScore = randomStartup.total_god_score || 0;
-      const change = Math.floor(Math.random() * 20) - 10; // -10 to +10
-      const newScore = Math.max(0, Math.min(100, oldScore + change));
+  // Run investor scraper - actually triggers the process
+  const runInvestorScraper = async () => {
+    setActionLoading(true);
+    try {
+      const response = await fetch('/api/investors/scrape', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to start investor scraper');
+      }
+      
+      alert(`✅ ${data.message || 'Investor scraper started successfully!'}`);
+      
+      // Refresh data after a delay
+      setTimeout(async () => {
+        await loadDashboardData();
+      }, 5000);
+    } catch (error: any) {
+      console.error('Error running investor scraper:', error);
+      alert(`❌ Error: ${error.message || 'Failed to start investor scraper'}`);
+    } finally {
+      setActionLoading(false);
+    }
+  };
 
-      // Insert score history
-      const { error } = await supabase
-        .from(TABLES.SCORE_HISTORY)
-        .insert({
-          startup_id: randomStartup.id,
-          old_score: oldScore,
-          new_score: newScore,
-          change_reason: change > 0 ? 'Positive momentum detected' : 'Market adjustment',
-          created_at: new Date().toISOString()
-        });
-
-      if (error) throw error;
-
-      // Update startup score
-      await supabase
-        .from(TABLES.STARTUPS)
-        .update({ total_god_score: newScore })
-        .eq('id', randomStartup.id);
-
-      await loadDashboardData();
-    } catch (error) {
-      console.error('Error updating score:', error);
+  // Calculate GOD scores - actually triggers the process
+  const calculateGodScores = async () => {
+    setActionLoading(true);
+    try {
+      const response = await fetch('/api/god-scores/calculate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to start GOD score calculation');
+      }
+      
+      alert(`✅ ${data.message || 'GOD score calculation started successfully!'}`);
+      
+      // Refresh data after a delay
+      setTimeout(async () => {
+        await loadDashboardData();
+      }, 5000);
+    } catch (error: any) {
+      console.error('Error calculating GOD scores:', error);
+      alert(`❌ Error: ${error.message || 'Failed to start GOD score calculation'}`);
     } finally {
       setActionLoading(false);
     }
@@ -455,7 +445,7 @@ const AdminDashboard: React.FC = () => {
             
             <div className="flex items-center gap-3">
               <button
-                onClick={() => navigate('/admin/operations')}
+                onClick={() => navigate('/admin/control')}
                 className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 text-white rounded-lg transition-all border border-white/10"
               >
                 <Settings className="w-4 h-4" />
@@ -873,22 +863,22 @@ const AdminDashboard: React.FC = () => {
                   {/* Action buttons based on modal type */}
                   {activeModal === 'ai' && (
                     <button
-                      onClick={generateTestAILog}
+                      onClick={runInvestorScraper}
                       disabled={actionLoading}
                       className="flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 disabled:bg-gray-600 text-white rounded-lg transition-all text-sm font-medium"
                     >
                       {actionLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Play className="w-4 h-4" />}
-                      Generate Test Log
+                      Run Investor Scraper
                     </button>
                   )}
                   {activeModal === 'rss' && (
                     <button
-                      onClick={generateTestRSSArticle}
+                      onClick={runRSSScraper}
                       disabled={actionLoading}
                       className="flex items-center gap-2 px-4 py-2 bg-cyan-600 hover:bg-cyan-700 disabled:bg-gray-600 text-white rounded-lg transition-all text-sm font-medium"
                     >
                       {actionLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Play className="w-4 h-4" />}
-                      Add Test Article
+                      Run RSS Scraper
                     </button>
                   )}
                   {activeModal === 'ml' && (
@@ -903,12 +893,12 @@ const AdminDashboard: React.FC = () => {
                   )}
                   {activeModal === 'god' && (
                     <button
-                      onClick={updateRandomScore}
+                      onClick={calculateGodScores}
                       disabled={actionLoading}
                       className="flex items-center gap-2 px-4 py-2 bg-orange-600 hover:bg-orange-700 disabled:bg-gray-600 text-white rounded-lg transition-all text-sm font-medium"
                     >
                       {actionLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Play className="w-4 h-4" />}
-                      Update Random Score
+                      Calculate GOD Scores
                     </button>
                   )}
                   <button

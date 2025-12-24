@@ -138,25 +138,18 @@ export default function AdminDashboard() {
       </div>
 
       <div className="max-w-[1800px] mx-auto p-4 space-y-4">
-        {/* Stats - All Clickable to Source */}
+        {/* Stats */}
         <div className="grid grid-cols-4 gap-3 text-xs">
           {[
-            { label: 'Total Startups', value: stats.totalStartups, color: 'text-orange-400', link: '/admin/edit-startups' },
-            { label: 'Pending Review', value: stats.pendingStartups, color: 'text-yellow-400', link: '/admin/edit-startups?status=pending' },
-            { label: 'Approved', value: stats.approvedStartups, color: 'text-green-400', link: '/admin/edit-startups?status=approved' },
-            { label: 'Avg GOD Score', value: stats.avgGodScore, color: 'text-cyan-400', link: '/admin/god-scores' }
+            { label: 'Total Startups', value: stats.totalStartups, color: 'text-orange-400' },
+            { label: 'Pending Review', value: stats.pendingStartups, color: 'text-yellow-400' },
+            { label: 'Approved', value: stats.approvedStartups, color: 'text-green-400' },
+            { label: 'Avg GOD Score', value: stats.avgGodScore, color: 'text-cyan-400' }
           ].map((s, i) => (
-            <Link 
-              key={i} 
-              to={s.link}
-              className="bg-gray-800/50 rounded-lg px-4 py-3 border border-gray-700 hover:bg-gray-800/70 hover:border-gray-600 cursor-pointer transition-all group"
-            >
-              <div className={`text-2xl font-bold font-mono ${s.color} group-hover:scale-105 transition-transform`}>{s.value}</div>
-              <div className="text-gray-500 group-hover:text-gray-400 flex items-center gap-1">
-                {s.label}
-                <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
-              </div>
-            </Link>
+            <div key={i} className="bg-gray-800/50 rounded-lg px-4 py-3 border border-gray-700">
+              <div className={`text-2xl font-bold font-mono ${s.color}`}>{s.value}</div>
+              <div className="text-gray-500">{s.label}</div>
+            </div>
           ))}
         </div>
 
@@ -260,6 +253,7 @@ export default function AdminDashboard() {
             <Link to="/investors" className="px-3 py-1.5 bg-green-500/20 border border-green-500/30 rounded text-green-400 hover:bg-green-500/30">💰 Investors</Link>
             <Link to="/admin/rss-manager" className="px-3 py-1.5 bg-blue-500/20 border border-blue-500/30 rounded text-blue-400 hover:bg-blue-500/30">📡 RSS</Link>
             <Link to="/admin/god-scores" className="px-3 py-1.5 bg-amber-500/20 border border-amber-500/30 rounded text-amber-400 hover:bg-amber-500/30">🏆 GOD Scores</Link>
+            <Link to="/benchmarks" className="px-3 py-1.5 bg-amber-500/20 border border-amber-500/30 rounded text-amber-400 hover:bg-amber-500/30">📊 Benchmarks</Link>
           </div>
         </div>
       </div>

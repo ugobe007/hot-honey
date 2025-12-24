@@ -252,7 +252,7 @@ async function getMetrics(): Promise<SystemStatus['metrics']> {
     supabase.from('startup_uploads').select('*', { count: 'exact', head: true }).gte('created_at', todayISO),
     supabase.from('investors').select('*', { count: 'exact', head: true }).gte('created_at', todayISO),
     supabase.from('startup_investor_matches').select('*', { count: 'exact', head: true }).gte('created_at', todayISO),
-    supabase.from('startup_uploads').select('total_god_score').not('total_god_score', 'is', null).limit(500)
+    supabase.from('startup_uploads').select('total_god_score').eq('status', 'approved').not('total_god_score', 'is', null)
   ]);
 
   const scores = scoresRes.data || [];

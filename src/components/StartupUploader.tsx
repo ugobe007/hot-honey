@@ -140,6 +140,13 @@ Provide comprehensive information about this company in the JSON format specifie
       });
 
       const data = await response.json();
+      
+      // Check if response has expected structure
+      if (!data || !data.choices || !data.choices[0] || !data.choices[0].message || !data.choices[0].message.content) {
+        console.error('❌ Invalid OpenAI response structure:', data);
+        throw new Error('Invalid API response format - missing choices[0].message.content');
+      }
+      
       const aiData = JSON.parse(data.choices[0].message.content);
 
       // Set extracted data from AI research

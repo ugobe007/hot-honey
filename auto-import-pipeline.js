@@ -51,10 +51,10 @@ function isQualityStartupName(name) {
   return true;
 }
 
-async function importDiscoveredStartups(limit = 1000) {
-  console.log(`\n📥 Auto-importing ALL quality startups (max ${limit})...`);
+async function importDiscoveredStartups(limit = 50) {
+  console.log(`\n📥 Importing up to ${limit} quality startups...`);
   
-  // Get unimported discovered startups - NO LIMIT for maximum data collection
+  // Get unimported discovered startups
   const { data: discovered, error } = await supabase
     .from('discovered_startups')
     .select('id, name, website, description')
@@ -162,8 +162,8 @@ async function generateMatchesForStartups(startups) {
   let matchCount = 0;
   
   for (const startup of startups) {
-    // Select 50+ random investors for each startup (increased for ML training)
-    const shuffled = investors.sort(() => Math.random() - 0.5).slice(0, Math.min(50, investors.length));
+    // Select 20 random investors for each startup
+    const shuffled = investors.sort(() => Math.random() - 0.5).slice(0, 20);
     
     const matches = shuffled.map(investor => ({
       startup_id: startup.id,
@@ -203,8 +203,8 @@ async function runPipeline() {
   console.log(`⏰ ${new Date().toISOString()}`);
   
   try {
-    // Step 1: Import ALL quality startups (no limit for ML training)
-    const imported = await importDiscoveredStartups(1000);
+    // Step 1: Import quality startups
+    const imported = await importDiscoveredStartups(30);
     
     // Step 2: Generate matches for new imports
     const matchCount = await generateMatchesForStartups(imported);

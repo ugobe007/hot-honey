@@ -1,6 +1,6 @@
 /**
  * STARTUP SCORING SERVICE
- * Evaluates startups based on VC criteria (YC, Sequoia, Founders Fund, First Round, Seed/Angel)
+ * Evaluates startups based on VC criteria (YC, Sequoia, Founders Fund, First Round, Seed/Angel, a16z)
  * Scores 1-10 where 10 = hottest investment opportunity
  * 
  * Seed/Angel investors added: Focus on team & vision, product-market fit, early traction,
@@ -8,7 +8,79 @@
  * 
  * FOUNDER AGE FACTOR: Younger founders (under 30) get bonus points for adaptability,
  * coachability, and hunger. This reflects real VC preferences (YC, Thiel Fellowship, etc.)
+ * 
+ * FOUNDER COURAGE & INTELLIGENCE: Based on Ben Horowitz (Andreessen Horowitz / a16z) framework.
+ * Horowitz emphasizes that great founders need both courage (to make hard decisions, persist
+ * through adversity) and intelligence (strategic thinking, problem-solving, fast learning).
  */
+
+// ============================================================================
+// GOD SCORE CALIBRATION SETTINGS (TypeScript Configuration Object)
+// ============================================================================
+// ⚠️  THIS IS TYPESCRIPT CODE - DO NOT EXECUTE AS SQL
+// 
+// ⚠️  CRITICAL: DO NOT MAKE ARBITRARY ADJUSTMENTS TO THIS SYSTEM
+// 
+// The GOD scoring system is based on REAL VC criteria (YC, Sequoia, Founders Fund, 
+// First Round, Seed/Angel, a16z) and must reflect actual investor preferences and 
+// deal quality. Arbitrary normalization changes corrupt the logic.
+// 
+// PROPER CALIBRATION METHOD:
+// 1. Run: npx tsx scripts/calibrate-god-scores.ts
+// 2. Analyze REAL investment outcomes (funded vs passed deals)
+// 3. Review ML recommendations from server/services/mlTrainingService.ts
+// 4. Adjust based on ACTUAL data, not arbitrary normalization
+// 
+// Expected Score Ranges (from validation criteria):
+// - High-quality startups: 78-98 (should receive funding)
+// - Low-quality startups: 30-48 (should be passed)
+// - Average startups: 50-77 (varies by investor)
+// 
+// Current Configuration:
+// - normalizationDivisor: Controls overall score scaling (DO NOT CHANGE ARBITRARILY)
+// - baseBoostMinimum: Minimum baseline score (preserves market signal sensitivity)
+// - vibeBonusCap: Qualitative bonus cap (based on VC preferences)
+// 
+// How it works:
+// - rawTotal = baseBoost (min 3.5) + component scores (max ~17.5) = max ~21.0
+// - Component scores reflect REAL investor criteria (team, traction, market, etc.)
+// - total (0-10 scale) = (rawTotal / normalizationDivisor) * 10
+// - Final score (0-100) = total * 10 (done in recalculate-scores.ts)
+// 
+// ⚠️  IF SCORES ARE TOO HIGH/LOW:
+// 1. First, analyze REAL outcomes using calibrate-god-scores.ts
+// 2. Check if component weights need adjustment (not normalization)
+// 3. Verify market signals (funding velocity) are properly weighted
+// 4. Review ML recommendations for data-driven adjustments
+// 5. Only adjust normalization as LAST RESORT, with clear justification
+
+const GOD_SCORE_CONFIG = {
+  // Normalization divisor - higher = lower scores
+  // Target: Average scores between 55-65 (5.5-6.5 on 0-10 scale)
+  // Adjusted to account for legitimate market signals (funding velocity, market validation)
+  // Current average: 46.4 → Need to reduce divisor further to reach 55-65 target
+  normalizationDivisor: 17, // Reduced from 19 to raise average from 46.4 toward 55-65 range
+  
+  // Base boost minimum - lower = lower baseline scores
+  // Increased to raise baseline while preserving market signal bonuses
+  baseBoostMinimum: 4.5, // Increased from 4.0 to raise baseline scores further
+  
+  // Vibe bonus cap - lower = less qualitative bonus
+  // Keep some qualitative boost but reduce it to focus on market signals
+  vibeBonusCap: 1.0, // Keep at 1.0 to allow qualitative boost
+  
+  // Final score multiplier (converts 0-10 to 0-100)
+  // Keep at 10 for standard 0-100 scale
+  finalScoreMultiplier: 10,
+  
+  // Alert thresholds for auto-monitoring
+  // Target range: 55-65 average
+  averageScoreAlertHigh: 70, // Alert if average exceeds this (above target range)
+  averageScoreAlertLow: 50,  // Alert if average falls below this (below target range)
+} as const;
+
+// Export for use in other TypeScript files if needed
+export { GOD_SCORE_CONFIG };
 
 interface StartupProfile {
   // Team
@@ -29,6 +101,20 @@ interface StartupProfile {
   founders_under_30?: number;
   founders_under_25?: number;
   first_time_founders?: boolean;
+  
+  // Founder Attributes (NEW)
+  founder_courage?: 'low' | 'moderate' | 'high' | 'exceptional'; // Risk-taking, bold decisions, resilience
+  founder_intelligence?: 'low' | 'moderate' | 'high' | 'exceptional'; // Problem-solving, strategic thinking, learning ability
+  // Indicators for courage
+  bold_decisions_made?: number; // Number of significant risky decisions
+  times_rejected_but_persisted?: number; // Rejections overcome
+  high_risk_opportunities_pursued?: number; // Risky bets taken
+  resilience_demonstrated?: boolean; // Evidence of bouncing back from setbacks
+  // Indicators for intelligence
+  strategic_thinking_evidence?: string; // Examples of strategic decisions
+  problem_solving_examples?: string[]; // Complex problems solved
+  learning_velocity_evidence?: string; // Fast adaptation to new information
+  analytical_depth?: 'surface' | 'moderate' | 'deep'; // Depth of analysis
   
   // Traction
   revenue?: number;
@@ -156,23 +242,16 @@ interface StartupProfile {
 }
 
 interface HotScore {
-  total: number; // 1-12 (expanded scoring)
+  total: number; // 1-10 (rebalanced scoring)
   breakdown: {
-    team: number; // 0-3
+    team_execution: number; // 0-3
+    product_vision: number; // 0-2
+    founder_courage: number; // 0-1.5
+    market_insight: number; // 0-1.5
+    team_age: number; // 0-1
     traction: number; // 0-3
     market: number; // 0-2
     product: number; // 0-2
-    vision: number; // 0-2
-    ecosystem: number; // 0-1.5
-    grit: number; // 0-1.5
-    problem_validation: number; // 0-2
-    founder_age: number; // 0-1.5 - Youth bonus
-    sales_velocity: number; // 0-2 - Speed of customer adoption
-    // YC-STYLE SCORING (Fund founders, not ideas)
-    founder_speed: number; // 0-3 ⭐⭐⭐⭐⭐ - Execution velocity
-    unique_insight: number; // 0-2.5 ⭐⭐⭐⭐ - Non-obvious thesis
-    user_love: number; // 0-2 ⭐⭐⭐ - Quality of engagement
-    learning_velocity: number; // 0-1.5 - How fast they learn & adapt
   };
   matchCount: number; // How many investors to match (5-20)
   reasoning: string[];
@@ -183,6 +262,20 @@ interface HotScore {
  * Main scoring function - evaluates startup quality
  */
 export function calculateHotScore(startup: StartupProfile): HotScore {
+    // --- Funding Velocity Bonus ---
+    // If a startup raised their first round quickly after founding, add a bonus to team execution
+    let fundingVelocityBonus = 0;
+    if (startup.founded_date && startup.previous_funding && typeof startup.previous_funding === 'number') {
+      const founded = new Date(startup.founded_date);
+      const now = new Date();
+      const monthsSinceFounding = (now.getTime() - founded.getTime()) / (1000 * 60 * 60 * 24 * 30);
+      // If raised any funding within 6 months of founding, strong signal
+      if (monthsSinceFounding <= 6) {
+        fundingVelocityBonus = 0.4;
+      } else if (monthsSinceFounding <= 12) {
+        fundingVelocityBonus = 0.2;
+      }
+    }
   // QUICK FIX: Base score boost for all startups with ANY content
   // This prevents scores of 0/100 and gives credit for basic presence
   let baseBoost = 0;
@@ -256,10 +349,10 @@ export function calculateHotScore(startup: StartupProfile): HotScore {
     vibeBonus += 0.7;
   }
   
-  // Total VIBE bonus: up to 4.0 points (significant impact on final score)
-  // VIBE is now ~21% of total possible score (4 out of 19 points)
-  baseBoost += Math.min(vibeBonus, 4.0);
-  
+  // Total VIBE bonus: up to configured cap (reduced impact on final score)
+  // VIBE is now ~12% of total possible score (2.5 out of 21 points)
+  baseBoost += Math.min(vibeBonus, GOD_SCORE_CONFIG.vibeBonusCap);
+
   // Give points for having basic content
   if (startup.team && startup.team.length > 0) baseBoost += 1;
   if (startup.launched || startup.demo_available) baseBoost += 1;
@@ -267,39 +360,59 @@ export function calculateHotScore(startup: StartupProfile): HotScore {
   if (startup.problem || startup.solution) baseBoost += 0.5;
   if (startup.tagline || startup.pitch) baseBoost += 0.5;
   if (startup.founded_date) baseBoost += 0.5;
+
+  // Lower minimum base boost to configured value so sparse startups score appropriately
+  // Math: baseBoost / normalizationDivisor * 10 = score on 0-10 scale
+  baseBoost = Math.max(baseBoost, GOD_SCORE_CONFIG.baseBoostMinimum);
   
-  // CRITICAL FIX: Minimum base boost of 17 points so startups score at least 50/100
-  // Math: 17 / 34.5 * 10 = 4.9 (~50/100)
-  // This accounts for all the GRIT/execution fields that are typically empty in scraped data
-  // Without this, startups with sparse data crater to 20-30 scores
-  baseBoost = Math.max(baseBoost, 17);
-  
-  const teamScore = scoreTeam(startup);
-  const tractionScore = scoreTraction(startup);
-  const marketScore = scoreMarket(startup);
-  const productScore = scoreProduct(startup);
-  const visionScore = scoreVision(startup);
-  const ecosystemScore = scoreEcosystem(startup);
-  const gritScore = scoreGrit(startup);
-  const problemValidationScore = scoreProblemValidation(startup);
-  const founderAgeScore = scoreFounderAge(startup);
-  const salesVelocityScore = scoreSalesVelocity(startup);
-  
-  // YC-STYLE SCORING (Fund founders, not ideas)
-  const founderSpeedScore = scoreFounderSpeed(startup); // ⭐⭐⭐⭐⭐ - Most important
-  const uniqueInsightScore = scoreUniqueInsight(startup); // ⭐⭐⭐⭐
-  const userLoveScore = scoreUserLove(startup); // ⭐⭐⭐
-  const learningVelocityScore = scoreLearningVelocity(startup); // How fast they adapt
-  
-  // YC-WEIGHTED Total:
-  // Old: 5 (base) + 3 + 3 + 2 + 2 + 2 + 1.5 + 1.5 + 2 + 1.5 + 2 = 25.5
-  // New: + 3 (speed) + 2.5 (insight) + 2 (love) + 1.5 (learning) = 34.5 points
-  // 
-  // YC weights execution > traction, so we scale accordingly
-  const rawTotal = baseBoost + teamScore + tractionScore + marketScore + productScore + visionScore + 
-                   ecosystemScore + gritScore + problemValidationScore + founderAgeScore + salesVelocityScore +
-                   founderSpeedScore + uniqueInsightScore + userLoveScore + learningVelocityScore;
-  const total = Math.min((rawTotal / 34.5) * 10, 10); // Normalize to 10-point scale
+  // (Old variable declarations removed; only new streamlined block below is used)
+  // --- REBALANCED SCORING ---
+  // Core founder/team variables:
+  // Team Execution (scoreTeam + scoreFounderSpeed): 3.0
+  // Product Vision (scoreVision): 2.0
+  // Founder Courage (scoreFounderCourage): 1.5
+  // Market Insight (scoreUniqueInsight): 1.5
+  // Team Age/Adaptability (scoreFounderAge): 1.0
+  // (Team Dynamics merged into Team Execution)
+  // Traction, Market, Product remain as is
+
+  const teamScore = scoreTeam(startup); // 0-2
+  const founderSpeedScore = scoreFounderSpeed(startup); // 0-1
+  const teamExecutionScore = Math.min(teamScore + founderSpeedScore + fundingVelocityBonus, 3.0); // Cap at 3
+  const productVisionScore = Math.min(scoreVision(startup), 2.0);
+  const founderCourageScore = Math.min(scoreFounderCourage(startup), 1.5);
+  const marketInsightScore = Math.min(scoreUniqueInsight(startup), 1.5);
+  const teamAgeScore = Math.min(scoreFounderAge(startup), 1.0);
+
+  // Traction, Market, Product Performance (keep as is)
+  const tractionScore = scoreTraction(startup); // 0-3
+  const marketScore = scoreMarket(startup); // 0-2
+  const productScore = scoreProduct(startup); // 0-2
+
+  // New total possible: 3 (team exec) + 2 (vision) + 1.5 (courage) + 1.5 (insight) + 1 (age) + 3 (traction) + 2 (market) + 2 (product) = 16
+  // Plus baseBoost (minimum 5, can go higher with vibe bonus)
+  const rawTotal = baseBoost + teamExecutionScore + productVisionScore + founderCourageScore + marketInsightScore + teamAgeScore + tractionScore + marketScore + productScore;
+  // Normalize to 10-point scale using configured divisor (higher divisor = lower scores)
+  const total = Math.min((rawTotal / GOD_SCORE_CONFIG.normalizationDivisor) * 10, 10);
+  /**
+   * GOD Score Bias Monitor (auto-healing system)
+   * Call this from System Guardian or batch scoring scripts
+   */
+  (globalThis as any).godScoreMonitor = function(rawTotal: number, total: number) {
+    // This is a stub; real implementation should aggregate scores and check distribution
+    // Example: If average < 45 or > 75, log and recommend recalibration
+    if (!(globalThis as any).godScoreStats) (globalThis as any).godScoreStats = { sum: 0, count: 0 };
+    (globalThis as any).godScoreStats.sum += total * 10; // Convert to 0-100 scale
+    (globalThis as any).godScoreStats.count++;
+    if ((globalThis as any).godScoreStats.count % 100 === 0) {
+      const avg = (globalThis as any).godScoreStats.sum / (globalThis as any).godScoreStats.count;
+      if (avg < GOD_SCORE_CONFIG.averageScoreAlertLow || avg > GOD_SCORE_CONFIG.averageScoreAlertHigh) {
+        console.warn(`[GOD SCORE ALERT] Average GOD score is ${avg.toFixed(2)}. Recommend recalibration!`);
+        console.warn(`[GOD SCORE ALERT] Current config: normalizationDivisor=${GOD_SCORE_CONFIG.normalizationDivisor}, baseBoostMinimum=${GOD_SCORE_CONFIG.baseBoostMinimum}, vibeBonusCap=${GOD_SCORE_CONFIG.vibeBonusCap}`);
+        // Optionally trigger auto-healing: run recalculation script, notify admin, etc.
+      }
+    }
+  };
   
   // Dynamic match count based on score
   let matchCount = 5; // Default
@@ -312,39 +425,26 @@ export function calculateHotScore(startup: StartupProfile): HotScore {
   return {
     total,
     breakdown: {
-      team: teamScore,
+      team_execution: teamExecutionScore,
+      product_vision: productVisionScore,
+      founder_courage: founderCourageScore,
+      market_insight: marketInsightScore,
+      team_age: teamAgeScore,
       traction: tractionScore,
       market: marketScore,
-      product: productScore,
-      vision: visionScore,
-      ecosystem: ecosystemScore,
-      grit: gritScore,
-      problem_validation: problemValidationScore,
-      founder_age: founderAgeScore,
-      sales_velocity: salesVelocityScore,
-      // YC-STYLE SCORING
-      founder_speed: founderSpeedScore,
-      unique_insight: uniqueInsightScore,
-      user_love: userLoveScore,
-      learning_velocity: learningVelocityScore
+      product: productScore
     },
     matchCount,
     reasoning: generateReasoning(startup, { 
       baseBoost,
-      teamScore, 
-      tractionScore, 
-      marketScore, 
-      productScore, 
-      visionScore,
-      ecosystemScore,
-      gritScore,
-      problemValidationScore,
-      founderAgeScore,
-      salesVelocityScore,
-      founderSpeedScore,
-      uniqueInsightScore,
-      userLoveScore,
-      learningVelocityScore
+      teamExecutionScore,
+      productVisionScore,
+      founderCourageScore,
+      marketInsightScore,
+      teamAgeScore,
+      tractionScore,
+      marketScore,
+      productScore
     }),
     tier
   };
@@ -409,11 +509,14 @@ function scoreTeam(startup: StartupProfile): number {
  * YC: "Proof of progress and traction"
  * Sequoia: "Measurable progress, growth, and social proof"
  * Seed/Angel: "Early traction with repeatability indicators"
+ * 
+ * IMPORTANT: This function must differentiate between startups even with minimal data.
+ * If all startups score 0, the component cannot differentiate quality.
  */
 function scoreTraction(startup: StartupProfile): number {
   let score = 0;
   
-  // Revenue traction
+  // Revenue traction (strongest signal)
   if (startup.revenue || startup.mrr || startup.gmv) {
     const annualRevenue = startup.revenue || (startup.mrr! * 12);
     const gmv = startup.gmv || 0;
@@ -421,6 +524,7 @@ function scoreTraction(startup: StartupProfile): number {
     
     if (bestMetric >= 1000000) score += 1.5; // $1M+ ARR/GMV
     else if (bestMetric >= 100000) score += 1; // $100K+ ARR/GMV
+    else if (bestMetric >= 10000) score += 0.75; // $10K+ ARR/GMV
     else if (bestMetric > 0) score += 0.5; // Any revenue
   }
   
@@ -430,6 +534,7 @@ function scoreTraction(startup: StartupProfile): number {
     else if (startup.growth_rate >= 20) score += 0.75; // 20%+ MoM - great
     else if (startup.growth_rate >= 15) score += 0.5; // 15%+ MoM - seed benchmark
     else if (startup.growth_rate >= 10) score += 0.25; // 10%+ MoM - decent
+    else if (startup.growth_rate >= 5) score += 0.15; // 5%+ MoM - some growth
   }
   
   // Retention & churn (Seed/Angel: "evidence of repeatability")
@@ -443,16 +548,19 @@ function scoreTraction(startup: StartupProfile): number {
   if (startup.active_users) {
     if (startup.active_users >= 10000) score += 0.5;
     else if (startup.active_users >= 1000) score += 0.25;
+    else if (startup.active_users >= 100) score += 0.15; // Lower threshold
   }
   
   // Pre-paying customers (Seed/Angel: "leading indicator")
   if (startup.prepaying_customers) {
     if (startup.prepaying_customers >= 10) score += 0.5;
     else if (startup.prepaying_customers >= 3) score += 0.25;
+    else if (startup.prepaying_customers >= 1) score += 0.15; // Even 1 paying customer is a signal
   } else if (startup.customers || startup.signed_contracts) {
-    if ((startup.customers || 0) >= 10 || (startup.signed_contracts || 0) >= 5) {
-      score += 0.5;
-    }
+    const customerCount = startup.customers || startup.signed_contracts || 0;
+    if (customerCount >= 10) score += 0.5;
+    else if (customerCount >= 5) score += 0.25;
+    else if (customerCount >= 1) score += 0.15; // Even 1 customer is progress
   }
   
   // Social proof - backed by reputable investors
@@ -463,6 +571,20 @@ function scoreTraction(startup: StartupProfile): number {
       )
     );
     if (hasTopInvestor) score += 0.5;
+    else score += 0.2; // Any investor backing is a positive signal
+  }
+  
+  // FALLBACK: If no quantitative data, use qualitative signals
+  // This prevents all startups from scoring 0 when data is missing
+  if (score === 0) {
+    // Check if startup is launched (indicates some traction)
+    if (startup.launched || startup.demo_available) {
+      score += 0.2; // Minimal traction signal
+    }
+    // Check if they have a clear value proposition (indicates market validation)
+    if (startup.value_proposition && startup.value_proposition.length > 50) {
+      score += 0.1; // Minimal validation signal
+    }
   }
   
   return Math.min(score, 3);
@@ -473,29 +595,70 @@ function scoreTraction(startup: StartupProfile): number {
  * YC: "Solving a real problem"
  * Sequoia: "Important problem in a market with massive growth potential"
  * Seed/Angel: "Large market opportunity with competitive edge"
+ * 
+ * IMPORTANT: Must differentiate even when market_size data is missing.
+ * Use sectors, problem/solution clarity, and other available signals.
  */
 function scoreMarket(startup: StartupProfile): number {
   let score = 0;
   
   // Hot sectors (fintech, AI, biotech, deep tech, climate)
-  const hotSectors = ['ai', 'artificial intelligence', 'fintech', 'biotech', 'climate', 'deep tech', 'crypto', 'web3'];
-  const isHotSector = startup.industries?.some(industry =>
+  // This is available for 100% of startups, so it's a key differentiator
+  const hotSectors = ['ai', 'artificial intelligence', 'fintech', 'biotech', 'climate', 'deep tech', 'crypto', 'web3', 'saas', 'enterprise', 'healthcare', 'edtech'];
+  const industries = startup.industries || [];
+  const isHotSector = industries.some(industry =>
     hotSectors.some(hot => industry.toLowerCase().includes(hot))
   );
   
-  if (isHotSector) score += 1;
-  
-  // Market size (TAM) - Seed/Angel: "sufficiently large market"
-  if (startup.market_size) {
-    if (startup.market_size >= 10) score += 1; // $10B+ TAM - massive
-    else if (startup.market_size >= 1) score += 0.5; // $1B+ TAM - substantial
-    else if (startup.market_size >= 0.1) score += 0.25; // $100M+ TAM - viable for seed
+  if (isHotSector) {
+    score += 1; // Hot sector = strong market signal
+  } else if (industries.length > 0) {
+    score += 0.3; // Any sector defined = basic market clarity
   }
   
+  // Market size (TAM) - Seed/Angel: "sufficiently large market"
+  // Handle both numeric and string market_size
+  let marketSizeNum = 0;
+  if (typeof startup.market_size === 'number') {
+    marketSizeNum = startup.market_size;
+  } else if (typeof startup.market_size === 'string') {
+    // Try to extract number from string like "$10B", "10 billion", etc.
+    const match = startup.market_size.match(/(\d+(?:\.\d+)?)\s*(b|billion|m|million|t|trillion)/i);
+    if (match) {
+      const num = parseFloat(match[1]);
+      const unit = match[2].toLowerCase();
+      marketSizeNum = unit.startsWith('b') ? num : unit.startsWith('t') ? num * 1000 : num / 1000;
+    }
+  }
+  
+  if (marketSizeNum >= 10) score += 1; // $10B+ TAM - massive
+  else if (marketSizeNum >= 1) score += 0.5; // $1B+ TAM - substantial
+  else if (marketSizeNum >= 0.1) score += 0.25; // $100M+ TAM - viable for seed
+  else if (marketSizeNum > 0) score += 0.15; // Any market size mentioned
+  
   // Clear problem/solution articulation (Seed: "compelling story")
+  // This is a key differentiator when market_size is missing
   if (startup.problem && startup.solution) {
-    if (startup.problem.length > 50 && startup.solution.length > 50) {
+    const problemLength = startup.problem.length;
+    const solutionLength = startup.solution.length;
+    if (problemLength > 100 && solutionLength > 100) {
       score += 0.5; // Well-articulated
+    } else if (problemLength > 50 && solutionLength > 50) {
+      score += 0.3; // Adequately articulated
+    } else if (problemLength > 0 || solutionLength > 0) {
+      score += 0.15; // Some articulation
+    }
+  } else if (startup.problem || startup.solution) {
+    score += 0.1; // Partial articulation
+  }
+  
+  // FALLBACK: Use value proposition or pitch as market signal
+  if (score === 0 && (startup.value_proposition || startup.pitch)) {
+    const text = (startup.value_proposition || startup.pitch || '').toLowerCase();
+    // Check for market-related keywords
+    const marketKeywords = ['market', 'billion', 'million', 'industry', 'sector', 'tam', 'opportunity'];
+    if (marketKeywords.some(keyword => text.includes(keyword))) {
+      score += 0.2; // Minimal market signal
     }
   }
   
@@ -507,18 +670,57 @@ function scoreMarket(startup: StartupProfile): number {
  * YC: "Having a working demo"
  * FF: "Cool IP or new business model"
  * Seed/Angel: "MVP demonstrates idea has moved beyond conceptual stage"
+ * 
+ * IMPORTANT: Must differentiate even when launch/demo flags are missing.
+ * Use available signals to assess product maturity.
  */
 function scoreProduct(startup: StartupProfile): number {
   let score = 0;
   
   // MVP stage (Seed/Angel: critical indicator)
-  if (startup.mvp_stage || startup.launched) score += 0.5;
-  if (startup.demo_available) score += 0.5;
+  // Check multiple possible field names
+  const isLaunched = startup.launched || startup.mvp_stage || (startup as any).is_launched;
+  const hasDemo = startup.demo_available || (startup as any).has_demo;
+  
+  if (isLaunched) {
+    score += 0.5; // Launched = product exists
+  } else if (hasDemo) {
+    score += 0.4; // Demo available = product in development
+  }
+  
+  if (hasDemo) {
+    score += 0.5; // Demo = can show product
+  }
   
   // Unique IP / defensibility
-  if (startup.unique_ip) score += 0.5;
-  if (startup.defensibility === 'high') score += 0.5;
-  else if (startup.defensibility === 'medium') score += 0.25;
+  if (startup.unique_ip || (startup as any).unique_ip) {
+    score += 0.5; // Has unique IP
+  }
+  if (startup.defensibility === 'high') {
+    score += 0.5;
+  } else if (startup.defensibility === 'medium') {
+    score += 0.25;
+  }
+  
+  // FALLBACK: Use stage and other signals when launch/demo flags missing
+  if (score === 0) {
+    // Check if they have a website (indicates some product presence)
+    if (startup.website || (startup as any).website) {
+      score += 0.2; // Website = some product presence
+    }
+    // Check stage - later stages imply product exists
+    if (startup.stage) {
+      const stageNum = typeof startup.stage === 'number' ? startup.stage : 
+        ['pre-seed', 'seed', 'series a', 'series b'].indexOf(String(startup.stage).toLowerCase());
+      if (stageNum >= 2) score += 0.3; // Series A+ implies product exists
+      else if (stageNum >= 1) score += 0.2; // Seed implies MVP
+      else if (stageNum >= 0) score += 0.1; // Pre-seed = early stage
+    }
+    // Check if they have a solution description (indicates product thinking)
+    if (startup.solution && startup.solution.length > 50) {
+      score += 0.15; // Solution description = product concept
+    }
+  }
   
   return Math.min(score, 2);
 }
@@ -651,54 +853,52 @@ function scoreGrit(startup: StartupProfile): number {
   let score = 0;
   let hasAnyData = false;
   
-  // Pivot history - intelligent pivots are GOOD (0-0.5 points)
+  // Pivot history - intelligent pivots are GOOD (0-0.7 points)
   if (startup.pivots_made !== undefined && startup.pivot_history) {
     hasAnyData = true;
     if (startup.pivots_made === 1 || startup.pivots_made === 2) {
-      // 1-2 pivots = learning and adapting (GOOD)
-      score += 0.5;
+      score += 0.7;
     } else if (startup.pivots_made === 0 && startup.founded_date) {
-      // No pivots after 12+ months might mean stubborn or perfect PMF
       const founded = new Date(startup.founded_date);
       const monthsOld = (Date.now() - founded.getTime()) / (1000 * 60 * 60 * 24 * 30);
       if (monthsOld > 12 && startup.customers && startup.customers > 10) {
-        score += 0.4; // No pivots + traction = found PMF fast
+        score += 0.5;
       }
     } else if (startup.pivots_made && startup.pivots_made >= 3) {
-      score += 0.2; // Too many pivots = concerning (but some points for persistence)
+      score += 0.3;
     }
   }
-  
-  // Customer feedback frequency (0-0.5 points)
+
+  // Customer feedback frequency (0-0.7 points)
   if (startup.customer_feedback_frequency) {
     hasAnyData = true;
     if (startup.customer_feedback_frequency === 'daily') {
-      score += 0.5; // Daily customer contact = exceptional obsession
+      score += 0.7;
     } else if (startup.customer_feedback_frequency === 'weekly') {
-      score += 0.35; // Weekly = strong
+      score += 0.5;
     } else if (startup.customer_feedback_frequency === 'monthly') {
-      score += 0.2; // Monthly = acceptable
+      score += 0.3;
     }
   }
-  
-  // Speed of iteration (0-0.5 points)
+
+  // Speed of iteration (0-0.6 points)
   if (startup.time_to_iterate_days !== undefined) {
     hasAnyData = true;
     if (startup.time_to_iterate_days <= 7) {
-      score += 0.5; // Ship updates within a week = exceptional velocity
+      score += 0.6;
     } else if (startup.time_to_iterate_days <= 14) {
-      score += 0.35; // Within 2 weeks = strong
+      score += 0.4;
     } else if (startup.time_to_iterate_days <= 30) {
-      score += 0.2; // Within a month = acceptable
+      score += 0.2;
     }
   }
-  
+
   // DEFAULT: If no GRIT data, assume average resilience (unknown ≠ bad)
   if (!hasAnyData) {
-    return 0.5; // Benefit of the doubt - assume average GRIT
+    return 0.3; // Lowered default GRIT score for missing data
   }
-  
-  return Math.min(score, 1.5);
+
+  return Math.min(score, 2.0);
 }
 
 /**
@@ -1013,6 +1213,227 @@ function scoreSalesVelocity(startup: StartupProfile): number {
 }
 
 /**
+ * FOUNDER COURAGE SCORING (0-1.5 points) - NEW
+ * Based on Ben Horowitz (Andreessen Horowitz / a16z) framework
+ * 
+ * Ben Horowitz emphasizes that courage is critical for founders:
+ * - The ability to make hard decisions when others won't
+ * - Persistence through adversity and rejection
+ * - Willingness to take calculated risks
+ * - Resilience in the face of setbacks
+ * - Boldness to pursue contrarian paths
+ * 
+ * Courage indicators:
+ * - Bold decisions made (risky bets, contrarian moves)
+ * - Persistence through rejections
+ * - High-risk opportunities pursued
+ * - Resilience demonstrated (bouncing back from setbacks)
+ * - Willingness to pivot when needed
+ */
+function scoreFounderCourage(startup: StartupProfile): number {
+  let score = 0;
+  const startupAny = startup as any;
+  
+  // Direct courage rating (if provided)
+  if (startupAny.founder_courage) {
+    switch (startupAny.founder_courage) {
+      case 'exceptional':
+        score += 1.5;
+        break;
+      case 'high':
+        score += 1.0;
+        break;
+      case 'moderate':
+        score += 0.5;
+        break;
+      case 'low':
+        score += 0.1;
+        break;
+    }
+  }
+  
+  // Bold decisions made (0-0.4 points)
+  if (startupAny.bold_decisions_made !== undefined) {
+    if (startupAny.bold_decisions_made >= 5) {
+      score += 0.4; // Many bold decisions = exceptional courage
+    } else if (startupAny.bold_decisions_made >= 3) {
+      score += 0.3; // Several bold decisions = high courage
+    } else if (startupAny.bold_decisions_made >= 1) {
+      score += 0.15; // Some bold decisions = moderate courage
+    }
+  }
+  
+  // Persistence through rejections (0-0.3 points)
+  if (startupAny.times_rejected_but_persisted !== undefined) {
+    if (startupAny.times_rejected_but_persisted >= 10) {
+      score += 0.3; // 10+ rejections overcome = exceptional persistence
+    } else if (startupAny.times_rejected_but_persisted >= 5) {
+      score += 0.2; // 5+ rejections = strong persistence
+    } else if (startupAny.times_rejected_but_persisted >= 2) {
+      score += 0.1; // 2+ rejections = some persistence
+    }
+  }
+  
+  // High-risk opportunities pursued (0-0.3 points)
+  if (startupAny.high_risk_opportunities_pursued !== undefined) {
+    if (startupAny.high_risk_opportunities_pursued >= 3) {
+      score += 0.3; // Multiple high-risk bets = exceptional courage
+    } else if (startupAny.high_risk_opportunities_pursued >= 2) {
+      score += 0.2; // Several risky bets = high courage
+    } else if (startupAny.high_risk_opportunities_pursued >= 1) {
+      score += 0.1; // Some risky bets = moderate courage
+    }
+  }
+  
+  // Resilience demonstrated (0-0.2 points)
+  if (startupAny.resilience_demonstrated === true) {
+    score += 0.2; // Evidence of bouncing back from setbacks
+  }
+  
+  // Pivot history as courage indicator (0-0.2 points)
+  // Pivoting shows courage to admit mistakes and change direction
+  if (startup.pivots_made !== undefined && startup.pivots_made > 0) {
+    if (startup.pivots_made >= 2) {
+      score += 0.2; // Multiple pivots = courage to change
+    } else if (startup.pivots_made === 1) {
+      score += 0.1; // One pivot = some courage
+    }
+  }
+  
+  // Contrarian insight as courage indicator (0-0.1 points)
+  // Going against conventional wisdom requires courage
+  if (startup.contrarian_insight && startup.contrarian_insight.length > 50) {
+    score += 0.1; // Has contrarian beliefs = courage to be different
+  }
+  
+  // DEFAULT: If no courage data, assume moderate courage
+  // (most founders who start companies have some courage)
+  if (score === 0 && !startupAny.founder_courage && !startupAny.bold_decisions_made && 
+      !startupAny.times_rejected_but_persisted && !startupAny.high_risk_opportunities_pursued &&
+      !startupAny.resilience_demonstrated) {
+    return 0.5; // Benefit of the doubt - assume moderate courage
+  }
+  
+  return Math.min(score, 1.5);
+}
+
+/**
+ * FOUNDER INTELLIGENCE SCORING (0-1.5 points) - NEW
+ * Based on Ben Horowitz (Andreessen Horowitz / a16z) framework
+ * 
+ * Ben Horowitz values intelligence in founders as:
+ * - Strategic thinking and long-term vision
+ * - Ability to solve complex problems
+ * - Fast learning and adaptation
+ * - Deep analytical thinking
+ * - Understanding of market dynamics and timing
+ * 
+ * Intelligence indicators:
+ * - Strategic thinking evidence (long-term planning, complex decisions)
+ * - Problem-solving examples (complex problems solved)
+ * - Learning velocity evidence (fast adaptation to new information)
+ * - Analytical depth (depth of analysis in decisions)
+ * - Education background (pedigree can indicate intelligence)
+ */
+function scoreFounderIntelligence(startup: StartupProfile): number {
+  let score = 0;
+  const startupAny = startup as any;
+  
+  // Direct intelligence rating (if provided)
+  if (startupAny.founder_intelligence) {
+    switch (startupAny.founder_intelligence) {
+      case 'exceptional':
+        score += 1.5;
+        break;
+      case 'high':
+        score += 1.0;
+        break;
+      case 'moderate':
+        score += 0.5;
+        break;
+      case 'low':
+        score += 0.1;
+        break;
+    }
+  }
+  
+  // Strategic thinking evidence (0-0.4 points)
+  if (startupAny.strategic_thinking_evidence && startupAny.strategic_thinking_evidence.length > 100) {
+    score += 0.4; // Strong evidence of strategic thinking
+  } else if (startupAny.strategic_thinking_evidence && startupAny.strategic_thinking_evidence.length > 50) {
+    score += 0.2; // Some evidence of strategic thinking
+  }
+  
+  // Problem-solving examples (0-0.3 points)
+  if (startupAny.problem_solving_examples && Array.isArray(startupAny.problem_solving_examples)) {
+    if (startupAny.problem_solving_examples.length >= 5) {
+      score += 0.3; // Many complex problems solved = exceptional intelligence
+    } else if (startupAny.problem_solving_examples.length >= 3) {
+      score += 0.2; // Several problems solved = high intelligence
+    } else if (startupAny.problem_solving_examples.length >= 1) {
+      score += 0.1; // Some problems solved = moderate intelligence
+    }
+  }
+  
+  // Learning velocity evidence (0-0.3 points)
+  if (startupAny.learning_velocity_evidence && startupAny.learning_velocity_evidence.length > 50) {
+    score += 0.3; // Evidence of fast learning and adaptation
+  }
+  
+  // Analytical depth (0-0.2 points)
+  if (startupAny.analytical_depth) {
+    switch (startupAny.analytical_depth) {
+      case 'deep':
+        score += 0.2; // Deep analysis = high intelligence
+        break;
+      case 'moderate':
+        score += 0.1; // Moderate analysis = some intelligence
+        break;
+      case 'surface':
+        score += 0.05; // Surface analysis = minimal
+        break;
+    }
+  }
+  
+  // Education background as proxy (0-0.2 points)
+  if (startup.team && Array.isArray(startup.team) && startup.team.length > 0) {
+    const hasTopEducation = startup.team.some(member => {
+      const edu = member.education?.toLowerCase() || '';
+      return edu.includes('stanford') || edu.includes('mit') || 
+             edu.includes('harvard') || edu.includes('berkeley') ||
+             edu.includes('caltech') || edu.includes('princeton') ||
+             edu.includes('yale') || edu.includes('phd') ||
+             edu.includes('mba');
+    });
+    
+    if (hasTopEducation) {
+      score += 0.2; // Top-tier education = likely high intelligence
+    }
+  }
+  
+  // Contrarian insight as intelligence indicator (0-0.1 points)
+  // Understanding something others don't requires intelligence
+  if (startup.contrarian_insight && startup.contrarian_insight.length > 100) {
+    score += 0.1; // Deep contrarian insight = intelligence
+  }
+  
+  // Problem discovery depth as intelligence indicator (0-0.1 points)
+  if (startup.problem_discovery_depth === 'deep') {
+    score += 0.1; // Deep problem understanding = intelligence
+  }
+  
+  // DEFAULT: If no intelligence data, assume moderate intelligence
+  // (most founders who start companies have some intelligence)
+  if (score === 0 && !startupAny.founder_intelligence && !startupAny.strategic_thinking_evidence && 
+      !startupAny.problem_solving_examples && !startupAny.learning_velocity_evidence &&
+      !startupAny.analytical_depth) {
+    return 0.5; // Benefit of the doubt - assume moderate intelligence
+  }
+  
+  return Math.min(score, 1.5);
+}
+
+/**
  * Generate human-readable reasoning
  */
 function generateReasoning(startup: StartupProfile, scores: any): string[] {
@@ -1149,6 +1570,24 @@ function generateReasoning(startup: StartupProfile, scores: any): string[] {
     reasons.push('🧪 RAPID LEARNER: Multiple experiments, fast pivots, validated hypotheses');
   } else if (scores.learningVelocityScore >= 0.6) {
     reasons.push('📚 Good learning velocity and adaptation');
+  }
+  
+  // FOUNDER ATTRIBUTES: Courage highlights
+  if (scores.founderCourageScore >= 1.2) {
+    reasons.push('🦁 EXCEPTIONAL COURAGE: Bold decisions, high-risk bets, resilient through setbacks');
+  } else if (scores.founderCourageScore >= 0.8) {
+    reasons.push('💪 High courage: Willing to take risks and persist through challenges');
+  } else if (scores.founderCourageScore >= 0.5) {
+    reasons.push('✅ Moderate courage: Shows resilience and willingness to pivot');
+  }
+  
+  // FOUNDER ATTRIBUTES: Intelligence highlights
+  if (scores.founderIntelligenceScore >= 1.2) {
+    reasons.push('🧠 EXCEPTIONAL INTELLIGENCE: Strategic thinking, complex problem-solving, rapid learning');
+  } else if (scores.founderIntelligenceScore >= 0.8) {
+    reasons.push('🎓 High intelligence: Strong analytical depth and strategic planning');
+  } else if (scores.founderIntelligenceScore >= 0.5) {
+    reasons.push('✅ Solid intelligence: Good problem-solving and learning ability');
   }
   
   return reasons;

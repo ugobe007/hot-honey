@@ -1,3 +1,13 @@
+/**
+ * @deprecated Use InvestorCard with variant="vc" instead
+ * 
+ * Migration:
+ *   import InvestorCard from './InvestorCard';
+ *   <InvestorCard investor={investor} variant="vc" />
+ * 
+ * This component will be removed in a future version.
+ */
+
 import { Link } from 'react-router-dom';
 
 interface VCFirmCardProps {

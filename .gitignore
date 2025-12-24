@@ -6,3 +6,10 @@ node_modules
 .env.local
 .env
 dist/
+
+# Backup and old files
+*.backup
+*_OLD.tsx
+*_OLD.ts
+*_old.tsx
+*_old.ts

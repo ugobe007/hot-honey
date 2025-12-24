@@ -128,14 +128,9 @@ async function regenerateMatches() {
       return;
     }
     
-    // Delete old matches
-    const { error: delErr } = await supabase
-      .from('startup_investor_matches')
-      .delete()
-      .neq('id', '00000000-0000-0000-0000-000000000000'); // Delete all
-    
-    if (delErr) console.warn('Delete warning:', delErr.message);
-    console.log('🗑️  Cleared old matches\n');
+    // NOTE: DO NOT DELETE existing matches - use upsert to update them instead
+    // This preserves matches for startups not in the current run
+    console.log('💾 Using upsert to update existing matches (preserving all matches)\n');
     
     // Generate new matches
     const allMatches = [];

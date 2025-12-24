@@ -1,93 +1,21 @@
 import { supabase } from './supabase';
+import { Investor, InvestorComponent } from '../types';
+import { adaptInvestorForComponent } from '../utils/investorAdapters';
 
 /**
- * Database column mapping:
- * - sectors (DB) -> sectors (frontend)
- * - stage (DB) -> stage (frontend)
- * - check_size_min/check_size_max (DB) -> checkSizeMin/checkSizeMax (frontend)
+ * @deprecated Use `Investor` from '@/types' or '@/lib/database.types' instead
+ * These interfaces are kept for backward compatibility but will be removed.
+ * Use adaptInvestorForComponent() from '@/utils/investorAdapters' instead.
  */
-
-export interface InvestorDB {
-  id: string;
-  name: string;
-  type: 'vc_firm' | 'accelerator' | 'angel_network' | 'corporate_vc';
-  tagline?: string;
-  bio?: string;  // DB uses 'bio' not 'description'
-  website?: string;
-  logo?: string;
-  linkedin?: string;
-  twitter?: string;
-  email?: string;  // DB uses 'email' not 'contact_email'
-  aum?: string;
-  fund_size?: string;
-  // Database columns for check size
-  check_size_min?: number;
-  check_size_max?: number;
-  // Database columns (correct names)
-  stage?: string[];   // Correct DB column name
-  sectors?: string[]; // Correct DB column name
-  geography?: string;
-  portfolio_size?: number;  // DB uses 'portfolio_size' not 'portfolio_count'
-  exits?: number;
-  unicorns?: number;
-  notable_investments?: string[];
-  hot_honey_investments?: number;
-  hot_honey_startups?: string[];
-  created_at?: string;
-  updated_at?: string;
-}
-
-// Frontend-friendly interface (what UI components expect)
-export interface InvestorFrontend {
-  id: string;
-  name: string;
-  type: string;
-  tagline?: string;
-  description?: string;
-  website?: string;
-  linkedin?: string;
-  twitter?: string;
-  contactEmail?: string;
-  aum?: string;
-  fundSize?: string;
-  checkSizeMin?: number;
-  checkSizeMax?: number;
-  stage?: string[];    // Direct from DB
-  sectors?: string[];  // Direct from DB
-  geography?: string;
-  portfolioCount?: number;
-  exits?: number;
-  unicorns?: number;
-  notableInvestments?: string[];
-}
+export interface InvestorDB extends Investor {}
+export interface InvestorFrontend extends InvestorComponent {}
 
 /**
  * Maps database investor row to frontend-friendly format
+ * @deprecated Use adaptInvestorForComponent() from '@/utils/investorAdapters' instead
  */
-function mapInvestorToFrontend(dbInvestor: any): InvestorFrontend {
-  return {
-    id: dbInvestor.id,
-    name: dbInvestor.name,
-    type: dbInvestor.type || 'vc_firm',
-    tagline: dbInvestor.tagline,
-    description: dbInvestor.bio,  // Map bio -> description
-    website: dbInvestor.website,
-    linkedin: dbInvestor.linkedin,
-    twitter: dbInvestor.twitter,
-    contactEmail: dbInvestor.email,
-    aum: dbInvestor.aum,
-    fundSize: dbInvestor.fund_size,
-    checkSizeMin: dbInvestor.check_size_min,
-    checkSizeMax: dbInvestor.check_size_max,
-    // Use correct DB column names
-    stage: dbInvestor.stage || [],
-    sectors: dbInvestor.sectors || [],
-    geography: dbInvestor.geography,
-    portfolioCount: dbInvestor.portfolio_size,
-    exits: dbInvestor.exits,
-    unicorns: dbInvestor.unicorns,
-    notableInvestments: dbInvestor.notable_investments,
-  };
+function mapInvestorToFrontend(dbInvestor: Investor): InvestorComponent {
+  return adaptInvestorForComponent(dbInvestor);
 }
 
 export interface StartupUploadDB {

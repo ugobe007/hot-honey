@@ -76,11 +76,13 @@ export async function collectTrainingData(): Promise<MatchOutcome[]> {
       startup_id,
       investor_id,
       match_score,
-      success_score,
-      why_you_match,
+      reasoning,
       status,
       viewed_at,
-      contacted_at
+      contacted_at,
+      startup:startup_uploads!startup_investor_matches_startup_id_fkey(
+        total_god_score
+      )
     `)
     .not('status', 'eq', 'suggested'); // Only matches with some interaction
 
@@ -114,15 +116,19 @@ export async function collectTrainingData(): Promise<MatchOutcome[]> {
       outcome_quality = 0.2; // Viewed but no action
     }
 
+    // Get GOD score from joined startup data
+    const startup = match.startup as any;
+    const godScore = startup?.total_god_score || 0;
+
     return {
       match_id: match.id,
       startup_id: match.startup_id,
       investor_id: match.investor_id,
       outcome,
       outcome_quality,
-      god_score: match.success_score || 0,  // success_score replaces god_score
+      god_score: godScore,
       match_score: match.match_score || 0,
-      match_reasons: match.why_you_match || [],  // why_you_match replaces match_reasons
+      match_reasons: match.reasoning ? [match.reasoning] : [],
       features: {
         contacted: match.contacted_at ? true : false,
         viewed: match.viewed_at ? true : false,
@@ -344,7 +350,12 @@ export async function trackAlgorithmPerformance(
 
   const { data: matches, error } = await supabase
     .from('startup_investor_matches')
-    .select('*')
+    .select(`
+      *,
+      startup:startup_uploads!startup_investor_matches_startup_id_fkey(
+        total_god_score
+      )
+    `)
     .gte('created_at', periodStart.toISOString())
     .lte('created_at', periodEnd.toISOString());
 
@@ -359,15 +370,27 @@ export async function trackAlgorithmPerformance(
   );
 
   const avgMatchScore = matches.reduce((sum, m) => sum + (m.match_score || 0), 0) / Math.max(matches.length, 1);
-  const avgSuccessScore = matches.reduce((sum, m) => sum + (m.success_score || 0), 0) / Math.max(matches.length, 1);
+  
+  // Get GOD scores from joined startup data
+  const godScores = matches
+    .map(m => {
+      const startup = (m as any).startup;
+      return startup?.total_god_score || 0;
+    })
+    .filter(score => score > 0);
+  
+  const avgGodScore = godScores.length > 0
+    ? godScores.reduce((sum, score) => sum + score, 0) / godScores.length
+    : 0;
+  
   const conversionRate = successful.length / Math.max(matches.length, 1);
 
-  // Calculate score distribution using success_score
+  // Calculate score distribution using GOD scores
   const scoreDistribution = {
-    '0-50': matches.filter(m => (m.success_score || 0) <= 50).length,
-    '51-70': matches.filter(m => (m.success_score || 0) > 50 && (m.success_score || 0) <= 70).length,
-    '71-85': matches.filter(m => (m.success_score || 0) > 70 && (m.success_score || 0) <= 85).length,
-    '86-100': matches.filter(m => (m.success_score || 0) > 85).length
+    '0-50': godScores.filter(score => score <= 50).length,
+    '51-70': godScores.filter(score => score > 50 && score <= 70).length,
+    '71-85': godScores.filter(score => score > 70 && score <= 85).length,
+    '86-100': godScores.filter(score => score > 85).length
   };
 
   // Store metrics
@@ -377,7 +400,7 @@ export async function trackAlgorithmPerformance(
     total_matches: matches.length,
     successful_matches: successful.length,
     avg_match_score: avgMatchScore,
-    avg_god_score: avgSuccessScore,
+    avg_god_score: avgGodScore,
     conversion_rate: conversionRate,
     score_distribution: scoreDistribution,
     algorithm_version: '1.0'
@@ -386,7 +409,7 @@ export async function trackAlgorithmPerformance(
   console.log('✅ Performance metrics stored');
   console.log(`   Total Matches: ${matches.length}`);
   console.log(`   Successful: ${successful.length} (${(conversionRate * 100).toFixed(1)}%)`);
-  console.log(`   Avg Success Score: ${avgSuccessScore.toFixed(1)}/100`);
+  console.log(`   Avg GOD Score: ${avgGodScore.toFixed(1)}/100`);
 }
 
 /**

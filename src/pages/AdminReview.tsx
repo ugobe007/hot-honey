@@ -118,7 +118,8 @@ export default function AdminReview() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0f0729] via-[#1a0f3a] to-[#2d1558] py-8 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-[#0f0729] via-[#1a0f3a] to-[#2d1558]">
+      <div className="py-8 px-4">
       {/* Animated background blobs */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-20 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
@@ -128,7 +129,7 @@ export default function AdminReview() {
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Back Button */}
         <button
-          onClick={() => navigate('/admin/dashboard')}
+          onClick={() => navigate('/admin/control')}
           className="group mb-6 px-6 py-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-cyan-400/50 transition-all flex items-center gap-2 text-gray-300 hover:text-white"
         >
           <svg className="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -200,7 +201,7 @@ export default function AdminReview() {
             </button>
           </div>
         ) : (
-          <div className="space-y-6">
+          <div className="space-y-6 relative z-10">
             {pending.map((startup) => {
               const isSelected = selectedIds.has(startup.id);
               const godScore = startup.total_god_score || 0;
@@ -356,6 +357,7 @@ export default function AdminReview() {
             })}
           </div>
         )}
+      </div>
       </div>
     </div>
   );

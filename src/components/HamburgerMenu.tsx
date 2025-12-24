@@ -184,12 +184,12 @@ export default function HamburgerMenu() {
             </Link>
             
             <Link
-              to="/admin/dashboard"
+              to="/admin/control"
               onClick={() => setIsOpen(false)}
               className="group px-4 py-3 rounded-xl bg-gradient-to-r from-yellow-600/40 to-amber-600/40 hover:from-yellow-500/60 hover:to-amber-500/60 text-white transition-all font-bold flex items-center gap-3 border border-yellow-400/50 hover:border-yellow-300 shadow-lg"
             >
               <Crown className="w-5 h-5 text-yellow-300" />
-              <span className="text-white">Admin Dashboard</span>
+              <span className="text-white">Admin Control Center</span>
             </Link>
 
             {/* Admin Link - Only visible to admins */}
@@ -197,7 +197,7 @@ export default function HamburgerMenu() {
               <>
                 <div className="my-3 border-t border-purple-500/30"></div>
                 <Link
-                  to="/admin/dashboard"
+                  to="/admin/control"
                   onClick={() => setIsOpen(false)}
                   className="group px-4 py-3 rounded-xl bg-purple-600/30 hover:bg-purple-600/50 text-white transition-all font-bold flex items-center gap-3 border-2 border-purple-400 hover:border-purple-300 shadow-lg"
                 >
@@ -205,14 +205,6 @@ export default function HamburgerMenu() {
                   <span className="text-white">Admin Panel</span>
                 </Link>
                 
-                <Link
-                  to="/admin/operations"
-                  onClick={() => setIsOpen(false)}
-                  className="group px-4 py-3 rounded-xl bg-cyan-600/30 hover:bg-cyan-600/50 text-white transition-all font-bold flex items-center gap-3 border-2 border-cyan-400 hover:border-cyan-300 shadow-lg"
-                >
-                  <Activity className="w-5 h-5 text-cyan-300" />
-                  <span className="text-white">⚡ Operations Center</span>
-                </Link>
               </>
             )}
           </nav>

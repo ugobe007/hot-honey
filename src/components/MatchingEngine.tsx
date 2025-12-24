@@ -7,31 +7,27 @@ import { calculateAdvancedMatchScore } from '../services/matchingService';
 import { supabase } from '../lib/supabase';
 import { DotLottie } from '@lottiefiles/dotlottie-web';
 import HowItWorksModal from './HowItWorksModal';
-import EnhancedInvestorCard from './EnhancedInvestorCard';
+import InvestorCard from './InvestorCard';
 import StartupVotePopup from './StartupVotePopup';
 import VCInfoPopup from './VCInfoPopup';
 import MatchScoreBreakdown from './MatchScoreBreakdown';
 import ShareMatchModal from './ShareMatchModal';
 import LogoDropdownMenu from './LogoDropdownMenu';
 import TransparencyPanel from './TransparencyPanel';
+import DataQualityBadge from './DataQualityBadge';
+import MatchConfidenceBadge from './MatchConfidenceBadge';
 import { saveMatch, unsaveMatch, isMatchSaved } from '../lib/savedMatches';
+import { StartupComponent, InvestorComponent } from '../types';
 
 // SIMPLIFIED MATCHING: Uses pre-calculated GOD scores from database
 // This aligns with Architecture Document Option A (Recommended)
 
 interface MatchPair {
-  startup: {
-    id: number | string;
-    name: string;
-    description: string; // fivePoints[0] - Value prop
+  startup: StartupComponent & {
     tags: string[];
-    seeking: string; // fivePoints[4] - Investment
-    status: string;
+    seeking?: string; // fivePoints[4] - Investment
     market?: string; // fivePoints[1] - Market
     product?: string; // fivePoints[2] - Product
-    team?: string; // fivePoints[3] - Team
-    stage?: string;
-    industries?: string[];
   };
   investor: {
     id: string;
@@ -49,8 +45,8 @@ interface MatchPair {
     status?: string;
     investmentThesis?: string; // investment_thesis
     portfolio?: string; // portfolio company info
-    aum?: string; // Assets Under Management
-    fundSize?: string; // Current fund size
+    aum?: number; // Assets Under Management
+    fundSize?: number; // Current fund size
     exits?: number; // Number of successful exits
     unicorns?: number; // Number of unicorn investments
     website?: string;
@@ -497,16 +493,16 @@ export default function MatchingEngine() {
           }
           
           // DEBUG: Log investor data to verify it's being parsed correctly
-          // NOTE: Using frontend-mapped property names (sectors, stage, checkSizeMin, etc.)
+          // NOTE: Using DB property names (sectors, stage, check_size_min, etc.)
           console.log('\n[INVESTOR DATA CHECK]', {
             name: investor.name,
-            checkSizeMin: investor.checkSizeMin,
-            checkSizeMax: investor.checkSizeMax,
+            check_size_min: investor.check_size_min,
+            check_size_max: investor.check_size_max,
             sectors: investor.sectors,   // Direct from DB 'sectors' column
             stage: investor.stage,       // Direct from DB 'stage' column
-            notableInvestments: investor.notableInvestments,
-            portfolioCount: investor.portfolioCount,
-            description: investor.description
+            notableInvestments: investor.notable_investments,
+            portfolioCount: investor.total_investments,
+            description: investor.bio
           });
         }
         
@@ -573,36 +569,37 @@ export default function MatchingEngine() {
         const investorStagesFromDB = investor.stage || [];
         
         let notableCompanyNames = '';
-        let investmentThesis = investor.tagline || investor.description || '';
+        let investmentThesis = investor.investment_thesis || investor.bio || '';
         let portfolioInfo = '';
         
         // Extract notable investments - handle both array and string formats
-        if (Array.isArray(investor.notableInvestments)) {
+        const notableInvs = investor.notable_investments as any;
+        if (Array.isArray(notableInvs)) {
           // If it's already an array of strings
-          if (typeof investor.notableInvestments[0] === 'string') {
-            notableCompanyNames = investor.notableInvestments.slice(0, 3).join(', ');
+          if (typeof notableInvs[0] === 'string') {
+            notableCompanyNames = notableInvs.slice(0, 3).join(', ');
           } else {
             // If it's an array of objects with company property
-            notableCompanyNames = investor.notableInvestments
+            notableCompanyNames = notableInvs
               .map((inv: any) => inv.company || inv)
               .filter(Boolean)
               .slice(0, 3)
               .join(', ');
           }
-        } else if (typeof investor.notableInvestments === 'string') {
-          notableCompanyNames = investor.notableInvestments;
+        } else if (typeof notableInvs === 'string') {
+          notableCompanyNames = notableInvs;
         }
         
         // Build portfolio info using correct field names
-        const portfolioCount = investor.portfolioCount || 0;
+        const portfolioCount = investor.total_investments || 0;
         if (portfolioCount > 0) {
           portfolioInfo = `${portfolioCount} companies`;
-          if (investor.unicorns && investor.unicorns > 0) portfolioInfo += `, ${investor.unicorns} unicorns`;
+          if (investor.successful_exits && investor.successful_exits > 0) portfolioInfo += `, ${investor.successful_exits} exits`;
         }
         
         // Format check size from min/max values
-        const checkSizeFormatted = investor.checkSizeMin && investor.checkSizeMax
-          ? `$${(investor.checkSizeMin / 1000000).toFixed(1)}M - $${(investor.checkSizeMax / 1000000).toFixed(1)}M`
+        const checkSizeFormatted = investor.check_size_min && investor.check_size_max
+          ? `$${(investor.check_size_min / 1000000).toFixed(1)}M - $${(investor.check_size_max / 1000000).toFixed(1)}M`
           : '$1-5M';
         
         // Fallback for description using CORRECT field names
@@ -627,7 +624,7 @@ export default function MatchingEngine() {
             }) ? 90 : 60)
           : 70;
         
-        const geographyMatch = investor.geography && investor.geography !== 'Global'
+        const geographyMatch = investor.geography_focus && investor.geography_focus.length > 0 && !investor.geography_focus.includes('Global')
           ? 85
           : 70; // Default high match for global investors
         
@@ -657,8 +654,7 @@ export default function MatchingEngine() {
         
         generatedMatches.push({
           startup: {
-            id: startup.id,
-            name: startup.name,
+            ...startup,
             description: valueProp, // Use fivePoints[0] as compelling value prop
             tags: tags.slice(0, 3),
             market: market, // fivePoints[1]
@@ -666,33 +662,31 @@ export default function MatchingEngine() {
             team: team, // fivePoints[3],
             seeking: investment, // Use fivePoints[4] for investment ask
             status: 'Active',
-            stage: startup.stage !== undefined ? ['Idea', 'Pre-Seed', 'Seed', 'Series A', 'Series B', 'Series C'][startup.stage] : undefined,
-            industries: startup.industries
-          },
+          } as MatchPair['startup'],
           investor: {
             id: investor.id,
             name: investor.name,
-            description: investmentThesis || investor.description || 'Venture Capital',
-            tagline: investor.tagline || investmentThesis,
-            type: investor.type || 'VC',
+            description: investmentThesis || investor.bio || 'Venture Capital',
+            tagline: investor.investment_thesis || investmentThesis,
+            type: investor.investor_tier || 'VC',
             stage: investorStagesFromDB.length > 0 ? investorStagesFromDB : ['Seed', 'Series A'],
             sectors: investorSectorsFromDB.slice(0, 5),
             tags: investorSectorsFromDB.slice(0, 3),
             checkSize: checkSizeFormatted,
-            geography: investor.geography || 'Global',
-            notableInvestments: Array.isArray(investor.notableInvestments) 
-              ? investor.notableInvestments.map((inv: any) => inv.company || inv).filter(Boolean).slice(0, 5)
+            geography: investor.geography_focus?.[0] || 'Global',
+            notableInvestments: Array.isArray(notableInvs) 
+              ? notableInvs.map((inv: any) => inv.company || inv).filter(Boolean).slice(0, 5)
               : notableCompanyNames ? notableCompanyNames.split(',').map(s => s.trim()).slice(0, 5) : [],
-            portfolioSize: investor.portfolioCount || undefined,
+            portfolioSize: investor.total_investments ?? undefined,
             status: 'Active',
             investmentThesis: investmentThesis,
-            aum: investor.aum,
-            fundSize: investor.fundSize,
-            exits: investor.exits,
-            unicorns: investor.unicorns,
-            website: investor.website,
-            linkedin: investor.linkedin,
-            twitter: investor.twitter,
+            aum: investor.active_fund_size ?? undefined,
+            fundSize: investor.active_fund_size ?? undefined,
+            exits: investor.successful_exits ?? undefined,
+            unicorns: 0,
+            website: investor.blog_url ?? undefined,
+            linkedin: investor.linkedin_url ?? undefined,
+            twitter: investor.twitter_url ?? undefined,
             portfolio: portfolioInfo
           },
           matchScore: godMatchScore, // Using GOD algorithm score
@@ -717,8 +711,8 @@ export default function MatchingEngine() {
       // Sort matches by score descending (highest quality first)
       generatedMatches.sort((a, b) => b.matchScore - a.matchScore);
       
-      // 🔥 FILTER: Only show matches with 50%+ score (lowered threshold for more variety)
-      const MIN_MATCH_SCORE = 50;
+      // 🔥 FILTER: Only show high-quality matches (increased threshold for better selectivity)
+      const MIN_MATCH_SCORE = 65; // Increased from 50 to 65 for better quality
       const qualityMatches = generatedMatches.filter(m => m.matchScore >= MIN_MATCH_SCORE);
       
       console.log(`\n🔥 QUALITY FILTER: ${qualityMatches.length}/${generatedMatches.length} matches above ${MIN_MATCH_SCORE}%`);
@@ -826,6 +820,9 @@ export default function MatchingEngine() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#141414] to-[#1a1a1a] relative overflow-hidden">
+      {/* Data Quality Banner - Shows when data is stale */}
+      <DataQualityBadge variant="banner" />
+      
       {/* Animated background - subtle orange/amber glows */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 w-64 h-64 bg-orange-500/5 rounded-full blur-3xl animate-pulse"></div>
@@ -862,6 +859,10 @@ export default function MatchingEngine() {
           <p className="text-xl md:text-2xl text-gray-300 max-w-2xl mx-auto mb-4">
             AI finds your perfect startup-investor matches with explanations and next steps.
           </p>
+          {/* Data Quality Indicator */}
+          <div className="flex justify-center mt-3">
+            <DataQualityBadge variant="inline" />
+          </div>
         </div>
       </div>
 
@@ -871,10 +872,17 @@ export default function MatchingEngine() {
         <div className="max-w-7xl mx-auto mb-16">
           {/* Match Badge & Explore Button */}
           <div className="flex flex-col items-center gap-4 mb-8">
-            <div className="bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full px-10 py-4 shadow-xl">
+            <div className="bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full px-10 py-4 shadow-xl flex items-center gap-3">
               <span className="text-2xl font-bold text-gray-900 flex items-center gap-2">
                 ⚡ {match.matchScore}% Match ✨
               </span>
+              <MatchConfidenceBadge 
+                matchScore={match.matchScore} 
+                godScore={match.startup.total_god_score ?? undefined}
+                hasInference={!!(match.startup.sectors?.length && match.startup.sectors.length > 0)}
+                hasSectorMatch={match.startup.tags?.some((t: string) => match.investor.sectors?.includes(t))}
+                variant="tooltip"
+              />
             </div>
             <Link
               to="/trending"
@@ -1085,8 +1093,9 @@ export default function MatchingEngine() {
                 
                 {/* Remove clipped border wrapper - apply border directly */}
                 <div className="relative">
-                  <EnhancedInvestorCard
+                  <InvestorCard
                     investor={match.investor}
+                    variant="enhanced"
                     matchScore={match.matchScore}
                     compact={true}
                     onClick={() => navigate(`/investor/${match.investor.id}`)}

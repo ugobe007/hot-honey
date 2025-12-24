@@ -143,34 +143,23 @@ export default function AdminOperations() {
       </div>
 
       <div className="max-w-[1800px] mx-auto p-4 space-y-4">
-        {/* Stats Row - All Clickable to Source */}
+        {/* Stats Row */}
         <div className="grid grid-cols-6 gap-2 text-xs">
           {[
-            { label: 'Startups', value: stats.totalStartups, color: 'orange', link: '/admin/edit-startups' },
-            { label: 'Investors', value: stats.totalInvestors, color: 'violet', link: '/investors' },
-            { label: 'Pending', value: stats.pendingStartups, color: 'yellow', link: '/admin/edit-startups?status=pending' },
-            { label: 'Avg GOD', value: stats.avgGodScore, color: 'green', link: '/admin/god-scores' },
-            { label: 'Matches', value: stats.totalMatches.toLocaleString(), color: 'cyan', link: '/matching' },
-            { label: 'Status', value: autoRefresh ? 'Live' : 'Paused', color: autoRefresh ? 'green' : 'gray', link: null }
-          ].map((s, i) => {
-            const StatBox = s.link ? Link : 'div';
-            const statProps = s.link ? { to: s.link } : {};
-            return (
-              <StatBox 
-                key={i} 
-                {...statProps}
-                className={`bg-gray-800/50 rounded-lg px-3 py-2 border border-gray-700 ${s.link ? 'hover:bg-gray-800/70 hover:border-gray-600 cursor-pointer transition-all group' : ''}`}
-              >
-                <div className={`text-xl font-bold font-mono ${s.color === 'orange' ? 'text-orange-400' : s.color === 'violet' ? 'text-violet-400' : s.color === 'yellow' ? 'text-yellow-400' : s.color === 'green' ? 'text-green-400' : s.color === 'cyan' ? 'text-cyan-400' : 'text-gray-400'} ${s.link ? 'group-hover:scale-105 transition-transform' : ''}`}>
-                  {s.value}
-                </div>
-                <div className={`text-gray-500 ${s.link ? 'group-hover:text-gray-400 flex items-center gap-1' : ''}`}>
-                  {s.label}
-                  {s.link && <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />}
-                </div>
-              </StatBox>
-            );
-          })}
+            { label: 'Startups', value: stats.totalStartups, color: 'orange' },
+            { label: 'Investors', value: stats.totalInvestors, color: 'violet' },
+            { label: 'Pending', value: stats.pendingStartups, color: 'yellow' },
+            { label: 'Avg GOD', value: stats.avgGodScore, color: 'green' },
+            { label: 'Matches', value: stats.totalMatches.toLocaleString(), color: 'cyan' },
+            { label: 'Status', value: autoRefresh ? 'Live' : 'Paused', color: autoRefresh ? 'green' : 'gray' }
+          ].map((s, i) => (
+            <div key={i} className="bg-gray-800/50 rounded-lg px-3 py-2 border border-gray-700">
+              <div className={`text-xl font-bold font-mono ${s.color === 'orange' ? 'text-orange-400' : s.color === 'violet' ? 'text-violet-400' : s.color === 'yellow' ? 'text-yellow-400' : s.color === 'green' ? 'text-green-400' : s.color === 'cyan' ? 'text-cyan-400' : 'text-gray-400'}`}>
+                {s.value}
+              </div>
+              <div className="text-gray-500">{s.label}</div>
+            </div>
+          ))}
         </div>
 
         {/* System Processes Table */}

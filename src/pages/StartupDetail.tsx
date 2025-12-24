@@ -20,6 +20,7 @@ const StartupDetail: React.FC = () => {
   const [startup, setStartup] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [news, setNews] = useState<NewsArticle[]>([]);
+  const [matchCount, setMatchCount] = useState<number>(0);
   const { userId } = useAuth();
   const { castVote, hasVoted, removeVote, voteCounts } = useVotes(userId);
 
@@ -39,6 +40,14 @@ const StartupDetail: React.FC = () => {
       } else {
         console.log('✅ Found startup:', data?.name);
         setStartup(data);
+        
+        // Fetch match count
+        const { count } = await supabase
+          .from('startup_investor_matches')
+          .select('*', { count: 'exact', head: true })
+          .eq('startup_id', id);
+        
+        setMatchCount(count || 0);
         
         // Fetch mock news for startup
         setNews([
@@ -153,6 +162,29 @@ const StartupDetail: React.FC = () => {
               )}
             </div>
             <div className="text-8xl ml-6 drop-shadow-2xl animate-bounce">🚀</div>
+          </div>
+
+          {/* Key Metrics: Benchmark Score, GOD Score, Match Count */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            {startup.benchmark_score !== null && startup.benchmark_score !== undefined && (
+              <div className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 backdrop-blur-sm rounded-xl p-5 border border-blue-400/30 shadow-lg">
+                <div className="text-blue-300 text-sm font-semibold mb-1">Benchmark Score</div>
+                <div className="text-3xl font-bold text-white">{startup.benchmark_score}</div>
+                <div className="text-xs text-gray-400 mt-1">vs Industry Peers</div>
+              </div>
+            )}
+            {startup.total_god_score !== null && startup.total_god_score !== undefined && (
+              <div className="bg-gradient-to-br from-yellow-500/10 to-orange-500/10 backdrop-blur-sm rounded-xl p-5 border border-yellow-400/30 shadow-lg">
+                <div className="text-yellow-300 text-sm font-semibold mb-1">GOD Score</div>
+                <div className="text-3xl font-bold text-white">{startup.total_god_score}</div>
+                <div className="text-xs text-gray-400 mt-1">Overall Quality</div>
+              </div>
+            )}
+            <div className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 backdrop-blur-sm rounded-xl p-5 border border-purple-400/30 shadow-lg">
+              <div className="text-purple-300 text-sm font-semibold mb-1">Matches</div>
+              <div className="text-3xl font-bold text-white">{matchCount.toLocaleString()}</div>
+              <div className="text-xs text-gray-400 mt-1">Investor Matches</div>
+            </div>
           </div>
 
           {/* Five Points */}

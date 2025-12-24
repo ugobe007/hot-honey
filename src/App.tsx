@@ -70,7 +70,11 @@ import MarketTrends from './pages/MarketTrends';
 import AdminAnalytics from './pages/AdminAnalytics';
 import AgentDashboard from './components/admin/AgentDashboard';
 import AdminRouteWrapper from './components/AdminRouteWrapper';
+import PipelineMonitor from './pages/PipelineMonitor';
+import FundingForecasts from './pages/FundingForecasts';
+import StartupBenchmarksDashboard from './pages/StartupBenchmarksDashboard';
 import './App.css';
+import LogoDropdownMenu from './components/LogoDropdownMenu';
 
 // Wrapper component that redirects admins to admin dashboard
 function DashboardRouter() {
@@ -91,6 +95,8 @@ const App: React.FC = () => {
   return (
     <AuthProvider>
       <div className="min-h-screen">
+      {/* Hot Match Navigation Bar */}
+      <LogoDropdownMenu />
       <main>
         <Routes>
           <Route path="/" element={<LandingPage />} />
@@ -158,6 +164,8 @@ const App: React.FC = () => {
             <Route path="investors/add" element={<QuickAddInvestor />} />
             <Route path="instructions" element={<AdminInstructions />} />
             <Route path="health" element={<SystemHealthDashboard />} />
+            <Route path="pipeline" element={<PipelineMonitor />} />
+            <Route path="forecasts" element={<FundingForecasts />} />
             {/* Legacy routes - keeping for backwards compatibility */}
             <Route path="operations" element={<ControlCenter />} />
             <Route path="dashboard" element={<AdminWorkflowDashboard />} />
@@ -169,6 +177,7 @@ const App: React.FC = () => {
             <Route path="sync" element={<SyncStartups />} />
             <Route path="migrate" element={<MigrateLocalStorage />} />
             <Route path="migrate-data" element={<MigrateStartupData />} />
+            <Route path="benchmarks" element={<StartupBenchmarksDashboard />} />
           </Route>
           
           <Route path="/bulkupload" element={<BulkUpload />} /> {/* ✅ Public bulk upload shortcut */}
@@ -177,6 +186,8 @@ const App: React.FC = () => {
           <Route path="/analytics" element={<Analytics />} />
           <Route path="/market-trends" element={<MarketTrends />} /> {/* 📈 Public Market Trends */}
           <Route path="/trends" element={<MarketTrends />} /> {/* 📈 Alias for Market Trends */}
+          {/* 🚀 Startup Benchmarks Dashboard */}
+          <Route path="/benchmarks" element={<StartupBenchmarksDashboard />} />
         </Routes>
       </main>
       </div>

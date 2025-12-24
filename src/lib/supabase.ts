@@ -6,42 +6,22 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
 
 if (!supabaseUrl || !supabaseAnonKey) {
   console.error('Missing Supabase environment variables. Please check your .env file.');
+  console.error('VITE_SUPABASE_URL:', supabaseUrl ? 'Set' : 'Missing');
+  console.error('VITE_SUPABASE_ANON_KEY:', supabaseAnonKey ? 'Set' : 'Missing');
 }
 
-export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);
+// Only create client if we have valid credentials
+export const supabase = supabaseUrl && supabaseAnonKey 
+  ? createClient<Database>(supabaseUrl, supabaseAnonKey)
+  : createClient<Database>('https://placeholder.supabase.co', 'placeholder-key'); // Fallback to prevent crash
 
-// Database Types - aligned with OpenAI 5-point format
-export interface Startup {
-  id: string;
-  name: string;
-  website: string;
-  
-  // 5-point data structure (OpenAI format)
-  value_proposition: string;  // Point 1: What value does this provide?
-  problem: string;             // Point 2: What problem are they solving?
-  solution: string;            // Point 3: How do they solve it?
-  team: string;                // Point 4: Team background and former employers
-  investment: string;          // Point 5: Funding raised or needed
-  
-  // Metadata
-  logo?: string;
-  pitch_deck_url?: string;
-  
-  // OpenAI scraping metadata
-  scraped_by?: string;         // Source URL
-  scraped_at?: string;
-  
-  // Review workflow
-  status: 'pending' | 'approved' | 'rejected' | 'published';
-  reviewed_by?: string;
-  reviewed_at?: string;
-  published_at?: string;
-  validated: boolean;
-  
-  // Timestamps
-  created_at: string;
-  updated_at: string;
-}
+/**
+ * @deprecated Use `Startup` from '@/types' or '@/lib/database.types' instead
+ * This interface has been removed. Use the SSOT types from database.types.ts
+ * 
+ * For OpenAI 5-point format data, use adaptStartupForComponent() from '@/utils/startupAdapters'
+ * which extracts value_proposition, problem, solution, team, investment from extracted_data
+ */
 
 // User vote tracking
 export interface UserVote {

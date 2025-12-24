@@ -236,8 +236,9 @@ export class OpenAIDataService {
         supabaseUpdates.five_points = updates.fivePoints;
       }
       
+      // SSOT: Use startup_uploads table (not 'startups')
       const { data, error } = await supabase
-        .from('startups')
+        .from('startup_uploads')
         .update(supabaseUpdates)
         .eq('id', startupId)
         .select()
@@ -259,12 +260,12 @@ export class OpenAIDataService {
    */
   static async getPublishedStartups() {
     try {
+      // SSOT: Use startup_uploads table (not 'startups')
       const { data, error } = await supabase
-        .from('startups')
+        .from('startup_uploads')
         .select('*')
-        .eq('status', 'published')
-        .eq('validated', true)
-        .order('published_at', { ascending: false });
+        .eq('status', 'approved')
+        .order('created_at', { ascending: false });
 
       if (error) throw error;
       return { success: true, startups: data };

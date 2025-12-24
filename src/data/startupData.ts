@@ -1,3 +1,17 @@
+/**
+ * @deprecated This static data file is kept for backward compatibility only.
+ * 
+ * SSOT: Use database (startup_uploads table) as single source of truth.
+ * 
+ * Migration:
+ *   - Use loadApprovedStartups() from '@/store' instead
+ *   - Remove fallback logic from services
+ *   - This file will be removed once all fallbacks are removed
+ * 
+ * Current usage: Used as fallback when database is empty or fails.
+ * This is a temporary measure until database is fully populated.
+ */
+
 import { Startup } from '../types';
 
 const startupData: Startup[] = [

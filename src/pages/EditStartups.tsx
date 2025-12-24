@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useNavigate, Link, useSearchParams } from 'react-router-dom';
-import { RefreshCw, Edit2, Trash2, Check, X, Save, Search, CheckCircle, XCircle } from 'lucide-react';
+import { RefreshCw, Edit2, Trash2, Check, X, Save, Search, CheckCircle, XCircle, Target, Users } from 'lucide-react';
 
 interface StartupUpload {
   id: string;
@@ -299,6 +299,25 @@ export default function EditStartups() {
                                 </button>
                               </>
                             )}
+                            <button 
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                navigate(`/startup/${s.id}/matches`);
+                              }} 
+                              className="p-2 hover:bg-purple-500/20 rounded-lg text-purple-400" 
+                              title="View Matches"
+                            >
+                              <Target className="w-5 h-5" />
+                            </button>
+                            <Link
+                              to={`/startup/${s.id}/talent`}
+                              onClick={(e) => e.stopPropagation()}
+                              className="px-3 py-1.5 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-400 rounded text-xs flex items-center gap-1.5 font-medium"
+                              title="Find Key Hires"
+                            >
+                              <Users className="w-4 h-4" />
+                              Talent
+                            </Link>
                             <button onClick={() => startEdit(s)} className="p-2 hover:bg-blue-500/20 rounded-lg text-blue-400" title="Edit">
                               <Edit2 className="w-5 h-5" />
                             </button>
@@ -325,7 +344,7 @@ export default function EditStartups() {
           <div className="flex flex-wrap gap-2 text-xs">
             <Link to="/admin/bulk-import" className="px-3 py-1.5 bg-violet-500/20 border border-violet-500/30 rounded text-violet-400 hover:bg-violet-500/30">📤 Bulk Import</Link>
             <Link to="/admin/discovered-startups" className="px-3 py-1.5 bg-cyan-500/20 border border-cyan-500/30 rounded text-cyan-400 hover:bg-cyan-500/30">🔍 RSS Discoveries</Link>
-            <Link to="/admin/dashboard" className="px-3 py-1.5 bg-orange-500/20 border border-orange-500/30 rounded text-orange-400 hover:bg-orange-500/30">📊 Dashboard</Link>
+            <Link to="/admin/control" className="px-3 py-1.5 bg-orange-500/20 border border-orange-500/30 rounded text-orange-400 hover:bg-orange-500/30">🎛️ Control Center</Link>
             <Link to="/matching" className="px-3 py-1.5 bg-green-500/20 border border-green-500/30 rounded text-green-400 hover:bg-green-500/30">🔥 View Matches</Link>
           </div>
         </div>

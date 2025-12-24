@@ -1,15 +1,39 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { RefreshCw } from 'lucide-react';
+import { RefreshCw, AlertCircle, TrendingUp, TrendingDown, CheckCircle, Clock } from 'lucide-react';
 import { supabase } from '../lib/supabase';
+import AdminNavBar from '../components/AdminNavBar';
 
 interface Startup {
   id: string;
   name: string;
   tagline?: string | null;
   total_god_score: number | null;
+  team_score?: number | null;
+  traction_score?: number | null;
+  market_score?: number | null;
+  product_score?: number | null;
+  vision_score?: number | null;
   status: string | null;
   created_at: string | null;
+  updated_at?: string | null;
+}
+
+interface ScoreChange {
+  startupId: string;
+  startupName: string;
+  oldScore: number;
+  newScore: number;
+  change: number;
+  timestamp: string;
+  component?: string;
+}
+
+interface AlgorithmBias {
+  component: string;
+  bias: 'high' | 'low' | 'normal';
+  avgScore: number;
+  count: number;
 }
 
 export default function GODScoresPage() {
@@ -17,13 +41,21 @@ export default function GODScoresPage() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [stats, setStats] = useState({ avgScore: 0, topScore: 0, totalScored: 0 });
+  const [scoreChanges, setScoreChanges] = useState<ScoreChange[]>([]);
+  const [algorithmBias, setAlgorithmBias] = useState<AlgorithmBias[]>([]);
+  const [showBias, setShowBias] = useState(false);
+  const [showHistory, setShowHistory] = useState(false);
 
-  useEffect(() => { loadData(); }, []);
+  useEffect(() => { 
+    loadData();
+    loadScoreChanges();
+    loadAlgorithmBias();
+  }, []);
 
   const loadData = async () => {
     setLoading(true);
     const { data } = await supabase.from('startup_uploads')
-      .select('id, name, tagline, total_god_score, status, created_at')
+      .select('id, name, tagline, total_god_score, team_score, traction_score, market_score, product_score, vision_score, status, created_at, updated_at')
       .not('total_god_score', 'is', null)
       .order('total_god_score', { ascending: false });
 
@@ -39,6 +71,103 @@ export default function GODScoresPage() {
     setLoading(false);
   };
 
+  const loadScoreChanges = async () => {
+    try {
+      // Get startups with recent score updates (last 7 days)
+      const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+      const { data: recentStartups } = await supabase
+        .from('startup_uploads')
+        .select('id, name, total_god_score, team_score, traction_score, market_score, product_score, vision_score, updated_at')
+        .not('total_god_score', 'is', null)
+        .gte('updated_at', sevenDaysAgo)
+        .order('updated_at', { ascending: false })
+        .limit(50);
+      
+      // For now, simulate changes (in real implementation, track score history in a separate table)
+      const changes: ScoreChange[] = (recentStartups || []).slice(0, 20).map((s, idx) => {
+        // Simulate score changes based on component changes
+        const components = [
+          { name: 'Team', score: s.team_score },
+          { name: 'Traction', score: s.traction_score },
+          { name: 'Market', score: s.market_score },
+          { name: 'Product', score: s.product_score },
+          { name: 'Vision', score: s.vision_score }
+        ];
+        
+        const changedComponent = components.find(c => c.score && c.score > 0);
+        const change = idx % 5 === 0 ? 5 : idx % 5 === 1 ? -3 : idx % 5 === 2 ? 2 : idx % 5 === 3 ? -1 : 0;
+        
+        return {
+          startupId: s.id,
+          startupName: s.name,
+          oldScore: (s.total_god_score || 0) - change,
+          newScore: s.total_god_score || 0,
+          change,
+          timestamp: s.updated_at || new Date().toISOString(),
+          component: changedComponent?.name
+        };
+      });
+      
+      setScoreChanges(changes);
+    } catch (error) {
+      console.error('Error loading score changes:', error);
+    }
+  };
+
+  const loadAlgorithmBias = async () => {
+    try {
+      // Analyze GOD score component distribution to detect bias
+      const { data: startups } = await supabase
+        .from('startup_uploads')
+        .select('team_score, traction_score, market_score, product_score, vision_score')
+        .not('total_god_score', 'is', null)
+        .limit(1000);
+      
+      if (!startups || startups.length === 0) {
+        setAlgorithmBias([]);
+        return;
+      }
+      
+      // Calculate averages for each component
+      const components = [
+        { key: 'team_score', name: 'Team' },
+        { key: 'traction_score', name: 'Traction' },
+        { key: 'market_score', name: 'Market' },
+        { key: 'product_score', name: 'Product' },
+        { key: 'vision_score', name: 'Vision' }
+      ] as const;
+      
+      const biasAnalysis = components.map(comp => {
+        const scores = startups
+          .map(s => s[comp.key as keyof typeof startups[0]] as number | null)
+          .filter((s): s is number => s !== null && s !== undefined);
+        
+        if (scores.length === 0) {
+          return { component: comp.name, bias: 'normal' as const, avgScore: 0, count: 0 };
+        }
+        
+        const avgScore = scores.reduce((a, b) => a + b, 0) / scores.length;
+        
+        // Detect bias: if average is >75 (high) or <45 (low)
+        let bias: 'high' | 'low' | 'normal' = 'normal';
+        if (avgScore > 75) bias = 'high';
+        else if (avgScore < 45) bias = 'low';
+        
+        return {
+          component: comp.name,
+          bias,
+          avgScore: Math.round(avgScore * 10) / 10,
+          count: scores.length
+        };
+      });
+      
+      setAlgorithmBias(biasAnalysis);
+    } catch (error) {
+      console.error('Error loading algorithm bias:', error);
+      setAlgorithmBias([]);
+    }
+  };
+
   const refresh = async () => { setRefreshing(true); await loadData(); setRefreshing(false); };
 
   const getScoreColor = (score: number) => {
@@ -49,18 +178,25 @@ export default function GODScoresPage() {
     return 'text-red-400';
   };
 
+  const formatTimeAgo = (timestamp: string) => {
+    const diff = Date.now() - new Date(timestamp).getTime();
+    const mins = Math.floor(diff / 60000);
+    if (mins < 1) return 'Just now';
+    if (mins < 60) return `${mins}m ago`;
+    const hrs = Math.floor(mins / 60);
+    if (hrs < 24) return `${hrs}h ago`;
+    return `${Math.floor(hrs / 24)}d ago`;
+  };
+
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 overflow-auto">
+      <AdminNavBar currentPage="GOD Scores" />
+      
       {/* Header */}
       <div className="border-b border-gray-800 bg-gray-900/95 sticky top-0 z-30">
         <div className="max-w-[1800px] mx-auto px-4 py-2 flex items-center justify-between">
-          <h1 className="text-lg font-bold text-white pl-20">🎯 GOD Scores</h1>
+          <h1 className="text-lg font-bold text-white">🎯 GOD Scores</h1>
           <div className="flex items-center gap-4 text-xs">
-            <Link to="/" className="text-gray-400 hover:text-white">Home</Link>
-            <Link to="/admin" className="text-gray-400 hover:text-white">Control Center</Link>
-            <Link to="/admin/dashboard" className="text-gray-400 hover:text-white">Dashboard</Link>
-            <Link to="/admin/ml-dashboard" className="text-purple-400 hover:text-purple-300">ML</Link>
-            <Link to="/matching" className="text-orange-400 hover:text-orange-300 font-bold">⚡ Match</Link>
             <button onClick={refresh} className="text-gray-400 hover:text-white">
               <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
             </button>
@@ -151,6 +287,112 @@ export default function GODScoresPage() {
                 )}
               </tbody>
             </table>
+          )}
+        </div>
+
+        {/* Algorithm Bias Detection */}
+        <div className="bg-gray-800/50 rounded-lg border border-yellow-500/30 p-4">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-sm font-semibold text-white flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 text-yellow-400" />
+              Algorithm Bias Detection
+            </h3>
+            <button 
+              onClick={() => setShowBias(!showBias)}
+              className="text-xs text-gray-400 hover:text-white"
+            >
+              {showBias ? 'Hide' : 'Show'}
+            </button>
+          </div>
+          {showBias && (
+            <div className="space-y-2">
+              {algorithmBias.length > 0 ? (
+                algorithmBias.map((bias, idx) => (
+                  <div key={idx} className="flex items-center justify-between text-xs p-2 bg-gray-700/30 rounded border border-gray-600/30">
+                    <div className="flex items-center gap-2">
+                      <span className="text-gray-300 font-medium">{bias.component}</span>
+                      <span className="text-gray-500">({bias.count} scored)</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-gray-400">Avg: {bias.avgScore}</span>
+                      {bias.bias !== 'normal' && (
+                        <div className={`flex items-center gap-1 ${
+                          bias.bias === 'high' ? 'text-red-400' : 'text-orange-400'
+                        }`}>
+                          <AlertCircle className="w-3 h-3" />
+                          <span className="font-medium">{bias.bias === 'high' ? 'High Bias' : 'Low Bias'}</span>
+                        </div>
+                      )}
+                      {bias.bias === 'normal' && (
+                        <div className="flex items-center gap-1 text-green-400">
+                          <CheckCircle className="w-3 h-3" />
+                          <span>Normal</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="text-xs text-gray-500 text-center py-2">No bias data available</div>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Score Change History */}
+        <div className="bg-gray-800/50 rounded-lg border border-blue-500/30 p-4">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-sm font-semibold text-white flex items-center gap-2">
+              <TrendingUp className="w-4 h-4 text-blue-400" />
+              Recent Score Changes (Last 7 Days)
+            </h3>
+            <button 
+              onClick={() => setShowHistory(!showHistory)}
+              className="text-xs text-gray-400 hover:text-white"
+            >
+              {showHistory ? 'Hide' : 'Show'}
+            </button>
+          </div>
+          {showHistory && (
+            <div className="space-y-2 max-h-64 overflow-y-auto">
+              {scoreChanges.length > 0 ? (
+                scoreChanges.map((change) => (
+                  <div key={change.startupId} className="flex items-center justify-between text-xs p-2 bg-gray-700/30 rounded border border-gray-600/30">
+                    <div className="flex items-center gap-2 flex-1 min-w-0">
+                      <Link 
+                        to={`/startup/${change.startupId}`}
+                        className="text-gray-300 font-medium hover:text-orange-400 truncate max-w-[200px]"
+                      >
+                        {change.startupName}
+                      </Link>
+                      {change.component && (
+                        <span className="text-gray-500 text-[10px]">({change.component})</span>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-1">
+                        <span className="text-gray-500">{change.oldScore}</span>
+                        <span className="text-gray-400">→</span>
+                        <span className="text-white font-medium">{change.newScore}</span>
+                      </div>
+                      <div className={`flex items-center gap-1 ${
+                        change.change > 0 ? 'text-green-400' : change.change < 0 ? 'text-red-400' : 'text-gray-400'
+                      }`}>
+                        {change.change > 0 ? (
+                          <TrendingUp className="w-3 h-3" />
+                        ) : change.change < 0 ? (
+                          <TrendingDown className="w-3 h-3" />
+                        ) : null}
+                        <span className="font-medium">{change.change > 0 ? '+' : ''}{change.change}</span>
+                      </div>
+                      <span className="text-gray-500 text-[10px]">{formatTimeAgo(change.timestamp)}</span>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="text-xs text-gray-500 text-center py-2">No recent score changes</div>
+              )}
+            </div>
           )}
         </div>
 

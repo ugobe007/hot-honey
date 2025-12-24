@@ -6,6 +6,7 @@
  */
 
 import React, { useState, useEffect, useCallback } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
 import {
   getSystemStatus,
@@ -32,7 +33,10 @@ import {
   PauseCircle,
   Target,
   BarChart3,
-  FileText
+  FileText,
+  ArrowLeft,
+  Home,
+  Settings
 } from 'lucide-react';
 
 // ============================================================================
@@ -81,6 +85,7 @@ function mapStatus(status: 'running' | 'stopped' | 'error' | 'unknown'): 'online
 // ============================================================================
 
 const AgentDashboard: React.FC = () => {
+  const navigate = useNavigate();
   const [systemStatus, setSystemStatus] = useState<SystemStatusType | null>(null);
   const [agentReports, setAgentReports] = useState<AgentReport[]>([]);
   const [watchdogReports, setWatchdogReports] = useState<WatchdogReport[]>([]);
@@ -227,8 +232,61 @@ const AgentDashboard: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-950 text-white">
+      {/* Top Navigation Bar */}
+      <nav className="fixed top-0 left-0 right-0 bg-gray-900/95 backdrop-blur-xl border-b border-white/10 z-50">
+        <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-center gap-2 text-sm">
+          <button 
+            onClick={() => navigate(-1)} 
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white transition-all"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span>Back</span>
+          </button>
+          <span className="text-gray-600">|</span>
+          <Link 
+            to="/" 
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white transition-all"
+          >
+            <Home className="w-4 h-4" />
+            <span>Home</span>
+          </Link>
+          <span className="text-gray-600">|</span>
+          <Link 
+            to="/admin/control" 
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white transition-all"
+          >
+            <Settings className="w-4 h-4" />
+            <span>Control Center</span>
+          </Link>
+          <span className="text-gray-600">|</span>
+          <Link 
+            to="/admin/analytics" 
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white transition-all"
+          >
+            <BarChart3 className="w-4 h-4" />
+            <span>Analytics</span>
+          </Link>
+          <span className="text-gray-600">|</span>
+          <Link 
+            to="/admin/edit-startups" 
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white transition-all"
+          >
+            <Briefcase className="w-4 h-4" />
+            <span>Startups</span>
+          </Link>
+          <span className="text-gray-600">|</span>
+          <Link 
+            to="/admin/discovered-investors" 
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white transition-all"
+          >
+            <Users className="w-4 h-4" />
+            <span>Investors</span>
+          </Link>
+        </div>
+      </nav>
+
       {/* Header */}
-      <header className="bg-gray-900/80 border-b border-white/10 px-6 py-4 sticky top-0 z-50 backdrop-blur-xl">
+      <header className="bg-gray-900/80 border-b border-white/10 px-6 py-4 sticky top-[49px] z-40 backdrop-blur-xl mt-[49px]">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">

@@ -12,10 +12,13 @@
  * 5. Could this be massive if it works? (TAM Potential) - Industry/market size
  */
 
-import { createClient } from '@supabase/supabase-js';
+const { createClient } = require('@supabase/supabase-js');
+require('dotenv').config();
 
-const supabaseUrl = process.env.VITE_SUPABASE_URL || 'https://unkpogyhhjbvxxjvmxlt.supabase.co';
-const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVua3BvZ3loaGpidnh4anZteGx0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjExNTkwMzUsImV4cCI6MjA3NjczNTAzNX0.DdtBUf-liELSfKs2akrrHMcmlX4vHEkTuytWnvAYpJ8';
+// Fallback credentials
+const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL || 'https://unkpogyhhjbvxxjvmxlt.supabase.co';
+const supabaseKey = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVua3BvZ3loaGpidnh4anZteGx0Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MTE1OTAzNSwiZXhwIjoyMDc2NzM1MDM1fQ.MYfYe8wDL1MYac1NHq2WkjFH27-eFUDi3Xn1hD5rLFA';
+
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Industries that typically need small teams (lean-friendly)
@@ -59,6 +62,9 @@ function inferSmellTests(startup) {
   const name = (startup.name || '').toLowerCase();
   const tagline = (startup.tagline || '').toLowerCase();
   const pitch = (startup.pitch || '').toLowerCase();
+  const description = (startup.description || '').toLowerCase();
+  const sectors = (startup.sectors || []).map(s => s.toLowerCase());
+  const extractedData = startup.extracted_data || {};
   const industry = (startup.industry || '').toLowerCase();
   const industries = (startup.industries || []).map(i => i.toLowerCase());
   const combined = `${name} ${tagline} ${pitch} ${industry} ${industries.join(' ')}`;
@@ -161,11 +167,11 @@ async function enrichSmellTests() {
   console.log('🧪 Enriching Startups with YC Smell Tests');
   console.log('='.repeat(50));
   
-  // Get startups without smell test scores
+  // Get startups without smell test scores (check both startups and startup_uploads tables)
   const { data: startups, error } = await supabase
-    .from('startups')
-    .select('id, name, tagline, pitch, industry, industries')
-    .is('smell_test_score', null)
+    .from('startup_uploads')
+    .select('id, name, tagline, pitch, sectors, description, extracted_data')
+    .or('smell_test_score.is.null,smell_test_score.eq.0')
     .limit(1000);
   
   if (error) {
@@ -183,7 +189,7 @@ async function enrichSmellTests() {
     const smellTests = inferSmellTests(startup);
     
     const { error: updateError } = await supabase
-      .from('startups')
+      .from('startup_uploads')
       .update(smellTests)
       .eq('id', startup.id);
     

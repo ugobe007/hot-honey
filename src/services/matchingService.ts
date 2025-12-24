@@ -11,6 +11,8 @@
 import { calculateHotScore } from '../../server/services/startupScoringService';
 import { getTeamReason, getTractionReason, getMarketReason, getProductReason } from './matchingHelpers';
 import { findSemanticInvestorMatches, hasEmbedding } from './semanticMatchingService';
+import { Startup, StartupComponent } from '../types';
+import { adaptStartupForComponent } from '../utils/startupAdapters';
 
 // Debug logging controls
 const DEBUG_GOD = true; // Set to false in production
@@ -18,13 +20,18 @@ const DEBUG_GOD = true; // Set to false in production
 /**
  * DATA NORMALIZATION FUNCTIONS
  * These ensure consistent field access regardless of data source (direct fields vs extracted_data)
+ * 
+ * @deprecated Use adaptStartupForComponent() from '@/utils/startupAdapters' for new code
+ * This function is kept for backward compatibility with existing matching logic
  */
 
 /**
  * Normalize startup data to consistent format
  * Handles fallback from startup.field to startup.extracted_data.field
+ * 
+ * @deprecated Use adaptStartupForComponent() instead
  */
-function normalizeStartupData(startup: any) {
+function normalizeStartupData(startup: Startup | StartupComponent | any) {
   const extracted = startup.extracted_data || {};
   
   return {
@@ -78,6 +85,12 @@ function normalizeStartupData(startup: any) {
     contrarian_insight: startup.contrarian_insight || extracted.contrarian_insight,
     creative_strategy: startup.creative_strategy || extracted.creative_strategy,
     passionate_customers: startup.passionate_customers || extracted.passionate_customers || 0,
+    
+    // Funding velocity and repeat founder fields (for bonus calculations)
+    funding_velocity_score: startup.funding_velocity_score || extracted.funding_velocity_score,
+    funding_rounds_count: startup.funding_rounds_count || extracted.funding_rounds_count,
+    has_repeat_founder_with_exit: startup.has_repeat_founder_with_exit || extracted.has_repeat_founder_with_exit,
+    founder_previous_exits: startup.founder_previous_exits || extracted.founder_previous_exits,
   };
 }
 
@@ -175,8 +188,10 @@ export function calculateAdvancedMatchScore(startup: any, investor: any, verbose
       // Still apply matching bonuses with investor
       const normalizedInvestor = normalizeInvestorData(investor);
       let matchBonus = 0;
+      let hasStageMatch = false;
+      let hasSectorMatch = false;
       
-      // Stage match bonus
+      // Stage match bonus (REDUCED from +10 to +5)
       if (normalizedInvestor.stage && startup.stage !== undefined) {
         const investorStages = Array.isArray(normalizedInvestor.stage) ? normalizedInvestor.stage : [normalizedInvestor.stage];
         const stageNum = typeof startup.stage === 'number' ? startup.stage : convertStageToNumber(startup.stage);
@@ -193,33 +208,141 @@ export function calculateAdvancedMatchScore(startup: any, investor: any, verbose
           const investorStage = String(s).toLowerCase().replace(/[_\s]/g, '');
           return startupStageNames.some(startupStage => {
             const normalizedStartupStage = startupStage.replace(/[_\s]/g, '');
-            return investorStage.includes(normalizedStartupStage) || 
+            return investorStage === normalizedStartupStage || // Exact match first
+                   investorStage.includes(normalizedStartupStage) || 
                    normalizedStartupStage.includes(investorStage);
           });
         });
         
-        if (stageMatch) matchBonus += 10;
+        if (stageMatch) {
+          hasStageMatch = true;
+          matchBonus += 5; // REDUCED from 10 to 5
+          if (verbose) console.log(`   Stage Match:        +5`);
+        } else if (verbose) {
+          console.log(`   Stage Match:        +0`);
+        }
       }
       
-      // Sector match bonus
+      // Sector match bonus (TIGHTENED - uses strict matching, REDUCED from +15 to +8)
       if (startup.industries && normalizedInvestor.sectors) {
         const startupIndustries = Array.isArray(startup.industries) ? startup.industries : [startup.industries];
         const investorSectors = Array.isArray(normalizedInvestor.sectors) ? normalizedInvestor.sectors : [normalizedInvestor.sectors];
         
-        const commonSectors = startupIndustries.filter((ind: string) =>
-          investorSectors.some((sec: string) => 
-            String(sec).toLowerCase().includes(String(ind).toLowerCase()) ||
-            String(ind).toLowerCase().includes(String(sec).toLowerCase())
-          )
-        );
-        matchBonus += Math.min(commonSectors.length * 5, 10);
+        // Strict sector matching - exact match or known synonyms only
+        const commonSectors = calculateStrictSectorMatch(startupIndustries, investorSectors);
+        const sectorBonus = Math.min(commonSectors.length * 3, 8); // REDUCED: 3 points per match, max 8 (was 5 per match, max 15)
+        if (commonSectors.length > 0) {
+          hasSectorMatch = true;
+          matchBonus += sectorBonus;
+          if (verbose) {
+            console.log(`   Sector Match:       +${sectorBonus} (${commonSectors.join(', ')})`);
+          }
+        } else if (verbose) {
+          console.log(`   Sector Match:       +0`);
+        }
       }
       
-      const finalScore = Math.min(baseScore + matchBonus, 99);
+      // 🎯 INVESTOR QUALITY BONUS (CONDITIONAL - only if there's actual fit)
+      // Only apply if there's at least a stage OR sector match (shows real fit)
+      let investorBonus = 0;
+      if (hasStageMatch || hasSectorMatch) {
+        const investorTier = investor.investor_tier || investor.tier || 'emerging';
+        const investorScore = investor.investor_score || 0;
+        
+        // Tier-based bonus (REDUCED amounts)
+        if (investorTier === 'elite') {
+          investorBonus += 4; // REDUCED from 8 to 4
+          if (verbose) console.log(`   Investor Quality:   +4 (Elite tier - conditional)`);
+        } else if (investorTier === 'strong') {
+          investorBonus += 2; // REDUCED from 5 to 2
+          if (verbose) console.log(`   Investor Quality:   +2 (Strong tier - conditional)`);
+        } else if (investorTier === 'solid') {
+          investorBonus += 1; // REDUCED from 3 to 1
+          if (verbose) console.log(`   Investor Quality:   +1 (Solid tier - conditional)`);
+        }
+        // Emerging gets 0 bonus now
+        
+        // Additional bonus for high investor scores (REDUCED)
+        if (investorScore >= 9) {
+          investorBonus += 1; // REDUCED from 2 to 1
+          if (verbose) console.log(`   Investor Score:     +1 (Score: ${investorScore}/10)`);
+        } else if (investorScore >= 7) {
+          investorBonus += 0.5; // REDUCED from 1 to 0.5
+          if (verbose) console.log(`   Investor Score:     +0.5 (Score: ${investorScore}/10)`);
+        }
+      } else if (verbose) {
+        console.log(`   Investor Quality:   +0 (no fit - conditional bonus not applied)`);
+      }
+      
+      matchBonus += Math.round(investorBonus);
+      
+      // Check size fit bonus (REDUCED from +5 to +3)
+      if (normalizedInvestor.checkSize && startup.raise_amount) {
+        const raiseAmount = parseFloat(String(startup.raise_amount).replace(/[^0-9.]/g, ''));
+        const checkSizeRange = normalizedInvestor.checkSize;
+        
+        if (checkSizeRange) {
+          const checkSizeLower = String(checkSizeRange).toLowerCase();
+          if (
+            (raiseAmount >= 0.5 && raiseAmount <= 2 && checkSizeLower.includes('seed')) ||
+            (raiseAmount >= 2 && raiseAmount <= 10 && checkSizeLower.includes('series')) ||
+            checkSizeLower.includes(String(raiseAmount))
+          ) {
+            matchBonus += 3; // REDUCED from 5 to 3
+            if (verbose) console.log(`   Check Size Fit:     +3`);
+          } else if (verbose) {
+            console.log(`   Check Size Fit:     +0`);
+          }
+        }
+      }
+      
+      // Geography match (REDUCED from +2 to +1, less important)
+      if (normalizedInvestor.geography && startup.location) {
+        const investorGeo = Array.isArray(normalizedInvestor.geography) ? normalizedInvestor.geography : [normalizedInvestor.geography];
+        const locationMatch = investorGeo.some((geo: string) =>
+          String(startup.location).toLowerCase().includes(String(geo).toLowerCase()) ||
+          String(geo).toLowerCase().includes(String(startup.location).toLowerCase())
+        );
+        if (locationMatch) {
+          matchBonus += 1; // REDUCED from 2 to 1
+          if (verbose) console.log(`   Geography Match:    +1`);
+        }
+      }
+      
+      // 🚀 FUNDING VELOCITY BONUS (NEW - emphasizes fast-growing startups)
+      // High velocity = raising rounds quickly = strong investor interest
+      if (startup.funding_velocity_score !== undefined || startup.funding_rounds_count) {
+        const velocityBonus = calculateFundingVelocityBonus(startup);
+        if (velocityBonus > 0) {
+          matchBonus += velocityBonus;
+          if (verbose) {
+            console.log(`   Funding Velocity:   +${velocityBonus} (${startup.funding_rounds_count || 'N/A'} rounds, fast growth)`);
+          }
+        }
+      }
+      
+      // 🏆 REPEAT FOUNDER WITH EXIT BONUS (NEW - emphasizes proven founders)
+      // Founders with previous successful exits are highly valued by investors
+      if (startup.has_repeat_founder_with_exit || startup.founder_previous_exits) {
+        const repeatFounderBonus = calculateRepeatFounderBonus(startup);
+        if (repeatFounderBonus > 0) {
+          matchBonus += repeatFounderBonus;
+          if (verbose) {
+            const exitCount = startup.founder_previous_exits || (startup.has_repeat_founder_with_exit ? 1 : 0);
+            console.log(`   Repeat Founder:    +${repeatFounderBonus} (${exitCount} previous exit${exitCount > 1 ? 's' : ''})`);
+          }
+        }
+      }
+      
+      // Calculate final score (cap at 100 instead of 99)
+      const finalScore = Math.min(baseScore + matchBonus, 100);
       
       if (verbose) {
-        console.log(`   Match Bonus: +${matchBonus}`);
-        console.log(`   Final Score: ${finalScore}/100`);
+        console.log(`\n   ─────────────────────────────`);
+        console.log(`   Base Score (GOD):   ${baseScore}/100`);
+        console.log(`   Match Bonuses:      +${matchBonus}`);
+        console.log(`   Final Score:        ${finalScore}/100`);
+        console.log('━'.repeat(60));
       }
       
       return Math.round(finalScore);
@@ -345,7 +468,11 @@ export function calculateAdvancedMatchScore(startup: any, investor: any, verbose
       console.log(''); // Empty line for spacing
     }
     
-    // Stage match (0-10 bonus points) - using normalized data
+    // Track matches for conditional investor bonus
+    let hasStageMatch = false;
+    let hasSectorMatch = false;
+    
+    // Stage match (REDUCED from +10 to +5) - using normalized data
     if (normalizedInvestor.stage && normalizedStartup.stage !== undefined) {
       const investorStages = Array.isArray(normalizedInvestor.stage) ? normalizedInvestor.stage : [normalizedInvestor.stage];
       
@@ -366,44 +493,44 @@ export function calculateAdvancedMatchScore(startup: any, investor: any, verbose
         const investorStage = String(s).toLowerCase().replace(/[_\s]/g, '');
         return startupStageNames.some(startupStage => {
           const normalizedStartupStage = startupStage.replace(/[_\s]/g, '');
-          return investorStage.includes(normalizedStartupStage) || 
-                 normalizedStartupStage.includes(investorStage) ||
-                 investorStage === normalizedStartupStage;
+          return investorStage === normalizedStartupStage || // Exact match first
+                 investorStage.includes(normalizedStartupStage) || 
+                 normalizedStartupStage.includes(investorStage);
         });
       });
       
       if (stageMatch) {
-        matchBonus += 10;
+        hasStageMatch = true;
+        matchBonus += 5; // REDUCED from 10 to 5
         if (verbose) {
           const stageNames = startupStageNames.join(', ');
-          console.log(`   Stage Match:        +10 (${stageNames} ↔ ${investorStages.join(', ')})`);
+          console.log(`   Stage Match:        +5 (${stageNames} ↔ ${investorStages.join(', ')})`);
         }
       } else if (verbose) {
         console.log(`   Stage Match:        +0 (no match)`);
       }
     }
     
-    // Sector/Industry match (0-10 bonus points) - using normalized data
+    // Sector/Industry match (TIGHTENED - strict matching, REDUCED from +15 to +8)
     if (normalizedStartup.industries && normalizedInvestor.sectors) {
       const startupIndustries = Array.isArray(normalizedStartup.industries) ? normalizedStartup.industries : [normalizedStartup.industries];
       const investorSectors = Array.isArray(normalizedInvestor.sectors) ? normalizedInvestor.sectors : [normalizedInvestor.sectors];
       
-      const commonSectors = startupIndustries.filter((ind: string) =>
-        investorSectors.some((sec: string) => 
-          String(sec).toLowerCase().includes(String(ind).toLowerCase()) ||
-          String(ind).toLowerCase().includes(String(sec).toLowerCase())
-        )
-      );
-      matchBonus += Math.min(commonSectors.length * 5, 10);
-      
-      if (verbose && commonSectors.length > 0) {
-        console.log(`   Sector Match:       +${Math.min(commonSectors.length * 5, 10)} (${commonSectors.join(', ')})`);
+      // Use strict sector matching
+      const commonSectors = calculateStrictSectorMatch(startupIndustries, investorSectors);
+      const sectorBonus = Math.min(commonSectors.length * 3, 8); // REDUCED: 3 points per match, max 8
+      if (commonSectors.length > 0) {
+        hasSectorMatch = true;
+        matchBonus += sectorBonus;
+        if (verbose) {
+          console.log(`   Sector Match:       +${sectorBonus} (${commonSectors.join(', ')})`);
+        }
       } else if (verbose) {
         console.log(`   Sector Match:       +0 (no match)`);
       }
     }
     
-    // Check size fit (0-5 bonus points) - using normalized data
+    // Check size fit (REDUCED from +5 to +3) - using normalized data
     if (normalizedInvestor.checkSize && normalizedStartup.raise_amount) {
       const raiseAmount = parseFloat(String(normalizedStartup.raise_amount).replace(/[^0-9.]/g, ''));
       const checkSizeRange = normalizedInvestor.checkSize;
@@ -416,9 +543,9 @@ export function calculateAdvancedMatchScore(startup: any, investor: any, verbose
           (raiseAmount >= 2 && raiseAmount <= 10 && checkSizeLower.includes('series')) ||
           checkSizeLower.includes(String(raiseAmount))
         ) {
-          matchBonus += 5;
+          matchBonus += 3; // REDUCED from 5 to 3
           if (verbose) {
-            console.log(`   Check Size Fit:     +5 ($${raiseAmount}M in range)`);
+            console.log(`   Check Size Fit:     +3 ($${raiseAmount}M in range)`);
           }
         } else if (verbose) {
           console.log(`   Check Size Fit:     +0 (outside range)`);
@@ -426,25 +553,84 @@ export function calculateAdvancedMatchScore(startup: any, investor: any, verbose
       }
     }
     
-    // Geography match (0-2 bonus points) - Reduced: modern VCs invest globally, remote work is standard
-    if (normalizedInvestor.geography && normalizedStartup.location) {
-      const investorGeo = Array.isArray(normalizedInvestor.geography) ? normalizedInvestor.geography : [normalizedInvestor.geography];
-      const locationMatch = investorGeo.some((geo: string) =>
-        String(normalizedStartup.location).toLowerCase().includes(String(geo).toLowerCase()) ||
-        String(geo).toLowerCase().includes(String(normalizedStartup.location).toLowerCase())
-      );
-      if (locationMatch) {
-        matchBonus += 2;  // Small bonus only - geography is less important
-        if (verbose) {
-          console.log(`   Geography Match:    +2 (${normalizedStartup.location} matches - minor factor)`);
+      // Geography match (REDUCED from +2 to +1) - modern VCs invest globally
+      if (normalizedInvestor.geography && normalizedStartup.location) {
+        const investorGeo = Array.isArray(normalizedInvestor.geography) ? normalizedInvestor.geography : [normalizedInvestor.geography];
+        const locationMatch = investorGeo.some((geo: string) =>
+          String(normalizedStartup.location).toLowerCase().includes(String(geo).toLowerCase()) ||
+          String(geo).toLowerCase().includes(String(normalizedStartup.location).toLowerCase())
+        );
+        if (locationMatch) {
+          matchBonus += 1; // REDUCED from 2 to 1
+          if (verbose) {
+            console.log(`   Geography Match:    +1 (${normalizedStartup.location} matches - minor factor)`);
+          }
+        } else if (verbose) {
+          console.log(`   Geography Match:    +0 (no match - not penalized, modern VC is global)`);
         }
-      } else if (verbose) {
-        console.log(`   Geography Match:    +0 (no match - not penalized, modern VC is global)`);
       }
+      
+      // 🚀 FUNDING VELOCITY BONUS (NEW - emphasizes fast-growing startups)
+      // High velocity = raising rounds quickly = strong investor interest
+      if (normalizedStartup.funding_velocity_score !== undefined || normalizedStartup.funding_rounds_count) {
+        const velocityBonus = calculateFundingVelocityBonus(normalizedStartup);
+        if (velocityBonus > 0) {
+          matchBonus += velocityBonus;
+          if (verbose) {
+            console.log(`   Funding Velocity:   +${velocityBonus} (${normalizedStartup.funding_rounds_count || 'N/A'} rounds, fast growth)`);
+          }
+        }
+      }
+      
+      // 🏆 REPEAT FOUNDER WITH EXIT BONUS (NEW - emphasizes proven founders)
+      // Founders with previous successful exits are highly valued by investors
+      if (normalizedStartup.has_repeat_founder_with_exit || normalizedStartup.founder_previous_exits) {
+        const repeatFounderBonus = calculateRepeatFounderBonus(normalizedStartup);
+        if (repeatFounderBonus > 0) {
+          matchBonus += repeatFounderBonus;
+          if (verbose) {
+            const exitCount = normalizedStartup.founder_previous_exits || (normalizedStartup.has_repeat_founder_with_exit ? 1 : 0);
+            console.log(`   Repeat Founder:    +${repeatFounderBonus} (${exitCount} previous exit${exitCount > 1 ? 's' : ''})`);
+          }
+        }
+      }
+      
+      // 🎯 INVESTOR QUALITY BONUS (CONDITIONAL - only if there's actual fit)
+    // Only apply if there's at least a stage OR sector match (shows real fit)
+    let investorBonus = 0;
+    if (hasStageMatch || hasSectorMatch) {
+      const investorTier = investor.investor_tier || investor.tier || 'emerging';
+      const investorScore = investor.investor_score || 0;
+      
+      // Tier-based bonus (REDUCED amounts)
+      if (investorTier === 'elite') {
+        investorBonus += 4; // REDUCED from 8 to 4
+        if (verbose) console.log(`   Investor Quality:   +4 (Elite tier - conditional)`);
+      } else if (investorTier === 'strong') {
+        investorBonus += 2; // REDUCED from 5 to 2
+        if (verbose) console.log(`   Investor Quality:   +2 (Strong tier - conditional)`);
+      } else if (investorTier === 'solid') {
+        investorBonus += 1; // REDUCED from 3 to 1
+        if (verbose) console.log(`   Investor Quality:   +1 (Solid tier - conditional)`);
+      }
+      // Emerging gets 0 bonus now
+      
+      // Additional bonus for high investor scores (REDUCED)
+      if (investorScore >= 9) {
+        investorBonus += 1; // REDUCED from 2 to 1
+        if (verbose) console.log(`   Investor Score:     +1 (Score: ${investorScore}/10)`);
+      } else if (investorScore >= 7) {
+        investorBonus += 0.5; // REDUCED from 1 to 0.5
+        if (verbose) console.log(`   Investor Score:     +0.5 (Score: ${investorScore}/10)`);
+      }
+    } else if (verbose) {
+      console.log(`   Investor Quality:   +0 (no fit - conditional bonus not applied)`);
     }
     
-    // Calculate final score (cap at 99)
-    const finalScore = Math.min(baseScore + matchBonus, 99);
+    matchBonus += Math.round(investorBonus);
+    
+    // Calculate final score (cap at 100 instead of 99)
+    const finalScore = Math.min(baseScore + matchBonus, 100);
     
     if (verbose) {
       console.log(`\n📈 Final Score: ${finalScore.toFixed(1)}/100`);
@@ -469,6 +655,121 @@ export function calculateAdvancedMatchScore(startup: any, investor: any, verbose
     // This makes it obvious something went wrong while not breaking the UI
     return 30;
   }
+}
+
+/**
+ * Calculate funding velocity bonus
+ * High velocity = raising rounds quickly = strong investor interest
+ * 
+ * Scoring:
+ * - 2+ rounds with avg < 180 days between rounds: +6 points (very fast)
+ * - 2+ rounds with avg < 365 days between rounds: +4 points (fast)
+ * - 2+ rounds with avg < 730 days between rounds: +2 points (moderate)
+ * - 3+ rounds: +1 additional point (proven ability to raise)
+ */
+function calculateFundingVelocityBonus(startup: any): number {
+  // If we have a pre-calculated velocity score (0-10 scale)
+  if (startup.funding_velocity_score !== undefined && startup.funding_velocity_score > 0) {
+    // Convert 0-10 scale to 0-6 bonus points
+    if (startup.funding_velocity_score >= 8) return 6; // Very fast
+    if (startup.funding_velocity_score >= 6) return 4; // Fast
+    if (startup.funding_velocity_score >= 4) return 2; // Moderate
+    return 0;
+  }
+  
+  // Fallback: use funding_rounds_count if available
+  const roundCount = startup.funding_rounds_count || 0;
+  if (roundCount >= 3) return 3; // 3+ rounds = proven ability
+  if (roundCount >= 2) return 1; // 2 rounds = some velocity
+  
+  return 0;
+}
+
+/**
+ * Calculate repeat founder with exit bonus
+ * Founders with previous successful exits are highly valued by investors
+ * 
+ * Scoring:
+ * - 2+ previous exits: +8 points (serial entrepreneur)
+ * - 1 previous exit: +5 points (proven exit)
+ * - Has exit flag but no count: +3 points (assumed 1 exit)
+ */
+function calculateRepeatFounderBonus(startup: any): number {
+  const exitCount = startup.founder_previous_exits;
+  
+  if (exitCount !== undefined && exitCount > 0) {
+    if (exitCount >= 2) return 8; // Serial entrepreneur
+    if (exitCount >= 1) return 5; // Proven exit
+  }
+  
+  // Fallback: boolean flag
+  if (startup.has_repeat_founder_with_exit) {
+    return 5; // Assume 1 exit if flag is true
+  }
+  
+  return 0;
+}
+
+/**
+ * Strict sector matching - uses exact match or known synonyms only
+ * Prevents false positives from loose substring matching
+ */
+function calculateStrictSectorMatch(startupIndustries: string[], investorSectors: string[]): string[] {
+  const SECTOR_SYNONYMS: Record<string, string[]> = {
+    'ai': ['artificial intelligence', 'machine learning', 'ml', 'deep learning', 'generative ai', 'ai/ml'],
+    'fintech': ['financial technology', 'payments', 'banking', 'insurtech', 'neobank'],
+    'healthtech': ['health tech', 'digital health', 'healthcare', 'medtech', 'biotech'],
+    'saas': ['software', 'b2b software', 'enterprise software', 'cloud'],
+    'ecommerce': ['e-commerce', 'retail', 'marketplace', 'dtc', 'd2c'],
+    'edtech': ['education technology', 'ed-tech', 'learning'],
+    'proptech': ['real estate tech', 'property technology'],
+    'cleantech': ['clean technology', 'climate tech', 'sustainability', 'greentech'],
+    'cybersecurity': ['security', 'infosec', 'information security']
+  };
+  
+  const normalizeSector = (sector: string): string => {
+    const normalized = String(sector).toLowerCase().trim();
+    // Check if it's a known synonym
+    for (const [key, synonyms] of Object.entries(SECTOR_SYNONYMS)) {
+      if (normalized === key || synonyms.some(s => normalized === s || normalized.includes(s) || s.includes(normalized))) {
+        return key;
+      }
+    }
+    return normalized;
+  };
+  
+  const normalizedStartup = startupIndustries.map(normalizeSector);
+  const normalizedInvestor = investorSectors.map(normalizeSector);
+  
+  // Find exact matches or matches within same synonym group
+  const matches: string[] = [];
+  for (const startupSector of normalizedStartup) {
+    for (const investorSector of normalizedInvestor) {
+      // Exact match
+      if (startupSector === investorSector) {
+        if (!matches.includes(startupSector)) {
+          matches.push(startupSector);
+        }
+        continue;
+      }
+      
+      // Check if both are in the same synonym group
+      for (const [key, synonyms] of Object.entries(SECTOR_SYNONYMS)) {
+        const allTerms = [key, ...synonyms];
+        const startupInGroup = allTerms.some(t => startupSector === t || startupSector.includes(t) || t.includes(startupSector));
+        const investorInGroup = allTerms.some(t => investorSector === t || investorSector.includes(t) || t.includes(investorSector));
+        
+        if (startupInGroup && investorInGroup) {
+          if (!matches.includes(key)) {
+            matches.push(key);
+          }
+          break;
+        }
+      }
+    }
+  }
+  
+  return matches;
 }
 
 /**

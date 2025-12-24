@@ -64,37 +64,40 @@ async function discoverStartupsFromRSS() {
   console.log(`Found ${sources.length} active RSS sources\n`);
 
   const allStartups = [];
+  const feedErrors = [];
 
-  // Process RSS sources in parallel batches of 5 (faster discovery)
-  const BATCH_SIZE = 5;
-  for (let i = 0; i < sources.length; i += BATCH_SIZE) {
-    const batch = sources.slice(i, i + BATCH_SIZE);
-    console.log(`\n📦 Processing batch ${Math.floor(i/BATCH_SIZE) + 1} (${batch.length} sources)...`);
-    
-    // Process batch in parallel
-    const batchPromises = batch.map(async (source) => {
+  // Process each RSS source with retry logic
+  for (const source of sources) {
+    let attempts = 0;
+    let startups = [];
+    let lastError = null;
+    while (attempts < 3) {
       try {
-        console.log(`📰 Processing: ${source.name}`);
-        const startups = await processRSSSource(source);
-        console.log(`   ✅ Found ${startups.length} startups from ${source.name}`);
-        return startups;
+        console.log(`📠 Processing: ${source.name} (attempt ${attempts + 1})`);
+        startups = await processRSSSource(source);
+        if (startups.length > 0) break; // Success
+        lastError = null;
       } catch (error) {
-        console.error(`   ❌ Error processing ${source.name}:`, error.message);
-        return [];
+        lastError = error;
+        console.error(`   ❌ Error processing ${source.name} (attempt ${attempts + 1}):`, error.message);
       }
-    });
-    
-    // Wait for batch to complete
-    const batchResults = await Promise.all(batchPromises);
-    batchResults.forEach(startups => allStartups.push(...startups));
-    
-    // Small delay between batches
-    if (i + BATCH_SIZE < sources.length) {
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      attempts++;
+      if (attempts < 3) await new Promise(resolve => setTimeout(resolve, 2000));
     }
+    if (lastError) {
+      feedErrors.push({ name: source.name, url: source.url, error: lastError.message });
+    }
+    allStartups.push(...startups);
+    console.log(`   ✅ Found ${startups.length} startups\n`);
+    // Be respectful - wait between feeds
+    await new Promise(resolve => setTimeout(resolve, 2000));
   }
 
   console.log(`\n✨ Total startups discovered: ${allStartups.length}`);
+  if (feedErrors.length > 0) {
+    console.log(`\n⚠️  ${feedErrors.length} feeds had errors:`);
+    feedErrors.forEach(e => console.log(`   - ${e.name}: ${e.error}`));
+  }
 
   // Save to database
   if (allStartups.length > 0) {
@@ -105,40 +108,41 @@ async function discoverStartupsFromRSS() {
 }
 
 async function processRSSSource(source) {
-  try {
-    // Parse RSS feed
-    const feedData = await parser.parseURL(source.url);
-    
-    // Filter recent articles (last 7 days for faster processing, more frequent runs)
-    const sevenDaysAgo = new Date();
-    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-
-    const recentArticles = feedData.items.filter((item) => {
-      const pubDate = item.pubDate ? new Date(item.pubDate) : null;
-      return !pubDate || pubDate >= sevenDaysAgo;
-    });
-
-    if (recentArticles.length === 0) {
-      return [];
+  let attempts = 0;
+  let lastError = null;
+  while (attempts < 3) {
+    try {
+      // Parse RSS feed
+      const feedData = await parser.parseURL(source.url);
+      // Filter recent articles (last 30 days)
+      const thirtyDaysAgo = new Date();
+      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+      const recentArticles = feedData.items.filter((item) => {
+        const pubDate = item.pubDate ? new Date(item.pubDate) : null;
+        return !pubDate || pubDate >= thirtyDaysAgo;
+      });
+      if (recentArticles.length === 0) {
+        return [];
+      }
+      console.log(`   📅 ${recentArticles.length} recent articles`);
+      // Extract startups using AI (with retry)
+      const startups = await extractStartupsFromArticles(recentArticles, source.name);
+      return startups;
+    } catch (error) {
+      lastError = error;
+      console.error(`Error parsing feed ${source.name} (attempt ${attempts + 1}):`, error.message);
+      attempts++;
+      if (attempts < 3) await new Promise(resolve => setTimeout(resolve, 1500));
     }
-
-    console.log(`   📅 ${recentArticles.length} recent articles`);
-
-    // Extract startups using AI
-    const startups = await extractStartupsFromArticles(recentArticles, source.name);
-
-    return startups;
-
-  } catch (error) {
-    console.error(`Error parsing feed ${source.name}:`, error.message);
-    return [];
   }
+  // Optionally: mark feed inactive after 5 consecutive failures (not implemented here)
+  return [];
 }
 
 async function extractStartupsFromArticles(articles, sourceName) {
-  // Prepare articles text for AI (increased from 15 to 25 for more startups per run)
+  // Prepare articles text for AI
   const articlesText = articles
-    .slice(0, 25)
+    .slice(0, 15)
     .map((item, i) => {
       const content = item.content || item.description || item.title || '';
       const cleanContent = content.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
@@ -152,92 +156,152 @@ Content: ${cleanContent.substring(0, 600)}...
     })
     .join('\n---\n');
 
-  const prompt = `You are a startup discovery analyst. Extract ALL startup companies mentioned in these articles.
+  const prompt = `You are a deal and startup discovery analyst. Extract ALL startups, funding rounds, mergers, acquisitions, partnerships, expansions, and major customer wins mentioned in these articles.
 
 ARTICLES:
 ${articlesText}
 
 EXTRACTION TASK:
-Extract EVERY startup/company mentioned that:
-1. Is a technology startup or innovative company
-2. Has any funding/product/launch news
+Extract EVERY entity or deal that:
+1. Is a technology startup, scaleup, or innovative company
+2. Has any funding, merger, acquisition, partnership, expansion, or major customer win
 3. Is mentioned with enough detail to be relevant
 
-For each startup, extract:
+For each item, extract:
+- Entity type (startup, funding, merger, acquisition, partnership, expansion, customer win)
 - Company name (exact name as mentioned)
 - Company website (if mentioned or can be inferred)
 - Brief description (1-2 sentences)
+- Deal type (funding, M&A, partnership, expansion, customer win)
 - Funding amount (if mentioned)
 - Funding stage (if mentioned)
 - Investor names (if mentioned)
+- Partner/customer names (if mentioned)
+- Article URL
+- Article title
 
 RESPONSE FORMAT (JSON only):
 {
-  "startups": [
+  "deals": [
     {
+      "entity_type": "startup|funding|merger|acquisition|partnership|expansion|customer_win",
       "name": "Company Name",
       "website": "https://example.com or null",
       "description": "Brief description",
+      "deal_type": "funding|merger|acquisition|partnership|expansion|customer_win",
       "funding_amount": "$10M or null",
       "funding_stage": "Series A or null",
       "investors": ["Investor 1"] or [],
+      "partners_customers": ["Partner/Customer 1"] or [],
       "article_url": "article url",
       "article_title": "article title"
     }
   ]
 }`;
 
-  try {
-    const message = await anthropic.messages.create({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 3000,
-      messages: [
-        {
-          role: 'user',
-          content: `You are a startup discovery expert. Extract startup information and return ONLY valid JSON.\n\n${prompt}`,
-        },
-      ],
-    });
-
-    const result = message.content[0]?.text?.trim();
-    
-    if (!result) {
-      return [];
+  let attempts = 0;
+  let lastError = null;
+  while (attempts < 3) {
+    try {
+      const message = await anthropic.messages.create({
+        model: 'claude-3-5-haiku-latest',
+        max_tokens: 3000,
+        messages: [
+          {
+            role: 'user',
+            content: `You are a deal and startup discovery expert. Extract startup and deal information and return ONLY valid JSON.\n\n${prompt}`,
+          },
+        ],
+      });
+      let result = message.content[0]?.text?.trim();
+      if (!result) {
+        throw new Error('No result from AI');
+      }
+      // Clean markdown code blocks if present
+      let jsonStr = result;
+      if (jsonStr.includes('```')) {
+        jsonStr = jsonStr.replace(/```json\n?/g, '').replace(/```\n?/g, '');
+      }
+      // Try to auto-correct malformed JSON
+      try {
+        jsonStr = jsonStr.replace(/\n\s*\{/g, '{').replace(/\n\s*\[/g, '[');
+        if (!jsonStr.startsWith('{')) jsonStr = '{' + jsonStr.split('{').slice(1).join('{');
+        if (!jsonStr.endsWith('}')) jsonStr = jsonStr.split('}')[0] + '}';
+      } catch {}
+      let parsed;
+      try {
+        parsed = JSON.parse(jsonStr);
+      } catch (e) {
+        // Fallback: try to extract deals with regex
+        console.error('   ⚠️  AI JSON parse failed, using regex fallback.');
+        const dealRegex = /([A-Z][a-zA-Z0-9&\- ]+) (raised|acquired|merged|partnered|expanded|won) (\$[0-9.,]+[A-Za-z]*|Series [A-Z]|[A-Z][a-zA-Z0-9&\- ]+|a customer|a partnership|an acquisition|an expansion|a deal)/gi;
+        const discoveredDeals = [];
+        articles.forEach(article => {
+          let matches = article.content.match(dealRegex);
+          if (matches) {
+            matches.forEach(m => {
+              discoveredDeals.push({
+                entity_type: 'deal',
+                name: m.split(' ')[0],
+                description: m,
+                deal_type: 'unknown',
+                article_url: article.link,
+                article_title: article.title,
+                rss_source: sourceName
+              });
+            });
+          }
+        });
+        return discoveredDeals;
+      }
+      const dealsArray = parsed.deals || [];
+      // Map to proper format
+      const discoveredDeals = dealsArray.map((d) => {
+        const matchingArticle = articles.find(a => a.link === d.article_url) || articles[0];
+        return {
+          entity_type: d.entity_type || 'startup',
+          name: d.name,
+          website: d.website && d.website !== 'null' ? d.website : null,
+          description: d.description || '',
+          deal_type: d.deal_type || null,
+          funding_amount: d.funding_amount && d.funding_amount !== 'null' ? d.funding_amount : null,
+          funding_stage: d.funding_stage && d.funding_stage !== 'null' ? d.funding_stage : null,
+          investors_mentioned: Array.isArray(d.investors) && d.investors.length > 0 ? d.investors : null,
+          partners_customers: Array.isArray(d.partners_customers) && d.partners_customers.length > 0 ? d.partners_customers : null,
+          article_url: d.article_url || matchingArticle.link,
+          article_title: d.article_title || matchingArticle.title,
+          article_date: matchingArticle.pubDate || null,
+          rss_source: sourceName,
+        };
+      });
+      return discoveredDeals;
+    } catch (error) {
+      lastError = error;
+      console.error('   ⚠️  Error extracting deals with AI (attempt ' + (attempts + 1) + '):', error.message);
+      attempts++;
+      if (attempts < 3) await new Promise(resolve => setTimeout(resolve, 1500));
     }
-
-    // Clean markdown code blocks if present
-    let jsonStr = result;
-    if (jsonStr.includes('```')) {
-      jsonStr = jsonStr.replace(/```json\n?/g, '').replace(/```\n?/g, '');
-    }
-
-    const parsed = JSON.parse(jsonStr);
-    const startupsArray = parsed.startups || [];
-
-    // Map to proper format
-    const discoveredStartups = startupsArray.map((s) => {
-      const matchingArticle = articles.find(a => a.link === s.article_url) || articles[0];
-      
-      return {
-        name: s.name,
-        website: s.website && s.website !== 'null' ? s.website : null,
-        description: s.description || '',
-        funding_amount: s.funding_amount && s.funding_amount !== 'null' ? s.funding_amount : null,
-        funding_stage: s.funding_stage && s.funding_stage !== 'null' ? s.funding_stage : null,
-        investors_mentioned: Array.isArray(s.investors) && s.investors.length > 0 ? s.investors : null,
-        article_url: s.article_url || matchingArticle.link,
-        article_title: s.article_title || matchingArticle.title,
-        article_date: matchingArticle.pubDate || null,
-        rss_source: sourceName,
-      };
-    });
-
-    return discoveredStartups;
-
-  } catch (error) {
-    console.error('   ⚠️  Error extracting startups with AI:', error.message);
-    return [];
   }
+  // Fallback: try regex extraction if all attempts fail
+  const dealRegex = /([A-Z][a-zA-Z0-9&\- ]+) (raised|acquired|merged|partnered|expanded|won) (\$[0-9.,]+[A-Za-z]*|Series [A-Z]|[A-Z][a-zA-Z0-9&\- ]+|a customer|a partnership|an acquisition|an expansion|a deal)/gi;
+  const discoveredDeals = [];
+  articles.forEach(article => {
+    let matches = article.content.match(dealRegex);
+    if (matches) {
+      matches.forEach(m => {
+        discoveredDeals.push({
+          entity_type: 'deal',
+          name: m.split(' ')[0],
+          description: m,
+          deal_type: 'unknown',
+          article_url: article.link,
+          article_title: article.title,
+          rss_source: sourceName
+        });
+      });
+    }
+  });
+  return discoveredDeals;
 }
 
 async function saveDiscoveredStartups(startups) {
@@ -290,21 +354,6 @@ async function saveDiscoveredStartups(startups) {
   }
 
   console.log(`\n✅ Saved: ${saved} | Skipped (duplicates): ${skipped}`);
-  
-  // Auto-import immediately after discovery (for ML training)
-  if (saved > 0) {
-    console.log(`\n🔄 Auto-importing ${saved} newly discovered startups...`);
-    try {
-      const { execSync } = require('child_process');
-      execSync('node auto-import-pipeline.js', { 
-        stdio: 'inherit',
-        cwd: __dirname 
-      });
-      console.log('✅ Auto-import complete');
-    } catch (error) {
-      console.log('⚠️  Auto-import failed (will retry via automation-engine):', error.message);
-    }
-  }
 }
 
 async function main() {

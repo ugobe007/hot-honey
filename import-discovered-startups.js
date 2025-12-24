@@ -1,5 +1,6 @@
 require('dotenv').config();
 const { createClient } = require('@supabase/supabase-js');
+const { extractInferenceData } = require('./lib/inference-extractor');
 const supabase = createClient(process.env.VITE_SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
 
 // Stage mapping (stage column is integer)
@@ -46,24 +47,48 @@ async function main() {
       continue;
     }
     
-    // Extract data
-    const extracted = startup.extracted_data || {};
+    // Extract data from discovered_startups
+    const discoveredData = startup.extracted_data || {};
+    
+    // Run inference extraction on description/tagline/pitch to populate extracted_data
+    const textToAnalyze = [
+      startup.name,
+      startup.description,
+      startup.tagline,
+      startup.pitch
+    ].filter(Boolean).join('. ');
+    
+    // Use existing inference extractor (pattern-based, no AI cost)
+    const inferenceData = textToAnalyze.length > 50 
+      ? extractInferenceData(textToAnalyze, startup.article_url || startup.source_url || '')
+      : null;
+    
+    // Merge discovered data with inference data
+    const extractedData = {
+      ...discoveredData,
+      ...(inferenceData || {}),
+      // Preserve original source
+      source: 'discovered_startups',
+      imported_at: new Date().toISOString()
+    };
     
     // Calculate basic GOD score (50-65 range for new imports)
     const baseScore = 50 + Math.floor(Math.random() * 15);
     
-    // Insert into startup_uploads
+    // Insert into startup_uploads WITH extracted_data populated
     const { error: insertError } = await supabase
       .from('startup_uploads')
       .insert({
         name: startup.name,
-        tagline: extracted.tagline || (startup.description ? startup.description.substring(0, 200) : ''),
-        pitch: extracted.pitch || startup.description || '',
-        sectors: extracted.sectors || ['Technology'],
-        stage: parseStage(extracted.stage),
+        tagline: discoveredData.tagline || (startup.description ? startup.description.substring(0, 200) : ''),
+        pitch: discoveredData.pitch || startup.description || '',
+        sectors: extractedData.sectors || discoveredData.sectors || ['Technology'],
+        stage: parseStage(extractedData.funding_stage || discoveredData.stage),
         source_type: 'rss_discovery',
-        source_url: startup.source_url,
+        source_url: startup.source_url || startup.article_url || '',
         status: 'approved',
+        // CRITICAL: Populate extracted_data with inference results
+        extracted_data: extractedData,
         total_god_score: baseScore,
         team_score: Math.floor(baseScore * 0.9),
         traction_score: Math.floor(baseScore * 0.85),

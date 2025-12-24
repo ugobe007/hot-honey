@@ -34,7 +34,7 @@ export default function QuickAddInvestor() {
       if (error) throw error;
 
       alert('✅ Investor added successfully!');
-      navigate('/admin/operations');
+      navigate('/admin/control');
     } catch (error) {
       console.error('Error adding investor:', error);
       alert('❌ Error adding investor: ' + (error as Error).message);

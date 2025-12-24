@@ -22,8 +22,8 @@ interface Investor {
   name: string;
   firm: string;
   title: string;
-  stage_focus: string[];
-  sector_focus: string[];
+  stage: string[]; // SSOT: Database uses 'stage', not 'stage_focus'
+  sectors: string[]; // SSOT: Database uses 'sectors', not 'sector_focus'
   geography_focus: string[];
   check_size_min: number;
   check_size_max: number;
@@ -72,9 +72,9 @@ export async function generateMatches(
       // Use provided startup data
       startup = startupData;
     } else {
-      // Try to fetch from database
+      // SSOT: Use startup_uploads table (not 'startups')
       const { data: dbStartup, error: startupError } = await supabase
-        .from('startups')
+        .from('startup_uploads')
         .select('*')
         .eq('id', startupId)
         .single();
@@ -136,10 +136,10 @@ async function analyzeMatch(startup: Startup, investor: Investor): Promise<Match
     const startupRaise = (startup as any).target_raise || (startup as any).raised || (startup as any).fundingAmount || 0;
     
     const fitAnalysis = {
-      stage_fit: Array.isArray(investor.stage_focus) && investor.stage_focus.some(s => 
+      stage_fit: Array.isArray(investor.stage) && investor.stage.some(s => 
         startupStage.includes(s.toLowerCase()) || s.toLowerCase().includes(startupStage)
       ),
-      sector_fit: Array.isArray(investor.sector_focus) && investor.sector_focus.some(s => 
+      sector_fit: Array.isArray(investor.sectors) && investor.sectors.some(s => 
         startupSector.includes(s.toLowerCase()) || s.toLowerCase().includes(startupSector)
       ),
       check_size_fit: 
@@ -165,8 +165,8 @@ INVESTOR:
 - Name: ${investor.name}
 - Firm: ${investor.firm}
 - Title: ${investor.title}
-- Stage Focus: ${investor.stage_focus?.join(', ') || 'N/A'}
-- Sector Focus: ${investor.sector_focus?.join(', ') || 'N/A'}
+- Stage Focus: ${investor.stage?.join(', ') || 'N/A'}
+- Sector Focus: ${investor.sectors?.join(', ') || 'N/A'}
 - Check Size: $${investor.check_size_min?.toLocaleString() || 0} - $${investor.check_size_max?.toLocaleString() || 0}
 - Investment Thesis: ${investor.investment_thesis || 'N/A'}
 - Notable Investments: ${JSON.stringify(investor.notable_investments || [])}
@@ -220,8 +220,8 @@ Focus on: stage alignment, sector expertise, check size fit, portfolio synergies
     
     // Fallback to basic scoring if AI fails
     let basicScore = 0;
-    if (investor.stage_focus.includes(startupStage)) basicScore += 30;
-    if (investor.sector_focus.some(s => startupSector.includes(s.toLowerCase()))) basicScore += 30;
+    if (investor.stage?.includes(startupStage)) basicScore += 30;
+    if (investor.sectors?.some(s => startupSector.includes(s.toLowerCase()))) basicScore += 30;
     if (startupRaise >= (investor.check_size_min || 0) && startupRaise <= (investor.check_size_max || Infinity)) basicScore += 20;
     basicScore += 20; // Base score
 
@@ -231,8 +231,8 @@ Focus on: stage alignment, sector expertise, check size fit, portfolio synergies
       confidence_level: 'low',
       reasoning: 'Basic algorithmic match (AI analysis unavailable)',
       fit_analysis: {
-        stage_fit: investor.stage_focus.includes(startupStage),
-        sector_fit: investor.sector_focus.some(s => startupSector.includes(s.toLowerCase())),
+        stage_fit: investor.stage?.includes(startupStage) || false,
+        sector_fit: investor.sectors?.some(s => startupSector.includes(s.toLowerCase())) || false,
         check_size_fit: true,
         geography_fit: true,
       },
@@ -366,8 +366,8 @@ export async function getMatches(
           title,
           photo_url,
           linkedin_url,
-          stage_focus,
-          sector_focus,
+          stage,
+          sectors,
           notable_investments
         )
       `)
@@ -492,8 +492,8 @@ export async function getPendingMatches(userId?: string, limit: number = 20): Pr
           title,
           photo_url,
           linkedin_url,
-          stage_focus,
-          sector_focus,
+          stage,
+          sectors,
           check_size_min,
           check_size_max
         )
@@ -529,8 +529,8 @@ export async function getQueuedMatches(userId?: string, limit: number = 20): Pro
           title,
           photo_url,
           linkedin_url,
-          stage_focus,
-          sector_focus,
+          stage,
+          sectors,
           check_size_min,
           check_size_max
         )
@@ -557,7 +557,7 @@ export async function getMatchSuggestions(userId?: string, limit: number = 10): 
   try {
     // Get startups that have few or no matches
     const { data: startups, error: startupsError } = await supabase
-      .from('startups')
+      .from('startup_uploads')
       .select('*')
       .order('created_at', { ascending: false })
       .limit(50);
@@ -590,11 +590,11 @@ export async function getMatchSuggestions(userId?: string, limit: number = 10): 
           const startupSector = (typeof rawSector === 'string' ? rawSector : String(rawSector)).toLowerCase();
 
           // Stage fit
-          if (investor.stage_focus?.some((s: string) => startupStage.includes(s.toLowerCase()))) {
+          if (investor.stage?.some((s: string) => startupStage.includes(s.toLowerCase()))) {
             score += 40;
           }
           // Sector fit
-          if (investor.sector_focus?.some((s: string) => startupSector.includes(s.toLowerCase()))) {
+          if (investor.sectors?.some((s: string) => startupSector.includes(s.toLowerCase()))) {
             score += 40;
           }
           // Check size fit
@@ -643,8 +643,8 @@ export async function getAllMatches(userId?: string, limit: number = 50): Promis
           title,
           photo_url,
           linkedin_url,
-          stage_focus,
-          sector_focus,
+          stage,
+          sectors,
           check_size_min,
           check_size_max
         ),
@@ -709,8 +709,8 @@ export async function getInvestorsByType(
         linkedin_url,
         twitter_url,
         photo_url,
-        stage_focus,
-        sector_focus,
+        stage,
+        sectors,
         geography_focus,
         check_size_min,
         check_size_max,
