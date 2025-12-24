@@ -1,0 +1,1001 @@
+id,name,desc_length,sector_count,team_score,traction_score,market_score,product_score,vision_score,total_god_score,sectors,status,has_extracted_data
+bfa9e992-fb2c-40a8-ad6f-51a13d770037,"VertexMind",237,3,55,20,70,30,30,41,"hr tech|enterprise|saas",approved,1
+0e1f1b3a-9220-4429-ab3a-51c8ecbb857e,"Coinbax",48,1,14,18,14,14,11,71,"fintech",approved,0
+1d1b8e80-a50a-4c97-a4b9-2abb5b576e12,"FanDuel",133,2,30,20,40,30,30,40,"gaming|media",approved,0
+67187754-69e5-4b6d-a798-7a734eeb381a,"HN Wrapped",165,3,30,20,70,30,30,40,"ai/ml|climate tech|gaming",approved,0
+5575f0e4-0ab8-4327-bf17-9ab79879f504,"Pinnacle Healthcare Advisors",56,2,30,20,70,30,30,40,"healthcare|gaming",approved,0
+825e10a1-f82c-4efd-a009-dd6270b3805f,"Copy",0,1,30,20,30,30,30,40,"artificial intelligence / content creation",approved,0
+478abc0d-8306-4d2e-9eb7-f232f1b79449,"Kargo",55,2,15,19,15,15,11,74,"logistics|gaming",approved,0
+ed0c639e-5d01-40f4-bb8b-01abc3c933bd,"PrunaAI / HiDream-L1-Fast",224,3,30,20,70,30,55,40,"ai/ml|ai|machine learning",approved,0
+dd88041a-72ae-41c2-8a7e-2199488e0959,"Prolific Machines",213,3,30,20,70,30,30,40,"technology|deeptech|healthtech",approved,0
+690dba75-430e-4ef8-900a-9d1eb97159f5,"Neuraworx Medical",215,3,30,20,40,30,30,40,"technology|medical devices|healthtech",approved,0
+ffc1e0d6-4a74-4cff-bd51-cc6be8e53fec,"Character",0,1,30,20,30,30,30,40,"ai",approved,0
+fa4c97ff-29ff-4563-b6b1-3ca977514c5d,"Tryshor",52,1,30,20,30,30,55,40,"technology",approved,1
+c96f0eba-e63c-4b31-88da-22fed21f0a72,"FloWorks",70,1,30,20,30,30,30,40,"technology",approved,0
+23a32db1-88c8-4f8d-9340-471db73fbede,"Boox",217,3,30,20,70,30,30,40,"climate tech|consumer electronics|e-readers",approved,0
+fa83fb84-a704-4ce1-940c-cc1732193ad9,"Monocle 3.0",68,1,30,20,30,30,30,40,"technology",approved,0
+e75373bc-5a89-4ea0-8a04-b3e06ba36709,"Chroma",67,3,30,20,70,30,30,40,"color technology|ai/machine learning|database",approved,0
+26d3ff01-39f3-4179-88c5-b6b8b57b7b87,"Truemed",50,3,15,19,15,15,11,76,"healthcare|ecommerce|climate tech",approved,0
+d9baa7e3-0fa5-4280-89b4-d51b4c442532,"EverZinc",42,1,30,20,60,30,30,40,"climate tech",approved,0
+9fc28a9e-980b-40ef-8de5-88b26d3fc9d2,"Subsense",209,3,30,20,70,55,30,41,"saas|enterprise|analytics",approved,0
+b3bbdbb8-de0f-4ed6-b464-06d27e1c7154,"Bird",334,3,30,20,70,30,55,40,"ai/ml|climate tech|enterprise ai & automation",approved,0
+3305cb14-8182-48eb-9614-d9f900e5fcee,"i-doit and Patchmanager",306,3,30,20,70,30,30,40,"technology|it management|healthtech",approved,0
+2d44fb43-957c-411a-ac8f-6df7209b2c51,"Agent Skill",242,3,30,20,70,30,30,40,"technology|developer tools|ai/ml tools",approved,0
+4805479e-8c54-4055-9d45-d5c66289dbf7,"DataLabs",235,3,55,100,40,55,30,60,"crypto|web3|defi",approved,1
+3220b707-3a09-474b-9278-4f8d76f10f51,"Speed1, Inc.",56,2,12,15,12,12,9,61,"fintech|developer tools",approved,0
+996b2840-5013-4264-aa59-a194b5010550,"Nabhdrishti Aerospace",40,1,30,20,30,30,30,40,"technology",approved,0
+e0c31545-f7f4-4a0b-9a36-3c350532205c,"Homelight",239,3,30,20,70,30,30,40,"proptech|enterprise software|consumer",approved,0
+b13d842c-3b42-4dd5-b62f-a28a0159b04c,"Mesa",206,2,30,20,40,30,55,40,"proptech|gaming",approved,0
+0cacb388-508c-4d09-a293-a0b457ece62d,"Bunq",87,2,30,20,70,30,30,40,"fintech|developer tools",approved,0
+d63cc8bd-f307-4ebf-af3f-2d3bcee3b60e,"Mirador Therapeutics",363,3,30,20,70,30,30,40,"healthtech|climate tech|consumer",approved,0
+e5155576-142c-4c68-95b7-6a25966d4ce9,"Paramount Skydance Corp.",90,2,30,20,40,30,30,40,"gaming|media",approved,0
+72f92bd3-d8a0-4ce3-b75d-cee6c733eac1,"Vega",29,1,30,20,30,30,30,40,"technology",approved,0
+54088315-e3b8-465c-8f52-cc6ec9a32f28,"SwiftLabs",240,3,55,100,70,80,30,71,"climate|cleantech|energy",approved,1
+ea567290-833d-4e3c-9b1a-a3a66dc500eb,"Unitree Robotics",207,3,30,20,70,55,55,44,"robotics|hardware|ai",approved,0
+5a5133ec-9720-4994-a51a-b0f6c022c560,"Monocle 3.0 for macOS",55,1,30,20,30,30,30,40,"technology",approved,0
+d6a25659-48cb-4422-a6fe-a87d89c724f9,"Spinny",213,2,30,20,70,30,55,40,"ai/ml|gaming",approved,0
+f1dbf4a7-3706-4306-9ead-f8c04380e893,"Retool",0,1,30,20,30,30,30,40,"software development",approved,0
+76555777-cbef-49dc-81a7-57be83ecec88,"MITI",68,1,30,20,30,30,30,40,"technology",approved,0
+be39afa0-b609-474d-8384-6c9cc0ca5a77,"DigitalCloud",243,3,55,90,70,55,30,63,"fintech|payments|b2b",approved,1
+78021ca3-0526-4d3e-96b1-0c604dac2bee,"CIENA",206,1,30,20,30,30,30,40,"iot",approved,0
+f87e27bf-9fc4-4917-8a68-9ac8be183e8b,"Athletic",211,1,30,20,30,30,30,40,"cleantech",approved,0
+ca8e410f-cddc-41d9-b1af-4384e96419cb,"Sipral Padana",68,1,30,20,30,30,30,40,"technology",approved,0
+0ad4ae38-86d6-4f37-b55b-5802a38bf763,"DataOps",225,3,55,90,40,55,30,57,"gaming|entertainment|consumer",approved,1
+2a15e225-abbf-445c-b49a-4bb2b24a7a9a,"Chipper Cash",243,2,30,20,70,30,30,40,"ai/ml|hr tech",approved,0
+ee9d8cb1-4429-448b-b85a-981f940fdc07,"MinecraftLM",339,3,30,20,70,30,30,40,"gaming|ai/machine learning|3d modeling",approved,0
+4dfcfc1b-40fb-4c54-a907-ba2280f02eee,"Lumio",42,1,30,20,30,30,30,40,"cleantech",approved,1
+b9e41a16-6a75-46b2-80e5-f7fa296a9ca3,"Cartesia",47,3,30,20,70,30,30,40,"ai/ml|gaming|logistics",approved,1
+a68dd7a0-5210-44b6-bc7f-9d8f6d88d871,"Brace",223,3,30,20,70,30,30,40,"ai/ml|cleantech|proptech",approved,0
+e0fdaab3-4fd6-4658-a4f7-35cde7a2217b,"Pantheon Platform",226,2,30,20,70,30,30,40,"saas|marketplace",approved,0
+43a51ecb-48a2-44dc-a050-ddd50d2bd474,"Local Insurance Advisors",68,1,30,20,30,30,30,40,"gaming",approved,0
+065bb662-fc13-4891-82ad-4d8f45a82c22,"AutoOps",243,3,55,90,70,80,30,68,"ai/ml|enterprise|b2b saas",approved,1
+7e9791c7-badb-4df8-a4c5-ed0c5e0ff106,"Entrevias",218,3,8,8,8,8,8,64,"cleantech|gaming|developer tools",approved,0
+e6283826-8c90-43bf-b6de-46781a75c4a1,"Stuut",45,1,30,20,30,55,30,40,"technology",approved,0
+845f1366-4d4a-427d-b791-a16d00028cf3,"Soin Pharmaceuticals",77,1,30,20,30,30,30,40,"technology",approved,0
+b30025bf-a88b-4cd2-ac6a-32c3e491bfb6,"GTAS Retail",224,2,30,20,70,30,55,40,"ai/ml|ecommerce",approved,0
+4ef95908-9055-44cc-b0a9-8e59e0a7bc10,"Planetscale",0,1,30,20,30,30,30,40,"database management",approved,0
+fd56311a-d59e-4342-a4a0-7776c28c9019,"Doximity",203,1,30,20,30,30,30,40,"gaming",approved,0
+cb0e1272-b337-4b7f-8cdc-44a741513949,"Supabase",0,1,30,20,30,30,30,40,"developer tools",approved,0
+59a53401-7173-4b1d-9df9-33b65b9ff7ef,"Rax",189,1,30,20,30,30,30,40,"gaming",approved,0
+9e1b2290-6689-4396-9e7d-e63d20106052,"HubTech",234,3,55,90,70,80,30,68,"fintech|payments|b2b",approved,1
+5bf6f981-8d1f-4dd1-8c79-87b6e6ec5400,"Stoke Space",219,2,30,20,40,30,30,40,"cleantech|spacetech",approved,0
+97f1664e-fa17-406b-809a-62094f37f918,"Knock",216,2,30,20,40,30,30,40,"cleantech|proptech",approved,0
+55581542-29a6-4b07-8aa3-c596b476c3fd,"Centaur Labs",41,1,30,20,30,30,30,40,"technology",approved,0
+5f5e99b1-dc31-48a4-a908-2687de96e030,"Grammarly",213,1,30,20,30,30,30,40,"gaming",approved,0
+52691ea0-84e9-4cd1-b548-07f48de9ee86,"IQ-EQ",55,1,30,20,30,30,30,40,"hr tech",approved,0
+b2456744-5145-403a-93f9-8f899d840e2c,"UltraSpace",237,3,45,90,40,80,30,60,"edtech|learning|b2c",approved,1
+cc0cb0e0-6ea3-49ec-8f1e-7cac7f43bb03,"LLMKit",144,3,30,20,70,30,30,40,"ai/ml|gaming|media",approved,0
+bcd52a96-e431-43d1-9c29-8c880c880460,"Coa",199,1,30,20,30,30,30,40,"technology",approved,0
+7de4e424-3ce2-48f5-a240-b85862d38ddf,"Rubrik",224,2,8,8,10,8,8,65,"ai/ml|saas",approved,0
+7f8425d8-45d5-44da-b198-d83917bb4bb4,"Lettermen's Energy",39,2,30,20,70,30,30,40,"climate tech|gaming",approved,0
+ced21b32-35f3-4b46-92a7-dc702e94b210,"Z Image Turbo",229,1,30,20,30,30,55,40,"technology",approved,0
+b8fc2c8f-4b4c-4cfc-aba2-80e3a2dc082b,"Segment",67,1,30,20,30,30,30,40,"technology",approved,0
+842c673a-738c-4d2a-b050-d3e679216c8a,"Sprinterhealth",53,3,30,20,40,30,30,40,"healthtech|cleantech|foodtech",approved,1
+0824b2ac-df8f-4a61-bf8d-4e783dc9838a,"Addi",225,1,30,20,30,30,55,40,"fintech",approved,0
+117b0cce-21d6-4027-bd00-12cb16a5e799,"Gusto",217,1,30,20,30,30,30,40,"hr tech",approved,0
+e189bbe4-6e7e-4531-bf33-c244298fa356,"Jain Software Bhopal",233,3,30,20,70,30,30,40,"ai/ml|saas|gaming",approved,0
+94fca53c-3e13-42ae-843a-ea2429e8ec9d,"GlossGenius",194,1,30,20,60,30,30,40,"ai/ml",approved,0
+473df3dd-5320-4588-b04c-b133a1b8f913,"Enveda Therapeutics",237,2,30,20,70,30,55,40,"ai/ml|healthtech",approved,0
+eb2919b6-156a-4abc-b574-5f02646024cb,"Oncue",221,3,30,20,70,30,30,40,"saas|cleantech|gaming",approved,0
+ea11abcb-7116-446c-8749-36e18167f0ef,"Crystalys Therapeutics",213,3,30,20,70,55,55,44,"biotech|healthcare|therapeutics",approved,0
+66d605e0-93de-4fab-bb71-fb03dace451e,"Qonto",219,2,30,20,70,30,30,40,"ai/ml|fintech",approved,0
+dc001f83-dc63-495f-b4e1-8d498fb652e7,"NeuralHub",220,3,55,90,40,80,30,62,"edtech|learning|b2c",approved,1
+63e6c9b0-e054-48cd-8985-47b285336d12,"LLM Gateway",144,3,30,20,70,30,30,40,"ai/ml|climate tech|developer tools",approved,0
+5bee97fa-2a64-4339-909c-154e923e7fe9,"Atlys",51,1,8,8,10,8,8,73,"ai/ml",approved,1
+f864dcbd-5f11-48bb-901f-092d3fe27fbb,"prunaai/p-image-edit",229,2,30,20,70,30,30,40,"ai/ml|cleantech",approved,0
+6b2f9aca-05a8-4090-8302-870b57d50550,"Koi Security",205,1,30,20,30,30,30,40,"cybersecurity",approved,0
+cad05d01-82a1-4457-a0c5-a368d53029ca,"Fora",218,1,30,20,30,30,55,40,"technology",approved,0
+ac2a1ae0-f880-4061-aa7d-39de2242070b,"Thirty Madison",206,2,30,20,70,30,30,40,"ai/ml|gaming",approved,0
+5af079f4-4da4-4db0-be66-69e3864afd66,"Peripheral Labs",88,3,30,20,70,30,30,40,"ai/ml|climate tech|developer tools",approved,0
+5c49c129-e788-45ee-9f96-6a76f29eca90,"Familia",26,1,11,13,11,11,8,53,"Technology",approved,0
+05d40446-add8-4277-881e-4be9170bef3b,"Nuance Labs",41,1,30,20,30,30,30,40,"proptech",approved,0
+fadd77a0-42b2-4823-98e3-3573ce2cae0e,"BlossomHill Therapeutics",40,2,30,20,70,55,30,41,"healthcare|gaming",approved,0
+f5a9fd9d-a936-4bce-9831-f52b5d056711,"Kapital",232,2,30,20,40,30,55,40,"fintech|developer tools",approved,0
+cc015d91-3065-44c3-9060-c4f6769e702f,"Unacademy",223,3,30,20,40,30,30,40,"edtech|cleantech|gaming",approved,0
+0311fb7c-255f-4844-b15e-0a39439c2dc9,"Mirror",82,1,30,20,30,55,30,40,"gaming",approved,0
+81a72111-eab7-4cb1-89ee-914992ee15db,"Complyance",211,3,30,20,70,30,55,40,"ai/ml|cybersecurity|legaltech",approved,0
+27229d1d-cc49-4794-8b77-f3ddddb47f84,"black-forest-labs",222,1,30,20,30,30,55,40,"technology",approved,0
+cd25eab0-430f-458d-bba0-8e0517ae9dd0,"Kernel",36,1,30,20,30,30,30,40,"developer tools",approved,0
+212e32a8-f1a4-414d-9f54-3298874f3706,"Quill",211,1,30,20,30,30,30,40,"technology",approved,0
+d0dc8a59-ff71-4bf7-a823-e8254e51b439,"Routine",112,1,30,20,30,30,30,40,"gaming",approved,0
+3be8d82c-8bf1-4024-849b-8a963cf8d5e6,"GC Wealth",47,1,10,13,10,10,8,50,"Technology",approved,0
+58df67ea-7814-40cc-82a3-93e1bd57fcf1,"Stan",211,1,30,20,30,30,55,40,"technology",approved,0
+fe854cf1-46cb-4c32-9a9b-b1e233009e2b,"Abnormal AI",221,2,30,20,70,30,30,40,"ai/ml|cleantech",approved,0
+bf80ccce-d247-4641-adf5-5291a78b99f4,"Hurry",152,1,30,20,30,30,30,40,"gaming",approved,0
+0ad7f076-8989-42b0-b7fc-24cd25c0b543,"Glean",51,2,30,20,70,30,30,40,"ai/ml|hr tech",approved,1
+8f3d784a-4d98-43dc-9a0d-b9af36390798,"Phil",230,3,30,20,70,30,55,40,"ai/ml|healthtech|cleantech",approved,0
+40077f5d-1de3-4532-be2c-9e60856774a9,"Flex",216,3,30,20,70,30,55,40,"ai/ml|fintech|cleantech",approved,0
+51d9e211-a799-4a60-9ce3-2148535b81cf,"NodeSpace",267,3,55,20,40,55,30,40,"crypto|web3|defi",approved,1
+af34ea4e-816d-4eb5-b2bd-775535ef8899,"HATCo",39,1,11,14,11,11,8,55,"Healthcare",approved,0
+6839700b-1d45-4341-bea4-83ee7a99b363,"Crosby",209,2,30,20,40,30,30,40,"cleantech|legaltech",approved,0
+01f503c0-4eac-46db-9bdf-d76dcbe249c7,"InvoiceCloud",216,2,30,20,70,30,55,40,"fintech|saas",approved,0
+4bbcb455-0ea5-45a7-8014-31121cdc5a50,"Tavus",196,1,30,20,60,30,30,40,"ai/ml",approved,0
+942217fb-e694-4003-963d-3fd4eb1f26a6,"Camber",65,1,30,20,30,30,30,40,"technology",approved,1
+c5e7487d-954e-426b-bbe7-5642736d917d,"Nubank",214,1,30,20,30,30,30,40,"fintech",approved,0
+13e1df01-60dd-4cd4-af99-749ace6863d5,"Benchling",221,2,30,20,40,30,30,40,"healthtech|iot",approved,0
+a656c3aa-c811-47b6-a73f-41a419a216a6,"Rundit",150,1,30,20,30,30,30,40,"technology",approved,0
+e79c8501-3d03-46ec-9885-cb90388f567e,"General Catalyst Institute",62,1,10,13,10,10,8,50,"Gaming",approved,0
+6fcdcebf-dd19-4bf3-961c-67b7677ef874,"Lila Sciences",213,3,30,20,70,55,55,44,"ai|deeptech|research",approved,0
+66213d74-266b-4ac0-b8ad-aa1207e2ee4c,"bytedance",227,1,30,20,30,30,55,40,"technology",approved,0
+1e0e67b5-27dc-4228-a5c6-16f11907b955,"Carta",215,1,30,20,30,30,30,40,"gaming",approved,0
+cdeb3e42-7cbf-4f39-8e28-0be932c1dddb,"Pinecone",0,1,30,20,30,30,30,40,"artificial intelligence / data management",approved,0
+520ff446-669f-4f0b-b3f6-c483be4f281d,"Vannevar Labs",240,3,30,20,40,30,55,40,"cleantech|cybersecurity|gaming",approved,0
+3524fc61-b662-41c0-83e7-4e3be0e5369e,"philz1337x",219,1,30,20,30,30,55,40,"technology",approved,0
+4e44f198-4d8b-4857-8fbd-0522d3b1194c,"Coastpay",44,2,30,20,70,30,30,40,"ai/ml|fintech",approved,1
+fdefa01d-52c5-48b2-8d73-419ab693df30,"Human API",223,3,30,20,40,30,30,40,"healthtech|hr tech|developer tools",approved,0
+45ef7a89-cbd0-453e-8516-26771056de81,"Ideogram",28,1,30,20,30,55,30,40,"technology",approved,0
+4d075494-51c0-4915-af04-d6bbed85e9f6,"Luma AI",25,2,30,20,70,55,30,41,"ai/ml|saas",approved,0
+9d19bb49-a13c-4538-8c5d-c5c8d82bad73,"Carbon Health",36,3,30,20,70,30,30,40,"healthcare|climate tech|gaming",approved,0
+1b449b48-571c-4c24-80ec-cb34be836653,"Nextdoor",27,1,30,20,30,30,30,40,"media",approved,0
+62545595-50c2-4138-8fce-a3163e568b1a,"Campfire",22,1,30,20,60,30,30,40,"saas",approved,0
+06902b09-279f-4ea8-b4f5-ac0c32f3ba56,"PermitFlow",234,2,30,20,70,30,55,40,"ai/ml|cleantech",approved,0
+243305a8-f567-468f-8f84-492e1dfbe14f,"StockGro",97,0,30,20,30,30,30,40,"",approved,0
+dc845b79-227e-4235-b727-356752b05183,"Northwood",36,1,30,20,30,55,30,40,"gaming",approved,0
+34ba7aa8-b103-40ff-9bb0-e69230f4844e,"Seezo",51,1,30,20,30,30,30,40,"technology",approved,0
+264d5994-e00f-4f1c-9829-74c93e4d69e5,"TimeTuna",72,0,30,20,30,30,30,40,"",approved,0
+833c4fdb-8e90-4fe2-a1b3-9a8149641a1e,"Huggingface",0,1,30,20,30,30,30,40,"artificial intelligence / natural language processing",approved,0
+1e6deca8-42d0-4b3f-9b34-7ab9e4fff7a9,"FurtherAI",21,2,30,20,70,55,30,41,"saas|gaming",approved,0
+ce2d8dac-a4a1-4033-af5e-dc67b8fbc4d6,"Quora",34,1,30,20,30,55,30,40,"technology",approved,0
+88d9ea0f-4da1-4e1a-9bfd-ad15d011987e,"Funding And TAE",50,0,30,20,30,30,30,40,"",approved,0
+e69dce41-fb7b-425c-a8ea-012ed53e80f5,"Ascend Arc",226,3,30,20,40,30,55,40,"cleantech|spacetech|gaming",approved,0
+9d677229-fbb6-4704-964b-85a5fbb930c3,"EigenLayer",25,1,30,20,60,55,30,40,"fintech",approved,0
+7451c21c-4e5a-475e-80f3-5fb87227026e,"Hebbia",31,1,30,20,30,55,30,40,"gaming",approved,0
+27982937-ec58-48cc-9fa1-51628255fb58,"Paytm",210,2,30,20,70,30,30,40,"ai/ml|fintech",approved,0
+6dbdc5c0-7ed9-4217-bf09-107a8479951e,"LMArena",43,2,30,20,40,55,30,40,"developer tools|gaming",approved,0
+de5da765-61c4-4f04-9d81-8ea22d8bdce6,"Levels",51,2,30,20,70,30,30,40,"healthcare|climate tech",approved,0
+8fcfd884-0e26-4c08-a6e7-596f8deca5a6,"Recraft",39,1,30,20,30,30,30,40,"technology",approved,0
+44a789e4-fe86-4461-95c8-26a48f83d391,"Claude Opus 4.5",227,2,30,20,70,30,30,40,"ai/ml|cleantech",approved,0
+917606d6-bcfe-4647-ba8b-65fa07f1efab,"Story",32,2,30,20,70,55,30,41,"fintech|gaming",approved,0
+0470913b-4dfa-4d31-a9a7-999a8a2f1a76,"Mintlify",40,2,30,20,40,55,30,40,"developer tools|gaming",approved,0
+4a348bef-17ce-4c62-b925-d1f092107335,"Rocket",25,1,30,20,30,30,30,40,"technology",approved,0
+b0418611-10eb-4c2a-b2ea-9f38f3d2ea6d,"Kaedim",28,1,30,20,30,55,30,40,"media",approved,0
+28ef8f8c-9798-452f-b19e-41934fb15766,"TAE Technologies",50,0,30,20,30,30,30,40,"",approved,0
+d978832d-4f04-46ba-8c61-9b6b0d3546a9,"Saronic",47,1,30,20,30,55,30,40,"gaming",approved,0
+2c8a82f2-6cc4-4c16-b4bf-b77988bca79a,"Nirvana Nearly Doubles",57,1,30,20,30,30,30,40,"technology",approved,0
+3f6f4cad-c884-4ee4-9505-e6d83e91812e,"Formation Bio",22,3,30,20,70,55,30,41,"ai/ml|healthcare|gaming",approved,0
+db4e02a3-4b4a-4bc2-8714-8f807b09f8c4,"TipTop",25,1,30,20,60,55,30,40,"fintech",approved,0
+a90c6e23-5207-4be7-ab8a-8c829e23cb34,"Zola",25,1,30,20,30,30,30,40,"technology",approved,0
+c9e3b2a7-0a03-4663-940e-815ae6283aa1,"NextFoods",98,0,30,20,30,30,30,40,"",approved,0
+74a3740c-0446-4b01-b18e-c711dea5b5be,"Sesame AI",25,2,30,20,40,55,30,40,"developer tools|gaming",approved,0
+2c39e4dd-a3a4-447f-932f-8ff0540fe7ce,"WaveForms AI",29,2,30,20,40,55,30,40,"gaming|consumer",approved,0
+dc8183c1-a3b1-496a-9722-4bf337e551dd,"SmartNetworks",242,3,55,90,40,80,30,62,"developer tools|devops|cloud",approved,1
+bcd440df-8af7-4810-9911-aeecf1fae761,"Capitalize",220,2,30,20,70,30,55,40,"ai/ml|developer tools",approved,0
+e7c07130-3fe9-4e1b-b4d3-4bb60130c27a,"mattrothenberg/drone-art",228,2,30,20,40,30,55,40,"robotics|gaming",approved,0
+d39f5e94-a1f9-44d9-b738-8b7ffecabe19,"hyperexponential",26,1,30,20,60,55,30,40,"fintech",approved,0
+744f4c7d-9151-4678-9f43-804c201ca965,"Distributional",30,1,30,20,60,55,30,40,"saas",approved,0
+2553aece-8ced-49ac-860d-31895f22ac32,"Tigris",24,1,30,20,60,55,30,40,"saas",approved,0
+e076f1f8-867f-4598-930d-0348d4debfcc,"Bono",33,1,30,20,30,30,30,40,"technology",approved,0
+cc2596f2-baee-4eee-91b1-def7c1d33ecc,"Doss",21,1,30,20,60,30,30,40,"saas",approved,0
+cc603299-8756-4541-beff-76c9d0313f90,"Odoo",238,2,30,20,70,30,55,40,"saas|gaming",approved,0
+e6a51f79-f191-4b39-8c2e-1f32e07be51c,"GitStory",63,0,30,20,30,30,55,40,"",approved,0
+4615a859-000a-475d-b5c2-63b23da01ae6,"Mission Produce Non",59,0,30,20,30,30,30,40,"",approved,0
+7d23cf6b-1508-40f8-9fc9-dde75e548b29,"Slide",213,3,30,20,70,30,30,40,"ai/ml|cleantech|consumer",approved,0
+b1078d17-acdc-407a-bab6-138244252a42,"LawVriksh",222,3,30,20,40,30,30,40,"cleantech|gaming|legaltech",approved,0
+44e6dcff-80f4-4f43-b5a7-b6efd6b8cfd7,"Fly",0,1,30,20,30,30,30,40,"cloud computing",approved,0
+c25d7cc8-9309-4ffb-9611-f992c6f05e3f,"Krea",38,2,30,20,40,55,30,40,"gaming|consumer",approved,0
+ddc8dab7-bec2-4e9a-9e7c-c300eb9baff3,"Talkiatry",22,1,30,20,60,55,30,40,"healthcare",approved,0
+f3a78e56-3f18-452b-babe-5494c0ee43f9,"Wellist",64,0,30,20,30,30,30,40,"",approved,0
+0b4675b1-8758-40e9-ac88-6dc6120bd01c,"k-ID",34,1,30,20,30,55,30,40,"cybersecurity",approved,0
+6afcdc52-11ac-4ce9-b44a-17699682424b,"Infinitus",33,2,30,20,70,55,30,41,"healthcare|gaming",approved,0
+0b2de2db-eef2-4d5f-b8ca-7b58d850ffc1,"Replicate",0,1,30,20,30,30,30,40,"ai",approved,0
+505791e2-768f-48fc-8a62-76f5c2d24b5a,"Chronosphere",124,0,30,20,30,30,30,40,"",approved,0
+31d11598-5b16-473a-802b-0847664c57e2,"Stability",70,1,30,20,30,30,30,40,"ai",approved,0
+5fd8ac7a-9568-452f-b87e-3b024f06ef3b,"Render",67,1,30,20,30,30,30,40,"cloud computing",approved,0
+3a530fcb-4a2c-4cef-a966-5947390c9511,"TestBot AI",66,3,30,20,70,30,30,40,"ai/ml|saas|robotics",approved,1
+4344faf6-50ca-4640-a993-fe80dbbdc856,"Attentive",232,2,30,20,40,30,55,40,"ecommerce|hr tech",approved,0
+08c87ed1-d6cc-46cb-9567-8c361e0579d1,"Crux",21,1,30,20,60,55,30,40,"fintech",approved,0
+12339e21-4bd6-4a2d-aad7-de288bf61628,"Nuitée",36,2,30,20,40,30,30,40,"developer tools|consumer",approved,0
+ec9c2d3a-b278-4dcc-8294-19c2268dae2b,"Innovative Aerosystems",77,0,30,20,30,30,30,40,"",approved,0
+636d6ba1-5b42-496e-954d-88c65f9514cc,"Blackbird",26,2,30,20,70,55,30,41,"fintech|foodtech",approved,0
+7a389cb6-6870-47db-9879-5e3379689373,"Cocooncarbon",52,3,30,20,70,30,55,40,"ai/ml|cleantech|gaming",approved,1
+702046ab-8e71-4665-b493-b1819fde433f,"Swedish startup",73,0,30,20,30,30,30,40,"",approved,0
+3b8f0eec-910e-48fe-a0df-beafad653fd3,"Squint",216,1,30,20,30,30,30,40,"gaming",approved,0
+de113918-f696-4ac7-98cb-12bc5d07145c,"Monarch Money",232,1,30,20,30,30,55,40,"gaming",approved,0
+ab38c12f-9bba-4ee1-a25c-f634efc85c56,"Superhuman",52,1,30,20,30,30,30,40,"gaming",approved,0
+f9e3f16c-030f-4e29-a9a0-a10684d14540,"Polar",40,3,30,20,70,30,30,40,"fintech|climate tech|developer tools",approved,0
+4a43e18b-fc95-4c0b-adb4-42d951797a8d,"OSV",221,2,30,20,70,30,30,40,"ai/ml|hr tech",approved,0
+b65f0ae4-81f9-469d-a1d8-93e7dcfaa736,"Zerocater",228,2,30,20,40,30,30,40,"cleantech|foodtech",approved,0
+b9e2480a-f7b5-4fb0-af49-7e79f46e028b,"Anicca Data Science Solutions",229,1,30,20,60,30,55,40,"saas",approved,0
+13072e00-91a6-42ab-be5e-b49e4f8f9aa3,"KB Home",59,0,30,20,30,30,30,40,"",approved,0
+2f5f2a74-77c2-499f-81e6-aeaa28db1c6d,"Nebius",40,1,30,20,30,30,30,40,"developer tools",approved,0
+334a982c-47b0-4c65-87ce-f421c1dea626,"Vanta",65,1,30,20,30,30,30,40,"cybersecurity",approved,0
+c1a8f6e0-5b1e-44f0-9697-628da67c3f7a,"Prophet Security",38,1,30,20,30,30,30,40,"cybersecurity",approved,0
+12dec20a-90a2-4c60-9ac4-46221acf1791,"Bridge",66,1,30,20,30,30,30,40,"technology",approved,0
+628647e9-620a-42f9-a376-c9e286b26be8,"Chai Discovery",205,3,30,20,70,55,30,41,"ai|biotech|healthcare",approved,0
+5ca765ac-714d-48b8-a769-245b9b371d78,"Color",93,1,30,20,30,30,30,40,"technology",approved,0
+90c52d4c-9cb1-4353-965a-bf5bd7f4323d,"Fal",228,3,30,20,70,30,30,40,"ai/ml|cleantech|consumer",approved,0
+abd969e8-5f36-4682-bda7-c15ba519d0e7,"Biokin",223,1,30,20,30,30,30,40,"cleantech",approved,0
+f4b641de-3653-4bdc-b1dd-adbf43ce9efc,"BlackBuck",36,1,30,20,30,30,30,40,"technology",approved,0
+3001c68f-69ec-4079-b412-d4b36ec517ba,"Arivihan",37,2,30,20,40,30,30,40,"edtech|gaming",approved,0
+282d9334-cb95-4d85-8757-50792d8bf85c,"Built",212,1,30,20,30,30,30,40,"cleantech",approved,0
+b99230c9-335d-441c-9b99-ad62499f2c5d,"Sailplane",210,2,30,20,70,30,30,40,"ai/ml|cleantech",approved,0
+faf1263a-752d-46cd-aea4-f71347f3fd46,"True Anomaly",26,1,30,20,30,30,30,40,"cybersecurity",approved,0
+44badcf9-9afb-4cfb-9c94-c22210086bdc,"SmartSecurity",252,3,55,100,40,80,30,65,"developer tools|devops|cloud",approved,1
+9c07fb9a-a90f-414d-8cff-2786380ae968,"Mistral priced the",163,1,30,20,30,30,30,40,"technology",approved,0
+c37de3aa-f58b-4b30-8caa-656f477ec7be,"Raspberry AI",19,1,30,20,30,30,55,40,"technology",approved,0
+8bac94eb-80b2-481d-bacd-99c4246802a6,"Omnea",32,1,30,20,30,30,30,40,"technology",approved,0
+c2b3881a-b4fc-4e35-a9ac-f75ab70f320c,"ADARx",191,1,30,20,30,30,30,40,"gaming",approved,0
+ca7d9a13-2c0b-4c76-a475-481720c11e2a,"Plaid",209,1,30,20,60,30,30,40,"ai/ml",approved,0
+c1a1307b-ab90-44a2-a556-72d861eadf4b,"BinSentry",141,0,30,20,30,30,30,40,"",approved,0
+8294a3d1-7c7a-4c34-bc91-abddba1092c7,"StackLabs",244,3,45,90,40,55,30,55,"proptech|real estate|b2b",approved,1
+5175576a-9c48-4b21-8e2e-9c1132b18c57,"SpotDraft",37,1,30,20,30,30,30,40,"technology",approved,0
+6d746848-f928-44f4-b564-22dea04bf483,"e6data",71,1,30,20,30,30,30,40,"technology",approved,0
+1eff9c9d-8dc4-4e62-9f3c-a038979578ff,"Lightrun",34,1,30,20,30,30,30,40,"media",approved,0
+8d45d0c3-51fb-4b79-ab43-dde226b56367,"Smartex",198,3,30,20,40,30,55,40,"cleantech|gaming|legaltech",approved,0
+d7133668-78ef-4f77-8ca9-7edff25d62f1,"Z.ai",99,2,30,20,70,30,30,40,"climate tech|gaming",approved,0
+169e1adb-9f6e-4661-9e4f-a4b18776763b,"Atomesus",195,3,30,20,70,55,30,41,"ai|enterprise|saas",approved,0
+a62aba2d-7098-4764-bb2c-fe372dd84457,"AI Mirelo",11,1,30,20,30,30,30,40,"technology",approved,0
+0c277ebc-b036-4cb6-aaba-47c76412ccaa,"Sports Attack",111,0,30,20,30,30,30,40,"",approved,0
+f5f5ddf0-c02a-4f5d-9ed0-afd7707de466,"Corelight",46,1,30,20,30,30,30,40,"cybersecurity",approved,0
+53888797-2613-41c5-be76-7232866b7da7,"coding startup Lovable",12,1,30,20,30,30,55,40,"technology",approved,0
+25db13ce-b2d9-4001-b637-7efc1d33d932,"Tessera Therapeutics",216,1,30,20,30,30,30,40,"healthtech",approved,0
+774b3ecb-f69e-47cd-9e10-ec01934154fe,"Generate:Biomedicines",233,2,30,20,70,30,30,40,"ai/ml|cleantech",approved,0
+7927adaf-aec6-412b-938f-d9f1dfeedb03,"EliseAI",216,3,30,20,70,55,55,44,"ai|enterprise|saas",approved,0
+74de62e0-2280-48c6-9056-1a1335f9ed95,"Chefie",52,1,30,20,60,30,30,40,"ai/ml",approved,1
+9932b15e-8de1-4bd3-8c4a-ddfc5acaddbf,"Prenuvo",221,2,30,20,40,30,55,40,"healthtech|gaming",approved,0
+1dd42779-2dfa-405f-8d9c-1cb5b52da871,"Commure",234,3,30,20,70,30,55,40,"ai/ml|healthtech|gaming",approved,0
+04490fdd-bb64-4a5d-963b-a2bdffd6551e,"Dream Studio",221,3,30,20,70,30,30,40,"ai/ml|saas|cleantech",approved,0
+8d1684a6-c3d0-4797-9490-57773a5a40b1,"Checkr",229,3,30,20,70,30,30,40,"ai/ml|edtech|cleantech",approved,0
+a1d63254-21fb-4f81-96e5-8abf4af7267d,"OneOncology",234,3,30,20,40,30,30,40,"cleantech|gaming|hr tech",approved,0
+7aa27586-e82b-4231-816b-af2c4ce0f488,"NotCo",216,3,30,20,70,30,30,40,"ai/ml|cleantech|foodtech",approved,0
+bb16edbb-ebc3-4748-9769-ecd3cac1e707,"Tive",211,2,30,20,70,30,55,40,"ai/ml|logistics",approved,0
+15f33a58-f975-4fb0-a6d7-a18b55a5d5db,"Cerebras",219,2,30,20,70,30,30,40,"ai/ml|cleantech",approved,0
+8b509fa6-f58a-4b3c-b923-0cf7a9151ebb,"Century Health",219,3,30,20,70,30,55,40,"ai/ml|healthtech|cleantech",approved,0
+baaf6f88-e049-4dd0-bed1-552469179ed7,"Intuit to use",60,1,30,20,30,30,30,40,"technology",approved,0
+15a2a2e7-2866-4647-96c7-1dc6ae469e35,"FusionCloud",236,3,55,75,40,55,30,53,"crypto|web3|defi",approved,1
+fcca4f14-5b82-4ccc-94e3-f22d03eaacbb,"Keeper",213,3,30,20,70,55,30,41,"ai|consumer|dating",approved,0
+d2bb89c5-53c8-461a-a4d7-bccbf8e5b8f0,"Treace Medical",62,1,30,20,30,30,30,40,"technology",approved,0
+59551af5-ec5d-4673-aed7-8ab157a0e285,"Caba Design",222,2,30,20,40,30,30,40,"cleantech|consumer",approved,0
+b0ed646f-9cc0-4648-b6ac-95bea6b721a9,"FarPay",113,0,30,20,30,30,30,40,"",approved,0
+46f4653a-04f2-4808-bb97-704e6d1adefe,"Climate Radiant Nuclear",12,1,30,20,30,30,30,40,"technology",approved,0
+d7b62e43-bfa4-4aa1-aa36-bbb3ff811708,"Tesla",119,1,30,20,60,30,30,40,"climate tech",approved,0
+9939f5f0-024b-4ce4-885c-9803b30c4e27,"EdgeVerve",124,2,30,20,70,30,30,40,"saas|climate tech",approved,0
+b69fb742-bbe4-430e-8fdd-684712695779,"Silna",23,1,30,20,30,30,30,40,"gaming",approved,0
+f4474d33-b6df-4be2-819f-ea79b2a3bf76,"KGeN",38,1,30,20,30,30,30,40,"gaming",approved,0
+6410c268-c4b7-41f1-be44-fd5360b1d1c5,"Crunch Fitness",220,1,30,20,30,30,30,40,"healthtech",approved,0
+26909bef-ca7f-4f00-a66d-575e6275365b,"Shaw",62,1,30,20,30,30,30,40,"technology",approved,0
+4f6baccb-7013-4f75-a59e-1693bad1a804,"Railway",68,1,30,20,30,30,30,40,"developer tools",approved,0
+3b3db2a9-9c65-4ba3-9fb4-b228e7bf12d0,"Cato Networks",236,1,30,20,60,30,55,40,"saas",approved,0
+f1d04aee-a059-42c8-bf52-ccf581438abb,"Haiku 4.5",213,1,30,20,60,30,30,40,"ai/ml",approved,0
+eff818cc-b803-4896-b677-cb1b8b8d3222,"Synthesia",247,3,30,20,70,55,30,41,"ai|enterprise software|content",approved,0
+4c815691-8019-4252-84ac-e185c9d219de,"Aindra Systems",221,3,30,20,70,30,30,40,"ai/ml|healthtech|gaming",approved,0
+1a3b372d-09ba-428a-8e3c-4a7ca6cd8304,"Tenth Revolution Group",223,2,30,20,40,30,55,40,"cleantech|hr tech",approved,0
+da11ef27-c9c0-4e3d-bf34-03845716852e,"BrightTech",243,3,45,100,70,55,30,64,"climate|cleantech|energy",approved,1
+19985c1e-6053-4257-9b36-504a37ef33be,"Syneron Bio",109,3,30,20,70,30,30,40,"healthcare|climate tech|developer tools",approved,0
+6d1043b7-19c2-4ca9-928b-3b54381c605d,"Cashew Research",225,3,30,20,70,30,30,40,"ai/ml|cleantech|gaming",approved,0
+87a69d97-d2bb-417f-a86e-2eee8fd84f27,"Devin Nunes",59,1,30,20,30,30,30,40,"technology",approved,0
+b126c783-681f-482b-89bf-d29c36e8e031,"Eversight",91,3,30,20,70,30,30,40,"ecommerce|climate tech|gaming",approved,0
+9a81ba50-81bf-4ad0-8a0c-7ab8bb3ac33c,"Dentira",83,1,30,20,30,30,30,40,"technology",approved,0
+de2ffa93-1bb9-4559-8383-d668f0ec9b24,"Flock Safety",43,1,30,20,30,30,30,40,"technology",approved,0
+34bb781d-892a-401e-b6e2-f1c94596ada6,"eToro",118,2,30,20,70,30,30,40,"fintech|gaming",approved,0
+84dc4188-6de5-4fc1-8494-cc05b8d2328e,"Overjet",214,3,30,20,70,30,55,40,"ai/ml|cleantech|gaming",approved,0
+39815035-1349-4594-b575-15cb276837b0,"Whichbook",181,1,30,20,30,30,30,40,"technology",approved,0
+c06631b0-5578-4276-a9e8-a5c1809ef58d,"BetterUp",241,1,30,20,30,30,30,40,"healthtech",approved,0
+51bbc457-315e-467b-9960-9cbb507628de,"VoyceMe",221,1,30,20,30,30,55,40,"cleantech",approved,0
+48303c65-2560-4729-adce-ec79c64d0de2,"Biren Technology",107,1,30,20,30,30,30,40,"gaming",approved,0
+e92395a2-ef8f-4cf9-a717-2545a3e89f7e,"Prime Security",76,1,30,20,30,30,30,40,"technology",approved,0
+fb6be9c9-8476-46c3-8895-535dbed57934,"Simplismart",33,2,30,20,40,30,30,40,"developer tools|gaming",approved,0
+eb601c2f-a454-4500-885c-02ada332f88a,"HitRecord",202,1,30,20,30,30,30,40,"gaming",approved,0
+05886a66-1cc0-445c-a15a-2a0a7a5d75d1,"Akka",125,2,30,20,70,30,30,40,"fintech|gaming",approved,0
+57e76bb2-1020-4cdc-a3b7-70136d97262d,"Kate Winslet",47,1,30,20,30,30,30,40,"technology",approved,0
+18ee382c-cf10-4e67-9f6f-804adb342311,"Bridgetown",32,1,30,20,30,30,30,40,"technology",approved,0
+66a6fc70-f421-4c2e-b36e-3232aa2156d2,"Manifold Pulls In",40,1,30,20,30,30,30,40,"technology",approved,0
+0099c44f-acb0-455f-8b5d-58e2fbcd58e4,"Zhipu AI",111,2,30,20,70,30,30,40,"climate tech|gaming",approved,0
+62058936-fbd2-4f88-bfe4-86e4e0a5124a,"Virtual Teleportation Portal App",247,1,30,20,30,30,30,40,"technology",approved,0
+514b950d-ae10-4658-a87a-92db0b3f6431,"MIMIC TECH",103,2,30,20,40,30,30,40,"foodtech|gaming",approved,0
+ad4e2c89-1cbd-4e5a-84c8-dfc13a176df2,"Palona AI",197,0,30,20,30,30,30,40,"",approved,0
+36e7a6b1-2631-4e6a-b2c9-0de72a6da1dd,"PowerUp Money",110,1,30,20,30,30,30,40,"gaming",approved,0
+24b30462-daa0-401e-b95a-f8a0edf938ba,"Israel",52,1,30,20,30,30,30,40,"technology",approved,0
+d3375556-dcd5-4847-a749-99eff62cfacb,"Healthcademia",224,2,30,20,40,30,55,40,"healthtech|edtech",approved,0
+6044546a-d173-4edd-9db5-0c063b11af0e,"SpaceX",130,2,30,20,70,30,30,40,"climate tech|gaming",approved,0
+b0955202-380a-47cf-b43e-bd6b944e09c0,"MindfulBoo",34,1,30,20,30,30,30,40,"technology",approved,0
+01a06fac-664a-4a43-a9e8-dff9f976d059,"Oliv AI",216,1,30,20,60,30,55,40,"ai/ml",approved,0
+17b9bebc-1275-4b3f-8c92-50611fef1d18,"iOrganBio",223,2,30,20,70,30,30,40,"ai/ml|cleantech",approved,0
+e71728bd-dc1c-410b-ad9e-89fad9cfe950,"Nory",30,1,30,20,60,30,30,40,"healthcare",approved,0
+f845a249-49de-463c-bb73-5749baec9ef4,"Checkly",67,1,30,20,30,30,30,40,"technology",approved,0
+5f161489-cd12-4ef4-8d4c-54db96433484,"GPT Store",131,1,30,20,30,30,30,40,"technology",approved,0
+c11d03ef-572f-4944-8c5d-c051a1e3f0de,"BYTES",125,3,30,20,70,30,30,40,"ai/ml|proptech|gaming",approved,0
+22fa0571-3f1a-419c-a194-f477bfc3ba99,"Hadrian",82,1,30,20,30,30,30,40,"developer tools",approved,0
+1c16276b-c399-40d6-8cf1-2e681e7592e8,"CoreWeave",102,1,30,20,30,30,30,40,"technology",approved,0
+bae58512-6b9b-4c5b-9168-080b1a2395d4,"Doctor Droid",53,2,30,20,70,30,30,40,"climate tech|developer tools",approved,0
+54788c5e-3011-432b-9039-ee51fd0e942d,"Ex-CoverWallet",41,1,30,20,30,30,30,40,"technology",approved,0
+247aae5f-ab45-40cd-8fba-c0ed9b51714f,"NotSoAAA",106,2,30,20,70,30,30,40,"climate tech|gaming",approved,0
+e8043162-316a-4af0-9f66-2f59f5ed4e09,"WaveLabs",241,3,55,90,70,55,30,63,"hr tech|enterprise|saas",approved,1
+7af31c53-4441-4a39-be5d-7e2a6eafac42,"Valerie Health",208,3,30,20,70,55,30,41,"healthcare|ai|enterprise",approved,0
+6f3ad248-2f48-41db-a3cd-fdd4d5829812,"MyDello",113,2,30,20,40,30,30,40,"logistics|gaming",approved,0
+654586f2-dbf3-4415-9b5d-1a8261d855af,"Brilliant Planet",43,1,30,20,30,55,30,40,"technology",approved,0
+d2075b2e-8e49-4eef-9e5c-27d2ced3c061,"Counsel Health",230,3,30,20,40,30,30,40,"technology|healthtech|telemedicine",approved,0
+e999913d-14ee-4dd5-9fb0-62815d282158,"StretchSense",108,3,30,20,70,30,30,40,"climate tech|edtech|developer tools",approved,0
+a4ff1ac1-b003-4c58-8689-c4cebda63c41,"MiniMax",111,2,30,20,70,30,30,40,"climate tech|gaming",approved,0
+b2c24f32-d635-4df2-b17f-75e144efde90,"Percepta",51,1,30,20,30,30,55,40,"technology",approved,0
+3e154532-c55e-4660-b6ae-9210eb780fef,"Halo Branded Solutions",240,1,30,20,60,30,55,40,"saas",approved,0
+a86d0bd4-ec4a-407c-931f-2591ed0e6264,"Sanegene Bio",15,1,30,20,30,30,55,40,"technology",approved,0
+8a57bf83-d728-44dc-b839-d5fe5adb98b0,"Codoxo",80,1,30,20,30,30,30,40,"technology",approved,0
+b113700b-ff71-4119-95b6-71aa6bffa280,"Brevo",208,1,30,20,30,30,30,40,"cleantech",approved,0
+56a8743d-2655-4c05-9b87-56976c878a18,"ByteSize",33,1,30,20,30,30,30,40,"edtech",approved,1
+1bf24389-13d2-4399-b091-e704a1012af9,"Supply6",117,2,30,20,40,30,30,40,"gaming|consumer",approved,0
+65ebb607-502b-4840-bdbc-6003e2abb86d,"LoadPay",129,1,30,20,30,30,30,40,"technology",approved,0
+20ce5581-5c41-4008-bc9d-d60b68ebf3ec,"Covertree",237,3,30,20,70,30,30,40,"ai/ml|fintech|proptech",approved,0
+b2281f91-5d48-4ac6-8886-5341d99f00c2,"Hoboken Farms",12,1,30,20,30,30,30,40,"technology",approved,0
+bfac4b5c-ddc3-43c2-be02-aff19b79b960,"Oculus",36,1,30,20,30,30,30,40,"gaming",approved,0
+2109b608-f441-4e1b-bd40-d25119a04ef3,"Saviynt",214,1,30,20,60,30,55,40,"ai/ml",approved,0
+45f4da80-527a-4db0-8c31-8ee0c8ea793e,"Bolt",68,1,30,20,30,30,30,40,"technology",approved,0
+2b372dc4-9287-41fc-81d9-01a24aac6b40,"Accordion",90,1,30,20,30,30,30,40,"technology",approved,0
+e08fcc9d-877f-4775-b5b8-800e8fcd485c,"Dakota",103,2,30,20,70,30,30,40,"fintech|gaming",approved,0
+b30797d9-568b-4374-9e7d-9b8e6c0c9836,"OpenAI",128,3,30,20,70,30,30,40,"ai/ml|ecommerce|gaming",approved,0
+b4fa692d-278b-4b04-b8b0-107e515e3d56,"Mswipe Technologies",117,2,30,20,70,30,30,40,"fintech|gaming",approved,0
+3164b7b2-bcf5-4c1e-a937-107b229d622d,"Instagram",36,1,30,20,30,55,30,40,"media",approved,0
+99dc4cb4-7eaf-4912-ae6b-c1b81a39c1db,"CoreAI",232,3,55,90,40,55,30,57,"edtech|learning|b2c",approved,1
+903ff574-cda3-4200-8c9e-a8779b0c07e8,"Intersect Power LLC",131,2,30,20,70,30,30,40,"climate tech|developer tools",approved,0
+2df53738-3671-4ebc-9cac-d1c99d1f262a,"BIOWEG",152,3,30,20,70,30,30,40,"healthcare|climate tech|gaming",approved,0
+61c3cf26-a1cc-40e6-87af-6cb878638938,"Cloudberry",40,1,30,20,30,30,30,40,"technology",approved,0
+34fd1827-3474-474d-833e-41991728c3a4,"United Launch Alliance",186,3,30,20,40,30,30,40,"gaming|aerospace|space technology",approved,0
+824dd793-a405-4bc4-96e9-e71f20dac43d,"Cautio",91,1,30,20,30,30,30,40,"gaming",approved,0
+65d56b30-5f11-4734-a1c1-05632b8d7714,"Reavil",67,1,30,20,30,30,30,40,"technology",approved,0
+1bef7440-f541-4e56-908c-fb8fd437d1a7,"Xilinx",217,1,30,20,30,30,30,40,"technology",approved,0
+f8a436b6-9986-4e9a-85dc-14f4b8899436,"FlowWorks",251,3,55,100,40,80,30,65,"developer tools|devops|cloud",approved,1
+0fcbedb1-d83e-4854-8f38-dcb57e7ce466,"FlowSystems",239,3,55,55,70,55,30,54,"legaltech|b2b|saas",approved,1
+6ab8b0c2-cd87-4860-95e9-5659b7b04713,"Saelens",159,1,30,20,30,30,30,40,"gaming",approved,0
+bc43dc5e-388f-4064-ba26-0f1b669773c1,"Dutch",82,1,30,20,30,30,30,40,"technology",approved,0
+5497eb30-b87f-4db3-9b5a-50fbfc9c6fc5,"Yann LeCun's World Model Startup",121,1,30,20,30,30,30,40,"technology",approved,0
+9c8d2e70-e13c-4034-866c-7efcee179b40,"mattrothenberg / drone-art",221,3,30,20,40,30,30,40,"cleantech|robotics|gaming",approved,0
+6e26d947-e9e1-44e5-bde5-0c8ec819a76a,"Flighty",126,2,30,20,70,30,30,40,"climate tech|gaming",approved,0
+848ac2fa-4cf5-432b-927c-e4ec6d41b0a2,"Athira Pharma",154,0,30,20,30,30,30,40,"",approved,0
+58f80cb9-b700-4eeb-a9e6-7d6761038b1a,"Chomp",210,1,30,20,30,30,30,40,"technology",approved,0
+1ba7e2ed-b573-4a2c-937d-128eba6ce3db,"PerformLine",209,3,30,20,70,30,30,40,"ai/ml|cybersecurity|legaltech",approved,0
+3af30cbd-3b3e-44e0-9e99-5ae210e92f0f,"Caris",225,3,30,20,70,30,30,40,"ai/ml|cleantech|gaming",approved,0
+0489be9a-8ffe-40e5-86c3-476ac1200e84,"Precision Medicine",241,3,30,20,70,30,30,40,"ai/ml|healthtech|cleantech",approved,0
+d12dc7d1-4c4c-4506-9b4b-d402db511f2b,"Kraa",31,1,30,20,30,30,30,40,"technology",approved,0
+e59eb7a7-9b17-4284-9fb5-8ce763c538b7,"KIFFIK Biomedical",33,1,30,20,30,30,30,40,"technology",approved,0
+26e1dddf-c6da-469c-b8e3-ab8de0a415ad,"Vantage",65,1,30,20,30,30,30,40,"gaming",approved,0
+853e732c-e393-4e02-bac0-5bf54cfe937b,"Kelv",151,1,30,20,30,30,30,40,"technology",approved,0
+ab738677-de0f-490e-90b0-6ec840d59431,"Blackbird Labs",43,1,30,20,30,55,30,40,"technology",approved,0
+755799c0-ca57-408c-9cd9-07e3f05d9ce2,"Autana AI",223,2,30,20,70,30,30,40,"ai/ml|cleantech",approved,0
+cb725f8a-b9bd-47b7-aecd-f2fcf42d39fa,"Nvidia",120,1,30,20,60,30,30,40,"climate tech",approved,0
+b5eea308-558c-48a2-908e-dc0b048628df,"Astranis",221,1,30,20,30,30,30,40,"spacetech",approved,0
+449ea40e-6928-4dcc-a18a-ba82bd2c733e,"SLAY",44,2,30,20,40,30,30,40,"gaming|media",approved,0
+60c438f1-c2be-4fe8-b769-d648fcfe025f,"Karcsham Co.",103,3,30,20,70,30,30,40,"saas|climate tech|gaming",approved,0
+fe52a64a-0821-4074-bd56-eb4b66512e7b,"Step Energy Services",42,1,30,20,30,30,30,40,"technology",approved,0
+93c9d569-3fb5-40b1-aafe-c7374a7622ae,"Zerohash",66,1,30,20,30,30,30,40,"technology",approved,0
+de22aaf8-2f3f-43d1-9504-2b9789fc256a,"Sequence",53,1,30,20,30,30,30,40,"technology",approved,0
+4d734455-6880-4e11-a754-89f2b5419026,"Melio",41,1,30,20,30,30,30,40,"gaming",approved,0
+94794e7d-b762-4366-9b93-ef830a09db3f,"Virtual Graffiti Wall",235,1,30,20,30,30,30,40,"spacetech",approved,0
+c5dd4848-0b3e-4122-b5fe-7e424ddfd3fb,"Medline",30,1,30,20,30,30,30,40,"technology",approved,0
+0acf9cdd-47ee-4ad3-92cc-da51cc42fb2a,"LinkLabs",224,3,45,90,40,55,30,55,"crypto|web3|defi",approved,1
+927dbdd5-f724-4384-9f72-b872dda296c0,"Homebound",212,1,30,20,30,30,30,40,"proptech",approved,0
+c2828d3f-56b7-4be4-9592-975beac6f23a,"FlooFloo",207,1,30,20,30,30,30,40,"technology",approved,0
+1fe56cbc-ebe4-4ac9-8b97-a1f7fa1a7c4f,"Enter Space",101,1,30,20,30,30,30,40,"gaming",approved,0
+13ed7473-dba0-45b1-951b-1af47962247f,"CapitalG and Menlo",53,1,30,20,30,30,30,40,"technology",approved,0
+17162747-4988-4f7e-b40c-69ca0e5f2f4b,"HashiCorp",70,2,30,20,40,30,30,40,"developer tools|gaming",approved,0
+3967164f-1170-4a6e-9a25-2e0f8f1f9b9d,"Applied Intuition",69,1,30,20,30,30,30,40,"gaming",approved,0
+df2ea8da-9baf-42a3-b8ac-1d519b6e51b4,"Stratsys",45,1,30,20,30,30,30,40,"technology",approved,0
+b0f64cbd-836c-4809-98f0-934a0a53f9da,"Strategy for Digital",91,1,30,20,30,30,30,40,"technology",approved,0
+37656af5-2ea6-473d-9bab-be7d8cb74a39,"ZYNO",44,1,30,20,30,30,30,40,"technology",approved,0
+61048a47-6024-4498-b13b-2e46de21975c,"GridSecurity",225,3,45,90,70,55,30,61,"healthcare|biotech|ai/ml",approved,1
+37c5733e-6dcf-41ae-bb5f-8d3603b287d5,"Suno",50,1,30,20,30,30,30,40,"technology",approved,0
+68aa5706-b5de-44b9-8c9b-70edb953568a,"InfiniGods",43,1,30,20,30,30,30,40,"gaming",approved,0
+176d52db-31b8-4605-bdee-c2ac9f8f80c6,"Enlightra",58,1,30,20,30,30,30,40,"technology",approved,0
+48c50c85-73ed-40b9-8916-8cd8b868b1e9,"AegisAI",36,1,30,20,30,30,30,40,"cybersecurity",approved,0
+c919b79b-2ef2-4fe1-b1e6-c594a402edbd,"Growth For Impact",211,1,30,20,60,30,30,40,"ai/ml",approved,0
+648823c5-0cfd-4e73-aac9-6a5d92fafe78,"Hypergene",51,1,30,20,30,30,30,40,"technology",approved,0
+b9df4bc7-a68f-4486-8cb7-8d055392dc92,"Weathermatic",62,1,30,20,30,30,30,40,"gaming",approved,0
+eff8d624-e01f-4181-b537-110327bb6bd9,"Mezo",47,2,30,20,70,30,30,40,"fintech|gaming",approved,0
+33d95c67-f090-4903-a879-ef830e380f66,"Helika",53,1,30,20,30,30,30,40,"gaming",approved,0
+b8776b30-b3d6-44de-b4ba-06454bcc12f7,"Inito",214,2,30,20,70,30,30,40,"ai/ml|cleantech",approved,0
+453313ed-9374-4cdf-99d6-4be18b7b4b46,"Dust",47,1,30,20,30,30,30,40,"technology",approved,0
+f5334403-3401-4240-99d5-062e8fd06035,"Ceres Technology",211,1,30,20,30,30,55,40,"technology",approved,0
+cd965a31-d85e-4762-904f-1577cee591c0,"Karat",200,1,30,20,30,30,30,40,"gaming",approved,0
+3682105f-51f1-45ae-8129-47e6036a2dac,"Pattern Generator",223,1,30,20,30,30,30,40,"technology",approved,0
+ffb59949-318c-4853-a50e-1b30f84dedd2,"Ariglad",226,2,30,20,70,30,55,40,"ai/ml|gaming",approved,0
+1e233a6a-0baa-487f-b6c0-39724949dd45,"Chargerhelp",215,3,30,20,70,30,30,40,"ai/ml|cleantech|gaming",approved,0
+e1b6cb2a-518b-4043-bd27-f166d4f758be,"Veza",49,1,30,20,30,30,30,40,"cybersecurity",approved,0
+cb9fe0cc-f3dc-4e68-8169-25334f6e6ee1,"ScioTeq",51,1,30,20,30,30,30,40,"developer tools",approved,0
+ab9ec16e-a138-4caa-94d9-a3da60fd9300,"Existing investors",72,1,30,20,30,30,30,40,"technology",approved,0
+5554e90b-4263-43c2-a4e1-bd5628e5edd8,"Globalization in Climate",53,1,30,20,30,30,30,40,"technology",approved,0
+463ec173-4940-414e-a4cd-003742406de6,"Nuvocargo",237,3,30,20,70,30,30,40,"ai/ml|gaming|logistics",approved,0
+a464650b-ed8f-4132-b965-9724508d8de1,"Humanz",36,1,30,20,30,30,30,40,"technology",approved,0
+4499830f-99f8-4b72-9a6f-5f9a1ea0c7d7,"Cluely",23,1,30,20,30,55,30,40,"consumer",approved,0
+b9fca031-4f88-4a8a-bec1-4a9ec5b9e942,"Tailscale",40,2,30,20,40,30,30,40,"developer tools|proptech",approved,0
+12d63b3b-b797-4648-8a7c-958670ef7ffa,"StellarAnalytics",255,3,55,90,40,80,30,62,"edtech|learning|b2c",approved,1
+5378e56d-1483-4f53-ad86-b9d982ee3998,"Reducto",49,1,30,20,30,55,30,40,"developer tools",approved,0
+94348676-be00-486c-bb6f-12d1519ef012,"Cursor",204,1,30,20,30,30,30,40,"cleantech",approved,0
+91f483d8-d19a-481d-9e82-0b566630c25b,"Pair Eyewear",226,2,30,20,70,30,55,40,"ai/ml|gaming",approved,0
+60a0a098-4a40-4f07-b77d-cb44198ed810,"Flint",42,1,30,20,30,30,30,40,"gaming",approved,0
+683c8b3a-4579-4f45-99b8-dbe78bdd2a7e,"Fabheads",39,1,30,20,60,30,30,40,"climate tech",approved,0
+12c8ca4b-2df2-498f-8ecb-de3b6e079da9,"K2 Space",50,3,30,20,70,55,30,41,"climate tech|developer tools|gaming",approved,0
+465116e9-6554-45fd-a33c-ecc711c9a871,"ThoughtSpot",214,1,30,20,30,30,30,40,"cleantech",approved,0
+627417d8-c03c-4c53-8c4e-3a531e4f83fb,"Ugmonk",76,1,30,20,30,30,30,40,"technology",approved,0
+0a6490cb-84e4-4848-91fd-9219d39f0b7e,"Blakthumb",227,1,30,20,30,30,30,40,"gaming",approved,0
+8fad2b2e-96b8-49b4-98fb-5a434dc7ab74,"MilkStation",97,1,30,20,30,30,30,40,"technology",approved,0
+6a35a568-2c46-4f4c-8615-5f0adaa640e5,"Palantir",116,1,30,20,30,30,30,40,"gaming",approved,0
+b5489de1-b83d-4d31-a186-ddee63311ec0,"Steward Partners",76,1,30,20,30,30,30,40,"technology",approved,0
+376622ed-2532-45b0-9e68-dc5c104e33b9,"Spire Global",222,1,30,20,30,30,55,40,"spacetech",approved,0
+f7b2f925-02ce-4eaf-aa85-f968f0e558c5,"DroneAcharya",101,1,30,20,30,30,30,40,"technology",approved,0
+819a6513-bbf4-44c3-bd1e-1523efefe31a,"Fibertime",111,1,30,20,30,30,30,40,"technology",approved,0
+1f5e5e5f-eb31-424f-bd9b-c148c9a1e090,"HawkEye 360",27,1,30,20,30,55,30,40,"technology",approved,0
+df49eb7c-781c-4d54-8a83-cb6544ea9c6f,"Flutterwave",112,1,30,20,30,30,30,40,"technology",approved,0
+a6358c5a-6a43-49ee-ad18-a69fc34abaea,"Scale",36,1,30,20,30,30,30,40,"technology",approved,0
+e3028631-47db-4a40-af54-8da2dd71c68a,"Synthflow AI",38,1,30,20,60,30,30,40,"saas",approved,0
+8d2bc0b1-8e0a-4178-a541-481af0afd3c3,"TikTok",136,1,30,20,30,30,30,40,"technology",approved,0
+efa061b3-08e7-4d16-8843-ad972f7abfbd,"Speak",45,2,30,20,40,30,30,40,"edtech|gaming",approved,0
+ee97336f-50dc-4757-a4ff-5d8df30e6dc9,"DynamicHorizon",65,1,30,20,30,30,30,40,"technology",approved,0
+5d92eeea-1d3a-4d9e-b898-4e55c44282af,"CapitalVia",218,1,30,20,30,30,55,40,"developer tools",approved,0
+f90dfe96-ef9c-4f89-b823-7c3735dc6de1,"CloudChute",93,1,30,20,30,30,30,40,"technology",approved,0
+17df6eba-70fc-43d6-be8f-bdc584b98071,"Quercle",150,1,30,20,30,30,30,40,"technology",approved,0
+cb6f714d-5486-4d42-b185-3ec18fc2ab33,"BuzzFeed",204,1,30,20,60,30,30,40,"ai/ml",approved,0
+c7b4a5ad-f723-4b6a-b4f4-bab76d733f0e,"Dash0",37,2,30,20,70,30,30,40,"climate tech|developer tools",approved,0
+013a0a28-a31e-4f2b-815a-ab5fa6963087,"dbt Labs",71,1,30,20,30,30,55,40,"technology",approved,0
+d8617238-8ed2-43e9-8c09-2855016bcb28,"Unnamed Silicon Valley Bank",91,2,30,20,70,30,30,40,"fintech|gaming",approved,0
+7e147c93-5b76-4b26-b06e-6ac70e532f8f,"Pixen",92,1,30,20,30,30,30,40,"technology",approved,0
+dbe27e4a-22bb-4f82-a7e6-586e419a69ee,"VibeSquad",224,1,30,20,30,30,55,40,"gaming",approved,0
+610b8ba9-7ac8-4701-8ff9-e06f914c6b44,"Matle",113,1,30,20,30,30,30,40,"technology",approved,0
+c98b57d5-b8be-4d42-a0fe-7685149f62d5,"Cartwheel",35,1,30,20,30,30,30,40,"gaming",approved,0
+7baeb56e-efcc-4b5c-bedd-1e56276e437e,"TrueDax",218,1,30,20,30,30,55,40,"technology",approved,0
+4f815e80-1039-40cf-882e-04c45e266eac,"Bitso",52,2,30,20,70,30,30,40,"fintech|gaming",approved,0
+204e0ef2-c303-4568-9d93-ac8bc6ff925f,"Phia",44,1,30,20,30,30,55,40,"technology",approved,0
+5ea237db-8ff8-4fb5-97a2-9257f82ee240,"Wayve",44,1,30,20,30,30,55,40,"technology",approved,0
+d778c60f-ab29-48b5-8d88-dad46ed70157,"Keycard",31,3,30,20,40,55,30,40,"cybersecurity|developer tools|gaming",approved,0
+52640c09-c9ae-42ed-b110-6464d3245c16,"ArgueWiki",149,1,30,20,30,30,30,40,"technology",approved,0
+df2d5213-9416-4d7b-96e5-55196c34fa0a,"Thiel-Backed Bank",92,2,30,20,70,30,30,40,"fintech|gaming",approved,0
+3510f145-7a5a-40dc-8b2c-73760cf23120,"ToolPipeline",71,1,30,20,30,30,30,40,"technology",approved,0
+cfcdb766-cf0c-494c-bcc2-cc59747e3ead,"Latameo",165,1,30,20,30,30,30,40,"technology",approved,0
+3539e443-af74-4241-b069-23b869b6da5d,"Kadoa",143,1,30,20,30,30,30,40,"technology",approved,0
+53ae15bc-e773-45e9-aca4-be73cc4bb17c,"Empromptu",215,2,30,20,70,30,30,40,"ai/ml|saas",approved,0
+113a8425-263d-453c-a2ff-266346dbc221,"Kalshi",27,1,30,20,30,55,30,40,"gaming",approved,0
+11b62697-8c48-4293-8536-3deafc579ee4,"Tooly",163,1,30,20,30,30,30,40,"technology",approved,0
+5799cd12-71f8-422a-80fd-ff235023baed,"Elemind",210,1,30,20,60,30,55,40,"ai/ml",approved,0
+bbeb35d0-59d2-403a-9f31-ff4efd186add,"Servury",146,1,30,20,30,30,30,40,"technology",approved,0
+295a956a-1176-4fff-a23d-4f23db036da7,"Advanced Micro Devices (AMD)",80,1,30,20,60,30,30,40,"climate tech",approved,0
+1cadee1a-3dac-4f67-9ce8-918a79745927,"Anna's Archive",89,1,30,20,30,30,30,40,"technology",approved,0
+fc74bf42-725f-4c7e-81b4-f75a7e9c6213,"NoteGPT",72,1,30,20,30,30,30,40,"technology",approved,0
+fe3695ac-c4b1-44d1-b43e-2ec904c9230c,"VulcanForms",235,2,30,20,40,30,30,40,"cleantech|developer tools",approved,0
+0fe47937-76c5-4321-b4bd-1299bb842572,"Fosi Audio",108,1,30,20,30,30,30,40,"technology",approved,0
+438be977-e16b-4824-97c2-b8f1ecb8f018,"Touched Grass",67,1,30,20,30,30,30,40,"technology",approved,0
+fdd34e68-0449-4d70-a9e3-bb9f3257387f,"GetProfile",68,1,30,20,30,30,30,40,"technology",approved,0
+f7e1ecaa-15d6-4c85-a89c-8bfc9baeffc4,"Noya",43,1,30,20,30,55,30,40,"technology",approved,0
+09f3b5a9-30d4-45f3-a834-efe1275be608,"Verkor",76,1,30,20,30,30,30,40,"technology",approved,0
+9ca06710-6824-43ff-936d-4677f431a310,"Hedra",40,3,30,20,40,55,30,40,"gaming|media|consumer",approved,0
+c8a03ce2-00e6-4cc2-b376-0e6f089f06d3,"Cariqa",44,1,30,20,30,30,30,40,"technology",approved,0
+296e5f7d-8402-4d39-b6b2-5ba18bc495ce,"NOIZ AI",69,1,30,20,30,30,30,40,"technology",approved,0
+f6e819ad-8d93-4c26-a51b-abdc6944a154,"OneHash",229,3,30,20,70,30,55,40,"saas|cleantech|gaming",approved,0
+d866ee8d-97a1-4954-8a91-17a6aa9c9f5e,"ideogram-ai",224,1,30,20,60,30,55,40,"ai/ml",approved,0
+8f2e1919-d31d-4965-b9b4-f14ddde2040d,"Espresso",29,3,30,20,70,55,30,41,"fintech|developer tools|gaming",approved,0
+1dfa89c1-d08c-4588-ba08-5d09fb0d9517,"Adonis",215,3,30,20,70,30,30,40,"ai/ml|healthtech|cleantech",approved,0
+96696de7-bbc8-4f95-bc57-a20739b2ce59,"Cabify",60,1,30,20,30,30,30,40,"technology",approved,0
+77e03770-2709-43e3-9924-cd86ab9a6385,"Hinge Health",248,2,30,20,40,30,55,40,"healthtech|gaming",approved,0
+debcaa71-6153-4662-9f17-ea13c02bd874,"METR",100,1,30,20,30,30,30,40,"technology",approved,0
+ba20c509-23d4-4153-9ee0-6710de9ddef4,"Taking Care",54,1,30,20,30,30,30,40,"gaming",approved,0
+e3d8f6cf-18cd-48ca-98e6-a7137f42542c,"Chameleon",43,1,30,20,30,30,30,40,"technology",approved,0
+41aac886-82a7-4ed8-8acf-74b0a4553327,"Rula",199,1,30,20,30,30,55,40,"healthtech",approved,0
+3ccf6c80-120f-499a-8006-70e7976bf94b,"MyLens",65,1,30,20,30,30,30,40,"technology",approved,0
+757928d5-bb79-4f7f-9a52-4c383b48fe6f,"Pylon",224,2,30,20,70,30,55,40,"saas|hr tech",approved,0
+b67c74dc-d9f4-4bea-b315-39be48578362,"Aerodome",216,2,30,20,40,30,30,40,"cleantech|robotics",approved,0
+11c960bb-fadb-41a8-a9a9-bdbe88dbe144,"Shield AI",129,1,30,20,30,30,30,40,"technology",approved,0
+11ea03d4-8dcb-4c4e-b77a-89041eebda21,"Wave Browser",78,1,30,20,30,30,30,40,"technology",approved,0
+c65566b9-6eba-4ea0-ae6d-18318cc1935a,"Base Power",50,2,30,20,40,55,30,40,"developer tools|gaming",approved,0
+fab97153-0383-4dfa-9530-8cdb24d8fbe0,"Mullvad VPN",69,1,30,20,30,30,30,40,"technology",approved,0
+58d5f9ab-8902-448f-9aa0-05ee8408eaca,"MiMo-V2-Flash",60,1,30,20,30,30,30,40,"technology",approved,0
+18aa3fef-892f-4d31-b32d-9baed2bb740f,"Joon Care",81,1,30,20,30,30,30,40,"technology",approved,0
+7df70c28-ffcd-49e3-9d8c-e4336a29f6ac,"American Drive Acquisition",52,1,30,20,30,30,30,40,"technology",approved,0
+3bcb4bc0-27c6-4141-aab7-ffd0f2905a78,"Stream Security",216,1,30,20,30,30,30,40,"cybersecurity",approved,0
+6eefa5bf-abf8-416f-9914-3cab2bce9dd7,"Exopriors",147,1,30,20,30,30,30,40,"gaming",approved,0
+c184fb0e-f32d-4db4-801d-c4db47b8245d,"Kanmail",100,1,30,20,30,30,30,40,"technology",approved,0
+825e8be9-9573-4af3-9275-04a0c7170b71,"LiteClient",128,1,30,20,30,30,30,40,"developer tools",approved,0
+d456a18d-c037-40d8-b405-0719321d607a,"Magma",63,1,30,20,30,30,30,40,"technology",approved,0
+05495e53-495e-4fd9-afd3-3dcf3bec9797,"Flowdrop",95,2,30,20,70,30,30,40,"saas|gaming",approved,0
+110e0740-8eff-4bfb-975f-f2fcd791216c,"Investar",52,1,30,20,30,30,30,40,"technology",approved,0
+c1f37131-cdb7-4b36-999a-0163854341ac,"Traversal",40,1,30,20,30,30,30,40,"technology",approved,0
+51b80234-5b48-457b-9f67-82c6affea56b,"AI Authority Gateway",112,1,30,20,30,30,30,40,"technology",approved,0
+86c59162-6797-4925-ada4-ed08ce314403,"TorForge",81,1,30,20,30,30,30,40,"technology",approved,0
+d3b11146-fff5-402b-bbae-776b21527d04,"Hadean",82,1,30,20,30,30,30,40,"technology",approved,0
+2e2c42f0-8b2b-4972-a528-24393af69241,"Curalta Foot & Ankle",40,1,30,20,30,30,30,40,"technology",approved,0
+c041218d-d70b-4927-8cd7-ac3c62de2899,"Acclime",26,1,30,20,30,30,30,40,"technology",approved,0
+63ee79f5-b287-4bba-aa9a-8b1cfebde86c,"black-forest-labs / flux-2-pro",235,1,30,20,60,30,55,40,"ai/ml",approved,0
+d1e5e185-c449-4d86-b497-d96b470169b1,"MiMo",45,1,30,20,30,30,30,40,"technology",approved,0
+c218450c-f888-47e7-a404-c7e3df91a5ec,"Runway",92,1,30,20,30,30,30,40,"technology",approved,0
+09e3c070-a0e1-4aaf-8014-0923b7808bb2,"Novoflow",22,1,30,20,30,30,30,40,"technology",approved,0
+3107000f-c7b6-4c27-9d00-c005ab46553b,"Rue",84,2,30,20,70,30,30,40,"climate tech|developer tools",approved,0
+1caa9133-331b-4b63-87e5-1fce7cd83db1,"Whisper Snapper",122,1,30,20,30,30,30,40,"gaming",approved,0
+98323425-5fda-403f-b538-2856a33c8a2c,"Gojek",81,1,30,20,30,30,30,40,"technology",approved,0
+dfcd6254-ed31-43ed-b110-d58db1366043,"August Health",43,1,30,20,30,30,30,40,"technology",approved,0
+dc1fd35d-5686-41c6-9e7f-a5133df98547,"Airbuds",16,1,30,20,30,30,55,40,"technology",approved,0
+e40a1309-ccc8-4168-9d85-fcea1c5249cb,"Unnamed Israeli AI Hacking Startup",260,3,30,20,70,30,55,40,"ai/ml|cleantech|cybersecurity",approved,0
+826849cb-3bcf-414d-bd64-3f8dec0c3231,"Kitman Labs",230,1,30,20,30,30,30,40,"cleantech",approved,0
+4348f73e-f640-414c-81f9-9f3977ec92bb,"ArkTabs",117,2,30,20,70,30,30,40,"climate tech|gaming",approved,0
+e3500524-ed30-4ea0-87e1-2fb92e04e50e,"lightricks / ltx-2-retake",231,1,30,20,30,30,55,40,"cleantech",approved,0
+86738cf4-4580-42f8-90d1-5f94109825bf,"ConnectMachine",98,1,30,20,30,30,30,40,"gaming",approved,0
+54c6cebd-61d5-46da-b15c-04fec89b77f8,"Wafer",93,3,30,20,70,30,30,40,"climate tech|developer tools|gaming",approved,0
+dbbb58ab-dc08-4239-9979-14ee849bd43b,"BrowserForge",126,1,30,20,30,30,30,40,"technology",approved,0
+97fd68f1-33f8-4718-b24a-ee82932c1a18,"Candosa",214,1,30,20,30,30,55,40,"technology",approved,0
+4f4fe777-bd2e-4aca-bf97-29a993517ab8,"Foundation EGI",223,2,30,20,40,30,30,40,"gaming|hr tech",approved,0
+aea1831c-dffb-45b3-9f44-b594487a5593,"Qwen / Qwen-Image",228,1,30,20,30,30,30,40,"technology",approved,0
+500b728b-6143-4ea4-9688-47975e938e50,"Slate",42,1,30,20,30,30,30,40,"technology",approved,0
+440dda65-7080-427b-b13a-ba3b7c163b3a,"Rad Power",33,1,30,20,30,30,30,40,"technology",approved,0
+8e0c8ad2-3ec4-4e98-8343-f11ac747e36c,"Mill",57,1,30,20,30,30,30,40,"technology",approved,0
+7f738935-6e81-4ed2-b698-ddd135af37de,"UpCharge App\t\t\t\n\t\t\n\t\t\n\t\t\n\t\t\tRead",49,1,30,20,30,30,30,40,"technology",approved,0
+39d9ac12-6841-46c9-ab00-a2e1c907064f,"Waze",225,1,30,20,30,30,55,40,"gaming",approved,0
+c0ab0350-9565-4d85-92d1-33c7eb074229,"Gen-4.5",232,2,30,20,70,30,55,40,"ai/ml|cleantech",approved,0
+3af7fa18-b800-4a65-84b1-e2bd73a58521,"Duvo",30,1,30,20,30,30,30,40,"technology",approved,0
+7f9d300d-7318-4305-8444-ef1450084b65,"Motif reveals",139,1,30,20,30,30,30,40,"technology",approved,0
+88710174-e99b-4adb-a368-c1d4eb99c6a2,"SharkNinja",71,1,30,20,30,30,30,40,"technology",approved,0
+df76f802-e24d-4ea5-a26f-15b6cca0252a,"Erebor",112,1,30,20,60,30,30,40,"fintech",approved,0
+86673420-2fa6-483d-b679-16fde8e71208,"IDDQD Internet",146,3,30,20,70,30,30,40,"saas|developer tools|proptech",approved,0
+f452d6cc-9765-4fef-87a5-5a871f1789d5,"Tecovas",79,1,30,20,30,30,30,40,"technology",approved,0
+efc5d934-5339-4657-8ee9-c83dc51e06d3,"LeadSynthAI",36,1,30,20,30,30,30,40,"technology",approved,0
+f6f8d0b9-c5f7-4d1e-b1a5-92fb5ce7e0a0,"Silicon Valley Banking Startup",138,2,30,20,70,30,30,40,"fintech|gaming",approved,0
+cd1de964-6b29-44e4-a716-5fdb237ec15a,"TikTok U.S.",144,1,30,20,30,30,30,40,"technology",approved,0
+b957a367-6706-4a5c-90ac-1eeb8adc5fee,"Azra Games",48,1,30,20,30,30,30,40,"gaming",approved,0
+2c125d47-34c4-4354-bc9b-6bc2bba3cad8,"Wintermute",60,1,30,20,30,30,30,40,"technology",approved,0
+ae6f49b6-c04e-4a34-be6a-16e46941994b,"Quince",69,1,30,20,30,30,30,40,"technology",approved,0
+ce993eb3-0ba9-4efa-a761-e59f13359612,"Transit",44,1,30,20,30,30,30,40,"technology",approved,0
+ce6a06dd-3890-4482-9feb-d28e7336ce1c,"AMD",89,1,30,20,30,30,30,40,"gaming",approved,0
+2207c3c7-3742-46dd-a332-0c1203b23d63,"Labrys",227,2,30,20,70,30,30,40,"ai/ml|cleantech",approved,0
+b3e0840d-8e02-4ee5-b8ce-4166507732f7,"Clio",221,2,30,20,70,30,55,40,"saas|legaltech",approved,0
+8e10ddc2-9a2a-468f-b9cd-6ee4c3eea1b7,"Apollo",28,1,30,20,30,30,30,40,"technology",approved,0
+328354d8-a10b-4e08-8ca0-c326d9e870de,"Premialab",41,1,30,20,30,30,30,40,"technology",approved,0
+48c59eba-29a3-45d3-a724-49ba2eb03244,"onX",200,1,30,20,30,30,30,40,"technology",approved,0
+4b786318-d880-4539-8dfd-b319e293845e,"Crunch",111,1,30,20,30,30,30,40,"technology",approved,0
+4d7f8ccd-dc81-4dc3-bdb9-7635503ad66a,"Generation Lab",41,2,30,20,70,30,30,40,"climate tech|gaming",approved,0
+5232f449-cd70-4984-b921-85f922764fcc,"Design Patterns",151,1,30,20,30,30,30,40,"technology",approved,0
+6c6a6f19-10ad-42db-9419-3f8bd38fa8ee,"Mephisto",47,1,30,20,30,30,30,40,"technology",approved,0
+a3461cc2-5f0a-48ef-acb8-657ac9323970,"Salsify",29,1,30,20,30,30,30,40,"technology",approved,0
+17cdb85a-5f7f-4c3e-a864-32fc07408323,"Smartcat",32,1,30,20,30,30,30,40,"technology",approved,0
+b219654f-d4f7-435a-aba0-0422a6310516,"Pixels.rocks",127,1,30,20,30,30,30,40,"technology",approved,0
+ff202e06-ee90-4cbb-b298-91c5dd48dd1b,"nexos.ai",32,1,30,20,30,30,30,40,"technology",approved,0
+c40244d5-2e2b-4572-a0be-138f419471d5,"DraftKings",106,1,30,20,30,30,30,40,"gaming",approved,0
+42c5e997-4243-4e60-b595-7d5a4cce8722,"YesRemoteJobs",166,1,30,20,30,30,30,40,"technology",approved,0
+f6ce5411-bb54-4cf4-898d-95bdd7e87acd,"Humans&",37,1,30,20,30,30,30,40,"technology",approved,0
+589f959b-9e09-444c-b477-dd3c7a3cedd0,"One Dollar Feedback",106,1,30,20,30,30,30,40,"technology",approved,0
+bd2dccef-052e-4646-bb29-adf453afb933,"Shorebird",41,3,30,20,70,30,30,40,"climate tech|developer tools|gaming",approved,0
+c087e86c-3a7c-4179-86a7-f7559f6ca468,"Splat",66,1,30,20,30,30,30,40,"technology",approved,0
+cf488118-325e-4e2b-a001-b96b880e6dab,"Qwen-Image-Layered",77,1,30,20,30,30,30,40,"technology",approved,0
+19016087-4063-4ffc-b694-190f9517c208,"Pebble",213,1,30,20,30,30,30,40,"technology",approved,0
+e1a932b3-6539-4e8a-8092-a762d0feaf87,"prunaai / z-image-turbo",229,1,30,20,60,30,55,40,"ai/ml",approved,0
+7a671136-229c-40ee-af41-c5afdfc8aa79,"The State Group",74,1,30,20,30,30,30,40,"technology",approved,0
+57aa827e-0549-40a8-9434-8f2bcfc74364,"Silicon Valley-focused banking startup",98,2,30,20,70,30,30,40,"fintech|gaming",approved,0
+afce20a8-1ae9-4092-b292-061453c86768,"King",24,1,30,20,30,30,30,40,"technology",approved,0
+82e6467f-fc03-4ef5-9e38-e55ad1f5dfe3,"Fireworks",29,1,30,20,30,30,30,40,"technology",approved,0
+f3c35fe1-fa77-4b3d-824c-3b2b486379ae,"ClickHouse",35,1,30,20,30,30,30,40,"technology",approved,0
+273dce80-c832-4241-9cab-56664cc0847d,"AI Serval",45,1,30,20,30,30,30,40,"technology",approved,0
+48214037-979b-43e9-b9aa-f660a8bfa3f4,"Daydream",39,1,30,20,30,30,55,40,"technology",approved,0
+eb67b8d7-3ecc-4bc6-a06a-382cbb28cf96,"NRAWG",145,1,30,20,30,30,30,40,"technology",approved,0
+05993f87-44d4-4544-89a7-d0c90bb2b290,"ETQ",213,1,30,20,30,30,55,40,"technology",approved,0
+a46bf854-6800-4899-be56-844f9de85ae1,"JSONViewerTool",26,1,30,20,30,30,30,40,"technology",approved,0
+7e50d4d1-bd68-4790-a754-bea7b8f935d3,"Mistral OCR",95,1,30,20,30,30,30,40,"gaming",approved,0
+24d5af34-b6c6-499c-9b64-725df03249c2,"Claude",66,1,30,20,30,30,30,40,"technology",approved,0
+c6eb14eb-5c2f-43a9-8460-dd71ad3ac4a6,"Wealthfront",39,1,30,20,30,30,30,40,"technology",approved,0
+c8bc27a8-c000-4d63-921f-b9d21e7d0057,"Cyble Inc",102,1,30,20,30,30,30,40,"technology",approved,0
+f176fdf6-1efe-4ec6-99b9-f37aa71a872b,"Municipal Packaging",55,1,30,20,30,30,30,40,"technology",approved,0
+2fb83841-4589-4b37-b538-e31ace5542a1,"Gloss Genius",24,1,30,20,30,30,30,40,"consumer",approved,0
+97ebfa1d-5fe0-495a-a73b-af7c26348cb2,"Wonderful",37,1,30,20,30,30,30,40,"technology",approved,0
+a30c085b-cef4-469f-9ac5-8b399b701041,"VSCO",201,1,30,20,30,30,55,40,"cleantech",approved,0
+597628f7-202b-4235-8b9a-f43dd2ff7589,"Echo",51,1,30,20,30,30,30,40,"technology",approved,0
+0f50ba77-e4e2-4443-aa46-d0c5db26bc3a,"OneDollarFeedback",137,1,30,20,30,30,30,40,"technology",approved,0
+b6acc5f5-b09f-4802-99ee-370dbeed505f,"RIANA Therapeutics",77,1,30,20,30,30,30,40,"technology",approved,0
+86a100dc-2ee6-46c8-9d7a-b741ac759fbf,"Speed1",68,2,30,20,70,30,30,40,"fintech|developer tools",approved,0
+c92b2228-eb27-4120-8de3-bcee534afed7,"Jan AI",65,1,30,20,30,30,30,40,"technology",approved,0
+c1fa536c-2417-4bce-8d1a-22e4c1d1aca9,"Zhipu",46,1,30,20,30,30,30,40,"gaming",approved,0
+6912a399-058a-4d89-9683-5a80913aca82,"Day.ai",39,1,30,20,30,30,30,40,"technology",approved,0
+bd2b6742-7b37-4822-b145-8962c2e583b2,"Kiosk",50,1,30,20,30,30,30,40,"technology",approved,0
+4315ef0d-cc4e-492a-be78-961196ed3e47,"Retro",208,1,30,20,30,30,30,40,"hr tech",approved,0
+d06f82ee-9ba3-4510-907a-02a7f1475d01,"HOTH Therapeutics",65,1,30,20,30,30,30,40,"technology",approved,0
+2d7f77e0-d510-4d9a-b8b4-c4a4b8592e2a,"Minform",48,1,30,20,30,30,30,40,"technology",approved,0
+0eb907f2-58cf-48e0-bb30-df0013a36666,"Tersus Technology",64,1,30,20,30,30,30,40,"developer tools",approved,0
+e3eeb0e9-5cf9-4b03-b5ec-540f505e4c72,"Crossbeam",59,1,30,20,30,30,30,40,"technology",approved,0
+28b1d847-fa17-4d3f-a4e7-e19e672ac517,"NeuralNest",32,2,30,20,70,30,30,40,"ai/ml|healthtech",approved,1
+34fa1119-09e4-4003-bd0d-341f4f223964,"FinFlow",33,1,30,20,30,30,30,40,"fintech",approved,1
+353e3f76-888b-4ada-9531-15b99fab381e,"Geomapping",151,1,30,20,30,30,30,40,"technology",approved,0
+9e28ddc4-94ee-45bc-a8c4-a45e45e4bf43,"PhaseV",27,2,30,20,70,30,30,40,"healthcare|climate tech",approved,0
+719501e5-9295-4010-88cf-2ff25529f34d,"Fivetran & dbt Labs",71,1,30,20,30,30,30,40,"technology",approved,0
+d9e2a3d1-4ea4-4ea0-ab87-de6f42744b7c,"Tennr",28,1,30,20,30,30,30,40,"technology",approved,0
+1ca338eb-0645-481d-ad62-473d129369bc,"Paragraph.xyz",54,1,30,20,30,30,30,40,"technology",approved,0
+5b340ecb-5ea1-475c-ab7b-0e2da892b099,"Clever",214,3,30,20,70,30,55,40,"ai/ml|edtech|cleantech",approved,0
+7fc314f0-f811-4105-92de-f51a530e64d0,"United Utility Services",61,1,30,20,30,30,30,40,"technology",approved,0
+c3ea6456-eb7c-428c-b114-897957abe7ea,"Kaizen",44,1,30,20,30,30,30,40,"technology",approved,0
+740740c9-334d-4fac-ab4d-48059ba4b7a6,"Mirror.xyz",47,1,30,20,30,30,30,40,"technology",approved,0
+ede8bddc-8a13-4468-93c3-ea2182585f15,"GC Therapeutics",60,1,30,20,30,30,30,40,"technology",approved,0
+d8c8c7bd-1ea9-4299-8bee-b6a23b1122b6,"WRITER AI",49,1,30,20,30,30,30,40,"technology",approved,0
+52b66a11-32aa-44c9-9178-fb703a32d225,"sia.vision",213,1,30,20,30,30,55,40,"gaming",approved,0
+f783ab64-d52f-4e57-babd-40f176f78782,"Quanta",28,1,30,20,30,30,30,40,"technology",approved,0
+5a6a0e89-56a0-4740-abd4-cc17048f751c,"Bonside",220,1,30,20,30,30,55,40,"cleantech",approved,0
+5d187f2c-c279-4325-b38a-4d955c3c1e96,"Doppel",27,3,30,20,70,55,30,41,"saas|cybersecurity|gaming",approved,0
+8f5a2af5-4465-415b-8f3e-12b30406057a,"Sentry",71,1,30,20,30,30,30,40,"technology",approved,0
+3268a9e0-8922-49be-b451-996714be49d3,"Floo",199,1,30,20,30,30,55,40,"technology",approved,0
+592dc8e6-f14d-4636-b13c-68b9985bd644,"Jantar GmbH",84,1,30,20,30,30,30,40,"technology",approved,0
+72e374c6-33dc-45b8-b35c-be1d40f0c114,"PagerDuty",125,1,30,20,30,30,30,40,"technology",approved,0
+cb775eac-6d4c-4dfd-b630-f8b75d7663eb,"Starcloud",131,2,30,20,40,30,30,40,"edtech|gaming",approved,0
+16d9c1d9-1ce5-465b-91d4-bc78a3f12daa,"Ideogram AI",225,2,30,20,70,30,30,40,"ai/ml|cleantech",approved,0
+fd2b05fe-7762-450f-8665-753c65d66311,"CyberSystems",235,3,55,90,70,55,30,63,"fintech|payments|b2b",approved,1
+e946b7d2-bcf9-413b-a3c6-ac46ac7c8179,"Pimlico",29,3,30,20,70,55,30,41,"fintech|developer tools|gaming",approved,0
+86758df7-c620-4130-bb42-4c8eccb82b4e,"Datasection",119,1,30,20,30,30,30,40,"technology",approved,0
+7f7b9a96-7291-4223-b6f0-28e121e475e0,"United Launch Alliance (ULA)",88,1,30,20,30,30,30,40,"technology",approved,0
+c9e5de48-b663-45cf-9a08-eb171fba6c2b,"CloudScale365",39,1,30,20,30,30,30,40,"technology",approved,0
+2b3a3ffb-f6d5-4343-af1d-5f3f30dccce8,"Octane",210,1,30,20,30,30,30,40,"technology",approved,0
+3807434b-cf02-4234-a6b3-588d5efa9e8e,"Verkada",222,2,30,20,40,30,55,40,"cybersecurity|gaming",approved,0
+488a83a5-aa7b-4ecd-b59f-7867cd31d4a5,"DNA Nanobots",47,1,30,20,30,30,30,40,"technology",approved,0
+d027d273-6750-4f22-8fa4-3f300550c0bd,"Hallucinations In Mental",61,1,30,20,30,30,30,40,"technology",approved,0
+eecb05fd-d9dc-4d13-8891-5f95e8c6e788,"Sprout",87,1,30,20,30,30,30,40,"gaming",approved,0
+8a5b2a72-2d1f-4444-83a5-af755123566a,"Patchmanager",19,1,30,20,30,30,30,40,"technology",approved,0
+7447e56f-4a0b-48a2-aed1-5a9e2138513c,"Agentforce",108,1,30,20,60,30,30,40,"saas",approved,0
+78eea1cd-20c9-4088-a8fc-6b206e5488e6,"ChatGPT Apps",69,1,30,20,30,30,30,40,"technology",approved,0
+bdf74731-696c-4016-bfad-c77766ed9c68,"Edison Scientific",21,1,30,20,30,30,30,40,"technology",approved,0
+80dfaa26-0513-4e3a-a8cb-d581daa311ef,"Startup Daddy",90,1,30,20,30,30,30,40,"technology",approved,0
+6238196b-5a10-43e0-813f-cd830084ed73,"IPF",214,3,30,20,40,55,30,40,"marketplace|consumer|sustainability",approved,0
+e9050d6e-a74b-4bfa-ac13-ec03e2a07e0d,"Harmony Baby Nutrition",74,1,30,20,30,30,30,40,"technology",approved,0
+05a47b2a-c17f-4150-a202-ab8daeced739,"Brill",76,0,30,20,30,30,30,40,"",approved,0
+7096dc84-9194-4eea-a212-87a0de1c7ecb,"Future Greens",83,1,30,20,30,30,30,40,"technology",approved,0
+b222dfbe-5206-475d-812b-7bf3d3aa2cbc,"Yestoday",38,1,30,20,30,30,30,40,"technology",approved,0
+41809795-bc3f-4b91-a3cf-5dd426b82b63,"Minivet AI",108,0,30,20,30,30,30,40,"",approved,0
+f184fb9f-f71a-49d2-9d02-cd370349c2b0,"Olo",217,2,30,20,70,30,30,40,"ai/ml|foodtech",approved,0
+966ca290-a322-4d0f-8483-6f88d3143ff0,"sdxl-based",221,1,30,20,60,30,55,40,"ai/ml",approved,0
+dc7e2d22-9a7e-4430-acac-85f29622055a,"LegalScribeHQ",65,1,30,20,30,30,30,40,"technology",approved,0
+b5785894-beac-4bb4-8423-0042721f3706,"Purchases Octane",47,1,30,20,30,30,30,40,"technology",approved,0
+52779af1-387c-4f61-99b0-8539343bd58f,"Swiss BioTech FoRx",72,1,30,20,30,30,30,40,"technology",approved,0
+aa2c0e50-4aa4-4fa5-b4e4-b40dadcb6aa2,"Sampriti Bhattacharyya's hydrofoil boats",39,1,30,20,30,30,30,40,"technology",approved,0
+ca7778b5-66fb-4e66-a396-2c8ac9460c95,"Neuraworx Medical Technology",50,1,30,20,30,30,30,40,"technology",approved,0
+296b1f48-4e6d-4b1f-8422-f3f0b3cb76d4,"Rovio",19,1,30,20,30,30,55,40,"technology",approved,0
+75fa244a-5485-4fb8-9144-d4d4875ef8ab,"Teal Health",215,1,30,20,30,30,30,40,"healthtech",approved,0
+767d2bd6-3205-4623-b06e-60d0e33f2b0c,"Kraken",204,1,30,20,30,30,30,40,"fintech",approved,0
+8b85f8fe-4e92-43ac-9961-30eb51f6e9d8,"Evoke",44,1,30,20,30,30,30,40,"technology",approved,0
+f95825f2-8d52-4066-9c7d-23c1b14ab65b,"Top Stories\n\tUS",58,1,30,20,30,30,30,40,"technology",approved,0
+241414c4-e254-42c7-8767-5220bec7680f,"Channel3 Raises",62,1,30,20,30,30,30,40,"technology",approved,0
+b96416f6-b17e-4cb3-99dd-d04198a5152b,"Leado",51,1,30,20,30,30,30,40,"technology",approved,0
+30e43487-9738-4b09-bf07-afe01af0dc09,"Einride",56,1,30,20,30,30,30,40,"technology",approved,0
+9df6327e-f415-4d37-b526-f9c4efe20321,"A&B Smart Materials",71,1,30,20,30,30,30,40,"technology",approved,0
+7dbc5eb8-ca7a-4da7-8020-90d39da4a38d,"Arbitrum",86,1,30,20,30,30,30,40,"technology",approved,0
+486b7ccf-6a89-403d-9a60-c3fa31380563,"Aurora Solar",232,3,30,20,70,30,30,40,"saas|cleantech|gaming",approved,0
+2c166ebe-a569-46ed-9205-ac34ce3cf0f2,"Jurvetson of Future",44,1,30,20,30,30,30,40,"technology",approved,0
+05b7a5e7-4c9b-459a-8517-41e6142ada7b,"WalletWallet",107,1,30,20,30,30,30,40,"technology",approved,0
+5614cf5c-1411-4ab9-b400-3bb310ffafb7,"Octane just",62,1,30,20,30,30,30,40,"technology",approved,0
+c9e804b6-c53e-4ff2-a467-cfef8de8206d,"Verodin",226,1,30,20,30,30,55,40,"cybersecurity",approved,0
+0b0e2a86-a3b9-46f9-952b-5bf89c85a479,"StackTech",243,3,55,90,40,80,30,62,"ecommerce|marketplace|retail",approved,1
+34862d35-b04e-4d25-9455-84a29d94e80d,"Courier",36,1,30,20,30,30,30,40,"technology",approved,0
+de980696-27f6-4dec-b471-aa99cb2d12e8,"ZoneShare",68,0,30,20,30,30,30,40,"",approved,0
+6ee1e36d-1f72-4fd3-9c80-82db71065712,"Nexture",117,2,30,20,70,30,30,40,"climate tech|foodtech",approved,0
+cf380d34-89f1-4b1a-95b9-315857d3e5c3,"MVPs",57,1,30,20,30,30,30,40,"technology",approved,0
+3af46234-e124-4616-be16-072992b63f16,"StellarNetworks",244,3,30,90,40,80,30,57,"crypto|web3|defi",approved,1
+02018d33-93e9-4afc-ab0b-83c904755a91,"prunaai/hidream-l1-fast",220,2,30,20,70,30,30,40,"ai/ml|gaming",approved,0
+c833f79d-7ba1-4e19-b28d-55caad9e1c0f,"Xtalic",41,1,30,20,30,30,30,40,"technology",approved,0
+8025d226-4621-4ce5-8b74-88f301fe39a7,"True Markets",216,2,30,20,40,30,30,40,"cleantech|gaming",approved,0
+580c1926-4169-44b7-8833-2d1d84cd7d63,"Aster",226,2,30,20,40,30,30,40,"healthtech|hr tech",approved,0
+259bd3fd-2fad-41a0-a395-d9d50730ed11,"MetaSense",241,3,55,90,40,80,30,62,"ecommerce|marketplace|retail",approved,1
+bd950185-e0c7-4cd4-9325-fa2d20a23f13,"Wonolo",202,1,30,20,30,30,30,40,"technology",approved,0
+f781c21f-b0a0-48e6-8b4f-86bbdfc0ae59,"Ramensoft has",70,1,30,20,30,30,30,40,"technology",approved,0
+7f9db004-963e-4431-ae57-381ebb95faf8,"Tagbin",44,1,30,20,30,30,30,40,"technology",approved,0
+060a542d-7445-4269-bc88-87d4bac996b4,"Anterior ",57,2,30,20,70,30,30,40,"ai/ml|cleantech",approved,1
+f460c504-20d2-4ec4-a35a-3ceaf641ab3c,"Zoca",31,1,30,20,30,30,30,40,"technology",approved,0
+6d4afca8-217c-4da8-a0ad-6b06d1aed9c9,"Europe Wodan AI",48,1,30,20,30,30,30,40,"technology",approved,0
+98783355-4eca-4c9c-a8aa-b747e6b38b66,"Prove",197,1,30,20,30,30,30,40,"technology",approved,0
+13974745-bba9-41c6-ae1e-76684a2f4bae,"Markforged",62,1,30,20,30,30,30,40,"technology",approved,0
+67a10535-591d-41dc-a76b-0f95a7425c35,"Walker",69,1,30,20,30,30,30,40,"technology",approved,0
+0a158449-7a78-4b0d-8899-79d9d504bd14,"Vesna Deep",74,1,30,20,30,30,30,40,"technology",approved,0
+5f8cb2ad-0641-41e7-a3f7-9c45a50703a5,"Honey",165,1,30,20,30,30,30,40,"technology",approved,0
+5c640662-4d42-4acc-a99f-5599f376448e,"Digit88",216,1,30,20,30,30,55,40,"technology",approved,0
+186b4c67-c5cc-44b5-a93b-a13f8b5ecc24,"UpCharge App Capitaliply",49,1,30,20,30,30,30,40,"technology",approved,0
+fa69c10c-f417-49b7-aa10-83f1137cfe84,"Moderna",215,1,30,20,30,30,55,40,"cleantech",approved,0
+b7262fb8-4fa1-4cee-8708-6fab0d13ed17,"Finnish",58,1,30,20,30,30,30,40,"technology",approved,0
+302c6d28-ff18-47f5-b808-81b03bfcadf1,"Truffle Security",243,3,30,20,40,30,55,40,"cleantech|cybersecurity|gaming",approved,0
+273b2e75-5c9e-41be-a333-7eddb72116e0,"Startup B",38,1,30,20,30,30,30,40,"technology",approved,0
+7ca5eb85-4453-44e4-a634-35c172c56d9a,"VertexAI",229,3,55,90,40,80,30,62,"foodtech|consumer|delivery",approved,1
+7a57207e-51cf-42ef-b626-15e1509fb9a3,"Nexus",60,1,30,20,30,30,30,40,"technology",approved,0
+57887a3a-089c-4eb8-96ab-7418718b17cc,"Aeovian Pharmaceuticals",52,1,30,20,30,30,30,40,"technology",approved,0
+e6f04375-3a68-4df3-9c9f-a40aaef61e7a,"Legal AI",72,1,30,20,30,30,30,40,"technology",approved,0
+bfdbe1c6-1e79-4a9a-8a8e-8845641a7446,"Topsy",212,1,30,20,30,30,30,40,"consumer",approved,0
+1de09836-bea9-4819-b3c4-e7bdeefff16c,"bytedance/seedream-4",231,1,30,20,30,30,55,40,"technology",approved,0
+070a79ff-4e74-4b37-911f-1e68d5072479,"Bytedance / Seedream-4",243,1,30,20,30,30,55,40,"technology",approved,0
+78724e0e-192d-4c6d-92b6-e694a1f80d9c,"Drive",50,1,30,20,30,30,30,40,"technology",approved,0
+e0d4fabb-083d-4b15-9489-73e4c44168e7,"MyLens for Chrome",53,1,30,20,30,30,30,40,"gaming",approved,0
+df416fb9-c2f1-4d50-95f9-2f6b37413aeb,"Faithful Today",119,2,30,20,40,30,30,40,"cybersecurity|consumer",approved,0
+d2cb4144-aa83-46c2-865b-f4102b88e0b0,"lightricks",215,1,30,20,30,30,55,40,"technology",approved,0
+4ea949e6-6833-493a-b9f3-1655a7b7f9ea,"Ideogram-AI / Ideogram-V3-Turbo",264,1,30,20,60,30,55,40,"ai/ml",approved,0
+1d5a88a7-c625-4f31-9809-0676f04a8dbe,"11x",32,2,30,20,70,55,30,41,"saas|gaming",approved,0
+86f4ef17-cb04-4d7b-a1f8-d750a3645a12,"Ankar raises",64,1,30,20,30,30,30,40,"technology",approved,0
+9450e272-0e63-44d3-9422-c6b441ace774,"Two Chairs",225,3,30,20,70,30,55,40,"ai/ml|healthtech|cleantech",approved,0
+875b790a-863c-4379-9925-68066faabbd8,"HyperVault",217,1,30,20,30,30,55,40,"cleantech",approved,0
+93db85a5-00eb-4d82-89ad-ec5d6dd58c43,"Aviatrix",206,1,30,20,60,30,30,40,"saas",approved,0
+344283dd-fab1-43ae-8311-eaa1fe06077a,"Tesaro",206,2,30,20,40,30,30,40,"cleantech|gaming",approved,0
+8f1d9f68-462c-4e8b-a9f4-9c1ef10b4498,"Enterpret",225,1,30,20,30,30,55,40,"technology",approved,0
+2d82e693-3c64-4867-ae33-eb4397bd0a12,"GigaCloud Technology",237,2,30,20,70,30,55,40,"saas|gaming",approved,0
+7706f1fd-ce56-4a5c-96a1-07faa7d9c3f6,"SciSpace",210,3,30,20,70,30,30,40,"ai/ml|spacetech|gaming",approved,0
+36d7953a-8019-426f-b67b-c1dfdbd3ecc4,"Mesa has shut",63,1,30,20,30,30,30,40,"technology",approved,0
+523f260e-c44e-4f45-bd88-445f0d600f1f,"Personal Capital",207,2,30,20,40,30,55,40,"gaming|developer tools",approved,0
+ec3f28f4-fb8b-43d6-a7cc-9c5bd8862a46,"Subsea",68,1,30,20,30,30,30,40,"technology",approved,0
+3cb2cb92-1fad-4d10-9838-975632e28389,"KRAFTON",111,0,30,20,30,30,30,40,"",approved,0
+da65df10-1967-4c98-94f2-2968ec6fa735,"COR Therapeutics",225,2,30,20,40,30,55,40,"healthtech|gaming",approved,0
+62062f64-d408-4064-8179-38c05dee71a0,"Bill.com",216,1,30,20,30,30,55,40,"technology",approved,0
+f22da6d2-d261-4865-930b-4f7b26965591,"black-forest-labs/flux-2-pro",244,1,30,20,30,30,55,40,"cleantech",approved,0
+c7a755ec-568c-49ea-86c0-2b301fd7b648,"Attention Engineering",28,1,30,20,30,30,30,40,"technology",approved,0
+9fe3c6be-1821-4524-9c23-be3ad63d718b,"Lovevery",204,1,30,20,30,30,30,40,"cleantech",approved,0
+7b07f76e-4554-4f42-8a04-a112ed55dfa3,"Tide",221,1,30,20,30,30,55,40,"cleantech",approved,0
+22f59dbb-7360-4c35-aa45-e3fbaee57aa5,"Pacaso",206,2,30,20,40,30,30,40,"proptech|gaming",approved,0
+9a9d7185-f348-4e50-a737-50a450adb85e,"Coalition",218,1,30,20,30,30,30,40,"hr tech",approved,0
+ae033524-dbc8-4191-9268-c75ec6f4a0d9,"Stride Learning",230,3,30,20,40,30,30,40,"edtech|gaming|hr tech",approved,0
+8fe152cb-4f8e-451f-b88c-582003765656,"QuantumScape",229,1,30,20,30,30,30,40,"cleantech",approved,0
+fd049298-301d-4f04-baa8-40f8fedf91ca,"U.S",51,1,30,20,30,30,30,40,"technology",approved,0
+392d5690-0deb-43d2-b1c2-d56daee48ae1,"Fabric8Labs",229,1,30,20,30,30,30,40,"cleantech",approved,0
+048bb257-87f7-43d4-af11-67f4c39ae24b,"Solo Founder Toolkit",296,3,30,20,70,30,30,40,"developer tools|media|productivity",approved,0
+b2f5d6b3-7f3a-4382-82e3-23aa62b334f7,"Zscaler",210,1,30,20,60,30,55,40,"saas",approved,0
+19a00cab-81db-4779-a184-ce71f63979e6,"Saenko of Future",59,1,30,20,30,30,30,40,"technology",approved,0
+91ab7407-6a14-49a7-a0b2-04773ed32e0a,"GoMechanic",202,2,30,20,40,30,55,40,"cleantech|gaming",approved,0
+a9314cd2-d53e-4663-b66d-5eef309a1f03,"Smart Audit",224,2,30,20,40,30,30,40,"cleantech|gaming",approved,0
+28e3d045-943c-4362-83f2-5203f84ae067,"Echelon",224,3,30,20,70,30,55,40,"saas|cleantech|robotics",approved,0
+821a4356-b6dd-4a61-9656-caf5b57b0b95,"Pibit.ai",230,2,30,20,70,30,30,40,"ai/ml|cleantech",approved,0
+6669ed61-1fbd-4af6-bd81-48d27e452b31,"Backflip",24,1,30,20,30,55,30,40,"gaming",approved,0
+1c64d901-6843-444e-95e8-951b3fcc7816,"DataSoftware",267,3,55,100,40,80,30,65,"foodtech|consumer|delivery",approved,1
+dfe54347-640e-43b6-9ef0-53b049413df5,"Rocket Lab",208,1,30,20,30,30,55,40,"spacetech",approved,0
+f945a426-dc71-403a-9eea-546473d8533c,"Kuaishou",226,2,30,20,70,30,30,40,"ai/ml|hr tech",approved,0
+0d96e872-4b13-4e6c-8060-762f8aa38e80,"Numeral is now",52,1,30,20,30,30,30,40,"technology",approved,0
+603c8fc1-3a4e-48e5-9d44-6ec6aabb6f57,"DataMind",263,3,45,100,70,80,30,69,"climate|cleantech|energy",approved,1
+77e7618a-3281-4be6-8072-0c63f228075d,"Nanji",48,0,30,20,30,30,30,40,"",approved,0
+a902d677-8a56-472d-8525-95cc46e44835,"Fibr AI",213,2,30,20,70,30,55,40,"ai/ml|cleantech",approved,0
+65e8c059-a2c6-4574-bb6e-7ad653416834,"Stainless",42,3,30,20,70,55,30,41,"climate tech|developer tools|gaming",approved,0
+5938eb5a-058b-4873-a18a-222e891e5955,"Redox",218,3,30,20,70,30,30,40,"ai/ml|healthtech|gaming",approved,0
+b6b3a614-4b50-47b3-82d5-5e7c164cd1c7,"Jmail",131,1,30,20,30,30,30,40,"technology",approved,0
+1150e8a7-32e1-476f-a3f8-48361e647558,"Flock",115,1,30,20,30,30,30,40,"technology",approved,0
+b691534f-915d-4308-bf8c-f3292789e4a7,"Mariana Minerals",49,1,30,20,30,55,30,40,"gaming",approved,0
+c239ef01-2a08-4fea-8278-302197f5a6d4,"PrimeSystems",228,3,55,20,70,80,30,51,"hr tech|enterprise|saas",approved,1
+5498641f-8c0e-47d7-b8ab-0313c1e62d4a,"Fundvis has raised",79,1,30,20,30,30,30,40,"technology",approved,0
+2770a507-8546-426d-9866-17a77f9a3e5d,"Crusoe Energy",233,1,30,20,30,30,55,40,"cleantech",approved,0
+dac10255-df41-404d-8f21-224466672fbd,"Rizon",103,2,30,20,70,30,30,40,"fintech|gaming",approved,0
+a8d0af33-0ee1-45a9-a10e-65a86053993f,"Spanish funds JME",48,1,30,20,30,30,30,40,"technology",approved,0
+e801bbf0-9e8e-405b-ab6c-f4576d96cdfd,"TrueWind",121,3,30,20,70,30,30,40,"ai/ml|cleantech|gaming",approved,1
+156d7bdb-f770-4464-be7b-22a1c4c9f616,"Outdoo AI",226,3,30,20,70,30,55,40,"ai/ml|saas|edtech",approved,0
+f7aee7ec-098e-4b19-9827-c966efa23fe5,"Hungryroot",227,2,30,20,40,30,55,40,"foodtech|logistics",approved,0
+dd2138e1-fcbb-411e-9faf-621cddf812b5,"With the standard",107,3,30,20,70,30,30,40,"fintech|saas|hrtech",approved,0
+e50fca3d-e8cc-4282-8de2-1a6fe195abf4,"EU",163,3,30,20,70,30,30,40,"healthtech|fintech|saas",approved,0
+9c14dc37-770a-4677-8143-86a8b46786ce,"Instituto Bernabeu",60,2,30,20,70,30,30,40,"healthcare|gaming",approved,0
+db79bf64-9fa4-4031-b66f-501bfa1dd61b,"BrainSightAI",241,2,30,20,70,30,30,40,"ai/ml|cleantech",approved,0
+6088e60d-9160-40eb-8f17-53ff7adebe6f,"ideogram-ai/ideogram-v3-turbo",233,1,30,20,60,30,30,40,"ai/ml",approved,0
+47a0d594-c8e7-4a08-8535-90c44c7b805b,"Clove",42,1,30,20,30,30,30,40,"technology",approved,0
+c1dc1e5d-f62c-4e77-9b71-246b256602af,"Instacart",205,1,30,20,30,30,30,40,"gaming",approved,0
+1d6f4409-1896-42cd-b228-dc4910d60ebc,"Healthline Media",234,3,30,20,40,30,55,40,"healthtech|hr tech|consumer",approved,0
+96054803-19e6-4389-bff2-210afe79315b,"Celona",230,1,30,20,60,30,30,40,"ai/ml",approved,0
+62230fab-269f-42a4-8890-d3675237a848,"AI",151,3,30,20,70,30,30,40,"saas|edtech|cybersecurity",approved,0
+7ae23099-2b8b-41ea-8a4d-5f7da7f7934c,"AOL",135,1,30,20,30,30,30,40,"gaming",approved,0
+5b777990-4103-46b9-b66d-49d15c2dbd94,"Midi",209,1,30,20,30,30,55,40,"technology",approved,0
+9b2aa790-4234-4a21-adc8-d05dd2211e8f,"Javis",210,2,30,20,70,30,30,40,"saas|cleantech",approved,0
+1503adf0-20b0-457e-8e7c-f96ed5a5bb0a,"AutoTest 1764636208580",75,1,30,20,60,30,30,40,"saas",approved,1
+fcd787e4-e1c9-4eb8-95c5-7e723a8604cc,"Dr. Squatch",203,1,30,20,30,30,30,40,"cleantech",approved,0
+57ee24fc-5843-4b28-82d1-b42785ce081b,"The Week",81,2,30,20,40,30,30,40,"cybersecurity|devtools",approved,0
+1d068bff-a575-47dc-8168-9b1644ec3485,"XYZ",69,1,30,20,30,30,30,40,"devtools",approved,0
+ffb870e5-6190-4bb7-a704-1bbe20706a1c,"Nuance to",88,1,30,20,30,30,30,40,"technology",approved,0
+0336ccac-139a-4591-8d07-707c787a4fd8,"Anthropic",112,1,30,20,30,30,30,40,"technology",approved,0
+afe98ceb-f4a8-4b4b-be3c-1e71e742ccdc,"Birdfy",156,1,30,20,30,30,30,40,"gaming",approved,0
+79386c01-c65b-42a9-8b84-f4b9836dd110,"Jan",139,1,30,20,30,30,30,40,"technology",approved,0
+d03ad849-26aa-44a2-a10f-6f5c12b61c57,"NeuralHealth",255,3,55,85,70,55,30,62,"cybersecurity|enterprise|saas",approved,1
+7cc9a643-2dae-4dd7-9e8b-b0f173f762f6,"Amazon Web Services",95,1,30,20,30,30,30,40,"gaming",approved,0
+b188672d-2e3a-42fb-bcd4-37f3f81a5ba8,"Thinking Stack",222,1,30,20,60,30,30,40,"ai/ml",approved,0
+e2441f55-a9ed-43b2-b65d-e0ea769acc1e,"CI",69,1,30,20,30,30,30,40,"devtools",approved,0
+b2cd3e8b-4de8-4600-a92f-b154e790b642,"It",69,1,30,20,30,30,30,40,"proptech",approved,0
+fde8d7c3-b767-4b0c-8fef-da422d83f0c2,"BRP",67,1,30,20,30,30,30,40,"devtools",approved,0
+0e5e0285-0354-4b18-8f67-c4bea4856b77,"Health Assurance Transformation Company",58,2,30,20,70,30,55,40,"healthcare|gaming",approved,0
+ad543836-3dd0-4d1d-b1a2-2e250f0b62b2,"Troopr.ai",227,1,30,20,60,30,55,40,"ai/ml",approved,0
+3e02def9-8f50-4450-bbaa-130423b7db81,"El Jannah",215,1,30,20,30,30,30,40,"technology",approved,0
+7b34546c-f5cf-4dbb-a230-f97ab81760b1,"J&J Electric of Indiana",69,1,30,20,30,30,30,40,"technology",approved,0
+3d75bce1-45c1-454a-b77d-a9e3436b4a1f,"Remi",196,1,30,20,30,30,55,40,"proptech",approved,0
+8fcbbf8c-1157-4117-a6ea-5d513cc64ea8,"Stephen Industries",64,1,30,20,30,30,30,40,"devtools",approved,0
+77847b0c-5863-4e6b-8110-c2244cf583b9,"Matterport",223,1,30,20,30,30,55,40,"spacetech",approved,0
+35b1e8a9-2746-46b4-8df5-a1bc88f3faaf,"Turo",208,1,30,20,30,30,55,40,"gaming",approved,0
+c1fbca84-a90b-46e4-93fe-fc2786f46a09,"Paystand",222,2,30,20,70,30,30,40,"ai/ml|fintech",approved,0
+bb414e8e-0fb0-419d-a2e7-31178f43bad9,"C3.ai",213,2,30,20,70,30,55,40,"ai/ml|saas",approved,0
+d2175dcf-c0cc-49fd-820b-aeebdbac095a,"Sword Health",231,1,30,20,30,30,55,40,"healthtech",approved,0
+c49faf15-2208-48c2-8a4c-121a5f45ee0f,"Vaxcyte",223,3,30,20,40,30,55,40,"healthtech|cleantech|gaming",approved,0
+2cee44c8-ac9a-4e73-bafc-8005e78028f1,"Infravision",227,3,30,20,40,30,30,40,"cleantech|robotics|developer tools",approved,0
+d9d56cfe-94f9-4f81-8571-342ccd4e3cef,"Magnifica Air",129,1,30,20,30,30,30,40,"technology",approved,0
+2a878f87-5fcb-4442-b0ad-987b03a120be,"Wiz",205,3,30,20,70,30,30,40,"saas|cleantech|cybersecurity",approved,0
+07707928-4d36-4d69-a92d-fc6b0e62dbce,"On Running",86,2,30,20,70,30,30,40,"climate tech|gaming",approved,0
+82f2b261-489a-41f5-a5c7-198d74b56a8f,"Fender",195,1,30,20,30,30,30,40,"technology",approved,0
+5478dd8b-d5b6-4be5-92d9-a92e00c07995,"Atlas Obscura",136,2,30,20,40,30,30,40,"gaming|consumer",approved,0
+a905a513-2497-45ea-81a1-acfa56b46449,"Mason",219,2,30,20,70,30,55,40,"ai/ml|ecommerce",approved,0
+8967cd4b-a6ff-4f36-a08d-9f7712a777e2,"DoorDash",209,1,30,20,30,30,30,40,"foodtech",approved,0
+068eaa83-0f7d-4c25-b5eb-af50fd8e0be7,"AroLeap",209,2,30,20,40,30,55,40,"cleantech|gaming",approved,0
+62c12557-48e7-4801-a143-3966ff5c3bb1,"TV",43,1,30,20,30,30,30,40,"gaming",approved,0
+44d62fbf-1008-4ebb-a7e4-75689fc0558f,"Enerin",74,1,30,20,30,30,30,40,"technology",approved,0
+8b0459df-2267-432c-a83d-b67f3b76c19d,"Quantum Systems today",39,1,30,20,30,30,30,40,"technology",approved,0
+bbe1ff61-a291-4a89-8417-adc32851697b,"Semgrep",219,2,30,20,40,30,55,40,"cybersecurity|developer tools",approved,0
+1729a280-5932-4e53-a3dd-202077781ad4,"NSO Group today",42,1,30,20,30,30,30,40,"technology",approved,0
+a1336cd9-aec2-4b79-a60f-080b54d00b42,"Week NYC",42,1,30,20,60,30,30,40,"climate tech",approved,0
+bbf48e1c-74b8-4cce-90fa-8cf8e566b7d1,"Coursera and Udemy",48,1,30,20,30,30,30,40,"technology",approved,0
+70326907-026b-42e0-9682-8a3a83d7df47,"NGL",48,1,30,20,30,30,30,40,"technology",approved,0
+20accd9e-2e87-4884-b20c-bfbbbf5339f3,"RIS Rx",225,3,30,20,40,30,30,40,"healthtech|cleantech|gaming",approved,0
+7d1129aa-4469-4c30-a10e-a029c6efdd20,"AIR",39,2,30,20,70,30,30,40,"ai/ml|fintech",approved,0
+f9e3f933-b167-4474-acea-3fb00e819218,"AiFi",223,3,30,20,70,30,55,40,"ai/ml|ecommerce|cleantech",approved,0
+f8808091-8f52-4b34-be3c-79cd66425ac2,"1mind",209,2,30,20,70,30,30,40,"ai/ml|cleantech",approved,0
+63210dfa-362b-4ccf-a739-7b099e61ec3b,"NYC",45,1,30,20,60,30,30,40,"climate tech",approved,0
+b342c0fb-2399-4617-bac2-08ed0b84ee32,"States\t\t\t\t\t\t\t\t\n\t\t\t\t\n\t\t\t\t\n\t\t\t\t\n\t\t\t\t\tRadiant Nuclear",46,1,30,20,30,30,30,40,"gaming",approved,0
+e7009a1f-cb15-44dc-82c9-a9fe136f49a7,"BarkPark",63,2,30,20,40,30,30,40,"gaming|consumer",approved,1
+71f216dd-0d3e-46e4-ad95-a070ee47a28c,"Waabi",217,1,30,20,30,30,55,40,"robotics",approved,0
+63744257-ab3b-45d9-b275-a8037adfa935,"HALA",218,2,30,20,70,30,55,40,"ai/ml|fintech",approved,0
+224d896e-e394-4ccc-a10c-47222a42489c,"7AI",23,1,30,20,30,30,30,40,"cybersecurity",approved,0
+d2d509bc-5069-4d68-b408-32d9704a2534,"OYO",73,1,30,20,30,30,30,40,"technology",approved,0
+bc25344f-b29f-4361-aaa8-0222f846fa90,"The RealReal",31,2,30,20,40,30,30,40,"ecommerce|gaming",approved,0
+3e61a56e-76f8-4ed0-b27f-318d685bb231,"Aurora Tech",32,1,30,20,30,30,30,40,"technology",approved,0
+ace4398b-3a08-4cdf-9d9a-22383ffaba58,"Wodan AI",56,1,30,20,30,30,30,40,"technology",approved,0
+bafbefcc-c84d-41cc-833c-5d3301c03b8f,"TON",69,1,30,20,60,30,30,40,"fintech",approved,0
+27cdd0a7-25c5-4c28-9985-f11069ff8d61,"threekit",221,1,30,20,30,30,55,40,"hr tech",approved,0
+a1db620a-1248-41a3-b8e0-156709ceb0b6,"The GoodStack Company",229,1,30,20,30,30,30,40,"technology",approved,0
+be26d5f3-6e23-4fce-b30e-4a4dab12bb80,"MaintainX",212,1,30,20,60,30,30,40,"ai/ml",approved,0
+4aa49819-f25e-4724-b19c-4b5059ca77c2,"Coupa",203,1,30,20,30,30,30,40,"technology",approved,0
+92843293-b1d1-4af8-9e53-7529596888ba,"Beautycounter",201,2,30,20,40,30,55,40,"cleantech|gaming",approved,0
+d53cf0a4-740b-4072-bd5e-64854ad246d5,"Scribie",211,1,30,20,30,30,55,40,"technology",approved,0
+7f78d84b-0bc7-426a-b244-9f243db89494,"TAE",125,1,30,20,30,30,30,40,"media",approved,0
+b9f41c0b-50c8-4e8d-abd6-ccd4caec5e25,"YC",49,1,30,20,30,30,30,40,"technology",approved,0
+61623d08-bd90-4f83-a141-a074d8259b3b,"Neural Magic",217,1,30,20,60,30,30,40,"ai/ml",approved,0
+263a3169-240b-4662-8a67-ae9d22fb2585,"Brooklyn Health",226,3,30,20,70,30,55,40,"ai/ml|healthtech|gaming",approved,0
+cd9b7f35-c75d-4175-880c-b3e02479880e,"MX",213,1,30,20,30,30,55,40,"technology",approved,0
+9035186e-aac2-48c4-aa08-1bdc152e7222,"Apple Hospitality",52,1,30,20,30,30,30,40,"technology",approved,0
+686c2cc9-db33-4bae-b054-15907c3f83d4,"CleanCloud",146,1,30,20,30,30,30,40,"technology",approved,0
+d108a0b0-c7e9-41bd-b5e0-db69b274c9b4,"StackAdapt",223,1,30,20,30,30,55,40,"gaming",approved,0
+9c30b9a8-5ede-49a6-ac27-9fcebfcbaac0,"Intercom",53,1,30,20,30,30,30,40,"technology",approved,0
+99a829f2-83e3-4d16-a7d5-6e61946d6e2f,"Fuse Energy",35,1,30,20,30,30,30,40,"technology",approved,0
+6bb13501-ce79-4960-b1ac-461d9c87a690,"Upside Foods",219,2,30,20,40,30,30,40,"cleantech|foodtech",approved,0
+5099144f-ac8b-4a57-817e-46b32f669157,"Braintrust",40,3,30,20,70,55,30,41,"climate tech|developer tools|gaming",approved,0
+41e23f38-bd58-40ea-953a-b8c23fad2985,"UK",74,3,30,20,70,30,30,40,"healthcare|climate tech|developer tools",approved,0
+093871cc-afa5-4e71-a766-51c9f746e699,"TERN Group",228,3,30,20,70,30,55,40,"ai/ml|healthtech|gaming",approved,0
+03f3b661-7900-4d12-8f84-51a1f4e5f880,"DataWorks",247,3,45,90,70,80,30,66,"climate|cleantech|energy",approved,1
+dde044c9-a9cc-465a-94a7-c3485a2f6505,"Hemenhesap",118,0,30,20,30,30,30,40,"",approved,0
+52e556ec-c44f-4994-9c19-68f34eace783,"Kommunicate (By Intentive)",241,1,30,20,30,30,30,40,"cleantech",approved,0
+54aa80ca-543a-4839-ac82-0683259197b3,"SPI",34,1,30,20,30,30,30,40,"technology",approved,0
+d907b8c1-68d7-4c27-8058-f1a8baa3c51d,"Samtel Avionics",66,1,30,20,30,30,30,40,"technology",approved,0
+79607eb0-a77b-413a-8c97-c2b54910eccb,"Atavistik Bio",77,3,30,20,70,30,30,40,"healthcare|climate tech|developer tools",approved,0
+1ddeb949-168f-446b-96c6-19db7f004f3e,"Roblox",213,1,30,20,30,30,30,40,"technology",approved,0
+5e2d9b0e-6318-4769-bfce-48fc4460ee82,"Kalaris Therapeutics",57,1,30,20,30,30,30,40,"technology",approved,0
+298a4aee-196b-480f-a9f1-d7a7a0bbc2b4,"Commercial Metals",52,1,30,20,30,30,30,40,"technology",approved,0
+e9ba1091-b161-4422-8586-52899f1db02b,"EULUMDAT",159,0,30,20,30,30,30,40,"",approved,0
+84450680-61bf-4b6a-9b4f-4018a96377be,"Deep Care",77,1,30,20,30,30,30,40,"technology",approved,0
+3eded013-fa1c-49ef-ace9-ad03e3cca767,"General Medicine",49,1,30,20,30,30,30,40,"technology",approved,0
+6c35fcf9-a176-46b8-9b5d-0ad50d56c48a,"Aero Norway",47,1,30,20,30,30,30,40,"technology",approved,0
+942c4463-f395-4ee7-a8fd-d1507dc1ad95,"Sierra Madre",52,1,30,20,30,30,30,40,"technology",approved,0
+0bd2fa37-d264-4ef3-a8aa-983066da40a3,"South Central",74,1,30,20,30,30,30,40,"technology",approved,0
+be036d8f-1216-4408-8837-4ba4401181b3,"Luma Labs",35,1,30,20,30,30,30,40,"technology",approved,0
+0f7135ba-57f4-4685-ad2b-83c062ad76a3,"Trump Media",53,1,30,20,30,30,30,40,"technology",approved,0
+ac259217-d4a3-4e57-bdf3-157d8b6803bb,"Avant Technology",26,1,30,20,30,30,30,40,"technology",approved,0
+f0570314-b2d5-41d8-9dc4-f94538682314,"Common Room",31,1,30,20,30,30,30,40,"technology",approved,0
+3eac7e70-8499-42ad-b65c-80f04d9c3e93,"Clearwater Analytics",118,0,30,20,30,30,30,40,"",approved,0
+df8320d5-1c62-4d8c-bbab-78e350ad6840,"Bharat Taxi",58,1,30,20,30,30,30,40,"technology",approved,0
+33ff86fd-16d8-456d-b3e2-9c13285af008,"Octane Lending",45,1,30,20,30,30,30,40,"technology",approved,0
+98de0ffa-717d-48cc-bf31-6ae8053a4ac0,"Adaptive Security",27,1,30,20,30,30,30,40,"technology",approved,0
+f1b19920-cd99-42e7-bfa5-309c76ef447f,"American Express",52,1,30,20,30,30,30,40,"technology",approved,0
+f4141727-2d54-4c25-a125-3f84399733c7,"Burro",213,3,30,20,40,30,30,40,"cleantech|foodtech|robotics",approved,0
+45bb40ee-2dc0-4ab6-83e7-1ba44f588c29,"Slidemaker App",25,1,30,20,30,30,30,40,"technology",approved,0
+c8fb0125-dabc-4f09-a063-533dbf21db8f,"Betterleave",222,1,30,20,30,30,30,40,"hr tech",approved,0
+c9efaa70-0b2c-455d-8b4b-3b11d1227929,"Image Translator",34,1,30,20,30,30,30,40,"technology",approved,0
+acbf68b8-3767-4a49-af1f-d3a0486335c4,"Cellarim Labs",28,1,30,20,30,30,30,40,"technology",approved,0
+71b4eeba-6104-43cb-81c1-fcca79d15000,"Arda Therapeutics",46,1,30,20,30,30,30,40,"technology",approved,0
+2c111424-e165-4903-b241-a4a0042b8f66,"Hogy Medical",29,1,30,20,30,30,30,40,"technology",approved,0
+cdfca337-6965-45d5-8bd6-1a40ba6ffd7e,"Decode Age",64,1,30,20,30,30,30,40,"technology",approved,0
+bd39f3f0-05ec-4c6f-80a2-e4fd66600405,"Everest Systems",61,1,30,20,30,30,55,40,"technology",approved,0
+c649ed3e-b4d4-4573-86f9-1ccb27d051ef,"Code Four",18,1,30,20,30,30,55,40,"technology",approved,0
+6192b818-adc5-4816-bca3-38708a8ff5a6,"Pine Labs",52,1,30,20,30,30,30,40,"technology",approved,0
+d0c26b2a-50d0-4d88-8bd7-ff15230c7c71,"Gambit Cyber",43,1,30,20,30,30,30,40,"technology",approved,0
+22285973-68e1-4987-a8e3-728e7456b459,"Read More",60,1,30,20,30,30,30,40,"technology",approved,0
+aa3d9d95-02c6-494d-9e85-f74f0c304cc7,"Billionaire Jared",68,1,30,20,30,30,30,40,"technology",approved,0
+9922f68d-64a3-4d1a-befd-b51531225f5a,"First Due",227,1,30,20,60,30,30,40,"ai/ml",approved,0
+64422dbe-0f7b-433b-bb91-9baacc8812a3,"Jutro Medical",49,1,30,20,30,30,30,40,"technology",approved,0
+cfca4320-0d44-4a8f-b7cf-d6fab751215d,"Sisir Radar",38,1,30,20,30,30,30,40,"technology",approved,0
+2f46f4e9-b021-4708-a69a-b5bf930cabf3,"Okta",208,1,30,20,30,30,55,40,"technology",approved,0
+fff6e57a-7cbc-4ec2-bf10-ae3446905706,"Spectral Compute",29,1,30,20,30,30,30,40,"technology",approved,0
+709b3f73-2318-4c16-940a-7fd96d6ae238,"Sunday Robotics",34,1,30,20,30,30,30,40,"technology",approved,0
+64c3835f-ba6e-48bc-ac0b-068543ba0459,"Metals Creek",58,1,30,20,30,30,30,40,"technology",approved,0
+2cabfba0-d3a0-4761-bd94-adc56ccec6dd,"Leona Health",57,1,30,20,30,30,55,40,"technology",approved,0
+9a169f11-238b-49b9-bbd1-2a8b1a362f6d,"Colossal Biosciences",76,1,30,20,30,30,30,40,"technology",approved,0
+a1fbbd67-72f6-4f48-8391-e25a0bc4401a,"Delivery Hero",210,2,30,20,40,30,55,40,"foodtech|logistics",approved,0
+4cda0797-37de-44a9-a666-0defa114c5ed,"Baya Systems",41,1,30,20,30,30,30,40,"technology",approved,0
+02786e88-1695-4436-b189-725f0df354c8,"Owl Labs",66,1,30,20,30,30,30,40,"technology",approved,0
+f5cd2b42-ae53-402a-b67a-b67b06a3347f,"Trade Republic",69,1,30,20,30,30,30,40,"technology",approved,0
+1a54f386-6275-4af2-9b57-89e5755ae557,"Cube",215,1,30,20,30,30,55,40,"cleantech",approved,0
+38fc5d05-6da5-4ba0-9a6c-a143946787ac,"Aera",214,1,30,20,30,30,55,40,"proptech",approved,0
+f27a969f-47a6-4189-81fb-d70f6058001d,"Docker",231,3,30,20,70,30,30,40,"ai/ml|cleantech|gaming",approved,0
+bb8dac39-d28e-43b5-a732-4d6126085126,"Coco Robotics",38,1,30,20,30,30,30,40,"technology",approved,0
+91671c9c-348a-495b-913f-b28e79bf1f6a,"Vivante Health",61,1,30,20,30,30,30,40,"technology",approved,0
+a1d27352-7645-47a0-a0ed-f4bbc5c8fe3a,"Axis",221,1,30,20,30,30,55,40,"hr tech",approved,0
+60e74b0c-785e-44b9-a774-b4688bc76750,"Clean Cult",223,1,30,20,30,30,55,40,"cleantech",approved,0
+0d3edbd3-b96f-4452-8fc8-5b350bee618f,"Mactop",46,0,30,20,30,30,30,40,"",approved,0
+ea4d63f5-48c7-4597-a82c-27f5457a22f3,"Compliable",218,3,30,20,70,30,55,40,"ai/ml|cybersecurity|legaltech",approved,0
+b1229e98-085d-432f-843d-c00b52eef22d,"Fortuna Health",39,1,30,20,30,30,30,40,"technology",approved,0
+c063e495-442d-4467-9f8a-9619f529df69,"Due Dilly",223,1,30,20,60,30,30,40,"ai/ml",approved,0
+fdc170ab-0a60-42f7-8525-89296a36b517,"Big Leap Health",222,1,30,20,30,30,55,40,"healthtech",approved,0
+297d8643-cc0b-4423-875d-f8b7e046fed0,"Griffin Bank",227,3,30,20,70,30,30,40,"ai/ml|fintech|cleantech",approved,0
+bff328d3-592d-4d5e-a4af-32f10a999afa,"Billionaires Build",43,1,30,20,30,30,30,40,"technology",approved,0
+294384d8-4b0b-4a32-b40c-9f241d02f2f6,"Alpaca DB",217,3,30,20,70,30,30,40,"ai/ml|cleantech|developer tools",approved,0
+4c5a4155-197d-4fd6-bb95-a6c32a1b5a04,"Tiger Global",59,1,30,20,30,30,30,40,"technology",approved,0
+703b6971-644c-4410-881d-fa4ad757fdf3,"&you",197,1,30,20,30,30,55,40,"healthtech",approved,0
+f1e6864c-e7fa-42a6-a42e-740ff36d22a1,"Transparency Analytics",47,1,30,20,30,30,30,40,"technology",approved,0
+6cde8bd1-440c-4c4c-b51a-cfd098b2f9d1,"Darktrace",233,3,30,20,70,30,30,40,"ai/ml|cybersecurity|gaming",approved,0
+21ebae7d-fc79-4062-aed7-8f2c316331de,"Agree",191,1,30,20,30,30,30,40,"technology",approved,0
+59064d5b-ba7d-40b3-8f26-6c585dbb0822,"Place Exchange",236,1,30,20,30,30,55,40,"proptech",approved,0
+24439723-afba-4835-a013-079b741bba14,"Finnish Freepress",64,1,30,20,30,30,30,40,"technology",approved,0
+6e1fc7a5-9603-4b53-bf33-2e942e654496,"Biotia",214,2,30,20,40,30,30,40,"cleantech|iot",approved,0
+db5e120d-d569-4686-b4c2-98fc81794b46,"Booky",208,1,30,20,30,30,30,40,"foodtech",approved,0
+c5f5b7fe-9e1e-48fa-9192-4e09361feebe,"Fay",204,1,8,8,8,8,8,61,"cleantech",approved,0
+b694f75d-48a5-43fa-9cbf-d1ce7d3ba1fe,"Instabase",216,2,30,20,70,30,30,40,"ai/ml|saas",approved,0
+284a4782-ebd9-449f-992e-193949309c59,"Radiant Nuclear",45,1,30,20,30,30,30,40,"technology",approved,0
+1f75bfd4-4254-4237-95c1-8c28eefc99ef,"Uber Eats",63,1,30,20,30,30,30,40,"technology",approved,0
+e04aa7a9-9db4-44e1-b0f5-32ce45d59eba,"Parallel Learning",59,1,30,20,30,30,30,40,"technology",approved,0
+043b93cc-a5b7-4b26-98a2-ab8e178d3adf,"Bahn Express",67,1,30,20,30,30,30,40,"technology",approved,0
+b85a53f0-d071-46cc-8a4f-4c22a694962e,"Chaiz",210,1,30,20,60,30,30,40,"ai/ml",approved,0
+86b9c1f1-f6b3-448f-b89d-2f0c3e797adf,"Biswas Built",71,1,30,20,30,30,30,40,"technology",approved,0
+92887f19-0020-4f2c-b4f1-49a79732b75b,"Clarity Pediatrics",47,1,30,20,30,30,30,40,"technology",approved,0
+a11e56a7-4750-42b0-851d-1f3a19780e19,"CoFertility",211,1,30,20,30,30,30,40,"cleantech",approved,0
+dbbfd64f-5f67-4546-8252-4cda7c8e04d9,"Swedish Praktikverket",63,1,30,20,30,30,30,40,"technology",approved,0
+00a5bca9-7ce7-4bf3-af82-7f4306afd78e,"Aneli Capital",85,1,30,20,30,30,30,40,"technology",approved,0
+5f34b2c9-d822-426d-af01-f08cab9936a7,"Flower Catcher",209,1,30,20,30,30,30,40,"technology",approved,0
+b43bf7fe-aad9-4ea4-9df7-a853be396ee7,"Datadog",206,1,30,20,30,30,55,40,"cleantech",approved,0
+8a654174-cb48-4a13-bb28-578938d851ef,"Asset Reality",207,1,30,20,30,30,55,40,"technology",approved,0
+43ba3aba-3b7c-4e10-a684-b512f39cf00d,"Wearlinq Raises",45,1,30,20,30,30,30,40,"technology",approved,0
+4baa4a6b-87bd-4f73-9792-42bc619e21dc,"Colabra",219,1,30,20,30,30,55,40,"gaming",approved,0
+f978110b-7b38-4d0f-82de-5ad908624368,"Abridge",218,3,30,20,70,30,55,40,"ai/ml|healthtech|cleantech",approved,0
+80fca34e-94dd-480d-b1bd-223061ddfd29,"World Labs",46,2,30,20,40,55,30,40,"developer tools|gaming",approved,0
+2bff2e28-e8b6-42b8-a468-5d85ff170652,"Drive Health",50,1,30,20,30,30,30,40,"technology",approved,0
+fdbd6ae6-944c-41a5-afb6-44ed33ab3806,"Auditive",214,2,30,20,70,30,30,40,"ai/ml|cleantech",approved,0
+7679c9ed-1237-4e17-bc18-759519e96383,"Octane Raises",62,1,30,20,30,30,30,40,"technology",approved,0
+8d2fe898-d53b-4435-b6a1-6864d613c5ff,"Smart Materials",39,1,30,20,30,30,30,40,"technology",approved,0
+8c35c88f-e5ce-4b11-ade3-35322c15c053,"Unconventional AI",222,2,8,8,10,8,8,66,"ai/ml|cleantech",approved,0
+644537d5-1001-4f4e-95a3-8da7152daea2,"Circle",222,2,30,20,70,30,30,40,"ai/ml|hr tech",approved,0
+74b10bf7-f6b6-4ea9-8b4a-8660dc6a420e,"CluePoints",221,3,30,20,70,30,55,40,"ai/ml|healthtech|cleantech",approved,0
+52b878df-b56c-4aba-a895-e1decd2dbaec,"Dream-wan2-2-faster-Pro",231,1,30,20,30,30,55,40,"technology",approved,0
+9d733f7c-0076-487a-9c97-c209ecf54eb1,"Boom",216,1,30,20,30,30,55,40,"fintech",approved,0
+cfd3aec1-4de5-4f48-97a3-b0557d8e36ce,"Bernd Bergmair",46,1,30,20,30,30,30,40,"technology",approved,0
+db2d36f7-5ce1-42d4-8a8a-d0b8861e6b31,"Calm",142,0,30,20,30,30,30,40,"",approved,0
+3d6bbb45-b229-42d4-95b8-017a3a7609bd,"Mercury",208,3,30,20,70,55,55,44,"fintech|banking|saas",approved,0
+b371d0b1-8a89-4592-8488-1359b6ef84e1,"F2",204,1,30,20,60,30,30,40,"ai/ml",approved,0
+1c6ef4f7-c419-4e3f-b078-0c8045c63598,"Black Forest Labs",230,1,30,20,60,30,55,40,"ai/ml",approved,0
+48f69c67-d81c-41bf-9575-33f9666aca9f,"Certn",209,1,30,20,30,30,30,40,"gaming",approved,0
+53f58d2a-7694-49cf-a658-252f0355e792,"Republic",221,1,30,20,30,30,30,40,"technology",approved,0
+cc45f4b1-3805-4b75-8a08-3c273e9036d9,"August",214,2,30,20,70,30,30,40,"ai/ml|gaming",approved,0
+8c8e5a1c-7c74-4473-a77c-5ab2c53a5dc7,"Contra",216,1,30,20,30,30,30,40,"technology",approved,0
+77bc5c9e-2a84-486d-a29d-735d6bfd1c78,"Anduril",210,3,30,20,70,55,55,44,"defense|ai|hardware",approved,0
+c79bc49e-a8e9-4e60-85c5-6f38e627587f,"Ambience Healthcare",214,3,30,20,70,55,55,44,"ai|healthcare|enterprise",approved,0
+97536612-1c99-46e3-b617-c0191b5d1312,"Attend",207,1,30,20,30,30,30,40,"cleantech",approved,0
+a48f18d6-7e9b-4683-b65d-02430ee3fbb7,"Double",212,3,30,20,70,55,30,41,"saas|enterprise|professional services",approved,0
+eeae7c3f-8f38-4c4f-a66d-d3f3ff3184d2,"Cursor Images",229,1,30,20,30,30,55,40,"technology",approved,0
+316aee87-33d3-4d59-a878-2ab44f4c2f1d,"Skeleton",106,1,30,20,30,30,30,40,"technology",approved,0
+47020adb-d009-4255-b3bc-460c230bc4d2,"DeepSeek",201,3,30,20,70,55,30,41,"ai|robotics|research",approved,0
+655d7604-3192-481c-85a7-d43f7aff017a,"awork",206,2,30,20,70,30,30,40,"ai/ml|saas",approved,0
+6614c786-1c9d-4cc1-adff-43b07e7da5ce,"Howard Hughes",60,1,30,20,30,30,30,40,"technology",approved,0
+430322f0-27fb-4717-b393-629635332143,"PathAI",224,2,30,20,70,30,55,40,"ai/ml|healthtech",approved,0
+5d5ac547-8d15-48e0-b592-1b590106dc8c,"Garage",208,1,30,20,30,30,30,40,"gaming",approved,0
+baa095d9-5607-4fbe-a9c6-41c3c27742a1,"Hone",209,1,30,20,30,30,55,40,"healthtech",approved,0
+f58d7f81-3b95-4f9a-b1ed-7d83a3547ca9,"Qwen Image Edit",220,1,30,20,30,30,30,40,"technology",approved,0
+c2e2ae26-20c8-4681-97c8-eee5b92670d2,"TAE Technologies in",53,1,30,20,30,30,30,40,"technology",approved,0
+743ade3f-6873-465c-9789-0b3104c4e416,"Klarna",219,2,30,20,40,30,30,40,"ecommerce|gaming",approved,0
+4c086fa0-dcd5-4f17-948a-0cd4352782ef,"ClimateAI",200,3,30,20,70,55,30,41,"ai|climate|enterprise",approved,0
+85d2ec5c-a327-4a73-82c3-2397d6cb054f,"OpenEvidence",206,3,30,20,70,55,30,41,"ai|healthcare|clinical",approved,0
+ce158cd8-611c-4a55-82af-ba7561ff3118,"Swiss Neural Concept",58,1,30,20,30,30,30,40,"technology",approved,0
+3d8a2647-1919-48f9-b059-884122ef0bb9,"Cascade",223,1,30,20,30,30,55,40,"technology",approved,0
+bc8d0f71-10af-42c9-9e0b-1f86e46a052c,"Camu",232,3,30,20,70,30,55,40,"ai/ml|fintech|gaming",approved,0
+085aad1c-cb39-45db-95ce-4adbc247b40c,"Figure AI",198,3,30,20,70,55,30,41,"ai|robotics|automation",approved,0
+08ee3dd1-f853-4cbf-a760-98440ea3ce25,"Asimov",218,1,30,20,30,30,30,40,"cleantech",approved,0
+146ef813-dd20-4350-8050-1d3b1b99904a,"Bright Harbor",228,1,30,20,30,30,55,40,"gaming",approved,0
+afc199d9-8192-48c3-8256-9d94e0aeaeed,"Conceive",220,1,30,20,30,30,30,40,"gaming",approved,0
+76078bc2-14ed-41cf-b1bd-d9598bb474d2,"Enerpac",76,1,30,20,30,30,30,40,"technology",approved,0
+93fb066a-137e-4577-9fda-d6237c9d6a7d,"HushRoom",47,1,30,20,30,30,30,40,"HR Tech",approved,1
+e447b24d-8931-4acf-b4de-56a06c6ab154,"Ursa Major",212,1,30,20,30,30,55,40,"SpaceTech",approved,0
+5718ecfc-e08a-441c-87ec-5997ed66582e,"Besolo",216,1,30,20,60,30,30,40,"AI/ML",approved,0
+76eab814-a063-4930-a305-692ebc60de11,"Boomerang",212,3,30,20,70,30,30,40,"SaaS|CleanTech|Robotics",approved,0
+16f82891-f259-40f2-af4e-75aafe67d8d5,"Basepowercompany",56,2,8,8,10,8,8,73,"AI/ML|CleanTech",approved,1
+8813cd8d-58ad-43a0-a2a2-c9d850f25ae2,"Monocle",73,1,30,20,30,30,30,40,"Technology",approved,0
+a920d147-5b78-44ae-85aa-bc43ba97b259,"Writer",199,4,30,20,70,55,30,41,"AI|Enterprise|SaaS|Content",approved,0
+c0b50518-e2da-4bfb-bbcd-f7628e8b4f7f,"Samata",65,1,30,20,30,30,30,40,"Technology",approved,0
+584a5a05-9a4b-422c-b5a1-94f0fbc31117,"Writesonic",71,1,30,20,30,30,30,40,"Artificial Intelligence / Content Creation",approved,0
+28581c07-9944-4bd3-ab0b-2581b889f47b,"ApexSystems",269,3,55,90,70,80,30,68,"Healthcare|Biotech|AI/ML",approved,1
+13968f9e-c321-4a7c-b975-d17d3eb17bdc,"GoCardless",99,1,30,20,30,30,30,40,"Technology",approved,0
+3c4ab802-d599-4a04-848a-930d5efce13a,"TargED Biopharmaceuticals",82,1,30,20,30,30,30,40,"Technology",approved,0
+ceb42ee5-80e1-4ebf-83a0-918657f74bbd,"Assistant UI",53,1,30,20,30,30,30,40,"Technology",approved,0
+537b5401-77b1-4a6e-bfec-848713778e46,"Empire AI",75,1,30,20,30,55,30,40,"Technology",approved,0
+5e67b110-db22-432b-878c-be66797d5acc,"Nouveau Monde Graphite",67,1,30,20,30,30,30,40,"Technology",approved,0
+2991cb57-0a75-4f77-b6ac-f0e34ddcfcae,"PetPulse",38,1,30,20,30,30,30,40,"Technology",approved,1
+d1470e9e-b28b-43cd-9ac8-dbad0a825755,"Higgsfield",55,1,30,20,30,30,30,40,"Technology",approved,0
+c5ed5b7e-052c-44e9-8a4a-ce17bdee2fa6,"Archer",75,1,30,20,30,30,30,40,"Technology",approved,0
+80589deb-e7b9-4cd4-96a1-75bb1ff6dee7,"Exein",69,1,30,20,30,30,30,40,"Technology",approved,0
+48d4a6a8-f706-4d30-95c0-5cba2077b056,"SwiftTech",252,3,45,90,70,55,30,61,"Climate|CleanTech|Energy",approved,1
+b46d12ff-a69a-4215-b1a1-9a26a1082769,"Sliq",55,1,30,20,30,30,30,40,"Technology",approved,0
+d1f5646a-9e80-41a9-9a99-3d3922443373,"Headway",220,3,30,20,40,30,55,40,"HealthTech|CleanTech|Gaming",approved,0
+40ea5d8b-c32f-4ebf-a56e-9b6a07148ce5,"Watershed",206,4,30,20,70,55,30,41,"Climate|Enterprise|SaaS|Sustainability",approved,0
+b0f90a82-1d1e-4a56-97f5-3122c00f2d46,"Rebrew",52,1,30,20,30,30,30,40,"Technology",approved,0
+6a7ca7cc-fb00-4f81-b23a-6ed5a247ccef,"Destinus",50,1,30,20,30,30,30,40,"Technology",approved,0
+c63d5d98-d17e-40c8-b0b5-9893f524b4b2,"Aisti",79,2,30,20,40,30,30,40,"PropTech|Gaming",approved,0
+511026d4-cbe0-460a-878e-c6153bb840d3,"GridOps",245,3,8,8,10,10,8,78,"E-commerce|Marketplace|Retail",approved,1
+1af544d0-fc57-40c0-b445-6c1b95e5f985,"Lanas Healthcare Technologies",254,3,30,20,40,30,30,40,"HealthTech|CleanTech|Gaming",approved,0
+6f5ca4f3-62a8-4fc1-8891-e224116991af,"SyncSoftware",259,3,55,90,70,80,30,68,"Cybersecurity|Enterprise|SaaS",approved,1
+67a32a86-4226-446e-b773-f73249a1f247,"Deepnight",50,1,30,20,60,30,55,40,"AI/ML",approved,1
