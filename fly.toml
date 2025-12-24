@@ -1,17 +1,23 @@
-app = 'hot-honey'
+# fly.toml app configuration file generated for hot-honey-purple-meadow-6623 on 2025-12-24T06:06:05-08:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'hot-honey-purple-meadow-6623'
 primary_region = 'lax'
 
 [build]
-  dockerfile = "Dockerfile"
+  dockerfile = 'Dockerfile'
 
 [http_service]
   internal_port = 80
   force_https = true
   auto_stop_machines = 'stop'
   auto_start_machines = true
-  min_machines_running = 1  # Keep at least 1 machine running (prevents site going down)
+  min_machines_running = 1
 
 [[vm]]
   memory = '256mb'
   cpu_kind = 'shared'
   cpus = 1
+  memory_mb = 256
