@@ -2,8 +2,8 @@ name: Automated Startup Discovery
 
 on:
   schedule:
-    # Run every 6 hours
-    - cron: '0 */6 * * *'
+    # Run every 12 hours instead of 6
+    - cron: '0 */12 * * *'
   workflow_dispatch:
     inputs:
       run_type:
