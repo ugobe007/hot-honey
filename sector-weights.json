@@ -1,0 +1,24 @@
+{
+  "version": "1.0.0",
+  "updated_at": "2025-12-25",
+  "sector_weights": {
+    "SaaS": 2.0,
+    "Consumer": 2.0,
+    "Robotics": 2.0,
+    "AI/ML": 2.0,
+    "FinTech": 2.0,
+    "HealthTech": 2.0,
+    "Crypto/Web3": 1.0,
+    "CleanTech": 0.5,
+    "Cybersecurity": 0.5,
+    "Gaming": 0.5,
+    "EdTech": 0.5,
+    "Other": 0.7
+  },
+  "scoring_adjustments": {
+    "traction_multiplier": 1.5,
+    "mrr_bonus_max": 15,
+    "elite_threshold": 85
+  },
+  "notes": "Based on Market Intelligence Monitor analysis showing investor demand vs startup supply imbalances"
+}
