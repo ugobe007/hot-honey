@@ -471,6 +471,14 @@ export default function MasterControlCenter() {
         runsToday: systemStatus.services.investorEnrichment.runsToday,
         route: '/admin/investor-enrichment',
         icon: Users
+      },
+      {
+        name: 'Tier Matching',
+        status: 'running',
+        lastRun: new Date().toISOString(),
+        runsToday: 0,
+        route: '/admin/tier-matching',
+        icon: Users
       }
     ];
   };

@@ -48,6 +48,7 @@ import SavedMatches from './pages/SavedMatches';
 import RSSManager from './pages/RSSManager';
 import DiscoveredStartups from './pages/DiscoveredStartups';
 import AILogsPage from './pages/AILogsPage';
+import TierMatchingAdmin from './pages/TierMatchingAdmin';
 import GODScoresPage from './pages/GODScoresPage';
 import AdminInstructions from './pages/AdminInstructions';
 import MLDashboard from './pages/MLDashboard';
@@ -152,6 +153,7 @@ const App: React.FC = () => {
             <Route path="investors" element={<DiscoveredInvestors />} />
             <Route path="bulk-upload" element={<BulkUpload />} />
             <Route path="god-scores" element={<GODScoresPage />} />
+            <Route path="tier-matching" element={<TierMatchingAdmin />} />
             <Route path="investor-enrichment" element={<InvestorEnrichmentPage />} />
             <Route path="ai-logs" element={<AILogsPage />} />
             <Route path="diagnostic" element={<DiagnosticPage />} />
