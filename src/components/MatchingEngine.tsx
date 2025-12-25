@@ -5,6 +5,32 @@ import { loadApprovedStartups } from '../store';
 import { getAllInvestors } from '../lib/investorService';
 import { calculateAdvancedMatchScore } from '../services/matchingService';
 import { supabase } from '../lib/supabase';
+// VC Tier Classification
+const TIER_FIRMS: Record<number, string[]> = {
+  1: ['sequoia', 'a16z', 'andreessen', 'benchmark', 'founders fund', 'general catalyst', 'greylock', 'accel', 'lightspeed', 'index', 'bessemer'],
+  2: ['first round', 'initialized', 'felicis', 'boldstart', 'spark', 'nea', 'khosla', 'craft', 'lux', 'dcvc'],
+  3: ['pear', 'haystack', 'precursor', 'nextview', 'notation', 'homebrew', 'compound'],
+  4: []
+};
+const TIER_INFO: Record<number, { name: string; minGOD: number; reachBase: number }> = {
+  1: { name: 'Elite', minGOD: 55, reachBase: 5 },
+  2: { name: 'Strong', minGOD: 45, reachBase: 15 },
+  3: { name: 'Emerging', minGOD: 38, reachBase: 25 },
+  4: { name: 'Angels', minGOD: 30, reachBase: 40 }
+};
+function classifyInvestorTier(investor: any): number {
+  const name = (investor.name || '').toLowerCase();
+  const firm = (investor.firm || '').toLowerCase();
+  for (const [tier, firms] of Object.entries(TIER_FIRMS)) {
+    if (firms.some(f => name.includes(f) || firm.includes(f))) return parseInt(tier);
+  }
+  const checkSize = investor.check_size_max || 0;
+  if (checkSize >= 10000000) return 1;
+  if (checkSize >= 2000000) return 2;
+  if (checkSize >= 500000) return 3;
+  return 4;
+}
+
 import { DotLottie } from '@lottiefiles/dotlottie-web';
 import HowItWorksModal from './HowItWorksModal';
 import InvestorCard from './InvestorCard';
@@ -386,6 +412,18 @@ export default function MatchingEngine() {
             tags: investor.sectors || [],
           },
           matchScore: (() => { const godScore = startup.total_god_score || 40; const startupSectors = startup.sectors || startup.industries || []; const investorSectors = investor.sectors || []; const sNorm = startupSectors.map((s: string) => s.toLowerCase()); const iNorm = investorSectors.map((s: string) => s.toLowerCase()); const sectorWeights: Record<string, number> = { "saas": 1.5, "ai/ml": 1.5, "ai": 1.5, "ml": 1.5, "fintech": 1.5, "healthtech": 1.5, "consumer": 1.3, "robotics": 1.5, "spacetech": 1.5, "defense": 1.5, "deeptech": 1.3, "materials": 1.3, "energy": 1.2, "bess": 1.2, "climate": 1.2, "crypto": 1.0, "cleantech": 1.0, "gaming": 0.8, "edtech": 0.8 }; let sectorBonus = 0; sNorm.forEach((s: string) => { const match = iNorm.some((i: string) => s.includes(i) || i.includes(s)); if (match) { const weight = sectorWeights[s] || sectorWeights[Object.keys(sectorWeights).find(k => s.includes(k)) || ""] || 1.0; sectorBonus += 4 * weight; } }); sectorBonus = Math.min(sectorBonus, 16); const investorStages = investor.stage || []; const startupStage = startup.stage || 2; const stageNames = ["idea", "pre-seed", "seed", "series a", "series b", "series c"]; const startupStageName = stageNames[startupStage] || "seed"; const stageMatch = investorStages.some((s: string) => s.toLowerCase().includes(startupStageName)) ? 8 : -5; const rawScore = godScore + sectorBonus + stageMatch; return Math.max(35, Math.min(rawScore, 95)); })(),
+          investorTier: classifyInvestorTier(investor),
+          tierName: TIER_INFO[classifyInvestorTier(investor)]?.name || 'Unknown',
+          reachabilityScore: (() => {
+            const tier = classifyInvestorTier(investor);
+            const god = startup.total_god_score || 40;
+            const base = TIER_INFO[tier]?.reachBase || 20;
+            const sectorMatch = (startup.sectors || []).some((s: string) => 
+              (investor.sectors || []).some((is: string) => s.toLowerCase().includes(is.toLowerCase()))
+            ) ? 10 : 0;
+            return Math.min(base + (god - 40) + sectorMatch, 60);
+          })(),
+          meetsThreshold: (startup.total_god_score || 40) >= (TIER_INFO[classifyInvestorTier(investor)]?.minGOD || 30),
         });
       }
       generatedMatches.sort((a, b) => b.matchScore - a.matchScore);
