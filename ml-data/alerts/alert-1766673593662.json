@@ -1,0 +1,53 @@
+{
+  "timestamp": "2025-12-25T14:39:53.659Z",
+  "batch": {
+    "batch": 1,
+    "count": 100
+  },
+  "deviations": [
+    {
+      "type": "distribution",
+      "bucket": "elite_55+",
+      "actual": "0.0%",
+      "target": "10.0%",
+      "deviation": "10.0%",
+      "severity": "MEDIUM"
+    },
+    {
+      "type": "distribution",
+      "bucket": "strong_45-54",
+      "actual": "5.0%",
+      "target": "25.0%",
+      "deviation": "20.0%",
+      "severity": "HIGH"
+    },
+    {
+      "type": "distribution",
+      "bucket": "good_40-44",
+      "actual": "95.0%",
+      "target": "40.0%",
+      "deviation": "55.0%",
+      "severity": "HIGH"
+    },
+    {
+      "type": "distribution",
+      "bucket": "promising_35-39",
+      "actual": "0.0%",
+      "target": "15.0%",
+      "deviation": "15.0%",
+      "severity": "HIGH"
+    },
+    {
+      "type": "distribution",
+      "bucket": "early_30-34",
+      "actual": "0.0%",
+      "target": "8.0%",
+      "deviation": "8.0%",
+      "severity": "HIGH"
+    }
+  ],
+  "recommendations": [
+    "Add more funded startups from TechCrunch/YC",
+    "Add more early-stage startups from Product Hunt/Indie Hackers"
+  ]
+}

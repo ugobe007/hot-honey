@@ -1,0 +1,51 @@
+{
+  "timestamp": "2025-12-25T14:39:55.070Z",
+  "batch": {
+    "batch": 4,
+    "count": 100
+  },
+  "deviations": [
+    {
+      "type": "distribution",
+      "bucket": "elite_55+",
+      "actual": "0.0%",
+      "target": "10.0%",
+      "deviation": "10.0%",
+      "severity": "MEDIUM"
+    },
+    {
+      "type": "distribution",
+      "bucket": "strong_45-54",
+      "actual": "1.0%",
+      "target": "25.0%",
+      "deviation": "24.0%",
+      "severity": "HIGH"
+    },
+    {
+      "type": "distribution",
+      "bucket": "good_40-44",
+      "actual": "84.0%",
+      "target": "40.0%",
+      "deviation": "44.0%",
+      "severity": "HIGH"
+    },
+    {
+      "type": "distribution",
+      "bucket": "promising_35-39",
+      "actual": "4.0%",
+      "target": "15.0%",
+      "deviation": "11.0%",
+      "severity": "HIGH"
+    },
+    {
+      "type": "avg_score",
+      "actual": "39.0",
+      "target": 44,
+      "deviation": "5.0",
+      "severity": "MEDIUM"
+    }
+  ],
+  "recommendations": [
+    "Add more funded startups from TechCrunch/YC"
+  ]
+}
