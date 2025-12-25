@@ -385,7 +385,7 @@ export default function MatchingEngine() {
             ...investor,
             tags: investor.sectors || [],
           },
-          matchScore: startup.total_god_score || 50,
+          matchScore: (() => { const godScore = startup.total_god_score || 50; const startupSectors = startup.sectors || startup.industries || []; const investorSectors = investor.sectors || []; const sNorm = startupSectors.map((s: string) => s.toLowerCase()); const iNorm = investorSectors.map((s: string) => s.toLowerCase()); const overlap = sNorm.filter((s: string) => iNorm.some((i: string) => s.includes(i) || i.includes(s))).length; const sectorBonus = Math.min(overlap * 8, 20); const investorStages = investor.stage || []; const startupStage = startup.stage || 2; const stageNames = ["idea", "pre-seed", "seed", "series a", "series b", "series c"]; const startupStageName = stageNames[startupStage] || "seed"; const stageMatch = investorStages.some((s: string) => s.toLowerCase().includes(startupStageName)) ? 10 : 0; return Math.min(godScore + sectorBonus + stageMatch, 99); })(),
         });
       }
       generatedMatches.sort((a, b) => b.matchScore - a.matchScore);
