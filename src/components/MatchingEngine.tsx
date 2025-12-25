@@ -784,16 +784,12 @@ export default function MatchingEngine() {
                 <div className="relative">
                   <EnhancedInvestorCard
                     investor={{
-                      id: match.investor.id,
-                      name: match.investor.name,
-                      tagline: match.investor.tagline,
-                      type: match.investor.type,
-                      stage: match.investor.stage,
-                      sectors: match.investor.sectors,
-                      check_size: match.investor.checkSize,
-                      geography: match.investor.geography,
+                      ...match.investor,
                       notable_investments: match.investor.notableInvestments,
-                      portfolio_size: match.investor.portfolioSize,
+                      check_size_min: match.investor.check_size_min,
+                      check_size_max: match.investor.check_size_max,
+                      geography_focus: match.investor.geography_focus,
+                      active_fund_size: match.investor.active_fund_size,
                     }}
                     compact={true}
                     onClick={() => navigate(`/investor/${match.investor.id}`)}
@@ -811,7 +807,6 @@ export default function MatchingEngine() {
                     <Info className="w-4 h-4" />
                     Learn More
                   </button>
-                </div>
                 </div>
               </div>
             </div>
