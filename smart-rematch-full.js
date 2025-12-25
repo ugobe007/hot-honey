@@ -3,7 +3,7 @@ const { createClient } = require('@supabase/supabase-js');
 
 const supabase = createClient(process.env.VITE_SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
 
-const SECTOR_WEIGHTS = { 'ai': 2.0, 'saas': 2.0, 'fintech': 2.0, 'health': 2.0, 'consumer': 2.0, 'robotics': 2.0, 'crypto': 1.0, 'climate': 0.5, 'gaming': 0.5 };
+const SECTOR_WEIGHTS = { 'ai': 2.0, 'saas': 2.0, 'fintech': 2.0, 'health': 2.0, 'consumer': 2.0, 'robotics': 2.0, 'space': 2.0, 'aerospace': 2.0, 'defense': 2.0, 'materials': 1.8, 'deeptech': 1.8, 'energy': 1.5, 'climate': 1.5, 'clean': 1.5, 'crypto': 1.0, 'gaming': 0.5, 'edtech': 0.5 };
 
 function norm(sec) {
   const s = (sec || '').toLowerCase();

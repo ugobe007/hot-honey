@@ -1,5 +1,5 @@
 {
-  "version": "2.0.0",
+  "version": "2.1.0",
   "updated_at": "2025-12-25",
   "sector_weights": {
     "AI/ML": 2.0,
@@ -8,6 +8,11 @@
     "HealthTech": 2.0,
     "Consumer": 2.0,
     "Robotics": 2.0,
+    "SpaceTech": 2.0,
+    "Aerospace": 2.0,
+    "Defense": 2.0,
+    "Materials": 1.8,
+    "DeepTech": 1.8,
     "Energy": 1.5,
     "CleanTech": 1.5,
     "Climate": 1.5,
@@ -23,5 +28,13 @@
     "3": 18,
     "4": 25
   },
-  "notes": "Energy/CleanTech upgraded from 0.5 to 1.5 - growing investor interest in energy transition"
+  "hot_sectors_2025": [
+    "AI/ML - Foundation models, agents, infrastructure",
+    "SpaceTech - Launch, satellites, space manufacturing",
+    "Defense - Autonomy, drones, cyber",
+    "Robotics - Humanoids, industrial automation",
+    "Materials - Advanced batteries, semiconductors, composites",
+    "DeepTech - Quantum, fusion, biotech"
+  ],
+  "notes": "SpaceTech and Materials added as hot sectors per Sand Hill Road trends. Founders Fund, Lux Capital, DCVC very active."
 }
