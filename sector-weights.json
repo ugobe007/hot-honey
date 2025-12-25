@@ -1,24 +1,27 @@
 {
-  "version": "1.0.0",
+  "version": "2.0.0",
   "updated_at": "2025-12-25",
   "sector_weights": {
-    "SaaS": 2.0,
-    "Consumer": 2.0,
-    "Robotics": 2.0,
     "AI/ML": 2.0,
+    "SaaS": 2.0,
     "FinTech": 2.0,
     "HealthTech": 2.0,
+    "Consumer": 2.0,
+    "Robotics": 2.0,
+    "Energy": 1.5,
+    "CleanTech": 1.5,
+    "Climate": 1.5,
+    "BESS": 1.5,
+    "Solar": 1.5,
     "Crypto/Web3": 1.0,
-    "CleanTech": 0.5,
-    "Cybersecurity": 0.5,
     "Gaming": 0.5,
-    "EdTech": 0.5,
-    "Other": 0.7
+    "EdTech": 0.5
   },
-  "scoring_adjustments": {
-    "traction_multiplier": 1.5,
-    "mrr_bonus_max": 15,
-    "elite_threshold": 85
+  "tier_bonuses": {
+    "1": 0,
+    "2": 10,
+    "3": 18,
+    "4": 25
   },
-  "notes": "Based on Market Intelligence Monitor analysis showing investor demand vs startup supply imbalances"
+  "notes": "Energy/CleanTech upgraded from 0.5 to 1.5 - growing investor interest in energy transition"
 }
