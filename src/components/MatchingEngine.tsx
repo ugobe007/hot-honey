@@ -356,12 +356,13 @@ export default function MatchingEngine() {
         const j = Math.floor(Math.random() * (i + 1));
         [shuffledStartups[i], shuffledStartups[j]] = [shuffledStartups[j], shuffledStartups[i]];
       }
-      const vcFirms = investors.filter((inv: any) => 
+      const investorsWithData = investors.filter((inv: any) => inv.sectors && inv.sectors.length > 0);
+      const vcFirms = investorsWithData.filter((inv: any) => 
         inv.type === 'VC Firm' || 
         inv.type === 'Accelerator' || 
         inv.type === 'Corporate VC'
       );
-      const investorsToUse = vcFirms.length > 0 ? vcFirms : investors;
+      const investorsToUse = vcFirms.length > 0 ? vcFirms : investorsWithData;
       const shuffledInvestors = [...investorsToUse];
       for (let i = shuffledInvestors.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -381,15 +382,14 @@ export default function MatchingEngine() {
             tags: startup.industries || [],
           },
           investor: {
-            id: investor.id,
-            name: investor.name,
+            ...investor,
             tags: investor.sectors || [],
           },
           matchScore: startup.total_god_score || 50,
         });
       }
       generatedMatches.sort((a, b) => b.matchScore - a.matchScore);
-      const MIN_MATCH_SCORE = 50;
+      const MIN_MATCH_SCORE = 35;
       const qualityMatches = generatedMatches.filter(m => m.matchScore >= MIN_MATCH_SCORE);
       const shuffledMatches = [...qualityMatches];
       for (let i = shuffledMatches.length - 1; i > 0; i--) {

@@ -2,7 +2,6 @@ name: Automated Startup Discovery
 
 on:
   schedule:
-    # Run every 12 hours instead of 6
     - cron: '0 */12 * * *'
   workflow_dispatch:
     inputs:
@@ -15,6 +14,7 @@ on:
           - full
           - rss_only
           - discovery_only
+          - inference_only
 
 env:
   SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
@@ -42,16 +42,23 @@ jobs:
         run: npm ci
 
       - name: Run Automated Scraper
+        if: ${{ github.event.inputs.run_type != 'inference_only' }}
         run: node automated-scraper.js
+        env:
+          DEBUG: true
+
+      - name: Run Inference Pipeline
+        run: node run-inference-pipeline.js
         env:
           DEBUG: true
 
       - name: Report Results
         if: always()
         run: |
-          echo "## Scraper Run Complete" >> $GITHUB_STEP_SUMMARY
+          echo "## Pipeline Run Complete" >> $GITHUB_STEP_SUMMARY
           echo "- Run time: $(date)" >> $GITHUB_STEP_SUMMARY
           echo "- Triggered by: ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Run type: ${{ github.event.inputs.run_type || 'full' }}" >> $GITHUB_STEP_SUMMARY
 
   notify-on-failure:
     needs: scrape
@@ -60,5 +67,5 @@ jobs:
     steps:
       - name: Log failure
         run: |
-          echo "Scraper failed at $(date)"
+          echo "Pipeline failed at $(date)"
           echo "Check the workflow logs for details"
