@@ -13,11 +13,13 @@ interface EnhancedInvestorCardProps {
     check_size?: string;
     check_size_min?: number;
     check_size_max?: number;
-    geography?: string;
+    geography?: string | string[];
     geography_focus?: string[];
-    notable_investments?: string[];
+    notable_investments?: string[] | any;
     notableInvestments?: string[];
     portfolio_size?: number;
+    total_investments?: number; // Database field name
+    portfolioCount?: number; // Adapter field name
     photo_url?: string;
     linkedin_url?: string;
     investment_thesis?: string;
@@ -51,16 +53,37 @@ export default function EnhancedInvestorCard({ investor, compact = false, onClic
 
   // Get geography
   const getGeography = () => {
-    if (investor.geography) return investor.geography;
+    if (typeof investor.geography === 'string' && investor.geography) return investor.geography;
+    if (Array.isArray(investor.geography) && investor.geography.length > 0) {
+      return investor.geography.join(', ');
+    }
     if (investor.geography_focus && investor.geography_focus.length > 0) {
       return investor.geography_focus.join(', ');
     }
     return null;
   };
 
-  // Get notable investments (handle both field names)
-  const getNotableInvestments = () => {
-    return investor.notable_investments || investor.notableInvestments || [];
+  // Get notable investments (handle both field names, JSON, and object arrays)
+  const getNotableInvestments = (): string[] => {
+    const investments = investor.notable_investments || investor.notableInvestments;
+    if (!investments) return [];
+    if (Array.isArray(investments)) {
+      // Check if it's an array of objects (from database) or strings
+      if (investments.length > 0 && typeof investments[0] === 'object' && investments[0] !== null) {
+        // Extract company names from objects like { company: 'Name', year: 2023 }
+        return investments.map((inv: any) => inv.company || inv.name || String(inv)).filter(Boolean);
+      }
+      return investments.filter((s): s is string => typeof s === 'string');
+    }
+    if (typeof investments === 'string') {
+      try { return JSON.parse(investments); } catch { return []; }
+    }
+    return [];
+  };
+
+  // Get portfolio size (handle multiple field names)
+  const getPortfolioSize = () => {
+    return investor.portfolio_size || investor.total_investments || investor.portfolioCount || 0;
   };
 
   // Get firm name (clean it up)
@@ -79,6 +102,7 @@ export default function EnhancedInvestorCard({ investor, compact = false, onClic
   const notableInvestments = getNotableInvestments();
   const firmName = getFirmName();
   const bio = investor.bio || investor.investment_thesis;
+  const portfolioSize = getPortfolioSize();
 
   return (
     <div
@@ -135,9 +159,9 @@ export default function EnhancedInvestorCard({ investor, compact = false, onClic
             🏦 {fundSize} AUM
           </span>
         )}
-        {investor.portfolio_size !== undefined && investor.portfolio_size > 0 && (
+        {portfolioSize > 0 && (
           <span className="bg-blue-500/20 text-blue-300 px-2 py-1 rounded-lg text-xs font-medium border border-blue-500/30">
-            📊 {investor.portfolio_size}+ deals
+            📊 {portfolioSize}+ deals
           </span>
         )}
         {geography && (
@@ -172,10 +196,11 @@ export default function EnhancedInvestorCard({ investor, compact = false, onClic
         ))}
       </div>
       
-      {/* Learn more hint */}
-      <div className="flex items-center justify-center gap-2 mt-3 text-cyan-400 text-xs font-medium">
-        <span className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></span>
-        <span>ⓘ Learn More</span>
+      {/* Learn more link */}
+      <div className="text-center mt-2">
+        <span className="text-cyan-400 text-xs hover:text-cyan-300 cursor-pointer">
+          ⓘ Learn More
+        </span>
       </div>
     </div>
   );

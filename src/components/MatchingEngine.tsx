@@ -533,10 +533,6 @@ export default function MatchingEngine() {
           <p className="text-base sm:text-xl md:text-2xl text-gray-300 max-w-2xl mx-auto mb-2 sm:mb-4">
             AI finds your perfect startup-investor matches with explanations and next steps.
           </p>
-          {/* Data Quality Indicator */}
-          <div className="flex justify-center mt-3">
-            <DataQualityBadge variant="inline" />
-          </div>
         </div>
       </div>
 
@@ -544,22 +540,6 @@ export default function MatchingEngine() {
 
         {/* Match Display with Lightning Animation */}
         <div className="max-w-7xl mx-auto mb-16">
-          {/* Batch navigation */}
-          <div className="flex flex-col items-center gap-2 mb-4">
-            <div className="text-white text-sm opacity-80">Batch {currentBatch + 1} of {totalBatches} ({batchMatches.length} matches)</div>
-            <div className="flex gap-2">
-              <button
-                className="px-3 py-1 rounded bg-orange-500/20 text-orange-300 border border-orange-400/30 hover:bg-orange-500/40 transition-all"
-                disabled={currentBatch === 0}
-                onClick={() => { setCurrentBatch((b) => Math.max(0, b - 1)); setCurrentIndex(0); }}
-              >Prev Batch</button>
-              <button
-                className="px-3 py-1 rounded bg-orange-500/20 text-orange-300 border border-orange-400/30 hover:bg-orange-500/40 transition-all"
-                disabled={currentBatch === totalBatches - 1}
-                onClick={() => { setCurrentBatch((b) => Math.min(totalBatches - 1, b + 1)); setCurrentIndex(0); }}
-              >Next Batch</button>
-            </div>
-          </div>
           {/* Match Badge & Explore Button */}
           <div className="flex flex-col items-center gap-4 mb-8">
             <div className="bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full px-10 py-4 shadow-xl flex items-center gap-3">

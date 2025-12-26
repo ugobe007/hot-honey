@@ -1,9 +1,7 @@
-# fly.toml app configuration file generated for hot-honey-purple-meadow-6623 on 2025-12-24T06:06:05-08:00
-#
+# fly.toml app configuration file
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
-#
 
-app = 'hot-honey-purple-meadow-6623'
+app = 'hot-honey'
 primary_region = 'lax'
 
 [build]
