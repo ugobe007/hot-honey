@@ -647,7 +647,7 @@ export default function MatchingEngine() {
                   {/* Header: Logo + Name */}
                   <div className="flex items-center gap-4 mb-4">
                     <img 
-                      src="/images/hot_badge.png" 
+                      src="/images/hot_badge.jpg" 
                       alt="Hot Startup" 
                       className="w-14 h-14 object-contain"
                     />
