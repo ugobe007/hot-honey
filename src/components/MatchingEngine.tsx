@@ -625,30 +625,46 @@ export default function MatchingEngine() {
                   </div>
 
                   {/* 5 Points Display */}
-                  <div className="space-y-1 text-sm text-white/90 mb-3">
-                    <p className="line-clamp-1">📊 {match.startup.market || 'Market opportunity'}</p>
-                    <p className="line-clamp-1">⚙️ {match.startup.product || 'Product innovation'}</p>
-                    <p className="line-clamp-1">👥 {match.startup.team || 'Experienced team'}</p>
+                  <div className="space-y-1.5 text-sm text-white/90 mb-3">
+                    {(() => {
+                      const ed = (match.startup as any).extracted_data || {};
+                      const startup = match.startup as any;
+                      
+                      // Extract 5 points with fallbacks
+                      const problem = ed.problem || startup.problem;
+                      const solution = ed.solution || ed.value_proposition || startup.solution || startup.description;
+                      const team = ed.team?.description || (typeof ed.team === 'string' ? ed.team : null) || startup.team;
+                      const market = ed.market?.tam || ed.market_size || startup.tam_estimate || startup.market_size;
+                      const investment = ed.funding?.seeking || ed.funding?.raise_amount || startup.raise_amount || startup.seeking;
+                      
+                      // Count how many points we have
+                      const points = [problem, solution, team, market, investment].filter(Boolean);
+                      
+                      return points.length > 0 ? (
+                        <>
+                          {problem && <p className="line-clamp-1">🎯 <span className="font-semibold text-orange-300">Problem:</span> {problem}</p>}
+                          {solution && <p className="line-clamp-1">💡 <span className="font-semibold text-emerald-300">Solution:</span> {solution}</p>}
+                          {team && <p className="line-clamp-1">👥 <span className="font-semibold text-blue-300">Team:</span> {team}</p>}
+                          {market && <p className="line-clamp-1">📊 <span className="font-semibold text-purple-300">Market:</span> {market}</p>}
+                          {investment && <p className="line-clamp-1">💰 <span className="font-semibold text-yellow-300">Raising:</span> {typeof investment === 'number' ? `$${(investment/1000000).toFixed(1)}M` : investment}</p>}
+                        </>
+                      ) : (
+                        <p className="text-white/60 italic">Details pending enrichment...</p>
+                      );
+                    })()}
                   </div>
 
-                  {/* Industry + Stage Tags */}
+                  {/* Industry Tags */}
                   <div className="flex flex-wrap gap-2 mb-3">
-                    {match.startup.tags.slice(0, 2).map((tag, idx) => (
+                    {match.startup.tags.slice(0, 3).map((tag, idx) => (
                       <span
                         key={idx}
-                        className="bg-white/30 backdrop-blur-sm border-2 border-white/60 text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg"
+                        className="bg-white/20 backdrop-blur-sm border border-white/40 text-white px-2.5 py-0.5 rounded-full text-xs font-semibold"
                       >
                         {tag}
                       </span>
                     ))}
-                    {/* Stage Tag */}
-                    <span className="bg-teal-600/50 text-white px-3 py-1 rounded-full text-sm font-bold">
-                      {match.startup.tags[match.startup.tags.length - 1] || 'Seed'}
-                    </span>
                   </div>
-
-                  {/* Funding */}
-                  <p className="text-yellow-400 text-lg font-extrabold mb-3">💰 {match.startup.seeking}</p>
 
                   {/* Vote Button */}
                   <button
