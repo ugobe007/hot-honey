@@ -629,8 +629,19 @@ export default function MatchingEngine() {
                       try {
                         const ed = (match.startup as any)?.extracted_data || {};
                         
-                        // Use fivePoints array directly from extracted_data
-                        const fivePoints = ed?.fivePoints || [];
+                        // Use fivePoints array but filter out garbage entries
+                        const fivePoints = (ed?.fivePoints || []).filter((point: string) => {
+                          if (!point || typeof point !== 'string') return false;
+                          const lower = point.toLowerCase();
+                          // Filter out meta info that's NOT a real 5-point
+                          if (lower.includes('discovered from')) return false;
+                          if (lower.includes('website:')) return false;
+                          if (lower.startsWith('stage:')) return false;
+                          if (lower.endsWith('stage funding')) return false;
+                          if (lower === 'technology') return false;
+                          if (point.includes('.com') || point.includes('.io') || point.includes('.ai')) return false;
+                          return true;
+                        });
                         
                         return fivePoints.length > 0 ? (
                           fivePoints.slice(0, 5).map((point: string, idx: number) => (
