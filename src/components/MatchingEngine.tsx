@@ -786,10 +786,6 @@ export default function MatchingEngine() {
                     investor={{
                       ...match.investor,
                       notable_investments: match.investor.notableInvestments,
-                      check_size_min: match.investor.check_size_min,
-                      check_size_max: match.investor.check_size_max,
-                      geography_focus: match.investor.geography_focus,
-                      active_fund_size: match.investor.active_fund_size,
                     }}
                     compact={true}
                     onClick={() => navigate(`/investor/${match.investor.id}`)}
@@ -807,6 +803,7 @@ export default function MatchingEngine() {
                     <Info className="w-4 h-4" />
                     Learn More
                   </button>
+                </div>
                 </div>
               </div>
             </div>
