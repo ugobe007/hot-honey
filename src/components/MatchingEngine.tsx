@@ -628,20 +628,13 @@ export default function MatchingEngine() {
                     {(() => {
                       try {
                         const ed = (match.startup as any)?.extracted_data || {};
-                        const startup = match.startup as any;
                         
-                        // Build 5 points: value prop, market, differentiator, traction, raise
-                        const points = [
-                          ed?.value_proposition || ed?.solution || startup?.pitch || startup?.description,
-                          ed?.market?.tam || ed?.market_size || startup?.tam_estimate,
-                          ed?.solution || ed?.problem,
-                          ed?.traction?.customers || startup?.traction,
-                          ed?.funding?.seeking || startup?.raise_amount || startup?.seeking
-                        ].filter(Boolean);
+                        // Use fivePoints array directly from extracted_data
+                        const fivePoints = ed?.fivePoints || [];
                         
-                        return points.length > 0 ? (
-                          points.slice(0, 5).map((point, idx) => (
-                            <p key={idx} className="line-clamp-1">{String(point)}</p>
+                        return fivePoints.length > 0 ? (
+                          fivePoints.slice(0, 5).map((point: string, idx: number) => (
+                            <p key={idx} className="line-clamp-1">{point}</p>
                           ))
                         ) : (
                           <p className="text-white/60 italic">Details pending enrichment...</p>
