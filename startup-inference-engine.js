@@ -79,22 +79,63 @@ function parseRaiseAmount(raiseStr) {
 }
 
 /**
+ * Clean garbage from text
+ */
+function cleanText(text) {
+  if (!text) return null;
+  // Remove "Discovered from..." patterns
+  let cleaned = text.replace(/Discovered from [^.]+\./gi, '').trim();
+  cleaned = cleaned.replace(/Sectors?:\s*[^.]+/gi, '').trim();
+  cleaned = cleaned.replace(/Website:\s*\S+/gi, '').trim();
+  cleaned = cleaned.replace(/Stage:\s*\S+/gi, '').trim();
+  return cleaned.length > 5 ? cleaned : null;
+}
+
+/**
  * Build extracted_data from existing fields
  */
 function buildExtractedData(startup) {
-  const text = `${startup.name} ${startup.tagline || ''} ${startup.description || ''} ${startup.pitch || ''}`;
+  const cleanTagline = cleanText(startup.tagline);
+  const cleanDescription = cleanText(startup.description);
+  const cleanPitch = cleanText(startup.pitch);
+  
+  const text = `${startup.name} ${cleanTagline || ''} ${cleanDescription || ''} ${cleanPitch || ''}`;
   const sectors = startup.sectors?.length > 0 ? startup.sectors : inferSectors(text);
   const stageName = STAGE_MAP[startup.stage] || 'Seed';
   const raiseAmount = parseRaiseAmount(startup.raise_amount);
   
-  // Build the 5-point summary
-  const fivePoints = [
-    startup.tagline || startup.description?.substring(0, 100) || `${startup.name} - innovative startup`,
-    `Stage: ${stageName}`,
-    sectors.join(', '),
-    startup.website ? `Website: ${startup.website}` : 'Early stage startup',
-    raiseAmount ? `Raising: $${(raiseAmount / 1000000).toFixed(1)}M` : `${stageName} stage funding`,
-  ];
+  // Build GOOD 5-point summary (no garbage!)
+  const fivePoints = [];
+  
+  // 1. Value Proposition (from tagline or description, or generate from name)
+  if (cleanTagline && cleanTagline.length > 10) {
+    fivePoints.push(cleanTagline);
+  } else if (cleanDescription && cleanDescription.length > 20) {
+    fivePoints.push(cleanDescription.substring(0, 120));
+  } else {
+    fivePoints.push(`${startup.name} is building innovative solutions in ${sectors[0] || 'technology'}`);
+  }
+  
+  // 2. Problem/Market
+  fivePoints.push(`Addressing key challenges in the ${sectors[0] || 'tech'} market`);
+  
+  // 3. Solution/Product
+  if (cleanPitch && cleanPitch.length > 20) {
+    fivePoints.push(cleanPitch.substring(0, 120));
+  } else {
+    fivePoints.push(`Building next-generation ${sectors[0] || 'technology'} solutions`);
+  }
+  
+  // 4. Team/Stage
+  const locationStr = startup.location && !startup.location.includes('Discovered') ? ` based in ${startup.location}` : '';
+  fivePoints.push(`${stageName} stage startup${locationStr}`);
+  
+  // 5. Investment
+  if (raiseAmount && raiseAmount > 0) {
+    fivePoints.push(`Raising $${(raiseAmount / 1000000).toFixed(1)}M ${stageName} round`);
+  } else {
+    fivePoints.push(`Seeking ${stageName} investment`);
+  }
   
   const extractedData = {
     // Problem/Solution from description
@@ -150,21 +191,49 @@ function buildExtractedData(startup) {
 }
 
 /**
+ * Check if fivePoints has garbage data
+ */
+function hasBadFivePoints(extractedData) {
+  if (!extractedData) return true;
+  const fp = extractedData.fivePoints || [];
+  if (fp.length < 3) return true;
+  
+  // Check for garbage patterns
+  const garbagePatterns = ['discovered from', 'website:', 'sectors:', 'stage:', '.com', '.io', '.ai', 'http'];
+  let goodCount = 0;
+  
+  for (const point of fp) {
+    if (!point || typeof point !== 'string') continue;
+    const lower = point.toLowerCase();
+    const isGarbage = garbagePatterns.some(p => lower.includes(p));
+    if (!isGarbage && point.length > 15) goodCount++;
+  }
+  
+  return goodCount < 3; // Need at least 3 good points
+}
+
+/**
  * Process startups
  */
 async function processStartups(options = {}) {
-  const { limit = 100 } = options;
+  const { limit = 100, forceRefresh = false } = options;
   
   console.log('\n🚀 STARTUP INFERENCE ENGINE');
   console.log('════════════════════════════════════════════════════════════════\n');
   
-  // Get startups missing extracted_data
-  const { data: startups, error } = await supabase
+  // Get ALL approved startups and filter client-side
+  const { data: allStartups, error } = await supabase
     .from('startup_uploads')
-    .select('id, name, tagline, description, pitch, website, sectors, stage, raise_amount, location, team_size, team_size_estimate, has_technical_cofounder, is_launched, has_demo, mrr, arr, customer_count, growth_rate_monthly')
+    .select('id, name, tagline, description, pitch, website, sectors, stage, raise_amount, location, team_size, team_size_estimate, has_technical_cofounder, is_launched, has_demo, mrr, arr, customer_count, growth_rate_monthly, extracted_data')
     .eq('status', 'approved')
-    .is('extracted_data', null)
-    .limit(limit);
+    .limit(2000);
+  
+  // Filter to startups needing enrichment
+  const startups = (allStartups || []).filter(s => {
+    if (!s.extracted_data) return true;
+    if (forceRefresh) return true;
+    return hasBadFivePoints(s.extracted_data);
+  }).slice(0, limit);
   
   if (error) {
     console.error('Error fetching startups:', error.message);
