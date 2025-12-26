@@ -600,7 +600,7 @@ export default function MatchingEngine() {
                   </div>
                 </div>
 
-                {/* INNER GRADIENT PANEL - DARK CHARCOAL */}
+                {/* ENHANCED STARTUP CARD - MODERN GLASSMORPHISM */}
                 <div 
                   onClick={() => {
                     const id = match.startup.id;
@@ -611,32 +611,36 @@ export default function MatchingEngine() {
                       alert('Startup details unavailable - database connection issue');
                     }
                   }}
-                  className="bg-gradient-to-br from-[#141414]/95 via-[#1a1a1a]/90 to-[#222222]/85 rounded-2xl p-6 h-full flex flex-col backdrop-blur-sm border-2 border-emerald-400/40 shadow-inner"
+                  className="relative bg-gradient-to-br from-[#1a1a2e]/95 via-[#16213e]/90 to-[#0f3460]/85 rounded-2xl p-5 h-full flex flex-col backdrop-blur-xl border border-cyan-500/30 shadow-[0_8px_32px_rgba(0,200,255,0.15)] hover:shadow-[0_12px_48px_rgba(0,200,255,0.25)] transition-all duration-300"
                 >
-                  {/* Icon + Name + Value Prop */}
-                  <div className="flex items-start gap-3 mb-3">
-                    <div className="bg-gradient-to-br from-orange-500 to-amber-600 p-4 rounded-xl shadow-2xl shadow-orange-500/30 flex-shrink-0">
-                      <span className="text-4xl">🚀</span>
+                  {/* Hot Badge - Top Right */}
+                  <div className="absolute -top-2 -right-2 text-2xl animate-bounce">🔥</div>
+                  
+                  {/* Header: Logo + Name */}
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="relative">
+                      <div className="bg-gradient-to-br from-orange-500 via-amber-500 to-yellow-500 p-3.5 rounded-2xl shadow-lg shadow-orange-500/40">
+                        <span className="text-3xl">🚀</span>
+                      </div>
+                      {/* Glow effect */}
+                      <div className="absolute inset-0 bg-orange-500/30 rounded-2xl blur-xl -z-10"></div>
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-2xl font-extrabold text-white mb-2 group-hover:text-cyan-300 transition-colors line-clamp-1">{match.startup.name}</h3>
-                      <p className="text-white/95 text-base font-semibold italic line-clamp-2">"{match.startup.description}"</p>
+                      <h3 className="text-xl font-bold text-white mb-0.5 line-clamp-1">{match.startup.name}</h3>
+                      <p className="text-cyan-300/90 text-sm font-medium italic line-clamp-1">"{match.startup.description?.slice(0, 60) || 'Innovative startup'}..."</p>
                     </div>
                   </div>
 
-                  {/* 5 Points Display - Clean text, no labels */}
-                  <div className="space-y-1 text-sm text-white/90 mb-3">
+                  {/* Key Highlights - Styled list */}
+                  <div className="flex-1 space-y-2 mb-4">
                     {(() => {
                       try {
-                        // Use fivePoints from the adapted startup object (top-level, not from extracted_data)
                         const startup = match.startup as any;
                         const rawPoints = startup?.fivePoints || (startup?.extracted_data?.fivePoints) || [];
                         
-                        // Filter out garbage entries
                         const fivePoints = rawPoints.filter((point: string) => {
                           if (!point || typeof point !== 'string') return false;
                           const lower = point.toLowerCase();
-                          // Filter out meta info that's NOT a real 5-point
                           if (lower.includes('discovered from')) return false;
                           if (lower.includes('website:')) return false;
                           if (lower.startsWith('stage:')) return false;
@@ -647,47 +651,45 @@ export default function MatchingEngine() {
                         });
                         
                         return fivePoints.length > 0 ? (
-                          fivePoints.slice(0, 5).map((point: string, idx: number) => (
-                            <p key={idx} className="line-clamp-1">{point}</p>
+                          fivePoints.slice(0, 3).map((point: string, idx: number) => (
+                            <div key={idx} className="flex items-start gap-2 text-sm">
+                              <span className="text-emerald-400 mt-0.5">✦</span>
+                              <p className="text-white/85 line-clamp-1">{point}</p>
+                            </div>
                           ))
                         ) : (
-                          <p className="text-white/60 italic">Details pending enrichment...</p>
+                          <p className="text-white/50 italic text-sm">Enriching startup data...</p>
                         );
                       } catch (e) {
-                        return <p className="text-white/60 italic">Loading...</p>;
+                        return <p className="text-white/50 italic text-sm">Loading...</p>;
                       }
                     })()}
                   </div>
 
-                  {/* Industry Tags */}
-                  <div className="flex flex-wrap gap-2 mb-3">
+                  {/* Industry Tags - Gradient pills */}
+                  <div className="flex flex-wrap gap-1.5 mb-4">
                     {(match.startup.tags || []).slice(0, 3).map((tag, idx) => (
                       <span
                         key={idx}
-                        className="bg-white/20 backdrop-blur-sm border border-white/40 text-white px-2.5 py-0.5 rounded-full text-xs font-semibold"
+                        className="bg-gradient-to-r from-cyan-500/20 to-blue-500/20 border border-cyan-400/40 text-cyan-200 px-3 py-1 rounded-full text-xs font-medium"
                       >
                         {tag}
                       </span>
                     ))}
                   </div>
 
-                  {/* Vote Button */}
+                  {/* Vote Button - Full width, prominent */}
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       setVotingStartup(match.startup);
                       setShowVotePopup(true);
                     }}
-                    className="flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 text-white font-semibold hover:from-orange-600 hover:to-amber-600 transition-all shadow-lg hover:scale-105 mb-2"
+                    className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 text-white font-bold text-base hover:from-orange-600 hover:via-amber-600 hover:to-yellow-600 transition-all shadow-lg shadow-orange-500/30 hover:shadow-orange-500/50 hover:scale-[1.02] active:scale-[0.98]"
                   >
-                    <ThumbsUp className="w-4 h-4" />
-                    Vote
+                    <ThumbsUp className="w-5 h-5" />
+                    Vote for {match.startup.name?.split(' ')[0]}
                   </button>
-
-                  {/* Hover instruction */}
-                  <p className="text-cyan-300 text-sm font-bold mt-auto opacity-0 group-hover:opacity-100 transition-opacity text-center">
-                    Click card to view full profile →
-                  </p>
                 </div>
                 </div>
               </div>
