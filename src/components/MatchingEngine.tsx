@@ -626,31 +626,35 @@ export default function MatchingEngine() {
                   {/* 5 Points Display - Clean text, no labels */}
                   <div className="space-y-1 text-sm text-white/90 mb-3">
                     {(() => {
-                      const ed = (match.startup as any).extracted_data || {};
-                      const startup = match.startup as any;
-                      
-                      // Build 5 points: value prop, market, differentiator, traction, raise
-                      const points = [
-                        ed.value_proposition || ed.solution || startup.pitch,
-                        ed.market?.tam || ed.market_size || startup.tam_estimate,
-                        ed.solution || ed.problem,
-                        ed.traction?.customers || startup.traction,
-                        ed.funding?.seeking || startup.raise_amount || startup.seeking
-                      ].filter(Boolean);
-                      
-                      return points.length > 0 ? (
-                        points.slice(0, 5).map((point, idx) => (
-                          <p key={idx} className="line-clamp-1">{point}</p>
-                        ))
-                      ) : (
-                        <p className="text-white/60 italic">Details pending enrichment...</p>
-                      );
+                      try {
+                        const ed = (match.startup as any)?.extracted_data || {};
+                        const startup = match.startup as any;
+                        
+                        // Build 5 points: value prop, market, differentiator, traction, raise
+                        const points = [
+                          ed?.value_proposition || ed?.solution || startup?.pitch || startup?.description,
+                          ed?.market?.tam || ed?.market_size || startup?.tam_estimate,
+                          ed?.solution || ed?.problem,
+                          ed?.traction?.customers || startup?.traction,
+                          ed?.funding?.seeking || startup?.raise_amount || startup?.seeking
+                        ].filter(Boolean);
+                        
+                        return points.length > 0 ? (
+                          points.slice(0, 5).map((point, idx) => (
+                            <p key={idx} className="line-clamp-1">{String(point)}</p>
+                          ))
+                        ) : (
+                          <p className="text-white/60 italic">Details pending enrichment...</p>
+                        );
+                      } catch (e) {
+                        return <p className="text-white/60 italic">Loading...</p>;
+                      }
                     })()}
                   </div>
 
                   {/* Industry Tags */}
                   <div className="flex flex-wrap gap-2 mb-3">
-                    {match.startup.tags.slice(0, 3).map((tag, idx) => (
+                    {(match.startup.tags || []).slice(0, 3).map((tag, idx) => (
                       <span
                         key={idx}
                         className="bg-white/20 backdrop-blur-sm border border-white/40 text-white px-2.5 py-0.5 rounded-full text-xs font-semibold"
