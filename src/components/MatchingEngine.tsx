@@ -494,7 +494,7 @@ export default function MatchingEngine() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#141414] to-[#1a1a1a] relative overflow-hidden">
       {/* Data Quality Banner - Shows when data is stale */}
-      <DataQualityBadge variant="banner" />
+      {/* <DataQualityBadge variant="banner" /> */}
       
       {/* Animated background - subtle orange/amber glows */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
