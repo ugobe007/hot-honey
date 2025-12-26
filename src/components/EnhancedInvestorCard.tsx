@@ -121,12 +121,12 @@ export default function EnhancedInvestorCard({ investor, compact = false, onClic
             alt={investor.name}
             className="w-14 h-14 sm:w-16 sm:h-16 rounded-full border-2 border-amber-500/50 object-cover flex-shrink-0"
             onError={(e) => {
-              (e.target as HTMLImageElement).src = '/images/investor_badge.png';
+              (e.target as HTMLImageElement).src = '/images/investor_badge.jpg';
             }}
           />
         ) : (
           <img 
-            src="/images/investor_badge.png" 
+            src="/images/investor_badge.jpg" 
             alt="Investor"
             className="w-14 h-14 sm:w-16 sm:h-16 rounded-full object-contain flex-shrink-0"
           />
