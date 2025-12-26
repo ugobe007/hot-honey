@@ -600,14 +600,11 @@ export default function MatchingEngine() {
                 {/* INNER GRADIENT PANEL - DARK CHARCOAL */}
                 <div 
                   onClick={() => {
-                    // Safety check: Only navigate if ID looks valid (UUID format, not numeric fallback)
                     const id = match.startup.id;
                     const isValidUUID = typeof id === 'string' && id.length > 8 && id.includes('-');
                     if (isValidUUID) {
-                      console.log('Navigating to startup:', id);
                       navigate(`/startup/${id}`);
                     } else {
-                      console.warn('⚠️ Invalid startup ID (likely fallback data):', id, typeof id);
                       alert('Startup details unavailable - database connection issue');
                     }
                   }}
@@ -624,30 +621,25 @@ export default function MatchingEngine() {
                     </div>
                   </div>
 
-                  {/* 5 Points Display */}
-                  <div className="space-y-1.5 text-sm text-white/90 mb-3">
+                  {/* 5 Points Display - Clean text, no labels */}
+                  <div className="space-y-1 text-sm text-white/90 mb-3">
                     {(() => {
                       const ed = (match.startup as any).extracted_data || {};
                       const startup = match.startup as any;
                       
-                      // Extract 5 points with fallbacks
-                      const problem = ed.problem || startup.problem;
-                      const solution = ed.solution || ed.value_proposition || startup.solution || startup.description;
-                      const team = ed.team?.description || (typeof ed.team === 'string' ? ed.team : null) || startup.team;
-                      const market = ed.market?.tam || ed.market_size || startup.tam_estimate || startup.market_size;
-                      const investment = ed.funding?.seeking || ed.funding?.raise_amount || startup.raise_amount || startup.seeking;
-                      
-                      // Count how many points we have
-                      const points = [problem, solution, team, market, investment].filter(Boolean);
+                      // Build 5 points: value prop, market, differentiator, traction, raise
+                      const points = [
+                        ed.value_proposition || ed.solution || startup.pitch,
+                        ed.market?.tam || ed.market_size || startup.tam_estimate,
+                        ed.solution || ed.problem,
+                        ed.traction?.customers || startup.traction,
+                        ed.funding?.seeking || startup.raise_amount || startup.seeking
+                      ].filter(Boolean);
                       
                       return points.length > 0 ? (
-                        <>
-                          {problem && <p className="line-clamp-1">🎯 <span className="font-semibold text-orange-300">Problem:</span> {problem}</p>}
-                          {solution && <p className="line-clamp-1">💡 <span className="font-semibold text-emerald-300">Solution:</span> {solution}</p>}
-                          {team && <p className="line-clamp-1">👥 <span className="font-semibold text-blue-300">Team:</span> {team}</p>}
-                          {market && <p className="line-clamp-1">📊 <span className="font-semibold text-purple-300">Market:</span> {market}</p>}
-                          {investment && <p className="line-clamp-1">💰 <span className="font-semibold text-yellow-300">Raising:</span> {typeof investment === 'number' ? `$${(investment/1000000).toFixed(1)}M` : investment}</p>}
-                        </>
+                        points.slice(0, 5).map((point, idx) => (
+                          <p key={idx} className="line-clamp-1">{point}</p>
+                        ))
                       ) : (
                         <p className="text-white/60 italic">Details pending enrichment...</p>
                       );
@@ -669,7 +661,7 @@ export default function MatchingEngine() {
                   {/* Vote Button */}
                   <button
                     onClick={(e) => {
-                      e.stopPropagation(); // Don't trigger card click
+                      e.stopPropagation();
                       setVotingStartup(match.startup);
                       setShowVotePopup(true);
                     }}
