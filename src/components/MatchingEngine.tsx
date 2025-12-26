@@ -482,14 +482,45 @@ export default function MatchingEngine() {
 
   if (!match) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#0c0c0c] via-[#171717] to-[#1e1e1e] flex flex-col items-center justify-center">
-        <div className="text-white text-2xl mb-4">{matches.length === 0 ? 'Loading matches...' : 'No matches in this batch.'}</div>
-        {loadError && <div className="text-red-400 text-lg mb-2">{loadError}</div>}
-        {debugInfo && (
-          <pre className="bg-black/60 text-gray-300 text-xs p-4 rounded-xl max-w-xl overflow-x-auto mt-2 text-left">
-            {JSON.stringify(debugInfo, null, 2)}
-          </pre>
-        )}
+      <div className="min-h-screen bg-gradient-to-br from-[#0a0a0a] via-[#141414] to-[#1a1a1a] flex flex-col items-center justify-center">
+        {/* Animated background glows */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        </div>
+        
+        {/* Loading content */}
+        <div className="relative z-10 text-center">
+          {/* Animated logo/spinner */}
+          <div className="mb-8">
+            <div className="relative inline-block">
+              <div className="w-24 h-24 border-4 border-orange-500/30 border-t-orange-500 rounded-full animate-spin"></div>
+              <span className="absolute inset-0 flex items-center justify-center text-4xl">🔥</span>
+            </div>
+          </div>
+          
+          {/* Loading text */}
+          <h2 className="text-3xl font-bold text-white mb-3">
+            {matches.length === 0 ? 'Finding Your Perfect Matches' : 'Loading Next Batch'}
+          </h2>
+          <p className="text-white/60 text-lg mb-6">
+            {matches.length === 0 ? 'AI is analyzing startups & investors...' : 'Preparing more matches for you...'}
+          </p>
+          
+          {/* Progress dots */}
+          <div className="flex justify-center gap-2">
+            <div className="w-3 h-3 bg-orange-500 rounded-full animate-bounce"></div>
+            <div className="w-3 h-3 bg-orange-500 rounded-full animate-bounce delay-100"></div>
+            <div className="w-3 h-3 bg-orange-500 rounded-full animate-bounce delay-200"></div>
+          </div>
+          
+          {/* Error display - only shown if there's an actual error */}
+          {loadError && (
+            <div className="mt-8 bg-red-500/10 border border-red-500/30 rounded-xl px-6 py-4 max-w-md">
+              <p className="text-red-400 text-sm">{loadError}</p>
+            </div>
+          )}
+        </div>
       </div>
     );
   }
