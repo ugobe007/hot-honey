@@ -628,10 +628,12 @@ export default function MatchingEngine() {
                   <div className="space-y-1 text-sm text-white/90 mb-3">
                     {(() => {
                       try {
-                        const ed = (match.startup as any)?.extracted_data || {};
+                        // Use fivePoints from the adapted startup object (top-level, not from extracted_data)
+                        const startup = match.startup as any;
+                        const rawPoints = startup?.fivePoints || (startup?.extracted_data?.fivePoints) || [];
                         
-                        // Use fivePoints array but filter out garbage entries
-                        const fivePoints = (ed?.fivePoints || []).filter((point: string) => {
+                        // Filter out garbage entries
+                        const fivePoints = rawPoints.filter((point: string) => {
                           if (!point || typeof point !== 'string') return false;
                           const lower = point.toLowerCase();
                           // Filter out meta info that's NOT a real 5-point
