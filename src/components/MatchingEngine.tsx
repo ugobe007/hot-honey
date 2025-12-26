@@ -647,15 +647,11 @@ export default function MatchingEngine() {
                   {/* Header: Logo + Name */}
                   <div className="flex items-center gap-4 mb-4">
                     <div className="relative">
-                      <div className="bg-gradient-to-br from-orange-500 via-amber-500 to-yellow-500 p-1 rounded-2xl shadow-lg shadow-orange-500/40">
-                        <img 
-                          src="/images/hot_badge.png" 
-                          alt="Hot Startup" 
-                          className="w-14 h-14 object-contain"
-                        />
-                      </div>
-                      {/* Glow effect */}
-                      <div className="absolute inset-0 bg-orange-500/30 rounded-2xl blur-xl -z-10"></div>
+                      <img 
+                        src="/images/hot_badge.png" 
+                        alt="Hot Startup" 
+                        className="w-14 h-14 object-contain drop-shadow-[0_0_8px_rgba(251,146,60,0.6)]"
+                      />
                     </div>
                     <div className="flex-1 min-w-0">
                       <h3 className="text-xl font-bold text-white mb-0.5 line-clamp-1">{match.startup.name}</h3>
