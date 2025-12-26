@@ -110,6 +110,9 @@ function normalizeInvestorData(investor: any) {
     name: investor.name,
     description: investor.description || investor.tagline || investor.bio || '',
     tagline: investor.tagline || investor.type || '',
+    firm: investor.firm || '',
+    bio: investor.bio || investor.investment_thesis || '',
+    photo_url: investor.photo_url || '',
     
     // Investment criteria - use sectors and stage from DB
     type: investor.type || 'vc_firm',
@@ -120,10 +123,20 @@ function normalizeInvestorData(investor: any) {
     // Financial
     checkSize: investor.checkSize || investor.check_size || '',
     check_size: investor.check_size || investor.checkSize || '',
+    check_size_min: investor.check_size_min,
+    check_size_max: investor.check_size_max,
+    active_fund_size: investor.active_fund_size,
     
     // Geographic
-    geography: investor.geography || investor.location || '',
+    geography: investor.geography || investor.geography_focus?.join(', ') || investor.location || '',
+    geography_focus: investor.geography_focus || [],
     location: investor.location || investor.geography || '',
+    
+    // Portfolio info
+    notableInvestments: investor.notable_investments || investor.notableInvestments || [],
+    notable_investments: investor.notable_investments || investor.notableInvestments || [],
+    portfolio_size: investor.portfolio_size || investor.total_investments || 0,
+    total_investments: investor.total_investments || investor.portfolio_size || 0,
   };
 }
 

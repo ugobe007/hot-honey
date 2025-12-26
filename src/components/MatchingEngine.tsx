@@ -644,9 +644,6 @@ export default function MatchingEngine() {
                   }}
                   className="relative bg-gradient-to-br from-[#1a1a2e]/95 via-[#16213e]/90 to-[#0f3460]/85 rounded-2xl p-5 h-full flex flex-col backdrop-blur-xl border border-cyan-500/30 shadow-[0_8px_32px_rgba(0,200,255,0.15)] hover:shadow-[0_12px_48px_rgba(0,200,255,0.25)] transition-all duration-300"
                 >
-                  {/* Hot Badge - Top Right */}
-                  <div className="absolute -top-2 -right-2 text-2xl animate-bounce">🔥</div>
-                  
                   {/* Header: Logo + Name */}
                   <div className="flex items-center gap-4 mb-4">
                     <div className="relative">
@@ -658,7 +655,18 @@ export default function MatchingEngine() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <h3 className="text-xl font-bold text-white mb-0.5 line-clamp-1">{match.startup.name}</h3>
-                      <p className="text-cyan-300/90 text-sm font-medium italic line-clamp-1">"{match.startup.description?.slice(0, 60) || 'Innovative startup'}..."</p>
+                      <p className="text-cyan-300/90 text-sm font-medium italic line-clamp-1">"{(() => {
+                        const desc = match.startup.description || match.startup.tagline || '';
+                        // Filter out garbage descriptions
+                        if (!desc || 
+                            desc.toLowerCase().includes('technology company that appears') ||
+                            desc.toLowerCase().includes('appears to have') ||
+                            desc.toLowerCase().includes('significant milestone') ||
+                            desc.toLowerCase().includes('discovered from')) {
+                          return match.startup.tagline || 'Innovative startup';
+                        }
+                        return desc.slice(0, 60);
+                      })()}..."</p>
                     </div>
                   </div>
 
@@ -825,18 +833,18 @@ export default function MatchingEngine() {
                     onClick={() => navigate(`/investor/${match.investor.id}`)}
                   />
                   
-                  {/* Info Button Overlay */}
-                  <button
+                  {/* Info Link Overlay */}
+                  <span
                     onClick={(e) => {
                       e.stopPropagation();
                       setSelectedInvestor(match.investor);
                       setShowVCPopup(true);
                     }}
-                    className="absolute bottom-6 left-6 flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-teal-700 to-teal-900 text-white font-semibold hover:from-teal-600 hover:to-teal-800 transition-all shadow-lg hover:scale-105 z-20"
+                    className="absolute bottom-4 left-4 flex items-center gap-1.5 text-teal-400 text-sm font-medium hover:text-teal-300 transition-colors cursor-pointer z-20 underline underline-offset-2"
                   >
-                    <Info className="w-4 h-4" />
-                    Learn More
-                  </button>
+                    <Info className="w-3.5 h-3.5" />
+                    Details
+                  </span>
                 </div>
                 </div>
               </div>

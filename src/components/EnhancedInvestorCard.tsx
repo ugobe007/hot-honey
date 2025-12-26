@@ -128,9 +128,11 @@ export default function EnhancedInvestorCard({ investor, compact = false, onClic
         )}
         
         <div className="flex-1 min-w-0">
-          <h3 className="text-lg sm:text-xl font-bold text-white truncate">{investor.name}</h3>
+          <h3 className="text-base sm:text-lg font-bold text-white leading-tight" style={{ wordBreak: 'break-word' }}>
+            {investor.name.length > 35 ? investor.name.slice(0, 35) + '...' : investor.name}
+          </h3>
           {firmName && (
-            <p className="text-amber-400 text-sm font-medium truncate">{firmName}</p>
+            <p className="text-amber-400 text-xs sm:text-sm font-medium truncate">{firmName}</p>
           )}
           <div className="flex flex-wrap gap-1 mt-1">
             {investor.type && (
@@ -194,13 +196,6 @@ export default function EnhancedInvestorCard({ investor, compact = false, onClic
             {stage}
           </span>
         ))}
-      </div>
-      
-      {/* Learn more link */}
-      <div className="text-center mt-2">
-        <span className="text-cyan-400 text-xs hover:text-cyan-300 cursor-pointer">
-          ⓘ Learn More
-        </span>
       </div>
     </div>
   );

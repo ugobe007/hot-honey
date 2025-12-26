@@ -13,6 +13,46 @@ import type { Investor } from '../lib/database.types';
 import type { InvestorComponent } from '../types';
 
 /**
+ * Infer investor type from name/firm if not set in database
+ */
+function inferInvestorType(investor: Investor): string {
+  // If type is already set, use it
+  if ((investor as any).type) return (investor as any).type;
+  
+  const name = (investor.name || '').toLowerCase();
+  const firm = (investor.firm || '').toLowerCase();
+  
+  // Check for accelerators
+  if (firm.includes('combinator') || firm.includes('techstars') || 
+      firm.includes('accelerator') || firm.includes('500 startups') ||
+      name.includes('combinator') || name.includes('accelerator')) {
+    return 'Accelerator';
+  }
+  
+  // Check for corporate VCs
+  if (firm.includes('google ventures') || firm.includes('gv') ||
+      firm.includes('intel capital') || firm.includes('salesforce') ||
+      firm.includes('microsoft') || name.includes('corporate')) {
+    return 'Corporate VC';
+  }
+  
+  // Check for VC Firms (most common)
+  if (firm.includes('capital') || firm.includes('ventures') || 
+      firm.includes('partners') || firm.includes('fund') ||
+      name.includes('capital') || name.includes('ventures')) {
+    return 'VC Firm';
+  }
+  
+  // If firm equals name (individual), likely Angel
+  if (firm && firm === name.toLowerCase()) {
+    return 'Angel';
+  }
+  
+  // Default to VC
+  return 'VC';
+}
+
+/**
  * Convert database Investor to component format
  * Handles field mapping and computed values
  */
@@ -33,6 +73,9 @@ export function adaptInvestorForComponent(dbInvestor: Investor): InvestorCompone
   return {
     // Core fields (direct mapping)
     ...dbInvestor,
+    
+    // Infer type if not in database
+    type: inferInvestorType(dbInvestor),
     
     // Ensure arrays are properly typed
     sectors: sectors || [],
