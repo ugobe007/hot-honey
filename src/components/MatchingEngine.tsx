@@ -647,7 +647,7 @@ export default function MatchingEngine() {
                   {/* Header: Logo + Name */}
                   <div className="flex items-center gap-4 mb-4">
                     <img 
-                      src="/images/hot_badge.jpg" 
+                      src="/images/hot_badge.png" 
                       alt="Hot Startup" 
                       className="w-14 h-14 object-contain"
                     />
@@ -687,8 +687,14 @@ export default function MatchingEngine() {
                           return true;
                         });
                         
-                        return fivePoints.length > 0 ? (
-                          fivePoints.slice(0, 3).map((point: string, idx: number) => (
+                        // Deduplicate points by normalizing and comparing
+                        const uniquePoints = fivePoints.filter((point: string, index: number, arr: string[]) => {
+                          const normalized = point.toLowerCase().trim();
+                          return arr.findIndex((p: string) => p.toLowerCase().trim() === normalized) === index;
+                        });
+                        
+                        return uniquePoints.length > 0 ? (
+                          uniquePoints.slice(0, 3).map((point: string, idx: number) => (
                             <div key={idx} className="flex items-start gap-2 text-sm">
                               <span className="text-emerald-400 mt-0.5">✦</span>
                               <p className="text-white/85 line-clamp-1">{point}</p>
