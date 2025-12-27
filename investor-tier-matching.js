@@ -46,7 +46,7 @@ const TIER_DEFINITIONS = {
     description: 'Top-tier VCs with massive brand, network, and check sizes',
     checkSizeMin: 5000000,
     checkSizeMax: 100000000,
-    expectedGODMin: 55, // Only show elite startups to elite VCs
+    expectedGODMin: 65, // Recalibrated Dec 2025 - Only show elite startups to elite VCs
     acceptanceRate: 0.02,
     matchBonus: 0, // No bonus - hardest to match
     firms: [
@@ -60,7 +60,7 @@ const TIER_DEFINITIONS = {
     description: 'Established VCs with good track records and networks',
     checkSizeMin: 1000000,
     checkSizeMax: 15000000,
-    expectedGODMin: 45, // Good startups for strong VCs
+    expectedGODMin: 55, // Recalibrated Dec 2025 - Good startups for strong VCs
     acceptanceRate: 0.04,
     matchBonus: 10, // Slight bonus - more accessible
     firms: [
@@ -74,7 +74,7 @@ const TIER_DEFINITIONS = {
     description: 'Newer funds or sector specialists with hands-on approach',
     checkSizeMin: 250000,
     checkSizeMax: 5000000,
-    expectedGODMin: 38, // Earlier stage startups welcome
+    expectedGODMin: 48, // Recalibrated Dec 2025 - Earlier stage startups welcome
     acceptanceRate: 0.08,
     matchBonus: 18, // Good bonus - more accessible
     firms: [
@@ -88,7 +88,7 @@ const TIER_DEFINITIONS = {
     description: 'Individual investors, scouts, and syndicates',
     checkSizeMin: 10000,
     checkSizeMax: 500000,
-    expectedGODMin: 30, // Open to very early ideas
+    expectedGODMin: 44, // Recalibrated Dec 2025 - Open to very early ideas
     acceptanceRate: 0.15,
     matchBonus: 25, // High bonus - most accessible
     firms: [] // Determined by individual investor patterns

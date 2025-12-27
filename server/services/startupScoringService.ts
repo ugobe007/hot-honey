@@ -56,33 +56,33 @@
 
 const GOD_SCORE_CONFIG = {
   // Normalization divisor - higher = lower scores
-  // Target: Average scores between 55-65 (5.5-6.5 on 0-10 scale)
-  // Adjusted to account for legitimate market signals (funding velocity, market validation)
-  // Current average: 46.4 → Need to reduce divisor further to reach 55-65 target
-  normalizationDivisor: 17, // Reduced from 19 to raise average from 46.4 toward 55-65 range
+  // Controls overall score scaling (DO NOT CHANGE WITHOUT USER APPROVAL)
+  // Based on VC benchmark sentiment mapping for predicting funding events
+  normalizationDivisor: 17,
   
-  // Base boost minimum - lower = lower baseline scores
-  // Increased to raise baseline while preserving market signal bonuses
-  baseBoostMinimum: 4.5, // Increased from 4.0 to raise baseline scores further
+  // Base boost minimum - ensures floor for data-poor startups
+  baseBoostMinimum: 3.5,
   
-  // Vibe bonus cap - lower = less qualitative bonus
-  // Keep some qualitative boost but reduce it to focus on market signals
-  vibeBonusCap: 1.0, // Keep at 1.0 to allow qualitative boost
+  // Vibe bonus cap - qualitative signal boost
+  vibeBonusCap: 1.0,
   
   // Final score multiplier (converts 0-10 to 0-100)
-  // Keep at 10 for standard 0-100 scale
   finalScoreMultiplier: 10,
   
   // Alert thresholds for auto-monitoring
-  // Target range: 55-65 average
-  averageScoreAlertHigh: 70, // Alert if average exceeds this (above target range)
-  averageScoreAlertLow: 50,  // Alert if average falls below this (below target range)
+  averageScoreAlertHigh: 70,
+  averageScoreAlertLow: 50,
 } as const;
 
 // Export for use in other TypeScript files if needed
 export { GOD_SCORE_CONFIG };
 
 interface StartupProfile {
+  // Basic info
+  name?: string;
+  website?: string;
+  value_proposition?: string;
+  
   // Team
   team?: Array<{
     name: string;
@@ -124,6 +124,15 @@ interface StartupProfile {
   customers?: number;
   signed_contracts?: number;
   
+  // Boolean inference signals (from pattern-matching extraction)
+  // These are used when we know something exists but don't have exact numbers
+  has_revenue?: boolean; // Inferred: startup mentions revenue but amount unknown
+  has_customers?: boolean; // Inferred: startup has customers but count unknown
+  execution_signals?: string[]; // e.g., ['Product Launched', 'Has Revenue', 'Has Customers']
+  team_signals?: string[]; // e.g., ['Ex-Google', 'Stanford MBA', 'Serial Founder']
+  funding_amount?: number; // Extracted funding amount
+  funding_stage?: string; // e.g., 'Seed', 'Series A'
+  
   // Seed/Angel specific metrics
   churn_rate?: number; // Monthly churn %
   retention_rate?: number; // Monthly retention %
@@ -151,7 +160,7 @@ interface StartupProfile {
   mvp_stage?: boolean; // Has moved beyond concept to tangible MVP
   
   // Market
-  market_size?: number; // TAM in billions
+  market_size?: number | string; // TAM in billions (can be string like "$10B")
   industries?: string[];
   problem?: string;
   solution?: string;
@@ -276,6 +285,37 @@ export function calculateHotScore(startup: StartupProfile): HotScore {
         fundingVelocityBonus = 0.2;
       }
     }
+
+  /**
+   * RED FLAGS SCORING (0 to -1.5 points)
+   * Negative signals that predict funding failure
+   */
+  function scoreRedFlags(startup: StartupProfile): number {
+    let penalty = 0;
+    
+    if (startup.platform_dependencies && startup.platform_dependencies.length >= 3) {
+      penalty -= 0.3;
+    }
+    
+    if (startup.defensibility === 'low') {
+      penalty -= 0.3;
+    }
+    
+    if (startup.name && startup.name.toLowerCase().includes('clone')) {
+      penalty -= 0.5;
+    }
+    
+    if (startup.pivots_made && startup.pivots_made >= 4) {
+      penalty -= 0.3;
+    }
+    
+    if (startup.first_time_founders && !startup.mrr && !startup.revenue) {
+      penalty -= 0.2;
+    }
+    
+    return Math.max(penalty, -1.5);
+  }
+
   // QUICK FIX: Base score boost for all startups with ANY content
   // This prevents scores of 0/100 and gives credit for basic presence
   let baseBoost = 0;
@@ -391,7 +431,8 @@ export function calculateHotScore(startup: StartupProfile): HotScore {
 
   // New total possible: 3 (team exec) + 2 (vision) + 1.5 (courage) + 1.5 (insight) + 1 (age) + 3 (traction) + 2 (market) + 2 (product) = 16
   // Plus baseBoost (minimum 5, can go higher with vibe bonus)
-  const rawTotal = baseBoost + teamExecutionScore + productVisionScore + founderCourageScore + marketInsightScore + teamAgeScore + tractionScore + marketScore + productScore;
+  const redFlagsScore = scoreRedFlags(startup);
+  const rawTotal = baseBoost + teamExecutionScore + productVisionScore + founderCourageScore + marketInsightScore + teamAgeScore + tractionScore + marketScore + productScore + redFlagsScore;
   // Normalize to 10-point scale using configured divisor (higher divisor = lower scores)
   const total = Math.min((rawTotal / GOD_SCORE_CONFIG.normalizationDivisor) * 10, 10);
   /**

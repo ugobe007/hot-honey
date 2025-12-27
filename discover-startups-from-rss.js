@@ -1,6 +1,7 @@
 require('dotenv').config();
 const { addStartup, startupExists } = require('./lib/scraper-db');
 const { extractFromHeadline } = require('./lib/funding-patterns');
+const { extractInferenceData } = require('./lib/inference-extractor');
 const Parser = require('rss-parser');
 
 const parser = new Parser({ timeout: 10000 });
@@ -14,20 +15,8 @@ const SOURCES = [
   { name: 'TechCrunch', url: 'https://techcrunch.com/feed/' },
 ];
 
-function detectSectors(text) {
-  const t = text.toLowerCase();
-  const s = [];
-  if (/\bai\b|machine learning|llm/i.test(t)) s.push('AI/ML');
-  if (/fintech|payment|banking/i.test(t)) s.push('FinTech');
-  if (/health|medical|biotech/i.test(t)) s.push('HealthTech');
-  if (/saas|software|cloud/i.test(t)) s.push('SaaS');
-  if (/climate|clean|energy/i.test(t)) s.push('CleanTech');
-  if (/security|cyber/i.test(t)) s.push('Cybersecurity');
-  return s.length > 0 ? s : ['SaaS'];
-}
-
 async function run() {
-  console.log('Startup Discovery (Pattern Library v2)\n');
+  console.log('Startup Discovery (Pattern Library v2 + Inference Extractor)\n');
   let total = 0, skipped = 0;
   
   for (const src of SOURCES) {
@@ -35,11 +24,38 @@ async function run() {
     try {
       const feed = await parser.parseURL(src.url);
       for (const item of feed.items.slice(0, 20)) {
+        // First try headline extraction for startup name
         const result = extractFromHeadline(item.title || '');
         if (result) {
           if (await startupExists(result.name)) { skipped++; continue; }
-          const sectors = detectSectors(item.title + ' ' + (item.contentSnippet || ''));
-          const godScore = result.funding > 50e6 ? 55 : (result.funding > 10e6 ? 48 : 42);
+          
+          // Use FULL inference extraction on article content (NO AI APIS!)
+          const fullText = `${item.title || ''} ${item.contentSnippet || ''} ${item.content || ''}`;
+          const inferenceData = extractInferenceData(fullText, item.link || '');
+          
+          // Merge headline funding with inference-extracted data
+          const funding = inferenceData.funding_amount || result.funding;
+          const stage = inferenceData.funding_stage || null;
+          const sectors = inferenceData.sectors?.length > 0 ? inferenceData.sectors : ['SaaS'];
+          
+          // Calculate GOD score based on available signals
+          let godScore = 42; // Base score
+          if (funding > 50e6) godScore += 13;
+          else if (funding > 10e6) godScore += 6;
+          
+          // Boost for team signals
+          if (inferenceData.team_signals?.length > 0) godScore += 3;
+          if (inferenceData.has_technical_cofounder) godScore += 2;
+          if (inferenceData.credential_signals?.length > 0) godScore += 2;
+          
+          // Boost for execution signals
+          if (inferenceData.is_launched) godScore += 2;
+          if (inferenceData.has_customers) godScore += 2;
+          if (inferenceData.has_revenue) godScore += 3;
+          
+          // Cap at reasonable max for discovered startups
+          godScore = Math.min(godScore, 65);
+          
           const startup = await addStartup({
             name: result.name,
             tagline: (item.contentSnippet || '').substring(0, 200),
@@ -47,10 +63,30 @@ async function run() {
             status: 'discovered',
             total_god_score: godScore,
             sectors,
-            extracted_data: { funding: result.funding, source: src.name, article: item.title }
+            funding_stage: stage,
+            extracted_data: { 
+              funding,
+              source: src.name, 
+              article: item.title,
+              // Inference-extracted fields
+              lead_investor: inferenceData.lead_investor,
+              investors_mentioned: inferenceData.investors_mentioned || [],
+              team_signals: inferenceData.team_signals || [],
+              grit_signals: inferenceData.grit_signals?.map(g => g.signal || g) || [],
+              credential_signals: inferenceData.credential_signals || [],
+              execution_signals: inferenceData.execution_signals || [],
+              is_launched: inferenceData.is_launched,
+              has_customers: inferenceData.has_customers,
+              has_revenue: inferenceData.has_revenue,
+              has_technical_cofounder: inferenceData.has_technical_cofounder,
+            }
           });
           if (startup) {
-            console.log('  +', result.name, '$' + (result.funding/1e6).toFixed(1) + 'M');
+            const signals = [];
+            if (inferenceData.team_signals?.length) signals.push(`team:${inferenceData.team_signals.length}`);
+            if (inferenceData.execution_signals?.length) signals.push(`exec:${inferenceData.execution_signals.length}`);
+            console.log('  +', result.name, '$' + (funding/1e6).toFixed(1) + 'M', 
+              `GOD:${godScore}`, signals.length ? `[${signals.join(',')}]` : '');
             total++;
           }
         }

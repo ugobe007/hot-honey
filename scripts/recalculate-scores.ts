@@ -36,6 +36,10 @@ interface ScoreBreakdown {
 
 /**
  * Convert startup DB row to profile format for scoring service
+ * 
+ * The scoring service now handles BOTH:
+ * 1. Numeric values (revenue: 100000) - uses exact amounts for tiered scoring
+ * 2. Boolean inference signals (has_revenue: true) - uses as fallback when no numbers
  */
 function toScoringProfile(startup: any): any {
   // Extract data from extracted_data JSONB column if available
@@ -54,28 +58,40 @@ function toScoringProfile(startup: any): any {
     })) : (extracted.team || []),
     founders_count: startup.team_size || extracted.team_size || 1,
     technical_cofounders: (startup.has_technical_cofounder ? 1 : 0) || (extracted.has_technical_cofounder ? 1 : 0),
+    
+    // Numeric traction values (use actual numbers when available)
     mrr: startup.mrr || extracted.mrr,
     revenue: startup.arr || startup.revenue || extracted.revenue || extracted.arr,
     growth_rate: startup.growth_rate_monthly || extracted.growth_rate || extracted.growth_rate_monthly,
     customers: startup.customer_count || extracted.customers || extracted.customer_count,
     active_users: extracted.active_users || extracted.users,
-    launched: startup.is_launched || extracted.is_launched || extracted.launched,
-    demo_available: startup.has_demo || extracted.has_demo || extracted.demo_available,
-    founded_date: startup.founded_date || startup.created_at || extracted.founded_date,
-    value_proposition: startup.value_proposition || startup.tagline || extracted.value_proposition,
-    // Additional traction data
     gmv: extracted.gmv,
     retention_rate: extracted.retention_rate,
     churn_rate: extracted.churn_rate,
     prepaying_customers: extracted.prepaying_customers,
     signed_contracts: extracted.signed_contracts,
-    // Additional product data
+    
+    // Boolean inference signals (used as fallback when no numbers exist)
+    has_revenue: extracted.has_revenue,
+    has_customers: extracted.has_customers,
+    execution_signals: extracted.execution_signals || [],
+    team_signals: extracted.team_signals || [],
+    funding_amount: extracted.funding_amount,
+    funding_stage: extracted.funding_stage,
+    
+    // Product signals
+    launched: startup.is_launched || extracted.is_launched || extracted.launched,
+    demo_available: startup.has_demo || extracted.has_demo || extracted.demo_available,
     unique_ip: extracted.unique_ip,
     defensibility: extracted.defensibility,
     mvp_stage: extracted.mvp_stage,
-    // Additional market data
+    
+    // Other fields
+    founded_date: startup.founded_date || startup.created_at || extracted.founded_date,
+    value_proposition: startup.value_proposition || startup.tagline || extracted.value_proposition,
     backed_by: startup.backed_by || extracted.backed_by || extracted.investors,
-    // Pass through any additional fields that might exist
+    
+    // Pass through any additional fields
     ...startup,
     ...extracted
   };
