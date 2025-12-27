@@ -1036,7 +1036,7 @@ function scoreFounderAge(startup: StartupProfile): number {
   
   // Method 5: Estimate from founded_year + team education (heuristic)
   // If company was founded recently and founders have recent graduation, they're likely young
-  if (!startupAny.founder_avg_age && startup.founded_date && startup.team) {
+  if (!startupAny.founder_avg_age && startup.founded_date && startup.team && Array.isArray(startup.team)) {
     const foundedYear = new Date(startup.founded_date).getFullYear();
     const hasRecentGrad = startup.team.some(member => {
       const edu = member.education?.toLowerCase() || '';

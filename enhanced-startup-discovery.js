@@ -23,26 +23,55 @@ const supabase = createClient(
 );
 const parser = new DynamicParser();
 
-// Startup discovery sources
+// Startup discovery sources - ONLY sources that don't block scrapers
+// ProductHunt returns 403, so removed
 const STARTUP_SOURCES = [
+  // RSS Feeds - Most reliable, always work
+  { 
+    name: 'TechCrunch Startups RSS', 
+    listUrl: 'https://techcrunch.com/category/startups/feed/',
+    type: 'rss',
+    linkPattern: /techcrunch\.com\/\d{4}\/\d{2}\/\d{2}\/[a-z0-9-]+/gi
+  },
+  { 
+    name: 'TechCrunch Funding RSS', 
+    listUrl: 'https://techcrunch.com/tag/funding/feed/',
+    type: 'rss',
+    linkPattern: /techcrunch\.com\/\d{4}\/\d{2}\/\d{2}\/[a-z0-9-]+/gi
+  },
+  { 
+    name: 'Hacker News Show HN', 
+    listUrl: 'https://hnrss.org/show',
+    type: 'rss',
+    linkPattern: /item\?id=\d+/gi
+  },
+  { 
+    name: 'Crunchbase News RSS', 
+    listUrl: 'https://news.crunchbase.com/feed/',
+    type: 'rss',
+    linkPattern: /news\.crunchbase\.com\/[a-z0-9-\/]+/gi
+  },
+  { 
+    name: 'VentureBeat RSS', 
+    listUrl: 'https://venturebeat.com/feed/',
+    type: 'rss',
+    linkPattern: /venturebeat\.com\/\d{4}\/\d{2}\/\d{2}\/[a-z0-9-]+/gi
+  },
+  { 
+    name: 'Indie Hackers RSS', 
+    listUrl: 'https://www.indiehackers.com/feed.xml',
+    type: 'rss',
+    linkPattern: /indiehackers\.com\/post\/[a-z0-9-]+/gi
+  },
+  // Web scraping - These allow scraping
   { 
     name: 'Y Combinator', 
     listUrl: 'https://www.ycombinator.com/companies',
     type: 'startup_list',
     linkPattern: /\/companies\/[a-z0-9-]+/gi
-  },
-  { 
-    name: 'Product Hunt Developer Tools', 
-    listUrl: 'https://www.producthunt.com/topics/developer-tools',
-    type: 'startup_list',
-    linkPattern: /\/posts\/[a-z0-9-]+/gi
-  },
-  {
-    name: 'TechCrunch Startups',
-    listUrl: 'https://techcrunch.com/category/startups/',
-    type: 'news',
-    linkPattern: /techcrunch\.com\/\d{4}\/\d{2}\/\d{2}\/[a-z0-9-]+/gi
   }
+  // REMOVED: ProductHunt - returns 403 Forbidden
+  // { name: 'Product Hunt', listUrl: 'https://www.producthunt.com/...', ... }
 ];
 
 // Investor sources (for --investors flag)
