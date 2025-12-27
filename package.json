@@ -13,7 +13,18 @@
     "scrape:restart": "node check-scraper-health.js --restart",
     "scrape:logs": "tail -f scraper.log",
     "discover": "node discover-startups-from-rss.js",
-    "enrich:vc": "npx tsx enrich-investor-data.ts"
+    "enrich:vc": "npx tsx enrich-investor-data.ts",
+    "discover:startups": "node discover-startups-from-rss.js",
+    "discover:investors": "node discover-investors.js",
+    "monitor": "node admin/monitor-scrapers.js",
+    "test:scrapers": "node admin/test-scrapers.js",
+    "enrich:startups": "node admin/enrich-startups.js",
+    "enrich:investors": "node admin/enrich-investors.js",
+    "cleanup:startups": "node admin/cleanup-bad-startups.js",
+    "cleanup:investors": "node admin/cleanup-bad-investors.js",
+    "discover:all": "npm run discover:startups && npm run discover:investors",
+    "enrich:all": "npm run enrich:startups && npm run enrich:investors",
+    "cleanup:all": "npm run cleanup:startups && npm run cleanup:investors"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.71.2",
