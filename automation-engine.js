@@ -140,16 +140,18 @@ const JOBS = {
   },
   
   investor_scoring: {
+    // Increased timeout for 3000+ investors
+    // UPDATED: Increased timeout for 3000+ investors
     name: 'Investor Scoring',
     command: 'node calculate-investor-scores-v2.js',
-    timeout: 120000,
+    timeout: 600000, // 10 min for 3000+ investors
     description: 'Calculate VC GOD scores'
   },
   
   news_score_update: {
     name: 'News Score Update',
     command: 'node update-scores-from-news.js',
-    timeout: 120000,
+    timeout: 300000, // 5 min
     description: 'Update investor scores from news'
   },
   
