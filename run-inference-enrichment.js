@@ -51,7 +51,7 @@ async function main() {
     }
 
     // Run inference extraction
-    const inference = extractInferenceData(text, startup.website || '');
+    const inference = extractInferenceData(text, startup.website || "") || {};;
 
     // Check if we found anything useful
     const hasNewData =
