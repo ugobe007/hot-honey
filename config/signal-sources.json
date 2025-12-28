@@ -1,0 +1,94 @@
+{
+  "version": "2025-Q4",
+  "lastUpdated": "2025-12-27",
+  
+  "vcBlogs": [
+    {
+      "name": "a16z Future",
+      "url": "https://a16z.com/",
+      "rss": "https://a16z.simplecast.com/rss",
+      "weight": 1.5,
+      "focus": ["ai", "crypto", "bio", "fintech"]
+    },
+    {
+      "name": "Sequoia Medium",
+      "url": "https://medium.com/sequoia-capital",
+      "rss": "https://medium.com/feed/sequoia-capital",
+      "weight": 1.5,
+      "focus": ["enterprise", "consumer", "healthcare"]
+    },
+    {
+      "name": "First Round Review",
+      "url": "https://review.firstround.com/",
+      "rss": "https://review.firstround.com/rss",
+      "weight": 1.3,
+      "focus": ["tactics", "operations", "hiring"]
+    },
+    {
+      "name": "NFX Essays",
+      "url": "https://www.nfx.com/essays",
+      "rss": "https://www.nfx.com/rss.xml",
+      "weight": 1.2,
+      "focus": ["network-effects", "marketplaces", "growth"]
+    }
+  ],
+  
+  "founderBlogs": [
+    {
+      "name": "Indie Hackers",
+      "url": "https://www.indiehackers.com/",
+      "rss": "https://feeds.transistor.fm/indie-hackers-podcast",
+      "weight": 1.0,
+      "focus": ["bootstrapping", "revenue", "solo-founders"]
+    }
+  ],
+  
+  "newsFeeds": [
+    {
+      "name": "TechCrunch Startups",
+      "url": "https://techcrunch.com/category/startups/",
+      "rss": "https://techcrunch.com/category/startups/feed/",
+      "weight": 1.0,
+      "focus": ["funding", "launches", "news"]
+    },
+    {
+      "name": "Hacker News Best",
+      "url": "https://news.ycombinator.com/best",
+      "rss": "https://hnrss.org/best",
+      "weight": 1.0,
+      "focus": ["tech", "startups", "programming"]
+    },
+    {
+      "name": "Hacker News Show HN",
+      "url": "https://news.ycombinator.com/show",
+      "rss": "https://hnrss.org/show",
+      "weight": 1.2,
+      "focus": ["launches", "projects", "demos"]
+    }
+  ],
+  
+  "themesToTrack": [
+    "ai agents",
+    "vertical ai",
+    "defense tech",
+    "climate tech",
+    "solo founders",
+    "bootstrapping",
+    "ai-native",
+    "regulatory change",
+    "emerging markets",
+    "platform shifts",
+    "developer tools",
+    "open source",
+    "humanoid robots",
+    "quantum computing",
+    "gene therapy",
+    "space tech",
+    "series a",
+    "seed round",
+    "funding",
+    "launched",
+    "revenue",
+    "profitable"
+  ]
+}
