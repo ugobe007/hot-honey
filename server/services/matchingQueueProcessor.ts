@@ -21,8 +21,8 @@ interface QueueJob {
 }
 
 const MAX_ATTEMPTS = 3;
-const POLL_INTERVAL = 10000; // Check every 10 seconds
-const BATCH_SIZE = 5; // Process 5 at a time
+const POLL_INTERVAL = 5000; // Check every 10 seconds
+const BATCH_SIZE = 20; // Process 5 at a time
 
 let isProcessing = false;
 
