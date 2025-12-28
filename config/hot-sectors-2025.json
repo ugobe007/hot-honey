@@ -1,0 +1,147 @@
+{
+  "version": "2025-Q4",
+  "lastUpdated": "2025-12-27",
+  "description": "Forward-looking sector weights based on VC/founder research. Update quarterly.",
+  
+  "hotSectors": {
+    "tier1_explosive": {
+      "weight": 1.5,
+      "sectors": [
+        "vertical ai",
+        "applied ai",
+        "agentic ai",
+        "ai agents",
+        "defense tech",
+        "defense",
+        "autonomous systems",
+        "robotics",
+        "humanoid robots",
+        "quantum computing",
+        "quantum"
+      ],
+      "rationale": "50%+ of VC funding in 2025, fastest growth trajectories"
+    },
+    
+    "tier2_strong": {
+      "weight": 1.0,
+      "sectors": [
+        "climate tech",
+        "clean energy",
+        "carbon capture",
+        "sustainability",
+        "healthtech",
+        "digital health",
+        "biotech",
+        "genomics",
+        "gene therapy",
+        "implantables",
+        "wearables",
+        "continuous monitoring",
+        "cybersecurity",
+        "zero trust",
+        "fintech",
+        "embedded finance",
+        "stablecoins",
+        "crypto infrastructure",
+        "defi"
+      ],
+      "rationale": "Strong fundamentals, policy tailwinds, structural demand"
+    },
+    
+    "tier3_emerging": {
+      "weight": 0.75,
+      "sectors": [
+        "space tech",
+        "satellite",
+        "edtech",
+        "skills training",
+        "creator economy",
+        "vertical saas",
+        "proptech",
+        "insurtech",
+        "legaltech",
+        "hr tech",
+        "dev tools",
+        "infrastructure"
+      ],
+      "rationale": "Solid growth, less hype, more stable returns"
+    },
+    
+    "tier4_cooling": {
+      "weight": 0.25,
+      "sectors": [
+        "social media",
+        "consumer apps",
+        "food delivery",
+        "ride sharing",
+        "general marketplace",
+        "web3 gaming",
+        "nft",
+        "metaverse"
+      ],
+      "rationale": "Overcrowded, declining VC interest, commoditized"
+    }
+  },
+  
+  "emergingCategories": {
+    "description": "Specific niches within hot sectors gaining momentum",
+    "categories": [
+      {
+        "name": "AI-native productivity",
+        "keywords": ["vibe coding", "ai copilot", "ai assistant", "prompt engineering"],
+        "bonus": 0.3
+      },
+      {
+        "name": "Autonomous defense",
+        "keywords": ["drone", "unmanned", "autonomous vehicle", "counter-uas"],
+        "bonus": 0.4
+      },
+      {
+        "name": "Continuous health monitoring",
+        "keywords": ["implantable", "biosensor", "continuous glucose", "real-time health"],
+        "bonus": 0.35
+      },
+      {
+        "name": "Unified finance",
+        "keywords": ["crypto + stocks", "unified investing", "all-in-one finance"],
+        "bonus": 0.3
+      },
+      {
+        "name": "Skills-first education",
+        "keywords": ["bootcamp", "skill-based", "certification", "micro-credential"],
+        "bonus": 0.25
+      }
+    ]
+  },
+  
+  "genZMarketFit": {
+    "description": "Products built by/for GenZ with native digital behaviors",
+    "signals": [
+      "mobile-first",
+      "community-led",
+      "creator economy",
+      "async-first",
+      "remote-native",
+      "sustainability-focused",
+      "mental health",
+      "financial wellness"
+    ],
+    "bonus": 0.2
+  },
+  
+  "antiSignals": {
+    "description": "Patterns that suggest declining opportunity or red flags",
+    "patterns": [
+      {
+        "name": "Overcrowded AI wrapper",
+        "keywords": ["chatgpt wrapper", "gpt wrapper", "ai wrapper"],
+        "penalty": -0.3
+      },
+      {
+        "name": "Generic marketplace",
+        "keywords": ["uber for", "airbnb for"],
+        "penalty": -0.2
+      }
+    ]
+  }
+}

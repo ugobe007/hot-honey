@@ -140,3 +140,5 @@ if (startup.launched || startup.demo_available) baseBoost += 0.5;  // 1 → 0.5
 
 The base boost increase from better data is a **feature, not a bug** - it reflects that startups with more complete profiles should score higher.
 
+
+

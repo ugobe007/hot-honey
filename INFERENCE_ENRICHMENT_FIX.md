@@ -150,3 +150,5 @@ Track enrichment success:
 **Priority**: 🔴 Critical - Required for unbiased GOD scoring
 **Next Action**: Run enrichment script on existing startups
 
+
+

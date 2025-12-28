@@ -58,3 +58,5 @@ console.log('   1. Stop the dev server (Ctrl+C)');
 console.log('   2. Clear cache: rm -rf node_modules/.vite');
 console.log('   3. Restart: npm run dev');
 
+
+

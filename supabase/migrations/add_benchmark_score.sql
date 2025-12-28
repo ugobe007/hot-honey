@@ -11,3 +11,5 @@ CREATE INDEX IF NOT EXISTS idx_startup_uploads_benchmark_score ON startup_upload
 -- Add comment
 COMMENT ON COLUMN startup_uploads.benchmark_score IS 'Overall benchmark score (0-100) comparing startup to industry peers based on GOD score, team size, and MRR';
 
+
+

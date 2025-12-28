@@ -8,7 +8,7 @@ const { execSync } = require('child_process');
 
 const STARTUP_DATABASES = [
   'https://www.ycombinator.com/companies',           // Y Combinator portfolio
-  'https://www.producthunt.com/topics/developer-tools', // Product Hunt
+  // 'https://www.producthunt.com/topics/developer-tools', // Product Hunt - DISABLED: returns 403
   'https://wellfound.com/discover/startups',         // Wellfound (AngelList)
   'https://techcrunch.com/startups/',                // TechCrunch Startups
   'https://www.crunchbase.com/discover/organization.companies/trending', // Crunchbase trending

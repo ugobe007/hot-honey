@@ -5,7 +5,7 @@
  * This script:
  * 1. Reads startups with funding info in extracted_data
  * 2. Parses funding amounts and rounds
- * 3. Creates funding_rounds records
+ * 3. Creates funding_rounds records 
  * 4. Handles various funding data formats
  */
 
@@ -220,4 +220,7 @@ extractFundingRounds()
     console.error('\n❌ Extraction failed:', error);
     process.exit(1);
   });
+
+
+
 

@@ -28,3 +28,5 @@ console.log('OpenAI vars:', Object.keys(process.env).filter(k => k.includes('OPE
 
 
 
+
+

@@ -9,3 +9,5 @@ COMMENT ON COLUMN investors.portfolio_performance IS 'JSONB field storing portfo
 
 
 
+
+

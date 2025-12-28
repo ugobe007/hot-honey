@@ -96,3 +96,5 @@ import StartupCard from './StartupCard';
 The consolidation strategy is established. Implementation can be done incrementally as needed.
 
 
+
+

@@ -14,6 +14,11 @@
  * through adversity) and intelligence (strategic thinking, problem-solving, fast learning).
  */
 
+// New forward-looking scoring components (Dec 2025)
+import { scoreVelocity } from './velocityScoring.js';
+import { scoreCapitalEfficiency } from './capitalEfficiencyScoring.js';
+import { scoreMarketTiming } from './marketTimingScoring.js';
+
 // ============================================================================
 // GOD SCORE CALIBRATION SETTINGS (TypeScript Configuration Object)
 // ============================================================================
@@ -58,10 +63,10 @@ const GOD_SCORE_CONFIG = {
   // Normalization divisor - higher = lower scores
   // Controls overall score scaling (DO NOT CHANGE WITHOUT USER APPROVAL)
   // Based on VC benchmark sentiment mapping for predicting funding events
-  normalizationDivisor: 17,
+  normalizationDivisor: 23,  // Increased for new forward-looking components (velocity, efficiency, timing)
   
   // Base boost minimum - ensures floor for data-poor startups
-  baseBoostMinimum: 3.5,
+  baseBoostMinimum: 2.0,  // Balanced to allow some floor variance
   
   // Vibe bonus cap - qualitative signal boost
   vibeBonusCap: 1.0,
@@ -254,17 +259,26 @@ interface HotScore {
   total: number; // 1-10 (rebalanced scoring)
   breakdown: {
     team_execution: number; // 0-3
-    product_vision: number; // 0-2
+    product_vision: number; // 0-1 (reduced from 2)
     founder_courage: number; // 0-1.5
     market_insight: number; // 0-1.5
     team_age: number; // 0-1
     traction: number; // 0-3
     market: number; // 0-2
-    product: number; // 0-2
+    product: number; // 0-3 (increased from 2)
+    // NEW forward-looking components (Dec 2025)
+    velocity: number; // 0-1.5
+    capital_efficiency: number; // 0-1.0
+    market_timing: number; // 0-1.5
   };
   matchCount: number; // How many investors to match (5-20)
   reasoning: string[];
   tier: 'hot' | 'warm' | 'cold';
+  // Optional detailed signals
+  velocitySignals?: string[];
+  efficiencySignals?: string[];
+  timingSignals?: string[];
+  matchedSectors?: string[];
 }
 
 /**
@@ -419,7 +433,7 @@ export function calculateHotScore(startup: StartupProfile): HotScore {
   const teamScore = scoreTeam(startup); // 0-2
   const founderSpeedScore = scoreFounderSpeed(startup); // 0-1
   const teamExecutionScore = Math.min(teamScore + founderSpeedScore + fundingVelocityBonus, 3.0); // Cap at 3
-  const productVisionScore = Math.min(scoreVision(startup), 2.0);
+  const productVisionScore = Math.min(scoreVision(startup), 1.0);  // Reduced from 2.0 - vision is hard to quantify
   const founderCourageScore = Math.min(scoreFounderCourage(startup), 1.5);
   const marketInsightScore = Math.min(scoreUniqueInsight(startup), 1.5);
   const teamAgeScore = Math.min(scoreFounderAge(startup), 1.0);
@@ -427,12 +441,22 @@ export function calculateHotScore(startup: StartupProfile): HotScore {
   // Traction, Market, Product Performance (keep as is)
   const tractionScore = scoreTraction(startup); // 0-3
   const marketScore = scoreMarket(startup); // 0-2
-  const productScore = scoreProduct(startup); // 0-2
+  const productScore = Math.min(scoreProduct(startup), 3.0); // 0-3 (increased from 0-2)
 
-  // New total possible: 3 (team exec) + 2 (vision) + 1.5 (courage) + 1.5 (insight) + 1 (age) + 3 (traction) + 2 (market) + 2 (product) = 16
-  // Plus baseBoost (minimum 5, can go higher with vibe bonus)
+  // === NEW FORWARD-LOOKING SCORES (Dec 2025) ===
+  const velocityResult = scoreVelocity(startup);
+  const velocityScore = velocityResult.score; // 0-1.5
+  
+  const efficiencyResult = scoreCapitalEfficiency(startup);
+  const capitalEfficiencyScore = efficiencyResult.score; // 0-1.0
+  
+  const timingResult = scoreMarketTiming(startup);
+  const marketTimingScore = timingResult.score; // 0-1.5
+
+  // New total possible: 3 (team exec) + 1 (vision) + 1.5 (courage) + 1.5 (insight) + 1 (age) + 3 (traction) + 2 (market) + 3 (product) + 1.5 (velocity) + 1 (efficiency) + 1.5 (timing) = 20
+  // Plus baseBoost (minimum 3, can go higher with vibe bonus)
   const redFlagsScore = scoreRedFlags(startup);
-  const rawTotal = baseBoost + teamExecutionScore + productVisionScore + founderCourageScore + marketInsightScore + teamAgeScore + tractionScore + marketScore + productScore + redFlagsScore;
+  const rawTotal = baseBoost + teamExecutionScore + productVisionScore + founderCourageScore + marketInsightScore + teamAgeScore + tractionScore + marketScore + productScore + redFlagsScore + velocityScore + capitalEfficiencyScore + marketTimingScore;
   // Normalize to 10-point scale using configured divisor (higher divisor = lower scores)
   const total = Math.min((rawTotal / GOD_SCORE_CONFIG.normalizationDivisor) * 10, 10);
   /**
@@ -473,8 +497,17 @@ export function calculateHotScore(startup: StartupProfile): HotScore {
       team_age: teamAgeScore,
       traction: tractionScore,
       market: marketScore,
-      product: productScore
+      product: productScore,
+      // NEW forward-looking components
+      velocity: velocityScore,
+      capital_efficiency: capitalEfficiencyScore,
+      market_timing: marketTimingScore
     },
+    // Detailed signals for debugging
+    velocitySignals: velocityResult.signals,
+    efficiencySignals: efficiencyResult.signals,
+    timingSignals: timingResult.signals,
+    matchedSectors: timingResult.matchedSectors,
     matchCount,
     reasoning: generateReasoning(startup, { 
       baseBoost,
@@ -557,6 +590,19 @@ function scoreTeam(startup: StartupProfile): number {
 function scoreTraction(startup: StartupProfile): number {
   let score = 0;
   
+  // Combine all available text for pattern-based analysis
+  const allText = [
+    startup.pitch || '',
+    startup.tagline || '',
+    startup.value_proposition || '',
+    (startup as any).description || '',
+    (startup as any).name || ''
+  ].join(' ').toLowerCase();
+  
+  // ============================================================================
+  // SECTION 1: QUANTITATIVE TRACTION (when data exists)
+  // ============================================================================
+  
   // Revenue traction (strongest signal)
   if (startup.revenue || startup.mrr || startup.gmv) {
     const annualRevenue = startup.revenue || (startup.mrr! * 12);
@@ -589,19 +635,19 @@ function scoreTraction(startup: StartupProfile): number {
   if (startup.active_users) {
     if (startup.active_users >= 10000) score += 0.5;
     else if (startup.active_users >= 1000) score += 0.25;
-    else if (startup.active_users >= 100) score += 0.15; // Lower threshold
+    else if (startup.active_users >= 100) score += 0.15;
   }
   
   // Pre-paying customers (Seed/Angel: "leading indicator")
   if (startup.prepaying_customers) {
     if (startup.prepaying_customers >= 10) score += 0.5;
     else if (startup.prepaying_customers >= 3) score += 0.25;
-    else if (startup.prepaying_customers >= 1) score += 0.15; // Even 1 paying customer is a signal
+    else if (startup.prepaying_customers >= 1) score += 0.15;
   } else if (startup.customers || startup.signed_contracts) {
     const customerCount = startup.customers || startup.signed_contracts || 0;
     if (customerCount >= 10) score += 0.5;
     else if (customerCount >= 5) score += 0.25;
-    else if (customerCount >= 1) score += 0.15; // Even 1 customer is progress
+    else if (customerCount >= 1) score += 0.15;
   }
   
   // Social proof - backed by reputable investors
@@ -612,21 +658,88 @@ function scoreTraction(startup: StartupProfile): number {
       )
     );
     if (hasTopInvestor) score += 0.5;
-    else score += 0.2; // Any investor backing is a positive signal
+    else score += 0.2;
   }
   
-  // FALLBACK: If no quantitative data, use qualitative signals
-  // This prevents all startups from scoring 0 when data is missing
-  if (score === 0) {
-    // Check if startup is launched (indicates some traction)
-    if (startup.launched || startup.demo_available) {
-      score += 0.2; // Minimal traction signal
-    }
-    // Check if they have a clear value proposition (indicates market validation)
-    if (startup.value_proposition && startup.value_proposition.length > 50) {
-      score += 0.1; // Minimal validation signal
-    }
-  }
+  // ============================================================================
+  // SECTION 2: PATTERN-BASED TRACTION (ALWAYS derive from text)
+  // This runs for ALL startups to ensure sparse-data startups get scored
+  // ============================================================================
+  
+  // --- 2A. Revenue/Business Model Signals ---
+  const revenuePatterns = [
+    /\b(revenue|profitable|monetiz|paying customers|subscription|saas|arr|mrr)/i,
+    /\b(\$\d+[KMB]|\d+\s*(million|billion)|raised\s*\$)/i,
+    /\b(enterprise|b2b|sales|contracts|deals|clients)/i,
+    /\b(funded|backed by|investors|seed|series [a-d]|pe funding|vc)/i
+  ];
+  const revenueMatches = revenuePatterns.filter(p => p.test(allText)).length;
+  if (revenueMatches >= 3) score += 0.5;
+  else if (revenueMatches >= 2) score += 0.35;
+  else if (revenueMatches >= 1) score += 0.2;
+  
+  // --- 2B. User/Customer Traction Signals ---
+  const userPatterns = [
+    /\b(\d+[KM]?\+?\s*(users|customers|clients|downloads|installs|subscribers))/i,
+    /\b(growing|growth|viral|adoption|traction|scale|scaling)/i,
+    /\b(waitlist|beta|early access|pilot|launch)/i,
+    /\b(active|daily|monthly|engagement|retention)/i
+  ];
+  const userMatches = userPatterns.filter(p => p.test(allText)).length;
+  if (userMatches >= 3) score += 0.4;
+  else if (userMatches >= 2) score += 0.3;
+  else if (userMatches >= 1) score += 0.15;
+  
+  // --- 2C. Product Maturity Signals ---
+  const productMaturityPatterns = [
+    /\b(launched|live|production|deployed|shipped|available)/i,
+    /\b(customers using|in use|adopted by|trusted by|powers|powering)/i,
+    /\b(integration|api|sdk|platform|app store|marketplace)/i
+  ];
+  const maturityMatches = productMaturityPatterns.filter(p => p.test(allText)).length;
+  if (maturityMatches >= 2) score += 0.35;
+  else if (maturityMatches >= 1) score += 0.15;
+  
+  // --- 2D. Market Validation Signals ---
+  const validationPatterns = [
+    /\b(partnership|partner with|partnered|strategic)/i,
+    /\b(award|winner|recognized|featured|press|media)/i,
+    /\b(accelerator|incubator|program|yc|techstars|500)/i
+  ];
+  const validationMatches = validationPatterns.filter(p => p.test(allText)).length;
+  if (validationMatches >= 2) score += 0.3;
+  else if (validationMatches >= 1) score += 0.1;
+  
+  // --- 2E. Technology/Innovation Signals (NEW - catches AI/ML, fintech, etc.) ---
+  const techInnovationPatterns = [
+    /\b(ai|artificial intelligence|machine learning|ml|deep learning|neural|gpt|llm)/i,
+    /\b(fintech|fin-tech|financial technology|payment|banking|lending|credit)/i,
+    /\b(blockchain|crypto|web3|defi|smart contract)/i,
+    /\b(biotech|therapeutics|clinical|drug discovery|genomics)/i,
+    /\b(revolutioniz|transform|disrupt|innovati|cutting-edge|next.?gen)/i
+  ];
+  const techMatches = techInnovationPatterns.filter(p => p.test(allText)).length;
+  if (techMatches >= 3) score += 0.4;
+  else if (techMatches >= 2) score += 0.25;
+  else if (techMatches >= 1) score += 0.1;
+  
+  // --- 2F. Company Existence Signals (baseline for minimal data) ---
+  const existencePatterns = [
+    /\b(company|startup|business|firm|venture|develops|provides|offers|building)/i,
+    /\b(technology|tech|software|application|tool|solution|service)/i,
+    /\b(health|healthcare|medical|enterprise|consumer|b2c)/i
+  ];
+  const existenceMatches = existencePatterns.filter(p => p.test(allText)).length;
+  if (existenceMatches >= 2 && score < 0.2) score += 0.15; // Floor for identified companies
+  
+  // ============================================================================
+  // SECTION 3: BOOLEAN FLAGS (direct from database)
+  // ============================================================================
+  
+  if ((startup as any).has_revenue) score += 0.3;
+  if ((startup as any).has_customers) score += 0.25;
+  if (startup.launched || (startup as any).is_launched) score += 0.2;
+  if (startup.demo_available || (startup as any).has_demo) score += 0.15;
   
   return Math.min(score, 3);
 }
@@ -707,7 +820,7 @@ function scoreMarket(startup: StartupProfile): number {
 }
 
 /**
- * PRODUCT SCORING (0-2 points)
+ * PRODUCT SCORING (0-3 points)
  * YC: "Having a working demo"
  * FF: "Cool IP or new business model"
  * Seed/Angel: "MVP demonstrates idea has moved beyond conceptual stage"
@@ -718,24 +831,33 @@ function scoreMarket(startup: StartupProfile): number {
 function scoreProduct(startup: StartupProfile): number {
   let score = 0;
   
+  // Combine all available text for pattern-based analysis
+  const allText = [
+    startup.pitch || '',
+    startup.tagline || '',
+    startup.value_proposition || '',
+    startup.solution || '',
+    (startup as any).description || ''
+  ].join(' ').toLowerCase();
+  
+  // ============================================================================
+  // SECTION 1: STRUCTURED PRODUCT DATA
+  // ============================================================================
+  
   // MVP stage (Seed/Angel: critical indicator)
-  // Check multiple possible field names
   const isLaunched = startup.launched || startup.mvp_stage || (startup as any).is_launched;
   const hasDemo = startup.demo_available || (startup as any).has_demo;
   
   if (isLaunched) {
     score += 0.5; // Launched = product exists
-  } else if (hasDemo) {
-    score += 0.4; // Demo available = product in development
   }
-  
   if (hasDemo) {
     score += 0.5; // Demo = can show product
   }
   
   // Unique IP / defensibility
   if (startup.unique_ip || (startup as any).unique_ip) {
-    score += 0.5; // Has unique IP
+    score += 0.5;
   }
   if (startup.defensibility === 'high') {
     score += 0.5;
@@ -743,27 +865,81 @@ function scoreProduct(startup: StartupProfile): number {
     score += 0.25;
   }
   
-  // FALLBACK: Use stage and other signals when launch/demo flags missing
-  if (score === 0) {
+  // ============================================================================
+  // SECTION 2: PATTERN-BASED PRODUCT SIGNALS (when structured data missing)
+  // ============================================================================
+  
+  if (score < 0.5) {
+    // --- 2A. Product Maturity Stage ---
+    const maturityPatterns = [
+      /\b(launched|live|production|shipped|released|available)/i,
+      /\b(beta|alpha|mvp|prototype|working product)/i,
+      /\b(app|platform|software|tool|solution|product)/i
+    ];
+    const maturityMatches = maturityPatterns.filter(p => p.test(allText)).length;
+    if (maturityMatches >= 2) score += 0.5;
+    else if (maturityMatches >= 1) score += 0.3;
+    
+    // --- 2B. Technical Sophistication ---
+    const techPatterns = [
+      /\b(ai|ml|machine learning|deep learning|neural|gpt|llm)/i,
+      /\b(algorithm|proprietary|patent|ip|breakthrough|novel)/i,
+      /\b(api|sdk|integration|developer|open.?source)/i,
+      /\b(blockchain|crypto|web3|smart contract|defi)/i,
+      /\b(cloud|saas|infrastructure|platform|engine)/i
+    ];
+    const techMatches = techPatterns.filter(p => p.test(allText)).length;
+    if (techMatches >= 3) score += 0.5;
+    else if (techMatches >= 2) score += 0.35;
+    else if (techMatches >= 1) score += 0.2;
+    
+    // --- 2C. Product Category Signals ---
+    const categoryPatterns = [
+      /\b(b2b|enterprise|smb|consumer|prosumer)/i,
+      /\b(marketplace|e-?commerce|fintech|healthtech|edtech)/i,
+      /\b(automation|workflow|productivity|collaboration)/i,
+      /\b(analytics|insights|dashboard|reporting|data)/i
+    ];
+    const categoryMatches = categoryPatterns.filter(p => p.test(allText)).length;
+    if (categoryMatches >= 2) score += 0.3;
+    else if (categoryMatches >= 1) score += 0.15;
+    
+    // --- 2D. Defensibility Signals ---
+    const defensibilityPatterns = [
+      /\b(proprietary|moat|defensible|unique|first.?mover)/i,
+      /\b(patent|ip|intellectual property|trade secret)/i,
+      /\b(network effect|viral|switching cost|lock.?in)/i,
+      /\b(data advantage|exclusive|partnership|license)/i
+    ];
+    const defensibilityMatches = defensibilityPatterns.filter(p => p.test(allText)).length;
+    if (defensibilityMatches >= 2) score += 0.4;
+    else if (defensibilityMatches >= 1) score += 0.2;
+  }
+  
+  // ============================================================================
+  // SECTION 3: FALLBACK SIGNALS
+  // ============================================================================
+  
+  if (score < 0.3) {
     // Check if they have a website (indicates some product presence)
     if (startup.website || (startup as any).website) {
-      score += 0.2; // Website = some product presence
+      score += 0.2;
     }
     // Check stage - later stages imply product exists
     if (startup.stage) {
       const stageNum = typeof startup.stage === 'number' ? startup.stage : 
         ['pre-seed', 'seed', 'series a', 'series b'].indexOf(String(startup.stage).toLowerCase());
-      if (stageNum >= 2) score += 0.3; // Series A+ implies product exists
-      else if (stageNum >= 1) score += 0.2; // Seed implies MVP
-      else if (stageNum >= 0) score += 0.1; // Pre-seed = early stage
+      if (stageNum >= 2) score += 0.3;
+      else if (stageNum >= 1) score += 0.2;
+      else if (stageNum >= 0) score += 0.1;
     }
-    // Check if they have a solution description (indicates product thinking)
+    // Check if they have a solution description
     if (startup.solution && startup.solution.length > 50) {
-      score += 0.15; // Solution description = product concept
+      score += 0.15;
     }
   }
   
-  return Math.min(score, 2);
+  return Math.min(score, 3);
 }
 
 /**
@@ -775,43 +951,157 @@ function scoreProduct(startup: StartupProfile): number {
 function scoreVision(startup: StartupProfile): number {
   let score = 0;
   
-  // Contrarian insight (0.5 points)
-  // First Round: "compelling, contrarian insight into a market"
+  // Combine all available text for analysis
+  const allText = [
+    startup.pitch || '',
+    startup.tagline || '',
+    startup.value_proposition || '',
+    startup.problem || '',
+    startup.solution || '',
+    startup.contrarian_insight || '',
+    startup.contrarian_belief || '',
+    startup.vision_statement || '',
+    startup.why_now || ''
+  ].join(' ').toLowerCase();
+  
+  // ============================================================================
+  // VISION SCORING FROM AVAILABLE DATA (0-2 points)
+  // Derives vision signals from tagline, pitch, description using pattern matching
+  // ============================================================================
+  
+  // --- 1. Contrarian/Disruptive Vision (0-0.5 points) ---
+  // Look for signals of contrarian thinking or market disruption
+  const contrarianPatterns = [
+    /\b(disrupt|revolutioniz|transform|reinvent|redefin|paradigm shift)/i,
+    /\b(unlike|different from|not like|versus traditional|vs\.? traditional)/i,
+    /\b(first|only|pioneer|novel|breakthrough|innovative approach)/i,
+    /\b(challenge|rethink|reimagin|new way|better way)/i,
+    /\b(outdated|broken|inefficient|legacy|old-fashioned)/i  // Criticizing status quo
+  ];
+  
+  // Explicit contrarian fields (legacy support)
   if (startup.contrarian_insight && startup.contrarian_insight.length > 100) {
     score += 0.5;
+  } else if (startup.contrarian_belief && startup.contrarian_belief.length > 50) {
+    score += 0.4;
+  } else {
+    // Pattern-based detection from available text
+    const contrarianMatches = contrarianPatterns.filter(p => p.test(allText)).length;
+    if (contrarianMatches >= 3) {
+      score += 0.5; // Strong contrarian signals
+    } else if (contrarianMatches >= 2) {
+      score += 0.35;
+    } else if (contrarianMatches >= 1) {
+      score += 0.2;
+    }
   }
   
-  // Creative strategy (0.5 points)
-  // First Round & Seed: "thoughtful, creative go-to-market and product strategy"
-  if (startup.creative_strategy && startup.creative_strategy.length > 100) {
+  // --- 2. Ambitious Scale/Impact Vision (0-0.5 points) ---
+  // VCs want "big if it works" - look for ambitious language
+  const ambitionPatterns = [
+    /\b(billion|trillion|\$\d+[BT]|massive market|huge opportunity)/i,
+    /\b(global|worldwide|international|cross-border|multi-country)/i,
+    /\b(platform|ecosystem|marketplace|infrastructure|operating system)/i,
+    /\b(every|all|entire|universal|ubiquitous)/i,  // Scope words
+    /\b(category.?defining|market.?leading|industry.?standard)/i,
+    /\b(10x|100x|exponential|scale|scalable)/i
+  ];
+  
+  const ambitionMatches = ambitionPatterns.filter(p => p.test(allText)).length;
+  if (ambitionMatches >= 3) {
     score += 0.5;
+  } else if (ambitionMatches >= 2) {
+    score += 0.35;
+  } else if (ambitionMatches >= 1) {
+    score += 0.2;
   }
   
-  // Passionate early customers (0.25 points)
-  // First Round: "small group of passionate early customers is a plus"
-  if (startup.passionate_customers && startup.passionate_customers >= 3) {
-    score += 0.25;
+  // --- 3. Creative/Unique Strategy (0-0.4 points) ---
+  // First Round: "thoughtful, creative go-to-market and product strategy"
+  const strategyPatterns = [
+    /\b(viral|word.?of.?mouth|organic growth|community.?driven|network effect)/i,
+    /\b(flywheel|compounding|moat|defensib|lock.?in|switching cost)/i,
+    /\b(land.?and.?expand|bottom.?up|top.?down|product.?led|sales.?led)/i,
+    /\b(freemium|self.?serve|enterprise|SMB|prosumer)/i,
+    /\b(API.?first|developer.?first|B2B2C|embedded|white.?label)/i
+  ];
+  
+  // Explicit creative strategy field (legacy support)
+  if (startup.creative_strategy && startup.creative_strategy.length > 100) {
+    score += 0.4;
+  } else {
+    const strategyMatches = strategyPatterns.filter(p => p.test(allText)).length;
+    if (strategyMatches >= 2) {
+      score += 0.4;
+    } else if (strategyMatches >= 1) {
+      score += 0.2;
+    }
   }
   
-  // Financial planning (0.5 points)
-  // Seed/Angel: "clear understanding of funding needs and use of funds"
+  // --- 4. Clear Value Proposition (0-0.35 points) ---
+  // Having a clear, compelling pitch is a vision signal
+  const tagline = startup.tagline || '';
+  const pitch = startup.pitch || '';
+  
+  // Good tagline: concise (under 100 chars) and specific (not generic)
+  const genericTaglines = [
+    /^a company in the/i,
+    /^we are a/i,
+    /^startup that/i,
+    /^building/i
+  ];
+  const isGenericTagline = genericTaglines.some(p => p.test(tagline));
+  
+  if (tagline.length > 10 && tagline.length < 100 && !isGenericTagline) {
+    score += 0.2; // Clear, non-generic tagline
+  }
+  
+  // Good pitch: substantive (100+ chars) and contains specifics
+  if (pitch.length > 100) {
+    const hasSpecifics = /\d+%|\$\d+|saves?\s+\d+|reduces?\s+\d+/i.test(pitch);
+    if (hasSpecifics) {
+      score += 0.15; // Pitch with quantified claims
+    }
+  }
+  
+  // --- 5. Why Now / Timing Insight (0-0.25 points) ---
+  // Good founders understand market timing
+  const timingPatterns = [
+    /\b(why now|right time|timing|inflection point|tipping point)/i,
+    /\b(AI|GPT|LLM|machine learning|generative)/i,  // Current tech waves
+    /\b(post.?covid|hybrid work|remote|new normal)/i,
+    /\b(regulation|compliance|new law|mandate)/i,
+    /\b(gen.?z|millennial|demographic shift)/i
+  ];
+  
+  if (startup.why_now && startup.why_now.length > 50) {
+    score += 0.25; // Explicit why-now
+  } else {
+    const timingMatches = timingPatterns.filter(p => p.test(allText)).length;
+    if (timingMatches >= 2) {
+      score += 0.25;
+    } else if (timingMatches >= 1) {
+      score += 0.1;
+    }
+  }
+  
+  // --- Legacy: Financial Planning (still check if data exists) ---
   const hasFinancialPlan = startup.use_of_funds && startup.use_of_funds.length > 50;
   const hasRunway = startup.runway_months && startup.runway_months >= 12 && startup.runway_months <= 18;
   const knowsBurnRate = startup.burn_rate && startup.burn_rate > 0;
   
   if (hasFinancialPlan && (hasRunway || knowsBurnRate)) {
-    score += 0.5; // Full financial planning
+    score += 0.3;
   } else if (hasFinancialPlan || hasRunway) {
-    score += 0.25; // Partial planning
+    score += 0.15;
   }
   
-  // Clear vision statement (0.25 points)
-  // First Round: "founder's unique vision"
-  if (startup.vision_statement && startup.vision_statement.length > 50) {
-    score += 0.25;
+  // --- Legacy: Passionate Customers ---
+  if (startup.passionate_customers && startup.passionate_customers >= 3) {
+    score += 0.2;
   }
   
-  return Math.min(score, 2); // Increased cap from 1.5 to 2.0 to account for financial planning
+  return Math.min(score, 2); // Cap at 2.0 points max
 }
 
 /**

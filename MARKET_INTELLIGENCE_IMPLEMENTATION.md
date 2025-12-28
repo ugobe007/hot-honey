@@ -221,3 +221,5 @@ WHERE sectors && ARRAY['your-sector']
 
 
 
+
+

@@ -82,3 +82,5 @@
 - src/components/InvestorCard.tsx (keep, enhance)
 
 
+
+

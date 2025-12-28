@@ -85,13 +85,13 @@ module.exports = {
       watch: false
     },
     
-    // GOD Score recalculator (hourly)
+    // GOD Score recalculator (every 2 hours, 15 min after inference)
     {
       name: 'score-recalc',
       script: 'npx',
-      args: 'tsx scripts/recalculate-scores.ts',
+      args: 'tsx scripts/force-recalculate-scores.ts',  // Use force version
       cwd: '/Users/leguplabs/Desktop/hot-honey',
-      cron_restart: '0 * * * *',  // Every hour
+      cron_restart: '0 */2 * * *',  // Every 2 hours at :00 (15 min after inference at :45)
       autorestart: false,
       watch: false
     },
@@ -232,9 +232,9 @@ module.exports = {
     {
       name: 'inference-enrichment',
       script: 'node',
-      args: 'scripts/enrich-startups-inference.js --limit 100 --missing',
+      args: 'run-inference-enrichment.js',
       cwd: '/Users/leguplabs/Desktop/hot-honey',
-      cron_restart: '0 */2 * * *',  // Every 2 hours
+      cron_restart: '45 */2 * * *',  // Every 2 hours at :45 (15 min before score-recalc at :00)
       autorestart: false,
       watch: false,
       env: {

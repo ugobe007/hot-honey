@@ -1,0 +1,43 @@
+{
+  "version": "2025-Q4-v2",
+  "lastUpdated": "2025-12-27",
+  "description": "Investor tier thresholds calibrated to GOD score distribution",
+  
+  "tiers": {
+    "T1_Elite": {
+      "minScore": 58,
+      "description": "Top-tier VCs: Sequoia, a16z, Founders Fund",
+      "actualPercent": 10,
+      "targetPercent": 10
+    },
+    "T2_Strong": {
+      "minScore": 50,
+      "maxScore": 57,
+      "description": "Established VCs: First Round, Initialized, Bessemer",
+      "actualPercent": 29,
+      "targetPercent": 28
+    },
+    "T3_Emerging": {
+      "minScore": 40,
+      "maxScore": 49,
+      "description": "Specialist funds, micro-VCs, sector-focused",
+      "actualPercent": 40,
+      "targetPercent": 50
+    },
+    "T4_Angels": {
+      "minScore": 35,
+      "maxScore": 39,
+      "description": "Angels, pre-seed funds, accelerators",
+      "actualPercent": 6,
+      "targetPercent": 10
+    },
+    "T5_Incubator": {
+      "minScore": 0,
+      "maxScore": 34,
+      "description": "Incubators, grants, need development or enrichment",
+      "actualPercent": 15,
+      "targetPercent": 2,
+      "note": "High count may indicate data quality issues - candidates for enrichment"
+    }
+  }
+}

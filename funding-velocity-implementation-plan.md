@@ -194,3 +194,5 @@ const velocity = calculateFundingVelocity(fundingRounds, startup);
 
 
 
+
+
