@@ -10,8 +10,9 @@ import NewDashboard from './components/Dashboard'; // ✅ Main Dashboard compone
 import LandingPage from './pages/LandingPage'; // ✅ NEW - Matching platform landing page
 import FrontPageNew from './components/FrontPageNew'; // ✅ OLD - Voting interface
 import MatchingEngine from './components/MatchingEngine'; // ✅ Matching engine component
+import StartupMatches from './pages/StartupMatches'; // ✅ Startup matches page
+import InvestorMatches from './pages/InvestorMatches'; // ✅ Investor matches page
 import VoteDemo from './pages/VoteDemo';
-import SignUpPage from './components/signup-page';
 import About from './pages/About';
 import Privacy from './pages/Privacy';
 import Contact from './pages/Contact';
@@ -61,6 +62,7 @@ import DiscoveredInvestors from './pages/DiscoveredInvestors';
 import SystemHealthDashboard from './pages/SystemHealthDashboard';
 import MasterNavigation from './pages/MasterNavigation';
 import GetMatchedPage from './pages/GetMatchedPage';
+import InvestorSignup from './pages/InvestorSignup';
 import TrendingPage from './pages/TrendingPage';
 import ServicesPage from './pages/ServicesPage';
 import ServiceDetailPage from './pages/ServiceDetailPage';
@@ -115,7 +117,7 @@ const App: React.FC = () => {
           <Route path="/match" element={<MatchingEngine />} />
           <Route path="/saved-matches" element={<SavedMatches />} />
           <Route path="/vote-cards" element={<FrontPageNew />} />
-          <Route path="/signup" element={<SignUpPage />} />
+          {/* Old /signup route removed - use /get-matched for startups or /investor/signup for investors */}
           <Route path="/login" element={<Login />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/vote" element={<VotePage />} />
@@ -126,11 +128,14 @@ const App: React.FC = () => {
           <Route path="/investors" element={<InvestorsPage />} /> {/* ✅ Investor Directory */}
           <Route path="/investor/:id" element={<InvestorProfile />} /> {/* ✅ Individual Investor Profile */}
           <Route path="/investor/:id/edit" element={<EditInvestorPage />} /> {/* ✅ Edit Investor */}
+          <Route path="/investor/signup" element={<InvestorSignup />} /> {/* ✅ Investor Signup */}
           <Route path="/invite-investor" element={<InviteInvestorPage />} /> {/* ✅ Invite Investor */}
           <Route path="/portfolio" element={<PortfolioPage />} /> {/* ✅ FIXED */}
           <Route path="/submit" element={<Submit />} />
           <Route path="/upload" element={<UploadPage />} /> {/* ✅ Startup Uploader */}
           <Route path="/startup/:id" element={<StartupDetail />} />
+          <Route path="/startup/:id/matches" element={<StartupMatches />} /> {/* ✅ Startup matches page */}
+          <Route path="/investor/:id/matches" element={<InvestorMatches />} /> {/* ✅ Investor matches page */}
           <Route path="/deals" element={<Deals />} />
           <Route path="/startups" element={<DashboardRouter />} /> {/* ✅ Redirects to unified dashboard */}
           <Route path="/dashboard" element={<DashboardRouter />} /> {/* ✅ UNIFIED DASHBOARD - redirects admins */}
