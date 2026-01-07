@@ -213,8 +213,8 @@ export default function SmartSearchBar({ className = '' }: SmartSearchBarProps) 
   return (
     <div className={`w-full max-w-xl mx-auto ${className}`}>
       <form onSubmit={handleSubmit}>
-        <div className={`relative flex items-center bg-slate-800/90 border rounded-2xl overflow-hidden transition-all shadow-xl shadow-black/20 ${
-          error ? 'border-red-500/50' : 'border-white/10 hover:border-white/20 focus-within:border-cyan-500/50'
+        <div className={`relative flex items-center bg-[#1a1a1a] border rounded-2xl overflow-hidden transition-all shadow-xl shadow-black/40 ${
+          error ? 'border-red-500/50' : 'border-white/20 hover:border-white/30 focus-within:border-orange-500/60'
         }`}>
           {/* Icon */}
           <div className="pl-5 pr-3">
@@ -227,7 +227,7 @@ export default function SmartSearchBar({ className = '' }: SmartSearchBarProps) 
             value={url}
             onChange={(e) => { setUrl(e.target.value); setError(null); }}
             placeholder="Enter your website URL"
-            className="flex-1 py-4 bg-transparent text-white placeholder-gray-500 outline-none text-base"
+            className="flex-1 py-4 bg-transparent text-white placeholder-gray-400 outline-none text-base font-medium"
             disabled={isSubmitting}
           />
           
