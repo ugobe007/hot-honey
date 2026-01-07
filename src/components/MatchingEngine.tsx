@@ -603,7 +603,7 @@ export default function MatchingEngine() {
           </p>
           
           {/* Smart Search Bar - Search or submit URL */}
-          <SmartSearchBar className="mb-6" />
+          <SmartSearchBar className="mb-3" />
         </div>
       </div>
 
@@ -612,9 +612,9 @@ export default function MatchingEngine() {
         {/* Match Display with Lightning Animation */}
         <div className="max-w-7xl mx-auto mb-16">
           {/* Match Badge & Explore Button */}
-          <div className="flex flex-col items-center gap-4 mb-8">
-            <div className="bg-gradient-to-r from-orange-500 to-amber-500 rounded-full px-10 py-4 shadow-xl flex items-center gap-3">
-              <span className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+          <div className="flex flex-col items-center gap-3 mb-8">
+            <div className="bg-gradient-to-r from-orange-500 to-amber-500 rounded-full px-8 py-3 shadow-xl flex items-center gap-3">
+              <span className="text-xl font-bold text-gray-900 flex items-center gap-2">
                 ⚡ {match.matchScore}% Match ✨
               </span>
               <MatchConfidenceBadge 
@@ -627,13 +627,11 @@ export default function MatchingEngine() {
             </div>
             <Link
               to="/trending"
-              className="group flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-[#1a1a1a] to-[#2a2a2a] hover:from-[#2a2a2a] hover:to-[#333333] text-white font-semibold rounded-xl border border-orange-500/50 hover:border-orange-400 shadow-md shadow-black/50 hover:shadow-orange-500/30 transition-all hover:scale-105"
+              className="group flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-bold text-base rounded-xl shadow-lg shadow-orange-500/40 hover:shadow-orange-500/60 transition-all hover:scale-105"
             >
-              <Search className="w-4 h-4 text-orange-400 group-hover:text-orange-300" />
-              <span className="text-sm bg-gradient-to-r from-orange-400 to-amber-400 bg-clip-text text-transparent">
-                Explore Startups & Investors
-              </span>
-              <TrendingUp className="w-4 h-4 text-orange-400 group-hover:text-orange-300 group-hover:translate-x-1 transition-transform" />
+              <Search className="w-5 h-5" />
+              <span>Explore Startups & Investors</span>
+              <TrendingUp className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
           <div className="relative">

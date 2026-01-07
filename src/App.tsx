@@ -58,6 +58,7 @@ import ControlCenter from './pages/ControlCenter';
 import MetricsDashboard from './pages/MetricsDashboard';
 import LiveDemo from './pages/LiveDemo';
 import MasterControlCenter from './pages/MasterControlCenter';
+import UnifiedAdminDashboard from './pages/UnifiedAdminDashboard';
 import InvestorEnrichmentPage from './pages/InvestorEnrichmentPage';
 import DiscoveredInvestors from './pages/DiscoveredInvestors';
 import SystemHealthDashboard from './pages/SystemHealthDashboard';
@@ -153,7 +154,9 @@ const App: React.FC = () => {
           
           {/* Admin Routes with Sidebar */}
           <Route path="/admin" element={<AdminRouteWrapper />}>
-            <Route index element={<Navigate to="/admin/control" replace />} />
+            <Route index element={<UnifiedAdminDashboard />} />
+            <Route path="dashboard" element={<UnifiedAdminDashboard />} />
+            {/* Legacy routes - keeping for backwards compatibility */}
             <Route path="control" element={<MasterControlCenter />} />
             <Route path="review" element={<AdminReview />} />
             <Route path="rss-manager" element={<RSSManager />} />
