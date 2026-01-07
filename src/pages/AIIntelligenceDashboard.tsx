@@ -391,12 +391,6 @@ export default function AIIntelligenceDashboard() {
     <div className="min-h-screen bg-gradient-to-br from-[#0f0729] via-[#1a0f3a] to-[#2d1558] text-white p-8 relative overflow-hidden">
       {/* Global Navigation */}
       <LogoDropdownMenu />
-          onClick={() => navigate('/')}
-          className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-semibold shadow-lg transition-all"
-        >
-          🌐 Main Site
-        </button>
-      </div>
 
       {/* Animated background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
