@@ -25,6 +25,7 @@ import {
   BookOpen
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
+import LogoDropdownMenu from '../components/LogoDropdownMenu';
 
 export default function GetMatchedPage() {
   const navigate = useNavigate();
@@ -187,6 +188,9 @@ export default function GetMatchedPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+      {/* Global Navigation */}
+      <LogoDropdownMenu />
+      
       {/* Background effects */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -left-40 w-[600px] h-[600px] bg-cyan-500/10 rounded-full blur-3xl" />
