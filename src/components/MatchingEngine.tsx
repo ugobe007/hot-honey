@@ -627,11 +627,15 @@ export default function MatchingEngine() {
             </div>
             <Link
               to="/trending"
-              className="group flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-bold text-base rounded-xl shadow-lg shadow-orange-500/40 hover:shadow-orange-500/60 transition-all hover:scale-105"
+              className="group relative flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 backdrop-blur-sm border border-cyan-400/50 hover:border-cyan-400 text-white font-semibold text-sm rounded-xl shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50 transition-all hover:scale-105"
             >
-              <Search className="w-5 h-5" />
-              <span>Explore Startups & Investors</span>
-              <TrendingUp className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              {/* Glowing effect */}
+              <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/0 via-cyan-400/20 to-cyan-500/0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity blur-sm"></div>
+              <Search className="w-4 h-4 text-cyan-400 group-hover:text-cyan-300 relative z-10" />
+              <span className="bg-gradient-to-r from-cyan-300 to-blue-300 bg-clip-text text-transparent relative z-10">
+                Explore Startups & Investors
+              </span>
+              <TrendingUp className="w-4 h-4 text-cyan-400 group-hover:text-cyan-300 group-hover:translate-x-1 transition-transform relative z-10" />
             </Link>
           </div>
           <div className="relative">
