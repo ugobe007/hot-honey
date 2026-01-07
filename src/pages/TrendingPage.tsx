@@ -475,29 +475,6 @@ export default function TrendingPage() {
       {/* Logo Dropdown Menu */}
       <LogoDropdownMenu />
 
-      {/* Navigation Buttons - Top Right */}
-      <div className="fixed top-6 right-8 z-50 flex items-center gap-3 flex-wrap">
-        <button
-          onClick={() => setShowHowItWorks(true)}
-          className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-purple-600/60 to-indigo-600/60 hover:from-purple-500 hover:to-indigo-500 text-white font-semibold rounded-xl transition-all border border-purple-400/50"
-        >
-          <FlameIcon variant={3} size="sm" />
-          How It Works
-        </button>
-        <Link 
-          to="/about" 
-          className="px-5 py-2.5 bg-gradient-to-r from-slate-600/60 to-gray-600/60 hover:from-slate-500 hover:to-gray-500 text-white font-semibold rounded-xl transition-all border border-slate-400/50"
-        >
-          About
-        </Link>
-        <Link 
-          to="/get-matched" 
-          className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-bold rounded-xl transition-all shadow-lg shadow-orange-500/30"
-        >
-          <Sparkles className="w-4 h-4" />
-          Get Matched
-        </Link>
-      </div>
 
       <div className="relative z-10 container mx-auto px-6 pt-28 pb-16">
         {/* Header */}

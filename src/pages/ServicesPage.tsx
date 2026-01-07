@@ -138,25 +138,8 @@ export default function ServicesPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#1a1140] via-[#2d1b69] to-[#4a2a8f]">
-      {/* Logo Dropdown Menu */}
+      {/* Logo Dropdown Menu - Global Navigation */}
       <LogoDropdownMenu />
-
-      {/* Navigation Buttons - Top Right */}
-      <div className="fixed top-6 right-8 z-50 flex items-center gap-3">
-        <Link 
-          to="/trending" 
-          className="px-5 py-2.5 bg-gradient-to-r from-purple-600/60 to-indigo-600/60 hover:from-purple-500 hover:to-indigo-500 text-white font-semibold rounded-xl transition-all border border-purple-400/50"
-        >
-          Trending
-        </Link>
-        <Link 
-          to="/get-matched" 
-          className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold rounded-xl transition-all shadow-lg"
-        >
-          <Sparkles className="w-4 h-4" />
-          Upgrade
-        </Link>
-      </div>
 
       <div className="container mx-auto px-8 py-8 pt-24">
         {/* Header */}

@@ -347,28 +347,8 @@ ${startup.description || 'Based on the information provided, here are our recomm
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950">
-      {/* Navigation */}
-      <nav className="border-b border-gray-800 bg-gray-950/80 backdrop-blur-md sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16 items-center">
-            <div className="flex items-center gap-4">
-              <LogoDropdownMenu />
-              <button
-                onClick={() => navigate('/services')}
-                className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
-              >
-                <ArrowLeft className="w-4 h-4" />
-                Back to Services
-              </button>
-            </div>
-            <div className="flex items-center gap-3">
-              <span className={`px-3 py-1 rounded-full text-xs font-semibold text-white ${tierColors[service.tier_required]}`}>
-                {service.tier_required.toUpperCase()} Tier
-              </span>
-            </div>
-          </div>
-        </div>
-      </nav>
+      {/* Global Navigation */}
+      <LogoDropdownMenu />
 
       <div className="max-w-4xl mx-auto px-4 py-12">
         {/* Service Header */}

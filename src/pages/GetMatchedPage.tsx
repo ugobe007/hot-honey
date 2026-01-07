@@ -197,12 +197,7 @@ export default function GetMatchedPage() {
       <div className="relative z-10 max-w-7xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-8">
-          <Link to="/" className="inline-flex items-center gap-2 text-slate-400 hover:text-white mb-4 transition-colors">
-            <ArrowLeft className="w-4 h-4" />
-            Back to Home
-          </Link>
-          
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-orange-500/20 to-amber-500/20 border border-orange-500/40 mb-4">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-orange-500/20 to-amber-500/20 border border-orange-500/40 mb-4">
             <Rocket className="w-4 h-4 text-orange-400" />
             <span className="text-orange-300 text-sm font-bold tracking-wide">FOR STARTUPS</span>
           </div>

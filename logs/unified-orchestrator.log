@@ -1611,3 +1611,11 @@
 [2026-01-07T04:38:39.357Z] ⚠️ Enrichment orchestrator not found
 [2026-01-07T04:47:20.729Z] ℹ️ Discovered startups pending: 440
 [2026-01-07T05:22:20.337Z] ℹ️ Discovered startups pending: 440
+[2026-01-07T05:42:20.054Z] ℹ️ Running: GOD Score calculation
+[2026-01-07T05:42:20.059Z] 🔍 Command: node scripts/core/god-score-v5-tiered.js 
+[2026-01-07T05:42:20.059Z] 🔍 Timeout: 900s
+[2026-01-07T05:42:20.061Z] 🔍 Spawning: node scripts/core/god-score-v5-tiered.js 
+[2026-01-07T05:47:20.057Z] ℹ️ Running: GOD Score calculation
+[2026-01-07T05:47:20.059Z] 🔍 Command: node scripts/core/god-score-v5-tiered.js 
+[2026-01-07T05:47:20.060Z] 🔍 Timeout: 900s
+[2026-01-07T05:47:20.060Z] 🔍 Spawning: node scripts/core/god-score-v5-tiered.js 
