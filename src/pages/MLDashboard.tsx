@@ -271,6 +271,7 @@ export default function MLDashboard() {
               Refresh
             </button>
           </div>
+          </div>
         </div>
         {/* Stats - All Clickable to Source */}
         {metrics && (
