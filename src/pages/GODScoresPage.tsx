@@ -261,6 +261,7 @@ export default function GODScoresPage() {
             </button>
           </div>
         </div>
+      </div>
 
       <div className="max-w-[1800px] mx-auto p-4 space-y-4">
         {/* Stats */}
