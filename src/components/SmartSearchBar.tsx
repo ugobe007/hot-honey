@@ -231,17 +231,17 @@ export default function SmartSearchBar({ className = '' }: SmartSearchBarProps) 
             disabled={isSubmitting}
           />
           
-          {/* Submit Button */}
+          {/* Submit Button - VIBRANT ORANGE to match match button */}
           <button
             type="submit"
             disabled={isSubmitting || !url.trim()}
-            className="flex items-center gap-2 px-6 py-4 bg-gradient-to-r from-orange-500 to-amber-500 text-black font-black text-base transition-all hover:from-orange-600 hover:to-amber-600 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-orange-500/60 hover:shadow-orange-500/80"
+            className="flex items-center gap-2 px-6 py-4 bg-gradient-to-r from-orange-500 to-amber-500 text-black font-black text-base transition-all hover:from-orange-400 hover:to-amber-400 disabled:opacity-50 disabled:cursor-not-allowed shadow-2xl shadow-orange-500/90 hover:shadow-orange-400/100"
           >
             {isSubmitting ? (
               <Loader2 className="w-5 h-5 animate-spin" />
             ) : (
               <>
-                <span className="hidden sm:inline">Get Matched</span>
+                <span className="hidden sm:inline">Search Matches</span>
                 <ArrowRight className="w-5 h-5" />
               </>
             )}
