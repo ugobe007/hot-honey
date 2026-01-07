@@ -161,9 +161,9 @@ export default function ServicesPage() {
       <div className="container mx-auto px-8 py-8 pt-24">
         {/* Header */}
         <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-500/20 to-indigo-500/20 border border-purple-500/30 rounded-full mb-6">
-            <Brain className="w-4 h-4 text-purple-400" />
-            <span className="text-purple-300 text-sm font-medium">AI-Powered Services</span>
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-500/20 to-amber-500/20 border border-orange-500/40 rounded-full mb-6">
+            <Brain className="w-4 h-4 text-orange-400" />
+            <span className="text-orange-300 text-sm font-medium">AI-Powered Services</span>
           </div>
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
             � <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">Fundraising</span> Toolkit
