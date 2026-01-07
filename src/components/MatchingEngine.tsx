@@ -570,9 +570,6 @@ export default function MatchingEngine() {
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl animate-pulse"></div>
       </div>
 
-      {/* Logo Dropdown Menu (replaces hamburger + separate logo) */}
-      <LogoDropdownMenu />
-
       {/* Get Matched Button - Top Right - Hidden on small mobile, visible sm+ */}
       <div className="hidden sm:block fixed top-20 right-4 sm:right-8 z-50">
         <button
