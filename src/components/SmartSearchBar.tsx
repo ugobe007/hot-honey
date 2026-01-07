@@ -50,17 +50,45 @@ export default function SmartSearchBar({ className = '' }: SmartSearchBarProps) 
     const normalizedUrl = normalizeUrl(trimmed);
 
     try {
-      // Check if startup exists with this domain
-      const { data: existingStartup, error: startupError } = await supabase
+      // Check if startup exists with this exact domain (more precise matching)
+      // First try exact match
+      const { data: exactMatch, error: exactError } = await supabase
         .from('startup_uploads')
-        .select('id, name')
-        .ilike('website', `%${domain}%`)
+        .select('id, name, website')
+        .eq('website', normalizedUrl)
         .limit(1)
         .maybeSingle();
 
-      if (existingStartup && !startupError) {
-        // Found! Go to their matches page
-        navigate(`/startup/${existingStartup.id}/matches`);
+      if (exactMatch && !exactError) {
+        console.log('Found exact match:', exactMatch.id, exactMatch.name);
+        navigate(`/startup/${exactMatch.id}/matches`);
+        return;
+      }
+
+      // Then try domain match - be very specific to avoid false matches
+      // Use the full domain (e.g., "x.ai") not just ".ai" to avoid matching "llamaindex.ai"
+      const domainPattern = `%${domain}%`;
+      const { data: existingStartups, error: startupError } = await supabase
+        .from('startup_uploads')
+        .select('id, name, website')
+        .ilike('website', domainPattern)
+        .limit(10); // Get multiple to find the best match
+
+      if (existingStartups && existingStartups.length > 0 && !startupError) {
+        // Find the best match - prioritize exact domain match
+        // Normalize all websites for comparison
+        const normalizedDomain = domain.toLowerCase();
+        const bestMatch = existingStartups.find(s => {
+          if (!s.website) return false;
+          const sDomain = extractDomain(s.website).toLowerCase();
+          return sDomain === normalizedDomain;
+        }) || existingStartups.find(s => {
+          if (!s.website) return false;
+          return s.website.toLowerCase().includes(normalizedDomain);
+        }) || existingStartups[0];
+        
+        console.log('✅ Found domain match:', bestMatch.id, bestMatch.name, bestMatch.website, 'from', existingStartups.length, 'candidates');
+        navigate(`/startup/${bestMatch.id}/matches`);
         return;
       }
 
@@ -81,28 +109,97 @@ export default function SmartSearchBar({ className = '' }: SmartSearchBarProps) 
       }
 
       // Not found - create new startup profile
-      const companyName = domain.split('.')[0];
-      const capitalizedName = companyName.charAt(0).toUpperCase() + companyName.slice(1);
+      // Extract company name from domain (better extraction)
+      let companyName = domain.split('.')[0];
       
+      // Handle special cases like "x.ai" -> "X" (not "X")
+      // For single-letter domains, use the full domain as name
+      if (companyName.length === 1) {
+        // For single letters, try to get a better name from the domain
+        // e.g., "x.ai" -> "X" (the company formerly known as Twitter)
+        companyName = companyName.toUpperCase();
+      } else {
+        // Capitalize first letter, handle camelCase domains
+        companyName = companyName.charAt(0).toUpperCase() + companyName.slice(1);
+      }
+      
+      // Try to fetch the actual company name from the website using AI
+      // For now, use the extracted name, but we'll improve this later
+      const startupName = companyName;
+      
+      // Try to insert new startup
       const { data: newStartup, error: createError } = await supabase
         .from('startup_uploads')
         .insert({
-          name: capitalizedName,
+          name: startupName,
           website: normalizedUrl,
           status: 'approved', // Auto-approve so matches can be generated
           source_type: 'url',
           source_url: normalizedUrl,
         })
-        .select('id')
+        .select('id, name')
         .single();
 
       if (createError) {
         console.error('Error creating startup:', createError);
-        setError('Failed to create profile. Please try again.');
+        console.error('Error code:', createError.code);
+        console.error('Error message:', createError.message);
+        console.error('Error details:', createError.details);
+        console.error('Error hint:', createError.hint);
+        
+        // Handle duplicate/conflict errors - try to find existing startup
+        const isDuplicateError = 
+          createError.code === '23505' || // Unique violation
+          createError.code === 'PGRST116' || // PostgREST duplicate
+          createError.message?.toLowerCase().includes('duplicate') ||
+          createError.message?.toLowerCase().includes('already exists') ||
+          createError.message?.toLowerCase().includes('409') ||
+          createError.hint?.toLowerCase().includes('duplicate');
+        
+        if (isDuplicateError) {
+          // Try multiple ways to find existing startup
+          let existingStartup = null;
+          
+          // Try by website first
+          const { data: byWebsite } = await supabase
+            .from('startup_uploads')
+            .select('id')
+            .eq('website', normalizedUrl)
+            .maybeSingle();
+          
+          if (byWebsite) {
+            existingStartup = byWebsite;
+          } else {
+            // Try by name (case insensitive)
+            const { data: byName } = await supabase
+              .from('startup_uploads')
+              .select('id')
+              .ilike('name', capitalizedName)
+              .maybeSingle();
+            
+            if (byName) {
+              existingStartup = byName;
+            }
+          }
+          
+          if (existingStartup) {
+            console.log('Found existing startup, navigating to matches');
+            navigate(`/startup/${existingStartup.id}/matches`);
+            return;
+          }
+        }
+        
+        // Show user-friendly error message
+        const errorMessage = isDuplicateError 
+          ? 'This startup already exists in our database.'
+          : createError.message || 'Failed to create profile. Please try again.';
+        
+        setError(errorMessage);
         return;
       }
 
       // Go to matches page - it will show "no matches yet" or trigger matching
+      console.log('✅ Created new startup:', newStartup.id, newStartup.name, newStartup.website);
       navigate(`/startup/${newStartup.id}/matches`);
       
     } catch (err) {
@@ -117,7 +214,7 @@ export default function SmartSearchBar({ className = '' }: SmartSearchBarProps) 
     <div className={`w-full max-w-xl mx-auto ${className}`}>
       <form onSubmit={handleSubmit}>
         <div className={`relative flex items-center bg-slate-800/90 border rounded-2xl overflow-hidden transition-all shadow-xl shadow-black/20 ${
-          error ? 'border-red-500/50' : 'border-white/10 hover:border-white/20 focus-within:border-orange-500/50'
+          error ? 'border-red-500/50' : 'border-white/10 hover:border-white/20 focus-within:border-cyan-500/50'
         }`}>
           {/* Icon */}
           <div className="pl-5 pr-3">
@@ -138,7 +235,7 @@ export default function SmartSearchBar({ className = '' }: SmartSearchBarProps) 
           <button
             type="submit"
             disabled={isSubmitting || !url.trim()}
-            className="flex items-center gap-2 px-6 py-4 bg-gradient-to-r from-orange-500 to-amber-500 text-gray-900 font-bold transition-all hover:from-orange-400 hover:to-amber-400 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex items-center gap-2 px-6 py-4 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-black text-base transition-all hover:from-cyan-400 hover:to-blue-400 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-cyan-500/40 hover:shadow-cyan-500/60"
           >
             {isSubmitting ? (
               <Loader2 className="w-5 h-5 animate-spin" />
