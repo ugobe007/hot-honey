@@ -3,38 +3,44 @@
 @tailwind utilities;
 
 /* ════════════════════════════════════════════════════════════════════════════
-   🔥 HOT HONEY - BLACK & GOLD ELEGANCE PALETTE
+   🔥 HOT MATCH - FLAME ORANGE & CYAN PALETTE
    ════════════════════════════════════════════════════════════════════════════ */
 :root {
-  /* Primary: Black & Gold Elegance */
-  --hh-gold: #FCA311;
-  --hh-gold-light: #FDBC4B;
-  --hh-gold-dark: #E59200;
-  --hh-navy: #14213D;
-  --hh-navy-light: #1D3461;
-  --hh-navy-dark: #0D1527;
+  /* Primary: Flame Orange (70% - Headlines, CTAs, Main Actions) */
+  --hh-fire: #FF5A09;        /* Primary flame orange */
+  --hh-fire-light: #FF7840;  /* Hover states */
+  --hh-fire-dark: #E54D00;   /* Pressed states */
+  --hh-coral: #F3843E;       /* Secondary warm accent */
+  --hh-amber: #FF9900;       /* Highlights, badges */
+  --hh-honey: #FFB402;       /* Subtle warmth */
   
-  /* Neutrals: Clean Whites & Grays */
+  /* Secondary: Cyan/Blue (30% - Data, Badges, Secondary Info) */
+  --hh-cyan: #06B6D4;        /* Primary cyan (cyan-500) */
+  --hh-cyan-light: #22D3EE;  /* Cyan-400 - lighter */
+  --hh-cyan-dark: #0891B2;   /* Cyan-600 - darker */
+  --hh-blue: #3B82F6;        /* Blue-500 - complementary */
+  --hh-teal: #14B8A6;        /* Teal-500 - alternative */
+  
+  /* Neutrals: Dark Backgrounds & Grays */
+  --hh-charcoal: #393939;
+  --hh-charcoal-light: #454545;
+  --hh-charcoal-dark: #2d2d2d;
+  --hh-slate: #0F172A;
+  --hh-slate-light: #1E293B;
+  --hh-steel: #6E6E6E;
   --hh-white: #FFFFFF;
   --hh-gray: #E5E5E5;
   --hh-gray-dark: #CCCCCC;
-  --hh-black: #000000;
-  --hh-charcoal: #1A1A1A;
   
-  /* Accent: Purple & Glistening Green */
-  --hh-purple: #8B5CF6;
-  --hh-purple-light: #A78BFA;
-  --hh-purple-dark: #7C3AED;
-  --hh-green: #10B981;
-  --hh-green-light: #34D399;
-  --hh-green-dark: #059669;
-  --hh-emerald: #00D9A5;
+  /* Legacy (keeping for backwards compat) */
+  --hh-gold: #FF9900;        /* Maps to amber */
+  --hh-navy: #0F172A;        /* Maps to slate */
   
   /* Semantic */
-  --hh-success: #10B981;
-  --hh-warning: #FCA311;
+  --hh-success: #22C55E;
+  --hh-warning: #FF9900;     /* Uses amber */
   --hh-error: #EF4444;
-  --hh-info: #8B5CF6;
+  --hh-info: #06B6D4;        /* Uses cyan */
 }
 
 /* Base styles */
@@ -117,4 +123,13 @@ nav, [class*="fixed"] {
 
 .animate-float-up {
   animation: float-up 1s ease-out forwards;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
 }

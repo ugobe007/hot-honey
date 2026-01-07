@@ -517,7 +517,7 @@ export default function MatchingEngine() {
       <div className="min-h-screen bg-gradient-to-br from-[#0a0a0a] via-[#141414] to-[#1a1a1a] flex flex-col items-center justify-center">
         {/* Animated background glows */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-600/10 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-orange-600/10 rounded-full blur-3xl animate-pulse"></div>
           <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
         </div>
         
@@ -526,7 +526,7 @@ export default function MatchingEngine() {
           {/* Animated logo/spinner */}
           <div className="mb-8">
             <div className="relative inline-block">
-              <div className="w-24 h-24 border-4 border-cyan-500/30 border-t-cyan-500 rounded-full animate-spin"></div>
+              <div className="w-24 h-24 border-4 border-orange-500/30 border-t-orange-500 rounded-full animate-spin"></div>
               <span className="absolute inset-0 flex items-center justify-center text-4xl">🔥</span>
             </div>
           </div>
@@ -541,9 +541,9 @@ export default function MatchingEngine() {
           
           {/* Progress dots */}
           <div className="flex justify-center gap-2">
-            <div className="w-3 h-3 bg-cyan-600 rounded-full animate-bounce"></div>
-            <div className="w-3 h-3 bg-cyan-600 rounded-full animate-bounce delay-100"></div>
-            <div className="w-3 h-3 bg-cyan-600 rounded-full animate-bounce delay-200"></div>
+            <div className="w-3 h-3 bg-orange-500 rounded-full animate-bounce"></div>
+            <div className="w-3 h-3 bg-cyan-500 rounded-full animate-bounce delay-100"></div>
+            <div className="w-3 h-3 bg-orange-500 rounded-full animate-bounce delay-200"></div>
           </div>
           
           {/* Error display - only shown if there's an actual error */}
@@ -566,7 +566,7 @@ export default function MatchingEngine() {
       
       {/* Animated background - subtle orange/amber glows */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-64 h-64 bg-cyan-600/5 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute top-20 left-10 w-64 h-64 bg-orange-600/5 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl animate-pulse"></div>
       </div>
 
@@ -577,7 +577,7 @@ export default function MatchingEngine() {
       <div className="hidden sm:block fixed top-20 right-4 sm:right-8 z-50">
         <button
           onClick={() => setShowHotMatchPopup(true)}
-          className="flex items-center gap-2 px-3 sm:px-5 py-2 sm:py-2.5 bg-[#1a1a1a] hover:bg-[#222222] text-cyan-400 hover:text-cyan-300 font-bold rounded-xl transition-all border-2 border-cyan-500/60 hover:border-cyan-400 shadow-lg shadow-black/30 text-sm sm:text-base"
+          className="flex items-center gap-2 px-3 sm:px-5 py-2 sm:py-2.5 bg-[#1a1a1a] hover:bg-[#222222] text-orange-400 hover:text-orange-300 font-bold rounded-xl transition-all border-2 border-orange-500/60 hover:border-orange-400 shadow-lg shadow-black/30 text-sm sm:text-base"
         >
           <Sparkles className="w-4 h-4 sm:w-5 sm:h-5" />
           <span className="hidden md:inline">Get Matched</span>
@@ -590,7 +590,7 @@ export default function MatchingEngine() {
         <div className="text-center">
           <h2 className="text-3xl sm:text-5xl md:text-7xl font-bold mb-2 sm:mb-3">
             <span className="text-white text-2xl sm:text-4xl md:text-5xl">Find Your </span>
-            <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-violet-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-orange-400 via-amber-400 to-orange-500 bg-clip-text text-transparent">
               Perfect Match
             </span>
           </h2>
@@ -613,7 +613,7 @@ export default function MatchingEngine() {
         <div className="max-w-7xl mx-auto mb-16">
           {/* Match Badge & Explore Button */}
           <div className="flex flex-col items-center gap-4 mb-8">
-            <div className="bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full px-10 py-4 shadow-xl flex items-center gap-3">
+            <div className="bg-gradient-to-r from-orange-500 to-amber-500 rounded-full px-10 py-4 shadow-xl flex items-center gap-3">
               <span className="text-2xl font-bold text-gray-900 flex items-center gap-2">
                 ⚡ {match.matchScore}% Match ✨
               </span>
@@ -627,13 +627,13 @@ export default function MatchingEngine() {
             </div>
             <Link
               to="/trending"
-              className="group flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-[#1a1a1a] to-[#2a2a2a] hover:from-[#2a2a2a] hover:to-[#333333] text-white font-semibold rounded-xl border border-cyan-500/50 hover:border-cyan-400 shadow-md shadow-black/50 hover:shadow-cyan-500/30 transition-all hover:scale-105"
+              className="group flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-[#1a1a1a] to-[#2a2a2a] hover:from-[#2a2a2a] hover:to-[#333333] text-white font-semibold rounded-xl border border-orange-500/50 hover:border-orange-400 shadow-md shadow-black/50 hover:shadow-orange-500/30 transition-all hover:scale-105"
             >
-              <Search className="w-4 h-4 text-cyan-400 group-hover:text-cyan-300" />
-              <span className="text-sm bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
+              <Search className="w-4 h-4 text-orange-400 group-hover:text-orange-300" />
+              <span className="text-sm bg-gradient-to-r from-orange-400 to-amber-400 bg-clip-text text-transparent">
                 Explore Startups & Investors
               </span>
-              <TrendingUp className="w-4 h-4 text-cyan-400 group-hover:text-cyan-300 group-hover:translate-x-1 transition-transform" />
+              <TrendingUp className="w-4 h-4 text-orange-400 group-hover:text-orange-300 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
           <div className="relative">
@@ -660,8 +660,8 @@ export default function MatchingEngine() {
                   >
                     <span className="text-2xl hover:scale-125 transition-transform inline-block animate-pulse">🔥</span>
                     {showSecret && (
-                      <div className="absolute top-full right-0 mt-2 bg-gradient-to-r from-cyan-600 to-blue-600 text-white px-4 py-3 rounded-xl shadow-2xl text-sm font-bold w-64 z-50 animate-fadeIn">
-                        <div className="absolute -top-2 right-4 w-4 h-4 bg-cyan-700 rotate-45"></div>
+                      <div className="absolute top-full right-0 mt-2 bg-gradient-to-r from-orange-600 to-amber-600 text-white px-4 py-3 rounded-xl shadow-2xl text-sm font-bold w-64 z-50 animate-fadeIn">
+                        <div className="absolute -top-2 right-4 w-4 h-4 bg-orange-700 rotate-45"></div>
                         💡 {currentSecret}
                       </div>
                     )}
@@ -690,7 +690,7 @@ export default function MatchingEngine() {
                     />
                     <div className="flex-1 min-w-0">
                       <h3 className="text-xl font-bold text-white mb-0.5 line-clamp-1">{match.startup.name}</h3>
-                      <p className="text-cyan-300/90 text-sm font-medium italic line-clamp-1">"{(() => {
+                      <p className="text-orange-300/90 text-sm font-medium italic line-clamp-1">"{(() => {
                         const desc = match.startup.description || match.startup.tagline || '';
                         // Filter out garbage descriptions
                         if (!desc || 
@@ -715,7 +715,7 @@ export default function MatchingEngine() {
                           .slice(0, 3)
                           .map((point: string, idx: number) => (
                             <div key={idx} className="flex items-start gap-2 text-xs">
-                              <span className="text-cyan-400 mt-0.5">✦</span>
+                              <span className="text-orange-400 mt-0.5">✦</span>
                               <p className="text-white/90 line-clamp-1">{point}</p>
                             </div>
                           ))}
@@ -743,7 +743,7 @@ export default function MatchingEngine() {
                     {(match.startup.tags || []).slice(0, 3).map((tag, idx) => (
                       <span
                         key={idx}
-                        className="bg-gradient-to-r from-cyan-500/20 to-blue-500/20 border border-cyan-400/40 text-cyan-200 px-3 py-1 rounded-full text-xs font-medium"
+                        className="bg-gradient-to-r from-orange-500/20 to-cyan-500/20 border border-orange-400/40 text-orange-200 px-3 py-1 rounded-full text-xs font-medium"
                       >
                         {tag}
                       </span>
@@ -757,7 +757,7 @@ export default function MatchingEngine() {
                       setVotingStartup(match.startup);
                       setShowVotePopup(true);
                     }}
-                    className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-gradient-to-r from-cyan-500 via-blue-500 to-violet-500 text-white font-bold text-base hover:from-cyan-600 hover:via-blue-600 hover:to-violet-600 transition-all shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50 hover:scale-[1.02] active:scale-[0.98]"
+                    className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-gradient-to-r from-orange-500 via-amber-500 to-orange-600 text-white font-bold text-base hover:from-orange-600 hover:via-amber-600 hover:to-orange-700 transition-all shadow-lg shadow-orange-500/30 hover:shadow-orange-500/50 hover:scale-[1.02] active:scale-[0.98]"
                   >
                     <ThumbsUp className="w-5 h-5" />
                     Vote for {match.startup.name?.split(' ')[0]}
@@ -810,7 +810,7 @@ export default function MatchingEngine() {
 
                 <button onClick={() => setShowHowItWorks(true)} className="relative z-10 cursor-pointer hover:scale-110 transition-transform">
                   {/* Pulsing glow background - ORANGE for hot deals */}
-                  <div className="absolute inset-0 bg-cyan-600/40 rounded-full blur-3xl animate-pulse"></div>
+                  <div className="absolute inset-0 bg-orange-600/40 rounded-full blur-3xl animate-pulse"></div>
                   
                   {/* Brain Icon Image with animation - orange glow */}
                   <div className={`relative transition-all duration-700 ${brainSpin ? 'scale-150 drop-shadow-[0_0_50px_rgba(255,90,9,1)]' : matchPulse ? 'scale-125 drop-shadow-[0_0_40px_rgba(255,90,9,1)]' : 'scale-100 drop-shadow-[0_0_25px_rgba(255,90,9,0.8)]'}`}>
@@ -845,7 +845,7 @@ export default function MatchingEngine() {
                   
                   {/* Energy particles */}
                   <div className="absolute -top-2 left-1/2 w-3 h-3 bg-yellow-400 rounded-full animate-ping"></div>
-                  <div className="absolute -bottom-2 -right-2 w-2 h-2 bg-cyan-400 rounded-full animate-ping" style={{animationDelay: '0.5s'}}></div>
+                  <div className="absolute -bottom-2 -right-2 w-2 h-2 bg-orange-400 rounded-full animate-ping" style={{animationDelay: '0.5s'}}></div>
                   <div className="absolute top-1/2 -left-2 w-2 h-2 bg-cyan-400 rounded-full animate-ping" style={{animationDelay: '1s'}}></div>
                 </button>
               </div>
@@ -900,7 +900,7 @@ export default function MatchingEngine() {
           {/* Section Header */}
           <div className="text-center mb-12">
             <h2 className="text-5xl font-bold text-white mb-4">
-              Watch the <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-violet-400 bg-clip-text text-transparent">Magic</span> Happen
+              Watch the <span className="bg-gradient-to-r from-orange-400 via-amber-400 to-orange-500 bg-clip-text text-transparent">Magic</span> Happen
             </h2>
             <p className="text-xl text-gray-400 max-w-3xl mx-auto">
               Our <span className="text-yellow-400 font-semibold">GOD Algorithm™</span> processes 20+ compatibility factors in real-time
@@ -920,11 +920,11 @@ export default function MatchingEngine() {
               </div>
               <div className="flex items-center gap-6">
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-cyan-400">{matches.length}</div>
+                  <div className="text-3xl font-bold text-orange-400">{matches.length}</div>
                   <div className="text-xs text-gray-400 uppercase tracking-wide">Active Matches</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-blue-400">{match.matchScore}%</div>
+                  <div className="text-3xl font-bold text-orange-400">{match.matchScore}%</div>
                   <div className="text-xs text-gray-400 uppercase tracking-wide">Match Score</div>
                 </div>
                 <div className="text-center">
@@ -944,7 +944,7 @@ export default function MatchingEngine() {
                     style={{ width: `${Math.min(95, match.matchScore + 5)}%` }}
                   />
                 </div>
-                <div className="w-12 text-right text-blue-400 font-bold">{Math.min(95, match.matchScore + 5)}%</div>
+                <div className="w-12 text-right text-orange-400 font-bold">{Math.min(95, match.matchScore + 5)}%</div>
               </div>
 
               <div className="flex items-center gap-4">
@@ -1090,15 +1090,15 @@ export default function MatchingEngine() {
         {/* Info modal */}
         {showInfoModal && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50" onClick={() => setShowInfoModal(false)}>
-          <div className="bg-gradient-to-br from-[#1a1a1a] to-[#222222] border border-cyan-500/50 rounded-3xl p-8 max-w-md mx-4 shadow-[0_0_50px_rgba(255,90,9,0.3)]" onClick={e => e.stopPropagation()}>
+          <div className="bg-gradient-to-br from-[#1a1a1a] to-[#222222] border border-orange-500/50 rounded-3xl p-8 max-w-md mx-4 shadow-[0_0_50px_rgba(255,90,9,0.3)]" onClick={e => e.stopPropagation()}>
             <div className="text-center mb-6">
               <span className="text-6xl">🧠</span>
               <h2 className="text-3xl font-bold text-white mt-4">How Hot Money Works</h2>
-              <p className="text-cyan-400 mt-2">AI-Powered Startup-Investor Matching</p>
+              <p className="text-orange-400 mt-2">AI-Powered Startup-Investor Matching</p>
             </div>
             
             <p className="text-gray-300 mb-6 text-center">
-              Our AI analyzes startups and investors to discover <span className="text-cyan-400 font-bold">perfect matches</span> based on industry, stage, funding needs, and investment thesis.
+              Our AI analyzes startups and investors to discover <span className="text-orange-400 font-bold">perfect matches</span> based on industry, stage, funding needs, and investment thesis.
             </p>
             
             <div className="space-y-3 mb-6">

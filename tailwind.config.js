@@ -10,13 +10,32 @@ module.exports = {
         // 🔥 HOT HONEY - BLACK & GOLD ELEGANCE PALETTE
         // ════════════════════════════════════════════════════════════════
         
-        // ── PRIMARY: Black & Gold Elegance ──
-        'hh-gold': '#FCA311',         // Primary accent, CTAs, highlights
-        'hh-gold-light': '#FDBC4B',   // Hover states, secondary accent
-        'hh-gold-dark': '#E59200',    // Pressed states
-        'hh-navy': '#14213D',         // Primary dark, headers, nav
-        'hh-navy-light': '#1D3461',   // Cards, elevated surfaces
-        'hh-navy-dark': '#0D1527',    // Deepest backgrounds
+        // ── PRIMARY: Flame Orange (70% - Headlines, CTAs, Main Actions) ──
+        'hh-fire': '#FF5A09',         // Primary flame orange (main brand color)
+        'hh-fire-light': '#FF7840',   // Hover states
+        'hh-fire-dark': '#E54D00',    // Pressed states
+        'hh-coral': '#F3843E',        // Secondary warm accent
+        'hh-amber': '#FF9900',        // Highlights, badges
+        'hh-honey': '#FFB402',        // Subtle warmth
+        
+        // ── SECONDARY: Cyan/Blue (30% - Data, Badges, Secondary Info) ──
+        'hh-cyan': '#06B6D4',         // Primary cyan (cyan-500)
+        'hh-cyan-light': '#22D3EE',   // Cyan-400
+        'hh-cyan-dark': '#0891B2',    // Cyan-600
+        'hh-teal': '#14B8A6',         // Teal-500
+        
+        // ── Legacy Gold (maps to amber) ──
+        'hh-gold': '#FF9900',         // Maps to amber for compatibility
+        'hh-gold-light': '#FFB84D',   // Light amber
+        'hh-gold-dark': '#E68A00',    // Dark amber
+        
+        // ── Backgrounds: Dark & Neutral ──
+        'hh-navy': '#0F172A',         // Slate-900
+        'hh-navy-light': '#1E293B',   // Slate-800
+        'hh-navy-dark': '#020617',    // Slate-950
+        'hh-charcoal': '#393939',     // Charcoal backgrounds
+        'hh-charcoal-light': '#454545',
+        'hh-charcoal-dark': '#2d2d2d',
         
         // ── NEUTRALS: Clean Whites & Grays ──
         'hh-white': '#FFFFFF',        // Pure white backgrounds
@@ -35,10 +54,10 @@ module.exports = {
         'hh-emerald': '#00D9A5',      // Bright glistening accent
         
         // ── SEMANTIC: Status Colors ──
-        'hh-success': '#10B981',      // Success states (green)
-        'hh-warning': '#FCA311',      // Warning (gold)
-        'hh-error': '#EF4444',        // Error states
-        'hh-info': '#8B5CF6',         // Info states (purple)
+        'hh-success': '#22C55E',      // Success states (green-500)
+        'hh-warning': '#FF9900',      // Warning (amber/fire)
+        'hh-error': '#EF4444',        // Error states (red-500)
+        'hh-info': '#06B6D4',         // Info states (cyan)
         
         // ════════════════════════════════════════════════════════════════
         // 🎨 LEGACY: Hot Money Spectrum (Keep for compatibility)

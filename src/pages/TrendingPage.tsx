@@ -20,8 +20,8 @@ const ALGORITHMS = [
     name: 'GOD Algorithm',
     shortName: 'GOD',
     icon: Flame,
-    color: 'from-red-500 to-amber-500',
-    bgColor: 'from-red-900/40 to-amber-900/30',
+    color: 'from-red-500 to-blue-500',
+    bgColor: 'from-slate-800/40 to-slate-700/30',
     borderColor: 'border-red-500/40',
     description: 'Our proprietary 14-factor scoring system: Team, Traction, Market, Product, Vision + YC Philosophy + Smell Tests.',
     formula: 'Balanced composite (0-100)',
@@ -32,9 +32,9 @@ const ALGORITHMS = [
     name: 'YC Smell Test',
     shortName: 'YC',
     icon: Lightbulb,
-    color: 'from-orange-500 to-amber-500',
-    bgColor: 'from-orange-900/40 to-amber-900/30',
-    borderColor: 'border-orange-500/40',
+    color: 'from-cyan-600 to-blue-600',
+    bgColor: 'from-slate-800/40 to-slate-700/30',
+    borderColor: 'border-cyan-500/40',
     description: "Paul Graham's 5 heuristics: Can 2 people build this? Users emotionally attached? Learning in public? Inevitable? Massive if works?",
     formula: 'Smell Tests + GOD (0-100)',
     weight: { smell_test: 20, god: 1 }
@@ -302,16 +302,19 @@ export default function TrendingPage() {
       setStartups(startupsWithScores);
       
       // Fetch stats
-      const [{ count: startupCount }, { count: investorCount }, { count: matchCount }] = await Promise.all([
+      const [{ count: startupCount }, { count: investorCount }] = await Promise.all([
         supabase.from('startup_uploads').select('*', { count: 'exact', head: true }).eq('status', 'approved'),
-        supabase.from('investors').select('*', { count: 'exact', head: true }),
-        supabase.from('startup_investor_matches').select('*', { count: 'exact', head: true })
+        supabase.from('investors').select('*', { count: 'exact', head: true })
       ]);
+      
+      // Get match count via fast RPC instead of slow COUNT(*)
+      const { data: matchEstimate } = await supabase
+        .rpc('get_match_count_estimate');
       
       setStats({
         startups: startupCount || 0,
         investors: investorCount || 0,
-        matches: matchCount || 0
+        matches: matchEstimate || 0
       });
       
       setLoading(false);
@@ -464,9 +467,9 @@ export default function TrendingPage() {
     <div className="min-h-screen bg-gradient-to-br from-[#0a0015] via-[#1a0a2e] to-[#0f0520] text-white relative overflow-hidden">
       {/* Background Effects */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute top-20 left-10 w-96 h-96 bg-orange-500/20 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-orange-500/10 to-amber-500/10 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-orange-500/10 to-cyan-500/10 rounded-full blur-3xl"></div>
       </div>
 
       {/* Logo Dropdown Menu */}
@@ -489,7 +492,7 @@ export default function TrendingPage() {
         </Link>
         <Link 
           to="/get-matched" 
-          className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold rounded-xl transition-all shadow-lg"
+          className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-bold rounded-xl transition-all shadow-lg shadow-orange-500/30"
         >
           <Sparkles className="w-4 h-4" />
           Get Matched
@@ -505,7 +508,7 @@ export default function TrendingPage() {
           </div>
           <h1 className="text-4xl md:text-5xl font-bold mb-3 flex items-center justify-center gap-3">
             <FlameIcon variant={1} size="xl" />
-            <span className="bg-gradient-to-r from-orange-400 via-red-500 to-amber-500 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-orange-400 via-red-500 to-yellow-500 bg-clip-text text-transparent">
               Hot Startup Rankings
             </span>
             <FlameIcon variant={9} size="xl" />
@@ -523,12 +526,12 @@ export default function TrendingPage() {
             <span className="text-sm text-gray-400">Startups</span>
           </div>
           <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-xl border border-white/10">
-            <Building2 className="w-5 h-5 text-purple-400" />
+            <Building2 className="w-5 h-5 text-orange-400" />
             <span className="text-2xl font-bold text-white">{stats.investors.toLocaleString()}</span>
             <span className="text-sm text-gray-400">Investors</span>
           </div>
           <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-xl border border-white/10">
-            <Zap className="w-5 h-5 text-yellow-400" />
+            <Zap className="w-5 h-5 text-cyan-400" />
             <span className="text-2xl font-bold text-white">{stats.matches.toLocaleString()}</span>
             <span className="text-sm text-gray-400">Matches</span>
           </div>
@@ -683,11 +686,11 @@ export default function TrendingPage() {
                           <td className="py-4 pl-4">
                             <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold text-sm ${
                               index === 0 
-                                ? 'bg-gradient-to-br from-yellow-400 to-amber-500 text-black shadow-lg shadow-yellow-500/30' 
+                                ? 'bg-gradient-to-br from-yellow-400 to-blue-500 text-black shadow-lg shadow-yellow-500/30' 
                                 : index === 1
                                   ? 'bg-gradient-to-br from-gray-200 to-gray-400 text-black shadow-lg'
                                   : index === 2
-                                    ? 'bg-gradient-to-br from-orange-500 to-orange-700 text-white shadow-lg'
+                                    ? 'bg-gradient-to-br from-cyan-500 to-cyan-700 text-white shadow-lg'
                                     : 'bg-white/10 text-gray-300 border border-white/20'
                             }`}>
                               {index === 0 ? '👑' : index + 1}
@@ -762,7 +765,7 @@ export default function TrendingPage() {
                               <span className={`text-xl font-bold bg-gradient-to-r ${currentAlgo.color} bg-clip-text text-transparent min-w-[60px]`}>
                                 {score}
                               </span>
-                              <ChevronRight className="w-4 h-4 text-gray-500 group-hover:text-orange-400 transition-colors" />
+                              <ChevronRight className="w-4 h-4 text-gray-500 group-hover:text-cyan-400 transition-colors" />
                             </div>
                           </td>
                           
@@ -862,7 +865,7 @@ export default function TrendingPage() {
               </button>
               <Link
                 to="/get-matched"
-                className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold rounded-xl transition-all shadow-lg"
+                className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold rounded-xl transition-all shadow-lg"
               >
                 <Zap className="w-5 h-5" />
                 Get Matched Now
@@ -885,7 +888,7 @@ export default function TrendingPage() {
             </button>
 
             <div className="text-center mb-8">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-red-500 to-amber-500 flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-red-500 to-blue-500 flex items-center justify-center mx-auto mb-4">
                 <FlameIcon variant={7} size="xl" />
               </div>
               <h2 className="text-3xl font-bold text-white mb-2">GOD Algorithm</h2>
@@ -903,7 +906,7 @@ export default function TrendingPage() {
                   { name: 'Team', icon: Users, color: 'from-blue-500 to-cyan-500', factors: ['Technical founders', 'Domain expertise', 'Team size', 'Prior exits'] },
                   { name: 'Traction', icon: TrendingUp, color: 'from-green-500 to-emerald-500', factors: ['ARR/MRR', 'Growth rate', 'Customer count', 'NRR'] },
                   { name: 'Market', icon: Target, color: 'from-purple-500 to-violet-500', factors: ['TAM estimate', 'Market timing', 'Competition', 'Winner-take-all'] },
-                  { name: 'Product', icon: Layers, color: 'from-orange-500 to-red-500', factors: ['Launch status', 'Demo ready', 'NPS score', 'User engagement'] },
+                  { name: 'Product', icon: Layers, color: 'from-cyan-600 to-blue-600', factors: ['Launch status', 'Demo ready', 'NPS score', 'User engagement'] },
                   { name: 'Vision', icon: Eye, color: 'from-indigo-500 to-violet-500', factors: ['Contrarian belief', 'Why now', 'Unfair advantage', '10x potential'] },
                 ].map((component) => (
                   <div key={component.name} className="bg-black/30 rounded-xl p-4 border border-white/10">
@@ -926,10 +929,10 @@ export default function TrendingPage() {
             {/* YC Smell Tests */}
             <div className="mb-8">
               <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-                <Lightbulb className="w-5 h-5 text-orange-400" />
+                <Lightbulb className="w-5 h-5 text-cyan-400" />
                 YC Smell Tests (5 Binary Tests)
               </h3>
-              <div className="bg-black/30 rounded-xl p-4 border border-orange-500/20">
+              <div className="bg-black/30 rounded-xl p-4 border border-cyan-500/20">
                 <p className="text-gray-300 text-sm mb-4">Paul Graham's quick heuristics for evaluating early-stage startups:</p>
                 <div className="grid md:grid-cols-5 gap-3">
                   {[
@@ -970,7 +973,7 @@ export default function TrendingPage() {
                 <div className="bg-black/30 rounded-xl p-4 border border-white/10">
                   <h4 className="font-bold text-white mb-3">Investor Tiers</h4>
                   <ul className="text-sm space-y-2">
-                    <li className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-gradient-to-r from-yellow-400 to-amber-500"></span> <span className="text-yellow-400 font-semibold">Elite</span> <span className="text-gray-400">- Top-tier VCs, proven track record</span></li>
+                    <li className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-gradient-to-r from-yellow-400 to-blue-500"></span> <span className="text-yellow-400 font-semibold">Elite</span> <span className="text-gray-400">- Top-tier VCs, proven track record</span></li>
                     <li className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-gradient-to-r from-purple-400 to-violet-500"></span> <span className="text-purple-400 font-semibold">Strong</span> <span className="text-gray-400">- Active investors, good portfolios</span></li>
                     <li className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-gradient-to-r from-blue-400 to-cyan-500"></span> <span className="text-blue-400 font-semibold">Solid</span> <span className="text-gray-400">- Reliable, sector-focused</span></li>
                     <li className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-gradient-to-r from-green-400 to-emerald-500"></span> <span className="text-green-400 font-semibold">Emerging</span> <span className="text-gray-400">- New funds, angels</span></li>
@@ -1040,8 +1043,8 @@ export default function TrendingPage() {
 
             {/* Score Cards */}
             <div className="grid grid-cols-3 gap-3 mb-5">
-              <div className="bg-orange-500/10 rounded-xl p-3 text-center border border-orange-500/20">
-                <div className="text-2xl font-bold text-orange-400">{selectedStartup.ycScore}</div>
+              <div className="bg-cyan-600/10 rounded-xl p-3 text-center border border-cyan-500/20">
+                <div className="text-2xl font-bold text-cyan-400">{selectedStartup.ycScore}</div>
                 <div className="text-xs text-gray-400">YC Score</div>
               </div>
               <div className="bg-emerald-500/10 rounded-xl p-3 text-center border border-emerald-500/20">
@@ -1065,7 +1068,7 @@ export default function TrendingPage() {
                   { label: 'Team', score: selectedStartup.team_score, color: 'from-blue-500 to-cyan-500' },
                   { label: 'Traction', score: selectedStartup.traction_score, color: 'from-green-500 to-emerald-500' },
                   { label: 'Market', score: selectedStartup.market_score, color: 'from-purple-500 to-violet-500' },
-                  { label: 'Product', score: selectedStartup.product_score, color: 'from-orange-500 to-red-500' },
+                  { label: 'Product', score: selectedStartup.product_score, color: 'from-cyan-600 to-blue-600' },
                   { label: 'Vision', score: selectedStartup.vision_score, color: 'from-indigo-500 to-violet-500' },
                 ].map((item) => (
                   <div key={item.label} className="flex items-center gap-3">
@@ -1124,7 +1127,7 @@ export default function TrendingPage() {
               </p>
               <Link
                 to="/get-matched"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold rounded-xl transition-all shadow-lg w-full justify-center"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold rounded-xl transition-all shadow-lg w-full justify-center"
               >
                 <Sparkles className="w-5 h-5" />
                 Find Matching Investors

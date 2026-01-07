@@ -42,21 +42,21 @@ const iconMap: Record<string, any> = {
 };
 
 const categoryColors: Record<string, { bg: string; border: string; text: string }> = {
-  pitch: { bg: 'from-orange-500/40 to-red-500/40', border: 'border-orange-400/50', text: 'text-orange-300' },
+  pitch: { bg: 'from-cyan-500/40 to-blue-500/40', border: 'border-cyan-400/50', text: 'text-cyan-300' },
   strategy: { bg: 'from-purple-500/40 to-indigo-500/40', border: 'border-purple-400/50', text: 'text-purple-300' },
   traction: { bg: 'from-emerald-500/40 to-teal-500/40', border: 'border-emerald-400/50', text: 'text-emerald-300' },
   team: { bg: 'from-blue-500/40 to-cyan-500/40', border: 'border-blue-400/50', text: 'text-blue-300' },
-  pmf: { bg: 'from-red-500/40 to-orange-500/40', border: 'border-red-400/50', text: 'text-red-300' },
-  partnerships: { bg: 'from-amber-500/40 to-yellow-500/40', border: 'border-amber-400/50', text: 'text-amber-300' },
+  pmf: { bg: 'from-blue-500/40 to-violet-500/40', border: 'border-red-400/50', text: 'text-red-300' },
+  partnerships: { bg: 'from-blue-500/40 to-yellow-500/40', border: 'border-cyan-400/50', text: 'text-cyan-300' },
   talent: { bg: 'from-cyan-500/40 to-blue-500/40', border: 'border-cyan-400/50', text: 'text-cyan-300' },
   ecosystem: { bg: 'from-green-500/40 to-emerald-500/40', border: 'border-green-400/50', text: 'text-green-300' },
-  growth: { bg: 'from-amber-500/40 to-orange-500/40', border: 'border-amber-400/50', text: 'text-amber-300' },
+  growth: { bg: 'from-cyan-500/40 to-blue-500/40', border: 'border-cyan-400/50', text: 'text-cyan-300' },
 };
 
 const tierBadges: Record<string, { label: string; color: string }> = {
   spark: { label: 'Free', color: 'bg-gray-500' },
-  flame: { label: 'Flame', color: 'bg-gradient-to-r from-orange-500 to-red-500' },
-  inferno: { label: 'Inferno', color: 'bg-gradient-to-r from-purple-500 to-indigo-500' },
+  flame: { label: 'Flame', color: 'bg-gradient-to-r from-orange-600 to-amber-600' },
+  inferno: { label: 'Inferno', color: 'bg-gradient-to-r from-orange-500 to-red-600' },
 };
 
 export default function ServicesPage() {
@@ -151,7 +151,7 @@ export default function ServicesPage() {
         </Link>
         <Link 
           to="/get-matched" 
-          className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold rounded-xl transition-all shadow-lg"
+          className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold rounded-xl transition-all shadow-lg"
         >
           <Sparkles className="w-4 h-4" />
           Upgrade
@@ -166,7 +166,7 @@ export default function ServicesPage() {
             <span className="text-purple-300 text-sm font-medium">AI-Powered Services</span>
           </div>
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            � <span className="bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent">Fundraising</span> Toolkit
+            � <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">Fundraising</span> Toolkit
           </h1>
           <p className="text-xl text-gray-300 max-w-2xl mx-auto">
             AI-powered tools to improve your pitch, strategy, traction, and more
@@ -189,7 +189,7 @@ export default function ServicesPage() {
               onClick={() => setSelectedCategory(cat)}
               className={`px-4 py-2 rounded-xl font-medium transition-all ${
                 selectedCategory === cat
-                  ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-lg shadow-orange-500/30'
+                  ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-lg shadow-cyan-500/30'
                   : 'bg-gradient-to-r from-purple-600/40 to-indigo-600/40 text-white hover:from-purple-500/60 hover:to-indigo-500/60 border border-purple-400/30'
               }`}
             >
@@ -266,15 +266,15 @@ export default function ServicesPage() {
 
         {/* Upgrade CTA */}
         {userTier === 'spark' && (
-          <div className="mt-16 max-w-2xl mx-auto text-center bg-gradient-to-br from-orange-900/40 to-red-900/30 border border-orange-500/30 rounded-2xl p-8">
-            <Crown className="w-12 h-12 text-orange-400 mx-auto mb-4" />
+          <div className="mt-16 max-w-2xl mx-auto text-center bg-gradient-to-br from-slate-800/40 to-slate-700/30 border border-cyan-500/30 rounded-2xl p-8">
+            <Crown className="w-12 h-12 text-cyan-400 mx-auto mb-4" />
             <h3 className="text-2xl font-bold text-white mb-2">Unlock All Services</h3>
             <p className="text-gray-300 mb-6">
               Upgrade to Flame or Inferno to access AI-powered tools that help you raise faster.
             </p>
             <Link
               to="/get-matched"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold rounded-xl transition-all shadow-lg"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold rounded-xl transition-all shadow-lg"
             >
               <Sparkles className="w-5 h-5" />
               View Pricing
