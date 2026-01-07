@@ -10,21 +10,31 @@ export default function LogoDropdownMenu() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Check if user is admin (always true for now to show admin links)
+  // Check if user is admin - RESTRICTED ACCESS
   useEffect(() => {
     const checkAdmin = () => {
       const currentUser = localStorage.getItem('currentUser');
       const userProfile = localStorage.getItem('userProfile');
       
+      let adminStatus = false;
+      
       if (currentUser) {
-        const user = JSON.parse(currentUser);
-        setIsAdmin(user.isAdmin || true); // Default to true for admin access
+        try {
+          const user = JSON.parse(currentUser);
+          adminStatus = user.isAdmin === true; // Only true if explicitly set
+        } catch (e) {
+          adminStatus = false;
+        }
       } else if (userProfile) {
-        const profile = JSON.parse(userProfile);
-        setIsAdmin(profile.isAdmin || true);
-      } else {
-        setIsAdmin(true); // Default admin for development
+        try {
+          const profile = JSON.parse(userProfile);
+          adminStatus = profile.isAdmin === true; // Only true if explicitly set
+        } catch (e) {
+          adminStatus = false;
+        }
       }
+      
+      setIsAdmin(adminStatus);
     };
     
     checkAdmin();
@@ -91,16 +101,19 @@ export default function LogoDropdownMenu() {
               <Home className="w-4 h-4" />
             </Link>
             
-            <Link
-              to="/dashboard"
-              className={`flex items-center justify-center w-8 h-8 rounded-full transition-all ${
-                isActive('/dashboard') 
-                  ? 'bg-orange-500/40 text-orange-300 border border-orange-500/60' 
-                  : 'bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white border border-white/10'
-              }`}
-            >
-              <Rocket className="w-4 h-4" />
-            </Link>
+            {/* Dashboard/Rocket button - ADMIN ONLY */}
+            {isAdmin && (
+              <Link
+                to="/dashboard"
+                className={`flex items-center justify-center w-8 h-8 rounded-full transition-all ${
+                  isActive('/dashboard') 
+                    ? 'bg-orange-500/40 text-orange-300 border border-orange-500/60' 
+                    : 'bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white border border-white/10'
+                }`}
+              >
+                <Rocket className="w-4 h-4" />
+              </Link>
+            )}
             
             <Link
               to="/trending"
@@ -260,81 +273,85 @@ export default function LogoDropdownMenu() {
                   <span className="text-base text-[#888888] group-hover:text-[#e0e0e0]">Site Map</span>
                 </Link>
 
-                {/* Admin Section */}
-                <div className="my-3 border-t border-[#333333]"></div>
-                <p className="text-sm text-[#FF5A09] px-3 mb-2 font-semibold tracking-wider">ADMIN</p>
-                
-                <Link
-                  to="/admin"
-                  onClick={() => setIsOpen(false)}
-                  className="group px-4 py-2.5 rounded-lg bg-[#1f1f1f] hover:bg-[#2a2a2a] border-l-2 border-l-transparent hover:border-l-[#FF5A09] transition-all font-medium flex items-center gap-3"
-                >
-                  <Shield className="w-5 h-5 text-[#FF5A09]" />
-                  <span className="text-base text-[#e0e0e0] group-hover:text-[#FF9900]">Admin Panel</span>
-                </Link>
-                
-                <Link
-                  to="/admin/control"
-                  onClick={() => setIsOpen(false)}
-                  className="group px-4 py-2.5 rounded-lg bg-[#1f1f1f] hover:bg-[#2a2a2a] border-l-2 border-l-transparent hover:border-l-[#FF5A09] transition-all font-medium flex items-center gap-3"
-                >
-                  <Sliders className="w-5 h-5 text-[#FF5A09]" />
-                  <span className="text-base text-[#e0e0e0] group-hover:text-[#FF9900]">Control Center</span>
-                </Link>
-                
-                <Link
-                  to="/admin/forecasts"
-                  onClick={() => setIsOpen(false)}
-                  className="group px-4 py-2.5 rounded-lg bg-[#1f1f1f] hover:bg-[#2a2a2a] border-l-2 border-l-transparent hover:border-l-[#FF5A09] transition-all font-medium flex items-center gap-3"
-                >
-                  <ChartBar className="w-5 h-5 text-[#FF5A09]" />
-                  <span className="text-base text-[#e0e0e0] group-hover:text-[#FF9900]">🔮 Forecasts</span>
-                </Link>
-                
-                <Link
-                  to="/admin/pipeline"
-                  onClick={() => setIsOpen(false)}
-                  className="group px-4 py-2.5 rounded-lg bg-[#1f1f1f] hover:bg-[#2a2a2a] border-l-2 border-l-transparent hover:border-l-[#FF5A09] transition-all font-medium flex items-center gap-3"
-                >
-                  <Activity className="w-5 h-5 text-[#FF5A09]" />
-                  <span className="text-base text-[#e0e0e0] group-hover:text-[#FF9900]">Pipeline</span>
-                </Link>
-                
-                <Link
-                  to="/admin/discovered-startups"
-                  onClick={() => setIsOpen(false)}
-                  className="group px-4 py-2.5 rounded-lg bg-[#1f1f1f] hover:bg-[#2a2a2a] border-l-2 border-l-transparent hover:border-l-[#FF5A09] transition-all font-medium flex items-center gap-3"
-                >
-                  <Search className="w-5 h-5 text-[#FF5A09]" />
-                  <span className="text-base text-[#e0e0e0] group-hover:text-[#FF9900]">Discovered</span>
-                </Link>
-                
-                <Link
-                  to="/admin/edit-startups"
-                  onClick={() => setIsOpen(false)}
-                  className="group px-4 py-2.5 rounded-lg bg-[#1f1f1f] hover:bg-[#2a2a2a] border-l-2 border-l-transparent hover:border-l-[#FF5A09] transition-all font-medium flex items-center gap-3"
-                >
-                  <FileText className="w-5 h-5 text-[#FF5A09]" />
-                  <span className="text-base text-[#e0e0e0] group-hover:text-[#FF9900]">Edit Startups</span>
-                </Link>
-                
-                <Link
-                  to="/admin/discovered-investors"
-                  onClick={() => setIsOpen(false)}
-                  className="group px-4 py-2.5 rounded-lg bg-[#1f1f1f] hover:bg-[#2a2a2a] border-l-2 border-l-transparent hover:border-l-[#FF5A09] transition-all font-medium flex items-center gap-3"
-                >
-                  <Users className="w-5 h-5 text-[#FF5A09]" />
-                  <span className="text-base text-[#e0e0e0] group-hover:text-[#FF9900]">Investors</span>
-                </Link>
-                
-                <Link
-                  to="/bulkupload"
-                  onClick={() => setIsOpen(false)}
-                  className="group px-4 py-2.5 rounded-lg bg-[#1f1f1f] hover:bg-[#2a2a2a] border-l-2 border-l-transparent hover:border-l-[#FF5A09] transition-all font-medium flex items-center gap-3"
-                >
-                  <Upload className="w-5 h-5 text-[#FF5A09]" />
-                  <span className="text-base text-[#e0e0e0] group-hover:text-[#FF9900]">Bulk Upload</span>
-                </Link>
+                {/* Admin Section - RESTRICTED TO ADMINS ONLY */}
+                {isAdmin && (
+                  <>
+                    <div className="my-3 border-t border-[#333333]"></div>
+                    <p className="text-sm text-[#FF5A09] px-3 mb-2 font-semibold tracking-wider">ADMIN</p>
+                    
+                    <Link
+                      to="/admin"
+                      onClick={() => setIsOpen(false)}
+                      className="group px-4 py-2.5 rounded-lg bg-[#1f1f1f] hover:bg-[#2a2a2a] border-l-2 border-l-transparent hover:border-l-[#FF5A09] transition-all font-medium flex items-center gap-3"
+                    >
+                      <Shield className="w-5 h-5 text-[#FF5A09]" />
+                      <span className="text-base text-[#e0e0e0] group-hover:text-[#FF9900]">Admin Panel</span>
+                    </Link>
+                    
+                    <Link
+                      to="/admin/control"
+                      onClick={() => setIsOpen(false)}
+                      className="group px-4 py-2.5 rounded-lg bg-[#1f1f1f] hover:bg-[#2a2a2a] border-l-2 border-l-transparent hover:border-l-[#FF5A09] transition-all font-medium flex items-center gap-3"
+                    >
+                      <Sliders className="w-5 h-5 text-[#FF5A09]" />
+                      <span className="text-base text-[#e0e0e0] group-hover:text-[#FF9900]">Control Center</span>
+                    </Link>
+                    
+                    <Link
+                      to="/admin/forecasts"
+                      onClick={() => setIsOpen(false)}
+                      className="group px-4 py-2.5 rounded-lg bg-[#1f1f1f] hover:bg-[#2a2a2a] border-l-2 border-l-transparent hover:border-l-[#FF5A09] transition-all font-medium flex items-center gap-3"
+                    >
+                      <ChartBar className="w-5 h-5 text-[#FF5A09]" />
+                      <span className="text-base text-[#e0e0e0] group-hover:text-[#FF9900]">🔮 Forecasts</span>
+                    </Link>
+                    
+                    <Link
+                      to="/admin/pipeline"
+                      onClick={() => setIsOpen(false)}
+                      className="group px-4 py-2.5 rounded-lg bg-[#1f1f1f] hover:bg-[#2a2a2a] border-l-2 border-l-transparent hover:border-l-[#FF5A09] transition-all font-medium flex items-center gap-3"
+                    >
+                      <Activity className="w-5 h-5 text-[#FF5A09]" />
+                      <span className="text-base text-[#e0e0e0] group-hover:text-[#FF9900]">Pipeline</span>
+                    </Link>
+                    
+                    <Link
+                      to="/admin/discovered-startups"
+                      onClick={() => setIsOpen(false)}
+                      className="group px-4 py-2.5 rounded-lg bg-[#1f1f1f] hover:bg-[#2a2a2a] border-l-2 border-l-transparent hover:border-l-[#FF5A09] transition-all font-medium flex items-center gap-3"
+                    >
+                      <Search className="w-5 h-5 text-[#FF5A09]" />
+                      <span className="text-base text-[#e0e0e0] group-hover:text-[#FF9900]">Discovered</span>
+                    </Link>
+                    
+                    <Link
+                      to="/admin/edit-startups"
+                      onClick={() => setIsOpen(false)}
+                      className="group px-4 py-2.5 rounded-lg bg-[#1f1f1f] hover:bg-[#2a2a2a] border-l-2 border-l-transparent hover:border-l-[#FF5A09] transition-all font-medium flex items-center gap-3"
+                    >
+                      <FileText className="w-5 h-5 text-[#FF5A09]" />
+                      <span className="text-base text-[#e0e0e0] group-hover:text-[#FF9900]">Edit Startups</span>
+                    </Link>
+                    
+                    <Link
+                      to="/admin/discovered-investors"
+                      onClick={() => setIsOpen(false)}
+                      className="group px-4 py-2.5 rounded-lg bg-[#1f1f1f] hover:bg-[#2a2a2a] border-l-2 border-l-transparent hover:border-l-[#FF5A09] transition-all font-medium flex items-center gap-3"
+                    >
+                      <Users className="w-5 h-5 text-[#FF5A09]" />
+                      <span className="text-base text-[#e0e0e0] group-hover:text-[#FF9900]">Investors</span>
+                    </Link>
+                    
+                    <Link
+                      to="/bulkupload"
+                      onClick={() => setIsOpen(false)}
+                      className="group px-4 py-2.5 rounded-lg bg-[#1f1f1f] hover:bg-[#2a2a2a] border-l-2 border-l-transparent hover:border-l-[#FF5A09] transition-all font-medium flex items-center gap-3"
+                    >
+                      <Upload className="w-5 h-5 text-[#FF5A09]" />
+                      <span className="text-base text-[#e0e0e0] group-hover:text-[#FF9900]">Bulk Upload</span>
+                    </Link>
+                  </>
+                )}
               </nav>
 
               {/* Footer */}
