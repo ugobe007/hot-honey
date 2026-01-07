@@ -28,11 +28,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const login = (email: string, password: string) => {
+    // Admin emails: aabramson@comunicano.com, ugobe07@gmail.com, ugobe1@mac.com
+    const ADMIN_EMAILS = [
+      'aabramson@comunicano.com',
+      'ugobe07@gmail.com',
+      'ugobe1@mac.com'
+    ];
+    
     // Simple demo login - in production, validate against backend
     const newUser: User = {
       email,
       name: email.split('@')[0],
-      isAdmin: email.includes('admin') || email.includes('ugobe'), // Make admin if email contains 'admin' or 'ugobe'
+      isAdmin: ADMIN_EMAILS.includes(email.toLowerCase()) || email.includes('admin'), // Make admin if email is in admin list or contains 'admin'
     };
     
     setUser(newUser);

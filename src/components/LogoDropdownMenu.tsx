@@ -11,6 +11,13 @@ export default function LogoDropdownMenu() {
   const location = useLocation();
 
   // Check if user is admin - RESTRICTED ACCESS
+  // Admin emails: aabramson@comunicano.com, ugobe07@gmail.com, ugobe1@mac.com
+  const ADMIN_EMAILS = [
+    'aabramson@comunicano.com',
+    'ugobe07@gmail.com',
+    'ugobe1@mac.com'
+  ];
+  
   useEffect(() => {
     const checkAdmin = () => {
       const currentUser = localStorage.getItem('currentUser');
@@ -21,14 +28,18 @@ export default function LogoDropdownMenu() {
       if (currentUser) {
         try {
           const user = JSON.parse(currentUser);
-          adminStatus = user.isAdmin === true; // Only true if explicitly set
+          // Check if explicitly set OR if email is in admin list
+          adminStatus = user.isAdmin === true || 
+                       (user.email && ADMIN_EMAILS.includes(user.email.toLowerCase()));
         } catch (e) {
           adminStatus = false;
         }
       } else if (userProfile) {
         try {
           const profile = JSON.parse(userProfile);
-          adminStatus = profile.isAdmin === true; // Only true if explicitly set
+          // Check if explicitly set OR if email is in admin list
+          adminStatus = profile.isAdmin === true || 
+                       (profile.email && ADMIN_EMAILS.includes(profile.email.toLowerCase()));
         } catch (e) {
           adminStatus = false;
         }
