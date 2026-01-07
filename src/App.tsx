@@ -12,6 +12,7 @@ import FrontPageNew from './components/FrontPageNew'; // ✅ OLD - Voting interf
 import MatchingEngine from './components/MatchingEngine'; // ✅ Matching engine component
 import StartupMatches from './pages/StartupMatches'; // ✅ Startup matches page
 import InvestorMatches from './pages/InvestorMatches'; // ✅ Investor matches page
+import MatchReviewPage from './pages/MatchReviewPage'; // ✅ Match review page
 import VoteDemo from './pages/VoteDemo';
 import About from './pages/About';
 import Privacy from './pages/Privacy';
@@ -60,6 +61,7 @@ import MasterControlCenter from './pages/MasterControlCenter';
 import InvestorEnrichmentPage from './pages/InvestorEnrichmentPage';
 import DiscoveredInvestors from './pages/DiscoveredInvestors';
 import SystemHealthDashboard from './pages/SystemHealthDashboard';
+import ScriptsControlPage from './pages/ScriptsControlPage';
 import MasterNavigation from './pages/MasterNavigation';
 import GetMatchedPage from './pages/GetMatchedPage';
 import InvestorSignup from './pages/InvestorSignup';
@@ -76,6 +78,7 @@ import AdminRouteWrapper from './components/AdminRouteWrapper';
 import PipelineMonitor from './pages/PipelineMonitor';
 import FundingForecasts from './pages/FundingForecasts';
 import StartupBenchmarksDashboard from './pages/StartupBenchmarksDashboard';
+import SocialSignalsDashboard from './components/SocialSignalsDashboard';
 import './App.css';
 import LogoDropdownMenu from './components/LogoDropdownMenu';
 
@@ -112,6 +115,7 @@ const App: React.FC = () => {
           <Route path="/strategies" element={<StrategiesPage />} /> {/* 📚 Fundraising Playbook */}
           <Route path="/trending" element={<TrendingPage />} /> {/* 🔥 Trending & Discovery */}
           <Route path="/discover" element={<TrendingPage />} /> {/* 🔥 Alias for Trending */}
+          <Route path="/social-signals" element={<SocialSignalsDashboard />} /> {/* 🕵️ Social Signals Intelligence */}
           <Route path="/matching-engine" element={<MatchingEngine />} />
           <Route path="/matching" element={<MatchingEngine />} />
           <Route path="/match" element={<MatchingEngine />} />
@@ -136,6 +140,7 @@ const App: React.FC = () => {
           <Route path="/startup/:id" element={<StartupDetail />} />
           <Route path="/startup/:id/matches" element={<StartupMatches />} /> {/* ✅ Startup matches page */}
           <Route path="/investor/:id/matches" element={<InvestorMatches />} /> {/* ✅ Investor matches page */}
+          <Route path="/match-review" element={<MatchReviewPage />} /> {/* ✅ Match review dashboard */}
           <Route path="/deals" element={<Deals />} />
           <Route path="/startups" element={<DashboardRouter />} /> {/* ✅ Redirects to unified dashboard */}
           <Route path="/dashboard" element={<DashboardRouter />} /> {/* ✅ UNIFIED DASHBOARD - redirects admins */}
@@ -173,6 +178,7 @@ const App: React.FC = () => {
             <Route path="health" element={<SystemHealthDashboard />} />
             <Route path="pipeline" element={<PipelineMonitor />} />
             <Route path="forecasts" element={<FundingForecasts />} />
+            <Route path="scripts" element={<ScriptsControlPage />} />
             {/* Legacy routes - keeping for backwards compatibility */}
             <Route path="operations" element={<ControlCenter />} />
             <Route path="dashboard" element={<AdminWorkflowDashboard />} />
