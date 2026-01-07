@@ -48,8 +48,9 @@ export async function getAllInvestors() {
   // Prioritize VC Firms and known entities over individual names
   const { data, error } = await supabase
     .from('investors')
-    .select('*')
-    .order('created_at', { ascending: false });
+    .select('id, name, firm, type, sectors, stage, check_size_min, check_size_max, geography_focus, notable_investments, total_investments, photo_url, bio, investment_thesis, investment_firm_description, firm_description_normalized, status, created_at').eq('status', 'active')
+    .order('created_at', { ascending: false })
+    .limit(500);
 
   if (error) {
     console.error('Error fetching investors:', error);

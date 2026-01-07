@@ -121,7 +121,7 @@ export default function BulkImport() {
             <Link to="/" className="text-gray-400 hover:text-white">Home</Link>
             <Link to="/admin" className="text-gray-400 hover:text-white">Control Center</Link>
             <Link to="/admin/edit-startups" className="text-cyan-400 hover:text-cyan-300">Edit</Link>
-            <Link to="/matching" className="text-orange-400 hover:text-orange-300 font-bold">⚡ Match</Link>
+            <Link to="/matching" className="text-cyan-400 hover:text-cyan-300 font-bold">⚡ Match</Link>
           </div>
         </div>
       </div>
@@ -229,7 +229,7 @@ export default function BulkImport() {
           <h3 className="text-sm font-semibold text-white mb-3">⚡ Quick Actions</h3>
           <div className="flex flex-wrap gap-2 text-xs">
             <Link to="/admin/discovered-startups" className="px-3 py-1.5 bg-cyan-500/20 border border-cyan-500/30 rounded text-cyan-400 hover:bg-cyan-500/30">🔍 RSS Discoveries</Link>
-            <Link to="/admin/edit-startups" className="px-3 py-1.5 bg-orange-500/20 border border-orange-500/30 rounded text-orange-400 hover:bg-orange-500/30">✏️ Edit Startups</Link>
+            <Link to="/admin/edit-startups" className="px-3 py-1.5 bg-cyan-600/20 border border-cyan-500/30 rounded text-cyan-400 hover:bg-cyan-600/30">✏️ Edit Startups</Link>
             <Link to="/admin/control" className="px-3 py-1.5 bg-violet-500/20 border border-violet-500/30 rounded text-violet-400 hover:bg-violet-500/30">🎛️ Control Center</Link>
           </div>
         </div>

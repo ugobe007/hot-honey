@@ -111,7 +111,7 @@ export default function LiveDemo() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-6xl font-bold text-white mb-4">
-            <span className="bg-gradient-to-r from-orange-400 via-amber-400 to-purple-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-violet-400 bg-clip-text text-transparent">
               Hot Match
             </span>{' '}
             Live Demo
@@ -174,7 +174,7 @@ export default function LiveDemo() {
 
                     <div className="flex items-center justify-center mb-6">
                       <div className="text-center">
-                        <div className="text-6xl font-bold bg-gradient-to-r from-orange-400 to-amber-400 bg-clip-text text-transparent mb-2">
+                        <div className="text-6xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent mb-2">
                           {currentMatch.score}%
                         </div>
                         <div className="text-gray-400">Match Quality Score</div>
@@ -236,7 +236,7 @@ export default function LiveDemo() {
               </div>
 
               <div className="bg-white/5 rounded-xl p-6 border border-white/10 text-center">
-                <Zap className="w-10 h-10 text-orange-400 mx-auto mb-3" />
+                <Zap className="w-10 h-10 text-cyan-400 mx-auto mb-3" />
                 <div className="text-white font-bold mb-1">&lt;2 Seconds</div>
                 <div className="text-gray-400 text-sm">Processing time</div>
               </div>
@@ -295,7 +295,7 @@ export default function LiveDemo() {
             </div>
 
             {/* Technology Stack */}
-            <div className="bg-gradient-to-br from-orange-500/20 to-amber-500/20 rounded-xl p-6 border border-orange-400/30">
+            <div className="bg-gradient-to-br from-cyan-500/20 to-blue-500/20 rounded-xl p-6 border border-cyan-400/30">
               <h3 className="text-xl font-bold text-white mb-3">🔧 Tech Stack</h3>
               <div className="space-y-2 text-sm">
                 <div className="text-gray-300">✓ React + TypeScript</div>

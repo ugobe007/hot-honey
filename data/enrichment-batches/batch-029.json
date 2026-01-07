@@ -1,0 +1,422 @@
+[
+  {
+    "id": "003fa66d-7daf-4c23-ade0-2b87463ffa3a",
+    "name": "Mohammed Amdani",
+    "firm": "Adapt Ventures",
+    "linkedin_url": "https://linkedin.com/in/mohammed-amdani",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "HealthTech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "78af36af-e4c0-4f12-9c36-cabec424a80e",
+    "name": "Launch Fund",
+    "firm": "Launch Fund",
+    "linkedin_url": "https://linkedin.com/in/launch-fund",
+    "blog_url": null,
+    "current_bio": "Technology and startup investment firm",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "baf6b7da-3f45-4ac1-b3b5-63861446cc78",
+    "name": "Chris Saccheri",
+    "firm": "G2 Venture Partners",
+    "linkedin_url": "https://linkedin.com/in/chrissaccheri",
+    "blog_url": null,
+    "current_bio": "Former operating exec. Focus on climate tech and sustainable agriculture technology.",
+    "current_sectors": [
+      "climate_tech",
+      "agriculture",
+      "food_tech",
+      "sustainability"
+    ],
+    "current_stage": [
+      "series_a",
+      "series_b"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "c872b111-45db-4d86-a133-cab2f2e88f5c",
+    "name": "Ellen Chisa",
+    "firm": "Ellen Chisa",
+    "linkedin_url": "https://linkedin.com/in/ellen-chisa",
+    "blog_url": null,
+    "current_bio": "Ellen Chisa is a angel investor focused on Enterprise, SaaS, Developer Tools investing at Pre-Seed and Seed stage.",
+    "current_sectors": [
+      "Enterprise",
+      "SaaS",
+      "Developer Tools"
+    ],
+    "current_stage": [
+      "Pre-Seed",
+      "Seed"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "bcdb7986-8e2e-405e-b8df-5fe529aa571e",
+    "name": "Deven Parekh",
+    "firm": "Deven Parekh",
+    "linkedin_url": "https://linkedin.com/in/deven-parekh",
+    "blog_url": null,
+    "current_bio": "Managing Director at Insight Partners",
+    "current_sectors": [
+      "SaaS",
+      "Enterprise"
+    ],
+    "current_stage": [
+      "Series B",
+      "Growth"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "821ea357-c9e8-42fd-a7d1-e7e773e57c05",
+    "name": "me hire my (Villageglobal)",
+    "firm": "me hire my (Villageglobal)",
+    "linkedin_url": "https://linkedin.com/in/me-hire-my",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "4ec495ff-5f6c-421d-8a9d-01fcbb147b7e",
+    "name": "Paul Conway (Spark Capital)",
+    "firm": "Paul Conway (Spark Capital)",
+    "linkedin_url": "https://linkedin.com/in/paul-conway",
+    "blog_url": null,
+    "current_bio": "Emeritus partner at Spark Capital",
+    "current_sectors": [
+      "SaaS",
+      "Consumer",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A",
+      "Series B"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "32bfcbc9-43ea-4fce-90cc-c44c95ff4b2e",
+    "name": "Roy Rosin",
+    "firm": "Roy Rosin",
+    "linkedin_url": "https://linkedin.com/in/roy-rosin",
+    "blog_url": null,
+    "current_bio": "Board Partner at Firstround",
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Consumer"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "0cd5326b-e05b-463b-83f7-d266d828f86d",
+    "name": "AlphaPrime Ventures",
+    "firm": "AlphaPrime Ventures",
+    "linkedin_url": "https://linkedin.com/in/alphaprime-ventures",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Healthcare"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "3555f4b4-48cc-455e-b93e-df8d85ec912c",
+    "name": "Alex Danco",
+    "firm": "Alex Danco",
+    "linkedin_url": "https://linkedin.com/in/alex-danco",
+    "blog_url": null,
+    "current_bio": "Andreessen Horowitz partner writing on technology trends and market dynamics",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "eb0358cf-a770-44ef-b370-4e006d50279c",
+    "name": "Gaurav Gupta (Lightspeed)",
+    "firm": "Lightspeed Venture Partners",
+    "linkedin_url": "https://linkedin.com/in/gaurav-gupta",
+    "blog_url": "https://lsvp.com",
+    "current_bio": "Partner at Lightspeed, focuses on AI, US",
+    "current_sectors": [
+      "Enterprise",
+      "Consumer",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A",
+      "Series B"
+    ],
+    "missing_fields": [
+      "Investment Thesis"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "482d32a5-7d9c-455c-9800-201de48d1001",
+    "name": "Jonathan Wasserstrum",
+    "firm": "SquareFoot",
+    "linkedin_url": "https://linkedin.com/in/jonathan-wasserstrum",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "012e49fc-400e-4534-bf0e-c3e3871e2374",
+    "name": "Diana Berisha",
+    "firm": "Diana Berisha",
+    "linkedin_url": "https://linkedin.com/in/diana-berisha",
+    "blog_url": null,
+    "current_bio": "Partner at Spark Capital",
+    "current_sectors": [
+      "SaaS",
+      "Consumer",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A",
+      "Series B"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "abd13706-6800-459e-9b89-b14168f71ecb",
+    "name": "Jason Levine",
+    "firm": "Newflow Partners",
+    "linkedin_url": "https://linkedin.com/in/jason-levine",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "HealthTech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "93945987-2721-4136-88f8-2e388baa476b",
+    "name": "Comcast Ventures",
+    "firm": "Comcast Ventures",
+    "linkedin_url": "https://linkedin.com/in/comcast-ventures",
+    "blog_url": null,
+    "current_bio": "Comcast Ventures is a vc firm focused on Generalist investing at Seed stage.",
+    "current_sectors": [
+      "Generalist"
+    ],
+    "current_stage": [
+      "Seed"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "13c30691-dca7-47be-a05b-1c13458a7d67",
+    "name": "Henry McCance",
+    "firm": "Henry McCance",
+    "linkedin_url": "https://linkedin.com/in/henry-mccance",
+    "blog_url": null,
+    "current_bio": "Henry McCance is a angel investor focused on Enterprise, SaaS, Consumer investing at Seed and Series A stage.",
+    "current_sectors": [
+      "Enterprise",
+      "SaaS",
+      "Consumer"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A",
+      "Series B"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "2cb0494b-20a2-4964-beaa-b1f779ada976",
+    "name": "Jessica Karr",
+    "firm": "Coyote Ventures",
+    "linkedin_url": "https://linkedin.com/in/jessica-karr",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "HealthTech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "ea324025-9811-46ab-9756-6234dc737971",
+    "name": "specifically for financial (Vcnewsdaily)",
+    "firm": "specifically for financial (Vcnewsdaily)",
+    "linkedin_url": "https://linkedin.com/in/specifically-for-financial",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "HealthTech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "8aaf8b83-76a5-47ff-99a1-26ecf7c93324",
+    "name": "million growth capital",
+    "firm": "million growth capital",
+    "linkedin_url": "https://linkedin.com/in/million-growth-capital",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "095693d7-6e7b-4d67-9b24-f945d4a4b625",
+    "name": "Dan Gregory",
+    "firm": "Dan Gregory",
+    "linkedin_url": "https://linkedin.com/in/dan-gregory",
+    "blog_url": null,
+    "current_bio": "Founding Partner at Greylock, co-founded firm in 1965, served as managing partner",
+    "current_sectors": [
+      "Enterprise",
+      "SaaS",
+      "Consumer"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A",
+      "Series B"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  }
+]

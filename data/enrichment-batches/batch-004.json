@@ -1,0 +1,450 @@
+[
+  {
+    "id": "9e3a4042-779f-4a92-971c-b473fa27b101",
+    "name": "Corey Ritter (Arch Venture Partners)",
+    "firm": "Corey Ritter (Arch Venture Partners)",
+    "linkedin_url": "https://linkedin.com/in/corey-ritter",
+    "blog_url": null,
+    "current_bio": "Corey Ritter is an investor at Arch Venture Partners focused on technology investing at seed and series_a stage.",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "1eb53489-19fd-4c7a-acde-e23136b131a5",
+    "name": "SleepScore Ventures",
+    "firm": "SleepScore Ventures",
+    "linkedin_url": "https://linkedin.com/in/sleepscore-ventures",
+    "blog_url": null,
+    "current_bio": "SleepScore Ventures is a vc firm focused on Sleep product solutions investing at Seed and Series A stage.",
+    "current_sectors": [
+      "Sleep product solutions"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "7674cdb2-1866-4244-a4c8-8e4e2b75f62f",
+    "name": "Sophia Lee (Ribbit Capital)",
+    "firm": "Sophia Lee (Ribbit Capital)",
+    "linkedin_url": "https://linkedin.com/in/sophia-lee",
+    "blog_url": null,
+    "current_bio": "Sophia Lee (Ribbit Capital) is a vc firm focused on technology investing at seed and series_a stage.",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "873d4993-078a-4e47-a825-3e9edf6f57ed",
+    "name": "Kira McCroden (Forerunner Ventures)",
+    "firm": "Kira McCroden (Forerunner Ventures)",
+    "linkedin_url": "https://linkedin.com/in/kira-mccroden",
+    "blog_url": null,
+    "current_bio": "VP, Head of Marketing & Communications",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "f9405098-55d7-4fb3-8703-b685877aa7a7",
+    "name": "Village Global",
+    "firm": "Village Global",
+    "linkedin_url": "https://linkedin.com/in/village-global",
+    "blog_url": null,
+    "current_bio": "Seed fund backed by world-class visionaries, investing in founders globally.",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "823b2eed-2bd1-4388-807f-dca039e68831",
+    "name": "Dan Rochkind (Lerer Hippeau)",
+    "firm": "Dan Rochkind (Lerer Hippeau)",
+    "linkedin_url": "https://linkedin.com/in/dan-rochkind",
+    "blog_url": null,
+    "current_bio": "CFO at Lerer Hippeau since 2019",
+    "current_sectors": [
+      "Generalist"
+    ],
+    "current_stage": [
+      "Seed"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "5806af86-ae09-41ba-83c7-0f6abf9264f9",
+    "name": "Denise Gilbert (Ribbit Capital)",
+    "firm": "Denise Gilbert (Ribbit Capital)",
+    "linkedin_url": "https://linkedin.com/in/denise-gilbert",
+    "blog_url": null,
+    "current_bio": "Partner at Ribbit Capital",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "9134cc8a-7736-458d-aa1d-5ecfe5ed56b0",
+    "name": "Jeff Lu",
+    "firm": "Jeff Lu",
+    "linkedin_url": "https://linkedin.com/in/jeff-lu",
+    "blog_url": null,
+    "current_bio": "Venture Partner at Village Global",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "b2dffd9b-d2a2-40a1-b72d-395e663928ae",
+    "name": "Work-Bench",
+    "firm": "Work-Bench",
+    "linkedin_url": "https://linkedin.com/in/work-bench",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "Enterprise",
+      "SaaS"
+    ],
+    "current_stage": [
+      "Seed+"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Check Size Min",
+      "Check Size Max",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "aac12c2e-5135-48d8-a1dc-fb12e3d3fe16",
+    "name": "Rebekah Murphy (Ribbit Capital)",
+    "firm": "Rebekah Murphy (Ribbit Capital)",
+    "linkedin_url": "https://linkedin.com/in/rebekah-murphy",
+    "blog_url": null,
+    "current_bio": "Rebekah Murphy is an investor at Ribbit Capital focused on technology investing at seed and series_a stage.",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "7b6d412b-a01d-4f1f-a1d9-fcdd5efd73a4",
+    "name": "Gabe Mennesson (Ribbit Capital)",
+    "firm": "Gabe Mennesson (Ribbit Capital)",
+    "linkedin_url": "https://linkedin.com/in/gabe-mennesson",
+    "blog_url": null,
+    "current_bio": "Team member at Ribbit Capital",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "72731036-264f-4cb8-934e-a3d19e09229e",
+    "name": "InterWest Partners",
+    "firm": "InterWest Partners",
+    "linkedin_url": "https://linkedin.com/in/interwest-partners",
+    "blog_url": null,
+    "current_bio": "Invests in early-stage IT and healthcare start-ups.",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "58c58232-7c3e-4e6d-ba78-44c5465213f8",
+    "name": "Max Kilberg (Village Global)",
+    "firm": "Max Kilberg (Village Global)",
+    "linkedin_url": "https://linkedin.com/in/max-kilberg",
+    "blog_url": null,
+    "current_bio": "Investment Partner at Village Global",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "545c10fc-8fb5-42a8-9693-6fa98963a8aa",
+    "name": "Anne Dwane",
+    "firm": "Anne Dwane",
+    "linkedin_url": "https://linkedin.com/in/anne-dwane",
+    "blog_url": null,
+    "current_bio": "General Partner at Village Global",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "a7c460ea-77c7-4a89-a039-3b902ac67496",
+    "name": "Citi Ventures",
+    "firm": "Citi Ventures",
+    "linkedin_url": "https://linkedin.com/in/citi-ventures",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "Fintech",
+      "Enterprise",
+      "AI",
+      "Analytics",
+      "Payments",
+      "Marketing"
+    ],
+    "current_stage": [
+      "Series A",
+      "Series B"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Check Size Min",
+      "Check Size Max",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "a651da40-7565-4e67-bab6-9e125152d97f",
+    "name": "Max Kilberg",
+    "firm": "Max Kilberg",
+    "linkedin_url": "https://linkedin.com/in/max-kilberg",
+    "blog_url": null,
+    "current_bio": "Investment Partner at Village Global",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "fd39ab80-9cbc-4879-a922-09854cebaf40",
+    "name": "Atomico",
+    "firm": "Atomico",
+    "linkedin_url": "https://linkedin.com/in/atomico",
+    "blog_url": null,
+    "current_bio": "Atomico is a venture capital firm designed to help gamechanging entrepreneurs build technology to rewire the world.",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "6e14352e-571b-4699-a94f-30e774ae6a14",
+    "name": "Shasta Ventures",
+    "firm": "Shasta Ventures",
+    "linkedin_url": "https://linkedin.com/in/shasta-ventures",
+    "blog_url": null,
+    "current_bio": "Early-stage venture capital firm with over a billion dollars under management.",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "12b01f14-be7a-452b-8487-cd28c00efc2e",
+    "name": "General Atlantic",
+    "firm": "General Atlantic",
+    "linkedin_url": "https://linkedin.com/in/general-atlantic",
+    "blog_url": null,
+    "current_bio": "Global investment leader partnering with entrepreneurs to build long-term value.",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "23a90dd3-b078-4a84-8ec0-55bfc60cbb12",
+    "name": "Voice Punch VC",
+    "firm": "Voice Punch VC",
+    "linkedin_url": "https://linkedin.com/in/voice-punch-vc",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "Adtech",
+      "Lifestyle",
+      "AR/VR",
+      "Gaming/Sports"
+    ],
+    "current_stage": [
+      "Pre-Seed",
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Check Size Min",
+      "Check Size Max",
+      "Notable Investments"
+    ],
+    "priority": 4
+  }
+]

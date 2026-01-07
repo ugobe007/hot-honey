@@ -40,8 +40,8 @@ const MatchScoreBreakdown: React.FC<MatchScoreBreakdownProps> = ({
           className={`h-full rounded-full transition-all duration-1000 ease-out ${
             value >= 90 ? 'bg-gradient-to-r from-green-500 to-emerald-500' :
             value >= 70 ? 'bg-gradient-to-r from-cyan-500 to-blue-500' :
-            value >= 50 ? 'bg-gradient-to-r from-yellow-500 to-orange-500' :
-            'bg-gradient-to-r from-orange-500 to-red-500'
+            value >= 50 ? 'bg-gradient-to-r from-cyan-500 to-blue-500' :
+            'bg-gradient-to-r from-cyan-600 to-blue-600'
           }`}
           style={{ width: `${value}%` }}
         />
@@ -75,7 +75,7 @@ const MatchScoreBreakdown: React.FC<MatchScoreBreakdownProps> = ({
               <h2 className="text-3xl font-bold text-white">Match Score Breakdown</h2>
             </div>
             <p className="text-gray-300 text-sm">
-              Why <span className="text-orange-400 font-semibold">{startupName}</span> and{' '}
+              Why <span className="text-cyan-400 font-semibold">{startupName}</span> and{' '}
               <span className="text-cyan-400 font-semibold">{investorName}</span> are a great fit
             </p>
           </div>
@@ -140,7 +140,7 @@ const MatchScoreBreakdown: React.FC<MatchScoreBreakdownProps> = ({
           <ProgressBar
             label="Investment Thesis Alignment"
             value={breakdown.thesisAlignment}
-            color="text-orange-400"
+            color="text-cyan-400"
             icon={Briefcase}
           />
         </div>
@@ -165,7 +165,7 @@ const MatchScoreBreakdown: React.FC<MatchScoreBreakdownProps> = ({
               <p>• <span className="text-green-400">Check size match</span> - funding ask aligns with typical investment range</p>
             )}
             {breakdown.thesisAlignment >= 80 && (
-              <p>• <span className="text-orange-400">Thesis alignment</span> - company fits investor's strategic focus areas</p>
+              <p>• <span className="text-cyan-400">Thesis alignment</span> - company fits investor's strategic focus areas</p>
             )}
           </div>
         </div>

@@ -70,7 +70,7 @@ export default function Settings() {
       <div className="pt-28 px-4 max-w-4xl mx-auto relative z-10">
         <div className="text-center mb-12">
           <h1 className="text-6xl font-bold mb-4">
-            <span className="bg-gradient-to-r from-orange-400 via-red-500 to-yellow-400 bg-clip-text text-transparent">⚙️ Settings</span>
+            <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-violet-400 bg-clip-text text-transparent">⚙️ Settings</span>
           </h1>
           <p className="text-xl text-purple-200">Manage your account and preferences</p>
         </div>
@@ -79,7 +79,7 @@ export default function Settings() {
         <div className="space-y-6">
           {/* Profile Section */}
           <div className="bg-gradient-to-br from-purple-900/60 to-indigo-900/60 backdrop-blur-lg rounded-3xl p-8 border-2 border-purple-500/30">
-            <h2 className="text-3xl font-bold text-transparent bg-gradient-to-r from-orange-400 to-yellow-400 bg-clip-text mb-6">👤 Profile</h2>
+            <h2 className="text-3xl font-bold text-transparent bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text mb-6">👤 Profile</h2>
             <div className="space-y-4">
               <div>
                 <label className="block text-purple-200 font-semibold mb-2">Name</label>
@@ -120,7 +120,7 @@ export default function Settings() {
 
           {/* Preferences Section */}
           <div className="bg-gradient-to-br from-purple-900/60 to-indigo-900/60 backdrop-blur-lg rounded-3xl p-8 border-2 border-purple-500/30">
-            <h2 className="text-3xl font-bold text-transparent bg-gradient-to-r from-orange-400 to-yellow-400 bg-clip-text mb-6">🔔 Preferences</h2>
+            <h2 className="text-3xl font-bold text-transparent bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text mb-6">🔔 Preferences</h2>
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div>
@@ -134,7 +134,7 @@ export default function Settings() {
                     onChange={(e) => setUserProfile({...userProfile, notifications: e.target.checked})}
                     className="sr-only peer"
                   />
-                  <div className="w-14 h-7 bg-slate-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-orange-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-orange-500"></div>
+                  <div className="w-14 h-7 bg-slate-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-cyan-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-cyan-600"></div>
                 </label>
               </div>
               <div className="flex items-center justify-between">
@@ -149,7 +149,7 @@ export default function Settings() {
                     onChange={(e) => setUserProfile({...userProfile, newsletter: e.target.checked})}
                     className="sr-only peer"
                   />
-                  <div className="w-14 h-7 bg-slate-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-orange-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-orange-500"></div>
+                  <div className="w-14 h-7 bg-slate-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-cyan-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-cyan-600"></div>
                 </label>
               </div>
             </div>
@@ -157,16 +157,16 @@ export default function Settings() {
 
           {/* Data Management Section */}
           <div className="bg-gradient-to-br from-purple-900/60 to-indigo-900/60 backdrop-blur-lg rounded-3xl p-8 border-2 border-purple-500/30">
-            <h2 className="text-3xl font-bold text-transparent bg-gradient-to-r from-orange-400 to-yellow-400 bg-clip-text mb-6">🗄️ Data Management</h2>
+            <h2 className="text-3xl font-bold text-transparent bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text mb-6">🗄️ Data Management</h2>
             <div className="space-y-4">
               <button
                 onClick={handleClearVotes}
-                className="w-full px-6 py-4 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-xl transition-all shadow-lg text-left"
+                className="w-full px-6 py-4 bg-cyan-700 hover:bg-cyan-600 text-white font-bold rounded-xl transition-all shadow-lg text-left"
               >
                 <div className="flex items-center justify-between">
                   <div>
                     <div className="text-lg">🗑️ Clear All Votes</div>
-                    <div className="text-sm text-orange-200">Remove all your voting history</div>
+                    <div className="text-sm text-cyan-200">Remove all your voting history</div>
                   </div>
                   <div className="text-2xl">→</div>
                 </div>

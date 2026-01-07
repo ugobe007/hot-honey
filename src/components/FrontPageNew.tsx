@@ -173,7 +173,7 @@ const FrontPageNew: React.FC = () => {
     });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-slate-100">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       {/* Logo Dropdown Menu */}
       <LogoDropdownMenu />
 
@@ -201,7 +201,7 @@ const FrontPageNew: React.FC = () => {
         </Link>
         {!isLoggedIn && (
           <Link
-            to="/signup"
+            to="/login"
             className="px-3 py-2 rounded-full bg-gradient-to-r from-purple-600 to-purple-800 text-white hover:from-purple-700 hover:to-purple-900 transition-all shadow-lg font-medium text-sm flex items-center gap-2"
           >
             <span>🔑</span>

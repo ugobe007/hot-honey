@@ -103,7 +103,7 @@ const StartupDetail: React.FC = () => {
           <p className="text-white text-xl">Startup not found.</p>
           <button 
             onClick={() => navigate('/match')}
-            className="mt-4 bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-6 rounded-xl"
+            className="mt-4 bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-6 rounded-xl"
           >
             ← Back to Matches
           </button>
@@ -174,7 +174,7 @@ const StartupDetail: React.FC = () => {
               </div>
             )}
             {startup.total_god_score !== null && startup.total_god_score !== undefined && (
-              <div className="bg-gradient-to-br from-yellow-500/10 to-orange-500/10 backdrop-blur-sm rounded-xl p-5 border border-yellow-400/30 shadow-lg">
+              <div className="bg-gradient-to-br from-cyan-500/10 to-blue-500/10 backdrop-blur-sm rounded-xl p-5 border border-cyan-400/30 shadow-lg">
                 <div className="text-yellow-300 text-sm font-semibold mb-1">GOD Score</div>
                 <div className="text-3xl font-bold text-white">{startup.total_god_score}</div>
                 <div className="text-xs text-gray-400 mt-1">Overall Quality</div>

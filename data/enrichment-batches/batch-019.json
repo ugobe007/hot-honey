@@ -1,0 +1,428 @@
+[
+  {
+    "id": "2998fece-5b64-40c4-9255-1702c4c4830b",
+    "name": "Aydin SenkutFounder (Felicis)",
+    "firm": "Aydin SenkutFounder (Felicis)",
+    "linkedin_url": "https://linkedin.com/in/aydin-senkutfounder",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "SaaS",
+      "Consumer",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "afc972ae-a910-42d5-a4af-917a10bf6a72",
+    "name": "Vamos Ventures",
+    "firm": "Vamos Ventures",
+    "linkedin_url": "https://linkedin.com/in/vamos-ventures",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "Industry/Sector Agnostic",
+      "Minority Founders",
+      "Female Founders"
+    ],
+    "current_stage": [
+      "Pre-Seed",
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "f1c58341-8e4b-439b-81ec-eb49f2db009b",
+    "name": "Wes Barton (Hustle Fund)",
+    "firm": "Wes Barton (Hustle Fund)",
+    "linkedin_url": "https://linkedin.com/in/wes-barton",
+    "blog_url": null,
+    "current_bio": "Principal at Hustle Fund",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "616e2d2e-60df-43fd-b30e-13050768d0f4",
+    "name": "Ariel Kantor, Ph.D.",
+    "firm": "Ariel Kantor, Ph.D.",
+    "linkedin_url": "https://linkedin.com/in/ariel-kantor",
+    "blog_url": null,
+    "current_bio": "Principal at Versantventures",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "cfa271b2-576d-4f98-affb-eaeee3e47f4a",
+    "name": "Professionals Private Equity",
+    "firm": "Professionals Private Equity",
+    "linkedin_url": "https://linkedin.com/in/professionals-private-equity",
+    "blog_url": null,
+    "current_bio": "Professionals Private Equity is a angel investor focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "76070d5c-a1a4-4dfc-b6fa-05b928740c0d",
+    "name": "Mahendra Balachandran",
+    "firm": "Mahendra Balachandran",
+    "linkedin_url": "https://linkedin.com/in/mahendra-balachandran",
+    "blog_url": null,
+    "current_bio": "Mahendra Balachandran is a angel investor focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "7758d997-03c6-4978-a141-40e0b0fd0e0c",
+    "name": "Sahir Azam",
+    "firm": "Sahir Azam",
+    "linkedin_url": "https://linkedin.com/in/sahir-azam",
+    "blog_url": null,
+    "current_bio": "Index Ventures Investor",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "d20a0727-d6a5-405b-991c-197adf06ae43",
+    "name": "Jonathan Strauss",
+    "firm": "Jonathan Strauss",
+    "linkedin_url": "https://linkedin.com/in/jonathan-strauss",
+    "blog_url": null,
+    "current_bio": "Operating Partner at Lowercarboncapital",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "f7e4e0c8-9f46-4eb8-a376-8d3f7904d28c",
+    "name": "on private equity",
+    "firm": "on private equity",
+    "linkedin_url": "https://linkedin.com/in/on-private-equity",
+    "blog_url": null,
+    "current_bio": "on private equity is a angel investor focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "de2308ad-18e6-4272-877d-4beb1a8ee9a0",
+    "name": "Nigel Sheail (Versant Ventures)",
+    "firm": "Nigel Sheail (Versant Ventures)",
+    "linkedin_url": "https://linkedin.com/in/nigel-sheail",
+    "blog_url": null,
+    "current_bio": "Nigel Sheail is an investor at Nigel Sheail (Versant Ventures) focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "e76f1619-46c2-45b8-9885-bf58ec028a48",
+    "name": "Zack Rosen",
+    "firm": "Zack Rosen",
+    "linkedin_url": "https://linkedin.com/in/zack-rosen",
+    "blog_url": null,
+    "current_bio": "Team Member at Ribbitcap",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "4848cf30-e37a-43de-9cbb-ce523aa6a3ba",
+    "name": "FemHealth Ventures",
+    "firm": "FemHealth Ventures",
+    "linkedin_url": "https://linkedin.com/in/femhealth-ventures",
+    "blog_url": null,
+    "current_bio": "Collected $65m for oversubscribed Fund II",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "e6eb95e3-29de-4c7d-9e7d-445fea49836e",
+    "name": "in venture capital",
+    "firm": "in venture capital",
+    "linkedin_url": "https://linkedin.com/in/in-venture-capital",
+    "blog_url": null,
+    "current_bio": "in venture capital is a vc firm focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "34569ee2-d973-48d1-b42f-1d143c173d3c",
+    "name": "Waypoint",
+    "firm": "Waypoint",
+    "linkedin_url": "https://linkedin.com/in/waypoint",
+    "blog_url": null,
+    "current_bio": "Waypoint is a angel investor focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "eb0ebcd2-c4ef-4f78-b4ef-ba945ec0d312",
+    "name": "Stephanie Yan Senior (Northpondventures)",
+    "firm": "Stephanie Yan Senior (Northpondventures)",
+    "linkedin_url": "https://linkedin.com/in/stephanie-yan-senior",
+    "blog_url": null,
+    "current_bio": "Stephanie Yan is an investor at Northpondventures focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "b70f402b-e6d1-46c9-88bf-863818802944",
+    "name": "Ali Tamaseb General (Dcvc)",
+    "firm": "DCVC",
+    "linkedin_url": "https://linkedin.com/in/ali-tamaseb-general",
+    "blog_url": "https://dcvc.com",
+    "current_bio": "Ali Tamaseb General is a partner at DCVC. Deep tech in AI, biology, materials, energy, space",
+    "current_sectors": [
+      "AI/ML",
+      "SaaS",
+      "Fintech",
+      "Biotechnology",
+      "Robotics"
+    ],
+    "current_stage": [
+      "Seed"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "df57fe04-2616-42fc-9b3d-8910fb3fd9b2",
+    "name": "Reid Hoffman",
+    "firm": "Reid Hoffman",
+    "linkedin_url": "https://linkedin.com/in/reid-hoffman",
+    "blog_url": null,
+    "current_bio": "Chairman at Village Global",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "ecf5e011-298c-4a61-80a7-54b1480e2ac0",
+    "name": "Mamoon Hamid",
+    "firm": "Mamoon Hamid",
+    "linkedin_url": "https://linkedin.com/in/mamoon-hamid",
+    "blog_url": null,
+    "current_bio": "Mamoon Hamid is a angel investor focused on AI/ML investing at Pre-Seed and Seed stage.",
+    "current_sectors": [
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Pre-Seed",
+      "Seed",
+      "Series A",
+      "Series B"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "98f952ed-c9ae-40a0-ab57-a075161725ec",
+    "name": "Gabe Mennessen",
+    "firm": "Gabe Mennessen",
+    "linkedin_url": "https://linkedin.com/in/gabe-mennessen",
+    "blog_url": null,
+    "current_bio": "Gabe Mennessen is a angel investor focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "6895523b-5800-4e77-ae06-86e8c0e3ffd3",
+    "name": "Investors Private Equity",
+    "firm": "Investors Private Equity",
+    "linkedin_url": "https://linkedin.com/in/investors-private-equity",
+    "blog_url": null,
+    "current_bio": "Investors Private Equity is a angel investor focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  }
+]

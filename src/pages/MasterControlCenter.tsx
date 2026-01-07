@@ -3,11 +3,12 @@ import { useNavigate, Link } from 'react-router-dom';
 import { 
   RefreshCw, Activity, Target, Rocket, Users, Brain, Zap, 
   TrendingUp, TrendingDown, ArrowRight, CheckCircle, AlertCircle,
-  Clock, BarChart3, Database, Cpu, Sparkles
+  Clock, BarChart3, Database, Cpu, Sparkles, Play
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import { getSystemStatus, type SystemStatus } from '../services/systemStatus';
+import ScriptsControlPanel from '../components/ScriptsControlPanel';
 
 interface Process {
   name: string;
@@ -67,6 +68,18 @@ export default function MasterControlCenter() {
   const [scraperActivity, setScraperActivity] = useState<any[]>([]);
   const [parserHealth, setParserHealth] = useState<{ status: string; issues: string[] }>({ status: 'unknown', issues: [] });
   const [algorithmBias, setAlgorithmBias] = useState<{ component: string; bias: 'high' | 'low' | 'normal'; avgScore: number }[]>([]);
+  const [tieredScraperStats, setTieredScraperStats] = useState<{
+    lastRun: string | null;
+    runsToday: number;
+    startupsFound24h: number;
+    qualityGatePassRate: number;
+    avgQualityScore: number;
+    tier0Count: number;
+    tier1Count: number;
+    tier2Count: number;
+    duplicatesBlocked: number;
+    garbageBlocked: number;
+  } | null>(null);
 
   const isAdmin = user?.isAdmin || user?.email?.includes('admin') || user?.email?.includes('ugobe');
 
@@ -89,7 +102,8 @@ export default function MasterControlCenter() {
         loadAIOperations(),
         loadScraperActivity(),
         loadParserHealth(),
-        loadAlgorithmBias()
+        loadAlgorithmBias(),
+        loadTieredScraperStats()
       ]);
     } catch (error) {
       console.error('Error loading data:', error);
@@ -275,6 +289,78 @@ export default function MasterControlCenter() {
       setAiOperations(operations);
     } catch (error) {
       console.error('Error loading AI operations:', error);
+    }
+  };
+
+  const loadTieredScraperStats = async () => {
+    try {
+      const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+      
+      // Get startups added in last 24h with tiered scraper source
+      const { count: startups24h } = await supabase
+        .from('startup_uploads')
+        .select('*', { count: 'exact', head: true })
+        .gte('created_at', yesterday)
+        .eq('source_type', 'rss');
+      
+      // Get quality metrics from extracted_data
+      const { data: recentStartups } = await supabase
+        .from('startup_uploads')
+        .select('extracted_data, created_at')
+        .gte('created_at', yesterday)
+        .eq('source_type', 'rss')
+        .limit(100);
+      
+      let qualityScores: number[] = [];
+      let tier0Count = 0;
+      let tier1Count = 0;
+      let tier2Count = 0;
+      let qualityGatePassed = 0;
+      
+      if (recentStartups) {
+        recentStartups.forEach((startup: any) => {
+          const extracted = startup.extracted_data || {};
+          if (extracted.confidence) {
+            qualityScores.push(extracted.confidence);
+          }
+          if (extracted.provenance) {
+            const method = extracted.provenance.extraction_method;
+            if (method === 'rss') tier0Count++;
+            else if (method === 'html' || method === 'json-ld') tier1Count++;
+            else if (method === 'dynamic-parser' || method === 'browser') tier2Count++;
+          }
+          if (extracted.confidence && extracted.confidence > 0.3) {
+            qualityGatePassed++;
+          }
+        });
+      }
+      
+      const avgQuality = qualityScores.length > 0
+        ? qualityScores.reduce((a, b) => a + b, 0) / qualityScores.length
+        : 0;
+      
+      const passRate = recentStartups && recentStartups.length > 0
+        ? (qualityGatePassed / recentStartups.length) * 100
+        : 0;
+      
+      // Estimate duplicates/garbage blocked (would need log table for exact)
+      setTieredScraperStats({
+        lastRun: recentStartups && recentStartups.length > 0 
+          ? recentStartups[0].created_at 
+          : null,
+        runsToday: 0, // Would need to track this
+        startupsFound24h: startups24h || 0,
+        qualityGatePassRate: passRate,
+        avgQualityScore: avgQuality,
+        tier0Count,
+        tier1Count,
+        tier2Count,
+        duplicatesBlocked: 0, // Would need log table
+        garbageBlocked: 0 // Would need log table
+      });
+    } catch (error) {
+      console.error('Error loading tiered scraper stats:', error);
+      setTieredScraperStats(null);
     }
   };
 
@@ -595,19 +681,19 @@ export default function MasterControlCenter() {
           {/* 2. Total Matches - Live Link */}
           <Link
             to="/matching-engine"
-            className="bg-gradient-to-br from-orange-500/10 to-red-500/10 border-2 border-orange-500/30 rounded-2xl p-6 hover:border-orange-500/50 transition-all group"
+            className="bg-gradient-to-br from-cyan-500/10 to-blue-500/10 border-2 border-cyan-500/30 rounded-2xl p-6 hover:border-cyan-500/50 transition-all group"
           >
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-orange-500/20 rounded-lg">
-                  <Target className="w-6 h-6 text-orange-400" />
+                <div className="p-2 bg-cyan-600/20 rounded-lg">
+                  <Target className="w-6 h-6 text-cyan-400" />
                 </div>
                 <h2 className="text-xl font-bold">Total Matches</h2>
               </div>
-              <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-orange-400 group-hover:translate-x-1 transition-all" />
+              <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-cyan-400 group-hover:translate-x-1 transition-all" />
             </div>
             <div className="space-y-3">
-              <div className="text-4xl font-bold text-orange-400">{totalMatches.toLocaleString()}</div>
+              <div className="text-4xl font-bold text-cyan-400">{totalMatches.toLocaleString()}</div>
               <div className="flex items-center gap-2 text-sm">
                 <TrendingUp className="w-4 h-4 text-green-400" />
                 {newMatchesToday > 0 && newMatchesToday < totalMatches ? (
@@ -620,10 +706,107 @@ export default function MasterControlCenter() {
             </div>
           </Link>
 
+          {/* 2.5. Tiered Scraper Pipeline - NEW OBSERVABILITY */}
+          <div
+            className="bg-gradient-to-br from-cyan-500/10 to-blue-500/10 border-2 border-cyan-500/30 rounded-2xl p-6 hover:border-cyan-500/50 transition-all"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-cyan-500/20 rounded-lg">
+                  <Database className="w-6 h-6 text-cyan-400" />
+                </div>
+                <h2 className="text-xl font-bold">Tiered Scraper</h2>
+              </div>
+              <div className={`px-2 py-1 rounded-full text-xs border ${
+                tieredScraperStats && tieredScraperStats.startupsFound24h > 0 
+                  ? 'text-green-400 bg-green-500/10 border-green-500/30' 
+                  : 'text-gray-400 bg-gray-500/10 border-gray-500/30'
+              }`}>
+                {tieredScraperStats && tieredScraperStats.startupsFound24h > 0 ? 'Active' : 'Idle'}
+              </div>
+            </div>
+            {tieredScraperStats ? (
+              <div className="space-y-3">
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <div className="text-2xl font-bold text-cyan-400">{tieredScraperStats.startupsFound24h}</div>
+                    <div className="text-xs text-gray-400">Startups (24h)</div>
+                  </div>
+                  <div>
+                    <div className="text-2xl font-bold text-cyan-400">{tieredScraperStats.qualityGatePassRate.toFixed(0)}%</div>
+                    <div className="text-xs text-gray-400">Quality Pass</div>
+                  </div>
+                </div>
+                <div className="space-y-2 pt-2 border-t border-white/10">
+                  <div className="flex justify-between text-xs">
+                    <span className="text-gray-400">Tier 0 (RSS):</span>
+                    <span className="text-white">{tieredScraperStats.tier0Count}</span>
+                  </div>
+                  <div className="flex justify-between text-xs">
+                    <span className="text-gray-400">Tier 1 (HTML):</span>
+                    <span className="text-white">{tieredScraperStats.tier1Count}</span>
+                  </div>
+                  <div className="flex justify-between text-xs">
+                    <span className="text-gray-400">Tier 2 (DynamicParser):</span>
+                    <span className="text-white">{tieredScraperStats.tier2Count}</span>
+                  </div>
+                </div>
+                <div className="text-xs text-gray-500 pt-2">
+                  Last run: {tieredScraperStats.lastRun ? formatTimeAgo(tieredScraperStats.lastRun) : 'Never'}
+                </div>
+              </div>
+            ) : (
+              <div className="text-sm text-gray-400">
+                No data yet. Run: <code className="bg-black/30 px-1 rounded">node tiered-scraper-pipeline.js</code>
+              </div>
+            )}
+          </div>
+
+          {/* 2.6. Hot Match Autopilot */}
+          <div
+            className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 border-2 border-purple-500/30 rounded-2xl p-6 hover:border-purple-500/50 transition-all group"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-purple-500/20 rounded-lg">
+                  <Zap className="w-6 h-6 text-purple-400" />
+                </div>
+                <h2 className="text-xl font-bold">Hot Match Autopilot</h2>
+              </div>
+              <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-purple-400 group-hover:translate-x-1 transition-all" />
+            </div>
+            <p className="text-sm text-gray-400 mb-4">
+              Automated data pipeline: RSS discovery, enrichment, scoring, and matching
+            </p>
+            <div className="space-y-2">
+              <a
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  const scriptPath = 'scripts/hot-match-autopilot.js';
+                  alert(`To run the autopilot:\n\nFull pipeline:\n  node ${scriptPath}\n\nQuick mode:\n  node ${scriptPath} --quick\n\nDaemon mode:\n  node ${scriptPath} --daemon\n\nOr with PM2:\n  pm2 start ${scriptPath} --name autopilot -- --daemon`);
+                }}
+                className="block p-3 bg-white/5 rounded-lg border border-white/10 hover:bg-white/10 hover:border-purple-500/30 transition-all text-sm"
+              >
+                <div className="flex items-center justify-between">
+                  <span className="flex items-center gap-2">
+                    <Play className="w-4 h-4 text-purple-400" />
+                    <span>View Instructions</span>
+                  </span>
+                </div>
+              </a>
+              <div className="text-xs text-gray-500 space-y-1 pt-2">
+                <div>• Full pipeline: <code className="bg-black/30 px-1 rounded">node scripts/hot-match-autopilot.js</code></div>
+                <div>• Quick mode: <code className="bg-black/30 px-1 rounded">--quick</code></div>
+                <div>• Daemon mode: <code className="bg-black/30 px-1 rounded">--daemon</code></div>
+              </div>
+            </div>
+          </div>
+
           {/* 3. GOD Scores & Changes - Enhanced with Bias Detection */}
           <Link
             to="/admin/god-scores"
-            className="md:col-span-2 bg-gradient-to-br from-yellow-500/10 to-amber-500/10 border-2 border-yellow-500/30 rounded-2xl p-6 hover:border-yellow-500/50 transition-all group"
+            className="md:col-span-2 bg-gradient-to-br from-yellow-500/10 to-blue-500/10 border-2 border-yellow-500/30 rounded-2xl p-6 hover:border-yellow-500/50 transition-all group"
           >
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
@@ -666,7 +849,7 @@ export default function MasterControlCenter() {
                       <div key={idx} className="flex items-center justify-between text-xs">
                         <span className="text-gray-400">{bias.component}</span>
                         <div className={`flex items-center gap-1 ${
-                          bias.bias === 'high' ? 'text-red-400' : 'text-orange-400'
+                          bias.bias === 'high' ? 'text-red-400' : 'text-cyan-400'
                         }`}>
                           <AlertCircle className="w-3 h-3" />
                           <span>{bias.bias === 'high' ? 'High' : 'Low'} ({bias.avgScore})</span>
@@ -830,7 +1013,7 @@ export default function MasterControlCenter() {
           {/* 8. Parser Health & DB Matching */}
           <Link
             to="/admin/diagnostic"
-            className="bg-gradient-to-br from-red-500/10 to-orange-500/10 border-2 border-red-500/30 rounded-2xl p-6 hover:border-red-500/50 transition-all group"
+            className="bg-gradient-to-br from-blue-500/10 to-violet-500/10 border-2 border-red-500/30 rounded-2xl p-6 hover:border-red-500/50 transition-all group"
           >
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
@@ -868,6 +1051,11 @@ export default function MasterControlCenter() {
             </div>
           </Link>
 
+        </div>
+
+        {/* Scripts Control Panel - Full Width Section */}
+        <div className="mt-8">
+          <ScriptsControlPanel />
         </div>
       </div>
     </div>

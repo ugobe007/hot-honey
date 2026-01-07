@@ -68,7 +68,7 @@ export default function DataIntelligence() {
       <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50">
         <div className="flex gap-2 items-center">
           <Link to="/" className="text-5xl hover:scale-110 transition-transform">🍯</Link>
-          <Link to="/admin/dashboard" className="px-4 py-2 bg-orange-500 text-white rounded-full font-bold hover:bg-orange-600">
+          <Link to="/admin/dashboard" className="px-4 py-2 bg-cyan-600 text-white rounded-full font-bold hover:bg-cyan-700">
             Admin Dashboard
           </Link>
           <Link to="/data-intelligence" className="px-4 py-2 bg-purple-600 text-white rounded-full font-bold">
@@ -144,7 +144,7 @@ export default function DataIntelligence() {
           {latestReport ? (
             <div className="space-y-8">
               {/* Report Header */}
-              <div className="bg-gradient-to-br from-yellow-400 via-orange-500 to-red-500 rounded-2xl p-8 shadow-2xl">
+              <div className="bg-gradient-to-br from-cyan-400 via-blue-500 to-violet-500 rounded-2xl p-8 shadow-2xl">
                 <h2 className="text-3xl font-black text-white mb-2">
                   📅 Daily Report - {new Date(latestReport.date).toLocaleDateString()}
                 </h2>
@@ -177,7 +177,7 @@ export default function DataIntelligence() {
                   icon="💼"
                   label="Active Investors"
                   value={latestReport.activeInvestors.toString()}
-                  color="from-orange-500 to-red-600"
+                  color="from-cyan-500 to-blue-600"
                 />
                 <MetricCard
                   icon="🔥"
@@ -276,7 +276,7 @@ export default function DataIntelligence() {
                     {latestReport.hotDeals.map((deal: any, idx: number) => (
                       <div key={idx} className="bg-white/5 rounded-lg p-4 border border-white/10">
                         <div className="flex items-start justify-between mb-2">
-                          <h4 className="text-xl font-black text-orange-300">{deal.companyName}</h4>
+                          <h4 className="text-xl font-black text-cyan-300">{deal.companyName}</h4>
                           <span className={`px-2 py-1 rounded-full text-xs font-bold ${
                             deal.significance === 'high' ? 'bg-red-500/30 text-red-200' :
                             deal.significance === 'medium' ? 'bg-yellow-500/30 text-yellow-200' :

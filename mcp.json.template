@@ -1,0 +1,20 @@
+{
+  "mcpServers": {
+    "Resend": {
+      "name": "Resend",
+      "url": "https://resend.com/docs/mcp",
+      "headers": {
+        "Authorization": "Bearer YOUR_RESEND_API_KEY"
+      }
+    },
+    "TestSprite": {
+      "command": "npx @testsprite/testsprite-mcp@latest",
+      "env": {
+        "API_KEY": "YOUR_TESTSPRITE_API_KEY"
+      },
+      "args": []
+    }
+  }
+}
+
+

@@ -1,153 +1,171 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { Mail, Lock, ArrowLeft, Sparkles, Eye, EyeOff } from 'lucide-react';
 
 export default function Login() {
   const navigate = useNavigate();
   const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    login(email, password);
+    setIsLoading(true);
+    setError('');
     
-    // Check if admin and redirect accordingly
-    const isAdmin = email.includes('admin') || email.includes('ugobe');
-    if (isAdmin) {
-      navigate('/admin/control');
-    } else {
-      navigate('/');
+    try {
+      // AuthContext.login is synchronous, but we'll handle it as async for future compatibility
+      login(email, password);
+      
+      // Check if admin and redirect accordingly
+      const isAdmin = email.includes('admin') || email.includes('ugobe');
+      if (isAdmin) {
+        navigate('/admin/control');
+      } else {
+        // Check if there's a redirect parameter in the URL
+        const params = new URLSearchParams(window.location.search);
+        const redirect = params.get('redirect');
+        navigate(redirect || '/');
+      }
+    } catch (err) {
+      setError('Invalid email or password');
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-slate-100 p-8">
-      <div className="max-w-md mx-auto">
-        
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4">
+      {/* Background decoration */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
+      </div>
+
+      <div className="w-full max-w-md relative z-10">
         {/* Back button */}
         <button
           onClick={() => navigate('/')}
-          className="mb-6 px-6 py-3 bg-gradient-to-b from-slate-300 via-slate-200 to-slate-400 text-slate-800 hover:from-slate-400 hover:via-slate-300 hover:to-slate-500 font-bold rounded-xl transition-all shadow-lg"
-          style={{
-            boxShadow: '0 4px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.8), inset 0 -1px 0 rgba(0,0,0,0.2)',
-            textShadow: '0 1px 1px rgba(255,255,255,0.8)'
-          }}
+          className="mb-6 flex items-center gap-2 text-slate-400 hover:text-white transition-colors"
         >
-          ← Back to Home
+          <ArrowLeft className="w-4 h-4" />
+          Back to Home
         </button>
 
         {/* Login Card */}
-        <div className="bg-white/80 backdrop-blur-lg rounded-3xl p-8 border-2 border-orange-200 shadow-2xl">
+        <div className="bg-slate-800/50 backdrop-blur-xl rounded-2xl p-8 border border-slate-700 shadow-2xl">
+          {/* Header */}
           <div className="text-center mb-8">
-            <div className="text-6xl mb-4">🔑</div>
-            <h1 className="text-4xl font-bold text-orange-600 mb-2">Log In</h1>
-            <p className="text-slate-700">Access your account</p>
+            <div className="w-16 h-16 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <Sparkles className="w-8 h-8 text-white" />
+            </div>
+            <h1 className="text-3xl font-bold text-white mb-2">Welcome Back</h1>
+            <p className="text-slate-400">Sign in to access your matches</p>
           </div>
 
-          <form className="space-y-4" onSubmit={handleSubmit}>
+          {/* Error message */}
+          {error && (
+            <div className="mb-6 p-3 bg-red-500/20 border border-red-500/50 rounded-lg text-red-300 text-sm text-center">
+              {error}
+            </div>
+          )}
+
+          {/* Form */}
+          <form className="space-y-5" onSubmit={handleSubmit}>
             <div>
-              <label className="block text-slate-700 font-semibold mb-2">Email</label>
-              <input
-                type="email"
-                placeholder="your@email.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl bg-white border-2 border-orange-200 text-slate-800 focus:border-orange-400 outline-none placeholder-slate-400"
-                required
-              />
+              <label className="block text-slate-300 text-sm font-medium mb-2">
+                Email
+              </label>
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
+                <input
+                  type="email"
+                  placeholder="you@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full pl-11 pr-4 py-3 bg-slate-900/50 border border-slate-600 rounded-xl text-white placeholder-slate-500 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 outline-none transition-all"
+                  required
+                />
+              </div>
             </div>
 
             <div>
-              <label className="block text-slate-700 font-semibold mb-2">Password</label>
-              <input
-                type="password"
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl bg-white border-2 border-orange-200 text-slate-800 focus:border-orange-400 outline-none placeholder-slate-400"
-                required
-              />
+              <label className="block text-slate-300 text-sm font-medium mb-2">
+                Password
+              </label>
+              <div className="relative">
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full pl-11 pr-12 py-3 bg-slate-900/50 border border-slate-600 rounded-xl text-white placeholder-slate-500 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 outline-none transition-all"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors"
+                >
+                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between text-sm">
+              <label className="flex items-center gap-2 text-slate-400 cursor-pointer">
+                <input type="checkbox" className="w-4 h-4 rounded border-slate-600 bg-slate-900 text-cyan-500 focus:ring-cyan-500" />
+                Remember me
+              </label>
+              <button type="button" className="text-cyan-400 hover:text-cyan-300 transition-colors">
+                Forgot password?
+              </button>
             </div>
 
             <button
               type="submit"
-              className="w-full py-4 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold rounded-xl transition-all shadow-lg text-lg mt-6"
+              disabled={isLoading}
+              className="w-full py-3 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-semibold rounded-xl transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
-              🚀 Log In
+              {isLoading ? (
+                <>
+                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  Signing in...
+                </>
+              ) : (
+                'Sign In'
+              )}
             </button>
           </form>
 
-          <div className="mt-6 text-center">
-            <button
-              onClick={() => navigate('/signup')}
-              className="text-orange-600 hover:text-orange-700 font-semibold transition-colors"
-            >
-              Don't have an account? Sign Up →
-            </button>
+          {/* Divider */}
+          <div className="my-6 flex items-center gap-4">
+            <div className="flex-1 h-px bg-slate-700" />
+            <span className="text-slate-500 text-sm">or</span>
+            <div className="flex-1 h-px bg-slate-700" />
           </div>
 
-          {/* Quick Login Options */}
-          <div className="mt-6 pt-6 border-t border-orange-200">
-            <p className="text-slate-700 font-semibold mb-3 text-center">Quick Login:</p>
-            <div className="grid grid-cols-2 gap-3">
-              <button
-                onClick={() => {
-                  setEmail('admin@hotmoney.com');
-                  setPassword('admin123');
-                }}
-                className="py-3 px-4 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-xl transition-all shadow-lg text-sm"
-              >
-                👑 Admin Login
-              </button>
-              <button
-                onClick={() => {
-                  setEmail('investor@example.com');
-                  setPassword('demo123');
-                }}
-                className="py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-all shadow-lg text-sm"
-              >
-                👤 Investor Login
-              </button>
-            </div>
-          </div>
-
-          <div className="mt-6 pt-6 border-t border-orange-200">
-            <p className="text-slate-700 text-sm mb-3">
-              <strong className="text-orange-600">🔑 Demo Credentials:</strong>
-            </p>
-            <div className="space-y-2 text-sm">
-              <div className="bg-purple-50 rounded-lg p-3 border border-purple-200">
-                <p className="font-semibold text-purple-700">Admin Access:</p>
-                <p className="text-slate-700">Email: <code className="bg-purple-100 px-2 py-0.5 rounded">admin@hotmoney.com</code></p>
-                <p className="text-slate-700">Password: <code className="bg-purple-100 px-2 py-0.5 rounded">admin123</code></p>
-              </div>
-              <div className="bg-blue-50 rounded-lg p-3 border border-blue-200">
-                <p className="font-semibold text-blue-700">Regular User:</p>
-                <p className="text-slate-700">Email: <code className="bg-blue-100 px-2 py-0.5 rounded">investor@example.com</code></p>
-                <p className="text-slate-700">Password: <code className="bg-blue-100 px-2 py-0.5 rounded">demo123</code></p>
-              </div>
-            </div>
-            <p className="text-slate-500 text-xs mt-3">
-              💡 <strong>Tip:</strong> Any email containing "admin" or "ugobe" gets admin access automatically!
+          {/* Sign up link */}
+          <div className="text-center">
+            <p className="text-slate-400">
+              Don't have an account?{' '}
+              <Link to="/get-matched" className="text-cyan-400 hover:text-cyan-300 font-medium transition-colors">
+                Sign up free
+              </Link>
             </p>
           </div>
         </div>
 
-        {/* Quick Actions */}
-        <div className="mt-6 grid grid-cols-2 gap-4">
-          <button
-            onClick={() => navigate('/submit')}
-            className="py-3 bg-gradient-to-r from-orange-400 to-orange-500 hover:from-orange-500 hover:to-orange-600 text-white font-semibold rounded-xl transition-all shadow-lg"
-          >
-            📝 Submit Startup
-          </button>
-          <button
-            onClick={() => navigate('/vote')}
-            className="py-3 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold rounded-xl transition-all shadow-lg"
-          >
-            🗳️ Start Voting
-          </button>
+        {/* Footer links */}
+        <div className="mt-6 text-center text-sm text-slate-500">
+          <Link to="/privacy" className="hover:text-slate-400 transition-colors">Privacy Policy</Link>
+          <span className="mx-2">•</span>
+          <Link to="/about" className="hover:text-slate-400 transition-colors">Terms of Service</Link>
         </div>
       </div>
     </div>

@@ -1,0 +1,147 @@
+{
+  "project_name": "Hot Honey / Hot Money Honey",
+  "project_type": "frontend",
+  "description": "AI-powered matching platform connecting early-stage startups with investors. Features include startup-investor matching engine, voting system, portfolio management, admin dashboard, and AI-powered data enrichment.",
+  "tech_stack": {
+    "framework": "React 19.1.0",
+    "language": "TypeScript",
+    "build_tool": "Vite 5.4.11",
+    "styling": "Tailwind CSS 3.4.17",
+    "routing": "React Router 7.6.3",
+    "state_management": "Zustand 5.0.6",
+    "backend": "Supabase (PostgreSQL)",
+    "deployment": "Fly.io"
+  },
+  "key_features": [
+    "Startup-Investor Matching Engine - AI-powered matching using GOD algorithm",
+    "Voting System - Anonymous voting on startups",
+    "Portfolio Management - Build and share investment portfolios",
+    "Investor Directory - Browse and search investors",
+    "Startup Directory - Browse and search startups",
+    "Trending Page - Algorithm-based startup rankings",
+    "Admin Dashboard - Complete admin workflow management",
+    "Document Scanner - AI-powered PDF/PowerPoint extraction",
+    "RSS Feed Manager - News article discovery",
+    "GOD Score System - Startup quality scoring algorithm",
+    "Match Score Breakdown - Detailed match analysis",
+    "Saved Matches - Save favorite matches",
+    "Activity Feed - User activity tracking",
+    "Authentication - User login/signup",
+    "Pricing Plans - Spark, Flame, Inferno tiers"
+  ],
+  "main_pages": [
+    {
+      "path": "/",
+      "name": "Landing Page",
+      "description": "Main landing page with matching engine preview"
+    },
+    {
+      "path": "/matching",
+      "name": "Matching Engine",
+      "description": "Core matching interface showing startup-investor pairs with scores"
+    },
+    {
+      "path": "/trending",
+      "name": "Trending",
+      "description": "Algorithm-based startup rankings and discovery"
+    },
+    {
+      "path": "/vote",
+      "name": "Vote Page",
+      "description": "Vote on startups anonymously"
+    },
+    {
+      "path": "/investors",
+      "name": "Investors Directory",
+      "description": "Browse and search all investors"
+    },
+    {
+      "path": "/dashboard",
+      "name": "Startups Dashboard",
+      "description": "Browse all startups with filters"
+    },
+    {
+      "path": "/get-matched",
+      "name": "Get Matched",
+      "description": "Pricing and signup page"
+    },
+    {
+      "path": "/saved-matches",
+      "name": "Saved Matches",
+      "description": "View saved startup-investor matches"
+    },
+    {
+      "path": "/admin/control",
+      "name": "Admin Control Center",
+      "description": "Master admin dashboard"
+    }
+  ],
+  "key_components": [
+    {
+      "name": "MatchingEngine",
+      "file": "src/components/MatchingEngine.tsx",
+      "description": "Main matching interface displaying startup-investor pairs with pre-calculated match scores"
+    },
+    {
+      "name": "EnhancedStartupCard",
+      "file": "src/components/EnhancedStartupCard.tsx",
+      "description": "Detailed startup card with GOD scores and PMF signals"
+    },
+    {
+      "name": "EnhancedInvestorCard",
+      "file": "src/components/EnhancedInvestorCard.tsx",
+      "description": "Detailed investor card with portfolio and investment criteria"
+    },
+    {
+      "name": "TrendingPage",
+      "file": "src/pages/TrendingPage.tsx",
+      "description": "Trending startups with multiple ranking algorithms"
+    },
+    {
+      "name": "GetMatchedPage",
+      "file": "src/pages/GetMatchedPage.tsx",
+      "description": "Pricing plans and signup flow"
+    }
+  ],
+  "backend_integration": {
+    "database": "Supabase PostgreSQL",
+    "tables": [
+      "startup_uploads",
+      "investors",
+      "startup_investor_matches",
+      "matching_queue",
+      "user_subscriptions"
+    ],
+    "api_endpoints": "Supabase REST API",
+    "authentication": "Supabase Auth"
+  },
+  "testing_needs": [
+    "Frontend component rendering",
+    "Matching engine functionality",
+    "Navigation and routing",
+    "Form submissions",
+    "API integration with Supabase",
+    "User authentication flows",
+    "Match score display",
+    "Card interactions",
+    "Modal dialogs",
+    "Responsive design"
+  ],
+  "dev_server": {
+    "port": 5173,
+    "command": "npm run dev",
+    "url": "http://localhost:5173"
+  },
+  "entry_point": "src/main.tsx",
+  "build_output": "dist/",
+  "environment_variables": [
+    "VITE_SUPABASE_URL",
+    "VITE_SUPABASE_ANON_KEY",
+    "SUPABASE_SERVICE_KEY",
+    "VITE_OPENAI_API_KEY",
+    "ANTHROPIC_API_KEY",
+    "RESEND_API_KEY"
+  ]
+}
+
+

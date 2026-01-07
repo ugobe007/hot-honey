@@ -1,0 +1,424 @@
+[
+  {
+    "id": "894ee903-ff7f-4d5b-88cb-cb101873dfeb",
+    "name": "Guru Chahal",
+    "firm": "Guru Chahal",
+    "linkedin_url": "https://linkedin.com/in/guru-chahal",
+    "blog_url": null,
+    "current_bio": "Partner at Lightspeed",
+    "current_sectors": [
+      "Enterprise",
+      "Consumer",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A",
+      "Series B"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "16be1301-e649-4fd4-b57a-047f6b528255",
+    "name": "Wen-Wen Lam",
+    "firm": "Gradient Ventures",
+    "linkedin_url": "https://linkedin.com/in/wen-wen-lam",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "HealthTech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "4b431332-8618-4a4d-a6eb-e7fcee1c0eff",
+    "name": "article Christina Cacioppo (Firstround)",
+    "firm": "article Christina Cacioppo (Firstround)",
+    "linkedin_url": "https://linkedin.com/in/article-christina-cacioppo",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "d3a020a3-fe30-401e-b767-edb9d2b8f529",
+    "name": "Dave Eisenberg",
+    "firm": "Zigg Capital",
+    "linkedin_url": "https://linkedin.com/in/dave-eisenberg",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "HealthTech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "02ecf689-523f-481d-9391-351d161c3154",
+    "name": "Natalie Vais (Spark Capital)",
+    "firm": "Natalie Vais (Spark Capital)",
+    "linkedin_url": "https://linkedin.com/in/natalie-vais",
+    "blog_url": null,
+    "current_bio": "Partner at Spark Capital",
+    "current_sectors": [
+      "SaaS",
+      "Consumer",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A",
+      "Series B"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "75cfcf8d-f3b6-404c-a9a9-68ec8661d363",
+    "name": "and General (Boldstart)",
+    "firm": "and General (Boldstart)",
+    "linkedin_url": "https://linkedin.com/in/and-general",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Cybersecurity"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "a0b82897-67fa-4900-a68e-8a8ea34366b0",
+    "name": "Jonathan Ehrlich",
+    "firm": "Foundation Capital",
+    "linkedin_url": "https://linkedin.com/in/jonathan-ehrlich",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Healthcare"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "38affff6-6092-4a4a-92cb-d73c3ba16df1",
+    "name": "About Taking the (Firstround)",
+    "firm": "About Taking the (Firstround)",
+    "linkedin_url": "https://linkedin.com/in/about-taking-the",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "HealthTech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "2076a1d2-55f2-4ed4-b0cc-94a14c29d651",
+    "name": "acquire utility management",
+    "firm": "acquire utility management",
+    "linkedin_url": "https://linkedin.com/in/acquire-utility-management",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "Utility Management",
+      "Sustainability",
+      "Smart Grid"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "913a07dd-1387-4504-bf83-957ec45c58d6",
+    "name": "What Early Stage (Firstround)",
+    "firm": "What Early Stage (Firstround)",
+    "linkedin_url": "https://linkedin.com/in/what-early-stage",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "Software",
+      "Consumer",
+      "Healthcare"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "8b030587-b8ac-4975-a942-4b3939339bd9",
+    "name": "Dave Girouard (Firstround)",
+    "firm": "Dave Girouard (Firstround)",
+    "linkedin_url": "https://linkedin.com/in/dave-girouard",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Healthtech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "5af2ddc2-6e0d-46c4-99f3-39715bbbaaec",
+    "name": "Thomas Chen",
+    "firm": "MAGIC Fund",
+    "linkedin_url": "https://linkedin.com/in/thomas-chen",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "HealthTech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "5473fcee-e833-4303-bb2c-5700653fba0b",
+    "name": "Michal Cieplak",
+    "firm": "Michal Cieplak",
+    "linkedin_url": "https://linkedin.com/in/michal-cieplak",
+    "blog_url": null,
+    "current_bio": "Michal Cieplak is a angel investor focused on SaaS, AI/ML, Consumer investing at Pre-Seed and Seed stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML",
+      "Consumer",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Pre-Seed",
+      "Seed"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "b9e8a1ab-764f-4c3b-a274-65e62d51f2b7",
+    "name": "Content Roy RosinBoard (Firstround)",
+    "firm": "Content Roy RosinBoard (Firstround)",
+    "linkedin_url": "https://linkedin.com/in/content-roy-rosinboard",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "HealthTech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "1ae2b916-5094-4bfe-a7fa-1243d450ef3b",
+    "name": "Mark Lee",
+    "firm": "Mucker Capital",
+    "linkedin_url": "https://linkedin.com/in/mark-lee",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "HealthTech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "85dff057-c28e-44b5-8613-8b521fab9f9d",
+    "name": "Jerry Lu",
+    "firm": "Maveron",
+    "linkedin_url": "https://linkedin.com/in/jerry-lu",
+    "blog_url": null,
+    "current_bio": "Invests in early-stage consumer brands with a focus on changing consumer behavior.",
+    "current_sectors": [
+      "Consumer"
+    ],
+    "current_stage": [
+      "Pre-seed",
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "36ce60dc-0fd9-46e9-b189-3fe80341a6d3",
+    "name": "Michael Ma",
+    "firm": "Liquid2 Ventures",
+    "linkedin_url": "https://linkedin.com/in/michael-ma",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "8657d65c-0fd3-45bd-a2b0-592da0e9e13b",
+    "name": "Katie Riester (Felicis)",
+    "firm": "Katie Riester (Felicis)",
+    "linkedin_url": "https://linkedin.com/in/katie-riester",
+    "blog_url": null,
+    "current_bio": "Managing Director & GP, Fund of Funds Investing",
+    "current_sectors": [
+      "SaaS",
+      "Consumer",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "50c8fc5a-a38e-4f84-8982-68f4573a225b",
+    "name": "view profile Board (Uncorkcapital)",
+    "firm": "view profile Board (Uncorkcapital)",
+    "linkedin_url": "https://linkedin.com/in/view-profile-board",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "af565617-9d1e-4f00-8fa9-7fbd9984de0d",
+    "name": "Jon Soberg",
+    "firm": "MS&AD Ventures",
+    "linkedin_url": "https://linkedin.com/in/jon-soberg",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Healthcare"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  }
+]

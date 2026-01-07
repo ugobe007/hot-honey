@@ -21,7 +21,7 @@ const HowItWorksModal: React.FC<HowItWorksModalProps> = ({ isOpen, onClose, show
       icon: Flame,
       title: "Startups Submit",
       description: "Founders submit their pitch, team background, traction metrics, and funding goals.",
-      color: "from-orange-500 to-amber-500",
+      color: "from-cyan-500 to-blue-500",
       details: ["Company overview", "Team credentials", "Traction data", "Funding ask"]
     },
     {
@@ -42,7 +42,7 @@ const HowItWorksModal: React.FC<HowItWorksModalProps> = ({ isOpen, onClose, show
       icon: Users,
       title: "Anonymous Discovery",
       description: "Investors browse matches anonymously. Identity revealed only when they engage.",
-      color: "from-amber-500 to-orange-500",
+      color: "from-cyan-500 to-blue-500",
       details: ["Private browsing", "Swipe to save", "No cold outreach", "Quality signal"]
     },
     {
@@ -56,7 +56,7 @@ const HowItWorksModal: React.FC<HowItWorksModalProps> = ({ isOpen, onClose, show
       icon: BarChart3,
       title: "Multi-VC Algorithm Views",
       description: "See how top VCs would score the same startup - YC, Sequoia, A16Z styles all in one place.",
-      color: "from-amber-500 to-orange-500",
+      color: "from-cyan-500 to-blue-500",
       details: ["GOD Algorithm", "YC Smell Test", "Sequoia Style", "A16Z Style"],
       isDemo: true
     }
@@ -135,12 +135,12 @@ const HowItWorksModal: React.FC<HowItWorksModalProps> = ({ isOpen, onClose, show
 
         {/* Header */}
         <div className="text-center pt-8 pb-4 px-8">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-orange-500/20 to-amber-500/20 border border-orange-500/30 mb-4">
-            <Sparkles className="w-4 h-4 text-orange-400" />
-            <span className="text-orange-300 text-sm font-medium">Powered by AI</span>
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-cyan-500/20 to-blue-500/20 border border-cyan-500/30 mb-4">
+            <Sparkles className="w-4 h-4 text-cyan-400" />
+            <span className="text-cyan-300 text-sm font-medium">Powered by AI</span>
           </div>
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-2">
-            How <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-500">HotMatch</span> Works
+            How <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">HotMatch</span> Works
           </h2>
           <p className="text-gray-400 text-lg">
             AI-powered matching in 6 simple steps
@@ -162,7 +162,7 @@ const HowItWorksModal: React.FC<HowItWorksModalProps> = ({ isOpen, onClose, show
                 }}
                 className={`h-2 rounded-full transition-all duration-300 ${
                   index === currentStep 
-                    ? 'w-8 bg-gradient-to-r from-orange-500 to-amber-500' 
+                    ? 'w-8 bg-gradient-to-r from-cyan-500 to-blue-500' 
                     : 'w-2 bg-gray-600 hover:bg-gray-500'
                 }`}
               />
@@ -187,13 +187,13 @@ const HowItWorksModal: React.FC<HowItWorksModalProps> = ({ isOpen, onClose, show
                     <div className="absolute top-0 left-1/2 w-3 h-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/50" />
                   </div>
                   <div className="absolute inset-0 animate-spin" style={{ animationDuration: '6s', animationDirection: 'reverse' }}>
-                    <div className="absolute bottom-0 left-1/2 w-2 h-2 -translate-x-1/2 translate-y-1/2 rounded-full bg-orange-400/70" />
+                    <div className="absolute bottom-0 left-1/2 w-2 h-2 -translate-x-1/2 translate-y-1/2 rounded-full bg-cyan-400/70" />
                   </div>
                 </div>
                 
                 {/* Step number */}
                 <div className="text-center mt-4">
-                  <span className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-500">
+                  <span className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
                     {currentStep + 1}
                   </span>
                   <span className="text-gray-500 text-lg">/{steps.length}</span>
@@ -213,8 +213,8 @@ const HowItWorksModal: React.FC<HowItWorksModalProps> = ({ isOpen, onClose, show
                 {currentStep === 5 && showDemoScores ? (
                   <div className="grid grid-cols-2 gap-3">
                     {[
-                      { key: 'god', name: 'GOD', icon: Flame, color: 'from-red-500 to-amber-500', textColor: 'text-red-400' },
-                      { key: 'yc', name: 'YC', icon: Lightbulb, color: 'from-orange-500 to-amber-500', textColor: 'text-orange-400' },
+                      { key: 'god', name: 'GOD', icon: Flame, color: 'from-red-500 to-blue-500', textColor: 'text-red-400' },
+                      { key: 'yc', name: 'YC', icon: Lightbulb, color: 'from-cyan-500 to-blue-500', textColor: 'text-cyan-400' },
                       { key: 'sequoia', name: 'Sequoia', icon: TrendingUp, color: 'from-emerald-500 to-green-500', textColor: 'text-emerald-400' },
                       { key: 'a16z', name: 'A16Z', icon: Code2, color: 'from-purple-500 to-indigo-500', textColor: 'text-purple-400' },
                     ].map((algo) => {
@@ -307,7 +307,7 @@ const HowItWorksModal: React.FC<HowItWorksModalProps> = ({ isOpen, onClose, show
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
               onClick={onClose}
-              className="px-8 py-3 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 text-white font-bold text-lg hover:from-orange-600 hover:to-amber-600 transition-all shadow-lg hover:shadow-orange-500/25 hover:scale-105"
+              className="px-8 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold text-lg hover:from-cyan-600 hover:to-blue-600 transition-all shadow-lg hover:shadow-cyan-500/25 hover:scale-105"
             >
               Start Matching
             </button>
@@ -333,7 +333,7 @@ const HowItWorksModal: React.FC<HowItWorksModalProps> = ({ isOpen, onClose, show
 
         {/* Background decoration */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-purple-500/20 to-transparent rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-orange-500/20 to-transparent rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-cyan-500/20 to-transparent rounded-full blur-3xl pointer-events-none" />
       </div>
 
       {/* CSS for animations */}

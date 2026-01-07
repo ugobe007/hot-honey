@@ -171,14 +171,14 @@ export default function TransparencyPanel({ matchScore, breakdown, startup, inve
             {/* Breakdown Tab */}
             {activeTab === 'breakdown' && (
               <div className="space-y-3">
-                <div className="bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/30 rounded-xl p-4">
+                <div className="bg-gradient-to-r from-cyan-500/10 to-blue-500/10 border border-cyan-500/30 rounded-xl p-4">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-yellow-300 font-semibold">GOD Score (Base)</span>
                     <span className="text-2xl font-bold text-white">{godScore}</span>
                   </div>
                   <div className="w-full bg-black/40 rounded-full h-2">
                     <div 
-                      className="bg-gradient-to-r from-yellow-400 to-orange-400 h-2 rounded-full transition-all"
+                      className="bg-gradient-to-r from-cyan-400 to-blue-400 h-2 rounded-full transition-all"
                       style={{ width: `${godScore}%` }}
                     ></div>
                   </div>
@@ -254,7 +254,7 @@ export default function TransparencyPanel({ matchScore, breakdown, startup, inve
                       <div className="text-gray-400 mb-1">🏢 Industries:</div>
                       <div className="flex flex-wrap gap-2 ml-4">
                         {(startup.industries || []).slice(0, 3).map((ind: string, i: number) => (
-                          <span key={i} className="px-2 py-1 bg-orange-500/20 text-orange-300 rounded text-xs">
+                          <span key={i} className="px-2 py-1 bg-cyan-600/20 text-cyan-300 rounded text-xs">
                             {ind}
                           </span>
                         ))}

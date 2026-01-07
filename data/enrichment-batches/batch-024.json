@@ -1,0 +1,426 @@
+[
+  {
+    "id": "9404a3ff-d869-489b-824e-9d87bb4b286b",
+    "name": "About Taking the (Firstround)",
+    "firm": "About Taking the (Firstround)",
+    "linkedin_url": "https://linkedin.com/in/about-taking-the",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "HealthTech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "99c7d328-da98-4879-868f-16debeaeaf06",
+    "name": "Tomasz Tunguz",
+    "firm": "Theory Ventures",
+    "linkedin_url": "https://linkedin.com/in/tunguz",
+    "blog_url": null,
+    "current_bio": "Former Redpoint partner. Led investments in Looker (acquired by Google), Monte Carlo, Kustomer.",
+    "current_sectors": [
+      "developer_tools",
+      "infrastructure",
+      "data",
+      "ai"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "c2d44f0c-f05f-46d0-b94d-6715aba492f2",
+    "name": "Leo Polovets",
+    "firm": "Susa Ventures",
+    "linkedin_url": "https://linkedin.com/in/leo-polovets",
+    "blog_url": null,
+    "current_bio": "Leo Polovets is an investor at Susa Ventures focused on Fintech, Healthcare, SaaS investing at Pre-seed and Seed stage.",
+    "current_sectors": [
+      "Fintech",
+      "Healthcare",
+      "SaaS"
+    ],
+    "current_stage": [
+      "Pre-seed",
+      "Seed"
+    ],
+    "missing_fields": [
+      "Investment Thesis"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "4f94dec0-2c3e-4a3d-ba48-a5cd4c06d2cf",
+    "name": "hours ago PAI (Pehub)",
+    "firm": "hours ago PAI (Pehub)",
+    "linkedin_url": "https://linkedin.com/in/hours-ago-pai",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Healthcare"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "bfe3eae2-16ad-4928-9eb2-70ebfdf6e72e",
+    "name": "Martin Casado",
+    "firm": "Martin Casado",
+    "linkedin_url": "https://linkedin.com/in/martin-casado",
+    "blog_url": null,
+    "current_bio": "Andreessen Horowitz General Partner focusing on infrastructure and AI investments",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "7f3f3f5e-1818-4d33-88a9-899fd0d1fdf4",
+    "name": "Accion Ventures Lab",
+    "firm": "Accion Ventures Lab",
+    "linkedin_url": "https://linkedin.com/in/accion-ventures-lab",
+    "blog_url": null,
+    "current_bio": "Accion Ventures Lab is a vc firm focused on Social Impact, Fintech, Insuretech investing at Pre-Seed and Seed stage.",
+    "current_sectors": [
+      "Social Impact",
+      "Fintech",
+      "Insuretech"
+    ],
+    "current_stage": [
+      "Pre-Seed",
+      "Seed"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "c5720b8c-4324-49f4-b8d9-8f692ead20ed",
+    "name": "ff Venture Capital",
+    "firm": "ff Venture Capital",
+    "linkedin_url": "https://linkedin.com/in/ff-venture-capital",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "aa0c4c84-dfcd-4194-90b6-d1047718174a",
+    "name": "Events ManagerVanessa ParedesSenior (Felicis)",
+    "firm": "Events ManagerVanessa ParedesSenior (Felicis)",
+    "linkedin_url": "https://linkedin.com/in/events-managervanessa-paredessenior",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "97961525-38fa-4c59-bd7e-ec8dfb23c95b",
+    "name": "Green Egg Ventures",
+    "firm": "Green Egg Ventures",
+    "linkedin_url": "https://linkedin.com/in/green-egg-ventures",
+    "blog_url": null,
+    "current_bio": "Green Egg Ventures is a vc firm focused on Enterprise Software, Adtech, Gaming/Sports investing at Pre-Seed and Seed stage.",
+    "current_sectors": [
+      "Enterprise Software",
+      "Adtech",
+      "Gaming/Sports",
+      "Marketplace"
+    ],
+    "current_stage": [
+      "Pre-Seed",
+      "Seed"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "65c33534-ae0f-466f-b0b6-b3ff3b8fb059",
+    "name": "Shiyan Koh (Hustle Fund)",
+    "firm": "Shiyan Koh (Hustle Fund)",
+    "linkedin_url": "https://linkedin.com/in/shiyan-koh",
+    "blog_url": null,
+    "current_bio": "General Partner at Hustle Fund",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "8b688547-f4fc-4964-affe-78a16ed55d34",
+    "name": "Million Equity",
+    "firm": "Million Equity",
+    "linkedin_url": "https://linkedin.com/in/million-equity",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "aad788e8-eb73-4b07-a04f-65e99ab01f5d",
+    "name": "Abby Levy (Hustle Fund)",
+    "firm": "Abby Levy (Hustle Fund)",
+    "linkedin_url": "https://linkedin.com/in/abby-levy",
+    "blog_url": null,
+    "current_bio": "General Partner at Hustle Fund",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "43b37521-5fa3-43f0-89d7-9a5f08e1cd23",
+    "name": "Kevin Thau (Spark Capital)",
+    "firm": "Kevin Thau (Spark Capital)",
+    "linkedin_url": "https://linkedin.com/in/kevin-thau",
+    "blog_url": null,
+    "current_bio": "Spark Capital is a venture firm that partners with exceptional founders. Invested in Twitter, Slack, Tumblr, and Wayfair.",
+    "current_sectors": [
+      "SaaS",
+      "Consumer",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A",
+      "Series B"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "b6dd47f8-abed-4781-80f6-0ce760dbce4c",
+    "name": "from our partners",
+    "firm": "from our partners",
+    "linkedin_url": "https://linkedin.com/in/from-our-partners",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "HealthTech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "7cc676d2-c193-43b3-b2fc-3a43491c4e6c",
+    "name": "Jennifer Moy (Boldstart)",
+    "firm": "Jennifer Moy (Boldstart)",
+    "linkedin_url": "https://linkedin.com/in/jennifer-moy",
+    "blog_url": null,
+    "current_bio": "Jennifer Moy is an investor at Boldstart focused on Enterprise, SaaS, Developer Tools investing at Pre-Seed and Seed stage.",
+    "current_sectors": [
+      "Enterprise",
+      "SaaS",
+      "Developer Tools"
+    ],
+    "current_stage": [
+      "Pre-Seed",
+      "Seed"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "df36dc7e-d977-48a6-b9a6-677d25bfecc6",
+    "name": "article David Hsu (Firstround)",
+    "firm": "article David Hsu (Firstround)",
+    "linkedin_url": "https://linkedin.com/in/article-david-hsu",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "HealthTech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "d2c07c5e-7fdc-4fa9-936b-4fce2175d385",
+    "name": "their private equity",
+    "firm": "their private equity",
+    "linkedin_url": "https://linkedin.com/in/their-private-equity",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "8cf8a869-b719-49b7-8606-42e6b47e14dc",
+    "name": "Anish Acharya",
+    "firm": "Anish Acharya",
+    "linkedin_url": "https://linkedin.com/in/anish-acharya",
+    "blog_url": null,
+    "current_bio": "General Partner at a16z consumer investing in AI and consumer apps",
+    "current_sectors": [
+      "AI/ML",
+      "Crypto",
+      "SaaS",
+      "Consumer"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A",
+      "Series B",
+      "Growth"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "a0e562ef-1c30-4a19-8e72-8da7369a8205",
+    "name": "our partners",
+    "firm": "our partners",
+    "linkedin_url": "https://linkedin.com/in/our-partners",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "HealthTech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "bf55d3f5-d9e1-4c7a-ab1e-0ec794751516",
+    "name": "Jeremy Philips",
+    "firm": "Jeremy Philips",
+    "linkedin_url": "https://linkedin.com/in/jeremy-philips",
+    "blog_url": null,
+    "current_bio": "Jeremy Philips is a angel investor focused on SaaS, Consumer, Fintech investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "Consumer",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A",
+      "Series B"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  }
+]

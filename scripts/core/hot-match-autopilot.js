@@ -1,0 +1,453 @@
+#!/usr/bin/env node
+/**
+ * HOT MATCH AUTOPILOT
+ * ===================
+ * Master automation script that runs the entire data pipeline:
+ * 
+ * 1. RSS Discovery - Fetch new startups from feeds
+ * 2. Inference Enrichment - Fill gaps without API calls
+ * 3. GOD Scoring - Score all startups
+ * 4. Match Generation - Create startup-investor matches
+ * 5. Data Validation - Ensure DB↔UI field alignment
+ * 
+ * Usage:
+ *   node scripts/hot-match-autopilot.js           # Run full pipeline
+ *   node scripts/hot-match-autopilot.js --quick   # Skip discovery, just score/match
+ *   node scripts/hot-match-autopilot.js --daemon  # Run continuously
+ * 
+ * PM2:
+ *   pm2 start scripts/hot-match-autopilot.js --name autopilot -- --daemon
+ */
+
+require('dotenv').config();
+const { createClient } = require('@supabase/supabase-js');
+const { execSync, spawn } = require('child_process');
+const fs = require('fs');
+const path = require('path');
+
+const supabase = createClient(
+  process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_KEY
+);
+
+// Configuration
+const CONFIG = {
+  DISCOVERY_INTERVAL: 30 * 60 * 1000,    // 30 minutes
+  ENRICHMENT_INTERVAL: 60 * 60 * 1000,   // 1 hour
+  SCORING_INTERVAL: 2 * 60 * 60 * 1000,  // 2 hours
+  MATCHING_INTERVAL: 4 * 60 * 60 * 1000, // 4 hours
+  VALIDATION_INTERVAL: 24 * 60 * 60 * 1000, // Daily
+};
+
+// Timestamps for daemon mode
+let lastDiscovery = 0;
+let lastEnrichment = 0;
+let lastScoring = 0;
+let lastMatching = 0;
+let lastValidation = 0;
+
+// Colors for logging
+const c = {
+  reset: '\x1b[0m',
+  red: '\x1b[31m',
+  green: '\x1b[32m',
+  yellow: '\x1b[33m',
+  blue: '\x1b[34m',
+  magenta: '\x1b[35m',
+  cyan: '\x1b[36m',
+  dim: '\x1b[2m',
+};
+
+function log(emoji, msg, color = '') {
+  const timestamp = new Date().toISOString().substring(11, 19);
+  console.log(`${c.dim}[${timestamp}]${c.reset} ${emoji} ${color}${msg}${c.reset}`);
+}
+
+function section(title) {
+  console.log(`\n${c.cyan}${'━'.repeat(60)}${c.reset}`);
+  console.log(`${c.cyan}  ${title}${c.reset}`);
+  console.log(`${c.cyan}${'━'.repeat(60)}${c.reset}\n`);
+}
+
+/**
+ * Run a script and capture output
+ */
+function runScript(scriptPath, args = [], timeout = 5 * 60 * 1000) {
+  const fullPath = path.join(process.cwd(), scriptPath);
+  if (!fs.existsSync(fullPath)) {
+    log('⚠️', `Script not found: ${scriptPath}`, c.yellow);
+    return { success: false, error: 'Script not found' };
+  }
+  
+  try {
+    const output = execSync(`node ${fullPath} ${args.join(' ')}`, {
+      encoding: 'utf-8',
+      timeout,
+      maxBuffer: 10 * 1024 * 1024,
+      cwd: process.cwd(),
+    });
+    return { success: true, output };
+  } catch (error) {
+    return { success: false, error: error.message, output: error.stdout };
+  }
+}
+
+/**
+ * STEP 1: RSS Discovery
+ */
+async function runDiscovery() {
+  section('📡 STEP 1: RSS DISCOVERY');
+  
+  // Check RSS sources
+  const { data: sources } = await supabase
+    .from('rss_sources')
+    .select('id, name, url')
+    .eq('active', true);
+  
+  log('📊', `Active RSS sources: ${sources?.length || 0}`);
+  
+  // Run simple RSS scraper first (no AI, fast)
+  log('🔄', 'Running simple RSS scraper...');
+  const rssResult = runScript('simple-rss-scraper.js', [], 10 * 60 * 1000);
+  
+  if (rssResult.success) {
+    log('✅', 'RSS scrape complete', c.green);
+  } else {
+    log('⚠️', 'RSS scrape had issues (continuing anyway)', c.yellow);
+  }
+  
+  // Check discovered startups
+  const { count: discoveredCount } = await supabase
+    .from('discovered_startups')
+    .select('id', { count: 'exact', head: true });
+  
+  log('📦', `Discovered startups pending: ${discoveredCount}`);
+  
+  // Auto-import high-confidence discoveries
+  if (discoveredCount > 0) {
+    log('🔄', 'Importing high-confidence discoveries...');
+    const importResult = runScript('import-discovered-startups.js', ['--auto'], 5 * 60 * 1000);
+    if (importResult.success) {
+      log('✅', 'Import complete', c.green);
+    }
+  }
+  
+  return true;
+}
+
+/**
+ * STEP 2: Inference Enrichment (No API calls!)
+ */
+async function runInferenceEnrichment() {
+  section('🧠 STEP 2: INFERENCE ENRICHMENT');
+  
+  // Count startups needing enrichment
+  const { data: needsEnrichment } = await supabase
+    .from('startup_uploads')
+    .select('id')
+    .or('extracted_data.is.null,total_god_score.is.null')
+    .limit(100);
+  
+  log('📊', `Startups needing enrichment: ${needsEnrichment?.length || 0}`);
+  
+  if (needsEnrichment?.length > 0) {
+    // Run startup inference engine
+    log('🔄', 'Running startup inference engine...');
+    const startupResult = runScript('startup-inference-engine.js', ['--limit', '50'], 10 * 60 * 1000);
+    if (startupResult.success) {
+      log('✅', 'Startup inference complete', c.green);
+    }
+  }
+  
+  // Check investors needing enrichment
+  const { data: investorsNeedEnrich } = await supabase
+    .from('investors')
+    .select('id')
+    .or('sectors.is.null,check_size_min.is.null')
+    .limit(100);
+  
+  log('📊', `Investors needing enrichment: ${investorsNeedEnrich?.length || 0}`);
+  
+  if (investorsNeedEnrich?.length > 0) {
+    log('🔄', 'Running investor inference engine...');
+    const investorResult = runScript('investor-inference-engine.js', ['--limit', '50'], 10 * 60 * 1000);
+    if (investorResult.success) {
+      log('✅', 'Investor inference complete', c.green);
+    }
+  }
+  
+  return true;
+}
+
+/**
+ * STEP 3: GOD Scoring
+ */
+async function runGODScoring() {
+  section('⚡ STEP 3: GOD SCORING');
+  
+  // Count unscored startups
+  const { data: unscored } = await supabase
+    .from('startup_uploads')
+    .select('id')
+    .is('total_god_score', null)
+    .limit(200);
+  
+  log('📊', `Unscored startups: ${unscored?.length || 0}`);
+  
+  if (unscored?.length > 0) {
+    log('🔄', 'Running GOD Score V5 (tiered)...');
+    const scoreResult = runScript('god-score-v5-tiered.js', [], 15 * 60 * 1000);
+    if (scoreResult.success) {
+      log('✅', 'GOD scoring complete', c.green);
+      
+      // Show distribution
+      const { data: dist } = await supabase.rpc('get_score_distribution');
+      if (dist) {
+        log('📈', `Score distribution: ${JSON.stringify(dist)}`);
+      }
+    }
+  } else {
+    log('✅', 'All startups scored', c.green);
+  }
+  
+  return true;
+}
+
+/**
+ * STEP 4: Match Generation
+ */
+async function runMatchGeneration() {
+  section('🔗 STEP 4: MATCH GENERATION');
+  
+  // Check current match count
+  const { count: matchCount } = await supabase
+    .from('startup_investor_matches')
+    .select('id', { count: 'exact', head: true });
+  
+  log('📊', `Current matches: ${matchCount || 0}`);
+  
+  // Check if we need to generate matches
+  const { count: startupCount } = await supabase
+    .from('startup_uploads')
+    .select('id', { count: 'exact', head: true })
+    .not('total_god_score', 'is', null);
+  
+  const { count: investorCount } = await supabase
+    .from('investors')
+    .select('id', { count: 'exact', head: true });
+  
+  const expectedMatches = Math.min(startupCount * 10, 50000); // ~10 matches per startup, cap at 50k
+  
+  if (!matchCount || matchCount < expectedMatches * 0.5) {
+    log('🔄', 'Running queue processor to generate matches...');
+    const matchResult = runScript('queue-processor-v16.js', [], 30 * 60 * 1000);
+    if (matchResult.success) {
+      log('✅', 'Match generation complete', c.green);
+    }
+  } else {
+    log('✅', `Matches look good (${matchCount} existing)`, c.green);
+  }
+  
+  return true;
+}
+
+/**
+ * STEP 5: Data Validation
+ */
+async function runDataValidation() {
+  section('🔍 STEP 5: DATA VALIDATION');
+  
+  // Check for data mismatches
+  const checks = [];
+  
+  // Check startups with missing critical fields
+  const { data: missingTagline } = await supabase
+    .from('startup_uploads')
+    .select('id')
+    .is('tagline', null)
+    .limit(100);
+  checks.push({ field: 'tagline', missing: missingTagline?.length || 0 });
+  
+  const { data: missingSectors } = await supabase
+    .from('startup_uploads')
+    .select('id')
+    .is('sectors', null)
+    .limit(100);
+  checks.push({ field: 'sectors', missing: missingSectors?.length || 0 });
+  
+  const { data: missingExtracted } = await supabase
+    .from('startup_uploads')
+    .select('id')
+    .is('extracted_data', null)
+    .limit(100);
+  checks.push({ field: 'extracted_data', missing: missingExtracted?.length || 0 });
+  
+  // Check investors
+  const { data: investorMissingBio } = await supabase
+    .from('investors')
+    .select('id')
+    .is('bio', null)
+    .limit(100);
+  checks.push({ field: 'investor.bio', missing: investorMissingBio?.length || 0 });
+  
+  const { data: investorMissingCheck } = await supabase
+    .from('investors')
+    .select('id')
+    .is('check_size_min', null)
+    .limit(100);
+  checks.push({ field: 'investor.check_size', missing: investorMissingCheck?.length || 0 });
+  
+  log('📊', 'Data completeness check:');
+  checks.forEach(({ field, missing }) => {
+    const status = missing === 0 ? '✅' : missing < 50 ? '⚠️' : '❌';
+    console.log(`   ${status} ${field}: ${missing} missing`);
+  });
+  
+  // If too many missing, trigger enrichment
+  const totalMissing = checks.reduce((sum, c) => sum + c.missing, 0);
+  if (totalMissing > 100) {
+    log('⚠️', `High missing data (${totalMissing}), triggering enrichment...`, c.yellow);
+    await runInferenceEnrichment();
+  }
+  
+  return true;
+}
+
+/**
+ * Get current stats
+ */
+async function getStats() {
+  const [startups, investors, matches, discovered, rss] = await Promise.all([
+    supabase.from('startup_uploads').select('id', { count: 'exact', head: true }),
+    supabase.from('investors').select('id', { count: 'exact', head: true }),
+    supabase.from('startup_investor_matches').select('id', { count: 'exact', head: true }),
+    supabase.from('discovered_startups').select('id', { count: 'exact', head: true }),
+    supabase.from('rss_sources').select('id', { count: 'exact', head: true }).eq('active', true),
+  ]);
+  
+  return {
+    startups: startups.count || 0,
+    investors: investors.count || 0,
+    matches: matches.count || 0,
+    discovered: discovered.count || 0,
+    rssSources: rss.count || 0,
+  };
+}
+
+/**
+ * Run full pipeline
+ */
+async function runFullPipeline(skipDiscovery = false) {
+  console.log(`
+${c.magenta}╔═══════════════════════════════════════════════════════════╗
+║                                                           ║
+║   🔥 HOT MATCH AUTOPILOT                                  ║
+║   Automated Data Pipeline                                 ║
+║                                                           ║
+╚═══════════════════════════════════════════════════════════╝${c.reset}
+`);
+  
+  const startTime = Date.now();
+  const initialStats = await getStats();
+  
+  log('📊', `Starting stats: ${initialStats.startups} startups, ${initialStats.investors} investors, ${initialStats.matches} matches`);
+  
+  try {
+    if (!skipDiscovery) {
+      await runDiscovery();
+      lastDiscovery = Date.now();
+    }
+    
+    await runInferenceEnrichment();
+    lastEnrichment = Date.now();
+    
+    await runGODScoring();
+    lastScoring = Date.now();
+    
+    await runMatchGeneration();
+    lastMatching = Date.now();
+    
+    await runDataValidation();
+    lastValidation = Date.now();
+    
+    const finalStats = await getStats();
+    const duration = ((Date.now() - startTime) / 1000).toFixed(1);
+    
+    section('✅ PIPELINE COMPLETE');
+    log('⏱️', `Duration: ${duration}s`);
+    log('📊', `Final stats: ${finalStats.startups} startups (+${finalStats.startups - initialStats.startups}), ${finalStats.investors} investors, ${finalStats.matches} matches`);
+    
+    return true;
+  } catch (error) {
+    log('❌', `Pipeline error: ${error.message}`, c.red);
+    return false;
+  }
+}
+
+/**
+ * Daemon mode - run continuously
+ */
+async function runDaemon() {
+  log('🚀', 'Starting autopilot in daemon mode...', c.green);
+  log('📅', `Discovery every ${CONFIG.DISCOVERY_INTERVAL / 60000} min`);
+  log('📅', `Enrichment every ${CONFIG.ENRICHMENT_INTERVAL / 60000} min`);
+  log('📅', `Scoring every ${CONFIG.SCORING_INTERVAL / 60000} min`);
+  log('📅', `Matching every ${CONFIG.MATCHING_INTERVAL / 60000} min`);
+  
+  // Initial run
+  await runFullPipeline();
+  
+  // Continuous loop
+  setInterval(async () => {
+    const now = Date.now();
+    
+    if (now - lastDiscovery >= CONFIG.DISCOVERY_INTERVAL) {
+      await runDiscovery();
+      lastDiscovery = now;
+    }
+    
+    if (now - lastEnrichment >= CONFIG.ENRICHMENT_INTERVAL) {
+      await runInferenceEnrichment();
+      lastEnrichment = now;
+    }
+    
+    if (now - lastScoring >= CONFIG.SCORING_INTERVAL) {
+      await runGODScoring();
+      lastScoring = now;
+    }
+    
+    if (now - lastMatching >= CONFIG.MATCHING_INTERVAL) {
+      await runMatchGeneration();
+      lastMatching = now;
+    }
+    
+    if (now - lastValidation >= CONFIG.VALIDATION_INTERVAL) {
+      await runDataValidation();
+      lastValidation = now;
+    }
+  }, 5 * 60 * 1000); // Check every 5 minutes
+}
+
+// Main
+const args = process.argv.slice(2);
+
+if (args.includes('--daemon')) {
+  runDaemon();
+} else if (args.includes('--quick')) {
+  runFullPipeline(true); // Skip discovery
+} else if (args.includes('--stats')) {
+  getStats().then(stats => {
+    console.log('\n📊 Current Stats:');
+    console.log(`   Startups: ${stats.startups}`);
+    console.log(`   Investors: ${stats.investors}`);
+    console.log(`   Matches: ${stats.matches}`);
+    console.log(`   Discovered (pending): ${stats.discovered}`);
+    console.log(`   RSS Sources: ${stats.rssSources}`);
+    process.exit(0);
+  });
+} else {
+  runFullPipeline().then(success => {
+    process.exit(success ? 0 : 1);
+  });
+}
+

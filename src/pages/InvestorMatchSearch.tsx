@@ -235,7 +235,7 @@ export default function InvestorMatchSearch() {
   const getConfidenceColor = (level: string) => {
     switch (level) {
       case 'high': return 'text-green-400 bg-green-400/20 border-green-400/30';
-      case 'medium': return 'text-yellow-400 bg-yellow-400/20 border-yellow-400/30';
+      case 'medium': return 'text-yellow-400 bg-yellow-400/20 border-cyan-400/30';
       case 'low': return 'text-red-400 bg-red-400/20 border-red-400/30';
       default: return 'text-gray-400 bg-gray-400/20 border-gray-400/30';
     }
@@ -316,7 +316,7 @@ export default function InvestorMatchSearch() {
             </div>
             <div className="bg-gray-800/50 rounded-xl border border-gray-700 p-4">
               <div className="text-sm text-gray-400 mb-1">Avg Match Score</div>
-              <div className="text-3xl font-bold text-amber-400">{stats.averageScore.toFixed(1)}</div>
+              <div className="text-3xl font-bold text-blue-400">{stats.averageScore.toFixed(1)}</div>
             </div>
           </div>
         )}

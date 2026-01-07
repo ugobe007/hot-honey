@@ -1,0 +1,478 @@
+[
+  {
+    "id": "0a95aab7-b682-4867-84f9-0f9b6b1729b8",
+    "name": "ResearchCaitlin Pintavorn",
+    "firm": "ResearchCaitlin Pintavorn",
+    "linkedin_url": null,
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [],
+    "missing_fields": [
+      "Bio",
+      "Stage",
+      "LinkedIn",
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Geography",
+      "Notable Investments"
+    ],
+    "priority": 8
+  },
+  {
+    "id": "9d7d654b-1575-4e29-bcae-fb36fc8ff396",
+    "name": "ai Alexander Schmitt (Lsvp)",
+    "firm": "ai Alexander Schmitt (Lsvp)",
+    "linkedin_url": null,
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [],
+    "missing_fields": [
+      "Bio",
+      "Stage",
+      "LinkedIn",
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Geography",
+      "Notable Investments"
+    ],
+    "priority": 8
+  },
+  {
+    "id": "6504d35e-195d-4767-8b8a-7b6bd307505b",
+    "name": "boldicorn Ed Sim (Boldstart)",
+    "firm": "boldicorn Ed Sim (Boldstart)",
+    "linkedin_url": null,
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "Technology"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio",
+      "LinkedIn",
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Geography",
+      "Notable Investments"
+    ],
+    "priority": 7
+  },
+  {
+    "id": "6accd665-9144-4d2a-8407-ed566e377a81",
+    "name": "Equity and Francisco (Pehub)",
+    "firm": "Equity and Francisco (Pehub)",
+    "linkedin_url": null,
+    "blog_url": null,
+    "current_bio": "Team member at Pehub. Discovered from: https://www.pehub.com/",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [],
+    "missing_fields": [
+      "Stage",
+      "LinkedIn",
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Geography",
+      "Notable Investments"
+    ],
+    "priority": 7
+  },
+  {
+    "id": "a4060d60-1fa3-45f4-a196-0a1901d2487a",
+    "name": "Wes Long, CPA, CFA",
+    "firm": "Wes Long, CPA, CFA",
+    "linkedin_url": null,
+    "blog_url": null,
+    "current_bio": "Wes Long, CPA, CFA is a venture capital firm focused on SaaS, AI/ML.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [],
+    "missing_fields": [
+      "Stage",
+      "LinkedIn",
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Geography",
+      "Notable Investments"
+    ],
+    "priority": 7
+  },
+  {
+    "id": "825c16b2-c65a-43a2-ab40-3820e7e2756d",
+    "name": "Tandis Moeini (Forerunner Ventures)",
+    "firm": "Tandis Moeini (Forerunner Ventures)",
+    "linkedin_url": null,
+    "blog_url": null,
+    "current_bio": "VP, Finance",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Bio",
+      "LinkedIn",
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Geography",
+      "Notable Investments"
+    ],
+    "priority": 7
+  },
+  {
+    "id": "3a07198e-88a4-4d43-9602-847675eeac12",
+    "name": "diverse as the (Lsvp)",
+    "firm": "diverse as the (Lsvp)",
+    "linkedin_url": null,
+    "blog_url": null,
+    "current_bio": "Team member at Lsvp. Discovered from: https://lsvp.com/team/",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [],
+    "missing_fields": [
+      "Stage",
+      "LinkedIn",
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Geography",
+      "Notable Investments"
+    ],
+    "priority": 7
+  },
+  {
+    "id": "15056504-dc41-4609-8241-631218f91e9c",
+    "name": "Vicki Sato",
+    "firm": "Vicki Sato",
+    "linkedin_url": null,
+    "blog_url": null,
+    "current_bio": "Venture Partner at Archventure",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [],
+    "missing_fields": [
+      "Stage",
+      "LinkedIn",
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Geography",
+      "Notable Investments"
+    ],
+    "priority": 7
+  },
+  {
+    "id": "9a2572f4-30f8-4409-8e8e-e28ea7c953d3",
+    "name": "Earl Jones Operating (Dcvc)",
+    "firm": "Earl Jones Operating (Dcvc)",
+    "linkedin_url": null,
+    "blog_url": null,
+    "current_bio": "Team member at Dcvc. Discovered from: https://www.dcvc.com/team",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [],
+    "missing_fields": [
+      "Stage",
+      "LinkedIn",
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Geography",
+      "Notable Investments"
+    ],
+    "priority": 7
+  },
+  {
+    "id": "90117692-b0cf-4e15-9145-c4d58c2e90f3",
+    "name": "venture capital limited (Greylock)",
+    "firm": "venture capital limited (Greylock)",
+    "linkedin_url": null,
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "Technology"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio",
+      "LinkedIn",
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Geography",
+      "Notable Investments"
+    ],
+    "priority": 7
+  },
+  {
+    "id": "45f9fcb8-a822-42e3-9291-5927d1d7ab78",
+    "name": "Musk PlaybookThe management",
+    "firm": "Musk PlaybookThe management",
+    "linkedin_url": null,
+    "blog_url": null,
+    "current_bio": "Discovered from: https://www.generalist.com/",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [],
+    "missing_fields": [
+      "Stage",
+      "LinkedIn",
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Geography",
+      "Notable Investments"
+    ],
+    "priority": 7
+  },
+  {
+    "id": "981819f8-02f8-4eac-8d7e-111da5347d0c",
+    "name": "Peter Mintun",
+    "firm": "Peter Mintun",
+    "linkedin_url": null,
+    "blog_url": null,
+    "current_bio": "Associate at Archventure",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [],
+    "missing_fields": [
+      "Stage",
+      "LinkedIn",
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Geography",
+      "Notable Investments"
+    ],
+    "priority": 7
+  },
+  {
+    "id": "cc42946e-2406-49e6-b28c-ad4e7ab960b5",
+    "name": "Andy May Operating (Dcvc)",
+    "firm": "Andy May Operating (Dcvc)",
+    "linkedin_url": null,
+    "blog_url": null,
+    "current_bio": "Team member at Dcvc. Discovered from: https://www.dcvc.com/team",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [],
+    "missing_fields": [
+      "Stage",
+      "LinkedIn",
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Geography",
+      "Notable Investments"
+    ],
+    "priority": 7
+  },
+  {
+    "id": "53302cf1-5585-4e77-83d3-0053cf4422d8",
+    "name": "megaround raiser Databricks was the top fund",
+    "firm": "megaround raiser Databricks was the top fund",
+    "linkedin_url": null,
+    "blog_url": null,
+    "current_bio": "Discovered from: Crunchbase",
+    "current_sectors": [
+      "CleanTech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "LinkedIn",
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Geography",
+      "Notable Investments"
+    ],
+    "priority": 6
+  },
+  {
+    "id": "c176e522-73f3-4226-87e8-fecf98cef7c4",
+    "name": "private equity firmsDealsNewsPAI (Penews)",
+    "firm": "private equity firmsDealsNewsPAI (Penews)",
+    "linkedin_url": null,
+    "blog_url": null,
+    "current_bio": "Team member at Penews. Discovered from: https://www.penews.com/",
+    "current_sectors": [
+      "Technology"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "LinkedIn",
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Geography",
+      "Notable Investments"
+    ],
+    "priority": 6
+  },
+  {
+    "id": "66d6a3c5-dd4e-4486-9b2d-6ae3eb5be761",
+    "name": "Bullpen Capital",
+    "firm": "Bullpen Capital",
+    "linkedin_url": null,
+    "blog_url": null,
+    "current_bio": "Bullpen Capital is a venture capital firm focused on AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "LinkedIn",
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Geography",
+      "Notable Investments"
+    ],
+    "priority": 6
+  },
+  {
+    "id": "c370a9d0-ac50-4e75-9275-14943b621fad",
+    "name": "Phoenix Fund",
+    "firm": "Phoenix Fund",
+    "linkedin_url": null,
+    "blog_url": null,
+    "current_bio": "Phoenix Fund is a venture capital firm focused on FinTech investing at Seed and Series A stage.",
+    "current_sectors": [
+      "FinTech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "LinkedIn",
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Geography",
+      "Notable Investments"
+    ],
+    "priority": 6
+  },
+  {
+    "id": "21e98195-087c-4461-b55e-967d6b04beea",
+    "name": "working with (Matrixpartners)",
+    "firm": "working with (Matrixpartners)",
+    "linkedin_url": null,
+    "blog_url": null,
+    "current_bio": "Team member at Matrixpartners. Discovered from: https://www.matrixpartners.com/team/",
+    "current_sectors": [
+      "Technology"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "LinkedIn",
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Geography",
+      "Notable Investments"
+    ],
+    "priority": 6
+  },
+  {
+    "id": "cf387bf6-8e80-458d-862e-622487a67dec",
+    "name": "Bezos PlaybookThe management",
+    "firm": "Bezos PlaybookThe management",
+    "linkedin_url": null,
+    "blog_url": null,
+    "current_bio": "Discovered from: https://www.generalist.com/",
+    "current_sectors": [
+      "Technology"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "LinkedIn",
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Geography",
+      "Notable Investments"
+    ],
+    "priority": 6
+  },
+  {
+    "id": "57b4ec0a-1e18-4a91-942b-5c00864fbb55",
+    "name": "Long Journey Ventures",
+    "firm": "Long Journey Ventures",
+    "linkedin_url": null,
+    "blog_url": null,
+    "current_bio": "Discovered from: FinSMEs",
+    "current_sectors": [
+      "FinTech",
+      "HealthTech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "LinkedIn",
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Geography",
+      "Notable Investments"
+    ],
+    "priority": 6
+  }
+]

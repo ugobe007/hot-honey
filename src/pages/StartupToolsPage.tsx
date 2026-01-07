@@ -221,7 +221,7 @@ export default function StartupToolsPage() {
                       <Icon className="w-6 h-6 text-white" />
                     </div>
                     {tool.badge && (
-                      <span className="px-2 py-1 bg-orange-500/20 text-orange-300 text-xs rounded-full">
+                      <span className="px-2 py-1 bg-cyan-600/20 text-cyan-300 text-xs rounded-full">
                         {tool.badge}
                       </span>
                     )}
@@ -276,7 +276,7 @@ export default function StartupToolsPage() {
         })}
 
         {/* Quick Actions */}
-        <div className="mt-16 bg-gradient-to-r from-purple-500/20 to-orange-500/20 rounded-2xl p-8 border border-white/20">
+        <div className="mt-16 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-2xl p-8 border border-white/20">
           <h2 className="text-2xl font-bold text-white mb-4">Ready to Get Started?</h2>
           <p className="text-white/70 mb-6">
             Submit your startup to get matched with investors, or explore our tools to find the perfect fit.
@@ -284,7 +284,7 @@ export default function StartupToolsPage() {
           <div className="flex gap-4">
             <Link
               to="/submit"
-              className="px-6 py-3 bg-gradient-to-r from-orange-500 to-amber-600 text-white font-semibold rounded-lg hover:from-orange-600 hover:to-amber-700 transition-all"
+              className="px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-semibold rounded-lg hover:from-cyan-600 hover:to-blue-700 transition-all"
             >
               Submit Your Startup
             </Link>

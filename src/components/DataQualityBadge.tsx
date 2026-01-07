@@ -128,7 +128,7 @@ export default function DataQualityBadge({ variant = 'inline', showDetails = fal
           health.status === 'healthy' 
             ? 'bg-green-500/10 border-green-500/30 hover:border-green-500/50' 
             : health.status === 'stale'
-            ? 'bg-yellow-500/10 border-yellow-500/30 hover:border-yellow-500/50'
+            ? 'bg-yellow-500/10 border-cyan-500/30 hover:border-yellow-500/50'
             : 'bg-red-500/10 border-red-500/30 hover:border-red-500/50'
         }`}>
           {health.status === 'healthy' ? (
@@ -175,7 +175,7 @@ export default function DataQualityBadge({ variant = 'inline', showDetails = fal
                 <span className={`font-medium ${
                   health.avgGodScore >= 60 ? 'text-green-400' :
                   health.avgGodScore >= 45 ? 'text-yellow-400' :
-                  'text-orange-400'
+                  'text-cyan-400'
                 }`}>
                   {health.avgGodScore.toFixed(0)}/100
                 </span>
@@ -207,7 +207,7 @@ export default function DataQualityBadge({ variant = 'inline', showDetails = fal
     return (
       <div className={`w-full px-4 py-2 flex items-center justify-center gap-2 text-sm ${
         health.status === 'stale' 
-          ? 'bg-yellow-500/10 border-b border-yellow-500/30 text-yellow-400'
+          ? 'bg-yellow-500/10 border-b border-cyan-500/30 text-yellow-400'
           : 'bg-red-500/10 border-b border-red-500/30 text-red-400'
       }`}>
         {health.status === 'stale' ? (

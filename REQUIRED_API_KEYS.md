@@ -45,8 +45,9 @@ flyctl secrets set ANTHROPIC_API_KEY=sk-ant-your-key-here
 
 ### 2. **Resend API Key** (Email Notifications)
 **Status**: ⚠️ Optional
-**Used in**: `scripts/notifications.ts`
+**Used in**: `scripts/notifications.ts`, `server/services/emailNotifications.ts`
 **Purpose**: Sending email notifications
+**MCP Server**: Available via Cursor IDE MCP integration
 
 **How to get:**
 1. Go to https://resend.com/
@@ -57,12 +58,53 @@ flyctl secrets set ANTHROPIC_API_KEY=sk-ant-your-key-here
 
 **To set:**
 ```bash
+# For local development
+echo "RESEND_API_KEY=re_your-key-here" >> .env
+
+# For production (Fly.io)
 flyctl secrets set RESEND_API_KEY=re_your-key-here
 ```
+
+**MCP Configuration:**
+- See `MCP_SETUP.md` for Cursor IDE MCP server setup
+- Template available in `mcp.json.template`
 
 **Check if needed:**
 - Only needed if you want email notifications
 - System will work without it (notifications just won't send)
+
+---
+
+### 2b. **TestSprite API Key** (Testing & QA)
+**Status**: ⚠️ Optional
+**Used in**: Automated testing via MCP server
+**Purpose**: Run automated tests, generate test reports, check code quality
+**MCP Server**: Available via Cursor IDE MCP integration
+
+**How to get:**
+1. Go to https://testsprite.com/ (or check their documentation)
+2. Sign up / Log in
+3. Navigate to API Keys section
+4. Create new API key
+5. Copy the key
+
+**To set:**
+```bash
+# For local development
+echo "TESTSPRITE_API_KEY=your-key-here" >> .env
+
+# For production (if needed)
+flyctl secrets set TESTSPRITE_API_KEY=your-key-here
+```
+
+**MCP Configuration:**
+- See `MCP_SETUP.md` for Cursor IDE MCP server setup
+- Template available in `mcp.json.template`
+- Run `./scripts/setup-mcp.sh` for automated setup
+
+**Check if needed:**
+- Only needed if you want to use TestSprite for automated testing
+- Useful for CI/CD and quality assurance
 
 ---
 
@@ -96,7 +138,8 @@ flyctl secrets set CRUNCHBASE_API_KEY=your-key-here
 
 ### Optional (Check if Needed)
 - [ ] Anthropic API Key (for RSS discovery AI)
-- [ ] Resend API Key (for email notifications)
+- [ ] Resend API Key (for email notifications) - MCP available
+- [ ] TestSprite API Key (for automated testing) - MCP available
 - [ ] Crunchbase API Key (for enhanced data)
 
 ---
@@ -133,8 +176,11 @@ If you want to add optional keys:
 # Anthropic (for RSS AI)
 flyctl secrets set ANTHROPIC_API_KEY=sk-ant-your-key-here
 
-# Resend (for emails)
+# Resend (for emails) - MCP available
 flyctl secrets set RESEND_API_KEY=re_your-key-here
+
+# TestSprite (for testing) - MCP available
+flyctl secrets set TESTSPRITE_API_KEY=your-key-here
 
 # Crunchbase (for enhanced data)
 flyctl secrets set CRUNCHBASE_API_KEY=your-key-here
@@ -147,8 +193,14 @@ flyctl secrets set CRUNCHBASE_API_KEY=your-key-here
 1. **Supabase credentials are embedded in the build** - you need to rebuild locally with them
 2. **OpenAI key is set** - used for AI features
 3. **Anthropic key** - only needed if RSS discovery AI is active
-4. **Resend key** - only needed for email notifications
-5. **Crunchbase key** - optional enhancement, not required
+4. **Resend key** - only needed for email notifications (MCP server available)
+5. **TestSprite key** - only needed for automated testing (MCP server available)
+6. **Crunchbase key** - optional enhancement, not required
+
+**MCP Server Setup:**
+- See `MCP_SETUP.md` for complete MCP configuration guide
+- Run `./scripts/setup-mcp.sh` for automated setup
+- MCP servers allow you to use Resend and TestSprite directly from Cursor IDE
 
 ---
 

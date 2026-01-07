@@ -1,0 +1,427 @@
+[
+  {
+    "id": "b0c18b14-66b7-4490-a32e-590d973fb4fe",
+    "name": "Sophia Lee",
+    "firm": "Sophia Lee",
+    "linkedin_url": "https://linkedin.com/in/sophia-lee",
+    "blog_url": null,
+    "current_bio": "Team Member at Ribbitcap",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "07e5cf2d-18f4-4521-b448-6e87a4250211",
+    "name": "Navin Chadha",
+    "firm": "Navin Chadha",
+    "linkedin_url": "https://linkedin.com/in/navin-chadha",
+    "blog_url": null,
+    "current_bio": "Partner at Mayfield, focusing on SaaS seed investments",
+    "current_sectors": [
+      "API",
+      "Enterprise",
+      "SaaS"
+    ],
+    "current_stage": [
+      "Pre-seed",
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "3182a128-77e0-422f-8762-492938d150c1",
+    "name": "Paradigm",
+    "firm": "Paradigm",
+    "linkedin_url": "https://linkedin.com/in/paradigm",
+    "blog_url": "https://paradigm.xyz",
+    "current_bio": "A research-driven crypto investment firm funding companies and protocols from their earliest stages.",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "b6c6d372-6a3e-435e-875b-76cdce1f62d2",
+    "name": "Matt Tracey",
+    "firm": "Matt Tracey",
+    "linkedin_url": "https://linkedin.com/in/matt-tracey",
+    "blog_url": null,
+    "current_bio": "Team Member at Ribbitcap",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "a18a9dca-4bd0-45c8-965a-3308b26df7bb",
+    "name": "Neue Fund",
+    "firm": "Neue Fund",
+    "linkedin_url": "https://linkedin.com/in/neue-fund",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "Social Impact",
+      "Healthcare",
+      "Wellness",
+      "HR",
+      "Education",
+      "Sustainability"
+    ],
+    "current_stage": [
+      "Pre-Seed",
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "2b516412-2315-472d-9b13-3095d0507eb6",
+    "name": "Carmen Chang",
+    "firm": "Carmen Chang",
+    "linkedin_url": "https://linkedin.com/in/carmen-chang",
+    "blog_url": null,
+    "current_bio": "Partner, Head of Asia",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "6bbd9db6-3ad6-4cdb-b30f-80d29cca1422",
+    "name": "Jaime Brantley",
+    "firm": "Jaime Brantley",
+    "linkedin_url": "https://linkedin.com/in/jaime-brantley",
+    "blog_url": null,
+    "current_bio": "Team Member at Ribbitcap",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "ccbcc992-05ed-4ea8-a617-67ec47b58287",
+    "name": "Eric Wagner",
+    "firm": "Eric Wagner",
+    "linkedin_url": "https://linkedin.com/in/eric-wagner",
+    "blog_url": null,
+    "current_bio": "Director of Research and Data at Felicis",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "977bb427-bf1e-437a-9a52-c4feaad3ecd3",
+    "name": "Myles Gutenkunst",
+    "firm": "Myles Gutenkunst",
+    "linkedin_url": "https://linkedin.com/in/myles-gutenkunst",
+    "blog_url": null,
+    "current_bio": "Index Ventures Investor",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "315ef4f8-3477-4a57-ba4d-2ad2c569d341",
+    "name": "AJ Tennant",
+    "firm": "AJ Tennant",
+    "linkedin_url": "https://linkedin.com/in/aj-tennant",
+    "blog_url": null,
+    "current_bio": "New team member at Accel",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "e3d151ff-ab94-466b-948b-319b67583732",
+    "name": "Samit Kalra",
+    "firm": "1984 Ventures",
+    "linkedin_url": "https://linkedin.com/in/samit-kalra",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "Ecommerce",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "a63dee0e-5712-4f46-b4d3-51c3e0525af3",
+    "name": "Sparky",
+    "firm": "Sparky",
+    "linkedin_url": "https://linkedin.com/in/sparky",
+    "blog_url": null,
+    "current_bio": "Muse and boldicorn at Boldstart",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "c106c860-8f16-4a5f-8452-b94153eb205a",
+    "name": "Andrea Jackson",
+    "firm": "Andrea Jackson",
+    "linkedin_url": "https://linkedin.com/in/andrea-jackson",
+    "blog_url": null,
+    "current_bio": "Partner at Northpondventures",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "eb501462-158d-4869-8c62-589dc1f3a517",
+    "name": "Markus Enzelberger, Ph.D.",
+    "firm": "Markus Enzelberger, Ph.D.",
+    "linkedin_url": "https://linkedin.com/in/markus-enzelberger",
+    "blog_url": null,
+    "current_bio": "Partner at Versantventures",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "c22c8fd6-479c-4c70-8fae-82237b1cd7d8",
+    "name": "Neeraj Padmanabhan",
+    "firm": "Neeraj Padmanabhan",
+    "linkedin_url": "https://linkedin.com/in/neeraj-padmanabhan",
+    "blog_url": null,
+    "current_bio": "Research Associate at Forerunnerventures",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "297926b7-9a2a-4c3d-bf7a-78edbb01c49a",
+    "name": "Mutares",
+    "firm": "Mutares",
+    "linkedin_url": "https://linkedin.com/in/mutares",
+    "blog_url": null,
+    "current_bio": "Private equity firm acquiring Gas Solutions business from Wärtsilä",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "bafd3c99-5a8b-42bc-8ca2-76f4439919d3",
+    "name": "Eric Hippeau",
+    "firm": "Eric Hippeau",
+    "linkedin_url": "https://linkedin.com/in/eric-hippeau",
+    "blog_url": null,
+    "current_bio": "Managing Partner at Lererhippeau since 2010",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "8dc6ac8b-0976-409c-9f70-15a0dfbcd10e",
+    "name": "AngelList",
+    "firm": "AngelList",
+    "linkedin_url": "https://linkedin.com/in/angellist",
+    "blog_url": null,
+    "current_bio": "Angel investing platform",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "baf7164d-4b33-4f6e-a48d-97d90cef813f",
+    "name": "Lara Hoth",
+    "firm": "Lara Hoth",
+    "linkedin_url": "https://linkedin.com/in/lara-hoth",
+    "blog_url": null,
+    "current_bio": "VP, Management Company Finance and Accounting at Versantventures",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "e7cd9b5c-d73e-4935-98ce-1aa9eda90a23",
+    "name": "Olivia Zetter",
+    "firm": "Olivia Zetter",
+    "linkedin_url": "https://linkedin.com/in/olivia-zetter",
+    "blog_url": null,
+    "current_bio": "Strategic Advisor & Venture Partner at Archventure",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  }
+]

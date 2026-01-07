@@ -10,7 +10,7 @@ export default function About() {
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
-        <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
       </div>
 
       {/* Logo Dropdown Menu */}
@@ -20,13 +20,13 @@ export default function About() {
       <div className="fixed top-6 right-8 z-50 flex items-center gap-4">
         <Link 
           to="/get-matched" 
-          className="px-5 py-2.5 bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-500 hover:to-amber-600 text-purple-900 font-bold rounded-xl transition-all shadow-lg"
+          className="px-5 py-2.5 bg-gradient-to-r from-yellow-400 to-blue-500 hover:from-yellow-500 hover:to-blue-600 text-purple-900 font-bold rounded-xl transition-all shadow-lg"
         >
           Get Matched
         </Link>
         <Link 
           to="/login" 
-          className="px-5 py-2.5 bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-500 hover:to-amber-600 text-purple-900 font-bold rounded-xl transition-all shadow-lg"
+          className="px-5 py-2.5 bg-gradient-to-r from-yellow-400 to-blue-500 hover:from-yellow-500 hover:to-blue-600 text-purple-900 font-bold rounded-xl transition-all shadow-lg"
         >
           Log In
         </Link>
@@ -40,7 +40,7 @@ export default function About() {
             <span className="text-purple-300 text-sm font-medium">AI-Powered Startup-Investor Matching</span>
           </div>
           <h1 className="text-5xl md:text-7xl font-bold mb-6">
-            About <span className="bg-gradient-to-r from-orange-400 via-red-500 to-yellow-400 bg-clip-text text-transparent">Hot Match</span>
+            About <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-violet-400 bg-clip-text text-transparent">Hot Match</span>
           </h1>
           <p className="text-2xl text-gray-300 max-w-3xl mx-auto mb-8">
             Where AI meets intuition to create perfect startup-investor connections in seconds.
@@ -51,7 +51,7 @@ export default function About() {
         <div className="max-w-4xl mx-auto mb-20">
           <div className="bg-gradient-to-br from-purple-900/50 to-indigo-900/50 backdrop-blur-lg rounded-3xl p-10 border border-purple-500/30 shadow-2xl">
             <div className="flex items-center gap-4 mb-6">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center shadow-lg">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-cyan-600 to-blue-600 flex items-center justify-center shadow-lg">
                 <Target className="w-8 h-8 text-white" />
               </div>
               <h2 className="text-3xl font-bold text-white">Our Mission</h2>
@@ -89,9 +89,9 @@ export default function About() {
 
             {/* Step 2 */}
             <div className="group relative">
-              <div className="absolute -inset-1 bg-gradient-to-r from-orange-600 to-red-600 rounded-3xl blur opacity-25 group-hover:opacity-50 transition-opacity"></div>
-              <div className="relative bg-gradient-to-br from-[#1a0033] to-[#2d1b4e] rounded-3xl p-8 border border-orange-500/30 h-full">
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center mb-6 shadow-lg">
+              <div className="absolute -inset-1 bg-gradient-to-r from-cyan-600 to-blue-600 rounded-3xl blur opacity-25 group-hover:opacity-50 transition-opacity"></div>
+              <div className="relative bg-gradient-to-br from-[#1a0033] to-[#2d1b4e] rounded-3xl p-8 border border-cyan-500/30 h-full">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-600 to-blue-600 flex items-center justify-center mb-6 shadow-lg">
                   <span className="text-2xl font-bold text-white">2</span>
                 </div>
                 <h3 className="text-2xl font-bold text-white mb-4">AI Finds Your Match</h3>
@@ -172,7 +172,7 @@ export default function About() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
             <div className="bg-gradient-to-br from-[#1a0033]/80 to-[#2d1b4e]/80 backdrop-blur-lg rounded-2xl p-6 border border-purple-500/20 text-center hover:scale-105 transition-all">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-yellow-500 to-orange-500 flex items-center justify-center mx-auto mb-4 shadow-lg">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center mx-auto mb-4 shadow-lg">
                 <Zap className="w-6 h-6 text-white" />
               </div>
               <h3 className="text-lg font-bold text-white mb-2">Lightning Fast</h3>
@@ -193,7 +193,7 @@ export default function About() {
               <p className="text-gray-400 text-sm">500+ investors, 700+ startups in our network</p>
             </div>
             <div className="bg-gradient-to-br from-[#1a0033]/80 to-[#2d1b4e]/80 backdrop-blur-lg rounded-2xl p-6 border border-purple-500/20 text-center hover:scale-105 transition-all">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-red-500 to-orange-500 flex items-center justify-center mx-auto mb-4 shadow-lg">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-violet-500 flex items-center justify-center mx-auto mb-4 shadow-lg">
                 <Heart className="w-6 h-6 text-white" />
               </div>
               <h3 className="text-lg font-bold text-white mb-2">Human Touch</h3>
@@ -275,19 +275,19 @@ export default function About() {
         <div className="mb-20">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-5xl mx-auto">
             <div className="bg-gradient-to-br from-[#1a0033]/80 to-[#2d1b4e]/80 backdrop-blur-lg rounded-2xl p-6 border border-purple-500/20 text-center">
-              <div className="text-4xl font-bold bg-gradient-to-r from-orange-400 to-yellow-400 bg-clip-text text-transparent mb-2">700+</div>
+              <div className="text-4xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent mb-2">700+</div>
               <div className="text-gray-400">Startups</div>
             </div>
             <div className="bg-gradient-to-br from-[#1a0033]/80 to-[#2d1b4e]/80 backdrop-blur-lg rounded-2xl p-6 border border-purple-500/20 text-center">
-              <div className="text-4xl font-bold bg-gradient-to-r from-orange-400 to-yellow-400 bg-clip-text text-transparent mb-2">500+</div>
+              <div className="text-4xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent mb-2">500+</div>
               <div className="text-gray-400">Investors</div>
             </div>
             <div className="bg-gradient-to-br from-[#1a0033]/80 to-[#2d1b4e]/80 backdrop-blur-lg rounded-2xl p-6 border border-purple-500/20 text-center">
-              <div className="text-4xl font-bold bg-gradient-to-r from-orange-400 to-yellow-400 bg-clip-text text-transparent mb-2">337+</div>
+              <div className="text-4xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent mb-2">337+</div>
               <div className="text-gray-400">Matches Made</div>
             </div>
             <div className="bg-gradient-to-br from-[#1a0033]/80 to-[#2d1b4e]/80 backdrop-blur-lg rounded-2xl p-6 border border-purple-500/20 text-center">
-              <div className="text-4xl font-bold bg-gradient-to-r from-orange-400 to-yellow-400 bg-clip-text text-transparent mb-2">60s</div>
+              <div className="text-4xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent mb-2">60s</div>
               <div className="text-gray-400">Average Match Time</div>
             </div>
           </div>
@@ -303,7 +303,7 @@ export default function About() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 to="/get-matched"
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold text-lg rounded-xl transition-all shadow-lg hover:shadow-orange-500/30"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold text-lg rounded-xl transition-all shadow-lg hover:shadow-cyan-500/30"
               >
                 <Zap className="w-5 h-5" />
                 Get Matched Now

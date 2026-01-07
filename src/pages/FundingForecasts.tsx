@@ -204,14 +204,14 @@ export default function FundingForecasts() {
   const getProbabilityColor = (prob: number) => {
     if (prob >= 80) return 'text-green-400';
     if (prob >= 60) return 'text-yellow-400';
-    if (prob >= 40) return 'text-orange-400';
+    if (prob >= 40) return 'text-cyan-400';
     return 'text-red-400';
   };
 
   const getProbabilityBg = (prob: number) => {
     if (prob >= 80) return 'bg-green-500/20 border-green-500/30';
     if (prob >= 60) return 'bg-yellow-500/20 border-yellow-500/30';
-    if (prob >= 40) return 'bg-orange-500/20 border-orange-500/30';
+    if (prob >= 40) return 'bg-cyan-600/20 border-cyan-500/30';
     return 'bg-red-500/20 border-red-500/30';
   };
 
@@ -238,7 +238,7 @@ export default function FundingForecasts() {
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent flex items-center gap-3">
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-400 via-blue-400 to-violet-400 bg-clip-text text-transparent flex items-center gap-3">
               <Sparkles className="w-8 h-8 text-purple-400" />
               Funding Forecast Engine
             </h1>
@@ -280,12 +280,12 @@ export default function FundingForecasts() {
             <div className="text-3xl font-bold text-yellow-400">{stats.likely}</div>
           </div>
           
-          <div className="bg-gradient-to-br from-orange-900/40 to-orange-800/20 rounded-xl p-5 border border-orange-500/30">
+          <div className="bg-gradient-to-br from-slate-800/40 to-slate-700/20 rounded-xl p-5 border border-cyan-500/30">
             <div className="flex items-center gap-3 mb-2">
-              <Clock className="w-5 h-5 text-orange-400" />
+              <Clock className="w-5 h-5 text-cyan-400" />
               <span className="text-gray-400 text-sm">Imminent (3mo)</span>
             </div>
-            <div className="text-3xl font-bold text-orange-400">{stats.imminent}</div>
+            <div className="text-3xl font-bold text-cyan-400">{stats.imminent}</div>
           </div>
           
           <div className="bg-gradient-to-br from-cyan-900/40 to-cyan-800/20 rounded-xl p-5 border border-cyan-500/30">

@@ -90,7 +90,7 @@ export default function MigrateLocalStorage() {
   const localStartups = checkLocalStorage();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-purple-800 to-orange-600 p-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-8">
       <div className="max-w-4xl mx-auto">
         
         {/* Header */}
@@ -117,16 +117,16 @@ export default function MigrateLocalStorage() {
           
           {localStartups && localStartups.length > 0 ? (
             <div className="space-y-4">
-              <div className="bg-orange-500/20 border border-orange-400 rounded-xl p-4">
+              <div className="bg-cyan-600/20 border border-cyan-400 rounded-xl p-4">
                 <p className="text-white text-lg">
-                  <strong className="text-orange-300">💾 Found in localStorage:</strong> {localStartups.length} startups
+                  <strong className="text-cyan-300">💾 Found in localStorage:</strong> {localStartups.length} startups
                 </p>
                 <ul className="mt-3 space-y-1 text-white/80 text-sm">
                   {localStartups.slice(0, 10).map((s: any, i: number) => (
                     <li key={i}>• {s.name}</li>
                   ))}
                   {localStartups.length > 10 && (
-                    <li className="text-orange-300">... and {localStartups.length - 10} more</li>
+                    <li className="text-cyan-300">... and {localStartups.length - 10} more</li>
                   )}
                 </ul>
               </div>
@@ -188,7 +188,7 @@ export default function MigrateLocalStorage() {
                 <div className="mt-6 pt-6 border-t border-white/20">
                   <button
                     onClick={clearLocalStorage}
-                    className="w-full py-3 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl transition-all"
+                    className="w-full py-3 bg-cyan-600 hover:bg-cyan-700 text-white font-bold rounded-xl transition-all"
                   >
                     ✨ Clear localStorage Now (Recommended)
                   </button>

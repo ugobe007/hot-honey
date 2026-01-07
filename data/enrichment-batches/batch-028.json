@@ -1,0 +1,433 @@
+[
+  {
+    "id": "e8721db8-7316-4d14-9138-4d679c3ca7d2",
+    "name": "Off The Grid Ventures",
+    "firm": "Off The Grid Ventures",
+    "linkedin_url": "https://linkedin.com/in/off-the-grid-ventures",
+    "blog_url": null,
+    "current_bio": "Off The Grid Ventures is a vc firm focused on Enterprise Software, Minority Founders, Female Founders investing at Pre-Seed and Seed stage.",
+    "current_sectors": [
+      "Enterprise Software",
+      "Minority Founders",
+      "Female Founders"
+    ],
+    "current_stage": [
+      "Pre-Seed",
+      "Seed"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "5b027189-7972-4791-a68d-1b83224f603d",
+    "name": "Henry Ni (Lightspeed)",
+    "firm": "Lightspeed Venture Partners",
+    "linkedin_url": "https://linkedin.com/in/henry-ni",
+    "blog_url": "https://lsvp.com",
+    "current_bio": "Head of Value Creation at Lightspeed, US",
+    "current_sectors": [
+      "Enterprise",
+      "Consumer",
+      "Fintech",
+      "SaaS"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A",
+      "Series B"
+    ],
+    "missing_fields": [
+      "Investment Thesis"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "8530e51c-a1bb-44e1-acf4-70c840cb010b",
+    "name": "Eric Flaningam",
+    "firm": "Eric Flaningam",
+    "linkedin_url": "https://linkedin.com/in/eric-flaningam",
+    "blog_url": null,
+    "current_bio": "Research Associate at Felicis",
+    "current_sectors": [
+      "SaaS",
+      "Consumer",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "5934a267-c01f-4d53-a60e-de26f8f67c7e",
+    "name": "Parasvil Patel",
+    "firm": "Radical Ventures",
+    "linkedin_url": "https://linkedin.com/in/parasvil-patel",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "HealthTech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "31cc2e2d-fd12-4974-bcdb-6b0baaa9c707",
+    "name": "Get Connected Pathway (Angelcapitalassociation)",
+    "firm": "Get Connected Pathway (Angelcapitalassociation)",
+    "linkedin_url": "https://linkedin.com/in/get-connected-pathway",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "HealthTech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "09cffa5a-439e-4e82-be7c-d6d6b6f53f25",
+    "name": "Consumer How great (Bvp)",
+    "firm": "Consumer How great (Bvp)",
+    "linkedin_url": "https://linkedin.com/in/consumer-how-great",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Cloud Computing"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "dcf4ddd5-1381-46e0-96f1-a36cd663184e",
+    "name": "Mikowai Ashwill",
+    "firm": "Mikowai Ashwill",
+    "linkedin_url": "https://linkedin.com/in/mikowai-ashwill",
+    "blog_url": null,
+    "current_bio": "Partner at Spark Capital",
+    "current_sectors": [
+      "SaaS",
+      "Consumer",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A",
+      "Series B"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "24df0b77-6b2d-4ab9-b395-2105b70fafb3",
+    "name": "Alex Morgan",
+    "firm": "Alex Morgan",
+    "linkedin_url": "https://linkedin.com/in/alex-morgan",
+    "blog_url": null,
+    "current_bio": "Investor at Khosla Ventures",
+    "current_sectors": [
+      "DeepTech",
+      "CleanTech",
+      "AI/ML",
+      "Healthcare"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A",
+      "Series B"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "a719bdae-b942-4428-a0d5-26131f2c528e",
+    "name": "Fraser Kelton",
+    "firm": "Fraser Kelton",
+    "linkedin_url": "https://linkedin.com/in/fraser-kelton",
+    "blog_url": null,
+    "current_bio": "Partner at Spark Capital",
+    "current_sectors": [
+      "SaaS",
+      "Consumer",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A",
+      "Series B"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "641c0084-3f72-48f0-9bea-48c2b3dd3aad",
+    "name": "Cloquet Capital Partners",
+    "firm": "Cloquet Capital Partners",
+    "linkedin_url": "https://linkedin.com/in/cloquet-capital-partners",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "HealthTech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "ccb4a4d1-ecbe-4455-94e1-56959d5bd71a",
+    "name": "Steve Jurvetson",
+    "firm": "Steve Jurvetson",
+    "linkedin_url": "https://linkedin.com/in/steve-jurvetson",
+    "blog_url": null,
+    "current_bio": "Partner at Future Ventures",
+    "current_sectors": [
+      "Industry/Sector Agnostic",
+      "Hardware",
+      "Fintech",
+      "Future of Work"
+    ],
+    "current_stage": [
+      "Pre-Seed",
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "5d346997-0e07-4520-8d14-bd81861008c8",
+    "name": "Rahul Prakash",
+    "firm": "NOMO Ventures",
+    "linkedin_url": "https://linkedin.com/in/rahul-prakash",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Cloud Computing"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "bd54671f-be7a-4a51-bb84-00d9ae6be5d9",
+    "name": "Michael Mauboussin",
+    "firm": "Michael Mauboussin",
+    "linkedin_url": "https://linkedin.com/in/michael-mauboussin",
+    "blog_url": null,
+    "current_bio": "Managing Director at Insight Partners",
+    "current_sectors": [
+      "SaaS",
+      "Enterprise"
+    ],
+    "current_stage": [
+      "Series B",
+      "Growth"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "1a1f20f1-3a4a-453e-a868-19073528356b",
+    "name": "Financial OfficerBrett Berson (Firstround)",
+    "firm": "Financial OfficerBrett Berson (Firstround)",
+    "linkedin_url": "https://linkedin.com/in/financial-officerbrett-berson",
+    "blog_url": null,
+    "current_bio": "Financial OfficerBrett Berson is an investor at Firstround focused on AI, SaaS, Consumer investing at Seed and Series A stage.",
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Consumer"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "ed312312-e2f7-4ab4-85dc-16c489bddccb",
+    "name": "Amber Yang",
+    "firm": "Amber Yang",
+    "linkedin_url": "https://linkedin.com/in/amber-yang",
+    "blog_url": null,
+    "current_bio": "Partner at Lightspeed",
+    "current_sectors": [
+      "Enterprise",
+      "Consumer",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A",
+      "Series B"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "0ac5aca8-2d19-4cd5-a1e8-e5b6d7b8a0b0",
+    "name": "article David Hsu (Firstround)",
+    "firm": "article David Hsu (Firstround)",
+    "linkedin_url": "https://linkedin.com/in/article-david-hsu",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "HealthTech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "783c5a7b-5ce3-4510-82d6-8b3eaa8eead4",
+    "name": "across asset management",
+    "firm": "across asset management",
+    "linkedin_url": "https://linkedin.com/in/across-asset-management",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "322824d3-c844-494c-8363-03bd0504064f",
+    "name": "Connor Mullaney (Spark Capital)",
+    "firm": "Connor Mullaney (Spark Capital)",
+    "linkedin_url": "https://linkedin.com/in/connor-mullaney",
+    "blog_url": null,
+    "current_bio": "Spark Capital is a venture firm that partners with exceptional founders. Invested in Twitter, Slack, Tumblr, and Wayfair.",
+    "current_sectors": [
+      "SaaS",
+      "Consumer",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A",
+      "Series B"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "0c409f98-cb68-4e15-99cc-d41c8985ed44",
+    "name": "Amber Yang (Lightspeed)",
+    "firm": "Lightspeed Venture Partners",
+    "linkedin_url": "https://linkedin.com/in/amber-yang",
+    "blog_url": "https://lsvp.com",
+    "current_bio": "Partner at Lightspeed, focuses on enterprise, US",
+    "current_sectors": [
+      "Enterprise",
+      "Consumer",
+      "Fintech",
+      "SaaS"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A",
+      "Series B"
+    ],
+    "missing_fields": [
+      "Investment Thesis"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "62b9a77d-3802-4e23-82e6-fc814e3354f6",
+    "name": "25madison",
+    "firm": "25madison",
+    "linkedin_url": "https://linkedin.com/in/25madison",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "HealthTech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  }
+]

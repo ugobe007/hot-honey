@@ -119,7 +119,7 @@ const CheckoutPage: React.FC = () => {
 
   const tierColors: Record<string, string> = {
     spark: 'from-gray-500 to-gray-600',
-    flame: 'from-orange-500 to-red-500',
+    flame: 'from-cyan-600 to-blue-600',
     inferno: 'from-red-500 to-purple-600',
     scout: 'from-blue-500 to-cyan-500',
     dealflow_pro: 'from-indigo-500 to-purple-600',
@@ -177,7 +177,7 @@ const CheckoutPage: React.FC = () => {
                     onClick={() => setSelectedTier(tier)}
                     className={`w-full p-4 rounded-xl border-2 text-left transition-all ${
                       isSelected 
-                        ? 'border-orange-500 bg-orange-500/10' 
+                        ? 'border-cyan-500 bg-cyan-600/10' 
                         : 'border-gray-700 bg-gray-800/50 hover:border-gray-600'
                     }`}
                     whileHover={{ scale: 1.01 }}
@@ -211,7 +211,7 @@ const CheckoutPage: React.FC = () => {
                             </span>
                           ))}
                           {details.features.length > 4 && (
-                            <span className="px-2 py-1 text-xs text-orange-400">
+                            <span className="px-2 py-1 text-xs text-cyan-400">
                               +{details.features.length - 4} more
                             </span>
                           )}
@@ -232,7 +232,7 @@ const CheckoutPage: React.FC = () => {
                     onClick={() => setBillingCycle('monthly')}
                     className={`flex-1 py-3 px-4 rounded-lg transition-all ${
                       billingCycle === 'monthly'
-                        ? 'bg-orange-500 text-white'
+                        ? 'bg-cyan-600 text-white'
                         : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
                     }`}
                   >
@@ -243,7 +243,7 @@ const CheckoutPage: React.FC = () => {
                     onClick={() => setBillingCycle('yearly')}
                     className={`flex-1 py-3 px-4 rounded-lg transition-all relative ${
                       billingCycle === 'yearly'
-                        ? 'bg-orange-500 text-white'
+                        ? 'bg-cyan-600 text-white'
                         : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
                     }`}
                   >
@@ -270,7 +270,7 @@ const CheckoutPage: React.FC = () => {
                 <p className="text-xs text-gray-400">7-day trial</p>
               </div>
               <div className="text-center">
-                <X className="w-6 h-6 text-orange-500 mx-auto mb-2" />
+                <X className="w-6 h-6 text-cyan-500 mx-auto mb-2" />
                 <p className="text-xs text-gray-400">Cancel anytime</p>
               </div>
             </div>
@@ -294,7 +294,7 @@ const CheckoutPage: React.FC = () => {
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full bg-gray-700 text-white rounded-xl px-4 py-3 border border-gray-600 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 outline-none"
+                  className="w-full bg-gray-700 text-white rounded-xl px-4 py-3 border border-gray-600 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 outline-none"
                   placeholder="John Smith"
                 />
               </div>
@@ -307,7 +307,7 @@ const CheckoutPage: React.FC = () => {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-gray-700 text-white rounded-xl px-4 py-3 border border-gray-600 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 outline-none"
+                  className="w-full bg-gray-700 text-white rounded-xl px-4 py-3 border border-gray-600 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 outline-none"
                   placeholder="john@company.com"
                 />
               </div>
@@ -320,7 +320,7 @@ const CheckoutPage: React.FC = () => {
                   type="text"
                   value={companyName}
                   onChange={(e) => setCompanyName(e.target.value)}
-                  className="w-full bg-gray-700 text-white rounded-xl px-4 py-3 border border-gray-600 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 outline-none"
+                  className="w-full bg-gray-700 text-white rounded-xl px-4 py-3 border border-gray-600 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 outline-none"
                   placeholder="Acme Inc."
                 />
               </div>
@@ -362,7 +362,7 @@ const CheckoutPage: React.FC = () => {
               <button
                 onClick={handleCheckout}
                 disabled={loading || !email || !name}
-                className="w-full py-4 bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-orange-500/25 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="w-full py-4 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-cyan-500/25 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {loading ? (
                   <>

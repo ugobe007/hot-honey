@@ -104,7 +104,7 @@ export default function InvestorsPage() {
         <div className="text-center mb-8 sm:mb-12">
           <div className="text-6xl sm:text-8xl mb-4">💼</div>
           <h1 className="text-4xl sm:text-6xl font-bold mb-2 sm:mb-4">
-            <span className="bg-gradient-to-r from-purple-400 via-amber-400 to-orange-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-purple-400 via-blue-400 to-violet-400 bg-clip-text text-transparent">
               Investor Network
             </span>
           </h1>
@@ -114,7 +114,7 @@ export default function InvestorsPage() {
           <div className="mt-4 flex gap-4 justify-center items-center flex-wrap">
             <Link
               to="/bulkupload"
-              className="inline-block px-6 py-3 bg-gradient-to-r from-orange-500 to-amber-600 text-white font-bold rounded-full text-sm hover:from-orange-600 hover:to-amber-700 transition-all shadow-lg"
+              className="inline-block px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold rounded-full text-sm hover:from-cyan-600 hover:to-blue-700 transition-all shadow-lg"
             >
               📤 Bulk Upload VCs
             </Link>
@@ -171,10 +171,10 @@ export default function InvestorsPage() {
 
         {/* Stats Overview - Hot Money Orange Theme */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <div className="bg-gradient-to-br from-amber-500/20 to-orange-500/20 backdrop-blur-md rounded-2xl p-6 text-center border-2 border-amber-400/50 hover:scale-105 transition-transform">
+          <div className="bg-gradient-to-br from-cyan-500/20 to-blue-500/20 backdrop-blur-md rounded-2xl p-6 text-center border-2 border-cyan-400/50 hover:scale-105 transition-transform">
             <div className="text-4xl mb-2">💼</div>
-            <div className="text-3xl font-bold text-amber-300">{investors.filter(i => i.investor_tier === 'elite' || i.investor_tier === 'established').length}</div>
-            <div className="text-amber-100 text-sm font-semibold">Top VCs</div>
+            <div className="text-3xl font-bold text-cyan-300">{investors.filter(i => i.investor_tier === 'elite' || i.investor_tier === 'established').length}</div>
+            <div className="text-cyan-100 text-sm font-semibold">Top VCs</div>
           </div>
           <div className="bg-gradient-to-br from-green-500/20 to-emerald-500/20 backdrop-blur-md rounded-2xl p-6 text-center border-2 border-green-400/50 hover:scale-105 transition-transform">
             <div className="text-4xl mb-2">🚀</div>
@@ -186,10 +186,10 @@ export default function InvestorsPage() {
             <div className="text-3xl font-bold text-purple-300">{investors.reduce((sum, i) => sum + (i.unicorns || 0), 0)}</div>
             <div className="text-purple-100 text-sm font-semibold">Unicorns Created</div>
           </div>
-          <div className="bg-gradient-to-br from-orange-500/20 to-amber-600/20 backdrop-blur-md rounded-2xl p-6 text-center border-2 border-orange-400/50 hover:scale-105 transition-transform">
+          <div className="bg-gradient-to-br from-cyan-500/20 to-blue-600/20 backdrop-blur-md rounded-2xl p-6 text-center border-2 border-cyan-400/50 hover:scale-105 transition-transform">
             <div className="text-4xl mb-2">💰</div>
-            <div className="text-3xl font-bold text-orange-300">{investors.reduce((sum, i) => sum + (i.portfolioCount || 0), 0)}+</div>
-            <div className="text-orange-100 text-sm font-semibold">Portfolio Cos</div>
+            <div className="text-3xl font-bold text-cyan-300">{investors.reduce((sum, i) => sum + (i.portfolioCount || 0), 0)}+</div>
+            <div className="text-cyan-100 text-sm font-semibold">Portfolio Cos</div>
           </div>
         </div>
 

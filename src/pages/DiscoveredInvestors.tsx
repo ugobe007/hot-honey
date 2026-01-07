@@ -111,8 +111,8 @@ export default function DiscoveredInvestors() {
     <div className="min-h-screen bg-gradient-to-br from-[#1a1140] via-[#2d1b69] to-[#4a2a8f] relative overflow-hidden">
       {/* Animated background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute top-20 left-10 w-96 h-96 bg-cyan-600/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
       </div>
       
       <div className="relative z-10 container mx-auto px-8 py-12">
@@ -129,7 +129,7 @@ export default function DiscoveredInvestors() {
             <span className="text-gray-600">|</span>
             <Link to="/admin/discovered-startups" className="text-gray-400 hover:text-white transition-all">🚀 Startups</Link>
             <span className="text-gray-600">|</span>
-            <Link to="/vote" className="text-orange-400 hover:text-orange-300 transition-all font-bold">⚡ Match</Link>
+            <Link to="/vote" className="text-cyan-400 hover:text-cyan-300 transition-all font-bold">⚡ Match</Link>
           </div>
         </div>
 
@@ -138,7 +138,7 @@ export default function DiscoveredInvestors() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-5xl font-bold text-white mb-3">
-                Discovered <span className="bg-gradient-to-r from-orange-400 to-amber-400 bg-clip-text text-transparent">Investors</span>
+                Discovered <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">Investors</span>
               </h1>
               <p className="text-gray-300 text-lg">Browse and manage discovered investors from all sources</p>
             </div>
@@ -147,7 +147,7 @@ export default function DiscoveredInvestors() {
               <button
                 onClick={loadInvestors}
                 disabled={loading}
-                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-bold rounded-lg transition-all"
+                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold rounded-lg transition-all"
               >
                 <RefreshCw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
                 Refresh
@@ -163,11 +163,11 @@ export default function DiscoveredInvestors() {
             <div className="text-gray-400 text-sm">Total Investors</div>
           </div>
           <div className="bg-white/10 backdrop-blur-lg rounded-xl p-4 border border-white/20">
-            <div className="text-3xl font-bold text-orange-400">{investors.filter(i => i.type?.toLowerCase().includes('vc')).length}</div>
+            <div className="text-3xl font-bold text-cyan-400">{investors.filter(i => i.type?.toLowerCase().includes('vc')).length}</div>
             <div className="text-gray-400 text-sm">VC Firms</div>
           </div>
           <div className="bg-white/10 backdrop-blur-lg rounded-xl p-4 border border-white/20">
-            <div className="text-3xl font-bold text-amber-400">{investors.filter(i => i.type?.toLowerCase().includes('angel')).length}</div>
+            <div className="text-3xl font-bold text-blue-400">{investors.filter(i => i.type?.toLowerCase().includes('angel')).length}</div>
             <div className="text-gray-400 text-sm">Angel Investors</div>
           </div>
           <div className="bg-white/10 backdrop-blur-lg rounded-xl p-4 border border-white/20">
@@ -186,7 +186,7 @@ export default function DiscoveredInvestors() {
                 placeholder="Search investors..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full px-4 py-2 bg-gray-900/50 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-orange-400"
+                className="w-full px-4 py-2 bg-gray-900/50 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-cyan-400"
               />
             </div>
 
@@ -198,7 +198,7 @@ export default function DiscoveredInvestors() {
                   onClick={() => setFilter(f)}
                   className={`px-4 py-2 rounded-lg font-medium transition-all ${
                     filter === f
-                      ? 'bg-orange-500 text-white'
+                      ? 'bg-cyan-600 text-white'
                       : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
                   }`}
                 >
@@ -231,7 +231,7 @@ export default function DiscoveredInvestors() {
         <div className="bg-white/10 backdrop-blur-lg rounded-2xl border border-white/20 overflow-hidden">
           {loading ? (
             <div className="p-12 text-center">
-              <RefreshCw className="w-12 h-12 text-orange-400 animate-spin mx-auto mb-4" />
+              <RefreshCw className="w-12 h-12 text-cyan-400 animate-spin mx-auto mb-4" />
               <p className="text-gray-300">Loading investors...</p>
             </div>
           ) : filteredInvestors.length === 0 ? (
@@ -245,7 +245,7 @@ export default function DiscoveredInvestors() {
                 <div 
                   key={investor.id}
                   className={`p-4 hover:bg-white/5 transition-all cursor-pointer ${
-                    selectedIds.has(investor.id) ? 'bg-orange-500/10' : ''
+                    selectedIds.has(investor.id) ? 'bg-cyan-600/10' : ''
                   }`}
                   onClick={() => toggleSelect(investor.id)}
                 >
@@ -255,7 +255,7 @@ export default function DiscoveredInvestors() {
                         type="checkbox"
                         checked={selectedIds.has(investor.id)}
                         onChange={() => toggleSelect(investor.id)}
-                        className="w-5 h-5 rounded border-gray-600 text-orange-500 focus:ring-orange-500"
+                        className="w-5 h-5 rounded border-gray-600 text-cyan-500 focus:ring-cyan-500"
                         onClick={(e) => e.stopPropagation()}
                       />
                       <div>
@@ -293,7 +293,7 @@ export default function DiscoveredInvestors() {
                           e.stopPropagation();
                           navigate(`/investor/${investor.id}`);
                         }}
-                        className="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium text-sm"
+                        className="px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg font-medium text-sm"
                       >
                         View Profile →
                       </button>
@@ -309,8 +309,8 @@ export default function DiscoveredInvestors() {
         <div className="mt-8 p-6 bg-white/5 backdrop-blur-lg rounded-2xl border border-white/10">
           <h3 className="text-white font-bold mb-4">🔗 Quick Links</h3>
           <div className="grid grid-cols-4 gap-4">
-            <Link to="/admin/bulk-upload" className="p-4 bg-orange-500/20 hover:bg-orange-500/30 rounded-xl text-center transition-all">
-              <Upload className="w-8 h-8 text-orange-400 mx-auto mb-2" />
+            <Link to="/admin/bulk-upload" className="p-4 bg-cyan-600/20 hover:bg-cyan-600/30 rounded-xl text-center transition-all">
+              <Upload className="w-8 h-8 text-cyan-400 mx-auto mb-2" />
               <div className="text-white font-medium">Bulk Upload</div>
               <div className="text-gray-400 text-sm">Import Startups</div>
             </Link>

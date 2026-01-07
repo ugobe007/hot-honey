@@ -47,11 +47,11 @@ export default function HamburgerMenu() {
         aria-label="Menu"
       >
         {isOpen ? (
-          <X size={32} className="text-orange-400 drop-shadow-[0_0_8px_rgba(251,146,60,0.6)]" />
+          <X size={32} className="text-cyan-400 drop-shadow-[0_0_8px_rgba(251,146,60,0.6)]" />
         ) : (
           <div className="flex flex-col gap-1.5">
-            <span className="block w-7 h-1 rounded-full bg-gradient-to-r from-orange-400 to-yellow-400 drop-shadow-[0_0_4px_rgba(251,146,60,0.5)]"></span>
-            <span className="block w-7 h-1 rounded-full bg-gradient-to-r from-red-500 to-orange-400 drop-shadow-[0_0_4px_rgba(239,68,68,0.5)]"></span>
+            <span className="block w-7 h-1 rounded-full bg-gradient-to-r from-cyan-400 to-blue-400 drop-shadow-[0_0_4px_rgba(251,146,60,0.5)]"></span>
+            <span className="block w-7 h-1 rounded-full bg-gradient-to-r from-blue-500 to-violet-400 drop-shadow-[0_0_4px_rgba(239,68,68,0.5)]"></span>
             <span className="block w-7 h-1 rounded-full bg-gradient-to-r from-teal-400 to-cyan-400 drop-shadow-[0_0_4px_rgba(45,212,191,0.5)]"></span>
           </div>
         )}
@@ -75,11 +75,11 @@ export default function HamburgerMenu() {
           {/* Header */}
           <div className="flex items-center justify-between mb-8 mt-4">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center shadow-lg">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-600 to-blue-600 flex items-center justify-center shadow-lg">
                 <span className="text-2xl">🔥</span>
               </div>
               <div>
-                <h2 className="text-2xl font-bold bg-gradient-to-r from-orange-400 via-red-500 to-yellow-400 bg-clip-text text-transparent">
+                <h2 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 via-blue-500 to-violet-400 bg-clip-text text-transparent">
                   Hot Money
                 </h2>
                 <p className="text-xs text-purple-300">AI-Powered Matching</p>
@@ -101,7 +101,7 @@ export default function HamburgerMenu() {
             <Link
               to="/match"
               onClick={() => setIsOpen(false)}
-              className="group px-4 py-3 rounded-xl bg-gradient-to-r from-orange-600/40 to-red-600/40 hover:from-orange-500/60 hover:to-red-500/60 text-white transition-all font-bold flex items-center gap-3 border border-orange-400/50 hover:border-orange-300 shadow-lg"
+              className="group px-4 py-3 rounded-xl bg-gradient-to-r from-cyan-600/40 to-blue-600/40 hover:from-cyan-500/60 hover:to-blue-500/60 text-white transition-all font-bold flex items-center gap-3 border border-cyan-400/50 hover:border-cyan-300 shadow-lg"
             >
               <Zap className="w-5 h-5 text-yellow-300" />
               <span className="text-white">AI Matching</span>
@@ -110,7 +110,7 @@ export default function HamburgerMenu() {
             <Link
               to="/saved-matches"
               onClick={() => setIsOpen(false)}
-              className="group px-4 py-3 rounded-xl bg-gradient-to-r from-red-600/40 to-orange-600/40 hover:from-red-500/60 hover:to-orange-500/60 text-white transition-all font-bold flex items-center gap-3 border border-red-400/50 hover:border-red-300 shadow-lg"
+              className="group px-4 py-3 rounded-xl bg-gradient-to-r from-blue-600/40 to-violet-600/40 hover:from-blue-500/60 hover:to-violet-500/60 text-white transition-all font-bold flex items-center gap-3 border border-red-400/50 hover:border-red-300 shadow-lg"
             >
               <img src="/images/fire-icon.svg" alt="Hot" className="w-5 h-5" />
               <span className="text-white">Saved Matches</span>
@@ -155,9 +155,9 @@ export default function HamburgerMenu() {
             <Link
               to="/submit"
               onClick={() => setIsOpen(false)}
-              className="group px-4 py-3 rounded-xl bg-gradient-to-r from-amber-600/40 to-orange-600/40 hover:from-amber-500/60 hover:to-orange-500/60 text-white transition-all font-bold flex items-center gap-3 border border-amber-400/50 hover:border-amber-300 shadow-lg"
+              className="group px-4 py-3 rounded-xl bg-gradient-to-r from-cyan-600/40 to-blue-600/40 hover:from-cyan-500/60 hover:to-blue-500/60 text-white transition-all font-bold flex items-center gap-3 border border-cyan-400/50 hover:border-cyan-300 shadow-lg"
             >
-              <FileText className="w-5 h-5 text-amber-300" />
+              <FileText className="w-5 h-5 text-cyan-300" />
               <span className="text-white">Submit Startup</span>
             </Link>
             
@@ -186,7 +186,7 @@ export default function HamburgerMenu() {
             <Link
               to="/admin/control"
               onClick={() => setIsOpen(false)}
-              className="group px-4 py-3 rounded-xl bg-gradient-to-r from-yellow-600/40 to-amber-600/40 hover:from-yellow-500/60 hover:to-amber-500/60 text-white transition-all font-bold flex items-center gap-3 border border-yellow-400/50 hover:border-yellow-300 shadow-lg"
+              className="group px-4 py-3 rounded-xl bg-gradient-to-r from-cyan-600/40 to-blue-600/40 hover:from-cyan-500/60 hover:to-blue-500/60 text-white transition-all font-bold flex items-center gap-3 border border-cyan-400/50 hover:border-cyan-300 shadow-lg"
             >
               <Crown className="w-5 h-5 text-yellow-300" />
               <span className="text-white">Admin Control Center</span>

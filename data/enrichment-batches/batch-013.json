@@ -1,0 +1,439 @@
+[
+  {
+    "id": "a7088c80-d043-4569-8b13-7c33bc5020c5",
+    "name": "TJ Parker",
+    "firm": "TJ Parker",
+    "linkedin_url": "https://linkedin.com/in/tj-parker",
+    "blog_url": null,
+    "current_bio": "Specializes in HealthTech and Consumer investments",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "02d7df76-142e-42f7-b56d-5d2fe40f8cd1",
+    "name": "Fred Wilson",
+    "firm": "Fred Wilson",
+    "linkedin_url": "https://linkedin.com/in/fred-wilson",
+    "blog_url": null,
+    "current_bio": "Blogger and investor, moved onchain for blogging, partner at USV",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "59be45e3-489a-40ec-abaa-847a31d53cbc",
+    "name": "Ali Tamaseb (DCVC)",
+    "firm": "DCVC",
+    "linkedin_url": "https://linkedin.com/in/ali-tamaseb",
+    "blog_url": "https://dcvc.com",
+    "current_bio": "Ali Tamaseb is a partner at DCVC. Deep tech in AI, biology, materials, energy, space",
+    "current_sectors": [
+      "AI/ML",
+      "SaaS",
+      "Fintech",
+      "Biotechnology",
+      "Robotics",
+      "DeepTech",
+      "SpaceTech",
+      "Materials",
+      "Climate"
+    ],
+    "current_stage": [
+      "Seed"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "ecb78f58-1a7b-4797-accf-850086ebd831",
+    "name": "H.I.G Capital",
+    "firm": "H.I.G Capital",
+    "linkedin_url": "https://linkedin.com/in/h-i-g-capital",
+    "blog_url": null,
+    "current_bio": "Private equity firm mentioned as owning non-compliant portfolio companies",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "96761472-bd73-4b11-bae4-bd7056e7735b",
+    "name": "Andy McLoughlin Managing (Uncorkcapital)",
+    "firm": "Andy McLoughlin Managing (Uncorkcapital)",
+    "linkedin_url": "https://linkedin.com/in/andy-mcloughlin-managing",
+    "blog_url": null,
+    "current_bio": "Andy McLoughlin Managing is an investor at Andy McLoughlin Managing (Uncorkcapital) focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "4c124afd-72c1-4f6d-ab81-1db96c505bc4",
+    "name": "Lyna Kim",
+    "firm": "Lyna Kim",
+    "linkedin_url": "https://linkedin.com/in/lyna-kim",
+    "blog_url": null,
+    "current_bio": "Associate at Lowercarboncapital",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "6fd98b6f-090a-464b-88a4-4a96ab8eae3a",
+    "name": "Ilya Fushman",
+    "firm": "Ilya Fushman",
+    "linkedin_url": "https://linkedin.com/in/ilya-fushman",
+    "blog_url": null,
+    "current_bio": "Ilya Fushman is a angel investor focused on AI/ML investing at Pre-Seed and Seed stage.",
+    "current_sectors": [
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Pre-Seed",
+      "Seed",
+      "Series A",
+      "Series B"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "e53e34ab-ed9c-4f7f-9545-03f4ff931b92",
+    "name": "MidEuropa Partners",
+    "firm": "MidEuropa Partners",
+    "linkedin_url": "https://linkedin.com/in/mideuropa-partners",
+    "blog_url": null,
+    "current_bio": "PE firm acquiring assisted mobility CDMO MBL Group",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "09c1379f-8ce3-448f-8187-c842529ea668",
+    "name": "Merchant Banking group",
+    "firm": "Merchant Banking group",
+    "linkedin_url": "https://linkedin.com/in/merchant-banking-group",
+    "blog_url": null,
+    "current_bio": "Merchant Banking group is a angel investor focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "e694dce8-75ad-4e2e-987f-34c9861668ce",
+    "name": "Squared Capital",
+    "firm": "Squared Capital",
+    "linkedin_url": "https://linkedin.com/in/squared-capital",
+    "blog_url": null,
+    "current_bio": "Squared Capital is a vc firm focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "703db114-85d8-473f-882f-40eea8cf21a5",
+    "name": "Mark Hawkins",
+    "firm": "Mark Hawkins",
+    "linkedin_url": "https://linkedin.com/in/mark-hawkins",
+    "blog_url": null,
+    "current_bio": "Mark Hawkins is a angel investor focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "898e0519-4c48-4ffe-81aa-cc43ed9547ff",
+    "name": "Jerel Davis, Ph.D. (Versant Ventures)",
+    "firm": "Jerel Davis, Ph.D. (Versant Ventures)",
+    "linkedin_url": "https://linkedin.com/in/jerel-davis",
+    "blog_url": null,
+    "current_bio": "Jerel Davis, Ph.D. is an investor at Versant Ventures focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "831b8903-8126-4672-839e-c040aec7f1ba",
+    "name": "Jason Pontin General (Dcvc)",
+    "firm": "DCVC",
+    "linkedin_url": "https://linkedin.com/in/jason-pontin-general",
+    "blog_url": "https://dcvc.com",
+    "current_bio": "Jason Pontin General is a partner at DCVC. Deep tech in AI, biology, materials, energy, space",
+    "current_sectors": [
+      "AI/ML",
+      "SaaS",
+      "Fintech",
+      "Biotechnology",
+      "Robotics"
+    ],
+    "current_stage": [
+      "Seed"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "72a7570d-4acd-4ac0-b536-ffdc559065c2",
+    "name": "Spencer Punter (DCVC)",
+    "firm": "DCVC",
+    "linkedin_url": "https://linkedin.com/in/spencer-punter",
+    "blog_url": "https://dcvc.com",
+    "current_bio": "Spencer Punter is a partner at DCVC. Deep tech in AI, biology, materials, energy, space",
+    "current_sectors": [
+      "AI/ML",
+      "SaaS",
+      "Fintech",
+      "Biotechnology",
+      "Robotics"
+    ],
+    "current_stage": [
+      "Seed"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "758a5404-7b0d-4372-9ca9-2a8132aae00d",
+    "name": "Inca Coman, Ph.D.",
+    "firm": "Inca Coman, Ph.D.",
+    "linkedin_url": "https://linkedin.com/in/inca-coman",
+    "blog_url": null,
+    "current_bio": "Venture Partner at Archventure",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "265838eb-2f79-408b-a1b1-02a69b85ae34",
+    "name": "Alpin Yukseloglu",
+    "firm": "Alpin Yukseloglu",
+    "linkedin_url": "https://linkedin.com/in/alpin-yukseloglu",
+    "blog_url": null,
+    "current_bio": "Alpin Yukseloglu is a angel investor focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "d015a4ad-d4a2-49ff-8de8-05b168e5cd9e",
+    "name": "Dr. Linda Maxwell (DCVC)",
+    "firm": "DCVC",
+    "linkedin_url": "https://linkedin.com/in/dr-linda-maxwell",
+    "blog_url": "https://dcvc.com",
+    "current_bio": "Dr. Linda Maxwell is a partner at DCVC. Deep tech in AI, biology, materials, energy, space",
+    "current_sectors": [
+      "AI/ML",
+      "SaaS",
+      "Fintech",
+      "Biotechnology",
+      "Robotics",
+      "DeepTech",
+      "SpaceTech",
+      "Materials",
+      "Climate"
+    ],
+    "current_stage": [
+      "Seed"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "b98bc353-f71f-4b8e-92f0-929077f6b641",
+    "name": "Lucy Coassin (North Pond Ventures)",
+    "firm": "Lucy Coassin (North Pond Ventures)",
+    "linkedin_url": "https://linkedin.com/in/lucy-coassin",
+    "blog_url": null,
+    "current_bio": "Lucy Coassin is an investor at North Pond Ventures focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "f267ec58-dcd6-4b6c-8c73-7e308f06bc70",
+    "name": "Quentin Clark",
+    "firm": "Quentin Clark",
+    "linkedin_url": "https://linkedin.com/in/quentin-clark",
+    "blog_url": null,
+    "current_bio": "Quentin Clark is a angel investor focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "03934bdc-dc4f-49a2-a72a-21df598090d8",
+    "name": "Kevin Hrusovsky Venture (Archventure)",
+    "firm": "Kevin Hrusovsky Venture (Archventure)",
+    "linkedin_url": "https://linkedin.com/in/kevin-hrusovsky-venture",
+    "blog_url": null,
+    "current_bio": "Kevin Hrusovsky is an investor at Archventure focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  }
+]

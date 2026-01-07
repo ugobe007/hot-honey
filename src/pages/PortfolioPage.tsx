@@ -22,7 +22,7 @@ export default function PortfolioPage() {
   const getStageInfo = (stage: number) => {
     switch(stage) {
       case 1: return { name: 'Stage 1', description: 'Anonymous voting', color: 'bg-slate-300', icon: '📊' };
-      case 2: return { name: 'Stage 2', description: 'Review materials', color: 'bg-orange-400', icon: '📄' };
+      case 2: return { name: 'Stage 2', description: 'Review materials', color: 'bg-cyan-400', icon: '📄' };
       case 3: return { name: 'Stage 3', description: 'Meet founder', color: 'bg-slate-300', icon: '🤝' };
       case 4: return { name: 'Stage 4', description: 'Deal room access', color: 'bg-slate-300', icon: '💼' };
       default: return { name: 'Stage 1', description: 'Voting stage', color: 'bg-slate-300', icon: '🗳️' };
@@ -44,7 +44,7 @@ export default function PortfolioPage() {
     } else {
       return { 
         message: `🔔 Needs ${votesRemaining} more vote${votesRemaining !== 1 ? 's' : ''} to advance`, 
-        color: 'bg-amber-100 border-amber-500 text-amber-800' 
+        color: 'bg-cyan-100 border-cyan-500 text-cyan-800' 
       };
     }
   };
@@ -195,7 +195,7 @@ export default function PortfolioPage() {
   return (
     <>
       {/* Main content container */}
-      <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-slate-100 p-4 sm:p-8">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-4 sm:p-8">
         {/* Logo Dropdown Menu */}
         <LogoDropdownMenu />
 
@@ -218,7 +218,7 @@ export default function PortfolioPage() {
           {/* Header */}
           <div className="text-center mb-6">
             <div className="text-5xl mb-3">🍯</div>
-            <h1 className="text-3xl sm:text-4xl font-bold text-orange-600 mb-2">
+            <h1 className="text-3xl sm:text-4xl font-bold text-cyan-600 mb-2">
               Your Portfolio
             </h1>
             <p className="text-base sm:text-lg text-slate-700 font-semibold">
@@ -246,14 +246,14 @@ export default function PortfolioPage() {
             </p>
             <button
               onClick={() => navigate('/vote')}
-              className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-4 px-8 rounded-2xl shadow-lg transition-all text-lg"
+              className="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold py-4 px-8 rounded-2xl shadow-lg transition-all text-lg"
             >
               🗳️ Go to Voting
             </button>
           </div>
         ) : (
           <div className="space-y-6">
-            <div className="bg-white/90 backdrop-blur-md rounded-2xl p-4 border-2 border-orange-400">
+            <div className="bg-white/90 backdrop-blur-md rounded-2xl p-4 border-2 border-cyan-400">
               <h2 className="text-lg font-bold text-slate-800 mb-1">
                 ✨ {myYesVotes.length} Startup{myYesVotes.length !== 1 ? 's' : ''} in Your Portfolio
               </h2>
@@ -321,7 +321,7 @@ export default function PortfolioPage() {
               </button>
               <button
                 onClick={() => navigate('/dashboard')}
-                className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-3 px-8 rounded-2xl shadow-lg transition-all"
+                className="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold py-3 px-8 rounded-2xl shadow-lg transition-all"
               >
                 📊 Back to Dashboard
               </button>

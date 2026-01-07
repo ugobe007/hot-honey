@@ -173,7 +173,7 @@ const VotePage: React.FC = () => {
 
   if (unvotedStartups.length === 0) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-slate-100">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
         {/* Logo Dropdown Menu */}
         <LogoDropdownMenu />
 
@@ -201,7 +201,7 @@ const VotePage: React.FC = () => {
             </h3>
             <p className="text-2xl text-white mb-8">You've voted on all {totalStartupCount} startups!</p>
             <div className="flex gap-4 justify-center flex-wrap">
-              <Link to="/dashboard" className="px-8 py-4 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white rounded-xl font-bold text-lg transition-all shadow-lg hover:scale-105 border-2 border-orange-400/30">
+              <Link to="/dashboard" className="px-8 py-4 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white rounded-xl font-bold text-lg transition-all shadow-lg hover:scale-105 border-2 border-cyan-400/30">
                 View My Hot Picks 🔥
               </Link>
               <button
@@ -264,7 +264,7 @@ const VotePage: React.FC = () => {
               <div className="flex items-center justify-center gap-4">
                 <div className="px-6 py-3 bg-gradient-to-r from-purple-600/30 to-indigo-600/30 backdrop-blur-sm border border-purple-400/30 rounded-xl">
                   <p className="text-2xl text-white">
-                    <span className="font-bold text-orange-400">{unvotedStartups.length}</span>
+                    <span className="font-bold text-cyan-400">{unvotedStartups.length}</span>
                     <span className="text-gray-300"> of </span>
                     <span className="font-bold text-cyan-400">{totalStartupCount}</span>
                     <span className="text-gray-300"> {unvotedStartups.length === 1 ? 'startup' : 'startups'} remaining</span>
@@ -366,7 +366,7 @@ const VotePage: React.FC = () => {
       {/* Fire Points Toast Notification */}
       {showToast && (
         <div className="fixed bottom-8 right-8 z-[1000] animate-bounce">
-          <div className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-6 py-4 rounded-2xl shadow-2xl font-bold text-lg">
+          <div className="bg-gradient-to-r from-cyan-600 to-blue-600 text-white px-6 py-4 rounded-2xl shadow-2xl font-bold text-lg">
             {toastMessage}
           </div>
         </div>

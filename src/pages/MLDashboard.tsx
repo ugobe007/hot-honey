@@ -148,7 +148,7 @@ export default function MLDashboard() {
           <div className="flex items-center gap-4 text-xs">
             <Link to="/" className="text-gray-400 hover:text-white">Home</Link>
             <Link to="/admin/control" className="text-gray-400 hover:text-white">Control Center</Link>
-            <Link to="/matching" className="text-orange-400 hover:text-orange-300 font-bold">⚡ Match</Link>
+            <Link to="/matching" className="text-cyan-400 hover:text-cyan-300 font-bold">⚡ Match</Link>
             <button onClick={refresh} className="text-gray-400 hover:text-white">
               <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
             </button>
@@ -161,11 +161,11 @@ export default function MLDashboard() {
         {metrics && (
           <div className="grid grid-cols-6 gap-3 text-xs">
             {[
-              { label: 'Total Matches', value: metrics.total_matches, color: 'text-orange-400', link: '/matching' },
+              { label: 'Total Matches', value: metrics.total_matches, color: 'text-cyan-400', link: '/matching' },
               { label: 'Successful', value: metrics.successful_matches, color: 'text-green-400', link: '/matching' },
               { label: 'Success Rate', value: `${(metrics.conversion_rate * 100).toFixed(1)}%`, color: 'text-cyan-400', link: '/matching' },
               { label: 'Avg Match Score', value: metrics.avg_match_score.toFixed(1), color: 'text-purple-400', link: '/matching' },
-              { label: 'Avg GOD Score', value: metrics.avg_god_score.toFixed(1), color: 'text-amber-400', link: '/admin/god-scores' },
+              { label: 'Avg GOD Score', value: metrics.avg_god_score.toFixed(1), color: 'text-blue-400', link: '/admin/god-scores' },
               { label: 'Training Status', value: trainingStatus === 'running' ? '🔄 Running' : trainingStatus === 'complete' ? '✅ Done' : '⏸️ Idle', color: 'text-blue-400', link: null, hasButton: true }
             ].map((s, i) => {
               const StatBox = s.link ? Link : 'div';
@@ -292,10 +292,10 @@ export default function MLDashboard() {
         <div className="bg-gray-800/30 rounded-lg border border-gray-700/50 p-4">
           <h3 className="text-sm font-semibold text-white mb-3">⚡ Related Tools</h3>
           <div className="flex flex-wrap gap-2 text-xs">
-            <Link to="/admin/god-scores" className="px-3 py-1.5 bg-amber-500/20 border border-amber-500/30 rounded text-amber-400 hover:bg-amber-500/30">🏆 GOD Scores</Link>
+            <Link to="/admin/god-scores" className="px-3 py-1.5 bg-cyan-500/20 border border-cyan-500/30 rounded text-blue-400 hover:bg-cyan-500/30">🏆 GOD Scores</Link>
             <Link to="/admin/analytics" className="px-3 py-1.5 bg-cyan-500/20 border border-cyan-500/30 rounded text-cyan-400 hover:bg-cyan-500/30">📊 Analytics</Link>
             <Link to="/admin/ai-intelligence" className="px-3 py-1.5 bg-violet-500/20 border border-violet-500/30 rounded text-violet-400 hover:bg-violet-500/30">🤖 AI Intelligence</Link>
-            <Link to="/matching" className="px-3 py-1.5 bg-orange-500/20 border border-orange-500/30 rounded text-orange-400 hover:bg-orange-500/30">⚡ Matching</Link>
+            <Link to="/matching" className="px-3 py-1.5 bg-cyan-600/20 border border-cyan-500/30 rounded text-cyan-400 hover:bg-cyan-600/30">⚡ Matching</Link>
           </div>
         </div>
       </div>

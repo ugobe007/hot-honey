@@ -238,7 +238,7 @@ Provide comprehensive information about this company in the JSON format specifie
               onClick={() => setUploadMethod('url')}
               className={`flex-1 py-3 px-6 rounded-xl font-bold transition-all ${
                 uploadMethod === 'url'
-                  ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-xl scale-105'
+                  ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-xl scale-105'
                   : 'bg-white/20 text-purple-200 hover:bg-white/30'
               }`}
             >
@@ -248,7 +248,7 @@ Provide comprehensive information about this company in the JSON format specifie
               onClick={() => setUploadMethod('deck')}
               className={`flex-1 py-3 px-6 rounded-xl font-bold transition-all ${
                 uploadMethod === 'deck'
-                  ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-xl scale-105'
+                  ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-xl scale-105'
                   : 'bg-white/20 text-purple-200 hover:bg-white/30'
               }`}
             >
@@ -258,7 +258,7 @@ Provide comprehensive information about this company in the JSON format specifie
               onClick={() => setUploadMethod('manual')}
               className={`flex-1 py-3 px-6 rounded-xl font-bold transition-all ${
                 uploadMethod === 'manual'
-                  ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-xl scale-105'
+                  ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-xl scale-105'
                   : 'bg-white/20 text-purple-200 hover:bg-white/30'
               }`}
             >
@@ -276,7 +276,7 @@ Provide comprehensive information about this company in the JSON format specifie
                   value={websiteUrl}
                   onChange={(e) => setWebsiteUrl(e.target.value)}
                   placeholder="https://company.com"
-                  className="w-full px-4 py-3 rounded-xl bg-white/20 text-white placeholder-purple-300 border-2 border-purple-400/50 focus:border-orange-400 outline-none"
+                  className="w-full px-4 py-3 rounded-xl bg-white/20 text-white placeholder-purple-300 border-2 border-purple-400/50 focus:border-cyan-400 outline-none"
                 />
               </div>
               <div>
@@ -286,7 +286,7 @@ Provide comprehensive information about this company in the JSON format specifie
                   value={linkedinUrl}
                   onChange={(e) => setLinkedinUrl(e.target.value)}
                   placeholder="https://linkedin.com/company/..."
-                  className="w-full px-4 py-3 rounded-xl bg-white/20 text-white placeholder-purple-300 border-2 border-purple-400/50 focus:border-orange-400 outline-none"
+                  className="w-full px-4 py-3 rounded-xl bg-white/20 text-white placeholder-purple-300 border-2 border-purple-400/50 focus:border-cyan-400 outline-none"
                 />
               </div>
               <button
@@ -302,8 +302,8 @@ Provide comprehensive information about this company in the JSON format specifie
                 disabled={researchingWithAI}
                 className={`w-full py-4 rounded-xl font-bold shadow-2xl transition-all transform hover:scale-105 ${
                   researchingWithAI
-                    ? 'bg-gradient-to-r from-yellow-400 via-orange-400 to-pink-500 text-white cursor-wait animate-pulse'
-                    : 'bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500 hover:from-purple-700 hover:via-pink-700 hover:to-orange-600 text-white animate-pulse hover:animate-none'
+                    ? 'bg-gradient-to-r from-cyan-400 via-blue-400 to-violet-500 text-white cursor-wait animate-pulse'
+                    : 'bg-gradient-to-r from-cyan-600 via-blue-600 to-violet-500 hover:from-cyan-700 hover:via-blue-700 hover:to-violet-600 text-white animate-pulse hover:animate-none'
                 }`}
               >
                 {researchingWithAI ? (
@@ -357,7 +357,7 @@ Provide comprehensive information about this company in the JSON format specifie
                   value={manualData.name}
                   onChange={(e) => setManualData({...manualData, name: e.target.value})}
                   placeholder="Awesome Startup Inc"
-                  className="w-full px-4 py-3 rounded-xl bg-white/20 text-white placeholder-purple-300 border-2 border-purple-400/50 focus:border-orange-400 outline-none"
+                  className="w-full px-4 py-3 rounded-xl bg-white/20 text-white placeholder-purple-300 border-2 border-purple-400/50 focus:border-cyan-400 outline-none"
                 />
               </div>
               <div>
@@ -367,7 +367,7 @@ Provide comprehensive information about this company in the JSON format specifie
                   value={manualData.pitch}
                   onChange={(e) => setManualData({...manualData, pitch: e.target.value})}
                   placeholder="AI-powered platform for X"
-                  className="w-full px-4 py-3 rounded-xl bg-white/20 text-white placeholder-purple-300 border-2 border-purple-400/50 focus:border-orange-400 outline-none"
+                  className="w-full px-4 py-3 rounded-xl bg-white/20 text-white placeholder-purple-300 border-2 border-purple-400/50 focus:border-cyan-400 outline-none"
                 />
               </div>
               <div>
@@ -377,7 +377,7 @@ Provide comprehensive information about this company in the JSON format specifie
                   onChange={(e) => setManualData({...manualData, description: e.target.value})}
                   placeholder="Tell us more about your company..."
                   rows={4}
-                  className="w-full px-4 py-3 rounded-xl bg-white/20 text-white placeholder-purple-300 border-2 border-purple-400/50 focus:border-orange-400 outline-none"
+                  className="w-full px-4 py-3 rounded-xl bg-white/20 text-white placeholder-purple-300 border-2 border-purple-400/50 focus:border-cyan-400 outline-none"
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
@@ -388,7 +388,7 @@ Provide comprehensive information about this company in the JSON format specifie
                     value={manualData.website}
                     onChange={(e) => setManualData({...manualData, website: e.target.value})}
                     placeholder="https://..."
-                    className="w-full px-4 py-3 rounded-xl bg-white/20 text-white placeholder-purple-300 border-2 border-purple-400/50 focus:border-orange-400 outline-none"
+                    className="w-full px-4 py-3 rounded-xl bg-white/20 text-white placeholder-purple-300 border-2 border-purple-400/50 focus:border-cyan-400 outline-none"
                   />
                 </div>
                 <div>
@@ -398,7 +398,7 @@ Provide comprehensive information about this company in the JSON format specifie
                     value={manualData.raise}
                     onChange={(e) => setManualData({...manualData, raise: e.target.value})}
                     placeholder="$2M Seed"
-                    className="w-full px-4 py-3 rounded-xl bg-white/20 text-white placeholder-purple-300 border-2 border-purple-400/50 focus:border-orange-400 outline-none"
+                    className="w-full px-4 py-3 rounded-xl bg-white/20 text-white placeholder-purple-300 border-2 border-purple-400/50 focus:border-cyan-400 outline-none"
                   />
                 </div>
               </div>
@@ -422,7 +422,7 @@ Provide comprehensive information about this company in the JSON format specifie
           {/* Submit Button */}
           <button
             onClick={handleSubmit}
-            className="w-full py-4 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold text-lg rounded-xl shadow-xl transition-all"
+            className="w-full py-4 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold text-lg rounded-xl shadow-xl transition-all"
           >
             🚀 Submit Startup
           </button>

@@ -71,7 +71,7 @@ const ALGORITHMS = [
     id: 'god',
     name: 'GOD Algorithm',
     icon: Flame,
-    color: 'from-red-500 to-amber-500',
+    color: 'from-red-500 to-blue-500',
     bgColor: 'bg-red-500/20',
     borderColor: 'border-red-500/40',
     textColor: 'text-red-400',
@@ -81,10 +81,10 @@ const ALGORITHMS = [
     id: 'yc',
     name: 'YC Smell Test',
     icon: Lightbulb,
-    color: 'from-orange-500 to-amber-500',
-    bgColor: 'bg-orange-500/20',
-    borderColor: 'border-orange-500/40',
-    textColor: 'text-orange-400',
+    color: 'from-cyan-500 to-blue-500',
+    bgColor: 'bg-cyan-600/20',
+    borderColor: 'border-cyan-500/40',
+    textColor: 'text-cyan-400',
     description: "Paul Graham's 5 heuristics"
   },
   {
@@ -274,7 +274,7 @@ export default function AlgorithmComparisonDemo({ isOpen, onClose }: Props) {
         <div className="p-6 pb-4 border-b border-purple-500/20">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center">
+              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-cyan-600 to-blue-600 flex items-center justify-center">
                 <Brain className="w-8 h-8 text-white" />
               </div>
               <div>
@@ -329,7 +329,7 @@ export default function AlgorithmComparisonDemo({ isOpen, onClose }: Props) {
                 }}
                 className={`px-4 py-2 rounded-lg font-semibold transition-all ${
                   currentStartupIndex === index
-                    ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-lg'
+                    ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-lg'
                     : 'bg-white/10 text-gray-300 hover:bg-white/20'
                 }`}
               >
@@ -354,7 +354,7 @@ export default function AlgorithmComparisonDemo({ isOpen, onClose }: Props) {
                   <span className="px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 text-sm">
                     GOD: {currentStartup.godScore}/100
                   </span>
-                  <span className="px-3 py-1 rounded-full bg-orange-500/20 text-orange-300 text-sm">
+                  <span className="px-3 py-1 rounded-full bg-cyan-600/20 text-cyan-300 text-sm">
                     Smell Tests: {currentStartup.smellTestScore}/5
                   </span>
                   {currentStartup.hasTechFounder && (
@@ -367,7 +367,7 @@ export default function AlgorithmComparisonDemo({ isOpen, onClose }: Props) {
               {!isAnimating && Object.keys(animatedScores).length === 0 && (
                 <button
                   onClick={runAnimation}
-                  className="px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold rounded-xl transition-all flex items-center gap-2 shadow-lg"
+                  className="px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold rounded-xl transition-all flex items-center gap-2 shadow-lg"
                 >
                   <Zap className="w-5 h-5" />
                   Run Analysis
@@ -428,7 +428,7 @@ export default function AlgorithmComparisonDemo({ isOpen, onClose }: Props) {
 
           {/* Insight Box */}
           {showInsight && (
-            <div className="p-4 bg-gradient-to-r from-yellow-500/20 to-orange-500/20 rounded-xl border border-yellow-500/30 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="p-4 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-xl border border-cyan-500/30 animate-in fade-in slide-in-from-bottom-4 duration-500">
               <div className="flex items-start gap-3">
                 <CheckCircle2 className="w-6 h-6 text-yellow-400 flex-shrink-0 mt-0.5" />
                 <div>
@@ -448,8 +448,8 @@ export default function AlgorithmComparisonDemo({ isOpen, onClose }: Props) {
                   { label: 'Team', score: currentStartup.teamScore, color: 'from-blue-500 to-blue-600' },
                   { label: 'Traction', score: currentStartup.tractionScore, color: 'from-green-500 to-green-600' },
                   { label: 'Market', score: currentStartup.marketScore, color: 'from-purple-500 to-purple-600' },
-                  { label: 'Product', score: currentStartup.productScore, color: 'from-orange-500 to-amber-600' },
-                  { label: 'Vision', score: currentStartup.visionScore, color: 'from-orange-500 to-orange-600' },
+                  { label: 'Product', score: currentStartup.productScore, color: 'from-cyan-500 to-blue-600' },
+                  { label: 'Vision', score: currentStartup.visionScore, color: 'from-cyan-600 to-blue-600' },
                   { label: 'Smell', score: currentStartup.smellTestScore * 20, color: 'from-yellow-500 to-yellow-600' },
                 ].map((item) => (
                   <div key={item.label} className="text-center">

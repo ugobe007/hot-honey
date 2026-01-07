@@ -35,7 +35,7 @@ export default function NavBar() {
   };
 
   return (
-    <nav className="bg-gradient-to-r from-purple-900 via-purple-800 to-indigo-900 shadow-xl border-b-4 border-orange-400">
+    <nav className="bg-gradient-to-r from-purple-900 via-purple-800 to-indigo-900 shadow-xl border-b-4 border-cyan-400">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
@@ -91,7 +91,7 @@ export default function NavBar() {
               onClick={() => navigate('/')}
               className={`font-bold rounded-full transition-all ${getButtonSize('/')} ${
                 isActive('/')
-                  ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg scale-110'
+                  ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-lg scale-110'
                   : 'bg-purple-700 hover:bg-purple-600 text-white'
               }`}
             >
@@ -120,8 +120,8 @@ export default function NavBar() {
                   onClick={() => navigate('/benchmarks')}
                   className={`font-bold rounded-full transition-all ${getButtonSize('/benchmarks')} ${
                     isActive('/benchmarks')
-                      ? 'bg-gradient-to-r from-amber-400 to-orange-500 text-white shadow-lg scale-110'
-                      : 'bg-purple-700 hover:bg-orange-500 text-amber-300'
+                      ? 'bg-gradient-to-r from-cyan-400 to-blue-500 text-white shadow-lg scale-110'
+                      : 'bg-purple-700 hover:bg-cyan-600 text-cyan-300'
                   }`}
                 >
                   📈 Benchmarks
@@ -142,7 +142,7 @@ export default function NavBar() {
                   onClick={() => navigate('/portfolio')}
                   className={`font-bold rounded-full transition-all ${getButtonSize('/portfolio')} ${
                     isActive('/portfolio')
-                      ? 'bg-gradient-to-r from-yellow-500 to-orange-500 text-white shadow-lg scale-110'
+                      ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white shadow-lg scale-110'
                       : 'bg-purple-700 hover:bg-purple-600 text-white'
                   }`}
                 >

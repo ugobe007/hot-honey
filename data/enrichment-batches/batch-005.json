@@ -1,0 +1,450 @@
+[
+  {
+    "id": "d582f5d4-8c8c-4b1c-a127-58829c2845cf",
+    "name": "RTP Global",
+    "firm": "RTP Global",
+    "linkedin_url": "https://linkedin.com/in/rtp-global",
+    "blog_url": null,
+    "current_bio": "Invests in ambitious founders reshaping the world through technology.",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "62907bc5-0829-4d0e-bd94-77986e7a948b",
+    "name": "Notable Capital",
+    "firm": "Notable Capital",
+    "linkedin_url": "https://www.notablecap.com",
+    "blog_url": null,
+    "current_bio": "We invest in notable founders with global ambitions. U.S. Anchored, Globally Minded, Investing for Decades with $5 billion assets under management, backing founders from the earliest stages of their idea to exit.",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "b19c1c8a-817e-488f-b80f-b1ed20fc6ae4",
+    "name": "lool Ventures",
+    "firm": "lool Ventures",
+    "linkedin_url": "https://linkedin.com/in/lool-ventures",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "Looking at companies based in Israel or with Israeli founders"
+    ],
+    "current_stage": [
+      "Seed"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Check Size Min",
+      "Check Size Max",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "56f55c9f-aaab-4b19-8cda-c5f77e4b1f65",
+    "name": "Flybridge Capital",
+    "firm": "Flybridge Capital",
+    "linkedin_url": "https://linkedin.com/in/flybridge-capital",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "Seed-stage venture capital for ambitious founders leveraging technology"
+    ],
+    "current_stage": [
+      "Seed"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Check Size Min",
+      "Check Size Max",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "5669391e-2f5c-4fc9-ba6f-4bdaab6abd5d",
+    "name": "Anne Dwane (Village Global)",
+    "firm": "Anne Dwane (Village Global)",
+    "linkedin_url": "https://linkedin.com/in/anne-dwane",
+    "blog_url": null,
+    "current_bio": "General Partner at Village Global",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "e7c63ae4-02af-4ead-ae44-72b272f8f25d",
+    "name": "Floodgate Fund",
+    "firm": "Floodgate Fund",
+    "linkedin_url": "https://linkedin.com/in/floodgate-fund",
+    "blog_url": null,
+    "current_bio": "Backing extraordinary founders at pre-seed and seed",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "06e9633a-aaa2-4f27-88a9-0b66ddd8266c",
+    "name": "Headline",
+    "firm": "Headline",
+    "linkedin_url": "https://linkedin.com/in/headline",
+    "blog_url": null,
+    "current_bio": "Global investing teams under a single brand.",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "ccbfb2dc-0c75-4e50-9ba0-feed6480bf25",
+    "name": "Carol Suh (Arch Venture Partners)",
+    "firm": "Carol Suh (Arch Venture Partners)",
+    "linkedin_url": "https://linkedin.com/in/carol-suh",
+    "blog_url": null,
+    "current_bio": "Carol Suh is an investor at Carol Suh (Arch Venture Partners) focused on technology, HealthTech, Biotech investing at seed and series_a stage.",
+    "current_sectors": [
+      "technology",
+      "HealthTech",
+      "Biotech"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "72edde04-33f6-4a32-9edd-959ac0953ebf",
+    "name": "Arc Ventures",
+    "firm": "Arc Ventures",
+    "linkedin_url": "https://linkedin.com/in/arc-ventures",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI/ML",
+      "SaaS",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A",
+      "Series B"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "daa1f1f1-0c5d-472e-8d74-5ec31e65c8e3",
+    "name": "Innocells",
+    "firm": "Innocells",
+    "linkedin_url": "https://linkedin.com/in/innocells",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI/ML",
+      "SaaS",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "047ef59d-3fa5-4b4b-9405-3600de356750",
+    "name": "Fawzi Itani (Forerunner Ventures)",
+    "firm": "Fawzi Itani (Forerunner Ventures)",
+    "linkedin_url": "https://linkedin.com/in/fawzi-itani",
+    "blog_url": null,
+    "current_bio": "Fawzi Itani is an investor at Forerunner Ventures focused on technology investing at seed and series_a stage.",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "2711b118-3ef2-47cf-b0c2-8bab43500d38",
+    "name": "Nina Capital",
+    "firm": "Nina Capital",
+    "linkedin_url": "https://linkedin.com/in/nina-capital",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "Analytics",
+      "Artificial Intelligence",
+      "Health Care",
+      "Information Technology"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Check Size Min",
+      "Check Size Max",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "8608f222-901a-4c40-bced-590d72e2a936",
+    "name": "W Fund",
+    "firm": "W Fund",
+    "linkedin_url": "https://linkedin.com/in/w-fund",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "Focused on females/underrepresented founders"
+    ],
+    "current_stage": [
+      "Seed"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Check Size Min",
+      "Check Size Max",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "ac5e107b-5532-43ee-bc2e-0547d1d42201",
+    "name": "Kori Davis (Village Global)",
+    "firm": "Kori Davis (Village Global)",
+    "linkedin_url": "https://linkedin.com/in/kori-davis",
+    "blog_url": null,
+    "current_bio": "VP, Finance at Village Global",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "da239821-5852-4492-92fe-dc319becbd6d",
+    "name": "WestSummit Capital",
+    "firm": "WestSummit Capital",
+    "linkedin_url": "https://linkedin.com/in/westsummit-capital",
+    "blog_url": null,
+    "current_bio": "Global technology growth investor with entrepreneurial DNA.",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "76ae5e11-eca5-428b-8359-9c3b78a991fc",
+    "name": "Intel Capital",
+    "firm": "Intel Capital",
+    "linkedin_url": "https://linkedin.com/in/intel-capital",
+    "blog_url": null,
+    "current_bio": "Intel Capital invests in companies shaping the future of compute.",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "413288d1-db23-4dc2-ad6b-b11d2e4a917c",
+    "name": "Prudence Holdings",
+    "firm": "Prudence Holdings",
+    "linkedin_url": "https://linkedin.com/in/prudence-holdings",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI/ML",
+      "SaaS",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "eb8b0c68-6177-4a2c-9fc0-0af54f8f0ca3",
+    "name": "Lesley Chavkin (Ribbit Capital)",
+    "firm": "Lesley Chavkin (Ribbit Capital)",
+    "linkedin_url": "https://linkedin.com/in/lesley-chavkin",
+    "blog_url": null,
+    "current_bio": "Lesley Chavkin is an investor at Lesley Chavkin (Ribbit Capital) focused on technology investing at seed and series_a stage.",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "95032f8a-5b30-4e79-ab0d-28513a0cab46",
+    "name": "Linse Capital",
+    "firm": "Linse Capital",
+    "linkedin_url": null,
+    "blog_url": null,
+    "current_bio": "Linse Capital is a venture capital firm focused on SaaS investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "LinkedIn",
+      "Investment Thesis",
+      "Geography",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "6286fe7d-6208-4ae7-8ae9-8e78be5385b2",
+    "name": "Bonart Financial Performance",
+    "firm": "Bonart Financial Performance",
+    "linkedin_url": "https://linkedin.com/in/bonart-financial-performance",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI/ML",
+      "SaaS",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis"
+    ],
+    "priority": 4
+  }
+]

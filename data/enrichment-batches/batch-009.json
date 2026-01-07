@@ -1,0 +1,430 @@
+[
+  {
+    "id": "9eae3bbe-4061-4696-9b7a-e2557e8c8f0e",
+    "name": "charge of capital",
+    "firm": "charge of capital",
+    "linkedin_url": "https://linkedin.com/in/charge-of-capital",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 3
+  },
+  {
+    "id": "e0456182-e155-47cb-8d3d-25c4d2bf1d59",
+    "name": "Agents PEI Fund",
+    "firm": "Agents PEI Fund",
+    "linkedin_url": "https://linkedin.com/in/agents-pei-fund",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 3
+  },
+  {
+    "id": "74f5cd12-1d20-418f-8364-bb7a02e6b585",
+    "name": "Bruno Werneck de Almeida",
+    "firm": "Plaid",
+    "linkedin_url": "https://linkedin.com/in/bruno-werneck-de-almeida",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "Crypto/Blockchain",
+      "Ecommerce",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Pre-seed",
+      "Seed"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 3
+  },
+  {
+    "id": "43e5ca2d-f735-49a7-807a-682b279f4be7",
+    "name": "Scott Lawin (Panteracapital)",
+    "firm": "Scott Lawin (Panteracapital)",
+    "linkedin_url": "https://linkedin.com/in/scott-lawin",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 3
+  },
+  {
+    "id": "b3906130-5d81-42e7-a4c9-d37114fdedfe",
+    "name": "Zach Sweeney, Ph.D. (Versant Ventures)",
+    "firm": "Zach Sweeney, Ph.D. (Versant Ventures)",
+    "linkedin_url": "https://linkedin.com/in/zach-sweeney",
+    "blog_url": null,
+    "current_bio": "Venture Partner",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 3
+  },
+  {
+    "id": "d9769996-2c64-477e-ad17-4f9282a07b67",
+    "name": "Two39 Ventures",
+    "firm": "Two39 Ventures",
+    "linkedin_url": "https://linkedin.com/in/two39-ventures",
+    "blog_url": null,
+    "current_bio": "Two39 Ventures is a vc firm focused on Not currently interested in pharma, Industry Agnostic investing at Seed stage.",
+    "current_sectors": [
+      "Not currently interested in pharma",
+      "Industry Agnostic"
+    ],
+    "current_stage": [
+      "Seed"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Notable Investments"
+    ],
+    "priority": 3
+  },
+  {
+    "id": "4367c495-c0fc-4c13-aaa9-1e0b5857ae3b",
+    "name": "ago Bain Capital",
+    "firm": "ago Bain Capital",
+    "linkedin_url": "https://linkedin.com/in/ago-bain-capital",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 3
+  },
+  {
+    "id": "efb4895f-1969-461e-90db-5508db61f422",
+    "name": "SquadInvestments",
+    "firm": "SquadInvestments",
+    "linkedin_url": "https://linkedin.com/in/squadinvestments",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 3
+  },
+  {
+    "id": "ceb395e6-90a7-459d-8d3d-3a8c42595417",
+    "name": "Strategic Value Partners",
+    "firm": "Strategic Value Partners",
+    "linkedin_url": "https://linkedin.com/in/strategic-value-partners",
+    "blog_url": null,
+    "current_bio": "Strategic Value Partners is a vc firm focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "8bfab047-3f13-4ec9-9659-73a831b30682",
+    "name": "Zemea Administration",
+    "firm": "Zemea Administration",
+    "linkedin_url": "https://linkedin.com/in/zemea-administration",
+    "blog_url": null,
+    "current_bio": "Zemea Administration is a angel investor focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "429a174d-d86f-4fb6-b8be-95ee49c4cadf",
+    "name": "Google",
+    "firm": "Google",
+    "linkedin_url": "https://linkedin.com/in/google",
+    "blog_url": null,
+    "current_bio": "Partnering with Accel to support AI founders through Atoms AI Cohort 2026",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "be9743b8-07f9-45bf-bda7-973a0cf741a9",
+    "name": "Ops Liz Factor (Villageglobal)",
+    "firm": "Ops Liz Factor (Villageglobal)",
+    "linkedin_url": "https://linkedin.com/in/ops-liz-factor",
+    "blog_url": null,
+    "current_bio": "Ops Liz Factor is an investor at Villageglobal focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "19a594f0-ff01-4e0c-bd81-b5402b68be69",
+    "name": "Private Equity",
+    "firm": "Private Equity",
+    "linkedin_url": "https://linkedin.com/in/private-equity",
+    "blog_url": null,
+    "current_bio": "Private Equity is a angel investor focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "14785de5-89bc-4eb8-92a1-9f7a17b70537",
+    "name": "Social Capital",
+    "firm": "Social Capital",
+    "linkedin_url": "https://linkedin.com/in/social-capital",
+    "blog_url": null,
+    "current_bio": "Social Capital is a vc firm focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "a4a63d0a-8650-4745-9b25-40ce4dc33f27",
+    "name": "Brad Feld",
+    "firm": "Brad Feld",
+    "linkedin_url": "https://linkedin.com/in/brad-feld",
+    "blog_url": null,
+    "current_bio": "Managing Director at Foundry Group",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "82c0a895-cc73-45f4-b766-3477e7093653",
+    "name": "Giorgio Ottaviani, Ph.D.",
+    "firm": "Giorgio Ottaviani, Ph.D.",
+    "linkedin_url": "https://linkedin.com/in/giorgio-ottaviani",
+    "blog_url": null,
+    "current_bio": "Operating Partner at Versantventures",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "a86e5954-4c33-46e4-b016-036d6b0cb381",
+    "name": "Cobie (Paradigm)",
+    "firm": "Paradigm",
+    "linkedin_url": "https://linkedin.com/in/cobie",
+    "blog_url": "https://paradigm.xyz",
+    "current_bio": "Cobie is a partner at Paradigm. Crypto-native investor in DeFi and web3",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "138b08d9-22b9-4952-816b-ab022a7b07e6",
+    "name": "Nick",
+    "firm": "Nick",
+    "linkedin_url": "https://linkedin.com/in/nick",
+    "blog_url": null,
+    "current_bio": "Partner at USV, wrote about composability benefits",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "14118ef0-6d94-4d3c-99b6-d2919f1c4a39",
+    "name": "Keith Crandell (Archventure)",
+    "firm": "Keith Crandell (Archventure)",
+    "linkedin_url": "https://linkedin.com/in/keith-crandell",
+    "blog_url": null,
+    "current_bio": "Keith Crandell is an investor at Archventure focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "e59314d1-61e6-484d-a288-0414a760db17",
+    "name": "of ContentRoy RosinBoard (Firstround)",
+    "firm": "of ContentRoy RosinBoard (Firstround)",
+    "linkedin_url": "https://linkedin.com/in/of-contentroy-rosinboard",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Consumer"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Notable Investments"
+    ],
+    "priority": 2
+  }
+]

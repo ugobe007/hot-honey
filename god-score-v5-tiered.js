@@ -1,0 +1,1 @@
+scripts/core/god-score-v5-tiered.js

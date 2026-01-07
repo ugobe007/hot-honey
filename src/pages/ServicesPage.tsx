@@ -189,8 +189,8 @@ export default function ServicesPage() {
               onClick={() => setSelectedCategory(cat)}
               className={`px-4 py-2 rounded-xl font-medium transition-all ${
                 selectedCategory === cat
-                  ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-lg shadow-cyan-500/30'
-                  : 'bg-gradient-to-r from-purple-600/40 to-indigo-600/40 text-white hover:from-purple-500/60 hover:to-indigo-500/60 border border-purple-400/30'
+                  ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-black font-bold shadow-lg shadow-orange-500/40'
+                  : 'bg-gradient-to-r from-cyan-600/40 to-blue-600/40 text-white hover:from-cyan-500/60 hover:to-blue-500/60 border border-cyan-400/30'
               }`}
             >
               {cat === 'all' ? 'All Services' : cat.charAt(0).toUpperCase() + cat.slice(1)}

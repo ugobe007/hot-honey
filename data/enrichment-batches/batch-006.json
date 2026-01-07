@@ -1,0 +1,461 @@
+[
+  {
+    "id": "47203f27-f424-4083-8727-a5b43a54f291",
+    "name": "Brigitte Bonebrake (Lerer Hippeau)",
+    "firm": "Brigitte Bonebrake (Lerer Hippeau)",
+    "linkedin_url": "https://linkedin.com/in/brigitte-bonebrake",
+    "blog_url": null,
+    "current_bio": "Assistant Controller at Lerer Hippeau since 2025",
+    "current_sectors": [
+      "Generalist"
+    ],
+    "current_stage": [
+      "Seed"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "3c0f6a0e-706a-4b09-95c7-6e73e67070ed",
+    "name": "TenOneTen Ventures",
+    "firm": "TenOneTen Ventures",
+    "linkedin_url": "https://linkedin.com/in/tenoneten-ventures",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI/ML",
+      "SaaS",
+      "Fintech",
+      "Consumer",
+      "Healthcare"
+    ],
+    "current_stage": [
+      "Seed"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "9b974db1-75e4-4a25-9193-c43f7de12778",
+    "name": "Data Community Fund",
+    "firm": "Data Community Fund",
+    "linkedin_url": "https://linkedin.com/in/data-community-fund",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "Focused on B2B companies with a clear data-tech differentiation"
+    ],
+    "current_stage": [
+      "Pre-Seed",
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Check Size Min",
+      "Check Size Max",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "24ed7605-30d9-4ace-888d-f359bbc9243b",
+    "name": "Xfund",
+    "firm": "Xfund",
+    "linkedin_url": "https://linkedin.com/in/xfund",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI/ML",
+      "SaaS",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "655ffa8f-1440-4a2f-aac8-e0879e6946e0",
+    "name": "Alpha Square Group",
+    "firm": "Alpha Square Group",
+    "linkedin_url": "https://linkedin.com/in/alpha-square-group",
+    "blog_url": null,
+    "current_bio": "Alpha Square Group is a angel investor focused on TMT, Healthcare, and Real Estate sectors investing at Series B and Series C stage.",
+    "current_sectors": [
+      "TMT",
+      "Healthcare",
+      "and Real Estate sectors"
+    ],
+    "current_stage": [
+      "Series B",
+      "Series C"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Notable Investments"
+    ],
+    "priority": 3
+  },
+  {
+    "id": "fb358d8c-3d6c-4c15-b9d7-4370077f33b5",
+    "name": "Digital Horizon",
+    "firm": "Digital Horizon",
+    "linkedin_url": "https://linkedin.com/in/digital-horizon",
+    "blog_url": null,
+    "current_bio": "Digital Horizon is a angel investor focused on Artificial Intelligence, Blockchain, FinTech investing at Seed stage.",
+    "current_sectors": [
+      "Artificial Intelligence",
+      "Blockchain",
+      "FinTech",
+      "Marketplace"
+    ],
+    "current_stage": [
+      "Seed"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Notable Investments"
+    ],
+    "priority": 3
+  },
+  {
+    "id": "37fd7de7-9822-419e-9db9-80f2852e153e",
+    "name": "Atypical",
+    "firm": "Atypical",
+    "linkedin_url": "https://linkedin.com/in/atypical",
+    "blog_url": null,
+    "current_bio": "Atypical is a angel investor focused on DeepTech, AI/ML, API-first investing at Pre-Seed stage.",
+    "current_sectors": [
+      "DeepTech",
+      "AI/ML",
+      "API-first",
+      "Cybersecurity"
+    ],
+    "current_stage": [
+      "Pre-Seed"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Notable Investments"
+    ],
+    "priority": 3
+  },
+  {
+    "id": "2aaa9270-c571-45a0-be74-28f57fb70967",
+    "name": "Energy Impact Partners",
+    "firm": "Energy Impact Partners",
+    "linkedin_url": "https://linkedin.com/in/energy-impact-partners",
+    "blog_url": null,
+    "current_bio": "Energy Impact Partners is a vc firm focused on Clean Energy, Sustainability, Electric Mobility investing at Seed and Series A stage.",
+    "current_sectors": [
+      "Clean Energy",
+      "Sustainability",
+      "Electric Mobility"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A",
+      "Series B"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis"
+    ],
+    "priority": 3
+  },
+  {
+    "id": "1cc7d49c-7cbb-4271-9c6c-656b1077704a",
+    "name": "CapitalT",
+    "firm": "CapitalT",
+    "linkedin_url": "https://linkedin.com/in/capitalt",
+    "blog_url": null,
+    "current_bio": "CapitalT is a vc firm focused on Software technology, Northern Europe investing at Seed stage.",
+    "current_sectors": [
+      "Software technology",
+      "Northern Europe"
+    ],
+    "current_stage": [
+      "Seed"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Notable Investments"
+    ],
+    "priority": 3
+  },
+  {
+    "id": "92b89650-aa0a-4b6c-821d-d999736ea8e0",
+    "name": "Security Leadership Capital",
+    "firm": "Security Leadership Capital",
+    "linkedin_url": "https://linkedin.com/in/security-leadership-capital",
+    "blog_url": null,
+    "current_bio": "Security Leadership Capital is a vc firm focused on AI/ML, SaaS, Fintech investing at Seed stage.",
+    "current_sectors": [
+      "AI/ML",
+      "SaaS",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis"
+    ],
+    "priority": 3
+  },
+  {
+    "id": "d810c71c-fd20-42b5-afa9-e8aca2e30f59",
+    "name": "Point Nine Capital",
+    "firm": "Point Nine Capital",
+    "linkedin_url": "https://linkedin.com/in/point-nine-capital",
+    "blog_url": null,
+    "current_bio": "Point Nine Capital is a vc firm focused on SaaS, Marketplaces, E-commerce investing at Pre-Seed and Seed stage.",
+    "current_sectors": [
+      "SaaS",
+      "Marketplaces",
+      "E-commerce"
+    ],
+    "current_stage": [
+      "Pre-Seed",
+      "Seed"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis"
+    ],
+    "priority": 3
+  },
+  {
+    "id": "f9714d12-2d51-4596-9486-f487668625bd",
+    "name": "Paladin Capital",
+    "firm": "Paladin Capital",
+    "linkedin_url": "https://linkedin.com/in/paladin-capital",
+    "blog_url": null,
+    "current_bio": "Paladin Capital is a vc firm focused on Cybersecurity, Technology, Healthcare investing at Seed and Series A stage.",
+    "current_sectors": [
+      "Cybersecurity",
+      "Technology",
+      "Healthcare",
+      "AI/ML",
+      "SaaS",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A",
+      "Series B",
+      "Series C"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis"
+    ],
+    "priority": 3
+  },
+  {
+    "id": "e68bed57-5563-453b-8199-ed9429333c39",
+    "name": "Chrysalix Venture Capital",
+    "firm": "Chrysalix Venture Capital",
+    "linkedin_url": "https://linkedin.com/in/chrysalix-venture-capital",
+    "blog_url": null,
+    "current_bio": "Chrysalix Venture Capital is a vc firm focused on Industrial Innovation - Intelligent Systems & Resource investing at Seed and Series A stage.",
+    "current_sectors": [
+      "Industrial Innovation - Intelligent Systems & Resource"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A",
+      "Series B"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Notable Investments"
+    ],
+    "priority": 3
+  },
+  {
+    "id": "9a67e0ef-84d2-4a93-a411-0cb473f70467",
+    "name": "Agroecology Capital",
+    "firm": "Agroecology Capital",
+    "linkedin_url": "https://linkedin.com/in/agroecology-capital",
+    "blog_url": null,
+    "current_bio": "Agroecology Capital is a vc firm focused on Next-gen proteins, biological solutions, plant health investing at Seed stage.",
+    "current_sectors": [
+      "Next-gen proteins",
+      "biological solutions",
+      "plant health"
+    ],
+    "current_stage": [
+      "Seed"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Notable Investments"
+    ],
+    "priority": 3
+  },
+  {
+    "id": "da0afff3-1071-4adb-a314-b29f4458b635",
+    "name": "Cleo Capital",
+    "firm": "Cleo Capital",
+    "linkedin_url": "https://linkedin.com/in/cleo-capital",
+    "blog_url": null,
+    "current_bio": "Cleo Capital is a vc firm focused on Consumer Technology, HealthTech, SaaS investing at Pre-Seed and Seed stage.",
+    "current_sectors": [
+      "Consumer Technology",
+      "HealthTech",
+      "SaaS"
+    ],
+    "current_stage": [
+      "Pre-Seed",
+      "Seed"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis"
+    ],
+    "priority": 3
+  },
+  {
+    "id": "0163b5f2-91e1-4832-bdf2-d50c39a03dfb",
+    "name": "Ripple Ventures",
+    "firm": "Ripple Ventures",
+    "linkedin_url": "https://linkedin.com/in/ripple-ventures",
+    "blog_url": null,
+    "current_bio": "Ripple Ventures is a vc firm focused on B2B SaaS investor in companies in North America investing at Pre-Seed and Seed stage.",
+    "current_sectors": [
+      "B2B SaaS investor in companies in North America"
+    ],
+    "current_stage": [
+      "Pre-Seed",
+      "Seed"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Notable Investments"
+    ],
+    "priority": 3
+  },
+  {
+    "id": "3f8abb39-0f35-4486-bab4-87c0e351fa46",
+    "name": "Armory Square Ventures",
+    "firm": "Armory Square Ventures",
+    "linkedin_url": "https://linkedin.com/in/armory-square-ventures",
+    "blog_url": null,
+    "current_bio": "Armory Square Ventures is a vc firm focused on Generalist, B2B Tech, SaaS investing at Seed and Seed+ stage.",
+    "current_sectors": [
+      "Generalist",
+      "B2B Tech",
+      "SaaS",
+      "Enterprise",
+      "Marketplaces"
+    ],
+    "current_stage": [
+      "Seed",
+      "Seed+",
+      "Late Seed"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Notable Investments"
+    ],
+    "priority": 3
+  },
+  {
+    "id": "39fa95c7-9483-43a1-98ef-25c8e98b4f58",
+    "name": "Underdog Labs",
+    "firm": "Underdog Labs",
+    "linkedin_url": "https://linkedin.com/in/underdog-labs",
+    "blog_url": null,
+    "current_bio": "Underdog Labs is a angel investor focused on AI/ML, SaaS, Fintech investing at Pre-Seed and Seed stage.",
+    "current_sectors": [
+      "AI/ML",
+      "SaaS",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Pre-Seed",
+      "Seed"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis"
+    ],
+    "priority": 3
+  },
+  {
+    "id": "12bf59b9-fa18-4078-8906-a3786351071a",
+    "name": "Evolv Ventures",
+    "firm": "Evolv Ventures",
+    "linkedin_url": "https://linkedin.com/in/evolv-ventures",
+    "blog_url": null,
+    "current_bio": "Evolv Ventures is a vc firm focused on Focused on investments across the food value chain investing at Seed stage.",
+    "current_sectors": [
+      "Focused on investments across the food value chain"
+    ],
+    "current_stage": [
+      "Seed"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Notable Investments"
+    ],
+    "priority": 3
+  },
+  {
+    "id": "bf5d8ca4-4d05-46e2-b023-ffd9ffecbd10",
+    "name": "Spark Capital",
+    "firm": "Spark Capital",
+    "linkedin_url": "https://linkedin.com/in/spark-capital",
+    "blog_url": null,
+    "current_bio": "A venture capital firm investing in startups.",
+    "current_sectors": [
+      "technology",
+      "SaaS",
+      "Consumer"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Notable Investments"
+    ],
+    "priority": 3
+  }
+]

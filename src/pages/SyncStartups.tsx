@@ -133,7 +133,7 @@ export default function SyncStartups() {
           <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20">
             <h2 className="text-2xl font-bold text-white mb-4">📁 Local (startupData.ts)</h2>
             <div className="text-white mb-4">
-              <p className="text-3xl font-bold text-orange-400">{startupData.length}</p>
+              <p className="text-3xl font-bold text-cyan-400">{startupData.length}</p>
               <p className="text-sm text-white/70">startups in code</p>
             </div>
             <div className="space-y-2 max-h-96 overflow-y-auto">
@@ -173,7 +173,7 @@ export default function SyncStartups() {
         </div>
 
         {/* Sync Button */}
-        <div className="bg-gradient-to-r from-orange-500 to-amber-500 rounded-2xl p-8 text-center">
+        <div className="bg-gradient-to-r from-cyan-600 to-blue-600 rounded-2xl p-8 text-center">
           <h3 className="text-3xl font-bold text-white mb-4">
             Sync Local → Database
           </h3>

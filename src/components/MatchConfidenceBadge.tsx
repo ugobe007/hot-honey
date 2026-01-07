@@ -85,7 +85,7 @@ export default function MatchConfidenceBadge({
   // Determine confidence level
   let confidenceLevel: 'high' | 'medium' | 'low' = 'low';
   let confidenceLabel = 'Low Confidence';
-  let confidenceColor = 'text-orange-400 bg-orange-500/20 border-orange-500/30';
+  let confidenceColor = 'text-cyan-400 bg-cyan-600/20 border-cyan-500/30';
   
   if (confidenceScore >= 70) {
     confidenceLevel = 'high';
@@ -94,7 +94,7 @@ export default function MatchConfidenceBadge({
   } else if (confidenceScore >= 45) {
     confidenceLevel = 'medium';
     confidenceLabel = 'Good Confidence';
-    confidenceColor = 'text-yellow-400 bg-yellow-500/20 border-yellow-500/30';
+    confidenceColor = 'text-yellow-400 bg-yellow-500/20 border-cyan-500/30';
   }
 
   // Simple badge variant
@@ -127,12 +127,12 @@ export default function MatchConfidenceBadge({
             ) : confidenceLevel === 'medium' ? (
               <Sparkles className="w-5 h-5 text-yellow-400" />
             ) : (
-              <AlertCircle className="w-5 h-5 text-orange-400" />
+              <AlertCircle className="w-5 h-5 text-cyan-400" />
             )}
             <span className={`font-semibold ${
               confidenceLevel === 'high' ? 'text-green-400' :
               confidenceLevel === 'medium' ? 'text-yellow-400' :
-              'text-orange-400'
+              'text-cyan-400'
             }`}>
               {confidenceLabel}
             </span>
@@ -146,7 +146,7 @@ export default function MatchConfidenceBadge({
             className={`h-full rounded-full transition-all ${
               confidenceLevel === 'high' ? 'bg-green-400' :
               confidenceLevel === 'medium' ? 'bg-yellow-400' :
-              'bg-orange-400'
+              'bg-cyan-400'
             }`}
             style={{ width: `${confidenceScore}%` }}
           />
@@ -159,7 +159,7 @@ export default function MatchConfidenceBadge({
               <span className={`w-1.5 h-1.5 rounded-full ${
                 confidenceLevel === 'high' ? 'bg-green-400' :
                 confidenceLevel === 'medium' ? 'bg-yellow-400' :
-                'bg-orange-400'
+                'bg-cyan-400'
               }`} />
               {factor}
             </div>

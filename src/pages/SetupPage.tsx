@@ -137,7 +137,7 @@ export default function SetupPage() {
             <button
               onClick={runSetup}
               disabled={loading}
-              className="px-8 py-4 bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold text-xl rounded-xl shadow-xl hover:from-yellow-600 hover:to-orange-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed mb-6"
+              className="px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold text-xl rounded-xl shadow-xl hover:from-cyan-600 hover:to-blue-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed mb-6"
             >
               {loading ? '⏳ Seeding Data...' : '🚀 Seed Investor Data'}
             </button>
@@ -173,7 +173,7 @@ export default function SetupPage() {
               <button
                 onClick={removeDuplicates}
                 disabled={removingDupes}
-                className="px-8 py-4 bg-gradient-to-r from-red-500 to-orange-500 text-white font-bold text-xl rounded-xl shadow-xl hover:from-red-600 hover:to-orange-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-8 py-4 bg-gradient-to-r from-blue-500 to-violet-500 text-white font-bold text-xl rounded-xl shadow-xl hover:from-cyan-600 hover:to-blue-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {removingDupes ? '🗑️ Removing...' : '🗑️ Remove Duplicates'}
               </button>

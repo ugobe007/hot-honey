@@ -384,7 +384,7 @@ const AdminDashboard: React.FC = () => {
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
-        <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-cyan-600/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto p-8">
@@ -471,15 +471,15 @@ const AdminDashboard: React.FC = () => {
 
         {/* Overview Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
-          <div className="group relative bg-gradient-to-br from-orange-500/20 via-amber-500/10 to-yellow-500/20 backdrop-blur-xl rounded-2xl p-6 border-2 border-orange-500/30 hover:border-orange-400/50 transition-all hover:scale-105 cursor-pointer shadow-xl hover:shadow-orange-500/30">
-            <div className="absolute inset-0 bg-gradient-to-r from-orange-500/0 via-orange-500/5 to-orange-500/0 opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl"></div>
+          <div className="group relative bg-gradient-to-br from-cyan-500/20 via-blue-500/10 to-violet-500/20 backdrop-blur-xl rounded-2xl p-6 border-2 border-cyan-500/30 hover:border-cyan-400/50 transition-all hover:scale-105 cursor-pointer shadow-xl hover:shadow-cyan-500/30">
+            <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/0 via-cyan-500/5 to-cyan-500/0 opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl"></div>
             <div className="relative">
               <div className="flex items-center gap-2 mb-2">
-                <Building2 className="w-5 h-5 text-orange-400" />
-                <span className="text-orange-300 text-sm font-medium">Total Startups</span>
+                <Building2 className="w-5 h-5 text-cyan-400" />
+                <span className="text-cyan-300 text-sm font-medium">Total Startups</span>
               </div>
               <div className="text-4xl font-bold text-white mb-1">{stats.totals.startups}</div>
-              <div className="text-orange-300/70 text-xs">Active in platform</div>
+              <div className="text-cyan-300/70 text-xs">Active in platform</div>
             </div>
           </div>
           
@@ -603,7 +603,7 @@ const AdminDashboard: React.FC = () => {
                   <div className="text-xs text-gray-300 mt-1">Total Articles</div>
                 </div>
                 <div className="bg-white/10 rounded-xl p-4 hover:bg-white/15 transition-all border border-white/10">
-                  <div className="text-3xl font-bold text-orange-400">{rssStats.unprocessed}</div>
+                  <div className="text-3xl font-bold text-cyan-400">{rssStats.unprocessed}</div>
                   <div className="text-xs text-gray-300 mt-1">Unprocessed</div>
                 </div>
                 <div className="bg-white/10 rounded-xl p-4 hover:bg-white/15 transition-all border border-white/10">
@@ -625,7 +625,7 @@ const AdminDashboard: React.FC = () => {
                         </div>
                       </div>
                       {!article.processed && (
-                        <Flame className="w-5 h-5 text-orange-400 flex-shrink-0 ml-2 animate-pulse" />
+                        <Flame className="w-5 h-5 text-cyan-400 flex-shrink-0 ml-2 animate-pulse" />
                       )}
                     </div>
                   </div>
@@ -712,7 +712,7 @@ const AdminDashboard: React.FC = () => {
             <DashboardWidget
               title="GOD Score Analytics"
               icon={Zap}
-              gradient="from-orange-900/80 via-red-900/80 to-orange-900/80"
+              gradient="from-slate-800/80 via-slate-700/80 to-slate-800/80"
               loading={loading}
               actions={
                 <button className="text-white/60 hover:text-white transition-colors">
@@ -723,7 +723,7 @@ const AdminDashboard: React.FC = () => {
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-white/10 rounded-xl p-4 hover:bg-white/15 transition-all border border-white/10">
-                  <div className="text-3xl font-bold bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">{avgGodScore}</div>
+                  <div className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">{avgGodScore}</div>
                   <div className="text-xs text-gray-300 mt-1">Avg Score</div>
                 </div>
                 <div className="bg-white/10 rounded-xl p-4 hover:bg-white/15 transition-all border border-white/10">
@@ -805,7 +805,7 @@ const AdminDashboard: React.FC = () => {
                 const colorClasses = {
                   purple: 'text-purple-400 bg-purple-500/10',
                   cyan: 'text-cyan-400 bg-cyan-500/10',
-                  orange: 'text-orange-400 bg-orange-500/10'
+                  orange: 'text-cyan-400 bg-cyan-600/10'
                 }[activity.color];
                 
                 return (
@@ -849,7 +849,7 @@ const AdminDashboard: React.FC = () => {
                   {activeModal === 'ai' && <Brain className="w-8 h-8 text-purple-400" />}
                   {activeModal === 'rss' && <Rss className="w-8 h-8 text-cyan-400" />}
                   {activeModal === 'ml' && <Cpu className="w-8 h-8 text-green-400" />}
-                  {activeModal === 'god' && <Zap className="w-8 h-8 text-orange-400" />}
+                  {activeModal === 'god' && <Zap className="w-8 h-8 text-cyan-400" />}
                   {activeModal === 'matching' && <Activity className="w-8 h-8 text-pink-400" />}
                   <h2 className="text-3xl font-bold text-white">
                     {activeModal === 'ai' && 'AI Activity Dashboard'}
@@ -895,7 +895,7 @@ const AdminDashboard: React.FC = () => {
                     <button
                       onClick={calculateGodScores}
                       disabled={actionLoading}
-                      className="flex items-center gap-2 px-4 py-2 bg-orange-600 hover:bg-orange-700 disabled:bg-gray-600 text-white rounded-lg transition-all text-sm font-medium"
+                      className="flex items-center gap-2 px-4 py-2 bg-cyan-700 hover:bg-cyan-600 disabled:bg-gray-600 text-white rounded-lg transition-all text-sm font-medium"
                     >
                       {actionLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Play className="w-4 h-4" />}
                       Calculate GOD Scores
@@ -975,9 +975,9 @@ const AdminDashboard: React.FC = () => {
                       <div className="text-3xl font-bold text-white">{rssStats.total}</div>
                       <div className="text-sm text-cyan-300">Total Articles</div>
                     </div>
-                    <div className="bg-orange-500/20 rounded-xl p-4 border border-orange-500/30">
-                      <div className="text-3xl font-bold text-orange-400">{rssStats.unprocessed}</div>
-                      <div className="text-sm text-orange-300">Unprocessed</div>
+                    <div className="bg-cyan-600/20 rounded-xl p-4 border border-cyan-500/30">
+                      <div className="text-3xl font-bold text-cyan-400">{rssStats.unprocessed}</div>
+                      <div className="text-sm text-cyan-300">Unprocessed</div>
                     </div>
                     <div className="bg-green-500/20 rounded-xl p-4 border border-green-500/30">
                       <div className="text-3xl font-bold text-green-400">{rssStats.sources}</div>
@@ -1008,9 +1008,9 @@ const AdminDashboard: React.FC = () => {
                             )}
                           </div>
                           {!article.processed && (
-                            <div className="flex items-center gap-2 bg-orange-500/20 px-3 py-1 rounded-full">
-                              <Flame className="w-4 h-4 text-orange-400 animate-pulse" />
-                              <span className="text-orange-300 text-xs font-medium">New</span>
+                            <div className="flex items-center gap-2 bg-cyan-600/20 px-3 py-1 rounded-full">
+                              <Flame className="w-4 h-4 text-cyan-400 animate-pulse" />
+                              <span className="text-cyan-300 text-xs font-medium">New</span>
                             </div>
                           )}
                         </div>
@@ -1090,11 +1090,11 @@ const AdminDashboard: React.FC = () => {
               {activeModal === 'god' && (
                 <div className="space-y-6">
                   <div className="grid grid-cols-2 gap-4">
-                    <div className="bg-orange-500/20 rounded-xl p-4 border border-orange-500/30">
+                    <div className="bg-cyan-600/20 rounded-xl p-4 border border-cyan-500/30">
                       <div className="text-3xl font-bold text-white">{avgGodScore}</div>
-                      <div className="text-sm text-orange-300">Average GOD Score</div>
+                      <div className="text-sm text-cyan-300">Average GOD Score</div>
                     </div>
-                    <div className="bg-yellow-500/20 rounded-xl p-4 border border-yellow-500/30">
+                    <div className="bg-yellow-500/20 rounded-xl p-4 border border-cyan-500/30">
                       <div className="text-3xl font-bold text-yellow-400">{stats.scoreHistory.length}</div>
                       <div className="text-sm text-yellow-300">Score Changes (24h)</div>
                     </div>
@@ -1106,14 +1106,14 @@ const AdminDashboard: React.FC = () => {
                       {stats.startups.slice(0, 10).map((startup, idx) => (
                         <div key={startup.id} className="bg-white/5 rounded-lg p-4 border border-white/10 flex items-center justify-between">
                           <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-full bg-gradient-to-r from-orange-500 to-red-500 flex items-center justify-center text-white font-bold text-sm">
+                            <div className="w-8 h-8 rounded-full bg-gradient-to-r from-cyan-600 to-blue-600 flex items-center justify-center text-white font-bold text-sm">
                               {idx + 1}
                             </div>
                             <span className="text-white font-semibold">{startup.name}</span>
                           </div>
                           <div className="flex items-center gap-3">
                             <div className="text-right">
-                              <div className="text-2xl font-bold bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">
+                              <div className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
                                 {startup.total_god_score || 0}
                               </div>
                               <div className="text-xs text-gray-400">GOD Score</div>

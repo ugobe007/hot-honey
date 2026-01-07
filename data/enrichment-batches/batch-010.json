@@ -1,0 +1,421 @@
+[
+  {
+    "id": "d4fbc116-31e9-428c-a202-8e93d6e19b12",
+    "name": "Blake Wu",
+    "firm": "Blake Wu",
+    "linkedin_url": "https://linkedin.com/in/blake-wu",
+    "blog_url": null,
+    "current_bio": "Blake Wu is a angel investor focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "701bec7d-1164-45af-b90d-f6a1d29a8691",
+    "name": "Ardian",
+    "firm": "Ardian",
+    "linkedin_url": "https://linkedin.com/in/ardian",
+    "blog_url": null,
+    "current_bio": "PE firm investing in specialty pharmacy and pharmaceutical sectors",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "bf49ffeb-1d97-4837-8af6-3319746bf612",
+    "name": "Jake Jolis",
+    "firm": "Matrix Partners",
+    "linkedin_url": "https://linkedin.com/in/jake-jolis",
+    "blog_url": null,
+    "current_bio": "Matrix Partners is a vc firm focused on AI/ML, API, SaaS investing at Pre-seed and Seed stage.",
+    "current_sectors": [
+      "AI/ML",
+      "API",
+      "SaaS"
+    ],
+    "current_stage": [
+      "Pre-seed",
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "70d81bef-a2b9-4e37-8290-3a44ec0efe26",
+    "name": "Matt Huang (Paradigm)",
+    "firm": "Paradigm",
+    "linkedin_url": "https://linkedin.com/in/matt-huang",
+    "blog_url": "https://paradigm.xyz",
+    "current_bio": "Matt Huang is a partner at Paradigm. Crypto-native investor in DeFi and web3",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "aae2a181-302f-436f-af19-6fb899f52ce8",
+    "name": "Alpin Yukseloglu (Paradigm)",
+    "firm": "Paradigm",
+    "linkedin_url": "https://linkedin.com/in/alpin-yukseloglu",
+    "blog_url": "https://paradigm.xyz",
+    "current_bio": "Alpin Yukseloglu is a partner at Paradigm. Crypto-native investor in DeFi and web3",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "9fff1d7a-2ea9-43c4-acf2-1bb5274e2b79",
+    "name": "Ricardo de Arruda (Paradigm)",
+    "firm": "Paradigm",
+    "linkedin_url": "https://linkedin.com/in/ricardo-de-arruda",
+    "blog_url": "https://paradigm.xyz",
+    "current_bio": "Ricardo de Arruda is a partner at Paradigm. Crypto-native investor in DeFi and web3",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "9be3c48b-e8c4-4ee8-8ef6-5765951f3fe6",
+    "name": "Su Fu",
+    "firm": "Su Fu",
+    "linkedin_url": "https://linkedin.com/in/su-fu",
+    "blog_url": null,
+    "current_bio": "Su Fu is a angel investor focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "236d003c-d1b8-4fe6-90c7-c715e875eae4",
+    "name": "RonZori RonVenture (Lererhippeau)",
+    "firm": "RonZori RonVenture (Lererhippeau)",
+    "linkedin_url": "https://linkedin.com/in/ronzori-ronventure",
+    "blog_url": null,
+    "current_bio": "Ron Zori Ron is an investor at RonZori RonVenture (Lererhippeau) focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "ff029f11-3b6c-4e20-9461-95b060c3dbdf",
+    "name": "Josh Berns",
+    "firm": "Blue Collective",
+    "linkedin_url": "https://linkedin.com/in/josh-berns",
+    "blog_url": null,
+    "current_bio": "Josh Berns is an investor at Blue Collective focused on AI/ML, API, SaaS investing at Pre-seed and Seed stage.",
+    "current_sectors": [
+      "AI/ML",
+      "API",
+      "SaaS"
+    ],
+    "current_stage": [
+      "Pre-seed",
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "917b4df8-a073-4678-93f9-bb89af59d91d",
+    "name": "Katie Biber (Paradigm)",
+    "firm": "Paradigm",
+    "linkedin_url": "https://linkedin.com/in/katie-biber",
+    "blog_url": "https://paradigm.xyz",
+    "current_bio": "Katie Biber is a partner at Paradigm. Crypto-native investor in DeFi and web3",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "13c7f057-3e2c-48e7-963b-36d4914a33d1",
+    "name": "Allyson Kaufman (DCVC)",
+    "firm": "DCVC",
+    "linkedin_url": "https://linkedin.com/in/allyson-kaufman",
+    "blog_url": "https://dcvc.com",
+    "current_bio": "Allyson Kaufman is a partner at DCVC. Deep tech in AI, biology, materials, energy, space",
+    "current_sectors": [
+      "AI/ML",
+      "SaaS",
+      "Fintech",
+      "Biotechnology",
+      "Robotics"
+    ],
+    "current_stage": [
+      "Seed"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "63bb9c93-9b46-4e50-93c6-a8ea3d7e2acb",
+    "name": "J.C. Lopez",
+    "firm": "J.C. Lopez",
+    "linkedin_url": "https://linkedin.com/in/j-c-lopez",
+    "blog_url": null,
+    "current_bio": "J.C. Lopez is a angel investor focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "7a6ef4b3-f641-452a-bf4c-36f3e7739f09",
+    "name": "Jordan Angelos",
+    "firm": "Jordan Angelos",
+    "linkedin_url": "https://linkedin.com/in/jordan-angelos",
+    "blog_url": null,
+    "current_bio": "Jordan Angelos is a angel investor focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "5b323226-7429-4ab0-9ca4-8ebb8d3f0aad",
+    "name": "Kyle Taylor",
+    "firm": "Kyle Taylor",
+    "linkedin_url": "https://linkedin.com/in/kyle-taylor",
+    "blog_url": null,
+    "current_bio": "Director of Product at Lowercarboncapital",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "1873e3b8-be06-44e8-925b-398ba7b9f727",
+    "name": "Fred Ehrsman (Paradigm)",
+    "firm": "Paradigm",
+    "linkedin_url": "https://linkedin.com/in/fred-ehrsman",
+    "blog_url": "https://paradigm.xyz",
+    "current_bio": "Fred Ehrsman is a partner at Paradigm. Crypto-native investor in DeFi and web3",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "c18e7a0c-3e2c-4043-a1c9-918cd7f1cdba",
+    "name": "Emerging Managers Fund",
+    "firm": "Emerging Managers Fund",
+    "linkedin_url": "https://linkedin.com/in/emerging-managers-fund",
+    "blog_url": null,
+    "current_bio": "Emerging Managers Fund is a vc firm focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "9b77cd9f-24b4-4e25-b3d6-83afe297f519",
+    "name": "Ciamac Moallemi (Paradigm)",
+    "firm": "Paradigm",
+    "linkedin_url": "https://linkedin.com/in/ciamac-moallemi",
+    "blog_url": "https://paradigm.xyz",
+    "current_bio": "Ciamac Moallemi is a partner at Paradigm. Crypto-native investor in DeFi and web3",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "5e7cdf85-c1b9-4ff8-932e-39cd6b2a7f67",
+    "name": "Sofiane Larbi",
+    "firm": "Sofiane Larbi",
+    "linkedin_url": "https://linkedin.com/in/sofiane-larbi",
+    "blog_url": null,
+    "current_bio": "Sofiane Larbi is a angel investor focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "9f14f178-6f64-4dc3-855c-1ee7534363d3",
+    "name": "Larry Bohn",
+    "firm": "Larry Bohn",
+    "linkedin_url": "https://linkedin.com/in/larry-bohn",
+    "blog_url": null,
+    "current_bio": "Larry Bohn is a angel investor focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "505c5e8f-bf17-4512-a476-e8c77706214f",
+    "name": "Caitlin Pintavorn (Paradigm)",
+    "firm": "Paradigm",
+    "linkedin_url": "https://linkedin.com/in/caitlin-pintavorn",
+    "blog_url": "https://paradigm.xyz",
+    "current_bio": "Caitlin Pintavorn is a partner at Paradigm. Crypto-native investor in DeFi and web3",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max"
+    ],
+    "priority": 2
+  }
+]

@@ -66,89 +66,60 @@ export default function LogoDropdownMenu() {
 
   return (
     <>
-      {/* Floating Nav Buttons - Hidden on matching pages */}
+      {/* Floating Nav Buttons - Simplified & Consistent - Hidden on matching pages */}
       {!isMatchingPage && (
         <div className="fixed top-4 left-1/2 -translate-x-1/2 z-40">
-          <div className="flex items-center gap-2 px-3 py-2 bg-black/40 backdrop-blur-md rounded-full border border-white/10 shadow-xl">
-            {/* Back Button */}
+          <div className="flex items-center gap-1.5 px-2 py-1.5 bg-black/60 backdrop-blur-md rounded-full border border-white/20 shadow-xl">
+            {/* Back Button - Consistent style */}
             <button
               onClick={() => navigate(-1)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white transition-all"
+              className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/10 hover:bg-orange-500/30 text-gray-300 hover:text-orange-300 transition-all border border-white/10 hover:border-orange-500/50"
             >
-              <ArrowLeft className="w-4 h-4" />
-              <span className="text-xs font-medium">Back</span>
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span className="text-xs font-medium hidden sm:inline">Back</span>
             </button>
             
-            {/* Home */}
+            {/* Key Navigation - Only essential items */}
             <Link
               to="/"
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all ${isActive('/') && location.pathname === '/' ? 'bg-orange-500/30 text-orange-400' : 'bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white'}`}
+              className={`flex items-center justify-center w-8 h-8 rounded-full transition-all ${
+                isActive('/') && location.pathname === '/' 
+                  ? 'bg-orange-500/40 text-orange-300 border border-orange-500/60' 
+                  : 'bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white border border-white/10'
+              }`}
             >
-              <span className="text-sm">🏠</span>
+              <Home className="w-4 h-4" />
             </Link>
             
-            {/* Admin */}
-            <Link
-              to="/admin/control"
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all ${isActive('/admin') ? 'bg-orange-500/30 text-orange-400' : 'bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white'}`}
-            >
-              <span className="text-sm">⚙️</span>
-            </Link>
-            
-            {/* Analytics */}
-            <Link
-              to="/admin/analytics"
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all ${isActive('/admin/analytics') ? 'bg-orange-500/30 text-orange-400' : 'bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white'}`}
-            >
-              <span className="text-sm">📊</span>
-            </Link>
-            
-            {/* Forecasts - NEW */}
-            <Link
-              to="/admin/forecasts"
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all ${isActive('/admin/forecasts') ? 'bg-orange-500/30 text-orange-400' : 'bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white'}`}
-            >
-              <span className="text-sm">🔮</span>
-            </Link>
-            
-            {/* Bulk Upload */}
-            <Link
-              to="/bulkupload"
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all ${isActive('/bulkupload') ? 'bg-orange-500/30 text-orange-400' : 'bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white'}`}
-            >
-              <span className="text-sm">📦</span>
-            </Link>
-            
-            {/* Startups */}
             <Link
               to="/dashboard"
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all ${isActive('/dashboard') ? 'bg-orange-500/30 text-orange-400' : 'bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white'}`}
+              className={`flex items-center justify-center w-8 h-8 rounded-full transition-all ${
+                isActive('/dashboard') 
+                  ? 'bg-orange-500/40 text-orange-300 border border-orange-500/60' 
+                  : 'bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white border border-white/10'
+              }`}
             >
-              <span className="text-sm">🚀</span>
+              <Rocket className="w-4 h-4" />
             </Link>
             
-            {/* Investors */}
             <Link
-              to="/investors"
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all ${isActive('/investors') ? 'bg-orange-500/30 text-orange-400' : 'bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white'}`}
+              to="/trending"
+              className={`flex items-center justify-center w-8 h-8 rounded-full transition-all ${
+                isActive('/trending') 
+                  ? 'bg-orange-500/40 text-orange-300 border border-orange-500/60' 
+                  : 'bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white border border-white/10'
+              }`}
             >
-              <span className="text-sm">👥</span>
+              <TrendingUp className="w-4 h-4" />
             </Link>
             
-            {/* Enrichment */}
-            <Link
-              to="/admin/investor-enrichment"
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all ${isActive('/admin/investor-enrichment') ? 'bg-orange-500/30 text-orange-400' : 'bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white'}`}
-            >
-              <span className="text-sm">🔄</span>
-            </Link>
-            
-            {/* Match - Highlighted */}
+            {/* Match - Primary CTA with orange */}
             <Link
               to="/matching"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-orange-500/30 text-orange-400 hover:bg-orange-500/40 transition-all"
+              className="flex items-center gap-1 px-3 py-1 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 text-white hover:from-orange-400 hover:to-amber-400 transition-all border border-orange-400/60 shadow-lg shadow-orange-500/30"
             >
-              <Zap className="w-4 h-4" />
+              <Zap className="w-3.5 h-3.5" />
+              <span className="text-xs font-bold hidden sm:inline">Match</span>
             </Link>
           </div>
         </div>

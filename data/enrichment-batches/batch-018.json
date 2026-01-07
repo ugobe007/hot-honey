@@ -1,0 +1,434 @@
+[
+  {
+    "id": "559a59d2-08a1-49fc-b33d-d213916913f5",
+    "name": "Rocana Ventures",
+    "firm": "Rocana Ventures",
+    "linkedin_url": "https://linkedin.com/in/rocana-ventures",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "Direct To Consumer",
+      "CPG",
+      "AR/VR",
+      "Hardware",
+      "Food/Beverage"
+    ],
+    "current_stage": [
+      "Series A",
+      "Series B"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "b27a9d69-ba47-466b-b0be-3c82b8a86f2b",
+    "name": "I Squared Capital",
+    "firm": "I Squared Capital",
+    "linkedin_url": "https://linkedin.com/in/i-squared-capital",
+    "blog_url": null,
+    "current_bio": "PE firm acquiring Zenith Energy Terminal",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "21e3caa1-ab54-467c-a1ac-ecb94ec48baf",
+    "name": "Sara Byrne",
+    "firm": "Sara Byrne",
+    "linkedin_url": "https://linkedin.com/in/sara-byrne",
+    "blog_url": null,
+    "current_bio": "Finance & Accounting",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "767e9f6f-4479-4a0c-8a8e-b8336bd00548",
+    "name": "new proptech fund",
+    "firm": "new proptech fund",
+    "linkedin_url": "https://linkedin.com/in/new-proptech-fund",
+    "blog_url": null,
+    "current_bio": "new proptech fund is a vc firm focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "3235ab6a-5e3f-4b86-ab56-514ee9ec087a",
+    "name": "Vista Equity Partners",
+    "firm": "Vista Equity Partners",
+    "linkedin_url": "https://linkedin.com/in/vista-equity-partners",
+    "blog_url": null,
+    "current_bio": "Technology-focused PE firm investing in dental support platform Dentira",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "1e7730e9-5e9e-462b-9599-ac73c95c598b",
+    "name": "Justin Saslaw",
+    "firm": "Justin Saslaw",
+    "linkedin_url": "https://linkedin.com/in/justin-saslaw",
+    "blog_url": null,
+    "current_bio": "Justin Saslaw is a angel investor focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "a8941d79-24c5-49a4-9dfc-c60c17831276",
+    "name": "Axel Bouchon, Ph.D.",
+    "firm": "Axel Bouchon, Ph.D.",
+    "linkedin_url": "https://linkedin.com/in/axel-bouchon",
+    "blog_url": null,
+    "current_bio": "Venture Partner at Archventure",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "b675f67f-0a75-446b-a9a3-69570d703267",
+    "name": "Peter Buckland",
+    "firm": "Peter Buckland",
+    "linkedin_url": "https://linkedin.com/in/peter-buckland",
+    "blog_url": null,
+    "current_bio": "Peter Buckland is a angel investor focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "3788d1b9-0282-4c1e-a232-d7d64971e621",
+    "name": "Kevin Grove, Ph.D. (Versant Ventures)",
+    "firm": "Kevin Grove, Ph.D. (Versant Ventures)",
+    "linkedin_url": "https://linkedin.com/in/kevin-grove",
+    "blog_url": null,
+    "current_bio": "Kevin Grove, Ph.D. (Versant Ventures) is a vc firm focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "692cfb45-f852-408c-8fa5-838ba89c9c11",
+    "name": "Recent Venture Capital",
+    "firm": "Recent Venture Capital",
+    "linkedin_url": "https://linkedin.com/in/recent-venture-capital",
+    "blog_url": null,
+    "current_bio": "Recent Venture Capital is a vc firm focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "111b9bd8-9a85-40c7-b747-de31ca9837d4",
+    "name": "Managing PartnerFred Ehrsam",
+    "firm": "Managing PartnerFred Ehrsam",
+    "linkedin_url": "https://linkedin.com/in/managing-partnerfred-ehrsam",
+    "blog_url": null,
+    "current_bio": "Fred Ehrsam is an investor at Managing PartnerFred Ehrsam focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "2062de26-1a66-45b1-bc40-d599449cd80c",
+    "name": "Ian Robinson",
+    "firm": "Ian Robinson",
+    "linkedin_url": "https://linkedin.com/in/ian-robinson",
+    "blog_url": null,
+    "current_bio": "Operator at Khosla Ventures",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "9a95c2d4-79e3-4ea5-aab7-3665d13a2e2e",
+    "name": "Jenny Bae (Foundation Capital)",
+    "firm": "Jenny Bae (Foundation Capital)",
+    "linkedin_url": "https://linkedin.com/in/jenny-bae",
+    "blog_url": null,
+    "current_bio": "Team member at Foundation Capital",
+    "current_sectors": [
+      "Consumer",
+      "SaaS"
+    ],
+    "current_stage": [
+      "Pre-seed",
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "b82940f5-e45f-40e8-9e2b-e231d6acaf06",
+    "name": "West Monroe",
+    "firm": "West Monroe",
+    "linkedin_url": "https://linkedin.com/in/west-monroe",
+    "blog_url": null,
+    "current_bio": "Investment firm partners writing about essential services market opportunities",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "eed5bef0-f688-4377-8f0e-86472351a7f7",
+    "name": "Ashley Cravens",
+    "firm": "Ashley Cravens",
+    "linkedin_url": "https://linkedin.com/in/ashley-cravens",
+    "blog_url": null,
+    "current_bio": "Head of Operations and Platform at Uncorkcapital",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "8ee341f2-6085-4ac4-a451-09ef34f31bea",
+    "name": "Becca Graff",
+    "firm": "Becca Graff",
+    "linkedin_url": "https://linkedin.com/in/becca-graff",
+    "blog_url": null,
+    "current_bio": "Administrative Assistant at Initialized",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "2c35ec9c-ac58-4b2f-8ab3-6f1e8d111ed5",
+    "name": "Manav Kohli",
+    "firm": "Manav Kohli",
+    "linkedin_url": "https://linkedin.com/in/manav-kohli",
+    "blog_url": null,
+    "current_bio": "Team Member at Ribbitcap",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "942df028-84ba-4c29-b760-59058fa2361b",
+    "name": "Brand Foundry Ventures",
+    "firm": "Brand Foundry Ventures",
+    "linkedin_url": "https://linkedin.com/in/brand-foundry-ventures",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "Direct To Consumer",
+      "Consumer Software",
+      "CPG",
+      "Female Founders"
+    ],
+    "current_stage": [
+      "Pre-Seed",
+      "Seed"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "09517d01-8cc9-4323-8df5-ee62842f7ee6",
+    "name": "Riverside Company",
+    "firm": "Riverside Company",
+    "linkedin_url": "https://linkedin.com/in/riverside-company",
+    "blog_url": null,
+    "current_bio": "PE firm selling remote security monitoring to GI Partners",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "8bf90032-aa8b-4631-bf72-dc1031478ccf",
+    "name": "James Hardiman (DCVC)",
+    "firm": "DCVC",
+    "linkedin_url": "https://linkedin.com/in/james-hardiman",
+    "blog_url": "https://dcvc.com",
+    "current_bio": "James Hardiman is a partner at DCVC. Deep tech in AI, biology, materials, energy, space",
+    "current_sectors": [
+      "AI/ML",
+      "SaaS",
+      "Fintech",
+      "Biotechnology",
+      "Robotics",
+      "DeepTech",
+      "SpaceTech",
+      "Materials",
+      "Climate"
+    ],
+    "current_stage": [
+      "Seed"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max"
+    ],
+    "priority": 2
+  }
+]

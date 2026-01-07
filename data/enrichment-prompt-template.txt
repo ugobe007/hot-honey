@@ -1,0 +1,16 @@
+You are enriching investor data for a startup-investor matching platform.
+
+For each investor below, find and return the following information:
+- bio: A 2-3 sentence description of the investor and their focus
+- investment_thesis: What they look for in investments
+- sectors: Array of sectors they invest in (e.g., ["AI/ML", "SaaS", "Fintech"])
+- stage: Array of stages they invest in (e.g., ["Pre-Seed", "Seed", "Series A"])
+- check_size_min: Minimum check size in USD (number)
+- check_size_max: Maximum check size in USD (number)
+- geography_focus: Array of regions (e.g., ["US", "Europe"])
+- notable_investments: Array of company names they've invested in
+
+Return as JSON array matching the input order.
+
+INVESTORS TO ENRICH:
+[BATCH_DATA_HERE]

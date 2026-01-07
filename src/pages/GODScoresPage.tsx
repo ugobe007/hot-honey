@@ -171,10 +171,10 @@ export default function GODScoresPage() {
   const refresh = async () => { setRefreshing(true); await loadData(); setRefreshing(false); };
 
   const getScoreColor = (score: number) => {
-    if (score >= 90) return 'text-amber-400 font-bold';
+    if (score >= 90) return 'text-blue-400 font-bold';
     if (score >= 80) return 'text-green-400';
     if (score >= 70) return 'text-yellow-400';
-    if (score >= 60) return 'text-orange-400';
+    if (score >= 60) return 'text-cyan-400';
     return 'text-red-400';
   };
 
@@ -208,7 +208,7 @@ export default function GODScoresPage() {
         {/* Stats */}
         <div className="grid grid-cols-5 gap-3 text-xs">
           <div className="bg-gray-800/50 rounded-lg px-3 py-2 border border-gray-700">
-            <div className="text-xl font-bold font-mono text-amber-400">{stats.topScore}</div>
+            <div className="text-xl font-bold font-mono text-blue-400">{stats.topScore}</div>
             <div className="text-gray-500 text-[10px]">Top Score</div>
           </div>
           <div className="bg-gray-800/50 rounded-lg px-3 py-2 border border-gray-700">
@@ -221,17 +221,17 @@ export default function GODScoresPage() {
           </div>
           <div className="col-span-2 bg-gray-800/30 rounded-lg px-3 py-2 border border-gray-700/50">
             <div className="text-[10px] text-gray-400">
-              <strong className="text-amber-400">Formula:</strong> Team (30%) + Traction (25%) + Market (20%) + Product (15%) + Pitch (10%)
+              <strong className="text-blue-400">Formula:</strong> Team (30%) + Traction (25%) + Market (20%) + Product (15%) + Pitch (10%)
             </div>
           </div>
         </div>
 
         {/* Score Legend */}
         <div className="flex gap-3 text-xs">
-          <span className="px-2 py-1 bg-amber-500/20 border border-amber-500/30 rounded text-amber-400">90+ Elite</span>
+          <span className="px-2 py-1 bg-cyan-500/20 border border-cyan-500/30 rounded text-blue-400">90+ Elite</span>
           <span className="px-2 py-1 bg-green-500/20 border border-green-500/30 rounded text-green-400">80-89 Excellent</span>
           <span className="px-2 py-1 bg-yellow-500/20 border border-yellow-500/30 rounded text-yellow-400">70-79 Good</span>
-          <span className="px-2 py-1 bg-orange-500/20 border border-orange-500/30 rounded text-orange-400">60-69 Average</span>
+          <span className="px-2 py-1 bg-cyan-600/20 border border-cyan-500/30 rounded text-cyan-400">60-69 Average</span>
           <span className="px-2 py-1 bg-red-500/20 border border-red-500/30 rounded text-red-400">&lt;60 Needs Work</span>
         </div>
 
@@ -256,7 +256,7 @@ export default function GODScoresPage() {
                   <tr key={s.id} className="border-t border-gray-700/50 hover:bg-gray-700/30">
                     <td className="px-4 py-2 text-center text-gray-500 font-mono">{idx + 1}</td>
                     <td className="px-4 py-2">
-                      <Link to={`/startup/${s.id}`} className="text-white font-medium hover:text-orange-400">{s.name}</Link>
+                      <Link to={`/startup/${s.id}`} className="text-white font-medium hover:text-cyan-400">{s.name}</Link>
                     </td>
                     <td className="px-4 py-2 text-gray-400 text-xs truncate max-w-64">{s.tagline || '-'}</td>
                     <td className="px-4 py-2 text-center">
@@ -272,10 +272,10 @@ export default function GODScoresPage() {
                     <td className="px-4 py-2">
                       <div className="h-3 bg-gray-700 rounded-full overflow-hidden">
                         <div className={`h-full rounded-full ${
-                          (s.total_god_score ?? 0) >= 90 ? 'bg-gradient-to-r from-amber-500 to-yellow-400' :
+                          (s.total_god_score ?? 0) >= 90 ? 'bg-gradient-to-r from-blue-500 to-yellow-400' :
                           (s.total_god_score ?? 0) >= 80 ? 'bg-gradient-to-r from-green-500 to-emerald-400' :
-                          (s.total_god_score ?? 0) >= 70 ? 'bg-gradient-to-r from-yellow-500 to-orange-400' :
-                          (s.total_god_score ?? 0) >= 60 ? 'bg-gradient-to-r from-orange-500 to-red-400' :
+                          (s.total_god_score ?? 0) >= 70 ? 'bg-gradient-to-r from-cyan-500 to-blue-400' :
+                          (s.total_god_score ?? 0) >= 60 ? 'bg-gradient-to-r from-blue-500 to-violet-400' :
                           'bg-gradient-to-r from-red-500 to-red-600'
                         }`} style={{ width: `${s.total_god_score ?? 0}%` }} />
                       </div>
@@ -317,7 +317,7 @@ export default function GODScoresPage() {
                       <span className="text-gray-400">Avg: {bias.avgScore}</span>
                       {bias.bias !== 'normal' && (
                         <div className={`flex items-center gap-1 ${
-                          bias.bias === 'high' ? 'text-red-400' : 'text-orange-400'
+                          bias.bias === 'high' ? 'text-red-400' : 'text-cyan-400'
                         }`}>
                           <AlertCircle className="w-3 h-3" />
                           <span className="font-medium">{bias.bias === 'high' ? 'High Bias' : 'Low Bias'}</span>
@@ -361,7 +361,7 @@ export default function GODScoresPage() {
                     <div className="flex items-center gap-2 flex-1 min-w-0">
                       <Link 
                         to={`/startup/${change.startupId}`}
-                        className="text-gray-300 font-medium hover:text-orange-400 truncate max-w-[200px]"
+                        className="text-gray-300 font-medium hover:text-cyan-400 truncate max-w-[200px]"
                       >
                         {change.startupName}
                       </Link>
@@ -402,7 +402,7 @@ export default function GODScoresPage() {
           <div className="flex flex-wrap gap-2 text-xs">
             <Link to="/admin/ml-dashboard" className="px-3 py-1.5 bg-purple-500/20 border border-purple-500/30 rounded text-purple-400 hover:bg-purple-500/30">🧠 ML Dashboard</Link>
             <Link to="/admin/analytics" className="px-3 py-1.5 bg-cyan-500/20 border border-cyan-500/30 rounded text-cyan-400 hover:bg-cyan-500/30">📊 Analytics</Link>
-            <Link to="/admin/edit-startups" className="px-3 py-1.5 bg-orange-500/20 border border-orange-500/30 rounded text-orange-400 hover:bg-orange-500/30">✏️ Edit Startups</Link>
+            <Link to="/admin/edit-startups" className="px-3 py-1.5 bg-cyan-600/20 border border-cyan-500/30 rounded text-cyan-400 hover:bg-cyan-600/30">✏️ Edit Startups</Link>
             <Link to="/matching" className="px-3 py-1.5 bg-green-500/20 border border-green-500/30 rounded text-green-400 hover:bg-green-500/30">🔥 View Matches</Link>
           </div>
         </div>

@@ -115,7 +115,7 @@ function StartupCard({ startup, onVote }: { startup: Startup; onVote: (id: numbe
           <h3 className="text-3xl font-bold text-gray-900 mb-2">
             {startup.name}
           </h3>
-          <p className="text-lg text-orange-600 font-semibold">
+          <p className="text-lg text-cyan-600 font-semibold">
             {startup.tagline}
           </p>
         </div>
@@ -132,11 +132,11 @@ function StartupCard({ startup, onVote }: { startup: Startup; onVote: (id: numbe
       <div className="mb-6">
         <div className="flex justify-between items-center mb-2">
           <span className="text-sm font-semibold text-gray-600">Heat Meter 🔥</span>
-          <span className="text-sm font-bold text-orange-600">{heatPercentage}% Hot</span>
+          <span className="text-sm font-bold text-cyan-600">{heatPercentage}% Hot</span>
         </div>
         <div className="w-full bg-gray-200 rounded-full h-3">
           <div
-            className="bg-gradient-to-r from-orange-400 to-red-500 h-3 rounded-full transition-all duration-300"
+            className="bg-gradient-to-r from-cyan-400 to-blue-500 h-3 rounded-full transition-all duration-300"
             style={{ width: `${heatPercentage}%` }}
           />
         </div>
@@ -148,8 +148,8 @@ function StartupCard({ startup, onVote }: { startup: Startup; onVote: (id: numbe
 
       {/* Five Points */}
       <div className="space-y-3 mb-6">
-        <div className="bg-orange-50 rounded-xl p-3">
-          <h4 className="font-bold text-orange-600 text-sm mb-1">💡 Problem</h4>
+        <div className="bg-slate-900 rounded-xl p-3">
+          <h4 className="font-bold text-cyan-600 text-sm mb-1">💡 Problem</h4>
           <p className="text-gray-700 text-sm">{startup.problem}</p>
         </div>
 
@@ -195,7 +195,7 @@ function StartupCard({ startup, onVote }: { startup: Startup; onVote: (id: numbe
       {/* Comment Toggle */}
       <button
         onClick={() => setShowComment(!showComment)}
-        className="w-full text-orange-600 font-semibold py-2 hover:text-orange-700 transition-colors"
+        className="w-full text-cyan-600 font-semibold py-2 hover:text-cyan-400 transition-colors"
       >
         💬 {showComment ? 'Hide Comment' : 'Add Comment'}
       </button>
@@ -207,12 +207,12 @@ function StartupCard({ startup, onVote }: { startup: Startup; onVote: (id: numbe
             value={comment}
             onChange={(e) => setComment(e.target.value)}
             placeholder="Share your thoughts..."
-            className="w-full px-4 py-3 border-2 border-orange-200 rounded-xl focus:border-orange-500 focus:outline-none transition-colors resize-none"
+            className="w-full px-4 py-3 border-2 border-slate-600 rounded-xl focus:border-cyan-500 focus:outline-none transition-colors resize-none"
             rows={3}
           />
           <button
             onClick={handleCommentSubmit}
-            className="mt-2 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-2 px-6 rounded-xl shadow transition-all"
+            className="mt-2 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold py-2 px-6 rounded-xl shadow transition-all"
           >
             Submit Comment
           </button>
@@ -244,9 +244,9 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-100 via-orange-50 to-yellow-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       {/* Hero Section */}
-      <div className="relative overflow-hidden bg-gradient-to-r from-orange-500 via-orange-600 to-red-600 text-white py-20 px-8">
+      <div className="relative overflow-hidden bg-gradient-to-r from-cyan-600 via-blue-600 to-violet-600 text-white py-20 px-8">
         <div className="max-w-6xl mx-auto text-center relative z-10">
           <h1 className="text-6xl md:text-7xl font-bold mb-6 drop-shadow-lg">
             🍯 Hot Honey
@@ -259,14 +259,14 @@ export default function Home() {
           </p>
           <div className="flex gap-4 justify-center flex-wrap">
             <button
-              onClick={() => navigate('/signup')}
-              className="bg-white text-orange-600 font-bold py-4 px-8 rounded-2xl shadow-lg hover:bg-gray-100 transition-all text-lg"
+              onClick={() => navigate('/investor/signup')}
+              className="bg-white text-cyan-600 font-bold py-4 px-8 rounded-2xl shadow-lg hover:bg-gray-100 transition-all text-lg"
             >
               🚀 Join as Investor
             </button>
             <button
-              onClick={() => navigate('/submit')}
-              className="bg-gradient-to-r from-orange-700 to-red-700 hover:from-orange-800 hover:to-red-800 text-white font-bold py-4 px-8 rounded-2xl shadow-lg transition-all text-lg"
+              onClick={() => navigate('/get-matched')}
+              className="bg-gradient-to-r from-cyan-700 to-blue-700 hover:from-cyan-600 hover:to-blue-600 text-white font-bold py-4 px-8 rounded-2xl shadow-lg transition-all text-lg"
             >
               💡 Submit Your Startup
             </button>
@@ -277,7 +277,7 @@ export default function Home() {
       {/* Hot 5 Section */}
       <div className="max-w-6xl mx-auto px-8 py-16">
         <div className="text-center mb-12">
-          <h2 className="text-5xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent mb-4">
+          <h2 className="text-5xl font-bold bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent mb-4">
             🔥 Today's Hot 5
           </h2>
           <p className="text-xl text-gray-700">
@@ -294,7 +294,7 @@ export default function Home() {
         <div className="text-center mt-12">
           <button
             onClick={() => navigate('/vote-demo')}
-            className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-4 px-8 rounded-2xl shadow-lg transition-all text-lg"
+            className="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold py-4 px-8 rounded-2xl shadow-lg transition-all text-lg"
           >
             🔍 Discover More Startups →
           </button>
@@ -334,7 +334,7 @@ export default function Home() {
       </div>
 
       {/* CTA Section */}
-      <div className="bg-gradient-to-r from-orange-500 to-red-600 py-16 px-8 text-white text-center">
+      <div className="bg-gradient-to-r from-cyan-500 to-blue-600 py-16 px-8 text-white text-center">
         <h2 className="text-4xl font-bold mb-4">Ready to Find Your Next Investment?</h2>
         <p className="text-xl mb-8 max-w-2xl mx-auto">
           Join thousands of investors discovering startups before they blow up.
@@ -342,13 +342,13 @@ export default function Home() {
         <div className="flex gap-4 justify-center flex-wrap">
           <button
             onClick={() => navigate('/signup')}
-            className="bg-white text-orange-600 font-bold py-4 px-8 rounded-2xl shadow-lg hover:bg-gray-100 transition-all text-lg"
+            className="bg-white text-cyan-600 font-bold py-4 px-8 rounded-2xl shadow-lg hover:bg-gray-100 transition-all text-lg"
           >
             Get Started Free
           </button>
           <button
             onClick={() => navigate('/about')}
-            className="bg-orange-700 hover:bg-orange-800 text-white font-bold py-4 px-8 rounded-2xl shadow-lg transition-all text-lg"
+            className="bg-cyan-700 hover:bg-cyan-600 text-white font-bold py-4 px-8 rounded-2xl shadow-lg transition-all text-lg"
           >
             Learn More
           </button>

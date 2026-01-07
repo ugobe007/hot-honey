@@ -129,9 +129,9 @@ export default function AdminOperations() {
           <div className="flex items-center gap-4 text-xs">
             <Link to="/" className="text-gray-400 hover:text-white">Home</Link>
             <Link to="/admin" className="text-gray-400 hover:text-white">Control Center</Link>
-            <Link to="/admin/analytics" className="text-orange-400 hover:text-orange-300">Analytics</Link>
+            <Link to="/admin/analytics" className="text-cyan-400 hover:text-cyan-300">Analytics</Link>
             <Link to="/market-trends" className="text-gray-400 hover:text-white">Trends</Link>
-            <Link to="/matching" className="text-orange-400 hover:text-orange-300 font-bold">⚡ Match</Link>
+            <Link to="/matching" className="text-cyan-400 hover:text-cyan-300 font-bold">⚡ Match</Link>
             <button onClick={() => setAutoRefresh(!autoRefresh)} className={`px-2 py-1 rounded text-xs ${autoRefresh ? 'bg-green-600' : 'bg-gray-600'}`}>
               {autoRefresh ? '🟢 Live' : '⏸ Paused'}
             </button>
@@ -146,7 +146,7 @@ export default function AdminOperations() {
         {/* Stats Row */}
         <div className="grid grid-cols-6 gap-2 text-xs">
           {[
-            { label: 'Startups', value: stats.totalStartups, color: 'orange' },
+            { label: 'Startups', value: stats.totalStartups, color: 'cyan' },
             { label: 'Investors', value: stats.totalInvestors, color: 'violet' },
             { label: 'Pending', value: stats.pendingStartups, color: 'yellow' },
             { label: 'Avg GOD', value: stats.avgGodScore, color: 'green' },
@@ -154,7 +154,7 @@ export default function AdminOperations() {
             { label: 'Status', value: autoRefresh ? 'Live' : 'Paused', color: autoRefresh ? 'green' : 'gray' }
           ].map((s, i) => (
             <div key={i} className="bg-gray-800/50 rounded-lg px-3 py-2 border border-gray-700">
-              <div className={`text-xl font-bold font-mono ${s.color === 'orange' ? 'text-orange-400' : s.color === 'violet' ? 'text-violet-400' : s.color === 'yellow' ? 'text-yellow-400' : s.color === 'green' ? 'text-green-400' : s.color === 'cyan' ? 'text-cyan-400' : 'text-gray-400'}`}>
+              <div className={`text-xl font-bold font-mono ${s.color === 'cyan' ? 'text-cyan-400' : s.color === 'violet' ? 'text-violet-400' : s.color === 'yellow' ? 'text-yellow-400' : s.color === 'green' ? 'text-green-400' : s.color === 'cyan' ? 'text-cyan-400' : 'text-gray-400'}`}>
                 {s.value}
               </div>
               <div className="text-gray-500">{s.label}</div>
@@ -183,7 +183,7 @@ export default function AdminOperations() {
               {Object.entries(processes).map(([key, p]) => (
                 <tr key={key} className="border-t border-gray-700/50 hover:bg-gray-700/30">
                   <td className="px-4 py-2">
-                    <Link to={p.route || '#'} className="text-white font-medium hover:text-orange-400 flex items-center gap-2">
+                    <Link to={p.route || '#'} className="text-white font-medium hover:text-cyan-400 flex items-center gap-2">
                       {key === 'ml' && '🧠'} {key === 'ai' && '⚡'} {key === 'matching' && '🎯'} {key === 'rss' && '📡'} {key === 'god' && '🏆'}
                       {p.name}
                     </Link>
@@ -196,7 +196,7 @@ export default function AdminOperations() {
                   <td className="px-4 py-2 text-right font-mono text-cyan-400">{p.count?.toLocaleString() || '-'}</td>
                   <td className="px-4 py-2 text-right text-gray-500">{p.lastRun?.toLocaleTimeString() || '-'}</td>
                   <td className="px-4 py-2 text-right">
-                    <button onClick={() => runProcess(key)} disabled={loading} className="px-2 py-1 bg-orange-500/20 hover:bg-orange-500/40 rounded text-orange-400 text-xs flex items-center gap-1 ml-auto disabled:opacity-50">
+                    <button onClick={() => runProcess(key)} disabled={loading} className="px-2 py-1 bg-cyan-600/20 hover:bg-cyan-600/40 rounded text-cyan-400 text-xs flex items-center gap-1 ml-auto disabled:opacity-50">
                       <Play className="w-3 h-3" /> Run
                     </button>
                   </td>
@@ -224,16 +224,16 @@ export default function AdminOperations() {
               {tools.map((t) => (
                 <tr key={t.id} className="border-t border-gray-700/50 hover:bg-gray-700/30 cursor-pointer" onClick={() => navigate(t.route)}>
                   <td className="px-4 py-2">
-                    <Link to={t.route} className="text-white font-medium hover:text-orange-400">{t.name}</Link>
+                    <Link to={t.route} className="text-white font-medium hover:text-cyan-400">{t.name}</Link>
                   </td>
                   <td className="px-4 py-2 text-gray-400">{t.description}</td>
                   <td className="px-4 py-2 text-center">
-                    <span className={`px-2 py-0.5 rounded text-xs ${t.category === 'dashboard' ? 'bg-purple-500/20 text-purple-400' : t.category === 'data' ? 'bg-cyan-500/20 text-cyan-400' : 'bg-orange-500/20 text-orange-400'}`}>
+                    <span className={`px-2 py-0.5 rounded text-xs ${t.category === 'dashboard' ? 'bg-purple-500/20 text-purple-400' : t.category === 'data' ? 'bg-cyan-500/20 text-cyan-400' : 'bg-cyan-600/20 text-cyan-400'}`}>
                       {t.category}
                     </span>
                   </td>
                   <td className="px-4 py-2 text-right">
-                    <Link to={t.route} className="text-orange-400 hover:text-orange-300 flex items-center gap-1 justify-end" onClick={e => e.stopPropagation()}>
+                    <Link to={t.route} className="text-cyan-400 hover:text-cyan-300 flex items-center gap-1 justify-end" onClick={e => e.stopPropagation()}>
                       Open <ExternalLink className="w-3 h-3" />
                     </Link>
                   </td>
@@ -266,11 +266,11 @@ export default function AdminOperations() {
         {/* Quick Links */}
         <div className="bg-gray-800/30 rounded-lg border border-gray-700/50 p-4">
           <div className="flex flex-wrap gap-2 text-xs">
-            <Link to="/matching" className="px-3 py-1.5 bg-orange-500/20 border border-orange-500/30 rounded text-orange-400 hover:bg-orange-500/30">🔥 Matching</Link>
+            <Link to="/matching" className="px-3 py-1.5 bg-cyan-600/20 border border-cyan-500/30 rounded text-cyan-400 hover:bg-cyan-600/30">🔥 Matching</Link>
             <Link to="/admin/analytics" className="px-3 py-1.5 bg-violet-500/20 border border-violet-500/30 rounded text-violet-400 hover:bg-violet-500/30">📊 Analytics</Link>
             <Link to="/admin/edit-startups" className="px-3 py-1.5 bg-cyan-500/20 border border-cyan-500/30 rounded text-cyan-400 hover:bg-cyan-500/30">✏️ Edit Startups</Link>
             <Link to="/admin/bulk-import" className="px-3 py-1.5 bg-green-500/20 border border-green-500/30 rounded text-green-400 hover:bg-green-500/30">📤 Bulk Import</Link>
-            <Link to="/admin/discovered-startups" className="px-3 py-1.5 bg-amber-500/20 border border-amber-500/30 rounded text-amber-400 hover:bg-amber-500/30">🔍 Discovered</Link>
+            <Link to="/admin/discovered-startups" className="px-3 py-1.5 bg-cyan-500/20 border border-cyan-500/30 rounded text-blue-400 hover:bg-cyan-500/30">🔍 Discovered</Link>
             <Link to="/admin/rss-manager" className="px-3 py-1.5 bg-blue-500/20 border border-blue-500/30 rounded text-blue-400 hover:bg-blue-500/30">📡 RSS</Link>
           </div>
         </div>

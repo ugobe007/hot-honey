@@ -140,7 +140,7 @@ export default function AdminReview() {
 
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-5xl font-extrabold bg-gradient-to-r from-cyan-400 via-purple-400 to-amber-400 bg-clip-text text-transparent mb-3">
+          <h1 className="text-5xl font-extrabold bg-gradient-to-r from-cyan-400 via-purple-400 to-blue-400 bg-clip-text text-transparent mb-3">
             🔍 AI Review Queue
           </h1>
           <p className="text-xl text-gray-300">
@@ -253,7 +253,7 @@ export default function AdminReview() {
 
                       {/* GOD Score Badge */}
                       {godScore > 0 && (
-                        <div className="inline-flex items-center gap-2 bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-400/50 px-4 py-2 rounded-lg mb-3">
+                        <div className="inline-flex items-center gap-2 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 border border-cyan-400/50 px-4 py-2 rounded-lg mb-3">
                           <span className="text-2xl">⚡</span>
                           <div>
                             <div className="text-xs text-yellow-300 font-semibold uppercase">GOD Score</div>
@@ -295,7 +295,7 @@ export default function AdminReview() {
                           </span>
                         )}
                         {startup.industry && (
-                          <span className="bg-orange-500/30 border border-orange-400/50 text-orange-200 px-4 py-2 rounded-lg text-sm font-semibold">
+                          <span className="bg-cyan-600/30 border border-cyan-400/50 text-cyan-200 px-4 py-2 rounded-lg text-sm font-semibold">
                             🏢 {startup.industry}
                           </span>
                         )}

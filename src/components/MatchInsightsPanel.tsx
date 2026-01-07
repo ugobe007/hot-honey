@@ -92,7 +92,7 @@ export default function MatchInsightsPanel({ entityId, entityType }: Props) {
     if (type === 'trend') {
       return 'bg-blue-500/20 border-blue-500/30 text-blue-300';
     }
-    return 'bg-yellow-500/20 border-yellow-500/30 text-yellow-300';
+    return 'bg-yellow-500/20 border-cyan-500/30 text-yellow-300';
   };
 
   const getTrendIcon = (direction: string) => {

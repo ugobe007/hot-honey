@@ -237,8 +237,8 @@ export default function MarketTrends() {
 
   const getScoreClass = (score: number | null) => {
     if (!score) return 'text-gray-400';
-    if (score >= 90) return 'text-amber-400 font-bold';
-    if (score >= 80) return 'text-orange-400 font-semibold';
+    if (score >= 90) return 'text-blue-400 font-bold';
+    if (score >= 80) return 'text-cyan-400 font-semibold';
     if (score >= 70) return 'text-yellow-400';
     if (score >= 60) return 'text-lime-400';
     return 'text-gray-400';
@@ -327,7 +327,7 @@ export default function MarketTrends() {
                   {sectorData.map((s, i) => (
                     <tr key={s.sector} className="border-t border-gray-700/50 hover:bg-gray-700/30">
                       <td className="px-3 py-1.5 text-white">{s.sector}</td>
-                      <td className="px-2 py-1.5 text-right text-orange-400 font-mono">{s.startup_count}</td>
+                      <td className="px-2 py-1.5 text-right text-cyan-400 font-mono">{s.startup_count}</td>
                       <td className="px-2 py-1.5 text-right text-violet-400 font-mono">{s.investor_count}</td>
                       <td className="px-2 py-1.5 text-right text-gray-300 font-mono">{s.match_potential}%</td>
                       <td className="px-2 py-1.5 text-center">
@@ -360,7 +360,7 @@ export default function MarketTrends() {
                   {recentMatches.map((m) => (
                     <tr key={m.id} className="border-t border-gray-700/50 hover:bg-gray-700/30">
                       <td className="px-3 py-1.5">
-                        <Link to={`/startup/${m.startup_id}`} className="text-white hover:text-orange-400 truncate block max-w-32">
+                        <Link to={`/startup/${m.startup_id}`} className="text-white hover:text-cyan-400 truncate block max-w-32">
                           {m.startup_name}
                         </Link>
                       </td>
@@ -388,7 +388,7 @@ export default function MarketTrends() {
         <div className="bg-gray-800/50 rounded-lg border border-gray-700 overflow-hidden">
           <div className="px-3 py-2 border-b border-gray-700 bg-gray-800/80 flex items-center justify-between">
             <h2 className="text-sm font-semibold text-white">🔥 Top Startups by GOD Score</h2>
-            <Link to="/trending" className="text-xs text-orange-400 hover:text-orange-300 flex items-center gap-1">
+            <Link to="/trending" className="text-xs text-cyan-400 hover:text-cyan-300 flex items-center gap-1">
               Full Rankings <ExternalLink className="w-3 h-3" />
             </Link>
           </div>
@@ -415,7 +415,7 @@ export default function MarketTrends() {
                 {sortedStartups.map((s, i) => (
                   <tr key={s.id} className="border-t border-gray-700/50 hover:bg-gray-700/30">
                     <td className="px-3 py-1.5 text-gray-500">{i + 1}</td>
-                    <td className="px-2 py-1.5 text-white font-medium cursor-pointer hover:text-orange-400" onClick={() => navigate(`/startup/${s.id}`)}>{s.name}</td>
+                    <td className="px-2 py-1.5 text-white font-medium cursor-pointer hover:text-cyan-400" onClick={() => navigate(`/startup/${s.id}`)}>{s.name}</td>
                     <td className="px-2 py-1.5 text-gray-400 truncate max-w-48">{s.tagline}</td>
                     <td className="px-2 py-1.5">
                       <div className="flex gap-1 flex-wrap">
@@ -512,7 +512,7 @@ function StatCell({ label, value, color }: { label: string; value: string; color
   const colorClass = {
     green: 'text-green-400',
     yellow: 'text-yellow-400',
-    orange: 'text-orange-400',
+    orange: 'text-cyan-400',
     blue: 'text-blue-400',
     violet: 'text-violet-400',
     red: 'text-red-400'

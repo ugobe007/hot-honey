@@ -11,7 +11,7 @@ const TIER_DEFINITIONS = {
   1: { name: 'Elite', color: 'bg-purple-500', expectedGOD: 55, bonus: 0 },
   2: { name: 'Strong', color: 'bg-blue-500', expectedGOD: 45, bonus: 10 },
   3: { name: 'Emerging', color: 'bg-green-500', expectedGOD: 38, bonus: 18 },
-  4: { name: 'Angels', color: 'bg-orange-500', expectedGOD: 30, bonus: 25 },
+  4: { name: 'Angels', color: 'bg-cyan-600', expectedGOD: 30, bonus: 25 },
 };
 
 const TIER_FIRMS: Record<number, string[]> = {
@@ -360,7 +360,7 @@ export default function TierMatchingAdmin() {
                   { label: 'Elite (55+)', count: stats.godBuckets.elite, color: 'bg-purple-500' },
                   { label: 'Strong (45-54)', count: stats.godBuckets.strong, color: 'bg-blue-500' },
                   { label: 'Promising (38-44)', count: stats.godBuckets.promising, color: 'bg-green-500' },
-                  { label: 'Early (<38)', count: stats.godBuckets.early, color: 'bg-orange-500' },
+                  { label: 'Early (<38)', count: stats.godBuckets.early, color: 'bg-cyan-600' },
                 ].map(bucket => (
                   <div key={bucket.label} className="flex items-center gap-3">
                     <div className={`w-3 h-3 rounded-full ${bucket.color}`} />
@@ -490,7 +490,7 @@ export default function TierMatchingAdmin() {
                         match.godScore >= 55 ? 'bg-purple-500/20 text-purple-300' :
                         match.godScore >= 45 ? 'bg-blue-500/20 text-blue-300' :
                         match.godScore >= 38 ? 'bg-green-500/20 text-green-300' :
-                        'bg-orange-500/20 text-orange-300'
+                        'bg-cyan-600/20 text-cyan-300'
                       }`}>
                         {match.godScore}
                       </span>

@@ -1,0 +1,425 @@
+[
+  {
+    "id": "4afc3d37-a18e-46ed-90f9-d2ed065c0ee4",
+    "name": "Divya Dhulipala (Haystack)",
+    "firm": "Divya Dhulipala (Haystack)",
+    "linkedin_url": "https://linkedin.com/in/divya-dhulipala",
+    "blog_url": null,
+    "current_bio": "Principal at Haystack. Invests across stages and in charge of capital formation and The Alignment Summit.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "79f61afc-8ee8-44a8-b779-38cee929aaa5",
+    "name": "Tamara Steffens (Hustle Fund)",
+    "firm": "Tamara Steffens (Hustle Fund)",
+    "linkedin_url": "https://linkedin.com/in/tamara-steffens",
+    "blog_url": null,
+    "current_bio": "Tamara Steffens is an investor at Tamara Steffens (Hustle Fund) focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "a3e47555-ca69-4767-8695-8a52d6d0afb8",
+    "name": "Galym Imanbayev (Lsvp)",
+    "firm": "Galym Imanbayev (Lsvp)",
+    "linkedin_url": "https://linkedin.com/in/galym-imanbayev",
+    "blog_url": null,
+    "current_bio": "Galym Imanbayev is an investor at Lsvp focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "9b2fab50-47d8-44d6-b921-7c164d8c1589",
+    "name": "IDEA Fund Partners",
+    "firm": "IDEA Fund Partners",
+    "linkedin_url": "https://linkedin.com/in/idea-fund-partners",
+    "blog_url": null,
+    "current_bio": "IDEA Fund Partners is a vc firm focused on Industry/Sector Agnostic investing at Seed and Series A stage.",
+    "current_sectors": [
+      "Industry/Sector Agnostic"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "5c991463-ca9e-4e4d-87ed-bd27f380f3e5",
+    "name": "Hellman & Friedman",
+    "firm": "Hellman & Friedman",
+    "linkedin_url": "https://linkedin.com/in/hellman-friedman",
+    "blog_url": null,
+    "current_bio": "PE firm partnering on $2.1bn Vantage sale to Howard Hughes",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "e7c891f1-a1e6-458b-ad64-8fa649e96183",
+    "name": "Alantra",
+    "firm": "Alantra",
+    "linkedin_url": "https://linkedin.com/in/alantra",
+    "blog_url": null,
+    "current_bio": "Investment firm backing SPW Fabrics acquiring Italy's MITI",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "c3b2e595-23bd-45c8-b3ce-b12e997a76b5",
+    "name": "Bio Corey Ritter (Archventure)",
+    "firm": "Bio Corey Ritter (Archventure)",
+    "linkedin_url": "https://linkedin.com/in/bio-corey-ritter",
+    "blog_url": null,
+    "current_bio": "Bio Corey Ritter is an investor at Archventure focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "f6235844-99df-4f70-8976-74922409e016",
+    "name": "Anne DwaneGeneral (Villageglobal)",
+    "firm": "Anne DwaneGeneral (Villageglobal)",
+    "linkedin_url": "https://linkedin.com/in/anne-dwanegeneral",
+    "blog_url": null,
+    "current_bio": "Anne DwaneGeneral (Villageglobal) is a angel investor focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "b66a791c-902c-4891-a6ae-238299d455bd",
+    "name": "Kenneth Managing (Lererhippeau)",
+    "firm": "Kenneth Managing (Lererhippeau)",
+    "linkedin_url": "https://linkedin.com/in/kenneth-managing",
+    "blog_url": null,
+    "current_bio": "Kenneth is an investor at Lererhippeau focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "e54b0194-6298-4580-8a59-5e575647f80f",
+    "name": "Changemakers Private Equity",
+    "firm": "Changemakers Private Equity",
+    "linkedin_url": "https://linkedin.com/in/changemakers-private-equity",
+    "blog_url": null,
+    "current_bio": "Changemakers Private Equity is a angel investor focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "f501b561-a60d-4e51-938e-d49410c9141c",
+    "name": "Michelle Fernandes",
+    "firm": "Michelle Fernandes",
+    "linkedin_url": "https://linkedin.com/in/michelle-fernandes",
+    "blog_url": null,
+    "current_bio": "Index Ventures Investor",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "552a382a-0b15-4e5b-97c4-1f8b94b2b6e6",
+    "name": "Plum Alley Ventures",
+    "firm": "Plum Alley Ventures",
+    "linkedin_url": "https://linkedin.com/in/plum-alley-ventures",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "Enterprise Software",
+      "Female Founders",
+      "AR/VR",
+      "Hardware"
+    ],
+    "current_stage": [
+      "Series A",
+      "Series B"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "964641b7-71f6-409e-97f5-e347cfeaff0d",
+    "name": "John Hamer Managing (Dcvc)",
+    "firm": "DCVC",
+    "linkedin_url": "https://linkedin.com/in/john-hamer-managing",
+    "blog_url": "https://dcvc.com",
+    "current_bio": "John Hamer Managing is a partner at DCVC. Deep tech in AI, biology, materials, energy, space",
+    "current_sectors": [
+      "AI/ML",
+      "SaaS",
+      "Fintech",
+      "Biotechnology",
+      "Robotics"
+    ],
+    "current_stage": [
+      "Seed"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "b2aaf797-8746-48eb-b66d-0bbab447041c",
+    "name": "Rhino Ventures",
+    "firm": "Rhino Ventures",
+    "linkedin_url": "https://linkedin.com/in/rhino-ventures",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "Industry/Sector Agnostic",
+      "Direct To Consumer",
+      "Enterprise"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "1ac44be3-3508-4d9c-81a1-f01e44ecb0fd",
+    "name": "Keith Lenden Venture (Archventure)",
+    "firm": "Keith Lenden Venture (Archventure)",
+    "linkedin_url": "https://linkedin.com/in/keith-lenden-venture",
+    "blog_url": null,
+    "current_bio": "Keith Lenden Venture is an investor at Keith Lenden Venture (Archventure) focused on SaaS, AI/ML, HealthTech investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML",
+      "HealthTech",
+      "Biotech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "458a6767-c4f2-48d8-b801-b5da70a3cd3f",
+    "name": "Union Square Ventures",
+    "firm": "Union Square Ventures",
+    "linkedin_url": "https://linkedin.com/in/union-square-ventures",
+    "blog_url": "https://usv.com",
+    "current_bio": "Venture capital firm based in New York City investing in large markets transformed by technology.",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "1d664541-233b-432d-9845-8dc4f6dde36e",
+    "name": "Eric Johnson",
+    "firm": "Eric Johnson",
+    "linkedin_url": "https://linkedin.com/in/eric-johnson",
+    "blog_url": null,
+    "current_bio": "Operator at Khosla Ventures",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "87f8117b-599d-4a1e-8806-77f6b6507feb",
+    "name": "Dean Meyer",
+    "firm": "Dean Meyer",
+    "linkedin_url": "https://linkedin.com/in/dean-meyer",
+    "blog_url": null,
+    "current_bio": "Sequoia Capital Partner focused on Seed/Early stage investments",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "f4a41c17-3fd7-4ec6-87c3-281d58ea5f9d",
+    "name": "Katie Riester",
+    "firm": "Katie Riester",
+    "linkedin_url": "https://linkedin.com/in/katie-riester",
+    "blog_url": null,
+    "current_bio": "Managing Director & GP, Fund of Funds Investing at Felicis",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "84b7d123-103b-415f-82b2-46293b6acd00",
+    "name": "Contour Ventures",
+    "firm": "Contour Ventures",
+    "linkedin_url": "https://linkedin.com/in/contour-ventures",
+    "blog_url": null,
+    "current_bio": "Contour Ventures is a vc firm focused on Fintech/SaaS/Digital Media investing at Seed stage.",
+    "current_sectors": [
+      "Fintech/SaaS/Digital Media"
+    ],
+    "current_stage": [
+      "Seed"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  }
+]

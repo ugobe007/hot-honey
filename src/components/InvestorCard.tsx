@@ -69,7 +69,7 @@ function VCInvestorCard({ investor, onContact, showEdit }: Omit<InvestorCardProp
   return (
     <Link 
       to={`/investor/${investor.id}`}
-      className="block bg-gradient-to-br from-slate-100 to-slate-200 rounded-2xl shadow-xl overflow-hidden border-2 border-purple-400/60 hover:border-orange-400 relative hover:scale-[1.02] transition-all duration-300 w-full max-w-[420px] hover:shadow-purple-500/30"
+      className="block bg-gradient-to-br from-slate-100 to-slate-200 rounded-2xl shadow-xl overflow-hidden border-2 border-purple-400/60 hover:border-cyan-400 relative hover:scale-[1.02] transition-all duration-300 w-full max-w-[420px] hover:shadow-purple-500/30"
     >
       {/* Header Section - Purple gradient */}
       <div className="bg-gradient-to-r from-purple-600 to-purple-800 p-3 border-b border-purple-400">
@@ -98,9 +98,9 @@ function VCInvestorCard({ investor, onContact, showEdit }: Omit<InvestorCardProp
         {/* Key Metrics Row - Silver/slate boxes */}
         <div className="grid grid-cols-3 gap-1.5">
           {(investor.activeFundSize || investor.fundSize || investor.aum) && (
-            <div className="bg-gradient-to-br from-orange-100 to-orange-200 rounded-lg p-2 border border-orange-300">
-              <p className="text-orange-700 text-[8px] font-black">💰 FUND</p>
-              <p className="text-orange-900 font-black text-xs">
+            <div className="bg-gradient-to-br from-slate-700 to-slate-600 rounded-lg p-2 border border-slate-500">
+              <p className="text-cyan-300 text-[8px] font-black">💰 FUND</p>
+              <p className="text-cyan-100 font-black text-xs">
                 {formatCurrency(investor.activeFundSize) || investor.fundSize || investor.aum}
               </p>
             </div>
@@ -134,12 +134,12 @@ function VCInvestorCard({ investor, onContact, showEdit }: Omit<InvestorCardProp
         {investor.sectors && investor.sectors.length > 0 && investor.sectors[0] !== 'all' && (
           <div className="flex flex-wrap gap-1">
             {investor.sectors.slice(0, 4).map((sector, idx) => (
-              <span key={idx} className="bg-orange-50 border border-orange-300 text-orange-700 px-2 py-0.5 rounded-full text-[9px] font-semibold">
+              <span key={idx} className="bg-slate-800 border border-slate-500 text-cyan-300 px-2 py-0.5 rounded-full text-[9px] font-semibold">
                 {sector}
               </span>
             ))}
             {investor.sectors.length > 4 && (
-              <span className="text-orange-500 text-[9px] font-bold">+{investor.sectors.length - 4}</span>
+              <span className="text-cyan-500 text-[9px] font-bold">+{investor.sectors.length - 4}</span>
             )}
           </div>
         )}
@@ -168,7 +168,12 @@ function EnhancedInvestorCard({ investor, matchScore, compact, onClick }: Pick<I
   const formatCheckSize = () => {
     if (investor.checkSize) return investor.checkSize;
     if (investor.check_size_min && investor.check_size_max) {
-      return `$${(investor.check_size_min / 1000000).toFixed(1)}M - $${(investor.check_size_max / 1000000).toFixed(1)}M`;
+      const formatAmount = (amt: number) => {
+        if (amt >= 1000000) return `${(amt / 1000000).toFixed(1)}M`;
+        if (amt >= 1000) return `${(amt / 1000).toFixed(0)}K`;
+        return `${amt}`;
+      };
+      return `${formatAmount(investor.check_size_min)} - ${formatAmount(investor.check_size_max)}`;
     }
     return 'Contact for details';
   };
@@ -219,7 +224,7 @@ function EnhancedInvestorCard({ investor, matchScore, compact, onClick }: Pick<I
             {/* Check size */}
             <div className="mb-4">
               <div className="flex items-center gap-2 mb-1.5">
-                <DollarSign className="w-4 h-4 text-amber-400" />
+                <DollarSign className="w-4 h-4 text-blue-400" />
                 <span className="text-xs font-semibold text-slate-400 uppercase tracking-wide">Check Size</span>
               </div>
               <div className="text-xl font-bold text-white">
@@ -227,33 +232,46 @@ function EnhancedInvestorCard({ investor, matchScore, compact, onClick }: Pick<I
               </div>
             </div>
 
-            {/* Notable investments */}
-            {investor.notableInvestments && investor.notableInvestments.length > 0 && (
+            {/* Notable Investments */}
+            {((investor.notableInvestments && investor.notableInvestments.length > 0) || 
+              (investor.notable_investments && investor.notable_investments.length > 0)) && (
               <div className="mb-4">
                 <div className="flex items-center gap-2 mb-2">
                   <Award className="w-4 h-4 text-purple-400" />
-                  <span className="text-xs font-semibold text-slate-400 uppercase tracking-wide">Portfolio</span>
+                  <span className="text-xs font-semibold text-slate-400 uppercase tracking-wide">Notable Investments</span>
                 </div>
-                <div className="text-white text-sm leading-relaxed">
-                  {investor.notableInvestments.slice(0, 5).map(inv => 
-                    typeof inv === 'string' ? inv : (inv as any).name || (inv as any).company
-                  ).join(', ')}
-                  {investor.notableInvestments.length > 5 && (
-                    <span className="text-slate-400"> +{investor.notableInvestments.length - 5} more</span>
+                <div className="flex flex-wrap gap-1.5">
+                  {(investor.notableInvestments || investor.notable_investments || []).slice(0, 6).map((inv: any, idx: number) => (
+                    <span key={idx} className="px-2 py-0.5 bg-purple-500/20 border border-purple-500/30 rounded-full text-purple-300 text-xs font-medium">
+                      {typeof inv === 'string' ? inv : inv?.name || inv?.company}
+                    </span>
+                  ))}
+                  {(investor.notableInvestments || investor.notable_investments || []).length > 6 && (
+                    <span className="px-2 py-0.5 text-slate-400 text-xs">
+                      +{(investor.notableInvestments || investor.notable_investments).length - 6} more
+                    </span>
                   )}
                 </div>
               </div>
             )}
 
-            {/* Investment Thesis */}
-            {investor.investmentThesis && (
+            {/* Investment Thesis or Bio - Use enriched description if available */}
+            {((investor as any).firm_description_normalized || (investor as any).investment_firm_description || investor.investmentThesis || investor.bio) && (
               <div className="mb-4">
                 <div className="flex items-center gap-2 mb-2">
                   <Target className="w-4 h-4 text-cyan-400" />
-                  <span className="text-xs font-semibold text-slate-400 uppercase tracking-wide">Investment Thesis</span>
+                  <span className="text-xs font-semibold text-slate-400 uppercase tracking-wide">
+                    {investor.investmentThesis ? 'Investment Thesis' : 'About'}
+                  </span>
                 </div>
                 <div className="text-white text-sm leading-relaxed">
-                  {investor.investmentThesis}
+                  {(() => {
+                  const text = (investor as any).firm_description_normalized || (investor as any).investment_firm_description || investor.investmentThesis || investor.bio || "";
+                  // Get first 2 sentences or 150 chars
+                  const sentences = text.match(/[^.!?]*[.!?]/g) || [text];
+                  const truncated = sentences.slice(0, 2).join(" ").substring(0, 150);
+                  return truncated + (text.length > 150 ? "..." : "");
+                })()}
                 </div>
               </div>
             )}
@@ -416,7 +434,7 @@ function EnhancedInvestorCard({ investor, matchScore, compact, onClick }: Pick<I
       {/* Match score badge */}
       {matchScore && (
         <div className="absolute -top-3 -right-3">
-          <div className="px-4 py-2 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 text-white font-bold shadow-lg">
+          <div className="px-4 py-2 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold shadow-lg">
             {matchScore}% Match
           </div>
         </div>
@@ -489,14 +507,14 @@ function EnhancedInvestorCard({ investor, matchScore, compact, onClick }: Pick<I
       {investor.notableInvestments && investor.notableInvestments.length > 0 && (
         <div className="mb-6">
           <div className="flex items-center gap-2 mb-3">
-            <Award className="w-5 h-5 text-amber-400" />
+            <Award className="w-5 h-5 text-blue-400" />
             <span className="text-sm font-semibold text-white">Notable Investments</span>
           </div>
           <div className="flex flex-wrap gap-2">
             {investor.notableInvestments.map((company: any, idx: number) => (
               <span
                 key={idx}
-                className="px-4 py-2 rounded-lg bg-gradient-to-r from-orange-500/30 to-amber-500/30 text-orange-200 text-sm font-medium border border-orange-400/50 shadow-sm shadow-orange-500/20"
+                className="px-4 py-2 rounded-lg bg-gradient-to-r from-cyan-500/30 to-blue-500/30 text-cyan-200 text-sm font-medium border border-cyan-400/50 shadow-sm shadow-cyan-500/20"
               >
                 {typeof company === 'string' ? company : (company.name || company.company)}
               </span>

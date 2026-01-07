@@ -51,7 +51,7 @@ const Vote: React.FC = () => {
           </p>
           <a
             href="/submit"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold rounded-xl hover:from-orange-400 hover:to-red-400 transition-all"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-bold rounded-xl hover:from-cyan-400 hover:to-blue-400 transition-all"
           >
             <FlameIcon variant={1} size="sm" />
             Submit a Startup
@@ -67,7 +67,7 @@ const Vote: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-br from-[#1a0033] via-[#2d1b4e] to-[#0f0f23] px-2 sm:px-4">
       {/* Background Effects */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-l from-orange-500/10 to-transparent rounded-full blur-3xl"></div>
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-l from-cyan-500/10 to-transparent rounded-full blur-3xl"></div>
         <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-gradient-to-r from-purple-500/10 to-transparent rounded-full blur-3xl"></div>
       </div>
       
@@ -81,7 +81,7 @@ const Vote: React.FC = () => {
             console.log('Vote button clicked, navigating to /');
             navigate('/');
           }}
-          className="px-4 py-2 rounded-full bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold text-sm flex items-center gap-2 shadow-lg hover:from-orange-400 hover:to-red-400 transition-all cursor-pointer border border-orange-400/50"
+          className="px-4 py-2 rounded-full bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-semibold text-sm flex items-center gap-2 shadow-lg hover:from-cyan-400 hover:to-blue-400 transition-all cursor-pointer border border-cyan-400/50"
         >
           <FlameIcon variant={8} size="sm" />
           <span>Vote</span>

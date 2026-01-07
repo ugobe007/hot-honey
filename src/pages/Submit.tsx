@@ -533,11 +533,11 @@ Fill ONLY the EMPTY fields with your research. Return JSON with ALL fields fille
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#160020] via-[#240032] to-[#330044] p-8 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#141414] to-[#1a1a1a] p-8 relative overflow-hidden">
       {/* Animated background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-64 h-64 bg-[#9400cd]/5 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-[#9400cd]/5 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute top-20 left-10 w-64 h-64 bg-cyan-600/5 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl animate-pulse"></div>
       </div>
 
       <div className="max-w-4xl mx-auto relative z-10">
@@ -545,13 +545,13 @@ Fill ONLY the EMPTY fields with your research. Return JSON with ALL fields fille
         <div className="flex justify-between items-center mb-8">
           <button
             onClick={() => navigate('/')}
-            className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-3 px-6 rounded-2xl shadow-lg transition-all"
+            className="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold py-3 px-6 rounded-2xl shadow-lg transition-all"
           >
             ← Home
           </button>
           <button
             onClick={() => navigate('/admin/bulk-import')}
-            className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold py-3 px-6 rounded-2xl shadow-lg transition-all text-sm"
+            className="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold py-3 px-6 rounded-2xl shadow-lg transition-all text-sm"
           >
             🚀 Bulk Import
           </button>
@@ -560,23 +560,23 @@ Fill ONLY the EMPTY fields with your research. Return JSON with ALL fields fille
         {/* Header */}
         <div className="text-center mb-12">
           <div className="text-8xl mb-4">🚀</div>
-          <h1 className="text-5xl font-bold text-orange-600 mb-4">
+          <h1 className="text-5xl font-bold text-cyan-600 mb-4">
             Submit Your Startup
           </h1>
-          <p className="text-xl text-orange-700 font-medium mb-2">
+          <p className="text-xl text-cyan-400 font-medium mb-2">
             Get discovered by investors who want to find you
           </p>
-          <p className="text-lg text-orange-600">
+          <p className="text-lg text-cyan-600">
             Fill out the form below to join Hot Honey 🍯
           </p>
         </div>
 
         {/* Quick Upload Option */}
-        <div className="bg-white rounded-3xl p-8 mb-8 border-2 border-orange-200 shadow-2xl">
+        <div className="bg-white rounded-3xl p-8 mb-8 border-2 border-slate-600 shadow-2xl">
           <div className="text-center mb-6">
             <div className="text-6xl mb-3">📄</div>
-            <h2 className="text-3xl font-bold mb-2 text-orange-600">Upload Your Pitch Deck</h2>
-            <p className="text-lg text-orange-700">AI will auto-fill the form below from your presentation!</p>
+            <h2 className="text-3xl font-bold mb-2 text-cyan-600">Upload Your Pitch Deck</h2>
+            <p className="text-lg text-cyan-400">AI will auto-fill the form below from your presentation!</p>
           </div>
 
           <div className="flex justify-center">
@@ -591,7 +591,7 @@ Fill ONLY the EMPTY fields with your research. Return JSON with ALL fields fille
               type="button"
               onClick={() => fileInputRef.current?.click()}
               disabled={uploadingDoc}
-              className="px-8 py-4 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold rounded-2xl shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-8 py-4 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold rounded-2xl shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {uploadingDoc ? (
                 <>🔍 Scanning Document...</>
@@ -607,8 +607,8 @@ Fill ONLY the EMPTY fields with your research. Return JSON with ALL fields fille
               disabled={researchingWithAI}
               className={`w-full py-6 rounded-2xl font-bold text-lg transition-all shadow-2xl transform hover:scale-105 ${
                 researchingWithAI
-                  ? 'bg-gradient-to-r from-yellow-400 via-orange-400 to-orange-500 text-white cursor-wait animate-pulse'
-                  : 'bg-gradient-to-r from-amber-500 via-orange-500 to-orange-600 hover:from-amber-600 hover:via-orange-600 hover:to-orange-700 text-white animate-pulse hover:animate-none'
+                  ? 'bg-gradient-to-r from-cyan-400 via-blue-400 to-blue-500 text-white cursor-wait animate-pulse'
+                  : 'bg-gradient-to-r from-cyan-500 via-blue-500 to-violet-600 hover:from-cyan-600 hover:via-blue-600 hover:to-violet-700 text-white animate-pulse hover:animate-none'
               }`}
             >
               {researchingWithAI ? (
@@ -623,10 +623,10 @@ Fill ONLY the EMPTY fields with your research. Return JSON with ALL fields fille
             </button>
           </div>
 
-          <p className="text-center mt-4 text-sm text-orange-700">
+          <p className="text-center mt-4 text-sm text-cyan-400">
             ✨ Upload a pitch deck OR use AI to auto-fill from your website/name!
           </p>
-          <p className="text-center mt-2 text-xs text-orange-600">
+          <p className="text-center mt-2 text-xs text-cyan-600">
             💡 Tip: Enter your startup name or website first, then click "Fill Missing Data with AI"
           </p>
         </div>
@@ -639,10 +639,10 @@ Fill ONLY the EMPTY fields with your research. Return JSON with ALL fields fille
         )}
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="bg-white rounded-3xl p-8 shadow-2xl mb-8 border-2 border-orange-200">
+        <form onSubmit={handleSubmit} className="bg-white rounded-3xl p-8 shadow-2xl mb-8 border-2 border-slate-600">
           {/* Basic Information */}
           <section className="mb-8">
-            <h2 className="text-2xl font-bold text-orange-600 mb-6 flex items-center gap-2">
+            <h2 className="text-2xl font-bold text-cyan-600 mb-6 flex items-center gap-2">
               <span>📋</span> Basic Information
             </h2>
             
@@ -657,7 +657,7 @@ Fill ONLY the EMPTY fields with your research. Return JSON with ALL fields fille
                   value={formData.name}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 border-2 border-orange-200 rounded-xl focus:border-orange-500 focus:outline-none transition-colors"
+                  className="w-full px-4 py-3 border-2 border-slate-600 rounded-xl focus:border-cyan-500 focus:outline-none transition-colors"
                   placeholder="e.g., HyperLoop"
                 />
               </div>
@@ -672,7 +672,7 @@ Fill ONLY the EMPTY fields with your research. Return JSON with ALL fields fille
                   value={formData.valueProp}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 border-2 border-orange-200 rounded-xl focus:border-orange-500 focus:outline-none transition-colors"
+                  className="w-full px-4 py-3 border-2 border-slate-600 rounded-xl focus:border-cyan-500 focus:outline-none transition-colors"
                   placeholder="One sentence that describes what you do"
                 />
               </div>
@@ -687,7 +687,7 @@ Fill ONLY the EMPTY fields with your research. Return JSON with ALL fields fille
                     name="website"
                     value={formData.website}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border-2 border-orange-200 rounded-xl focus:border-orange-500 focus:outline-none transition-colors"
+                    className="w-full px-4 py-3 border-2 border-slate-600 rounded-xl focus:border-cyan-500 focus:outline-none transition-colors"
                     placeholder="www.yourstartup.com or https://yourstartup.com"
                   />
                 </div>
@@ -701,7 +701,7 @@ Fill ONLY the EMPTY fields with your research. Return JSON with ALL fields fille
                     value={formData.stage}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 border-2 border-orange-200 rounded-xl focus:border-orange-500 focus:outline-none transition-colors"
+                    className="w-full px-4 py-3 border-2 border-slate-600 rounded-xl focus:border-cyan-500 focus:outline-none transition-colors"
                   >
                     <option value="Idea">Idea</option>
                     <option value="Pre-Seed">Pre-Seed</option>
@@ -722,7 +722,7 @@ Fill ONLY the EMPTY fields with your research. Return JSON with ALL fields fille
                   value={formData.industry}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 border-2 border-orange-200 rounded-xl focus:border-orange-500 focus:outline-none transition-colors"
+                  className="w-full px-4 py-3 border-2 border-slate-600 rounded-xl focus:border-cyan-500 focus:outline-none transition-colors"
                   placeholder="e.g., AI, FinTech, HealthTech, CleanTech"
                 />
               </div>
@@ -731,7 +731,7 @@ Fill ONLY the EMPTY fields with your research. Return JSON with ALL fields fille
 
           {/* Founder Information */}
           <section className="mb-8">
-            <h2 className="text-2xl font-bold text-orange-600 mb-6 flex items-center gap-2">
+            <h2 className="text-2xl font-bold text-cyan-600 mb-6 flex items-center gap-2">
               <span>👤</span> Founder Information
             </h2>
             
@@ -747,7 +747,7 @@ Fill ONLY the EMPTY fields with your research. Return JSON with ALL fields fille
                     value={formData.founderName}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 border-2 border-orange-200 rounded-xl focus:border-orange-500 focus:outline-none transition-colors"
+                    className="w-full px-4 py-3 border-2 border-slate-600 rounded-xl focus:border-cyan-500 focus:outline-none transition-colors"
                     placeholder="Full name"
                   />
                 </div>
@@ -762,7 +762,7 @@ Fill ONLY the EMPTY fields with your research. Return JSON with ALL fields fille
                     value={formData.founderEmail}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 border-2 border-orange-200 rounded-xl focus:border-orange-500 focus:outline-none transition-colors"
+                    className="w-full px-4 py-3 border-2 border-slate-600 rounded-xl focus:border-cyan-500 focus:outline-none transition-colors"
                     placeholder="founder@startup.com"
                   />
                 </div>
@@ -772,7 +772,7 @@ Fill ONLY the EMPTY fields with your research. Return JSON with ALL fields fille
 
           {/* Core Pitch */}
           <section className="mb-8">
-            <h2 className="text-2xl font-bold text-orange-600 mb-4 flex items-center gap-2">
+            <h2 className="text-2xl font-bold text-cyan-600 mb-4 flex items-center gap-2">
               <span>🔥</span> Your Pitch
             </h2>
             <p className="text-gray-600 mb-6">
@@ -791,7 +791,7 @@ Fill ONLY the EMPTY fields with your research. Return JSON with ALL fields fille
                   required
                   rows={3}
                   maxLength={300}
-                  className="w-full px-4 py-3 border-2 border-orange-200 rounded-xl focus:border-orange-500 focus:outline-none transition-colors resize-none"
+                  className="w-full px-4 py-3 border-2 border-slate-600 rounded-xl focus:border-cyan-500 focus:outline-none transition-colors resize-none"
                   placeholder="What problem are you solving? (Max 300 characters)"
                 />
                 <div className="text-right text-sm text-gray-500 mt-1">
@@ -810,7 +810,7 @@ Fill ONLY the EMPTY fields with your research. Return JSON with ALL fields fille
                   required
                   rows={3}
                   maxLength={300}
-                  className="w-full px-4 py-3 border-2 border-orange-200 rounded-xl focus:border-orange-500 focus:outline-none transition-colors resize-none"
+                  className="w-full px-4 py-3 border-2 border-slate-600 rounded-xl focus:border-cyan-500 focus:outline-none transition-colors resize-none"
                   placeholder="How does your product solve it? (Max 300 characters)"
                 />
                 <div className="text-right text-sm text-gray-500 mt-1">
@@ -829,7 +829,7 @@ Fill ONLY the EMPTY fields with your research. Return JSON with ALL fields fille
                   required
                   rows={3}
                   maxLength={300}
-                  className="w-full px-4 py-3 border-2 border-orange-200 rounded-xl focus:border-orange-500 focus:outline-none transition-colors resize-none"
+                  className="w-full px-4 py-3 border-2 border-slate-600 rounded-xl focus:border-cyan-500 focus:outline-none transition-colors resize-none"
                   placeholder="Who's building this? Key backgrounds? (Max 300 characters)"
                 />
                 <div className="text-right text-sm text-gray-500 mt-1">
@@ -841,7 +841,7 @@ Fill ONLY the EMPTY fields with your research. Return JSON with ALL fields fille
 
           {/* Funding & Resources */}
           <section className="mb-8">
-            <h2 className="text-2xl font-bold text-orange-600 mb-6 flex items-center gap-2">
+            <h2 className="text-2xl font-bold text-cyan-600 mb-6 flex items-center gap-2">
               <span>💰</span> Funding & Resources
             </h2>
             
@@ -856,7 +856,7 @@ Fill ONLY the EMPTY fields with your research. Return JSON with ALL fields fille
                   value={formData.funding}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 border-2 border-orange-200 rounded-xl focus:border-orange-500 focus:outline-none transition-colors"
+                  className="w-full px-4 py-3 border-2 border-slate-600 rounded-xl focus:border-cyan-500 focus:outline-none transition-colors"
                   placeholder="e.g., $500K seed round"
                 />
               </div>
@@ -870,7 +870,7 @@ Fill ONLY the EMPTY fields with your research. Return JSON with ALL fields fille
                   name="presentationUrl"
                   value={formData.presentationUrl}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border-2 border-orange-200 rounded-xl focus:border-orange-500 focus:outline-none transition-colors"
+                  className="w-full px-4 py-3 border-2 border-slate-600 rounded-xl focus:border-cyan-500 focus:outline-none transition-colors"
                   placeholder="www.dropbox.com/presentation or https://..."
                 />
                 <p className="text-sm text-gray-500 mt-2">
@@ -887,7 +887,7 @@ Fill ONLY the EMPTY fields with your research. Return JSON with ALL fields fille
                   name="videoUrl"
                   value={formData.videoUrl}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border-2 border-orange-200 rounded-xl focus:border-orange-500 focus:outline-none transition-colors"
+                  className="w-full px-4 py-3 border-2 border-slate-600 rounded-xl focus:border-cyan-500 focus:outline-none transition-colors"
                   placeholder="www.youtube.com/watch?v=... or https://..."
                 />
                 <p className="text-sm text-gray-500 mt-2">
@@ -898,18 +898,18 @@ Fill ONLY the EMPTY fields with your research. Return JSON with ALL fields fille
           </section>
 
           {/* Submit Button */}
-          <div className="flex gap-4 justify-center pt-6 border-t-2 border-orange-100">
+          <div className="flex gap-4 justify-center pt-6 border-t-2 border-slate-700">
             <button
               type="button"
               onClick={() => navigate('/')}
-              className="bg-white text-orange-600 font-bold py-4 px-8 rounded-2xl shadow-lg hover:bg-gray-100 transition-all text-lg border-2 border-orange-500"
+              className="bg-white text-cyan-600 font-bold py-4 px-8 rounded-2xl shadow-lg hover:bg-gray-100 transition-all text-lg border-2 border-cyan-500"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-4 px-12 rounded-2xl shadow-lg transition-all text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold py-4 px-12 rounded-2xl shadow-lg transition-all text-lg disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? '⏳ Submitting...' : '🚀 Submit Startup'}
             </button>
@@ -917,7 +917,7 @@ Fill ONLY the EMPTY fields with your research. Return JSON with ALL fields fille
         </form>
 
         {/* Info Box */}
-        <div className="bg-gradient-to-r from-orange-400 to-orange-500 rounded-2xl p-6 text-white mb-8">
+        <div className="bg-gradient-to-r from-cyan-500 to-blue-500 rounded-2xl p-6 text-white mb-8">
           <h3 className="text-xl font-bold mb-3">What happens next?</h3>
           <ul className="space-y-2">
             <li className="flex gap-2">

@@ -127,7 +127,7 @@ export default function InviteInvestorPage() {
           <Link to="/" className="text-4xl sm:text-6xl hover:scale-110 transition-transform">🍯</Link>
           <Link to="/" className="px-3 sm:px-4 py-1 sm:py-2 bg-purple-700 hover:bg-purple-600 text-white font-bold rounded-full transition-all shadow-lg text-xs sm:text-sm whitespace-nowrap">🏠 Home</Link>
           <Link to="/investors" className="px-3 sm:px-4 py-1 sm:py-2 bg-purple-700 hover:bg-purple-600 text-white font-bold rounded-full transition-all shadow-lg text-xs sm:text-sm whitespace-nowrap">💼 Investors</Link>
-          <Link to="/invite-investor" className="px-4 sm:px-6 py-1.5 sm:py-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold rounded-full shadow-xl scale-105 sm:scale-110 text-xs sm:text-base whitespace-nowrap">➕ Invite Investor</Link>
+          <Link to="/invite-investor" className="px-4 sm:px-6 py-1.5 sm:py-3 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold rounded-full shadow-xl scale-105 sm:scale-110 text-xs sm:text-base whitespace-nowrap">➕ Invite Investor</Link>
         </div>
       </div>
 
@@ -277,7 +277,7 @@ export default function InviteInvestorPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-4 px-8 bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold text-xl rounded-xl shadow-xl hover:from-yellow-600 hover:to-orange-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full py-4 px-8 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold text-xl rounded-xl shadow-xl hover:from-cyan-600 hover:to-blue-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? '⏳ Adding Investor...' : '✨ Add Investor to Network'}
             </button>

@@ -27,19 +27,19 @@ const FirePointsWidget: React.FC = () => {
     : 100;
 
   return (
-    <div className="bg-white/80 backdrop-blur-md rounded-3xl shadow-xl p-6 border-2 border-orange-200">
+    <div className="bg-white/80 backdrop-blur-md rounded-3xl shadow-xl p-6 border-2 border-slate-600">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">
           <div className="text-4xl">🔥</div>
           <div>
-            <h3 className="text-2xl font-bold text-orange-600">Fire Points</h3>
+            <h3 className="text-2xl font-bold text-cyan-600">Fire Points</h3>
             <p className="text-sm text-slate-600">Level up your investor game</p>
           </div>
         </div>
         <Link
           to="/profile"
-          className="px-3 py-1.5 bg-orange-100 hover:bg-orange-200 text-orange-700 text-sm font-medium rounded-lg transition-all"
+          className="px-3 py-1.5 bg-cyan-100 hover:bg-cyan-200 text-cyan-700 text-sm font-medium rounded-lg transition-all"
         >
           View Profile
         </Link>
@@ -101,7 +101,7 @@ const FirePointsWidget: React.FC = () => {
             {unlockedPerks.map((perk) => (
               <div
                 key={perk.id}
-                className="bg-gradient-to-br from-orange-50 to-yellow-50 border border-orange-200 rounded-xl p-3 text-center"
+                className="bg-gradient-to-br from-slate-800 to-slate-700 border border-slate-600 rounded-xl p-3 text-center"
               >
                 <div className="text-2xl mb-1">{perk.icon}</div>
                 <p className="text-xs font-medium text-slate-700">{perk.name}</p>

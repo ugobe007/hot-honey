@@ -10,7 +10,14 @@ export default defineConfig({
     },
   },
   server: {
-    host: 'localhost'  // Makes it work at http://localhost:5173
+    host: 'localhost',  // Makes it work at http://localhost:5173
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3002',
+        changeOrigin: true,
+        secure: false,
+      },
+    },
   },
   build: {
     // Ensure no HMR in production

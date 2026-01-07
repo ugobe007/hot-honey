@@ -1,0 +1,428 @@
+[
+  {
+    "id": "ec806e22-41d7-4db3-b13a-75e0f897e2d9",
+    "name": "Rick Dewey, M.D. (Versant Ventures)",
+    "firm": "Rick Dewey, M.D. (Versant Ventures)",
+    "linkedin_url": "https://linkedin.com/in/rick-dewey",
+    "blog_url": null,
+    "current_bio": "Rick Dewey, M.D. is an investor at Versant Ventures focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "6b5ed380-9b0f-4599-bcc7-020f019e54bd",
+    "name": "Kearny Jackson",
+    "firm": "Kearny Jackson",
+    "linkedin_url": "https://linkedin.com/in/kearny-jackson",
+    "blog_url": null,
+    "current_bio": "Former operator, runs SPVs and has own fund",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "58398858-11d3-4e3f-8add-77503c999144",
+    "name": "Scott Duke Kominers",
+    "firm": "Scott Duke Kominers",
+    "linkedin_url": "https://linkedin.com/in/scott-duke-kominers",
+    "blog_url": null,
+    "current_bio": "Scott Duke Kominers is a angel investor focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "80e176d6-0f55-4a3c-b650-1d86e06c72d2",
+    "name": "Joel Drewry, Ph.D.",
+    "firm": "Joel Drewry, Ph.D.",
+    "linkedin_url": "https://linkedin.com/in/joel-drewry",
+    "blog_url": null,
+    "current_bio": "Joel Drewry, Ph.D. is a angel investor focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "3e26fa9f-d1d0-4e59-8383-99d67539129a",
+    "name": "Andrea Hippeau",
+    "firm": "Andrea Hippeau",
+    "linkedin_url": "https://linkedin.com/in/andrea-hippeau",
+    "blog_url": null,
+    "current_bio": "Partner at Lererhippeau since 2014",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "29ba50cb-aa35-4936-9464-16205cfabfb7",
+    "name": "Mason Murray",
+    "firm": "Mason Murray",
+    "linkedin_url": "https://linkedin.com/in/mason-murray",
+    "blog_url": null,
+    "current_bio": "Mason Murray is a angel investor focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "8a025a69-f7e4-49ed-bc11-c4c92b3c1691",
+    "name": "and Stack Mythical (Boldstart)",
+    "firm": "and Stack Mythical (Boldstart)",
+    "linkedin_url": "https://linkedin.com/in/and-stack-mythical",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "Enterprise",
+      "SaaS",
+      "Developer Tools"
+    ],
+    "current_stage": [
+      "Pre-Seed",
+      "Seed"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "456d491e-41b4-417d-9c78-de45a7c4f237",
+    "name": "Spencer Punter",
+    "firm": "Spencer Punter",
+    "linkedin_url": "https://linkedin.com/in/spencer-punter",
+    "blog_url": null,
+    "current_bio": "Spencer Punter is a angel investor focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "0ec3ff9b-40fc-4779-9774-f3275e8716fe",
+    "name": "Eddy Lazzarin",
+    "firm": "Eddy Lazzarin",
+    "linkedin_url": "https://linkedin.com/in/eddy-lazzarin",
+    "blog_url": null,
+    "current_bio": "Chief Technology Officer at A16zcrypto",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "b4f75b24-b6a6-4529-a93b-924e8e31a516",
+    "name": "Steve Edelson",
+    "firm": "Steve Edelson",
+    "linkedin_url": "https://linkedin.com/in/steve-edelson",
+    "blog_url": null,
+    "current_bio": "VP, IR & Communications at Versantventures",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "773e1d98-c5cf-463c-996f-bcbaf75fb3f2",
+    "name": "Emery Rosansky",
+    "firm": "Emery Rosansky",
+    "linkedin_url": "https://linkedin.com/in/emery-rosansky",
+    "blog_url": null,
+    "current_bio": "VP, Founder Success & GTM at Firstround",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "432b4f64-d930-4b1c-8a06-beeb37aae5ff",
+    "name": "Chitranjan Jain",
+    "firm": "Chitranjan Jain",
+    "linkedin_url": "https://linkedin.com/in/chitranjan-jain",
+    "blog_url": null,
+    "current_bio": "Accel Partner based in Bangalore",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "ab571afb-ea08-4120-b00c-7789fcadd3aa",
+    "name": "Ryan Ward (DCVC)",
+    "firm": "DCVC",
+    "linkedin_url": "https://linkedin.com/in/ryan-ward",
+    "blog_url": "https://dcvc.com",
+    "current_bio": "Ryan Ward is a partner at DCVC. Deep tech in AI, biology, materials, energy, space",
+    "current_sectors": [
+      "AI/ML",
+      "SaaS",
+      "Fintech",
+      "Biotechnology",
+      "Robotics",
+      "DeepTech",
+      "SpaceTech",
+      "Materials",
+      "Climate"
+    ],
+    "current_stage": [
+      "Seed"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "8aa88fda-552f-4508-9f70-15412fd8c609",
+    "name": "Packy McCormick",
+    "firm": "Packy McCormick",
+    "linkedin_url": "https://linkedin.com/in/packy-mccormick",
+    "blog_url": null,
+    "current_bio": "Packy McCormick is a angel investor focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "fcb05968-0d06-4df8-840c-f5f18f4465c0",
+    "name": "Dana Stalder",
+    "firm": "Dana Stalder",
+    "linkedin_url": "https://linkedin.com/in/dana-stalder",
+    "blog_url": null,
+    "current_bio": "Specializes in FinTech and B2B investments",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "376c413f-f750-487e-8229-0237c8f6735a",
+    "name": "Sheel Mohnot",
+    "firm": "Better Tomorrow Ventures",
+    "linkedin_url": "https://linkedin.com/in/sheel-mohnot",
+    "blog_url": null,
+    "current_bio": "Sheel Mohnot is an investor at Better Tomorrow Ventures focused on Fintech investing at Pre-seed and Seed stage.",
+    "current_sectors": [
+      "Fintech"
+    ],
+    "current_stage": [
+      "Pre-seed",
+      "Seed"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "d91a0294-4814-43df-b818-e87c429275fd",
+    "name": "Clavier view profile (Uncorkcapital)",
+    "firm": "Clavier view profile (Uncorkcapital)",
+    "linkedin_url": "https://linkedin.com/in/clavier-view-profile",
+    "blog_url": null,
+    "current_bio": "Clavier view profile is an investor at Uncorkcapital focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "cd0ed1cd-6f1f-4257-9394-53721665a8ac",
+    "name": "Thomson Advisory Group",
+    "firm": "Thomson Advisory Group",
+    "linkedin_url": "https://linkedin.com/in/thomson-advisory-group",
+    "blog_url": null,
+    "current_bio": "Thomson Advisory Group is a angel investor focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "77ecb6f1-fd3f-49bd-b98f-edf3240bfff4",
+    "name": "Reports Private Equity",
+    "firm": "Reports Private Equity",
+    "linkedin_url": "https://linkedin.com/in/reports-private-equity",
+    "blog_url": null,
+    "current_bio": "Reports Private Equity is a angel investor focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "609740fa-ed37-4878-b15a-6192db43f68b",
+    "name": "Luca Rossi (Refactoring)",
+    "firm": "Luca Rossi (Refactoring)",
+    "linkedin_url": "https://linkedin.com/in/luca-rossi",
+    "blog_url": null,
+    "current_bio": "Writer at Refactoring, covers tech and business insights",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  }
+]

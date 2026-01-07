@@ -56,9 +56,9 @@ export default function VoteTransparency({ startup, currentVotes }: VoteTranspar
           <div className="text-green-300 text-sm mt-2 font-semibold">{yesPercentage}% of community</div>
         </div>
 
-        <div className="bg-gradient-to-br from-red-500/20 to-orange-500/20 border border-red-500/50 rounded-xl p-4">
+        <div className="bg-gradient-to-br from-blue-500/20 to-violet-500/20 border border-red-500/50 rounded-xl p-4">
           <div className="flex items-center gap-3 mb-2">
-            <div className="bg-gradient-to-r from-red-500 to-orange-500 p-2 rounded-lg">
+            <div className="bg-gradient-to-r from-blue-500 to-violet-500 p-2 rounded-lg">
               <ThumbsDown className="w-5 h-5 text-white" />
             </div>
             <div>
@@ -68,7 +68,7 @@ export default function VoteTransparency({ startup, currentVotes }: VoteTranspar
           </div>
           <div className="w-full bg-black/40 rounded-full h-2 mt-2">
             <div 
-              className="bg-gradient-to-r from-red-400 to-orange-400 h-2 rounded-full transition-all"
+              className="bg-gradient-to-r from-blue-400 to-violet-400 h-2 rounded-full transition-all"
               style={{ width: `${noPercentage}%` }}
             ></div>
           </div>
@@ -77,7 +77,7 @@ export default function VoteTransparency({ startup, currentVotes }: VoteTranspar
       </div>
 
       {/* AI + Community Score Calculation */}
-      <div className="bg-black/40 rounded-xl p-6 border border-yellow-500/30 mb-4">
+      <div className="bg-black/40 rounded-xl p-6 border border-cyan-500/30 mb-4">
         <h4 className="text-lg font-bold text-yellow-300 mb-4 flex items-center gap-2">
           <Users className="w-5 h-5" />
           How Your Vote Impacts the Score
@@ -105,7 +105,7 @@ export default function VoteTransparency({ startup, currentVotes }: VoteTranspar
           <div className="bg-gradient-to-r from-purple-600/20 to-cyan-600/20 border border-purple-500/50 rounded-lg p-3 mt-3">
             <div className="flex items-center justify-between">
               <span className="text-white font-bold">Final Score (AI + Community):</span>
-              <span className="text-3xl font-bold bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">
+              <span className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
                 {adjustedScore}
               </span>
             </div>
@@ -118,7 +118,7 @@ export default function VoteTransparency({ startup, currentVotes }: VoteTranspar
         yesPercentage > 70 
           ? 'bg-green-500/10 border-green-500/30' 
           : yesPercentage > 50 
-          ? 'bg-yellow-500/10 border-yellow-500/30'
+          ? 'bg-yellow-500/10 border-cyan-500/30'
           : 'bg-gray-500/10 border-gray-500/30'
       }`}>
         <div className="flex items-start gap-2">

@@ -1,0 +1,473 @@
+[
+  {
+    "id": "03c9ad0b-3e4e-46d1-8d5a-7b5735419270",
+    "name": "Coinbase Ventures",
+    "firm": "Coinbase Ventures",
+    "linkedin_url": null,
+    "blog_url": null,
+    "current_bio": "Discovered from: FinSMEs",
+    "current_sectors": [
+      "SaaS"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "LinkedIn",
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Geography",
+      "Notable Investments"
+    ],
+    "priority": 6
+  },
+  {
+    "id": "a9b271bf-21bc-4341-bb88-e63e8b3eec28",
+    "name": "s Capital and Chingona Ventures",
+    "firm": "s Capital and Chingona Ventures",
+    "linkedin_url": null,
+    "blog_url": null,
+    "current_bio": "Discovered from: FinSMEs",
+    "current_sectors": [
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "LinkedIn",
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Geography",
+      "Notable Investments"
+    ],
+    "priority": 6
+  },
+  {
+    "id": "4fef2470-ea49-4203-aaa7-c86e45d6fd8b",
+    "name": "NovoLINC Raises Fund",
+    "firm": "NovoLINC Raises Fund",
+    "linkedin_url": null,
+    "blog_url": null,
+    "current_bio": "Discovered from: FinSMEs",
+    "current_sectors": [
+      "SaaS"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "LinkedIn",
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Geography",
+      "Notable Investments"
+    ],
+    "priority": 6
+  },
+  {
+    "id": "8ed29c18-1462-4541-9a12-f4ae8c01b63d",
+    "name": "Sinovation Capital",
+    "firm": "Sinovation Capital",
+    "linkedin_url": null,
+    "blog_url": null,
+    "current_bio": "Discovered from: FinSMEs",
+    "current_sectors": [
+      "HealthTech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "LinkedIn",
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Geography",
+      "Notable Investments"
+    ],
+    "priority": 6
+  },
+  {
+    "id": "fe5cc105-af91-4a22-a110-d54e84762822",
+    "name": "ResearchCaitlin Pintavorn",
+    "firm": "ResearchCaitlin Pintavorn",
+    "linkedin_url": null,
+    "blog_url": null,
+    "current_bio": "Pintavorn is an investor at ResearchCaitlin Pintavorn focused on Technology investing at Seed and Series A stage.",
+    "current_sectors": [
+      "Technology"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "LinkedIn",
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Geography",
+      "Notable Investments"
+    ],
+    "priority": 6
+  },
+  {
+    "id": "d8eef949-da39-4656-9cdf-39ad45cd8a84",
+    "name": "Gabriella Garcia",
+    "firm": "Gabriella Garcia",
+    "linkedin_url": null,
+    "blog_url": null,
+    "current_bio": "Engineering Fellow at Felicis",
+    "current_sectors": [
+      "Technology"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "LinkedIn",
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Geography",
+      "Notable Investments"
+    ],
+    "priority": 6
+  },
+  {
+    "id": "cd93f9c2-f54c-49e1-8637-ab6765ed09c3",
+    "name": "founded Greylock Partners",
+    "firm": "founded Greylock Partners",
+    "linkedin_url": null,
+    "blog_url": null,
+    "current_bio": "Greylock Partners is a leading venture capital firm focused on consumer and enterprise software. Investors in LinkedIn, Facebook, Airbnb, and Discord.",
+    "current_sectors": [
+      "Technology"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "LinkedIn",
+      "Check Size Min",
+      "Check Size Max",
+      "Geography",
+      "Notable Investments"
+    ],
+    "priority": 5
+  },
+  {
+    "id": "80cedd5a-bb79-4ecc-8adf-493dbe1f424d",
+    "name": "company not the (A16z)",
+    "firm": "company not the (A16z)",
+    "linkedin_url": null,
+    "blog_url": null,
+    "current_bio": "Team member at A16z. Discovered from: https://a16z.com/about/",
+    "current_sectors": [
+      "Technology"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "LinkedIn",
+      "Check Size Min",
+      "Check Size Max",
+      "Geography",
+      "Notable Investments"
+    ],
+    "priority": 5
+  },
+  {
+    "id": "ff0b8264-3056-4bc7-9c43-0bac68b98a4c",
+    "name": "Green Cow Venture Capital",
+    "firm": "Green Cow Venture Capital",
+    "linkedin_url": "https://linkedin.com/in/green-cow-venture-capital",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "Sector agnostic"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 5
+  },
+  {
+    "id": "c02901ad-1d79-46f1-8ed2-263cb0bc627a",
+    "name": "Venture Partners",
+    "firm": "Venture Partners",
+    "linkedin_url": "https://linkedin.com/in/venture-partners",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 5
+  },
+  {
+    "id": "f8725ba0-1906-42de-87fb-8c94bd53f079",
+    "name": "Ari Nowacek (Arch Venture Partners)",
+    "firm": "Ari Nowacek (Arch Venture Partners)",
+    "linkedin_url": "https://linkedin.com/in/ari-nowacek",
+    "blog_url": null,
+    "current_bio": "Partner",
+    "current_sectors": [
+      "technology",
+      "HealthTech",
+      "Biotech"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 5
+  },
+  {
+    "id": "ded33b60-73a6-47b0-8cb0-fc8f43d9fe83",
+    "name": "Florida SBA",
+    "firm": "Florida SBA",
+    "linkedin_url": null,
+    "blog_url": null,
+    "current_bio": "Using AI to analyze private markets exposure",
+    "current_sectors": [
+      "Technology"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "LinkedIn",
+      "Check Size Min",
+      "Check Size Max",
+      "Geography",
+      "Notable Investments"
+    ],
+    "priority": 5
+  },
+  {
+    "id": "810dfa16-5737-4f8b-a9b4-2ed788551e10",
+    "name": "Vicki Sato (Arch Venture Partners)",
+    "firm": "Vicki Sato (Arch Venture Partners)",
+    "linkedin_url": "https://linkedin.com/in/vicki-sato",
+    "blog_url": null,
+    "current_bio": "Venture Partner",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 5
+  },
+  {
+    "id": "b026298b-5bc8-48b6-b00d-2b5bdf9c313c",
+    "name": "True BelieversBacking extraordinary (Floodgate)",
+    "firm": "True BelieversBacking extraordinary (Floodgate)",
+    "linkedin_url": "https://linkedin.com/in/true-believersbacking-extraordinary",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 5
+  },
+  {
+    "id": "f2aa359e-f7d9-43c6-a36e-382076646143",
+    "name": "Milo Werner",
+    "firm": "Milo Werner",
+    "linkedin_url": "https://linkedin.com/in/milo-werner",
+    "blog_url": null,
+    "current_bio": "Milo Werner is a angel investor focused on AI/ML, SaaS, Fintech investing at Seed stage.",
+    "current_sectors": [
+      "AI/ML",
+      "SaaS",
+      "Fintech",
+      "Biotechnology",
+      "Robotics"
+    ],
+    "current_stage": [
+      "Seed"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "d91f72bd-f70b-4bdb-84f8-10aad6f8d94f",
+    "name": "Warburg Pincus",
+    "firm": "Warburg Pincus",
+    "linkedin_url": "https://linkedin.com/in/warburg-pincus",
+    "blog_url": null,
+    "current_bio": "A pioneer in private equity global growth investing since 1966.",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "1bf2e650-d8dd-4ffa-a132-13ca9c2361c4",
+    "name": "Flo Thinh Chialtas",
+    "firm": "Flo Thinh Chialtas",
+    "linkedin_url": "https://linkedin.com/in/flo-thinh-chialtas",
+    "blog_url": null,
+    "current_bio": "Flo Thinh Chialtas is a angel investor focused on AI/ML, SaaS, Fintech investing at Seed stage.",
+    "current_sectors": [
+      "AI/ML",
+      "SaaS",
+      "Fintech",
+      "Biotechnology",
+      "Robotics"
+    ],
+    "current_stage": [
+      "Seed"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "eb38beec-a070-4287-bed6-cdc3f211f01b",
+    "name": "OrbiMed",
+    "firm": "OrbiMed",
+    "linkedin_url": "https://linkedin.com/in/orbimed",
+    "blog_url": null,
+    "current_bio": "Specializes in healthcare and life sciences investments.",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "ef08e720-65b5-4ed0-90c5-4a56a3e6ed2b",
+    "name": "Dr. Vandon Duong",
+    "firm": "Dr. Vandon Duong",
+    "linkedin_url": "https://linkedin.com/in/dr-vandon-duong",
+    "blog_url": null,
+    "current_bio": "Dr. Vandon Duong is a angel investor focused on AI/ML, SaaS, Fintech investing at Seed stage.",
+    "current_sectors": [
+      "AI/ML",
+      "SaaS",
+      "Fintech",
+      "Biotechnology",
+      "Robotics"
+    ],
+    "current_stage": [
+      "Seed"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "f2e001f1-a7fe-4cbd-a8b4-ad8b95e7cad4",
+    "name": "Ekkta Bathija (Village Global)",
+    "firm": "Ekkta Bathija (Village Global)",
+    "linkedin_url": "https://linkedin.com/in/ekkta-bathija",
+    "blog_url": null,
+    "current_bio": "Finance & Operations Analyst at Village Global",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  }
+]

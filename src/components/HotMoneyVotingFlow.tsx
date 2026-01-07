@@ -55,7 +55,7 @@ const HotMoneyVotingFlow: React.FC<HotMoneyVotingFlowProps> = ({
   };
 
   const getRoundColor = (round: number) => {
-    return round <= 4 ? "bg-orange-500" : "bg-red-600";
+    return round <= 4 ? "bg-cyan-600" : "bg-red-600";
   };
 
   const getNextStepText = (round: number) => {
@@ -69,11 +69,11 @@ const HotMoneyVotingFlow: React.FC<HotMoneyVotingFlowProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-yellow-50 flex items-center justify-center p-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-800 to-slate-700 flex items-center justify-center p-8">
       <div className="max-w-4xl w-full">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-orange-600 mb-4">
+          <h1 className="text-4xl font-bold text-cyan-600 mb-4">
             Hot Money creates demand...
           </h1>
           <p className="text-lg text-gray-600 mb-2">
@@ -128,8 +128,8 @@ const HotMoneyVotingFlow: React.FC<HotMoneyVotingFlowProps> = ({
 
           {/* Hot or Not Decision */}
           <div className="flex flex-col items-center gap-4">
-            <div className="border-2 border-orange-500 rounded-lg px-6 py-3">
-              <span className="text-orange-500 font-bold text-lg">hot... or not?</span>
+            <div className="border-2 border-cyan-500 rounded-lg px-6 py-3">
+              <span className="text-cyan-500 font-bold text-lg">hot... or not?</span>
             </div>
             
             <div className="text-6xl">→</div>
@@ -158,7 +158,7 @@ const HotMoneyVotingFlow: React.FC<HotMoneyVotingFlowProps> = ({
           <div className="flex justify-center gap-6 mt-12">
             <button
               onClick={() => handleVote('hot')}
-              className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 px-8 rounded-lg text-xl transition-colors"
+              className="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-4 px-8 rounded-lg text-xl transition-colors"
             >
               🔥 HOT
             </button>
@@ -173,7 +173,7 @@ const HotMoneyVotingFlow: React.FC<HotMoneyVotingFlowProps> = ({
 
         {/* Social Graph Voting */}
         <div className="text-center mt-8">
-          <h3 className="text-xl font-bold text-orange-600 mb-4">
+          <h3 className="text-xl font-bold text-cyan-600 mb-4">
             Social Graph Investing: Friend votes = (+2)
           </h3>
           <p className="text-gray-600 mb-4">
@@ -185,11 +185,11 @@ const HotMoneyVotingFlow: React.FC<HotMoneyVotingFlowProps> = ({
               <div className="bg-gray-200 rounded-lg px-4 py-2">
                 <span className="font-bold">Voting: Trusted Friend +2</span>
               </div>
-              <div className="border-2 border-orange-500 rounded-lg px-4 py-2">
-                <span className="text-orange-500 font-bold">hot... or not?</span>
+              <div className="border-2 border-cyan-500 rounded-lg px-4 py-2">
+                <span className="text-cyan-500 font-bold">hot... or not?</span>
               </div>
               <div className="text-2xl">→</div>
-              <div className="bg-orange-500 text-white font-bold text-2xl px-6 py-4 rounded-lg">
+              <div className="bg-cyan-600 text-white font-bold text-2xl px-6 py-4 rounded-lg">
                 +2
               </div>
             </div>

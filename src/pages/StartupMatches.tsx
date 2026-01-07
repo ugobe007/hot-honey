@@ -1,28 +1,58 @@
-import { useState, useEffect, useCallback } from 'react';
+/**
+ * STARTUP MATCHES PAGE
+ * ====================
+ * Shows investor matches for a startup using GOD Score matching
+ * Integrates: Save, Share, Intro Request, Notifications, Analytics
+ * Color scheme: Light blue to violet (NO rose/pink)
+ */
+
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { 
   ArrowLeft, 
   Rocket, 
-  Briefcase, 
   Zap, 
   Target, 
   TrendingUp,
-  ExternalLink,
-  Mail,
-  Linkedin,
-  Globe,
   Loader2,
   Sparkles,
-  ChevronRight,
   Filter,
-  SortDesc,
   RefreshCw,
   Lock,
+  Users,
+  Lightbulb,
+  ChevronDown,
+  Search,
+  BarChart3,
+  Bookmark,
+  Save
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
+import { 
+  findMatchesForStartup, 
+  MatchResult,
+  INVESTOR_PREFERENCES 
+} from '../lib/matchingService';
+import { 
+  saveMatch, 
+  unsaveMatch, 
+  isMatchSaved,
+  getSavedMatchCount 
+} from '../lib/savedMatchesService';
+import MatchCard from '../components/MatchCard';
+import ShareMatchModal from '../components/ShareMatchModal';
+import RequestIntroModal from '../components/RequestIntroModal';
+import MatchNotifications from '../components/MatchNotifications';
 
 const REMATCH_COUNT_KEY = 'hotmatch_rematch_count';
+const SEARCH_COUNT_KEY = 'hotmatch_search_count';
+const SEARCH_MONTH_KEY = 'hotmatch_search_month';
+const MATCHES_WEEK_KEY = 'hotmatch_matches_week';
+const MATCHES_WEEK_COUNT_KEY = 'hotmatch_matches_week_count';
 const MAX_FREE_REMATCHES = 1;
+const MAX_FREE_MATCHES = 3; // For non-signed-in users
+const MAX_FREE_MATCHES_PER_WEEK = 3; // For free signed-up users
+const MAX_FREE_SEARCHES_PER_MONTH = 3;
 
 interface Startup {
   id: string;
@@ -33,24 +63,13 @@ interface Startup {
   sectors?: string[];
   stage?: string;
   total_god_score?: number;
+  team_score?: number;
+  market_score?: number;
+  product_score?: number;
+  traction_score?: number;
+  vision_score?: number;
   raise_amount?: string;
   location?: string;
-}
-
-interface MatchedInvestor {
-  id: string;
-  name: string;
-  firm?: string;
-  bio?: string;
-  sectors?: string[];
-  stage?: string[];
-  check_size_min?: number;
-  check_size_max?: number;
-  linkedin_url?: string;
-  blog_url?: string;
-  geography_focus?: string[];
-  notable_investments?: string[];
-  match_score: number;
 }
 
 export default function StartupMatches() {
@@ -58,248 +77,367 @@ export default function StartupMatches() {
   const navigate = useNavigate();
   
   const [startup, setStartup] = useState<Startup | null>(null);
-  const [matches, setMatches] = useState<MatchedInvestor[]>([]);
+  const [matches, setMatches] = useState<MatchResult[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isMatching, setIsMatching] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [sortBy, setSortBy] = useState<'score' | 'name'>('score');
-  const [filterSector, setFilterSector] = useState<string | null>(null);
   const [rematchCount, setRematchCount] = useState(0);
   const [matchingStatus, setMatchingStatus] = useState<string>('');
+  const [savedCount, setSavedCount] = useState(0);
+  const [matchesSaved, setMatchesSaved] = useState(false);
+  
+  const [filterType, setFilterType] = useState<string | null>(null);
+  const [showFilters, setShowFilters] = useState(false);
+  const [shareModalMatch, setShareModalMatch] = useState<MatchResult | null>(null);
+  const [introModalInvestor, setIntroModalInvestor] = useState<{id: string; name: string; firm?: string} | null>(null);
+  const [isSignedIn, setIsSignedIn] = useState(false);
+  const [isPaid, setIsPaid] = useState(false);
+  const [savedMatches, setSavedMatches] = useState<Set<string>>(new Set());
+  const [searchCount, setSearchCount] = useState(0);
+  const [canSearch, setCanSearch] = useState(true);
+  const [weeklyMatchCount, setWeeklyMatchCount] = useState(0);
+  const [canViewMoreMatches, setCanViewMoreMatches] = useState(true);
 
-  // Load rematch count from localStorage
   useEffect(() => {
     const saved = localStorage.getItem(`${REMATCH_COUNT_KEY}_${id}`);
     if (saved) setRematchCount(parseInt(saved, 10));
+    
+    // Check auth and subscription status
+    supabase.auth.getUser().then(({ data }) => {
+      const signedIn = !!data.user;
+      setIsSignedIn(signedIn);
+      
+      // Check subscription status (you'll need to implement this based on your subscription system)
+      // For now, assume no one is paid unless explicitly set
+      const subscriptionStatus = localStorage.getItem('subscription_status');
+      const paid = subscriptionStatus === 'paid' || subscriptionStatus === 'premium';
+      setIsPaid(paid);
+      
+      // Check search limits for signed-in free users
+      if (signedIn && !paid) {
+        const currentMonth = new Date().getMonth();
+        const savedMonth = localStorage.getItem(SEARCH_MONTH_KEY);
+        const savedCount = localStorage.getItem(SEARCH_COUNT_KEY);
+        
+        if (savedMonth && parseInt(savedMonth) === currentMonth) {
+          const count = parseInt(savedCount || '0', 10);
+          setSearchCount(count);
+          setCanSearch(count < MAX_FREE_SEARCHES_PER_MONTH);
+        } else {
+          // New month, reset count
+          setSearchCount(0);
+          setCanSearch(true);
+          localStorage.setItem(SEARCH_MONTH_KEY, currentMonth.toString());
+          localStorage.setItem(SEARCH_COUNT_KEY, '0');
+        }
+        
+        // Check weekly match limits for free signed-up users
+        const currentWeek = getWeekNumber(new Date());
+        const savedWeek = localStorage.getItem(MATCHES_WEEK_KEY);
+        const savedWeekCount = localStorage.getItem(MATCHES_WEEK_COUNT_KEY);
+        
+        if (savedWeek && parseInt(savedWeek) === currentWeek) {
+          const count = parseInt(savedWeekCount || '0', 10);
+          setWeeklyMatchCount(count);
+          setCanViewMoreMatches(count < MAX_FREE_MATCHES_PER_WEEK);
+        } else {
+          // New week, reset count
+          setWeeklyMatchCount(0);
+          setCanViewMoreMatches(true);
+          localStorage.setItem(MATCHES_WEEK_KEY, currentWeek.toString());
+          localStorage.setItem(MATCHES_WEEK_COUNT_KEY, '0');
+        }
+      }
+    });
+    
+    setSavedCount(getSavedMatchCount());
   }, [id]);
+  
+  // Helper function to get week number
+  const getWeekNumber = (date: Date): number => {
+    const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+    const dayNum = d.getUTCDay() || 7;
+    d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+    const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+    return Math.ceil((((d.getTime() - yearStart.getTime()) / 86400000) + 1) / 7);
+  };
 
   const canRematch = rematchCount < MAX_FREE_REMATCHES;
 
-  // Generate matches for a startup
-  const generateMatches = useCallback(async (startupId: string, startupData: Startup) => {
-    setIsMatching(true);
-    setMatchingStatus('Analyzing startup profile...');
+  useEffect(() => {
+    if (!id) return;
+    loadStartupAndMatches();
+  }, [id]);
 
+  useEffect(() => {
+    if (matches.length > 0 && startup) {
+      const saved = new Set<string>();
+      matches.forEach(m => {
+        if (isMatchSaved(startup.id, m.investor.id)) saved.add(m.investor.id);
+      });
+      setSavedMatches(saved);
+      // Check if all matches are already saved
+      if (saved.size === matches.length) {
+        setMatchesSaved(true);
+      }
+    }
+  }, [matches, startup]);
+
+  const loadStartupAndMatches = async () => {
+    setIsLoading(true);
+    setError(null);
     try {
-      // Get all investors
-      setMatchingStatus('Finding compatible investors...');
-      const { data: investors } = await supabase
-        .from('investors')
-        .select('id, name, firm, sectors, stage, check_size_min, check_size_max, geography_focus')
-        .limit(200);
-
-      if (!investors || investors.length === 0) {
-        setMatchingStatus('No investors found');
-        setIsMatching(false);
+      if (!id) {
+        setError('Invalid startup ID');
+        setIsLoading(false);
         return;
       }
 
-      setMatchingStatus(`Scoring ${investors.length} investors...`);
-
-      // Simple matching algorithm
-      const matchResults: { investor_id: string; score: number }[] = [];
-      const startupSectors = startupData.sectors || [];
-      const startupStage = startupData.stage?.toLowerCase() || '';
-
-      for (const investor of investors) {
-        let score = 50; // Base score
-
-        // Sector match (+20 points for each matching sector)
-        const investorSectors = investor.sectors || [];
-        const sectorMatches = startupSectors.filter(s => 
-          investorSectors.some((is: string) => 
-            is.toLowerCase().includes(s.toLowerCase()) || 
-            s.toLowerCase().includes(is.toLowerCase())
-          )
-        );
-        score += sectorMatches.length * 20;
-
-        // Stage match (+15 points)
-        const investorStages = investor.stage || [];
-        if (investorStages.some((is: string) => is.toLowerCase().includes(startupStage))) {
-          score += 15;
-        }
-
-        // Cap at 99
-        score = Math.min(99, score);
-
-        if (score >= 50) {
-          matchResults.push({ investor_id: investor.id, score });
-        }
-      }
-
-      // Sort by score and take top 25
-      matchResults.sort((a, b) => b.score - a.score);
-      const topMatches = matchResults.slice(0, 25);
-
-      setMatchingStatus(`Saving ${topMatches.length} matches...`);
-
-      // Delete existing matches for this startup
-      await supabase
-        .from('startup_investor_matches')
-        .delete()
-        .eq('startup_id', startupId);
-
-      // Insert new matches
-      if (topMatches.length > 0) {
-        const matchInserts = topMatches.map(m => ({
-          startup_id: startupId,
-          investor_id: m.investor_id,
-          match_score: m.score,
-        }));
-
-        await supabase
-          .from('startup_investor_matches')
-          .insert(matchInserts);
-      }
-
-      setMatchingStatus('Done!');
-      
-      // Reload matches
-      await loadStartupAndMatches(startupId);
-
-    } catch (err) {
-      console.error('Matching error:', err);
-      setMatchingStatus('Error generating matches');
-    } finally {
-      setIsMatching(false);
-    }
-  }, []);
-
-  const handleRematch = async () => {
-    if (!canRematch || !startup || !id) return;
-
-    // Increment rematch count
-    const newCount = rematchCount + 1;
-    setRematchCount(newCount);
-    localStorage.setItem(`${REMATCH_COUNT_KEY}_${id}`, newCount.toString());
-
-    await generateMatches(id, startup);
-  };
-
-  useEffect(() => {
-    if (id) {
-      loadStartupAndMatches(id);
-    }
-  }, [id]);
-
-  // Auto-trigger matching when startup has no matches
-  useEffect(() => {
-    if (startup && matches.length === 0 && !isLoading && !isMatching && id) {
-      generateMatches(id, startup);
-    }
-  }, [startup, matches.length, isLoading, isMatching, id, generateMatches]);
-
-  const loadStartupAndMatches = async (startupId: string) => {
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      // Load startup details
       const { data: startupData, error: startupError } = await supabase
         .from('startup_uploads')
-        .select('id, name, tagline, description, website, sectors, stage, total_god_score, raise_amount, location')
-        .eq('id', startupId)
+        .select('*')
+        .eq('id', id)
         .single();
 
       if (startupError || !startupData) {
+        console.error('❌ Error loading startup:', startupError);
+        console.error('Startup ID requested:', id);
         setError('Startup not found');
         setIsLoading(false);
         return;
       }
 
-      setStartup(startupData);
+      // Log for debugging - this will show what startup is actually loaded
+      console.log('✅ Loaded startup:', {
+        id: startupData.id,
+        name: startupData.name,
+        website: startupData.website,
+        requestedId: id
+      });
 
-      // Load matches
-      const { data: matchData, error: matchError } = await supabase
-        .from('startup_investor_matches')
-        .select(`
-          match_score,
-          investor_id
-        `)
-        .eq('startup_id', startupId)
-        .order('match_score', { ascending: false })
-        .limit(50);
+      // Convert null to undefined for optional fields
+      const startup: Startup = {
+        id: startupData.id,
+        name: startupData.name,
+        tagline: startupData.tagline ?? undefined,
+        description: startupData.description ?? undefined,
+        website: startupData.website ?? undefined,
+        sectors: startupData.sectors ?? undefined,
+        stage: startupData.stage ? String(startupData.stage) : undefined,
+        total_god_score: startupData.total_god_score ?? undefined,
+        team_score: startupData.team_score ?? undefined,
+        market_score: startupData.market_score ?? undefined,
+        product_score: startupData.product_score ?? undefined,
+        traction_score: startupData.traction_score ?? undefined,
+        vision_score: startupData.vision_score ?? undefined,
+        raise_amount: startupData.raise_amount ?? undefined,
+        location: startupData.location ?? undefined,
+      };
 
-      if (matchError) {
-        console.error('Error loading matches:', matchError);
-      }
-
-      if (matchData && matchData.length > 0) {
-        const investorIds = matchData.map(m => m.investor_id).filter(Boolean);
-        
-        const { data: investors } = await supabase
-          .from('investors')
-          .select('id, name, firm, bio, sectors, stage, check_size_min, check_size_max, linkedin_url, blog_url, geography_focus, notable_investments')
-          .in('id', investorIds);
-
-        if (investors) {
-          const investorMap = new Map(investors.map(i => [i.id, i]));
-          const matchedInvestors: MatchedInvestor[] = matchData
-            .filter(m => investorMap.has(m.investor_id))
-            .map(m => ({
-              ...investorMap.get(m.investor_id)!,
-              match_score: m.match_score,
-            }));
-          
-          setMatches(matchedInvestors);
-        }
-      }
+      setStartup(startup);
+      await generateMatches(startup);
     } catch (err) {
-      console.error('Error:', err);
-      setError('Failed to load matches');
+      console.error('Error loading startup:', err);
+      setError('Failed to load data');
     } finally {
       setIsLoading(false);
     }
   };
 
-  const formatCheckSize = (min?: number, max?: number): string => {
-    if (!min && !max) return 'Undisclosed';
-    const formatNum = (n: number) => {
-      if (n >= 1000000) return `$${(n / 1000000).toFixed(1)}M`;
-      if (n >= 1000) return `$${(n / 1000).toFixed(0)}K`;
-      return `$${n}`;
-    };
-    if (min && max) return `${formatNum(min)} - ${formatNum(max)}`;
-    if (min) return `${formatNum(min)}+`;
-    if (max) return `Up to ${formatNum(max)}`;
-    return 'Undisclosed';
+  const generateMatches = async (startupData: Startup) => {
+    // Check search limits for signed-in free users
+    if (isSignedIn && !isPaid) {
+      if (!canSearch) {
+        setError('You\'ve reached your monthly search limit. Upgrade to Premium for unlimited searches.');
+        return;
+      }
+      
+      // Increment search count
+      const newCount = searchCount + 1;
+      setSearchCount(newCount);
+      localStorage.setItem(SEARCH_COUNT_KEY, newCount.toString());
+      
+      if (newCount >= MAX_FREE_SEARCHES_PER_MONTH) {
+        setCanSearch(false);
+      }
+    }
+    
+    setIsMatching(true);
+    setMatchingStatus('Finding compatible investors...');
+    try {
+      if (!startupData.id) {
+        setError('Invalid startup ID');
+        return;
+      }
+
+      // Lower minScore for low-scoring startups to ensure they get matches
+      const godScore = startupData.total_god_score || 50;
+      const minScore = godScore < 40 ? 20 : 30; // Lower threshold for startups with GOD < 40
+
+      const matchResults = await findMatchesForStartup(startupData.id, 50, {
+        investorTypes: filterType ? [filterType] : undefined,
+        minScore: minScore
+      });
+      
+      setMatchingStatus(`Found ${matchResults.length} matches!`);
+      setMatches(matchResults);
+      
+      // If no matches found, log for debugging
+      if (matchResults.length === 0) {
+        console.warn('No matches found for startup:', {
+          id: startupData.id,
+          name: startupData.name,
+          godScore: godScore,
+          sectors: startupData.sectors,
+          stage: startupData.stage,
+          minScore: minScore
+        });
+      }
+    } catch (err) {
+      console.error('Error generating matches:', err);
+      setError('Failed to generate matches');
+    } finally {
+      setIsMatching(false);
+      setMatchingStatus('');
+    }
   };
 
-  const getScoreColor = (score: number) => {
-    if (score >= 80) return 'from-green-500 to-emerald-500';
-    if (score >= 60) return 'from-amber-500 to-yellow-500';
-    return 'from-orange-500 to-red-500';
+  const handleRematch = async () => {
+    if (!canRematch || !startup) return;
+    const newCount = rematchCount + 1;
+    setRematchCount(newCount);
+    localStorage.setItem(`${REMATCH_COUNT_KEY}_${id}`, newCount.toString());
+    await generateMatches(startup);
   };
 
-  const getScoreBadge = (score: number) => {
-    if (score >= 80) return { text: 'Excellent', color: 'bg-green-500/20 text-green-400 border-green-500/30' };
-    if (score >= 60) return { text: 'Good', color: 'bg-amber-500/20 text-amber-400 border-amber-500/30' };
-    return { text: 'Potential', color: 'bg-orange-500/20 text-orange-400 border-orange-500/30' };
+  const handleSaveMatch = (investorId: string) => {
+    if (!startup) return;
+    
+    const match = matches.find(m => m.investor.id === investorId);
+    if (!match) return;
+
+    // Save match to localStorage (works for both free and signed-in users)
+    // Free users' matches will be synced when they sign up
+    if (savedMatches.has(investorId)) {
+      unsaveMatch(startup.id, investorId);
+      setSavedMatches(prev => { const next = new Set(prev); next.delete(investorId); return next; });
+      setSavedCount(prev => prev - 1);
+      setMatchesSaved(false); // Not all saved anymore
+    } else {
+      saveMatch({
+        startupId: startup.id,
+        investorId: investorId,
+        startupName: startup.name,
+        investorName: match.investor.name,
+        matchScore: match.score
+      });
+      setSavedMatches(prev => new Set(prev).add(investorId));
+      setSavedCount(prev => prev + 1);
+      
+      // Check if all matches are now saved
+      const allSaved = displayMatches.every(m => 
+        m.investor.id === investorId || savedMatches.has(m.investor.id)
+      );
+      if (allSaved && displayMatches.length > 0) {
+        setMatchesSaved(true);
+      }
+    }
+    
+    // Redirect free users to signup after saving (so they can view their saved matches)
+    if (!isSignedIn) {
+      navigate('/get-matched?redirect=/startup/' + startup.id + '/matches');
+    }
   };
 
-  // Get unique sectors from all matches for filtering
-  const allSectors = [...new Set(matches.flatMap(m => m.sectors || []))].sort();
+  const handleShare = (match: MatchResult) => setShareModalMatch(match);
+  
+  const handleRequestIntro = (investorId: string) => {
+    const match = matches.find(m => m.investor.id === investorId);
+    if (match) setIntroModalInvestor({ id: investorId, name: match.investor.name, firm: match.investor.firm });
+  };
 
-  // Filter and sort matches
-  const sortedMatches = matches
-    .filter(m => !filterSector || m.sectors?.includes(filterSector))
-    .sort((a, b) => {
-      if (sortBy === 'score') return b.match_score - a.match_score;
-      return (a.name || '').localeCompare(b.name || '');
+  const filteredMatches = filterType ? matches.filter(m => m.investorType === filterType) : matches;
+  
+  // Determine how many matches to show based on user tier
+  let displayMatches: MatchResult[];
+  let hasMoreMatches = false;
+  
+  if (isPaid) {
+    // Paid users: see all matches
+    displayMatches = filteredMatches;
+  } else if (isSignedIn) {
+    // Free signed-up users: 3 matches per week
+    const currentWeek = getWeekNumber(new Date());
+    const savedWeek = localStorage.getItem(MATCHES_WEEK_KEY);
+    const savedWeekCount = localStorage.getItem(MATCHES_WEEK_COUNT_KEY);
+    
+    let weekCount = 0;
+    if (savedWeek && parseInt(savedWeek) === currentWeek) {
+      weekCount = parseInt(savedWeekCount || '0', 10);
+    }
+    
+    // Show matches up to weekly limit (but at least show the first 3)
+    const maxToShow = Math.max(MAX_FREE_MATCHES_PER_WEEK, weekCount);
+    displayMatches = filteredMatches.slice(0, maxToShow);
+    hasMoreMatches = filteredMatches.length > displayMatches.length;
+    
+    // Track viewed matches for weekly limit (only increment if viewing more than current count)
+    if (displayMatches.length > weekCount) {
+      const newCount = displayMatches.length;
+      setWeeklyMatchCount(newCount);
+      localStorage.setItem(MATCHES_WEEK_KEY, currentWeek.toString());
+      localStorage.setItem(MATCHES_WEEK_COUNT_KEY, newCount.toString());
+    }
+  } else {
+    // Non-signed-in users: only 3 matches
+    displayMatches = filteredMatches.slice(0, MAX_FREE_MATCHES);
+    hasMoreMatches = filteredMatches.length > MAX_FREE_MATCHES;
+  }
+
+  const handleSaveAllMatches = () => {
+    if (!startup || displayMatches.length === 0) return;
+    
+    // Save matches to localStorage (works for both free and signed-in users)
+    // Free users can save up to 3 matches, which will be available after signup
+    const matchesToSave = !isSignedIn 
+      ? displayMatches.slice(0, MAX_FREE_MATCHES) // Free users: only first 3
+      : displayMatches; // Signed-in users: all displayed
+    
+    let newSaveCount = 0;
+    matchesToSave.forEach(match => {
+      if (!savedMatches.has(match.investor.id)) {
+        saveMatch({
+          startupId: startup.id,
+          investorId: match.investor.id,
+          startupName: startup.name,
+          investorName: match.investor.name,
+          matchScore: match.score
+        });
+        newSaveCount++;
+      }
     });
-
-  // Limit to 3 free matches
-  const FREE_MATCH_LIMIT = 3;
-  const filteredMatches = sortedMatches.slice(0, FREE_MATCH_LIMIT);
-  const hiddenMatchCount = Math.max(0, sortedMatches.length - FREE_MATCH_LIMIT);
+    
+    const savedIds = new Set(matchesToSave.map(m => m.investor.id));
+    setSavedMatches(prev => {
+      const next = new Set(prev);
+      matchesToSave.forEach(m => next.add(m.investor.id));
+      return next;
+    });
+    setSavedCount(prev => prev + newSaveCount);
+    setMatchesSaved(matchesToSave.every(m => savedMatches.has(m.investor.id) || savedIds.has(m.investor.id)));
+    
+    // Redirect free users to signup after saving (so they can view their saved matches)
+    if (!isSignedIn) {
+      navigate('/get-matched?redirect=/startup/' + startup.id + '/matches');
+    }
+  };
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#0a0a0a] via-[#141414] to-[#1a1a1a] flex items-center justify-center">
+    <div className="min-h-screen w-full bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900" style={{ minHeight: '100vh' }}>
         <div className="text-center">
-          <Loader2 className="w-12 h-12 text-emerald-500 animate-spin mx-auto mb-4" />
-          <p className="text-white text-lg">Finding your perfect investor matches...</p>
+          <Loader2 className="w-12 h-12 text-cyan-500 animate-spin mx-auto mb-4" />
+          <p className="text-white text-lg">Loading matches...</p>
         </div>
       </div>
     );
@@ -307,305 +445,216 @@ export default function StartupMatches() {
 
   if (error || !startup) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#0a0a0a] via-[#141414] to-[#1a1a1a] flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center">
         <div className="text-center">
-          <div className="w-20 h-20 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Rocket className="w-10 h-10 text-red-400" />
-          </div>
-          <h2 className="text-2xl font-bold text-white mb-2">Startup Not Found</h2>
-          <p className="text-gray-400 mb-6">{error || 'The startup you\'re looking for doesn\'t exist.'}</p>
-          <Link 
-            to="/"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-500 text-white rounded-xl hover:bg-emerald-600 transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Go Home
-          </Link>
+          <p className="text-red-400 text-lg mb-4">{error || 'Startup not found'}</p>
+          <Link to="/" className="text-cyan-400 hover:text-cyan-300">← Back to Home</Link>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0a0a0a] via-[#141414] to-[#1a1a1a]">
+    <div className="min-h-screen w-full bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       {/* Header */}
-      <div className="border-b border-white/10 bg-black/50 backdrop-blur-sm sticky top-0 z-40">
-        <div className="container mx-auto px-4 py-4">
+      <div className="bg-slate-900/80 backdrop-blur-sm border-b border-slate-800 sticky top-0 z-10">
+        <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <button 
-              onClick={() => navigate(-1)}
-              className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
-            >
-              <ArrowLeft className="w-5 h-5" />
-              <span>Back</span>
-            </button>
-            <Link to="/" className="text-2xl font-bold">
-              <span className="bg-gradient-to-r from-orange-400 to-amber-400 bg-clip-text text-transparent">
-                Hot Match
-              </span>
-            </Link>
-            <div className="w-20" /> {/* Spacer */}
+            <div className="flex items-center gap-4">
+              <button onClick={() => navigate(-1)} className="p-2 hover:bg-slate-800 rounded-lg transition-colors">
+                <ArrowLeft className="w-5 h-5 text-slate-400" />
+              </button>
+              <div>
+                <h1 className="text-xl font-bold text-white flex items-center gap-2">
+                  <Rocket className="w-5 h-5 text-cyan-400" />
+                  {startup.name}
+                </h1>
+                <p className="text-sm text-slate-400">{startup.tagline || 'Investor Matches'}</p>
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-3">
+              {/* Save Matches Button */}
+              {matchesSaved ? (
+                <Link to="/saved-matches" className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-500 transition-colors">
+                  <Bookmark className="w-4 h-4" />
+                  <span className="text-sm">{savedCount} Saved ✓</span>
+                </Link>
+              ) : (
+                <button 
+                  onClick={handleSaveAllMatches} 
+                  className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-lg hover:from-cyan-500 hover:to-blue-500 transition-colors"
+                  title={!isSignedIn ? `Free users can only save the first ${MAX_FREE_MATCHES} matches` : undefined}
+                >
+                  <Save className="w-4 h-4" />
+                  <span className="text-sm">
+                    {!isSignedIn ? `Save First ${MAX_FREE_MATCHES}` : 'Save Matches'}
+                  </span>
+                </button>
+              )}
+              {isSignedIn && !isPaid && (
+                <div className="flex items-center gap-1 px-3 py-1 bg-cyan-500/20 text-cyan-300 rounded-lg text-xs border border-cyan-500/30">
+                  <span>{searchCount}/{MAX_FREE_SEARCHES_PER_MONTH} searches</span>
+                </div>
+              )}
+              {isPaid && <MatchNotifications />}
+              {isPaid && (
+                <Link to="/analytics" className="p-2 hover:bg-slate-800 rounded-lg transition-colors" title="View Analytics">
+                  <BarChart3 className="w-5 h-5 text-slate-400" />
+                </Link>
+              )}
+              {canRematch ? (
+                <button onClick={handleRematch} disabled={isMatching} className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-lg hover:from-cyan-500 hover:to-blue-500 transition-all disabled:opacity-50">
+                  <RefreshCw className={`w-4 h-4 ${isMatching ? 'animate-spin' : ''}`} />
+                  Re-match
+                </button>
+              ) : (
+                <div className="flex items-center gap-2 px-4 py-2 bg-slate-800 text-slate-400 rounded-lg">
+                  <Lock className="w-4 h-4" />
+                  No rematches left
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-8">
-        {/* Startup Hero Card */}
-        <div className="max-w-4xl mx-auto mb-8">
-          <div className="bg-gradient-to-br from-emerald-500/10 to-green-500/10 border border-emerald-500/30 rounded-2xl p-6">
-            <div className="flex items-start gap-4">
-              <div className="w-16 h-16 bg-gradient-to-br from-emerald-500 to-green-500 rounded-xl flex items-center justify-center flex-shrink-0">
-                <Rocket className="w-8 h-8 text-white" />
-              </div>
-              <div className="flex-1">
-                <div className="flex items-center gap-3 mb-2">
-                  <h1 className="text-2xl font-bold text-white">{startup.name}</h1>
-                  {startup.total_god_score && (
-                    <span className="px-2 py-1 bg-cyan-500/20 text-cyan-400 text-sm font-bold rounded-lg border border-cyan-500/30">
-                      GOD Score: {startup.total_god_score}
-                    </span>
-                  )}
-                </div>
-                {startup.tagline && (
-                  <p className="text-gray-300 mb-3">{startup.tagline}</p>
-                )}
-                <div className="flex flex-wrap gap-2">
-                  {startup.stage && (
-                    <span className="px-3 py-1 bg-purple-500/20 text-purple-300 text-sm rounded-full border border-purple-500/30">
-                      {startup.stage}
-                    </span>
-                  )}
-                  {startup.sectors?.slice(0, 3).map((sector, idx) => (
-                    <span key={idx} className="px-3 py-1 bg-slate-700 text-gray-300 text-sm rounded-full">
-                      {sector}
-                    </span>
-                  ))}
-                  {startup.location && (
-                    <span className="px-3 py-1 bg-slate-700 text-gray-300 text-sm rounded-full">
-                      📍 {startup.location}
-                    </span>
-                  )}
-                </div>
-              </div>
-              {startup.website && (
-                <a 
-                  href={startup.website}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-3 bg-white/10 hover:bg-white/20 rounded-xl transition-colors"
-                >
-                  <Globe className="w-5 h-5 text-gray-400" />
-                </a>
-              )}
+      <div className="max-w-7xl mx-auto px-4 py-6 pb-32">
+        {/* GOD Score Summary */}
+        <div className="bg-slate-800/50 rounded-2xl p-6 mb-6 border border-slate-700">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-semibold text-white flex items-center gap-2">
+              <Sparkles className="w-5 h-5 text-blue-400" />
+              GOD Score Profile
+            </h2>
+            <div className="text-3xl font-black bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
+              {startup.total_god_score || 50}/100
             </div>
+          </div>
+          <div className="grid grid-cols-5 gap-4">
+            <ScoreBar label="Team" value={startup.team_score || 50} icon={Users} />
+            <ScoreBar label="Market" value={startup.market_score || 50} icon={TrendingUp} />
+            <ScoreBar label="Product" value={startup.product_score || 50} icon={Target} />
+            <ScoreBar label="Traction" value={startup.traction_score || 50} icon={Zap} />
+            <ScoreBar label="Vision" value={startup.vision_score || 50} icon={Lightbulb} />
           </div>
         </div>
 
-        {/* Results Header */}
-        <div className="max-w-4xl mx-auto mb-6">
-          <div className="flex items-center justify-between flex-wrap gap-4">
-            <div className="flex items-center gap-3">
-              <Sparkles className="w-6 h-6 text-amber-400" />
-              <h2 className="text-xl font-bold text-white">
-                {matches.length} Investor Matches
-              </h2>
-            </div>
-            
-            <div className="flex items-center gap-3">
-              {/* Re-match Button */}
-              {canRematch ? (
-                <button
-                  onClick={handleRematch}
-                  disabled={isMatching}
-                  className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-gray-900 font-semibold rounded-lg text-sm hover:from-amber-400 hover:to-orange-400 transition-all disabled:opacity-50"
-                >
-                  {isMatching ? (
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                  ) : (
-                    <RefreshCw className="w-4 h-4" />
-                  )}
-                  Re-match
-                </button>
-              ) : (
-                <Link
-                  to="/get-matched"
-                  className="flex items-center gap-2 px-4 py-2 bg-slate-700 text-gray-300 rounded-lg text-sm hover:bg-slate-600 transition-colors border border-white/10"
-                >
-                  <Lock className="w-4 h-4" />
-                  Sign up for more
-                </Link>
-              )}
-              
-              {/* Sector Filter */}
-              {allSectors.length > 0 && (
-                <div className="relative">
-                  <select
-                    value={filterSector || ''}
-                    onChange={(e) => setFilterSector(e.target.value || null)}
-                    className="appearance-none bg-slate-800 border border-white/10 rounded-lg px-4 py-2 pr-8 text-sm text-white focus:outline-none focus:border-cyan-500"
-                  >
-                    <option value="">All Sectors</option>
-                    {allSectors.map(sector => (
-                      <option key={sector} value={sector}>{sector}</option>
-                    ))}
-                  </select>
-                  <Filter className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
-                </div>
-              )}
-              
-              {/* Sort */}
-              <button
-                onClick={() => setSortBy(sortBy === 'score' ? 'name' : 'score')}
-                className="flex items-center gap-2 px-4 py-2 bg-slate-800 border border-white/10 rounded-lg text-sm text-white hover:bg-slate-700 transition-colors"
-              >
-                <SortDesc className="w-4 h-4" />
-                {sortBy === 'score' ? 'By Score' : 'By Name'}
+        {/* Filters */}
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-3">
+            <button onClick={() => setShowFilters(!showFilters)} className="flex items-center gap-2 px-4 py-2 bg-slate-800 text-slate-300 rounded-lg hover:bg-slate-700 transition-colors">
+              <Filter className="w-4 h-4" />
+              Filter
+              <ChevronDown className={`w-4 h-4 transition-transform ${showFilters ? 'rotate-180' : ''}`} />
+            </button>
+            {filterType && (
+              <button onClick={() => setFilterType(null)} className="px-3 py-1 bg-cyan-500/20 text-cyan-300 rounded-full text-sm">
+                {filterType} ✕
               </button>
+            )}
+          </div>
+          <p className="text-slate-400">{displayMatches.length} of {filteredMatches.length} matches</p>
+        </div>
+
+        {showFilters && (
+          <div className="bg-slate-800/50 rounded-xl p-4 mb-6 border border-slate-700">
+            <p className="text-sm text-slate-400 mb-3">Filter by Investor Type:</p>
+            <div className="flex flex-wrap gap-2">
+              {Object.keys(INVESTOR_PREFERENCES).map(type => (
+                <button key={type} onClick={() => setFilterType(filterType === type ? null : type)}
+                  className={`px-3 py-1.5 rounded-full text-sm transition-colors ${filterType === type ? 'bg-cyan-600 text-white' : 'bg-slate-700 text-slate-300 hover:bg-slate-600'}`}>
+                  {type}
+                </button>
+              ))}
             </div>
           </div>
-        </div>
+        )}
 
-        {/* Match Cards */}
-        <div className="max-w-4xl mx-auto space-y-4">
-          {filteredMatches.length === 0 ? (
-            <div className="text-center py-16">
-              {isMatching ? (
+        {isMatching && (
+          <div className="bg-cyan-500/20 rounded-xl p-4 mb-6 border border-cyan-500/30 flex items-center gap-3">
+            <Loader2 className="w-5 h-5 text-cyan-400 animate-spin" />
+            <span className="text-cyan-300">{matchingStatus}</span>
+          </div>
+        )}
+
+        {displayMatches.length > 0 ? (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {displayMatches.map((match, index) => (
+              <MatchCard 
+                key={match.investor.id}
+                match={match}
+                rank={index + 1}
+                isSaved={savedMatches.has(match.investor.id)}
+                onSave={handleSaveMatch}
+                onShare={handleShare}
+                onRequestIntro={handleRequestIntro}
+                isPaid={isPaid}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-12">
+            <Search className="w-12 h-12 text-slate-600 mx-auto mb-4" />
+            <p className="text-slate-400 text-lg">No matches found</p>
+            <p className="text-slate-500 text-sm mt-2">Try adjusting your filters</p>
+          </div>
+        )}
+
+        {(!isSignedIn || hasMoreMatches) && (
+          <div className="mt-8 mb-12 bg-gradient-to-r from-slate-800 to-slate-900 rounded-2xl p-8 border border-cyan-500/30 text-center">
+            <Lock className="w-12 h-12 text-cyan-400 mx-auto mb-4" />
+            <h3 className="text-2xl font-bold text-white mb-2">
+              {filteredMatches.length - displayMatches.length} More Matches Available
+            </h3>
+            <p className="text-slate-300 mb-6 max-w-md mx-auto">
+              {!isSignedIn 
+                ? `Sign up to get ${MAX_FREE_MATCHES_PER_WEEK} matches per week and view your saved matches.`
+                : isPaid
+                  ? 'Upgrade to Premium to unlock all matches and get personalized match advice.'
+                  : `You've viewed ${weeklyMatchCount}/${MAX_FREE_MATCHES_PER_WEEK} matches this week. Upgrade to Premium for unlimited matches, personalized match advice, and unlimited searches.`}
+            </p>
+            <div className="flex gap-4 justify-center">
+              {!isSignedIn ? (
                 <>
-                  <div className="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-amber-500/20 to-orange-500/20 rounded-full flex items-center justify-center">
-                    <Loader2 className="w-10 h-10 text-amber-400 animate-spin" />
-                  </div>
-                  <h3 className="text-xl font-bold text-white mb-3">Finding Your Matches</h3>
-                  <p className="text-amber-400 mb-2 animate-pulse">{matchingStatus}</p>
-                  <p className="text-gray-500 text-sm">This usually takes a few seconds...</p>
+                  <Link to="/get-matched" className="px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-lg font-semibold hover:from-cyan-500 hover:to-blue-500 transition-all">Sign Up Free</Link>
+                  <Link to="/login" className="px-6 py-3 bg-slate-700 text-white rounded-lg font-semibold hover:bg-slate-600 transition-all">Log In</Link>
                 </>
               ) : (
-                <>
-                  <div className="w-20 h-20 mx-auto mb-6 bg-slate-800 rounded-full flex items-center justify-center">
-                    <Briefcase className="w-10 h-10 text-gray-600" />
-                  </div>
-                  <h3 className="text-xl font-bold text-white mb-3">No Matches Yet</h3>
-                  <p className="text-gray-400 mb-6">We couldn't find any investor matches. Try updating your profile.</p>
-                </>
+                <Link to="/get-matched" className="px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-lg font-semibold hover:from-cyan-500 hover:to-blue-500 transition-all">Upgrade to Premium</Link>
               )}
-            </div>
-          ) : (
-            filteredMatches.map((investor, idx) => {
-              const badge = getScoreBadge(investor.match_score);
-              return (
-                <div 
-                  key={investor.id}
-                  className="group bg-slate-800/50 border border-white/10 rounded-xl p-5 hover:border-amber-500/30 hover:bg-slate-800/80 transition-all cursor-pointer"
-                  onClick={() => navigate(`/investor/${investor.id}`)}
-                >
-                  <div className="flex items-start gap-4">
-                    {/* Rank Badge */}
-                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                      idx === 0 ? 'bg-gradient-to-br from-yellow-400 to-amber-500 text-gray-900' :
-                      idx === 1 ? 'bg-gradient-to-br from-gray-300 to-gray-400 text-gray-900' :
-                      idx === 2 ? 'bg-gradient-to-br from-amber-600 to-orange-700 text-white' :
-                      'bg-slate-700 text-gray-400'
-                    } font-bold`}>
-                      {idx + 1}
-                    </div>
-
-                    {/* Investor Info */}
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-3 mb-1">
-                        <h3 className="text-lg font-bold text-white group-hover:text-amber-400 transition-colors">
-                          {investor.name}
-                        </h3>
-                        {investor.firm && (
-                          <span className="text-amber-400 text-sm">@ {investor.firm}</span>
-                        )}
-                      </div>
-                      
-                      {investor.bio && (
-                        <p className="text-gray-400 text-sm mb-3 line-clamp-2">{investor.bio}</p>
-                      )}
-
-                      <div className="flex flex-wrap gap-2">
-                        {investor.sectors?.slice(0, 3).map((sector, sIdx) => (
-                          <span key={sIdx} className="px-2 py-0.5 bg-slate-700 text-gray-300 text-xs rounded">
-                            {sector}
-                          </span>
-                        ))}
-                        <span className="px-2 py-0.5 bg-green-500/20 text-green-400 text-xs rounded border border-green-500/30">
-                          {formatCheckSize(investor.check_size_min, investor.check_size_max)}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Score & Actions */}
-                    <div className="flex flex-col items-end gap-2">
-                      <div className={`px-4 py-2 rounded-xl bg-gradient-to-r ${getScoreColor(investor.match_score)} text-white font-bold text-lg`}>
-                        {investor.match_score}%
-                      </div>
-                      <span className={`px-2 py-1 text-xs font-medium rounded border ${badge.color}`}>
-                        {badge.text}
-                      </span>
-                      
-                      {/* Quick Actions */}
-                      <div className="flex gap-2 mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        {investor.linkedin_url && (
-                          <a 
-                            href={investor.linkedin_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={(e) => e.stopPropagation()}
-                            className="p-2 bg-blue-500/20 hover:bg-blue-500/30 rounded-lg transition-colors"
-                          >
-                            <Linkedin className="w-4 h-4 text-blue-400" />
-                          </a>
-                        )}
-                        {investor.blog_url && (
-                          <a 
-                            href={investor.blog_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={(e) => e.stopPropagation()}
-                            className="p-2 bg-slate-700 hover:bg-slate-600 rounded-lg transition-colors"
-                          >
-                            <Globe className="w-4 h-4 text-gray-400" />
-                          </a>
-                        )}
-                      </div>
-                    </div>
-
-                    <ChevronRight className="w-5 h-5 text-gray-600 group-hover:text-amber-400 transition-colors" />
-                  </div>
-                </div>
-              );
-            })
-          )}
-        </div>
-
-        {/* Unlock More Matches CTA */}
-        {hiddenMatchCount > 0 && (
-          <div className="max-w-4xl mx-auto mt-8">
-            <div className="bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/30 rounded-2xl p-8 text-center">
-              <div className="w-16 h-16 mx-auto mb-4 bg-amber-500/20 rounded-full flex items-center justify-center">
-                <Lock className="w-8 h-8 text-amber-400" />
-              </div>
-              <h3 className="text-2xl font-bold text-white mb-2">
-                +{hiddenMatchCount} More Investor Matches
-              </h3>
-              <p className="text-gray-400 mb-6">
-                Sign up to unlock all your matches and get warm introductions
-              </p>
-              <Link
-                to="/get-matched"
-                className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-amber-500 to-orange-500 text-gray-900 font-bold rounded-xl hover:from-amber-400 hover:to-orange-400 transition-all"
-              >
-                <Sparkles className="w-5 h-5" />
-                Unlock All Matches
-              </Link>
-              <p className="text-gray-500 text-sm mt-4">
-                Free signup • No credit card required
-              </p>
             </div>
           </div>
         )}
       </div>
+
+      {shareModalMatch && startup && (
+        <ShareMatchModal isOpen={true} onClose={() => setShareModalMatch(null)} match={shareModalMatch} startupName={startup.name} />
+      )}
+
+      {introModalInvestor && startup && (
+        <RequestIntroModal isOpen={true} onClose={() => setIntroModalInvestor(null)} investorId={introModalInvestor.id} investorName={introModalInvestor.name} investorFirm={introModalInvestor.firm} startupId={startup.id} startupName={startup.name} matchScore={matches.find(m => m.investor.id === introModalInvestor.id)?.score || 0} />
+      )}
+    </div>
+  );
+}
+
+function ScoreBar({ label, value, icon: Icon }: { label: string; value: number; icon: React.ElementType }) {
+  const getColor = (v: number) => {
+    if (v >= 70) return 'from-emerald-500 to-cyan-500';
+    if (v >= 50) return 'from-cyan-500 to-blue-500';
+    if (v >= 30) return 'from-blue-500 to-indigo-500';
+    return 'from-indigo-500 to-violet-500';
+  };
+
+  return (
+    <div className="text-center">
+      <Icon className="w-5 h-5 text-slate-400 mx-auto mb-1" />
+      <div className="text-xs text-slate-400 mb-1">{label}</div>
+      <div className="h-2 bg-slate-700 rounded-full overflow-hidden mb-1">
+        <div className={`h-full rounded-full bg-gradient-to-r ${getColor(value)}`} style={{ width: `${value}%` }} />
+      </div>
+      <div className="text-sm font-semibold text-white">{value}</div>
     </div>
   );
 }

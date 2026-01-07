@@ -16,8 +16,8 @@ const FloatingNav: React.FC = () => {
   ];
 
   const adminTools = [
-    { icon: '👑', label: 'Admin Dashboard', path: '/admin/dashboard', color: 'from-yellow-500 to-orange-500' },
-    { icon: '📋', label: 'Review Queue', path: '/admin/review', color: 'from-orange-500 to-pink-500' },
+    { icon: '👑', label: 'Admin Dashboard', path: '/admin/dashboard', color: 'from-cyan-500 to-blue-500' },
+    { icon: '📋', label: 'Review Queue', path: '/admin/review', color: 'from-cyan-500 to-blue-500' },
     { icon: '✏️', label: 'Edit Startups', path: '/admin/edit-startups', color: 'from-purple-500 to-indigo-500' },
     { icon: '🚀', label: 'Bulk Import', path: '/admin/bulk-import', color: 'from-green-500 to-teal-500' },
     { icon: '⚙️', label: 'DB Setup', path: '/admin/setup', color: 'from-blue-500 to-indigo-500' },
@@ -35,8 +35,8 @@ const FloatingNav: React.FC = () => {
             to={item.path}
             className={`flex items-center gap-2 px-5 py-2 rounded-full font-semibold text-sm transition-all transform hover:scale-105 shadow-xl ${
               isActive(item.path)
-                ? 'bg-gradient-to-r from-orange-400 to-orange-500 text-white'
-                : 'bg-gradient-to-r from-yellow-400 to-orange-400 text-white hover:from-orange-400 hover:to-orange-500'
+                ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white'
+                : 'bg-gradient-to-r from-cyan-400 to-blue-400 text-white hover:from-cyan-500 hover:to-blue-500'
             }`}
           >
             <span className="text-lg">{item.icon}</span>
@@ -51,7 +51,7 @@ const FloatingNav: React.FC = () => {
               onClick={() => setShowAdminMenu(!showAdminMenu)}
               className={`flex items-center gap-2 px-5 py-2 rounded-full font-semibold text-sm transition-all transform hover:scale-105 shadow-xl ${
                 showAdminMenu
-                  ? 'bg-gradient-to-r from-yellow-500 to-orange-600 text-white'
+                  ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white'
                   : 'bg-gradient-to-r from-purple-500 to-indigo-500 text-white hover:from-purple-600 hover:to-indigo-600'
               }`}
             >

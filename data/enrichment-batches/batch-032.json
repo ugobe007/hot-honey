@@ -1,0 +1,280 @@
+[
+  {
+    "id": "0a1fb20c-0419-4029-b161-3d6e930ce49f",
+    "name": "place where leading (Generalcatalyst)",
+    "firm": "place where leading (Generalcatalyst)",
+    "linkedin_url": "https://linkedin.com/in/place-where-leading",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Healthcare"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "e52518c8-72ed-4ce8-9953-51518ad41b97",
+    "name": "Officer Brett Berson (Firstround)",
+    "firm": "Officer Brett Berson (Firstround)",
+    "linkedin_url": "https://linkedin.com/in/officer-brett-berson",
+    "blog_url": null,
+    "current_bio": "Berson is an investor at Firstround focused on AI, SaaS, Consumer investing at Seed and Series A stage.",
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Consumer"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "8ff6e84a-2ff9-4da1-8e7b-1437fb2c5150",
+    "name": "PM Turned Healthcare (Firstround)",
+    "firm": "PM Turned Healthcare (Firstround)",
+    "linkedin_url": "https://linkedin.com/in/pm-turned-healthcare",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "Healthcare",
+      "AI",
+      "SaaS"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "e9efc0a3-3676-4f8f-914a-6c9c65a3f4e7",
+    "name": "Nathan Leung",
+    "firm": "Nathan Leung",
+    "linkedin_url": "https://linkedin.com/in/nathan-leung",
+    "blog_url": null,
+    "current_bio": "Partner at Insight Partners",
+    "current_sectors": [
+      "SaaS",
+      "Enterprise"
+    ],
+    "current_stage": [
+      "Series B",
+      "Growth"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "c0c71b7a-15d2-40c0-ad5a-5a843eace9a6",
+    "name": "Tactical advice for (Firstround)",
+    "firm": "Tactical advice for (Firstround)",
+    "linkedin_url": "https://linkedin.com/in/tactical-advice-for",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Consumer"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "19ce17fa-22d0-4da8-abeb-83e35dd9ef00",
+    "name": "Patrick Salyer",
+    "firm": "Mayfield",
+    "linkedin_url": "https://linkedin.com/in/patrick-salyer",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "f76dac01-239b-4872-9f70-cf2b5e9b0f97",
+    "name": "Andrew Braccia",
+    "firm": "Andrew Braccia",
+    "linkedin_url": "https://linkedin.com/in/andrew-braccia",
+    "blog_url": null,
+    "current_bio": "Accel Partner based in Bay Area",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "7a5007a4-a5d0-4d50-b340-4b00d5e01776",
+    "name": "Alex Finkelstein",
+    "firm": "Alex Finkelstein",
+    "linkedin_url": "https://linkedin.com/in/alex-finkelstein",
+    "blog_url": null,
+    "current_bio": "Partner at Spark Capital",
+    "current_sectors": [
+      "SaaS",
+      "Consumer",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A",
+      "Series B"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "ed53d58b-1a99-4ef3-899e-4ce8bb1915ef",
+    "name": "Fusion Fund",
+    "firm": "Fusion Fund",
+    "linkedin_url": "https://linkedin.com/in/fusion-fund",
+    "blog_url": null,
+    "current_bio": "Fusion Fund is a vc firm focused on Enterprise Software, Insuretech, Cybersecurity investing at Pre-Seed and Seed stage.",
+    "current_sectors": [
+      "Enterprise Software",
+      "Insuretech",
+      "Cybersecurity",
+      "Healthcare"
+    ],
+    "current_stage": [
+      "Pre-Seed",
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "0221da5c-05b7-4c7d-b2d5-c9aec2e94789",
+    "name": "alongside its (Avc)",
+    "firm": "alongside its (Avc)",
+    "linkedin_url": "https://linkedin.com/in/alongside-its",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "557d3a69-47f4-4ca1-a92f-8f5f711f2a56",
+    "name": "invested in female (Nfx)",
+    "firm": "invested in female (Nfx)",
+    "linkedin_url": "https://linkedin.com/in/invested-in-female",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "21ebcb7c-b4d9-4882-9069-9bdfe8bd8f21",
+    "name": "Dr. Brenton Fargnoli (Lightspeed)",
+    "firm": "Lightspeed Venture Partners",
+    "linkedin_url": "https://linkedin.com/in/dr-brenton-fargnoli",
+    "blog_url": "https://lsvp.com",
+    "current_bio": "Partner at Lightspeed, focuses on health, US",
+    "current_sectors": [
+      "Enterprise",
+      "Consumer",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A",
+      "Series B"
+    ],
+    "missing_fields": [
+      "Investment Thesis"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "58d94811-1cf7-403a-a3e8-47a221f50dd8",
+    "name": "Olivia Moore",
+    "firm": "Olivia Moore",
+    "linkedin_url": "https://linkedin.com/in/olivia-moore",
+    "blog_url": null,
+    "current_bio": "Partner at Andreessen Horowitz, focusing on marketplaces seed investments",
+    "current_sectors": [
+      "AI/ML",
+      "Crypto",
+      "SaaS",
+      "Consumer"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A",
+      "Series B",
+      "Growth"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  }
+]

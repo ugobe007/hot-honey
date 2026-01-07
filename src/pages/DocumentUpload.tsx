@@ -268,7 +268,7 @@ export default function DocumentUpload() {
           <h1 className="text-3xl font-bold text-gray-800 mb-4">Admin Access Required</h1>
           <button
             onClick={() => navigate('/')}
-            className="px-8 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold rounded-2xl transition-all"
+            className="px-8 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold rounded-2xl transition-all"
           >
             Go Home
           </button>
@@ -288,7 +288,7 @@ export default function DocumentUpload() {
         <div className="flex justify-between items-center mb-8">
           <button
             onClick={() => navigate('/dashboard')}
-            className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-3 px-6 rounded-2xl shadow-lg transition-all"
+            className="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold py-3 px-6 rounded-2xl shadow-lg transition-all"
           >
             ← Back to Dashboard
           </button>

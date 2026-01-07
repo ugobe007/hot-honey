@@ -736,9 +736,9 @@ function scoreTraction(startup: StartupProfile): number {
   // SECTION 3: BOOLEAN FLAGS (direct from database)
   // ============================================================================
   
-  if ((startup as any).has_revenue) score += 0.3;
-  if ((startup as any).has_customers) score += 0.25;
-  if (startup.launched || (startup as any).is_launched) score += 0.2;
+  if ((startup as any).has_revenue) score += 1.0; // Revenue = major traction signal
+  if ((startup as any).has_customers) score += 0.6; // Customers = strong signal
+  if (startup.launched || (startup as any).is_launched) score += 0.4; // Launched = baseline signal
   if (startup.demo_available || (startup as any).has_demo) score += 0.15;
   
   return Math.min(score, 3);

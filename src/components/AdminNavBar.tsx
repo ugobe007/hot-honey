@@ -80,7 +80,7 @@ export default function AdminNavBar({ showBack = true, currentPage }: AdminNavBa
         <span className="text-gray-600">|</span>
         <Link 
           to="/benchmarks" 
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-400 hover:text-amber-200 transition-all font-semibold"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 text-blue-400 hover:text-cyan-200 transition-all font-semibold"
         >
           <BarChart3 className="w-4 h-4" />
           <span>Benchmarks</span>
@@ -88,7 +88,7 @@ export default function AdminNavBar({ showBack = true, currentPage }: AdminNavBa
         <span className="text-gray-600">|</span>
         <Link 
           to="/matching-engine" 
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-orange-500/20 hover:bg-orange-500/30 text-orange-300 hover:text-orange-200 transition-all font-semibold"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cyan-600/20 hover:bg-cyan-600/30 text-cyan-300 hover:text-cyan-200 transition-all font-semibold"
         >
           <span>⚡ Match</span>
         </Link>

@@ -238,11 +238,11 @@ export default function BulkUpload() {
       <div className="max-w-4xl mx-auto px-6 py-12">
         {/* Header */}
         <div className="text-center mb-10">
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-orange-500 to-amber-500 mb-6 shadow-xl">
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-cyan-600 to-blue-600 mb-6 shadow-xl">
             <Globe className="w-10 h-10 text-white" />
           </div>
           <h1 className="text-4xl font-bold mb-3">
-            <span className="bg-gradient-to-r from-orange-400 to-amber-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
               Bulk URL Import
             </span>
           </h1>
@@ -255,7 +255,7 @@ export default function BulkUpload() {
         <div className="bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 p-6 mb-8">
           <div className="flex items-center justify-between mb-4">
             <label className="text-lg font-semibold text-white flex items-center gap-2">
-              <ExternalLink className="w-5 h-5 text-orange-400" />
+              <ExternalLink className="w-5 h-5 text-cyan-400" />
               Startup URLs
             </label>
             <span className="text-sm text-gray-400">
@@ -272,7 +272,7 @@ https://example-startup.com
 https://another-startup.io
 startup-name.co
 www.company.ai`}
-            className="w-full h-64 bg-black/30 border border-white/20 rounded-xl p-4 text-white placeholder-gray-500 font-mono text-sm focus:outline-none focus:border-orange-400/50 focus:ring-2 focus:ring-orange-400/20"
+            className="w-full h-64 bg-black/30 border border-white/20 rounded-xl p-4 text-white placeholder-gray-500 font-mono text-sm focus:outline-none focus:border-cyan-400/50 focus:ring-2 focus:ring-cyan-400/20"
             disabled={importing}
           />
 
@@ -294,7 +294,7 @@ www.company.ai`}
               <button
                 onClick={importUrls}
                 disabled={importing || !urls.trim()}
-                className="px-6 py-2 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 rounded-lg font-bold transition flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed text-white shadow-lg"
+                className="px-6 py-2 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 rounded-lg font-bold transition flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed text-white shadow-lg"
               >
                 {importing ? (
                   <>
@@ -317,13 +317,13 @@ www.company.ai`}
           <div className="mb-8">
             <div className="flex items-center justify-between mb-2">
               <span className="text-gray-300">Processing URLs...</span>
-              <span className="text-orange-400 font-semibold">
+              <span className="text-cyan-400 font-semibold">
                 {progress.current} / {progress.total}
               </span>
             </div>
             <div className="h-3 bg-white/10 rounded-full overflow-hidden">
               <div 
-                className="h-full bg-gradient-to-r from-orange-500 to-amber-500 transition-all duration-300"
+                className="h-full bg-gradient-to-r from-cyan-600 to-blue-600 transition-all duration-300"
                 style={{ width: `${(progress.current / progress.total) * 100}%` }}
               />
             </div>
@@ -362,14 +362,14 @@ www.company.ai`}
                   className={`flex items-center justify-between p-3 rounded-lg ${
                     result.status === 'success' ? 'bg-green-500/10 border border-green-500/30' :
                     result.status === 'failed' ? 'bg-red-500/10 border border-red-500/30' :
-                    result.status === 'enriching' ? 'bg-orange-500/10 border border-orange-500/30' :
+                    result.status === 'enriching' ? 'bg-cyan-600/10 border border-cyan-500/30' :
                     'bg-white/5 border border-white/10'
                   }`}
                 >
                   <div className="flex items-center gap-3">
                     {result.status === 'success' && <CheckCircle2 className="w-5 h-5 text-green-400" />}
                     {result.status === 'failed' && <XCircle className="w-5 h-5 text-red-400" />}
-                    {result.status === 'enriching' && <RefreshCw className="w-5 h-5 text-orange-400 animate-spin" />}
+                    {result.status === 'enriching' && <RefreshCw className="w-5 h-5 text-cyan-400 animate-spin" />}
                     {result.status === 'pending' && <div className="w-5 h-5 rounded-full border-2 border-gray-500" />}
                     <div>
                       <p className="font-medium text-white">{result.name || result.url}</p>
@@ -379,7 +379,7 @@ www.company.ai`}
                   <div className="text-right">
                     {result.status === 'success' && <span className="text-green-400 text-sm">Imported</span>}
                     {result.status === 'failed' && <span className="text-red-400 text-sm">{result.error || 'Failed'}</span>}
-                    {result.status === 'enriching' && <span className="text-orange-400 text-sm">Enriching...</span>}
+                    {result.status === 'enriching' && <span className="text-cyan-400 text-sm">Enriching...</span>}
                     {result.status === 'pending' && <span className="text-gray-400 text-sm">Waiting</span>}
                   </div>
                 </div>
@@ -435,19 +435,19 @@ www.company.ai`}
             <h3 className="font-semibold text-white mb-4">📋 How it works</h3>
             <ol className="space-y-3 text-gray-300">
               <li className="flex items-start gap-3">
-                <span className="w-6 h-6 rounded-full bg-orange-500/30 text-orange-400 flex items-center justify-center text-sm font-bold shrink-0">1</span>
+                <span className="w-6 h-6 rounded-full bg-cyan-600/30 text-cyan-400 flex items-center justify-center text-sm font-bold shrink-0">1</span>
                 <span>Paste startup website URLs (one per line)</span>
               </li>
               <li className="flex items-start gap-3">
-                <span className="w-6 h-6 rounded-full bg-orange-500/30 text-orange-400 flex items-center justify-center text-sm font-bold shrink-0">2</span>
+                <span className="w-6 h-6 rounded-full bg-cyan-600/30 text-cyan-400 flex items-center justify-center text-sm font-bold shrink-0">2</span>
                 <span>Click "Import & Enrich with AI" to start processing</span>
               </li>
               <li className="flex items-start gap-3">
-                <span className="w-6 h-6 rounded-full bg-orange-500/30 text-orange-400 flex items-center justify-center text-sm font-bold shrink-0">3</span>
+                <span className="w-6 h-6 rounded-full bg-cyan-600/30 text-cyan-400 flex items-center justify-center text-sm font-bold shrink-0">3</span>
                 <span>AI automatically researches and creates a profile for each startup</span>
               </li>
               <li className="flex items-start gap-3">
-                <span className="w-6 h-6 rounded-full bg-orange-500/30 text-orange-400 flex items-center justify-center text-sm font-bold shrink-0">4</span>
+                <span className="w-6 h-6 rounded-full bg-cyan-600/30 text-cyan-400 flex items-center justify-center text-sm font-bold shrink-0">4</span>
                 <span>Review imported startups in the Edit Startups page</span>
               </li>
             </ol>

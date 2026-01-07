@@ -72,7 +72,7 @@ const DEMO_MATCHES: DemoMatch[] = [
 const ANIMATION_STEPS = [
   { icon: Brain, text: "Analyzing startup DNA...", color: "text-purple-400" },
   { icon: Users, text: "Scanning investor database...", color: "text-blue-400" },
-  { icon: Target, text: "Running GOD Algorithm...", color: "text-orange-400" },
+  { icon: Target, text: "Running GOD Algorithm...", color: "text-cyan-400" },
   { icon: TrendingUp, text: "Calculating compatibility...", color: "text-green-400" },
   { icon: Sparkles, text: "Match found!", color: "text-yellow-400" }
 ];
@@ -165,7 +165,7 @@ export default function WatchMagicDemo({ isOpen, onClose }: Props) {
         {/* Animated background particles */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-10 left-10 w-32 h-32 bg-purple-500/20 rounded-full blur-3xl animate-pulse" />
-          <div className="absolute bottom-10 right-10 w-40 h-40 bg-orange-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '0.5s' }} />
+          <div className="absolute bottom-10 right-10 w-40 h-40 bg-cyan-600/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '0.5s' }} />
         </div>
 
         {/* Close Button */}
@@ -181,7 +181,7 @@ export default function WatchMagicDemo({ isOpen, onClose }: Props) {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="relative">
-                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center">
+                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-cyan-600 to-blue-600 flex items-center justify-center">
                   <Zap className="w-8 h-8 text-white" />
                 </div>
                 <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full animate-ping" />
@@ -252,7 +252,7 @@ export default function WatchMagicDemo({ isOpen, onClose }: Props) {
               {/* Processing bar */}
               <div className="h-2 bg-white/10 rounded-full overflow-hidden">
                 <div 
-                  className="h-full bg-gradient-to-r from-purple-500 via-amber-500 to-orange-500 transition-all duration-500"
+                  className="h-full bg-gradient-to-r from-cyan-500 via-blue-500 to-violet-500 transition-all duration-500"
                   style={{ width: `${(animationStep / (ANIMATION_STEPS.length - 1)) * 100}%` }}
                 />
               </div>
@@ -290,10 +290,10 @@ export default function WatchMagicDemo({ isOpen, onClose }: Props) {
 
               {/* Score Display */}
               <div className="text-center mb-6">
-                <div className="inline-flex items-center gap-4 px-8 py-4 bg-gradient-to-r from-orange-500/20 to-red-500/20 rounded-2xl border border-orange-500/30">
+                <div className="inline-flex items-center gap-4 px-8 py-4 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-2xl border border-cyan-500/30">
                   <Heart className="w-8 h-8 text-red-400 animate-pulse" />
                   <div>
-                    <div className="text-5xl font-bold bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">
+                    <div className="text-5xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
                       {displayedScore}%
                     </div>
                     <div className="text-gray-400 text-sm">Match Score</div>
@@ -333,7 +333,7 @@ export default function WatchMagicDemo({ isOpen, onClose }: Props) {
             </p>
             <button
               onClick={onClose}
-              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold rounded-lg transition-all"
+              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-semibold rounded-lg transition-all"
             >
               Try It Yourself
               <ArrowRight className="w-4 h-4" />

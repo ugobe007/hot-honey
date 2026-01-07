@@ -69,7 +69,7 @@ export default function SharedPortfolio() {
           </p>
           <button
             onClick={() => navigate('/')}
-            className="px-8 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold rounded-2xl transition-all"
+            className="px-8 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold rounded-2xl transition-all"
           >
             Go to Hot Honey
           </button>
@@ -89,7 +89,7 @@ export default function SharedPortfolio() {
         {/* Header */}
         <div className="text-center mb-12">
           <div className="text-7xl mb-4">🍯</div>
-          <h1 className="text-5xl font-bold bg-gradient-to-r from-yellow-300 via-orange-400 to-red-500 bg-clip-text text-transparent mb-3">
+          <h1 className="text-5xl font-bold bg-gradient-to-r from-cyan-300 via-blue-400 to-violet-500 bg-clip-text text-transparent mb-3">
             {shareData.investorName}'s Hot Picks
           </h1>
           <p className="text-xl text-purple-200 mb-2">
@@ -114,7 +114,7 @@ export default function SharedPortfolio() {
           {filteredStartups.map((startup, index) => (
             <div 
               key={index}
-              className="bg-gradient-to-br from-amber-300 via-orange-400 to-yellow-500 rounded-2xl p-6 shadow-2xl"
+              className="bg-gradient-to-br from-cyan-300 via-blue-400 to-violet-500 rounded-2xl p-6 shadow-2xl"
             >
               <h3 className="text-2xl font-black text-gray-900 mb-2">
                 {startup.name}
@@ -141,7 +141,7 @@ export default function SharedPortfolio() {
         {/* CTA Section */}
         <div className="bg-white rounded-3xl p-12 text-center shadow-2xl">
           <div className="text-5xl mb-4">🔥</div>
-          <h2 className="text-4xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent mb-4">
+          <h2 className="text-4xl font-bold bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent mb-4">
             Want to Discover Hot Startups Too?
           </h2>
           <p className="text-xl text-gray-700 mb-6 max-w-2xl mx-auto">
@@ -149,14 +149,14 @@ export default function SharedPortfolio() {
           </p>
           <div className="flex gap-4 justify-center">
             <button
-              onClick={() => navigate('/signup')}
-              className="px-8 py-4 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold rounded-2xl shadow-lg transition-all text-lg"
+              onClick={() => navigate('/get-matched')}
+              className="px-8 py-4 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold rounded-2xl shadow-lg transition-all text-lg"
             >
               🚀 Join Hot Honey
             </button>
             <button
               onClick={() => navigate('/vote')}
-              className="px-8 py-4 bg-white border-2 border-orange-500 text-orange-600 font-bold rounded-2xl shadow-lg hover:bg-orange-50 transition-all text-lg"
+              className="px-8 py-4 bg-white border-2 border-cyan-500 text-cyan-600 font-bold rounded-2xl shadow-lg hover:bg-slate-900 transition-all text-lg"
             >
               👀 See All Startups
             </button>
@@ -164,21 +164,21 @@ export default function SharedPortfolio() {
 
           {/* Features */}
           <div className="grid md:grid-cols-3 gap-6 mt-12">
-            <div className="bg-orange-50 rounded-xl p-6">
+            <div className="bg-slate-900 rounded-xl p-6">
               <div className="text-3xl mb-3">🎯</div>
               <h3 className="font-bold text-gray-800 mb-2">Filter by Industry</h3>
               <p className="text-sm text-gray-600">
                 Only see startups in industries you care about
               </p>
             </div>
-            <div className="bg-orange-50 rounded-xl p-6">
+            <div className="bg-slate-900 rounded-xl p-6">
               <div className="text-3xl mb-3">📊</div>
               <h3 className="font-bold text-gray-800 mb-2">Track Your Picks</h3>
               <p className="text-sm text-gray-600">
                 Build your own portfolio of hot startups
               </p>
             </div>
-            <div className="bg-orange-50 rounded-xl p-6">
+            <div className="bg-slate-900 rounded-xl p-6">
               <div className="text-3xl mb-3">📤</div>
               <h3 className="font-bold text-gray-800 mb-2">Share Selectively</h3>
               <p className="text-sm text-gray-600">

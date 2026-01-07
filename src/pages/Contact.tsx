@@ -41,7 +41,7 @@ export default function Contact() {
         <div className="flex justify-between items-center mb-8">
           <button
             onClick={() => navigate('/')}
-            className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-3 px-6 rounded-2xl shadow-lg transition-all"
+            className="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold py-3 px-6 rounded-2xl shadow-lg transition-all"
           >
             ← Home
           </button>
@@ -52,7 +52,7 @@ export default function Contact() {
           {/* Header */}
           <div className="text-center mb-12">
             <div className="text-8xl mb-4">💬</div>
-            <h1 className="text-5xl font-bold bg-gradient-to-r from-yellow-300 via-orange-400 to-red-500 bg-clip-text text-transparent mb-4">
+            <h1 className="text-5xl font-bold bg-gradient-to-r from-cyan-300 via-blue-400 to-violet-500 bg-clip-text text-transparent mb-4">
               Contact Us
             </h1>
             <p className="text-xl text-gray-700 font-medium">
@@ -61,20 +61,20 @@ export default function Contact() {
           </div>
 
           {/* Contact Info */}
-          <div className="mb-8 bg-gradient-to-br from-orange-50 to-yellow-50 rounded-2xl p-6">
+          <div className="mb-8 bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-6">
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <h3 className="text-lg font-bold text-orange-600 mb-2 flex items-center gap-2">
+                <h3 className="text-lg font-bold text-cyan-600 mb-2 flex items-center gap-2">
                   📧 Email Us
                 </h3>
                 <p className="text-gray-700">
-                  <a href="mailto:hello@hotmoneyhoney.com" className="text-orange-600 hover:text-orange-700 underline">
+                  <a href="mailto:hello@hotmoneyhoney.com" className="text-cyan-600 hover:text-cyan-400 underline">
                     hello@hotmoneyhoney.com
                   </a>
                 </p>
               </div>
               <div>
-                <h3 className="text-lg font-bold text-orange-600 mb-2 flex items-center gap-2">
+                <h3 className="text-lg font-bold text-cyan-600 mb-2 flex items-center gap-2">
                   🕒 Response Time
                 </h3>
                 <p className="text-gray-700">
@@ -107,7 +107,7 @@ export default function Contact() {
                     required
                     value={formData.name}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-orange-500 focus:outline-none transition-colors"
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-cyan-500 focus:outline-none transition-colors"
                     placeholder="John Doe"
                   />
                 </div>
@@ -122,7 +122,7 @@ export default function Contact() {
                     required
                     value={formData.email}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-orange-500 focus:outline-none transition-colors"
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-cyan-500 focus:outline-none transition-colors"
                     placeholder="john@example.com"
                   />
                 </div>
@@ -138,7 +138,7 @@ export default function Contact() {
                   required
                   value={formData.subject}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-orange-500 focus:outline-none transition-colors"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-cyan-500 focus:outline-none transition-colors"
                 >
                   <option value="">Select a topic...</option>
                   <option value="investor">I'm an Investor</option>
@@ -161,14 +161,14 @@ export default function Contact() {
                   value={formData.message}
                   onChange={handleChange}
                   rows={6}
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-orange-500 focus:outline-none transition-colors resize-none"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-cyan-500 focus:outline-none transition-colors resize-none"
                   placeholder="Tell us how we can help..."
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-4 px-8 rounded-2xl shadow-lg transition-all text-lg"
+                className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold py-4 px-8 rounded-2xl shadow-lg transition-all text-lg"
               >
                 📤 Send Message
               </button>

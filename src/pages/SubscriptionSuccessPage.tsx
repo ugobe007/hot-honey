@@ -67,7 +67,7 @@ const SubscriptionSuccessPage: React.FC = () => {
 
   const tierColors: Record<string, string> = {
     spark: 'from-gray-500 to-gray-600',
-    flame: 'from-orange-500 to-red-500',
+    flame: 'from-cyan-600 to-blue-600',
     inferno: 'from-red-500 to-purple-600',
     scout: 'from-blue-500 to-cyan-500',
     dealflow_pro: 'from-indigo-500 to-purple-600',
@@ -148,7 +148,7 @@ const SubscriptionSuccessPage: React.FC = () => {
           <div className="space-y-3">
             <button
               onClick={() => navigate('/matching-engine')}
-              className="w-full py-4 bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-orange-500/25 transition-all flex items-center justify-center gap-2"
+              className="w-full py-4 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-cyan-500/25 transition-all flex items-center justify-center gap-2"
             >
               <FlameIcon variant={5} size="sm" />
               Start Matching Now

@@ -1,0 +1,422 @@
+[
+  {
+    "id": "32634fcd-7e5a-465d-9bda-a7be9156c24d",
+    "name": "Connected Pathway Partners",
+    "firm": "Connected Pathway Partners",
+    "linkedin_url": "https://linkedin.com/in/connected-pathway-partners",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "0149cdcb-0c68-4469-9531-e84a4104d8c9",
+    "name": "MetLife Investment Management",
+    "firm": "MetLife Investment Management",
+    "linkedin_url": "https://linkedin.com/in/metlife-investment-management",
+    "blog_url": null,
+    "current_bio": "Developing $20bn private equity portfolio",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "33f55bee-241b-40d1-a937-6a7920093a21",
+    "name": "Sony Innovation Fund",
+    "firm": "Sony Innovation Fund",
+    "linkedin_url": "https://linkedin.com/in/sony-innovation-fund",
+    "blog_url": null,
+    "current_bio": "Sony Innovation Fund is a vc firm focused on Industry/Sector Agnostic, Direct To Consumer, Enterprise investing at Seed and Series A stage.",
+    "current_sectors": [
+      "Industry/Sector Agnostic",
+      "Direct To Consumer",
+      "Enterprise"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A",
+      "Series B"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "8d71817c-2c3a-4c67-b2ef-97474bf564e3",
+    "name": "Terrence Rohan",
+    "firm": "Otherwise Fund",
+    "linkedin_url": "https://linkedin.com/in/terrence-rohan",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Healthcare"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "8bfc9a3b-23c8-495d-a9b3-269e4216d280",
+    "name": "Blue 9 Capital",
+    "firm": "Blue 9 Capital",
+    "linkedin_url": "https://linkedin.com/in/blue-9-capital",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "HealthTech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "77948108-6af2-4312-aa77-08e6224c9bce",
+    "name": "Michelle DelcambreExecutive (Felicis)",
+    "firm": "Michelle DelcambreExecutive (Felicis)",
+    "linkedin_url": "https://linkedin.com/in/michelle-delcambreexecutive",
+    "blog_url": null,
+    "current_bio": "Michelle DelcambreExecutive is an investor at Michelle DelcambreExecutive (Felicis) focused on SaaS, Consumer, Fintech investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "Consumer",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "a36f6aac-efa6-4763-a83b-a4319886b661",
+    "name": "Riot Ventures",
+    "firm": "Riot Ventures",
+    "linkedin_url": "https://linkedin.com/in/riot-ventures",
+    "blog_url": null,
+    "current_bio": "Riot Ventures is a vc firm focused on Synthetic data creation for ML, autonomous defense tech investing at Pre-Seed and Seed stage.",
+    "current_sectors": [
+      "Synthetic data creation for ML",
+      "autonomous defense tech"
+    ],
+    "current_stage": [
+      "Pre-Seed",
+      "Seed"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "4996264f-6982-43f4-b378-0e0708de5eea",
+    "name": "Tilly McLain (Uncork Capital)",
+    "firm": "Tilly McLain (Uncork Capital)",
+    "linkedin_url": "https://linkedin.com/in/tilly-mclain",
+    "blog_url": null,
+    "current_bio": "Operations and Community Manager at Uncork Capital",
+    "current_sectors": [
+      "AI/ML",
+      "API",
+      "SaaS"
+    ],
+    "current_stage": [
+      "Seed"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "79a7d1ec-738c-4219-8a60-48da8ef0fa2b",
+    "name": "Ishan Sachdev",
+    "firm": "Deciens Capital",
+    "linkedin_url": "https://linkedin.com/in/ishan-sachdev",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "HealthTech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "878ecf3c-1f00-47c5-b942-b1d74a1cf5f1",
+    "name": "Bejul Somaia (Lightspeed)",
+    "firm": "Lightspeed Venture Partners",
+    "linkedin_url": "https://linkedin.com/in/bejul-somaia",
+    "blog_url": "https://lsvp.com",
+    "current_bio": "Partner at Lightspeed, focuses on AI, Global/US",
+    "current_sectors": [
+      "Enterprise",
+      "Consumer",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A",
+      "Series B"
+    ],
+    "missing_fields": [
+      "Investment Thesis"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "dbd43820-f971-463b-ad10-57d8eb812cd6",
+    "name": "Kaitlyn Doyle",
+    "firm": "TechNexus Venture Collaborative",
+    "linkedin_url": "https://linkedin.com/in/kaitlyn-doyle",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "126a8361-1eb2-46c6-912c-677b044e970c",
+    "name": "Bijan Sabet (Spark Capital)",
+    "firm": "Bijan Sabet (Spark Capital)",
+    "linkedin_url": "https://linkedin.com/in/bijan-sabet",
+    "blog_url": null,
+    "current_bio": "Emeritus partner at Spark Capital",
+    "current_sectors": [
+      "SaaS",
+      "Consumer",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A",
+      "Series B"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "3c1e25c4-65ab-492b-b265-1bc2f7d3504a",
+    "name": "Thomson Nguyen",
+    "firm": "Hatch",
+    "linkedin_url": "https://linkedin.com/in/thomson-nguyen",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "f9eb2f47-6d7f-44cc-9733-ec9775ee43d6",
+    "name": "for early stage (Bvp)",
+    "firm": "for early stage (Bvp)",
+    "linkedin_url": "https://linkedin.com/in/for-early-stage",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "1ecf2b4d-c711-4848-9821-62fd77781cd8",
+    "name": "of Moore Capital",
+    "firm": "of Moore Capital",
+    "linkedin_url": "https://linkedin.com/in/of-moore-capital",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "c12b1d6e-2656-4ece-81c6-bd1954b5ed91",
+    "name": "Herston Powers",
+    "firm": "1982 Ventures",
+    "linkedin_url": "https://linkedin.com/in/herston-powers",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "HealthTech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "26427591-ca87-4aef-92e7-48e6e38c2b7f",
+    "name": "Jeff Clavier (Uncork Capital)",
+    "firm": "Jeff Clavier (Uncork Capital)",
+    "linkedin_url": "https://linkedin.com/in/jeff-clavier",
+    "blog_url": null,
+    "current_bio": "Founding Partner at Uncork Capital",
+    "current_sectors": [
+      "AI/ML",
+      "API",
+      "SaaS"
+    ],
+    "current_stage": [
+      "Seed"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "a19cf91b-efc1-43f3-b5c3-e4011343ab6c",
+    "name": "Adina Tecklu",
+    "firm": "Adina Tecklu",
+    "linkedin_url": "https://linkedin.com/in/adina-tecklu",
+    "blog_url": null,
+    "current_bio": "Investor at Khosla Ventures",
+    "current_sectors": [
+      "DeepTech",
+      "CleanTech",
+      "AI/ML",
+      "Healthcare"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A",
+      "Series B"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "ee4c92f1-4bcc-4165-9597-77333cb49a4f",
+    "name": "and Private Equity",
+    "firm": "and Private Equity",
+    "linkedin_url": "https://linkedin.com/in/and-private-equity",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Healthcare"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "b042a0bd-dc88-4b81-8c89-6300da08f693",
+    "name": "Angel Capital Association",
+    "firm": "Angel Capital Association",
+    "linkedin_url": "https://linkedin.com/in/angel-capital-association",
+    "blog_url": null,
+    "current_bio": "World's largest community of angel investors representing and connecting the most active seed-stage investors globally",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  }
+]

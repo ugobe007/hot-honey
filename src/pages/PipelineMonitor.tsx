@@ -220,10 +220,10 @@ export default function PipelineMonitor() {
           <div className="flex items-center justify-between gap-4 overflow-x-auto pb-4">
             {/* Step 1: RSS Scraper */}
             <div className="flex-shrink-0 text-center">
-              <div className="w-20 h-20 bg-orange-500/20 border border-orange-500/50 rounded-xl flex items-center justify-center mb-2 mx-auto">
-                <Zap className="w-8 h-8 text-orange-400" />
+              <div className="w-20 h-20 bg-cyan-600/20 border border-cyan-500/50 rounded-xl flex items-center justify-center mb-2 mx-auto">
+                <Zap className="w-8 h-8 text-cyan-400" />
               </div>
-              <p className="text-orange-400 font-semibold text-sm">RSS Scraper</p>
+              <p className="text-cyan-400 font-semibold text-sm">RSS Scraper</p>
               <p className="text-gray-500 text-xs">Discovers startups</p>
             </div>
             
@@ -380,8 +380,8 @@ export default function PipelineMonitor() {
             <p className="text-gray-500 text-sm">Full diagnostics</p>
           </Link>
           
-          <Link to="/admin/discovered-startups" className="p-4 bg-gradient-to-br from-orange-900/40 to-orange-950/40 rounded-xl border border-orange-500/30 hover:border-orange-400/50 hover:shadow-lg hover:shadow-orange-500/10 transition-all group">
-            <Zap className="w-6 h-6 text-orange-400 mb-2 group-hover:scale-110 transition-transform" />
+          <Link to="/admin/discovered-startups" className="p-4 bg-gradient-to-br from-slate-800/40 to-slate-900/40 rounded-xl border border-cyan-500/30 hover:border-cyan-400/50 hover:shadow-lg hover:shadow-cyan-500/10 transition-all group">
+            <Zap className="w-6 h-6 text-cyan-400 mb-2 group-hover:scale-110 transition-transform" />
             <p className="text-white font-medium">RSS Discoveries</p>
             <p className="text-gray-500 text-sm">View scraped data</p>
           </Link>

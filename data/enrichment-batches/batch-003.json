@@ -1,0 +1,457 @@
+[
+  {
+    "id": "de9973cb-8da6-429e-9092-da97138c776d",
+    "name": "Menlo Ventures",
+    "firm": "Menlo Ventures",
+    "linkedin_url": "https://menlovc.com",
+    "blog_url": null,
+    "current_bio": "Early-stage venture capital firm that invests across AI, consumer, enterprise, and healthcare technologies. They are 'ALL IN on AI' and focus on transformative technology companies that are changing the way we live and work.",
+    "current_sectors": [
+      "Artificial Intelligence",
+      "Bio + Healthcare",
+      "Consumer",
+      "Cybersecurity",
+      "FinTech",
+      "Infrastructure",
+      "Robotics + Hardware",
+      "SaaS",
+      "Supply Chain + Automation"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "cb258bf5-ff44-423f-8ae7-6e8832731b06",
+    "name": "Alana Palmedo",
+    "firm": "Alana Palmedo",
+    "linkedin_url": "https://linkedin.com/in/alana-palmedo",
+    "blog_url": null,
+    "current_bio": "Alana Palmedo is a angel investor focused on technology investing at seed and series_a stage.",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "736c977c-093d-49b1-bdd6-ba82ee04b92b",
+    "name": "Khlosla Ventures",
+    "firm": "Khlosla Ventures",
+    "linkedin_url": "https://www.khoslaventures.com",
+    "blog_url": null,
+    "current_bio": "Bold, early, impactful ventures focused on deep tech and disruptive technologies. Known for making contrarian bets on world-class teams and supporting breakthrough innovations in AI, cleantech, healthcare, and other transformative sectors.",
+    "current_sectors": [
+      "Artificial Intelligence",
+      "Clean Technology",
+      "HealthTech",
+      "Deep Tech",
+      "Financial Technology",
+      "Space Technology",
+      "Biotechnology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "c29deb7f-ac0b-4efd-88a5-4e61150723ac",
+    "name": "Karen Sidey (Ribbit Capital)",
+    "firm": "Karen Sidey (Ribbit Capital)",
+    "linkedin_url": "https://linkedin.com/in/karen-sidey",
+    "blog_url": null,
+    "current_bio": "Karen Sidey is an investor at Ribbit Capital focused on technology investing at seed and series_a stage.",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "15a342ee-dd1a-48a0-83e3-a4eb732cafb4",
+    "name": "Frankie",
+    "firm": "Frankie",
+    "linkedin_url": "https://linkedin.com/in/frankie",
+    "blog_url": null,
+    "current_bio": "Frankie is a angel investor focused on technology investing at seed and series_a stage.",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "402734f5-efc0-49f8-a642-544bf14d1c91",
+    "name": "Cindy McAdam (Ribbit Capital)",
+    "firm": "Cindy McAdam (Ribbit Capital)",
+    "linkedin_url": "https://linkedin.com/in/cindy-mcadam",
+    "blog_url": null,
+    "current_bio": "Cindy Mc Adam is an investor at Cindy McAdam (Ribbit Capital) focused on technology investing at seed and series_a stage.",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "6b2614e1-2874-4cd6-9a40-bd39413594c5",
+    "name": "Robert Nelsen (Arch Venture Partners)",
+    "firm": "Robert Nelsen (Arch Venture Partners)",
+    "linkedin_url": "https://linkedin.com/in/robert-nelsen",
+    "blog_url": null,
+    "current_bio": "Co-founder & Managing Director",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "d6c663ce-fbf3-4c7f-ae09-da1e1f0bb7df",
+    "name": "Stephanie Manning (Lerer Hippeau)",
+    "firm": "Stephanie Manning (Lerer Hippeau)",
+    "linkedin_url": "https://linkedin.com/in/stephanie-manning",
+    "blog_url": null,
+    "current_bio": "Operating Partner, Platform at Lerer Hippeau since 2017",
+    "current_sectors": [
+      "Generalist"
+    ],
+    "current_stage": [
+      "Seed"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "e2de7de8-0337-4871-a899-4cd96eb8386d",
+    "name": "Manav Kohli (Ribbit Capital)",
+    "firm": "Manav Kohli (Ribbit Capital)",
+    "linkedin_url": "https://linkedin.com/in/manav-kohli",
+    "blog_url": null,
+    "current_bio": "Manav Kohli is an investor at Ribbit Capital focused on technology investing at seed and series_a stage.",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "4c2430da-a369-49c2-a573-86a9c4937203",
+    "name": "Sam Kirschner (Village Global)",
+    "firm": "Sam Kirschner (Village Global)",
+    "linkedin_url": "https://linkedin.com/in/sam-kirschner",
+    "blog_url": null,
+    "current_bio": "Vice President at Village Global",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "601c7e86-4ae5-47de-91cd-e8b139124d1b",
+    "name": "Matt Tracey (Ribbit Capital)",
+    "firm": "Matt Tracey (Ribbit Capital)",
+    "linkedin_url": "https://linkedin.com/in/matt-tracey",
+    "blog_url": null,
+    "current_bio": "Matt Tracey is an investor at Ribbit Capital focused on technology investing at seed and series_a stage.",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "76aa3f8e-23d4-46d0-aa56-4dd64862863a",
+    "name": "Andrew Ciatto (Ribbit Capital)",
+    "firm": "Andrew Ciatto (Ribbit Capital)",
+    "linkedin_url": "https://linkedin.com/in/andrew-ciatto",
+    "blog_url": null,
+    "current_bio": "Andrew Ciatto is an investor at Ribbit Capital focused on technology investing at seed and series_a stage.",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "56a40ce4-3fe2-4f6d-8eed-3ca2ceee2cf6",
+    "name": "Nick Shalek (Ribbit Capital)",
+    "firm": "Nick Shalek (Ribbit Capital)",
+    "linkedin_url": "https://linkedin.com/in/nick-shalek",
+    "blog_url": null,
+    "current_bio": "Nick Shalek is an investor at Ribbit Capital focused on technology investing at seed and series_a stage.",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "c8ed4482-7aad-4e7c-b262-23dac44cb2d5",
+    "name": "Anorak Ventures",
+    "firm": "Anorak Ventures",
+    "linkedin_url": "https://linkedin.com/in/anorak-ventures",
+    "blog_url": null,
+    "current_bio": "Anorak Ventures is a vc firm focused on Focus on technical founders investing at Pre-Seed and Seed stage.",
+    "current_sectors": [
+      "Focus on technical founders"
+    ],
+    "current_stage": [
+      "Pre-Seed",
+      "Seed"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "fc8974e2-a9b8-4fae-a9cc-b88d509cabe4",
+    "name": "NewSchools Venture Fund",
+    "firm": "NewSchools Venture Fund",
+    "linkedin_url": "https://linkedin.com/in/newschools-venture-fund",
+    "blog_url": null,
+    "current_bio": "NewSchools is a venture philanthropy that builds a better education system by connecting people, resources, and ideas.",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "dc99e05a-3d4f-4824-be16-11175078b3c6",
+    "name": "Adrian Adegesan (Ribbit Capital)",
+    "firm": "Adrian Adegesan (Ribbit Capital)",
+    "linkedin_url": "https://linkedin.com/in/adrian-adegesan",
+    "blog_url": null,
+    "current_bio": "Adrian Adegesan is an investor at Ribbit Capital focused on technology investing at seed and series_a stage.",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "a1b0d4ea-80d0-469b-92ed-9c4aa51d6315",
+    "name": "Andrea Hippeau (Lerer Hippeau)",
+    "firm": "Andrea Hippeau (Lerer Hippeau)",
+    "linkedin_url": "https://linkedin.com/in/andrea-hippeau",
+    "blog_url": null,
+    "current_bio": "Partner at Lerer Hippeau since 2014",
+    "current_sectors": [
+      "Generalist"
+    ],
+    "current_stage": [
+      "Seed"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "baeb8d02-dde2-4eee-a430-9f220b4ff9dc",
+    "name": "Max Ryan (Ribbit Capital)",
+    "firm": "Max Ryan (Ribbit Capital)",
+    "linkedin_url": "https://linkedin.com/in/max-ryan",
+    "blog_url": null,
+    "current_bio": "Max Ryan is an investor at Ribbit Capital focused on technology investing at seed and series_a stage.",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "8d03fdf8-d57c-4f39-8c47-d684b71d1f6e",
+    "name": "Axel Bouchon (Arch Venture Partners)",
+    "firm": "Axel Bouchon (Arch Venture Partners)",
+    "linkedin_url": "https://linkedin.com/in/axel-bouchon",
+    "blog_url": null,
+    "current_bio": "Axel Bouchon is an investor at Arch Venture Partners focused on technology investing at seed and series_a stage.",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  },
+  {
+    "id": "e31780cc-bbc2-4190-8c44-20b25e03b6c4",
+    "name": "Earl Jones",
+    "firm": "Earl Jones",
+    "linkedin_url": "https://linkedin.com/in/earl-jones",
+    "blog_url": null,
+    "current_bio": "Earl Jones is a angel investor focused on AI/ML, SaaS, Fintech investing at Seed stage.",
+    "current_sectors": [
+      "AI/ML",
+      "SaaS",
+      "Fintech",
+      "Biotechnology",
+      "Robotics"
+    ],
+    "current_stage": [
+      "Seed"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 4
+  }
+]

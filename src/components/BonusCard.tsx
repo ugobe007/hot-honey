@@ -45,7 +45,7 @@ const BonusCard: React.FC<BonusCardProps> = ({ onClose, onClaim }) => {
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
       <div
-        className="relative bg-gradient-to-br from-orange-400 via-red-500 to-pink-500 rounded-3xl shadow-2xl p-8 max-w-md w-full animate-in zoom-in spin-in duration-500"
+        className="relative bg-gradient-to-br from-cyan-400 via-blue-500 to-violet-500 rounded-3xl shadow-2xl p-8 max-w-md w-full animate-in zoom-in spin-in duration-500"
         style={{
           boxShadow: '0 20px 60px rgba(0,0,0,0.5), inset 0 0 40px rgba(255,255,255,0.2)',
         }}
@@ -82,7 +82,7 @@ const BonusCard: React.FC<BonusCardProps> = ({ onClose, onClaim }) => {
             
             <button
               onClick={handleReveal}
-              className="px-8 py-4 bg-white text-orange-600 font-bold text-xl rounded-2xl shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 transition-all"
+              className="px-8 py-4 bg-white text-cyan-600 font-bold text-xl rounded-2xl shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 transition-all"
             >
               🍯 Reveal Your Honeypot
             </button>

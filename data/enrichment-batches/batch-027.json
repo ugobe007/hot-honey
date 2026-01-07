@@ -1,0 +1,433 @@
+[
+  {
+    "id": "56e5d299-1b74-48ef-bcb1-ab3314856c56",
+    "name": "Fabrice Grinda",
+    "firm": "FJ Labs",
+    "linkedin_url": "https://linkedin.com/in/fabrice-grinda",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "8d89c3f4-dead-4396-845b-98d6b041cc09",
+    "name": "Kamal Ravikant",
+    "firm": "Kamal Ravikant Angel",
+    "linkedin_url": "https://linkedin.com/in/kamal-ravikant",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "304703c6-b9d7-42a9-a485-b21a0ecc9767",
+    "name": "preferences Foundation Capital",
+    "firm": "preferences Foundation Capital",
+    "linkedin_url": "https://linkedin.com/in/preferences-foundation-capital",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "Fintech",
+      "Healthcare",
+      "SaaS"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "7352743a-6ddf-4496-8fe7-507d6630bfd6",
+    "name": "Turner Novak",
+    "firm": "Banana Capital",
+    "linkedin_url": "https://linkedin.com/in/turner-novak",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "55487b06-3f4d-4e92-8969-cf984c4fbf1e",
+    "name": "About ACA Our (Angelcapitalassociation)",
+    "firm": "About ACA Our (Angelcapitalassociation)",
+    "linkedin_url": "https://linkedin.com/in/about-aca-our",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "HealthTech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "6ac05f8c-0392-446b-9cab-68dbec82e29c",
+    "name": "of Pantera Capital",
+    "firm": "of Pantera Capital",
+    "linkedin_url": "https://linkedin.com/in/of-pantera-capital",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "Blockchain",
+      "Cryptocurrency",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "584f5bfe-da37-4d42-a9b7-aa5fecf9c683",
+    "name": "Fintech Ventures Fund",
+    "firm": "Fintech Ventures Fund",
+    "linkedin_url": "https://linkedin.com/in/fintech-ventures-fund",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "Fintech",
+      "AI",
+      "SaaS"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "260ea353-9351-4a6a-bf8c-94a1d1bdb552",
+    "name": "Will McClelland",
+    "firm": "Elizabeth Street Ventures",
+    "linkedin_url": "https://linkedin.com/in/will-mcclelland",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "1d48976b-185b-4508-b1c1-1fdec9b29fc6",
+    "name": "note to (Vccafe)",
+    "firm": "note to (Vccafe)",
+    "linkedin_url": "https://linkedin.com/in/note-to",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "851365f3-cf77-4de1-a128-df6203ae03b8",
+    "name": "token strategies as (Panteracapital)",
+    "firm": "token strategies as (Panteracapital)",
+    "linkedin_url": "https://linkedin.com/in/token-strategies-as",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "Blockchain",
+      "DeFi",
+      "NFTs"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A",
+      "Series B"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "6b57073b-313c-4591-ac26-bd5aa8a566b4",
+    "name": "Newark Venture Partners",
+    "firm": "Newark Venture Partners",
+    "linkedin_url": "https://linkedin.com/in/newark-venture-partners",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Healthcare"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "4159d1cb-1f78-4b81-8cf3-b99ebcb5284d",
+    "name": "Guru Chahal (Lightspeed)",
+    "firm": "Lightspeed Venture Partners",
+    "linkedin_url": "https://linkedin.com/in/guru-chahal",
+    "blog_url": "https://lsvp.com",
+    "current_bio": "Partner at Lightspeed, focuses on AI, US",
+    "current_sectors": [
+      "Enterprise",
+      "Consumer",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A",
+      "Series B"
+    ],
+    "missing_fields": [
+      "Investment Thesis"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "9f1c153a-364b-4bf1-bc3e-495c433bf3be",
+    "name": "Jon Chu",
+    "firm": "Jon Chu",
+    "linkedin_url": "https://linkedin.com/in/jon-chu",
+    "blog_url": null,
+    "current_bio": "Investor at Khosla Ventures",
+    "current_sectors": [
+      "DeepTech",
+      "CleanTech",
+      "AI/ML",
+      "Healthcare"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A",
+      "Series B"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "625c1c6a-b215-410b-b9d3-80cd300ea87f",
+    "name": "Bean Huynh",
+    "firm": "Bean Huynh",
+    "linkedin_url": "https://linkedin.com/in/bean-huynh",
+    "blog_url": null,
+    "current_bio": "Partner at Hustle Fund",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "4e0075ff-afd9-498e-9e5b-cc5055015c7a",
+    "name": "Founders Factory NY",
+    "firm": "Founders Factory NY",
+    "linkedin_url": "https://linkedin.com/in/founders-factory-ny",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "HealthTech",
+      "SpaceTech",
+      "Defense",
+      "DeepTech",
+      "AI/ML",
+      "Robotics"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A",
+      "Series B",
+      "Growth"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "91e88734-9d99-41b9-b07f-107b7606c923",
+    "name": "Ravi Grover",
+    "firm": "Data Tech Fund",
+    "linkedin_url": "https://linkedin.com/in/ravi-grover",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "fed3e13d-26be-456b-91c7-07db19fb9195",
+    "name": "Melitas Ventures",
+    "firm": "Melitas Ventures",
+    "linkedin_url": "https://linkedin.com/in/melitas-ventures",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "HealthTech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "b9f75ccb-a7d1-4ee5-8b7b-de9c6872acc8",
+    "name": "Networks and (Felicis)",
+    "firm": "Networks and (Felicis)",
+    "linkedin_url": "https://linkedin.com/in/networks-and",
+    "blog_url": null,
+    "current_bio": "Networks and is an investor at Felicis focused on SaaS, Consumer, Fintech investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "Consumer",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "4ec2e5b6-b268-4dff-94b5-0dded662d4c5",
+    "name": "Lex Zhao",
+    "firm": "One Way Ventures",
+    "linkedin_url": "https://linkedin.com/in/lex-zhao",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "HealthTech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "ba5a6ba8-e575-4072-856c-6f8502c3fe51",
+    "name": "Paige Craig",
+    "firm": "Arena Ventures",
+    "linkedin_url": "https://linkedin.com/in/paigecraig",
+    "blog_url": null,
+    "current_bio": "Angel investor in Uber, Lyft, AngelList, Wish, Postmates, Twitter. 500+ investments.",
+    "current_sectors": [
+      "saas",
+      "marketplace",
+      "fintech",
+      "consumer"
+    ],
+    "current_stage": [
+      "pre_seed",
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  }
+]

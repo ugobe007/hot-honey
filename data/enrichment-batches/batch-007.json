@@ -1,0 +1,445 @@
+[
+  {
+    "id": "b563fe63-fe09-4c5e-a46d-65aa5af6a71f",
+    "name": "Bridge Ventures",
+    "firm": "Bridge Ventures",
+    "linkedin_url": "https://linkedin.com/in/bridge-ventures",
+    "blog_url": null,
+    "current_bio": "Bridge Ventures is a vc firm focused on AI/ML, SaaS, Fintech investing at Seed and Series A stage.",
+    "current_sectors": [
+      "AI/ML",
+      "SaaS",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A",
+      "Series B"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis"
+    ],
+    "priority": 3
+  },
+  {
+    "id": "f7fe6f29-d2e4-4e1d-a72d-244854e75c35",
+    "name": "for oversubscribed Fund",
+    "firm": "for oversubscribed Fund",
+    "linkedin_url": "https://linkedin.com/in/for-oversubscribed-fund",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 3
+  },
+  {
+    "id": "fff43047-fdfc-404b-baff-e7defa0c0148",
+    "name": "Saola Ventures",
+    "firm": "Saola Ventures",
+    "linkedin_url": "https://linkedin.com/in/saola-ventures",
+    "blog_url": null,
+    "current_bio": "Saola Ventures is a vc firm focused on Generalist investing at Seed+ stage.",
+    "current_sectors": [
+      "Generalist"
+    ],
+    "current_stage": [
+      "Seed+"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Notable Investments"
+    ],
+    "priority": 3
+  },
+  {
+    "id": "2fd3746e-92aa-4092-93ac-69fa299275fc",
+    "name": "view profile Founding (Uncorkcapital)",
+    "firm": "view profile Founding (Uncorkcapital)",
+    "linkedin_url": "https://linkedin.com/in/view-profile-founding",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 3
+  },
+  {
+    "id": "defe5613-f6b3-42cc-9676-8eb9e13d7dcb",
+    "name": "strategic growth equity",
+    "firm": "strategic growth equity",
+    "linkedin_url": "https://linkedin.com/in/strategic-growth-equity",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 3
+  },
+  {
+    "id": "25110aff-8abc-4e25-b352-80d0017df26f",
+    "name": "ReGen Ventures",
+    "firm": "ReGen Ventures",
+    "linkedin_url": "https://linkedin.com/in/regen-ventures",
+    "blog_url": null,
+    "current_bio": "ReGen Ventures is a vc firm focused on Regenerative technology companies with the intention to restore investing at Seed stage.",
+    "current_sectors": [
+      "Regenerative technology companies with the intention to restore"
+    ],
+    "current_stage": [
+      "Seed"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Notable Investments"
+    ],
+    "priority": 3
+  },
+  {
+    "id": "83ef3b6e-522b-495b-8a3a-1428f9dfeab0",
+    "name": "Bayes Ventures",
+    "firm": "Bayes Ventures",
+    "linkedin_url": "https://linkedin.com/in/bayes-ventures",
+    "blog_url": null,
+    "current_bio": "Bayes Ventures is a vc firm focused on Healthcare, Generalist, FinTech investing at Pre-seed and Seed stage.",
+    "current_sectors": [
+      "Healthcare",
+      "Generalist",
+      "FinTech",
+      "SaaS",
+      "Enterprise"
+    ],
+    "current_stage": [
+      "Pre-seed",
+      "Seed",
+      "Angel"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Notable Investments"
+    ],
+    "priority": 3
+  },
+  {
+    "id": "c0267482-4ac6-4324-8580-d5a103de2ce6",
+    "name": "Erik de Stefanis",
+    "firm": "Interlace Ventures",
+    "linkedin_url": "https://linkedin.com/in/erik-de-stefanis",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "CommerceTech",
+      "E-commerce",
+      "RetailTech",
+      "Consumer"
+    ],
+    "current_stage": [
+      "Pre-seed",
+      "Seed"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 3
+  },
+  {
+    "id": "8f937113-fb54-47e2-b3fa-1ab3a4f19441",
+    "name": "Brick & Mortar Ventures",
+    "firm": "Brick & Mortar Ventures",
+    "linkedin_url": "https://linkedin.com/in/brick-mortar-ventures",
+    "blog_url": null,
+    "current_bio": "Brick & Mortar Ventures is a vc firm focused on Software and hardware solutions for architecture, engineering investing at Seed and Series A stage.",
+    "current_sectors": [
+      "Software and hardware solutions for architecture",
+      "engineering"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Notable Investments"
+    ],
+    "priority": 3
+  },
+  {
+    "id": "750755b5-ea3a-4427-8af2-f4ed4301f0a0",
+    "name": "NFX",
+    "firm": "NFX",
+    "linkedin_url": "https://linkedin.com/in/nfx",
+    "blog_url": null,
+    "current_bio": "NFX is a venture capital firm investing in early-stage startups.",
+    "current_sectors": [
+      "AI/ML",
+      "SaaS",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Investment Thesis"
+    ],
+    "priority": 3
+  },
+  {
+    "id": "e44aa2ea-d0f6-4115-9eba-117ef87491a1",
+    "name": "Partner Andy McLoughlin (Uncorkcapital)",
+    "firm": "Partner Andy McLoughlin (Uncorkcapital)",
+    "linkedin_url": "https://linkedin.com/in/partner-andy-mcloughlin",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 3
+  },
+  {
+    "id": "efece774-7511-4fdf-a957-549f0131201e",
+    "name": "PartnershipsErik Torenberg (Villageglobal)",
+    "firm": "PartnershipsErik Torenberg (Villageglobal)",
+    "linkedin_url": "https://linkedin.com/in/partnershipserik-torenberg",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 3
+  },
+  {
+    "id": "3373747a-72c0-45e6-ba93-bc3281a396ea",
+    "name": "Range Ventures",
+    "firm": "Range Ventures",
+    "linkedin_url": "https://linkedin.com/in/range-ventures",
+    "blog_url": null,
+    "current_bio": "Range Ventures is a vc firm focused on Companies based in or with a connection to Colorado investing at Seed and Series A stage.",
+    "current_sectors": [
+      "Companies based in or with a connection to Colorado"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Notable Investments"
+    ],
+    "priority": 3
+  },
+  {
+    "id": "b83366ff-a289-4767-8489-0ec5e2c52527",
+    "name": "Comment Private Equity",
+    "firm": "Comment Private Equity",
+    "linkedin_url": "https://linkedin.com/in/comment-private-equity",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 3
+  },
+  {
+    "id": "7af98cb1-4df7-40a4-805a-4cd516927003",
+    "name": "Sean Kendall (Arch Venture Partners)",
+    "firm": "Sean Kendall (Arch Venture Partners)",
+    "linkedin_url": "https://linkedin.com/in/sean-kendall",
+    "blog_url": null,
+    "current_bio": "Partner (Europe)",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 3
+  },
+  {
+    "id": "0480cbf2-4b02-4afd-8e19-8e5e5dd41c9f",
+    "name": "Blue Bear Capital",
+    "firm": "Blue Bear Capital",
+    "linkedin_url": "https://linkedin.com/in/blue-bear-capital",
+    "blog_url": null,
+    "current_bio": "Blue Bear Capital is a vc firm focused on Digital tech in energy, infrastructure and climate investing at Seed and Series A stage.",
+    "current_sectors": [
+      "Digital tech in energy",
+      "infrastructure and climate"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max",
+      "Notable Investments"
+    ],
+    "priority": 3
+  },
+  {
+    "id": "1d46b51b-4f0c-47b3-a5c0-28ddb902a6ae",
+    "name": "Staff Jacob MullinsVenture (Villageglobal)",
+    "firm": "Staff Jacob MullinsVenture (Villageglobal)",
+    "linkedin_url": "https://linkedin.com/in/staff-jacob-mullinsventure",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 3
+  },
+  {
+    "id": "f6f3b4bb-f604-44e7-ac68-a228101eb456",
+    "name": "Caroline Weintraub",
+    "firm": "True Beauty Ventures",
+    "linkedin_url": "https://linkedin.com/in/caroline-weintraub",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "Consumer"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A",
+      "Series B"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 3
+  },
+  {
+    "id": "3f7957da-6abe-4221-a75e-71d15a27dd07",
+    "name": "Rami Hannoush, Ph.D. (Versant Ventures)",
+    "firm": "Rami Hannoush, Ph.D. (Versant Ventures)",
+    "linkedin_url": "https://linkedin.com/in/rami-hannoush",
+    "blog_url": null,
+    "current_bio": "Venture Partner",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 3
+  },
+  {
+    "id": "82f05b5b-d001-4154-bd50-6ea756b90105",
+    "name": "TeamCOO GC Capital",
+    "firm": "TeamCOO GC Capital",
+    "linkedin_url": "https://linkedin.com/in/teamcoo-gc-capital",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 3
+  }
+]

@@ -1,626 +1,737 @@
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { 
-  Zap, Check, X, Sparkles, Building2, ArrowRight, Star, Shield, Clock,
-  Crown, Brain, Target, TrendingUp, MessageSquare, Lightbulb,
-  FileText, BarChart3, Users2, Handshake, Headphones, Lock, Flame
+  FileText, 
+  Brain, 
+  Target, 
+  BarChart3, 
+  Star,
+  Sparkles,
+  ArrowRight,
+  CheckCircle2,
+  Clock,
+  Zap,
+  TrendingUp,
+  Users,
+  DollarSign,
+  Globe,
+  Briefcase,
+  ChevronRight,
+  Play,
+  Rocket,
+  Shield,
+  Award,
+  ArrowLeft,
+  BookOpen
 } from 'lucide-react';
-import FlameIcon from '../components/FlameIcon';
 import { supabase } from '../lib/supabase';
-import LogoDropdownMenu from '../components/LogoDropdownMenu';
-
-type UserType = 'startup' | 'investor';
-type PlanType = 'spark' | 'flame' | 'inferno' | 'scout' | 'dealflow_pro';
-
-interface Service {
-  name: string;
-  icon: any;
-  spark: boolean;
-  flame: boolean;
-  inferno: boolean;
-}
-
-const startupServices: Service[] = [
-  { name: 'Browse Trending Rankings', icon: TrendingUp, spark: true, flame: true, inferno: true },
-  { name: 'Preview 3 Investor Matches', icon: Target, spark: true, flame: true, inferno: true },
-  { name: 'Basic GOD Score', icon: Brain, spark: true, flame: true, inferno: true },
-  { name: 'Unlimited Investor Matches', icon: Sparkles, spark: false, flame: true, inferno: true },
-  { name: 'Full GOD Score Breakdown', icon: BarChart3, spark: false, flame: true, inferno: true },
-  { name: 'Match Reasoning (5 reasons)', icon: Lightbulb, spark: false, flame: true, inferno: true },
-  { name: 'VC Approach Playbook', icon: Target, spark: false, flame: true, inferno: true },
-  { name: 'Pitch Deck Analyzer', icon: FileText, spark: false, flame: true, inferno: true },
-  { name: 'Value Prop Sharpener', icon: MessageSquare, spark: false, flame: true, inferno: true },
-  { name: 'Warm Intro Path Finder', icon: Handshake, spark: false, flame: true, inferno: true },
-  { name: 'Product-Market Fit Analysis', icon: Target, spark: false, flame: false, inferno: true },
-  { name: 'Team & Advisor Gap Analysis', icon: Users2, spark: false, flame: false, inferno: true },
-  { name: 'Traction Improvement Plan', icon: TrendingUp, spark: false, flame: false, inferno: true },
-  { name: 'Funding Strategy Roadmap', icon: TrendingUp, spark: false, flame: false, inferno: true },
-  { name: 'Partnership Opportunities', icon: Handshake, spark: false, flame: false, inferno: true },
-  { name: 'Competitive Intelligence', icon: Brain, spark: false, flame: false, inferno: true },
-  { name: 'Monthly Office Hours', icon: Headphones, spark: false, flame: false, inferno: true },
-  { name: 'Priority Support', icon: Crown, spark: false, flame: false, inferno: true },
-];
 
 export default function GetMatchedPage() {
   const navigate = useNavigate();
-  const [step, setStep] = useState<'type' | 'pricing' | 'signup'>('type');
-  const [selectedPlan, setSelectedPlan] = useState<PlanType>('spark');
-  const [userType, setUserType] = useState<UserType>('startup');
-  const [loading, setLoading] = useState(false);
+  const [step, setStep] = useState<'info' | 'details' | 'pitch'>('info');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
+  const [activeProcessStep, setActiveProcessStep] = useState(0);
+  
+  // Animate the process steps
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveProcessStep((prev) => (prev + 1) % 5);
+    }, 2000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Form state
   const [formData, setFormData] = useState({
+    // Step 1: Basic Info
     name: '',
-    email: '',
-    password: '',
-    companyName: '',
+    tagline: '',
     website: '',
+    founderName: '',
+    founderEmail: '',
+    
+    // Step 2: Details
+    sectors: [] as string[],
+    stage: '',
+    location: '',
+    teamSize: '',
+    
+    // Step 3: Pitch
     description: '',
+    raiseAmount: '',
+    useOfFunds: '',
   });
 
-  const handleTypeSelect = (type: UserType) => {
-    setUserType(type);
-    setStep('pricing');
+  const sectors = [
+    'AI/ML', 'SaaS', 'Fintech', 'HealthTech', 'E-Commerce', 'CleanTech', 
+    'Cybersecurity', 'EdTech', 'Robotics', 'Developer Tools', 'Consumer',
+    'Biotech', 'SpaceTech', 'Gaming', 'Web3/Crypto', 'Marketplace'
+  ];
+
+  const stages = ['Pre-Seed', 'Seed', 'Series A', 'Series B', 'Series C+'];
+  
+  const teamSizes = ['Solo Founder', '2-5', '6-10', '11-25', '26-50', '50+'];
+
+  const handleSectorToggle = (sector: string) => {
+    setFormData(prev => ({
+      ...prev,
+      sectors: prev.sectors.includes(sector)
+        ? prev.sectors.filter(s => s !== sector)
+        : prev.sectors.length < 3 ? [...prev.sectors, sector] : prev.sectors
+    }));
   };
 
-  const handlePlanSelect = (planId: PlanType) => {
-    setSelectedPlan(planId);
-    setStep('signup');
-  };
-
-  const handleSignUp = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
+    setIsSubmitting(true);
     setError('');
-    setLoading(true);
 
     try {
-      // Create user in Supabase auth
-      const { data: authData, error: authError } = await supabase.auth.signUp({
-        email: formData.email,
-        password: formData.password,
-        options: {
-          data: {
-            name: formData.name,
-            user_type: userType,
-          }
+      // Parse team size from string to number
+      let teamSizeNum: number | null = null;
+      if (formData.teamSize) {
+        const match = formData.teamSize.match(/(\d+)/);
+        if (match) {
+          teamSizeNum = parseInt(match[1]);
+        } else if (formData.teamSize === 'Solo Founder') {
+          teamSizeNum = 1;
         }
-      });
-
-      if (authError) {
-        console.warn('Supabase auth failed, using localStorage:', authError);
       }
 
-      // Create subscription record
-      const subscription = {
-        user_id: authData?.user?.id,
-        email: formData.email,
-        tier: selectedPlan,
-        user_type: userType,
-        status: 'active',
-        matches_viewed_count: 0,
-        matches_limit: selectedPlan === 'spark' ? 3 : -1,
-      };
+      const { data, error: insertError } = await supabase
+        .from('startup_uploads')
+        .insert({
+          name: formData.name,
+          tagline: formData.tagline,
+          website: formData.website,
+          submitted_email: formData.founderEmail,
+          sectors: formData.sectors,
+          stage: stages.indexOf(formData.stage) + 1,
+          location: formData.location,
+          team_size: teamSizeNum,
+          description: formData.description,
+          raise_amount: formData.raiseAmount,
+          source_type: 'manual',
+          status: 'pending',
+          created_at: new Date().toISOString(),
+        })
+        .select()
+        .single();
 
-      // Try to save to Supabase
-      const { error: subError } = await (supabase.from as any)('user_subscriptions')
-        .insert(subscription);
+      if (insertError) throw insertError;
 
-      if (subError) {
-        console.warn('Subscription save failed:', subError);
-      }
-
-      // Create user profile
-      const userProfile = {
-        id: authData?.user?.id || `user-${Date.now()}`,
-        name: formData.name,
-        email: formData.email,
-        user_type: userType,
-        company_name: formData.companyName,
-        website: formData.website,
-        description: formData.description,
-        plan: selectedPlan,
-        matches_remaining: selectedPlan === 'spark' ? 3 : -1,
-        matches_used: 0,
-        created_at: new Date().toISOString(),
-      };
-
-      // Always save to localStorage as backup
-      localStorage.setItem('currentUser', JSON.stringify(userProfile));
-      localStorage.setItem('isLoggedIn', 'true');
-      localStorage.setItem('userPlan', selectedPlan);
-      localStorage.setItem('userType', userType);
-      localStorage.setItem('matchesRemaining', selectedPlan === 'spark' ? '3' : '-1');
-
-      // Show success
-      const tierNames: Record<PlanType, string> = {
-        spark: 'Spark (Free)',
-        flame: 'Flame ($49/mo)',
-        inferno: 'Inferno ($199/mo)',
-        scout: 'Scout ($99/mo)',
-        dealflow_pro: 'Dealflow Pro ($499/mo)',
-      };
+      // Check if there's a redirect parameter in the URL
+      const params = new URLSearchParams(window.location.search);
+      const redirect = params.get('redirect');
       
-      alert(`🎉 Welcome to Hot Match!\n\nPlan: ${tierNames[selectedPlan]}\n${selectedPlan === 'spark' ? '✨ You have 3 free matches to start!' : '✨ Full access activated!'}`);
-
-      // Redirect based on user type
-      if (userType === 'investor') {
-        navigate('/trending');
+      if (redirect) {
+        // If redirect is to matches page, navigate there
+        navigate(redirect);
       } else {
-        navigate('/matching');
+        // Otherwise navigate to matching engine
+        navigate('/match', { state: { newStartup: true, startupId: data?.id } });
       }
-
-    } catch (err) {
+    } catch (err: any) {
       console.error('Signup error:', err);
-      setError('Something went wrong. Please try again.');
+      setError(err.message || 'Failed to submit. Please try again.');
     } finally {
-      setLoading(false);
+      setIsSubmitting(false);
     }
   };
 
+  // Process steps for the visualization
+  const processSteps = [
+    { 
+      num: 1, 
+      icon: <FileText className="w-6 h-6" />, 
+      title: 'Submit', 
+      desc: 'Your startup details',
+      tags: ['Stage', 'Sector'],
+      color: 'cyan'
+    },
+    { 
+      num: 2, 
+      icon: <Brain className="w-6 h-6" />, 
+      title: 'Analyze', 
+      desc: 'GOD Algorithm scores',
+      tags: ['Team', 'PMF'],
+      color: 'blue'
+    },
+    { 
+      num: 3, 
+      icon: <Target className="w-6 h-6" />, 
+      title: 'Match', 
+      desc: '3,000+ investors compared',
+      tags: ['Sector', 'Stage'],
+      color: 'indigo'
+    },
+    { 
+      num: 4, 
+      icon: <BarChart3 className="w-6 h-6" />, 
+      title: 'Rank', 
+      desc: 'Score & confidence',
+      tags: ['Score', 'Fit'],
+      color: 'violet'
+    },
+  ];
+
+  const getColorClasses = (color: string) => {
+    const colors: Record<string, { bg: string; border: string; text: string; textLight: string }> = {
+      cyan: { bg: 'bg-cyan-500/20', border: 'border-cyan-500/50', text: 'text-cyan-400', textLight: 'text-cyan-300' },
+      blue: { bg: 'bg-blue-500/20', border: 'border-blue-500/50', text: 'text-blue-400', textLight: 'text-blue-300' },
+      indigo: { bg: 'bg-indigo-500/20', border: 'border-indigo-500/50', text: 'text-indigo-400', textLight: 'text-indigo-300' },
+      violet: { bg: 'bg-violet-500/20', border: 'border-violet-500/50', text: 'text-violet-400', textLight: 'text-violet-300' },
+      emerald: { bg: 'bg-emerald-500/20', border: 'border-emerald-500/50', text: 'text-emerald-400', textLight: 'text-emerald-300' },
+    };
+    return colors[color] || colors.cyan;
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-purple-950 to-blue-950 relative overflow-hidden">
-      {/* Background Effects */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-orange-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+      {/* Background effects */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -left-40 w-[600px] h-[600px] bg-cyan-500/10 rounded-full blur-3xl" />
+        <div className="absolute -bottom-40 -right-40 w-[600px] h-[600px] bg-blue-500/10 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-cyan-500/5 to-violet-500/5 rounded-full blur-3xl" />
       </div>
 
-      {/* Logo Dropdown Menu */}
-      <LogoDropdownMenu />
-
-      {/* Navigation Buttons - Top Right */}
-      <div className="fixed top-6 right-8 z-50 flex items-center gap-3">
-        <Link 
-          to="/trending" 
-          className="px-5 py-2.5 bg-gradient-to-r from-purple-600/60 to-indigo-600/60 hover:from-purple-500 hover:to-indigo-500 text-white font-semibold rounded-xl transition-all border border-purple-400/50"
-        >
-          Trending
-        </Link>
-        <Link 
-          to="/matching" 
-          className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold rounded-xl transition-all shadow-lg"
-        >
-          <Sparkles className="w-4 h-4" />
-          Try Demo
-        </Link>
-      </div>
-
-      <div className="relative z-10 container mx-auto px-8 py-8 pt-24">
-        
-        {/* Step 1: Choose User Type */}
-        {step === 'type' && (
-          <>
-            <div className="text-center mb-12">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-500/20 to-red-500/20 border border-orange-500/30 rounded-full mb-6">
-                <Sparkles className="w-4 h-4 text-orange-400" />
-                <span className="text-orange-300 text-sm font-medium">Choose Your Path</span>
-              </div>
-              <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
-                Are you a <span className="bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent">Startup</span> or <span className="bg-gradient-to-r from-purple-400 to-indigo-500 bg-clip-text text-transparent">Investor</span>?
-              </h1>
-              <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-                We have different tools and services tailored for each
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-              {/* Startup Card */}
-              <button
-                onClick={() => handleTypeSelect('startup')}
-                className="group bg-gradient-to-br from-orange-900/40 to-red-900/30 border-2 border-orange-500/30 hover:border-orange-500/60 rounded-3xl p-10 text-left transition-all hover:scale-105"
-              >
-                <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center mb-6">
-                  <FlameIcon variant={5} size="3xl" />
-                </div>
-                <h2 className="text-3xl font-bold text-white mb-3">I'm a Startup</h2>
-                <p className="text-gray-300 mb-6">
-                  Find investors who match your stage, sector, and vision. Get strategic tools to improve your fundraise.
-                </p>
-                <div className="flex items-center gap-2 text-orange-400 group-hover:text-orange-300">
-                  <span className="font-semibold">Get Matched with Investors</span>
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </div>
-              </button>
-
-              {/* Investor Card */}
-              <button
-                onClick={() => handleTypeSelect('investor')}
-                className="group bg-gradient-to-br from-purple-900/40 to-indigo-900/30 border-2 border-purple-500/30 hover:border-purple-500/60 rounded-3xl p-10 text-left transition-all hover:scale-105"
-              >
-                <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-purple-500 to-indigo-500 flex items-center justify-center mb-6">
-                  <Building2 className="w-10 h-10 text-white" />
-                </div>
-                <h2 className="text-3xl font-bold text-white mb-3">I'm an Investor</h2>
-                <p className="text-gray-300 mb-6">
-                  Discover pre-vetted startups with AI-powered scoring. Streamline your deal flow with smart tools.
-                </p>
-                <div className="flex items-center gap-2 text-purple-400 group-hover:text-purple-300">
-                  <span className="font-semibold">Discover Startups</span>
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </div>
-              </button>
-            </div>
-          </>
-        )}
-
-        {/* Step 2: Pricing for Startups */}
-        {step === 'pricing' && userType === 'startup' && (
-          <>
-            <button 
-              onClick={() => setStep('type')}
-              className="text-orange-400 hover:text-orange-300 mb-6 flex items-center gap-2"
+      <div className="relative z-10 max-w-7xl mx-auto px-4 py-8">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <Link to="/" className="inline-flex items-center gap-2 text-slate-400 hover:text-white mb-4 transition-colors">
+            <ArrowLeft className="w-4 h-4" />
+            Back to Home
+          </Link>
+          
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-orange-500/20 to-amber-500/20 border border-orange-500/40 mb-4">
+            <Rocket className="w-4 h-4 text-orange-400" />
+            <span className="text-orange-300 text-sm font-bold tracking-wide">FOR STARTUPS</span>
+          </div>
+          
+          <h1 className="text-4xl md:text-5xl font-black text-white mb-3">
+            Find Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-amber-400 to-orange-500">Perfect Investor</span>
+          </h1>
+          
+          <p className="text-xl text-slate-400 max-w-2xl mx-auto">
+            Get matched with investors who actually fund your sector and stage. 
+            <span className="text-orange-400 font-semibold"> In under 2 seconds.</span>
+          </p>
+          
+          {/* Resource Cards - Startup Playbook & Fundraising Toolkit */}
+          <div className="flex flex-wrap justify-center gap-4 mt-8">
+            <Link
+              to="/strategies"
+              className="group flex items-center gap-3 px-5 py-3 bg-gradient-to-r from-orange-500/20 to-amber-500/20 border border-orange-500/40 hover:border-orange-400/60 rounded-xl transition-all hover:scale-105 shadow-lg shadow-orange-500/20 hover:shadow-orange-500/40"
             >
-              ← Back
-            </button>
+              <BookOpen className="w-5 h-5 text-orange-400 group-hover:text-orange-300" />
+              <div className="text-left">
+                <div className="text-white font-bold text-sm">Startup Fundraising Playbook</div>
+                <div className="text-orange-300 text-xs">Y Combinator & a16z strategies</div>
+              </div>
+              <ChevronRight className="w-4 h-4 text-orange-400 group-hover:translate-x-1 transition-transform" />
+            </Link>
+            
+            <Link
+              to="/services"
+              className="group flex items-center gap-3 px-5 py-3 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 border border-cyan-500/40 hover:border-cyan-400/60 rounded-xl transition-all hover:scale-105 shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/40"
+            >
+              <Brain className="w-5 h-5 text-cyan-400 group-hover:text-cyan-300" />
+              <div className="text-left">
+                <div className="text-white font-bold text-sm">Fundraising Toolkit</div>
+                <div className="text-cyan-300 text-xs">AI-powered pitch & strategy tools</div>
+              </div>
+              <ChevronRight className="w-4 h-4 text-cyan-400 group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
+        </div>
 
-            <div className="text-center mb-12">
-              <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-                🔥 Choose Your <span className="bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent">Hot Match</span> Plan
-              </h1>
-              <p className="text-xl text-gray-300">
-                Unlock AI-powered tools to supercharge your fundraise
-              </p>
+        {/* How Hot Match Works - Process Visualization */}
+        <div className="mb-10">
+          <div className="text-center mb-6">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/20 border border-blue-500/30">
+              <Sparkles className="w-4 h-4 text-blue-400" />
+              <span className="text-blue-300 text-sm font-semibold">The Matching Machine</span>
             </div>
+          </div>
+          
+          <h2 className="text-2xl md:text-3xl font-bold text-center text-white mb-2">
+            How Hot Match <span className="text-orange-400">Works</span>
+          </h2>
+          <p className="text-center text-slate-400 mb-8">
+            Watch the machinery process your startup and deliver perfect matches in under 2 seconds
+          </p>
 
-            {/* Pricing Cards */}
-            <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto mb-12">
+          <div className="flex flex-col lg:flex-row items-center justify-center gap-4 lg:gap-2">
+            {/* Process Steps */}
+            {processSteps.map((step, idx) => {
+              const colorClasses = getColorClasses(step.color);
+              return (
+                <React.Fragment key={step.num}>
+                  <div 
+                    className={`relative ${colorClasses.bg} backdrop-blur-sm border ${colorClasses.border} rounded-2xl p-5 w-full lg:w-44 transition-all duration-500 ${
+                      activeProcessStep === idx ? 'scale-105 shadow-lg' : 'opacity-80'
+                    }`}
+                  >
+                    {/* Step number badge */}
+                    <div className={`absolute -top-2 -right-2 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white bg-gradient-to-r from-cyan-500 to-blue-500`}>
+                      {step.num}
+                    </div>
+
+                    {/* Icon */}
+                    <div className={`w-12 h-12 rounded-xl ${colorClasses.bg} flex items-center justify-center mb-3 mx-auto ${colorClasses.text}`}>
+                      {step.icon}
+                    </div>
+
+                    {/* Content */}
+                    <h3 className="text-white font-bold text-center mb-1">{step.title}</h3>
+                    <p className="text-slate-400 text-xs text-center mb-3">{step.desc}</p>
+
+                    {/* Tags */}
+                    <div className="flex justify-center gap-1.5">
+                      {step.tags.map((tag, tidx) => (
+                        <span 
+                          key={tidx}
+                          className={`px-2 py-0.5 rounded text-xs font-medium ${colorClasses.bg} ${colorClasses.textLight}`}
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Arrow between steps (hidden on mobile) */}
+                  {idx < processSteps.length - 1 && (
+                    <div className="hidden lg:flex items-center justify-center w-8">
+                      <ChevronRight className={`w-5 h-5 transition-all ${activeProcessStep === idx ? 'text-white scale-125' : 'text-slate-600'}`} />
+                    </div>
+                  )}
+                </React.Fragment>
+              );
+            })}
+
+            {/* Perfect Match Result Card */}
+            <div className="hidden lg:flex items-center justify-center w-8">
+              <ChevronRight className={`w-5 h-5 transition-all ${activeProcessStep === 4 ? 'text-white scale-125' : 'text-slate-600'}`} />
+            </div>
+            
+            <div className={`relative bg-gradient-to-br from-cyan-500/30 to-blue-600/20 backdrop-blur-sm border-2 border-cyan-500/60 rounded-2xl p-5 w-full lg:w-52 transition-all duration-500 ${
+              activeProcessStep === 4 ? 'scale-105 shadow-xl shadow-cyan-500/30' : 'opacity-90'
+            }`}>
+              {/* Sparkle icon */}
+              <div className="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 flex items-center justify-center">
+                <Sparkles className="w-4 h-4 text-white" />
+              </div>
+
+              {/* Star icon */}
+              <div className="w-12 h-12 rounded-xl bg-cyan-500/30 flex items-center justify-center mb-3 mx-auto">
+                <Star className="w-6 h-6 text-cyan-400 fill-cyan-400" />
+              </div>
+
+              <h3 className="text-white font-bold text-center text-lg mb-2">Perfect Match!</h3>
               
-              {/* SPARK - Free */}
-              <div className="bg-gradient-to-br from-gray-900/60 to-gray-800/60 border border-gray-700/50 rounded-3xl p-8 transition-all hover:border-gray-600/50">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-gray-700 flex items-center justify-center">
-                    <Zap className="w-6 h-6 text-yellow-400" />
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-bold text-white">Spark</h3>
-                    <p className="text-gray-400 text-sm">Explore & Discover</p>
-                  </div>
-                </div>
-                
-                <div className="mb-6">
-                  <span className="text-4xl font-bold text-white">Free</span>
-                  <span className="text-gray-400 ml-2">forever</span>
-                </div>
-
-                <ul className="space-y-3 mb-8 text-sm">
-                  {startupServices.slice(0, 3).map((service, idx) => (
-                    <li key={idx} className="flex items-center gap-3">
-                      <Check className="w-4 h-4 text-green-400" />
-                      <span className="text-gray-300">{service.name}</span>
-                    </li>
-                  ))}
-                  <li className="flex items-center gap-3 opacity-50">
-                    <Lock className="w-4 h-4 text-gray-500" />
-                    <span className="text-gray-500">Limited to 3 matches</span>
-                  </li>
-                </ul>
-
-                <button
-                  onClick={() => handlePlanSelect('spark')}
-                  className="w-full py-3 rounded-xl font-bold bg-gray-700 hover:bg-gray-600 text-white transition-all"
-                >
-                  Get Started Free
-                </button>
+              {/* Score */}
+              <div className="text-center mb-3">
+                <span className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">
+                  87%
+                </span>
+                <p className="text-slate-400 text-xs">Match Score</p>
               </div>
 
-              {/* FLAME - $49 */}
-              <div className="relative bg-gradient-to-br from-orange-900/40 via-red-900/30 to-amber-900/40 border-2 border-orange-500/50 rounded-3xl p-8 transition-all hover:border-orange-500/70 scale-105">
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                  <span className="px-4 py-1 bg-gradient-to-r from-orange-500 to-red-500 text-white text-sm font-bold rounded-full">
-                    🔥 Most Popular
-                  </span>
+              {/* Match indicators */}
+              <div className="space-y-1.5">
+                <div className="flex items-center gap-2 text-xs">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                  <span className="text-slate-300">Sector match</span>
                 </div>
-
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center">
-                    <Flame className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-bold text-white">Flame</h3>
-                    <p className="text-orange-300 text-sm">Active Fundraising</p>
-                  </div>
+                <div className="flex items-center gap-2 text-xs">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                  <span className="text-slate-300">Stage aligned</span>
                 </div>
-                
-                <div className="mb-6">
-                  <span className="text-4xl font-bold text-white">$49</span>
-                  <span className="text-gray-300 ml-2">/month</span>
-                </div>
-
-                <ul className="space-y-2 mb-8 text-sm">
-                  {startupServices.filter(s => s.flame).slice(0, 10).map((service, idx) => (
-                    <li key={idx} className="flex items-center gap-2">
-                      <Check className="w-4 h-4 text-orange-400 flex-shrink-0" />
-                      <span className="text-gray-200">{service.name}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                <button
-                  onClick={() => handlePlanSelect('flame')}
-                  className="w-full py-3 rounded-xl font-bold bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white transition-all shadow-lg"
-                >
-                  Start 7-Day Free Trial
-                </button>
               </div>
+            </div>
+          </div>
 
-              {/* INFERNO - $199 */}
-              <div className="bg-gradient-to-br from-purple-900/40 to-indigo-900/30 border border-purple-500/30 rounded-3xl p-8 transition-all hover:border-purple-500/50">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-indigo-500 flex items-center justify-center">
-                    <Crown className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-bold text-white">Inferno</h3>
-                    <p className="text-purple-300 text-sm">Full Stack Fundraising</p>
-                  </div>
-                </div>
-                
-                <div className="mb-6">
-                  <span className="text-4xl font-bold text-white">$199</span>
-                  <span className="text-gray-300 ml-2">/month</span>
-                </div>
+          {/* Processing indicator */}
+          <div className="flex items-center justify-center gap-3 mt-6">
+            <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-slate-800/50 border border-white/10">
+              <div className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse" />
+              <span className="text-slate-300 text-sm">Processing in real-time</span>
+              <Clock className="w-4 h-4 text-slate-500" />
+              <span className="text-cyan-400 font-bold text-sm">&lt;2s</span>
+            </div>
+          </div>
+        </div>
 
-                <ul className="space-y-2 mb-8 text-sm">
-                  <li className="flex items-center gap-2 text-purple-300 font-medium">
-                    <Sparkles className="w-4 h-4" />
-                    Everything in Flame, plus:
-                  </li>
-                  {startupServices.filter(s => s.inferno && !s.flame).map((service, idx) => (
-                    <li key={idx} className="flex items-center gap-2">
-                      <Check className="w-4 h-4 text-purple-400 flex-shrink-0" />
-                      <span className="text-gray-200">{service.name}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                <button
-                  onClick={() => handlePlanSelect('inferno')}
-                  className="w-full py-3 rounded-xl font-bold bg-purple-600 hover:bg-purple-500 text-white transition-all"
-                >
-                  Start 7-Day Free Trial
-                </button>
+        {/* Main Content Grid */}
+        <div className="grid lg:grid-cols-5 gap-8">
+          {/* Left side - Benefits */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Stats */}
+            <div className="bg-slate-800/50 border border-slate-700 rounded-2xl p-6">
+              <h3 className="text-lg font-bold text-white mb-4">Why Startups Choose Hot Match</h3>
+              <div className="space-y-4">
+                {[
+                  { icon: <Target className="w-5 h-5" />, title: 'Pre-Qualified Investors', desc: 'Only see investors who fund your sector & stage', color: 'cyan' },
+                  { icon: <Zap className="w-5 h-5" />, title: 'Skip Cold Outreach', desc: 'No more 97% rejection rate on cold emails', color: 'blue' },
+                  { icon: <Brain className="w-5 h-5" />, title: 'GOD Score™ Analysis', desc: 'See how VCs will evaluate your startup', color: 'indigo' },
+                  { icon: <TrendingUp className="w-5 h-5" />, title: 'Real-Time Matching', desc: '3,200+ active investors in our database', color: 'violet' },
+                ].map((item, idx) => {
+                  const colorClasses = getColorClasses(item.color);
+                  return (
+                    <div key={idx} className="flex items-start gap-3">
+                      <div className={`p-2 rounded-lg flex-shrink-0 ${colorClasses.bg} ${colorClasses.text}`}>
+                        {item.icon}
+                      </div>
+                      <div>
+                        <h4 className="text-white font-semibold text-sm">{item.title}</h4>
+                        <p className="text-slate-500 text-xs">{item.desc}</p>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
 
-            {/* Feature Comparison Table */}
-            <div className="max-w-4xl mx-auto bg-black/30 rounded-2xl p-8 border border-white/10">
-              <h3 className="text-xl font-bold text-white mb-6 text-center">Full Feature Comparison</h3>
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead>
-                    <tr className="border-b border-white/10">
-                      <th className="text-left py-3 text-gray-400 font-medium">Service</th>
-                      <th className="text-center py-3 text-gray-400 font-medium w-24">Spark</th>
-                      <th className="text-center py-3 text-orange-400 font-medium w-24">Flame</th>
-                      <th className="text-center py-3 text-purple-400 font-medium w-24">Inferno</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {startupServices.map((service, idx) => (
-                      <tr key={idx} className="border-b border-white/5">
-                        <td className="py-3 text-gray-300 flex items-center gap-2">
-                          <service.icon className="w-4 h-4 text-gray-500" />
-                          {service.name}
-                        </td>
-                        <td className="text-center py-3">
-                          {service.spark ? <Check className="w-5 h-5 text-green-400 mx-auto" /> : <X className="w-5 h-5 text-gray-600 mx-auto" />}
-                        </td>
-                        <td className="text-center py-3">
-                          {service.flame ? <Check className="w-5 h-5 text-orange-400 mx-auto" /> : <X className="w-5 h-5 text-gray-600 mx-auto" />}
-                        </td>
-                        <td className="text-center py-3">
-                          {service.inferno ? <Check className="w-5 h-5 text-purple-400 mx-auto" /> : <X className="w-5 h-5 text-gray-600 mx-auto" />}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+            {/* Success Story */}
+            <div className="bg-gradient-to-br from-cyan-500/10 to-blue-500/10 border border-cyan-500/20 rounded-2xl p-6">
+              <div className="flex items-center gap-1 mb-3">
+                {[1,2,3,4,5].map(i => (
+                  <Star key={i} className="w-4 h-4 fill-yellow-400 text-blue-400" />
+                ))}
               </div>
-            </div>
-          </>
-        )}
-
-        {/* Step 2: Pricing for Investors */}
-        {step === 'pricing' && userType === 'investor' && (
-          <>
-            <button 
-              onClick={() => setStep('type')}
-              className="text-purple-400 hover:text-purple-300 mb-6 flex items-center gap-2"
-            >
-              ← Back
-            </button>
-
-            <div className="text-center mb-12">
-              <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-                🔍 <span className="bg-gradient-to-r from-purple-400 to-indigo-500 bg-clip-text text-transparent">Investor</span> Plans
-              </h1>
-              <p className="text-xl text-gray-300">
-                Discover pre-vetted, AI-scored startups for your portfolio
+              <p className="text-white italic mb-3">
+                "We got 12 investor meetings in our first week on Hot Match. The GOD Score helped us understand exactly what VCs were looking for."
               </p>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-              {/* Scout */}
-              <div className="bg-gradient-to-br from-gray-900/60 to-gray-800/60 border border-gray-700/50 rounded-3xl p-8">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center">
-                    <Target className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-bold text-white">Scout</h3>
-                    <p className="text-gray-400 text-sm">Angels & Solo GPs</p>
-                  </div>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center text-white font-bold">
+                  AK
                 </div>
-                
-                <div className="mb-6">
-                  <span className="text-4xl font-bold text-white">$99</span>
-                  <span className="text-gray-300 ml-2">/month</span>
+                <div>
+                  <div className="text-white font-semibold text-sm">Alex Kumar</div>
+                  <div className="text-slate-500 text-xs">Founder, DataSync (YC W24)</div>
                 </div>
-
-                <ul className="space-y-3 mb-8">
-                  <li className="flex items-center gap-3"><Check className="w-4 h-4 text-cyan-400" /><span className="text-gray-300">Full startup database access</span></li>
-                  <li className="flex items-center gap-3"><Check className="w-4 h-4 text-cyan-400" /><span className="text-gray-300">GOD Score filtering</span></li>
-                  <li className="flex items-center gap-3"><Check className="w-4 h-4 text-cyan-400" /><span className="text-gray-300">Save & organize pipeline</span></li>
-                  <li className="flex items-center gap-3"><Check className="w-4 h-4 text-cyan-400" /><span className="text-gray-300">Weekly hot startups digest</span></li>
-                  <li className="flex items-center gap-3"><Check className="w-4 h-4 text-cyan-400" /><span className="text-gray-300">Founder contact requests</span></li>
-                </ul>
-
-                <button
-                  onClick={() => handlePlanSelect('scout')}
-                  className="w-full py-3 rounded-xl font-bold bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white transition-all"
-                >
-                  Start Free Trial
-                </button>
-              </div>
-
-              {/* Dealflow Pro */}
-              <div className="relative bg-gradient-to-br from-purple-900/40 to-indigo-900/30 border-2 border-purple-500/50 rounded-3xl p-8">
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                  <span className="px-4 py-1 bg-gradient-to-r from-purple-500 to-indigo-500 text-white text-sm font-bold rounded-full">
-                    For VC Firms
-                  </span>
-                </div>
-
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-indigo-500 flex items-center justify-center">
-                    <Crown className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-bold text-white">Dealflow Pro</h3>
-                    <p className="text-purple-300 text-sm">VC Firms & Family Offices</p>
-                  </div>
-                </div>
-                
-                <div className="mb-6">
-                  <span className="text-4xl font-bold text-white">$499</span>
-                  <span className="text-gray-300 ml-2">/month</span>
-                </div>
-
-                <ul className="space-y-3 mb-8">
-                  <li className="flex items-center gap-3 text-purple-300 font-medium"><Sparkles className="w-4 h-4" />Everything in Scout, plus:</li>
-                  <li className="flex items-center gap-3"><Check className="w-4 h-4 text-purple-400" /><span className="text-gray-300">Team seats (up to 5)</span></li>
-                  <li className="flex items-center gap-3"><Check className="w-4 h-4 text-purple-400" /><span className="text-gray-300">API access for CRM</span></li>
-                  <li className="flex items-center gap-3"><Check className="w-4 h-4 text-purple-400" /><span className="text-gray-300">Custom scoring weights</span></li>
-                  <li className="flex items-center gap-3"><Check className="w-4 h-4 text-purple-400" /><span className="text-gray-300">First look at new startups</span></li>
-                  <li className="flex items-center gap-3"><Check className="w-4 h-4 text-purple-400" /><span className="text-gray-300">White-label deal memos</span></li>
-                </ul>
-
-                <button
-                  onClick={() => handlePlanSelect('dealflow_pro')}
-                  className="w-full py-3 rounded-xl font-bold bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white transition-all"
-                >
-                  Contact Sales
-                </button>
               </div>
             </div>
-          </>
-        )}
 
-        {/* Step 3: Signup Form */}
-        {step === 'signup' && (
-          <>
-            <button 
-              onClick={() => setStep('pricing')}
-              className="text-orange-400 hover:text-orange-300 mb-6 flex items-center gap-2"
-            >
-              ← Back to Plans
-            </button>
+            {/* Quick Stats */}
+            <div className="grid grid-cols-2 gap-3">
+              <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-4 text-center">
+                <div className="text-2xl font-bold text-white">3,400+</div>
+                <div className="text-xs text-slate-500">Startups Matched</div>
+              </div>
+              <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-4 text-center">
+                <div className="text-2xl font-bold text-white">89%</div>
+                <div className="text-xs text-slate-500">Match Accuracy</div>
+              </div>
+            </div>
+          </div>
 
-            <div className="max-w-md mx-auto">
-              <div className="text-center mb-8">
-                <h1 className="text-3xl font-bold text-white mb-2">
-                  Create Your Account
-                </h1>
-                <p className="text-gray-400">
-                  {selectedPlan === 'spark' ? 'Start with 3 free matches' : 'Start your 7-day free trial'}
-                </p>
+          {/* Right side - Sign Up Form */}
+          <div className="lg:col-span-3">
+            <div className="bg-slate-800/80 border border-slate-700 rounded-2xl p-8">
+              {/* Progress Steps */}
+              <div className="flex items-center justify-between mb-8">
+                {[
+                  { id: 'info', label: 'Your Startup', num: 1 },
+                  { id: 'details', label: 'Details', num: 2 },
+                  { id: 'pitch', label: 'Your Pitch', num: 3 },
+                ].map((s, idx) => (
+                  <React.Fragment key={s.id}>
+                    <button
+                      onClick={() => setStep(s.id as any)}
+                      className={`flex items-center gap-2 ${
+                        step === s.id 
+                          ? 'text-white' 
+                          : s.num < (step === 'info' ? 1 : step === 'details' ? 2 : 3)
+                            ? 'text-emerald-400'
+                            : 'text-slate-500'
+                      }`}
+                    >
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
+                        step === s.id 
+                          ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white' 
+                          : s.num < (step === 'info' ? 1 : step === 'details' ? 2 : 3)
+                            ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                            : 'bg-slate-700 text-slate-500'
+                      }`}>
+                        {s.num < (step === 'info' ? 1 : step === 'details' ? 2 : 3) 
+                          ? <CheckCircle2 className="w-4 h-4" />
+                          : s.num
+                        }
+                      </div>
+                      <span className="hidden sm:block text-sm font-medium">{s.label}</span>
+                    </button>
+                    {idx < 2 && (
+                      <div className={`flex-1 h-0.5 mx-2 ${
+                        s.num < (step === 'info' ? 1 : step === 'details' ? 2 : 3)
+                          ? 'bg-emerald-500/50'
+                          : 'bg-slate-700'
+                      }`} />
+                    )}
+                  </React.Fragment>
+                ))}
               </div>
 
-              <form onSubmit={handleSignUp} className="bg-black/30 rounded-2xl p-8 border border-white/10">
-                {error && (
-                  <div className="mb-4 p-3 bg-red-500/20 border border-red-500/50 rounded-lg text-red-300 text-sm">
-                    {error}
-                  </div>
-                )}
-
-                <div className="space-y-4">
+              {/* Step 1: Basic Info */}
+              {step === 'info' && (
+                <div className="space-y-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Your Name</label>
+                    <h2 className="text-2xl font-bold text-white mb-2">Tell us about your startup</h2>
+                    <p className="text-slate-400">We'll use this to find your perfect investor matches.</p>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-slate-300 mb-2">Startup Name *</label>
                     <input
                       type="text"
-                      required
                       value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-orange-500"
-                      placeholder="John Smith"
+                      onChange={e => setFormData({...formData, name: e.target.value})}
+                      placeholder="Acme Inc"
+                      className="w-full px-4 py-3 bg-slate-900/50 border border-slate-600 rounded-xl text-white placeholder-slate-500 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 outline-none transition-all"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Email</label>
-                    <input
-                      type="email"
-                      required
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-orange-500"
-                      placeholder="john@startup.com"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Password</label>
-                    <input
-                      type="password"
-                      required
-                      minLength={6}
-                      value={formData.password}
-                      onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-orange-500"
-                      placeholder="••••••••"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Company Name</label>
+                    <label className="block text-sm font-medium text-slate-300 mb-2">One-Line Tagline *</label>
                     <input
                       type="text"
-                      value={formData.companyName}
-                      onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
-                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-orange-500"
-                      placeholder="Acme Inc."
+                      value={formData.tagline}
+                      onChange={e => setFormData({...formData, tagline: e.target.value})}
+                      placeholder="AI-powered analytics for e-commerce"
+                      className="w-full px-4 py-3 bg-slate-900/50 border border-slate-600 rounded-xl text-white placeholder-slate-500 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 outline-none transition-all"
+                    />
+                    <p className="text-xs text-slate-500 mt-1">Keep it short and punchy</p>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-slate-300 mb-2">Website</label>
+                    <input
+                      type="url"
+                      value={formData.website}
+                      onChange={e => setFormData({...formData, website: e.target.value})}
+                      placeholder="https://acme.com"
+                      className="w-full px-4 py-3 bg-slate-900/50 border border-slate-600 rounded-xl text-white placeholder-slate-500 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 outline-none transition-all"
                     />
                   </div>
+
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-slate-300 mb-2">Your Name *</label>
+                      <input
+                        type="text"
+                        value={formData.founderName}
+                        onChange={e => setFormData({...formData, founderName: e.target.value})}
+                        placeholder="Jane Smith"
+                        className="w-full px-4 py-3 bg-slate-900/50 border border-slate-600 rounded-xl text-white placeholder-slate-500 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 outline-none transition-all"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-300 mb-2">Email *</label>
+                      <input
+                        type="email"
+                        value={formData.founderEmail}
+                        onChange={e => setFormData({...formData, founderEmail: e.target.value})}
+                        placeholder="jane@acme.com"
+                        className="w-full px-4 py-3 bg-slate-900/50 border border-slate-600 rounded-xl text-white placeholder-slate-500 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 outline-none transition-all"
+                      />
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => setStep('details')}
+                    disabled={!formData.name || !formData.tagline || !formData.founderName || !formData.founderEmail}
+                    className="w-full py-4 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 text-black font-black text-lg hover:from-orange-400 hover:to-amber-400 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-xl shadow-orange-500/50"
+                  >
+                    Continue
+                    <ArrowRight className="w-5 h-5" />
+                  </button>
                 </div>
+              )}
 
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full mt-6 py-4 rounded-xl font-bold bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white transition-all disabled:opacity-50"
-                >
-                  {loading ? 'Creating Account...' : 'Create Account'}
-                </button>
+              {/* Step 2: Details */}
+              {step === 'details' && (
+                <div className="space-y-6">
+                  <div>
+                    <h2 className="text-2xl font-bold text-white mb-2">Company Details</h2>
+                    <p className="text-slate-400">Help us match you with the right investors.</p>
+                  </div>
 
-                <p className="text-center text-gray-500 text-sm mt-4">
-                  Already have an account? <Link to="/login" className="text-orange-400 hover:underline">Log in</Link>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-300 mb-3">Sectors (pick up to 3) *</label>
+                    <div className="flex flex-wrap gap-2">
+                      {sectors.map(sector => (
+                        <button
+                          key={sector}
+                          onClick={() => handleSectorToggle(sector)}
+                          className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
+                            formData.sectors.includes(sector)
+                              ? 'bg-cyan-500/20 border border-cyan-500 text-cyan-300'
+                              : 'bg-slate-900/50 border border-slate-600 text-slate-400 hover:border-slate-500'
+                          }`}
+                        >
+                          {sector}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-slate-300 mb-3">Funding Stage *</label>
+                    <div className="grid grid-cols-3 md:grid-cols-5 gap-2">
+                      {stages.map(stage => (
+                        <button
+                          key={stage}
+                          onClick={() => setFormData({...formData, stage})}
+                          className={`px-3 py-2 rounded-xl border text-sm font-medium transition-all ${
+                            formData.stage === stage
+                              ? 'bg-blue-500/20 border-blue-500 text-blue-300'
+                              : 'bg-slate-900/50 border-slate-600 text-slate-400 hover:border-slate-500'
+                          }`}
+                        >
+                          {stage}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-slate-300 mb-2">Location</label>
+                      <input
+                        type="text"
+                        value={formData.location}
+                        onChange={e => setFormData({...formData, location: e.target.value})}
+                        placeholder="San Francisco, CA"
+                        className="w-full px-4 py-3 bg-slate-900/50 border border-slate-600 rounded-xl text-white placeholder-slate-500 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 outline-none transition-all"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-300 mb-2">Team Size</label>
+                      <select
+                        value={formData.teamSize}
+                        onChange={e => setFormData({...formData, teamSize: e.target.value})}
+                        className="w-full px-4 py-3 bg-slate-900/50 border border-slate-600 rounded-xl text-white focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 outline-none transition-all"
+                      >
+                        <option value="">Select size</option>
+                        {teamSizes.map(size => (
+                          <option key={size} value={size}>{size}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-3">
+                    <button
+                      onClick={() => setStep('info')}
+                      className="px-6 py-4 rounded-xl bg-slate-700 text-white font-medium hover:bg-slate-600 transition-all"
+                    >
+                      Back
+                    </button>
+                    <button
+                      onClick={() => setStep('pitch')}
+                      disabled={formData.sectors.length === 0 || !formData.stage}
+                      className="flex-1 py-4 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 text-black font-black text-lg hover:from-orange-400 hover:to-amber-400 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-xl shadow-orange-500/50"
+                    >
+                      Continue
+                      <ArrowRight className="w-5 h-5" />
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Step 3: Pitch */}
+              {step === 'pitch' && (
+                <div className="space-y-6">
+                  <div>
+                    <h2 className="text-2xl font-bold text-white mb-2">Your Pitch</h2>
+                    <p className="text-slate-400">Tell investors what makes you special.</p>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-slate-300 mb-2">What do you do? *</label>
+                    <textarea
+                      value={formData.description}
+                      onChange={e => setFormData({...formData, description: e.target.value})}
+                      placeholder="Describe your product, target market, and what problem you solve..."
+                      rows={4}
+                      className="w-full px-4 py-3 bg-slate-900/50 border border-slate-600 rounded-xl text-white placeholder-slate-500 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 outline-none transition-all resize-none"
+                    />
+                  </div>
+
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-slate-300 mb-2">How much are you raising?</label>
+                      <div className="relative">
+                        <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
+                        <input
+                          type="text"
+                          value={formData.raiseAmount}
+                          onChange={e => setFormData({...formData, raiseAmount: e.target.value})}
+                          placeholder="2M"
+                          className="w-full pl-10 pr-4 py-3 bg-slate-900/50 border border-slate-600 rounded-xl text-white placeholder-slate-500 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 outline-none transition-all"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-300 mb-2">Use of Funds</label>
+                      <input
+                        type="text"
+                        value={formData.useOfFunds}
+                        onChange={e => setFormData({...formData, useOfFunds: e.target.value})}
+                        placeholder="Product, Engineering, Sales"
+                        className="w-full px-4 py-3 bg-slate-900/50 border border-slate-600 rounded-xl text-white placeholder-slate-500 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 outline-none transition-all"
+                      />
+                    </div>
+                  </div>
+
+                  {error && (
+                    <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-sm">
+                      {error}
+                    </div>
+                  )}
+
+                  <div className="flex gap-3">
+                    <button
+                      onClick={() => setStep('details')}
+                      className="px-6 py-4 rounded-xl bg-slate-700 text-white font-medium hover:bg-slate-600 transition-all"
+                    >
+                      Back
+                    </button>
+                    <button
+                      onClick={handleSubmit}
+                      disabled={isSubmitting || !formData.description}
+                      className="flex-1 py-4 rounded-xl bg-gradient-to-r from-orange-500 via-amber-500 to-orange-600 text-black font-black text-lg hover:from-orange-400 hover:via-amber-400 hover:to-orange-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-2xl shadow-orange-500/60"
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <div className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full animate-spin" />
+                          Finding Matches...
+                        </>
+                      ) : (
+                        <>
+                          <Sparkles className="w-5 h-5" />
+                          Get Matched Now
+                          <ArrowRight className="w-5 h-5" />
+                        </>
+                      )}
+                    </button>
+                  </div>
+
+                  <p className="text-center text-slate-500 text-xs">
+                    By submitting, you agree to our <Link to="/privacy" className="text-cyan-400 hover:underline">Terms of Service</Link> and <Link to="/privacy" className="text-cyan-400 hover:underline">Privacy Policy</Link>
+                  </p>
+                </div>
+              )}
+
+              {/* Already have account */}
+              <div className="mt-6 pt-6 border-t border-slate-700 text-center">
+                <p className="text-slate-400">
+                  Already have an account?{' '}
+                  <Link to="/login" className="text-cyan-400 hover:text-cyan-300 font-medium transition-colors">
+                    Log in
+                  </Link>
                 </p>
-              </form>
+              </div>
             </div>
-          </>
-        )}
-
-        {/* Trust Section */}
-        <div className="flex flex-wrap justify-center gap-8 mt-16 text-gray-500">
-          <div className="flex items-center gap-2">
-            <Shield className="w-5 h-5" />
-            <span>Bank-level Security</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <Clock className="w-5 h-5" />
-            <span>Cancel Anytime</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <Star className="w-5 h-5" />
-            <span>7-Day Free Trial</span>
           </div>
         </div>
       </div>

@@ -329,7 +329,7 @@ export default function AIIntelligenceDashboard() {
   const getTrendColor = (trend: string) => {
     switch (trend) {
       case 'hot': return 'text-red-400 bg-red-500/20 border-red-500/50';
-      case 'rising': return 'text-orange-400 bg-orange-500/20 border-orange-500/50';
+      case 'rising': return 'text-cyan-400 bg-cyan-600/20 border-cyan-500/50';
       case 'cooling': return 'text-blue-400 bg-blue-500/20 border-blue-500/50';
       default: return 'text-gray-400 bg-gray-500/20 border-gray-500/50';
     }
@@ -485,14 +485,14 @@ export default function AIIntelligenceDashboard() {
                 element?.scrollIntoView({ behavior: 'smooth' });
               }, 100);
             }}
-            className="bg-gradient-to-br from-orange-900/60 to-red-900/60 backdrop-blur-xl border-2 border-orange-500/50 rounded-xl p-6 shadow-lg shadow-orange-900/50 hover:scale-105 transition-all cursor-pointer text-left"
+            className="bg-gradient-to-br from-slate-800/60 to-slate-900/60 backdrop-blur-xl border-2 border-cyan-500/50 rounded-xl p-6 shadow-lg shadow-slate-900/50 hover:scale-105 transition-all cursor-pointer text-left"
           >
             <div className="flex items-center justify-between mb-2">
-              <TrendingUp className="w-8 h-8 text-orange-400" />
+              <TrendingUp className="w-8 h-8 text-cyan-400" />
               <span className="text-3xl font-bold text-white">{trends.filter(t => t.trend === 'hot').length}</span>
             </div>
             <div className="text-sm text-gray-300">Hot Sectors Detected</div>
-            <div className="text-xs text-orange-400 mt-1">{rssStats.unique_sectors} total sectors</div>
+            <div className="text-xs text-cyan-400 mt-1">{rssStats.unique_sectors} total sectors</div>
           </button>
 
           <button
@@ -758,9 +758,9 @@ export default function AIIntelligenceDashboard() {
         {/* Market Trends Tab */}
         {selectedTab === 'trends' && (
           <div className="space-y-4">
-            <div className="bg-white/5 border border-orange-500/30 rounded-xl p-6">
+            <div className="bg-white/5 border border-cyan-500/30 rounded-xl p-6">
               <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
-                <TrendingUp className="w-6 h-6 text-orange-400" />
+                <TrendingUp className="w-6 h-6 text-cyan-400" />
                 Market Trends Detection
               </h2>
               <p className="text-gray-400 mb-6">
@@ -838,7 +838,7 @@ export default function AIIntelligenceDashboard() {
                       document.getElementById('trends-section')?.scrollIntoView({ behavior: 'smooth' });
                     }, 100);
                   }}
-                  className="px-6 py-3 bg-orange-600 hover:bg-orange-700 text-white rounded-lg font-semibold transition-all flex items-center gap-2"
+                  className="px-6 py-3 bg-cyan-700 hover:bg-cyan-600 text-white rounded-lg font-semibold transition-all flex items-center gap-2"
                 >
                   View All Trends →
                 </button>
@@ -877,7 +877,7 @@ export default function AIIntelligenceDashboard() {
                       <div className="flex items-center gap-3">
                         <div className={`p-2 rounded-lg ${
                           update.entity_type === 'startup'
-                            ? 'bg-orange-500/30'
+                            ? 'bg-cyan-600/30'
                             : 'bg-cyan-500/30'
                         }`}>
                           <span className="text-2xl">
@@ -975,7 +975,7 @@ export default function AIIntelligenceDashboard() {
                   >
                     <div className="grid grid-cols-[1fr,auto,1fr] gap-4 items-center mb-4">
                       {/* Startup */}
-                      <div className="bg-orange-500/20 border border-orange-500/40 rounded-lg p-3">
+                      <div className="bg-cyan-600/20 border border-cyan-500/40 rounded-lg p-3">
                         <div className="flex items-center gap-2 mb-1">
                           <span className="text-xl">🚀</span>
                           <span className="text-sm text-gray-400">Startup</span>

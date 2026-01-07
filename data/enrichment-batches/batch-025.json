@@ -1,0 +1,429 @@
+[
+  {
+    "id": "da2c6185-2dbe-4fe3-8973-d5211d2b246f",
+    "name": "Pierce Daly",
+    "firm": "Pierce Daly",
+    "linkedin_url": "https://linkedin.com/in/pierce-daly",
+    "blog_url": null,
+    "current_bio": "Accel Partner based in Bay Area",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "2e584cba-3448-4e40-bec2-2595023e5629",
+    "name": "Glasswing Ventures",
+    "firm": "Glasswing Ventures",
+    "linkedin_url": "https://linkedin.com/in/glasswing-ventures",
+    "blog_url": null,
+    "current_bio": "Glasswing Ventures is a vc firm focused on Industry/Sector Agnostic, Enterprise Software, CPG investing at Pre-Seed and Seed stage.",
+    "current_sectors": [
+      "Industry/Sector Agnostic",
+      "Enterprise Software",
+      "CPG",
+      "Minority Founders"
+    ],
+    "current_stage": [
+      "Pre-Seed",
+      "Seed"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "36ff01ce-cceb-47d7-b2c0-3f3d3d496b19",
+    "name": "article Dharmesh Shah (Firstround)",
+    "firm": "article Dharmesh Shah (Firstround)",
+    "linkedin_url": "https://linkedin.com/in/article-dharmesh-shah",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Healthtech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "76b6c554-8cb2-46e8-a3a0-e48a493db9da",
+    "name": "Elliott Robinson",
+    "firm": "Elliott Robinson",
+    "linkedin_url": "https://linkedin.com/in/elliott-robinson",
+    "blog_url": null,
+    "current_bio": "Elliott Robinson is a angel investor focused on AI, SaaS, Healthcare investing at Seed and Series A stage.",
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Healthcare"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "ebb5666d-a88c-4528-adda-e0303ae4fd6e",
+    "name": "Impact Engine",
+    "firm": "Impact Engine",
+    "linkedin_url": "https://linkedin.com/in/impact-engine",
+    "blog_url": null,
+    "current_bio": "Impact Engine is a angel investor focused on Enterprise Software, Social Impact, Fintech investing at Seed and Series A stage.",
+    "current_sectors": [
+      "Enterprise Software",
+      "Social Impact",
+      "Fintech",
+      "Healthcare"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "3a3f47b3-d7f9-4322-962e-4631464569fc",
+    "name": "Hayley Barna (Firstround)",
+    "firm": "Hayley Barna (Firstround)",
+    "linkedin_url": "https://linkedin.com/in/hayley-barna",
+    "blog_url": null,
+    "current_bio": "Hayley Barna is an investor at Firstround focused on AI, SaaS, Consumer investing at Seed and Series A stage.",
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Consumer"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "90452a2b-5266-4bb8-b7af-087efd5f49c9",
+    "name": "Sonia Arrison (Felicis)",
+    "firm": "Sonia Arrison (Felicis)",
+    "linkedin_url": "https://linkedin.com/in/sonia-arrison",
+    "blog_url": null,
+    "current_bio": "Sonia Arrison is an investor at Felicis focused on SaaS, Consumer, Fintech investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "Consumer",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "2f2abd18-225b-48ef-8f16-50b375e917b1",
+    "name": "Vyshakh Kodoth",
+    "firm": "MetaProp Ventures",
+    "linkedin_url": "https://linkedin.com/in/vyshakh-kodoth",
+    "blog_url": null,
+    "current_bio": "Vyshakh Kodoth is an investor at MetaProp Ventures focused on AI/ML, API, PropTech investing at Pre-Seed and Seed stage.",
+    "current_sectors": [
+      "AI/ML",
+      "API",
+      "PropTech"
+    ],
+    "current_stage": [
+      "Pre-Seed",
+      "Seed",
+      "Series A",
+      "Series B"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "b9e140c1-3cab-452f-b6b7-152dae9d23a5",
+    "name": "Angel Capital Association (ACA)",
+    "firm": "Angel Capital Association (ACA)",
+    "linkedin_url": "https://linkedin.com/in/angel-capital-association",
+    "blog_url": null,
+    "current_bio": "World's largest community of angel investors representing and connecting active seed-stage investors",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "3be84a21-7e02-4f5c-b8fa-1bcc7e6ac603",
+    "name": "Romulus Capital",
+    "firm": "Romulus Capital",
+    "linkedin_url": "https://linkedin.com/in/romulus-capital",
+    "blog_url": null,
+    "current_bio": "Romulus Capital is a vc firm focused on Enterprise Software, E-Commerce, Adtech investing at Pre-Seed and Seed stage.",
+    "current_sectors": [
+      "Enterprise Software",
+      "E-Commerce",
+      "Adtech",
+      "Marketplace"
+    ],
+    "current_stage": [
+      "Pre-Seed",
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "635f5d9e-2cde-4dae-82f8-2d33a3c367f6",
+    "name": "Yasmin Razavi",
+    "firm": "Yasmin Razavi",
+    "linkedin_url": "https://linkedin.com/in/yasmin-razavi",
+    "blog_url": null,
+    "current_bio": "Yasmin Razavi is a angel investor focused on SaaS, Consumer, Fintech investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "Consumer",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A",
+      "Series B"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "4d99a9ff-aadd-4eb4-94b3-7c6a7130350d",
+    "name": "G9 Ventures",
+    "firm": "G9 Ventures",
+    "linkedin_url": "https://linkedin.com/in/g9-ventures",
+    "blog_url": null,
+    "current_bio": "G9 Ventures is a vc firm focused on Direct To Consumer, CPG, Minority Founders investing at Pre-Seed and Seed stage.",
+    "current_sectors": [
+      "Direct To Consumer",
+      "CPG",
+      "Minority Founders",
+      "Female Founders"
+    ],
+    "current_stage": [
+      "Pre-Seed",
+      "Seed"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "e8867df8-b3e8-494f-b686-64219c999c67",
+    "name": "Todd Bao",
+    "firm": "Todd Bao",
+    "linkedin_url": "https://linkedin.com/in/todd-bao",
+    "blog_url": null,
+    "current_bio": "Investment Partner at Hustle Fund",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "8e621700-c2bd-4d10-bbba-d7ebec4c7450",
+    "name": "happyInvestingAydin SenkutFounder (Felicis)",
+    "firm": "happyInvestingAydin SenkutFounder (Felicis)",
+    "linkedin_url": "https://linkedin.com/in/happyinvestingaydin-senkutfounder",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "a2473925-48b7-4f47-aa70-f119600671df",
+    "name": "Mina Markham",
+    "firm": "Mina Markham",
+    "linkedin_url": "https://linkedin.com/in/mina-markham",
+    "blog_url": null,
+    "current_bio": "Mina Markham is a angel investor focused on SaaS, AI/ML, Consumer investing at Pre-Seed and Seed stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML",
+      "Consumer",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Pre-Seed",
+      "Seed"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "3c7a6c90-bb08-44dd-99a6-789845520e1b",
+    "name": "Kent Bennett",
+    "firm": "Kent Bennett",
+    "linkedin_url": "https://linkedin.com/in/kent-bennett",
+    "blog_url": null,
+    "current_bio": "Partner at Bessemer Venture Partners",
+    "current_sectors": [
+      "SaaS",
+      "Cloud",
+      "Healthcare"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A",
+      "Series B",
+      "Growth"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "b0d106bb-d956-46b4-98e5-9d38ee48d065",
+    "name": "Todd Jackson (Firstround)",
+    "firm": "Todd Jackson (Firstround)",
+    "linkedin_url": "https://linkedin.com/in/todd-jackson",
+    "blog_url": null,
+    "current_bio": "Todd Jackson is an investor at Firstround focused on AI, SaaS, Consumer investing at Seed and Series A stage.",
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Consumer"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "314a0123-e106-49bc-8291-1cfe735e658c",
+    "name": "Arbor Ventures",
+    "firm": "Arbor Ventures",
+    "linkedin_url": "https://linkedin.com/in/arbor-ventures",
+    "blog_url": null,
+    "current_bio": "Arbor Ventures is a vc firm focused on E-Commerce, Marketplace, Fintech investing at Seed and Series A stage.",
+    "current_sectors": [
+      "E-Commerce",
+      "Marketplace",
+      "Fintech",
+      "Insuretech",
+      "Cybersecurity"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "0f8e1a19-6238-4b57-8e8a-62558b831099",
+    "name": "Navigate Ventures",
+    "firm": "Navigate Ventures",
+    "linkedin_url": "https://linkedin.com/in/navigate-ventures",
+    "blog_url": null,
+    "current_bio": "Navigate Ventures is a vc firm focused on Looking for early/mid growth stage enterprise SaaS companies investing at Seed and Series A stage.",
+    "current_sectors": [
+      "Looking for early/mid growth stage enterprise SaaS companies"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "3050bf74-586a-42f7-9174-e0870d2f6e8d",
+    "name": "Paul Veradittakit",
+    "firm": "Paul Veradittakit",
+    "linkedin_url": "https://linkedin.com/in/paul-veradittakit",
+    "blog_url": null,
+    "current_bio": "Managing Partner at Pantera Capital, backed over 200 strategic blockchain investments",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  }
+]

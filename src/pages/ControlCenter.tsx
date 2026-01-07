@@ -47,7 +47,7 @@ export default function ControlCenter() {
     { name: 'Pipeline Monitor', icon: Radio, path: '/admin/pipeline', color: 'cyan', desc: 'Real-time pipeline view' },
     { name: 'System Health', icon: Activity, path: '/admin/health', color: 'green', desc: 'Diagnostics & status' },
     { name: 'Review Queue', icon: Clock, path: '/admin/review', color: 'yellow', desc: 'Pending startups' },
-    { name: 'RSS Discoveries', icon: Zap, path: '/admin/discovered-startups', color: 'orange', desc: 'Scraped data' },
+    { name: 'RSS Discoveries', icon: Zap, path: '/admin/discovered-startups', color: 'cyan', desc: 'Scraped data' },
     { name: 'RSS Manager', icon: Database, path: '/admin/rss-manager', color: 'purple', desc: 'Feed sources' },
     { name: 'Edit Startups', icon: Rocket, path: '/admin/edit-startups', color: 'pink', desc: 'Modify startup data' },
     { name: 'Investors', icon: Users, path: '/admin/discovered-investors', color: 'blue', desc: 'Investor database' },
@@ -55,14 +55,14 @@ export default function ControlCenter() {
     { name: 'GOD Scores', icon: TrendingUp, path: '/admin/god-scores', color: 'red', desc: 'Score management' },
     { name: 'AI Logs', icon: FileText, path: '/admin/ai-logs', color: 'gray', desc: 'System events' },
     { name: 'Bulk Import', icon: Database, path: '/admin/bulk-import', color: 'teal', desc: 'Mass data upload' },
-    { name: 'Instructions', icon: AlertCircle, path: '/admin/instructions', color: 'amber', desc: 'Help guide' },
+    { name: 'Instructions', icon: AlertCircle, path: '/admin/instructions', color: 'blue', desc: 'Help guide' },
   ];
 
   const colorMap: Record<string, string> = {
     cyan: 'bg-cyan-500/20 border-cyan-500/50 text-cyan-400',
     green: 'bg-green-500/20 border-green-500/50 text-green-400',
     yellow: 'bg-yellow-500/20 border-yellow-500/50 text-yellow-400',
-    orange: 'bg-orange-500/20 border-orange-500/50 text-orange-400',
+    orange: 'bg-cyan-600/20 border-cyan-500/50 text-cyan-400',
     purple: 'bg-purple-500/20 border-purple-500/50 text-purple-400',
     pink: 'bg-pink-500/20 border-pink-500/50 text-pink-400',
     blue: 'bg-blue-500/20 border-blue-500/50 text-blue-400',
@@ -70,7 +70,7 @@ export default function ControlCenter() {
     red: 'bg-red-500/20 border-red-500/50 text-red-400',
     gray: 'bg-gray-500/20 border-gray-500/50 text-gray-400',
     teal: 'bg-teal-500/20 border-teal-500/50 text-teal-400',
-    amber: 'bg-amber-500/20 border-amber-500/50 text-amber-400',
+    amber: 'bg-cyan-500/20 border-cyan-500/50 text-blue-400',
   };
 
   if (loading) {

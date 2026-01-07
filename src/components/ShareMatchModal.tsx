@@ -1,165 +1,188 @@
+/**
+ * SHARE MATCH MODAL
+ * =================
+ * Modal for sharing matches via link, email, or social
+ * Color scheme: Light blue to violet
+ */
+
 import React, { useState } from 'react';
-import { Share2, Copy, Check, X } from 'lucide-react';
+import { 
+  X, 
+  Link2, 
+  Mail, 
+  Twitter, 
+  Linkedin, 
+  Copy, 
+  Check,
+  Share2,
+  MessageCircle
+} from 'lucide-react';
+import { MatchResult } from '../lib/matchingService';
 
 interface ShareMatchModalProps {
   isOpen: boolean;
   onClose: () => void;
+  match: MatchResult;
   startupName: string;
-  investorName: string;
-  matchScore: number;
-  matchUrl: string;
 }
 
-const ShareMatchModal: React.FC<ShareMatchModalProps> = ({
-  isOpen,
-  onClose,
-  startupName,
-  investorName,
-  matchScore,
-  matchUrl,
-}) => {
+export default function ShareMatchModal({ 
+  isOpen, 
+  onClose, 
+  match,
+  startupName 
+}: ShareMatchModalProps) {
   const [copied, setCopied] = useState(false);
+  const [emailSent, setEmailSent] = useState(false);
 
   if (!isOpen) return null;
 
-  const shareText = `🚀 Check out this ${matchScore}% match between ${startupName} and ${investorName} on Hot Money!`;
-  const encodedText = encodeURIComponent(shareText);
-  const encodedUrl = encodeURIComponent(matchUrl);
+  const shareUrl = `${window.location.origin}/match/${match.investor.id}?startup=${encodeURIComponent(startupName)}`;
+  const shareText = `Check out this investor match: ${match.investor.name} (${match.score}% match) for ${startupName}`;
 
-  const copyToClipboard = async () => {
+  const handleCopyLink = async () => {
     try {
-      await navigator.clipboard.writeText(matchUrl);
+      await navigator.clipboard.writeText(shareUrl);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    } catch (error) {
-      console.error('Failed to copy:', error);
+    } catch (err) {
+      console.error('Failed to copy:', err);
     }
   };
 
-  const shareToTwitter = () => {
-    window.open(
-      `https://twitter.com/intent/tweet?text=${encodedText}&url=${encodedUrl}`,
-      '_blank',
-      'width=600,height=400'
+  const handleEmailShare = () => {
+    const subject = encodeURIComponent(`Investor Match: ${match.investor.name} for ${startupName}`);
+    const body = encodeURIComponent(
+      `I found a great investor match on Hot Match!\n\n` +
+      `Investor: ${match.investor.name}\n` +
+      `${match.investor.firm ? `Firm: ${match.investor.firm}\n` : ''}` +
+      `Match Score: ${match.score}%\n\n` +
+      `Check it out: ${shareUrl}`
     );
+    window.open(`mailto:?subject=${subject}&body=${body}`);
+    setEmailSent(true);
+    setTimeout(() => setEmailSent(false), 2000);
   };
 
-  const shareToLinkedIn = () => {
-    window.open(
-      `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`,
-      '_blank',
-      'width=600,height=600'
-    );
+  const handleTwitterShare = () => {
+    const text = encodeURIComponent(shareText);
+    window.open(`https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(shareUrl)}`, '_blank');
+  };
+
+  const handleLinkedInShare = () => {
+    window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`, '_blank');
+  };
+
+  const handleWhatsAppShare = () => {
+    const text = encodeURIComponent(`${shareText}\n\n${shareUrl}`);
+    window.open(`https://wa.me/?text=${text}`, '_blank');
   };
 
   return (
-    <div
-      className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fadeIn"
-      onClick={onClose}
-    >
-      <div
-        className="bg-gradient-to-br from-purple-900 via-indigo-900 to-blue-900 rounded-3xl p-8 max-w-md w-full border-2 border-purple-500/50 shadow-2xl"
-        onClick={(e) => e.stopPropagation()}
-      >
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <div className="bg-slate-900 rounded-2xl w-full max-w-md border border-slate-700 shadow-2xl">
         {/* Header */}
-        <div className="flex justify-between items-start mb-6">
-          <div className="flex items-center gap-3">
-            <div className="bg-gradient-to-r from-cyan-500 to-blue-500 p-2 rounded-xl">
-              <Share2 className="w-6 h-6 text-white" />
-            </div>
-            <h2 className="text-2xl font-bold text-white">Share This Match</h2>
+        <div className="flex items-center justify-between p-4 border-b border-slate-700">
+          <div className="flex items-center gap-2">
+            <Share2 className="w-5 h-5 text-cyan-400" />
+            <h2 className="text-lg font-semibold text-white">Share Match</h2>
           </div>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-white transition-colors"
+            className="p-1 hover:bg-slate-800 rounded-lg transition-colors"
           >
-            <X className="w-6 h-6" />
+            <X className="w-5 h-5 text-slate-400" />
           </button>
         </div>
 
-        {/* Match Info */}
-        <div className="bg-white/10 rounded-xl p-4 mb-6 border border-white/20">
-          <div className="flex items-center justify-center gap-2 mb-3">
-            <span className="text-2xl">🚀</span>
-            <span className="text-white font-semibold">{startupName}</span>
-            <span className="text-xl">↔</span>
-            <span className="text-white font-semibold">{investorName}</span>
-            <span className="text-2xl">💼</span>
+        {/* Content */}
+        <div className="p-4 space-y-4">
+          {/* Match Preview */}
+          <div className="bg-slate-800/50 rounded-xl p-4 border border-slate-700">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="font-semibold text-white">{match.investor.name}</h3>
+                <p className="text-sm text-slate-400">{match.investor.firm || match.investorType}</p>
+              </div>
+              <div className="px-3 py-1 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold">
+                {match.score}%
+              </div>
+            </div>
           </div>
-          <div className="text-center">
-            <span className="bg-gradient-to-r from-yellow-400 to-orange-500 text-gray-900 font-bold px-4 py-1 rounded-full text-sm">
-              {matchScore}% Match
-            </span>
-          </div>
-        </div>
 
-        {/* Share Options */}
-        <div className="space-y-3 mb-6">
           {/* Copy Link */}
-          <button
-            onClick={copyToClipboard}
-            className="w-full bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl p-4 text-white font-semibold transition-all flex items-center justify-center gap-3"
-          >
-            {copied ? (
-              <>
-                <Check className="w-5 h-5 text-green-400" />
-                <span className="text-green-400">Link Copied!</span>
-              </>
-            ) : (
-              <>
-                <Copy className="w-5 h-5" />
-                <span>Copy Link</span>
-              </>
-            )}
-          </button>
+          <div>
+            <label className="text-sm text-slate-400 mb-2 block">Share Link</label>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={shareUrl}
+                readOnly
+                className="flex-1 bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-300 focus:outline-none focus:border-cyan-500"
+              />
+              <button
+                onClick={handleCopyLink}
+                className={`px-4 py-2 rounded-lg font-medium transition-all flex items-center gap-2 ${
+                  copied
+                    ? 'bg-emerald-500/20 text-emerald-400'
+                    : 'bg-cyan-600 text-white hover:bg-cyan-500'
+                }`}
+              >
+                {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                {copied ? 'Copied!' : 'Copy'}
+              </button>
+            </div>
+          </div>
 
-          {/* Twitter */}
-          <button
-            onClick={shareToTwitter}
-            className="w-full bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700 rounded-xl p-4 text-white font-semibold transition-all flex items-center justify-center gap-3 shadow-lg"
-          >
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-            </svg>
-            <span>Share on Twitter</span>
-          </button>
-
-          {/* LinkedIn */}
-          <button
-            onClick={shareToLinkedIn}
-            className="w-full bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 rounded-xl p-4 text-white font-semibold transition-all flex items-center justify-center gap-3 shadow-lg"
-          >
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5a1.78 1.78 0 01-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z" />
-            </svg>
-            <span>Share on LinkedIn</span>
-          </button>
+          {/* Share Options */}
+          <div>
+            <label className="text-sm text-slate-400 mb-2 block">Share via</label>
+            <div className="grid grid-cols-4 gap-2">
+              <button
+                onClick={handleEmailShare}
+                className="flex flex-col items-center gap-1 p-3 bg-slate-800 hover:bg-slate-700 rounded-xl transition-colors"
+              >
+                <Mail className={`w-6 h-6 ${emailSent ? 'text-emerald-400' : 'text-slate-300'}`} />
+                <span className="text-xs text-slate-400">Email</span>
+              </button>
+              
+              <button
+                onClick={handleTwitterShare}
+                className="flex flex-col items-center gap-1 p-3 bg-slate-800 hover:bg-slate-700 rounded-xl transition-colors"
+              >
+                <Twitter className="w-6 h-6 text-slate-300" />
+                <span className="text-xs text-slate-400">Twitter</span>
+              </button>
+              
+              <button
+                onClick={handleLinkedInShare}
+                className="flex flex-col items-center gap-1 p-3 bg-slate-800 hover:bg-slate-700 rounded-xl transition-colors"
+              >
+                <Linkedin className="w-6 h-6 text-slate-300" />
+                <span className="text-xs text-slate-400">LinkedIn</span>
+              </button>
+              
+              <button
+                onClick={handleWhatsAppShare}
+                className="flex flex-col items-center gap-1 p-3 bg-slate-800 hover:bg-slate-700 rounded-xl transition-colors"
+              >
+                <MessageCircle className="w-6 h-6 text-slate-300" />
+                <span className="text-xs text-slate-400">WhatsApp</span>
+              </button>
+            </div>
+          </div>
         </div>
 
-        {/* URL Display */}
-        <div className="bg-white/5 rounded-lg p-3 border border-white/10">
-          <p className="text-xs text-gray-400 mb-1">Share URL:</p>
-          <p className="text-white text-sm font-mono truncate">{matchUrl}</p>
+        {/* Footer */}
+        <div className="p-4 border-t border-slate-700">
+          <button
+            onClick={onClose}
+            className="w-full py-2 bg-slate-800 text-slate-300 rounded-lg hover:bg-slate-700 transition-colors"
+          >
+            Done
+          </button>
         </div>
       </div>
-
-      <style>{`
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: scale(0.95);
-          }
-          to {
-            opacity: 1;
-            transform: scale(1);
-          }
-        }
-        .animate-fadeIn {
-          animation: fadeIn 0.3s ease-out;
-        }
-      `}</style>
     </div>
   );
-};
-
-export default ShareMatchModal;
+}

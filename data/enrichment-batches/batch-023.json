@@ -1,0 +1,431 @@
+[
+  {
+    "id": "bb8ed460-7b03-49d9-918f-11f04ccff1d1",
+    "name": "digital asset fund",
+    "firm": "digital asset fund",
+    "linkedin_url": "https://linkedin.com/in/digital-asset-fund",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "Blockchain",
+      "DeFi",
+      "NFTs"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "8361ba6b-f7a2-4d61-8102-8e315831f34e",
+    "name": "state management",
+    "firm": "state management",
+    "linkedin_url": "https://linkedin.com/in/state-management",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Cloud Computing"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "908e787c-2bd4-4bfa-bbb1-fcc47ab17202",
+    "name": "Hans Morris",
+    "firm": "Hans Morris",
+    "linkedin_url": "https://linkedin.com/in/hans-morris",
+    "blog_url": null,
+    "current_bio": "Managing Partner at Nyca Partners",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML",
+      "Consumer",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Pre-Seed",
+      "Seed"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "49b31419-5b2d-41bd-8043-7c96b23a6fb4",
+    "name": "Timur Khayzullin",
+    "firm": "Timur Khayzullin",
+    "linkedin_url": "https://linkedin.com/in/timur-khayzullin",
+    "blog_url": null,
+    "current_bio": "Timur Khayzullin is a angel investor focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "c58dc34c-7f14-4391-8fa7-5f01f8c7a5b9",
+    "name": "Balaji Srinivasan",
+    "firm": "Independent",
+    "linkedin_url": "https://linkedin.com/in/balajis",
+    "blog_url": null,
+    "current_bio": "Former Coinbase CTO, a16z GP. Founded Earn.com (sold to Coinbase). Author \"The Network State\".",
+    "current_sectors": [
+      "crypto",
+      "web3",
+      "biotech",
+      "longevity"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "156bdb0e-c65e-4e87-89b0-a9ea126f56f2",
+    "name": "New York Venture Partners",
+    "firm": "New York Venture Partners",
+    "linkedin_url": "https://linkedin.com/in/new-york-venture-partners",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "HealthTech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "3218763a-d0eb-478a-8878-95b95c74281f",
+    "name": "Genesis Investments",
+    "firm": "Genesis Investments",
+    "linkedin_url": "https://linkedin.com/in/genesis-investments",
+    "blog_url": null,
+    "current_bio": "Genesis Investments is a angel investor focused on Enterprise Software, Consumer Software, Female Founders investing at Pre-Seed and Seed stage.",
+    "current_sectors": [
+      "Enterprise Software",
+      "Consumer Software",
+      "Female Founders"
+    ],
+    "current_stage": [
+      "Pre-Seed",
+      "Seed"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "587e4e17-ffa8-4bd4-9dc6-9521016ecf0a",
+    "name": "About Venture Capital",
+    "firm": "About Venture Capital",
+    "linkedin_url": "https://linkedin.com/in/about-venture-capital",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "HealthTech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "8b4570da-3c4a-4a03-aceb-cae50c1360d7",
+    "name": "Tripp Jones",
+    "firm": "Uncork Capital",
+    "linkedin_url": "https://linkedin.com/in/tripp-jones",
+    "blog_url": null,
+    "current_bio": "Tripp Jones is an investor at Uncork Capital focused on AI/ML, API, SaaS investing at Seed stage.",
+    "current_sectors": [
+      "AI/ML",
+      "API",
+      "SaaS"
+    ],
+    "current_stage": [
+      "Seed"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "103371b1-88fc-4155-990f-30fc8c2dd948",
+    "name": "Thijn Lamers",
+    "firm": "Thijn Lamers",
+    "linkedin_url": "https://linkedin.com/in/thijn-lamers",
+    "blog_url": null,
+    "current_bio": "Thijn Lamers is a angel investor focused on SaaS, Consumer, Fintech investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "Consumer",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "a841f486-7595-4f52-b29b-000d785e34ca",
+    "name": "Nyle Sykes",
+    "firm": "Nyle Sykes",
+    "linkedin_url": "https://linkedin.com/in/nyle-sykes",
+    "blog_url": null,
+    "current_bio": "Nyle Sykes is a angel investor focused on AI, SaaS, Consumer investing at Seed and Series A stage.",
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Consumer"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "3c89004e-612b-4db0-b7e6-e47c88ce3ce0",
+    "name": "Mikowai Ashwill (Spark Capital)",
+    "firm": "Mikowai Ashwill (Spark Capital)",
+    "linkedin_url": "https://linkedin.com/in/mikowai-ashwill",
+    "blog_url": null,
+    "current_bio": "Spark Capital is a venture firm that partners with exceptional founders. Invested in Twitter, Slack, Tumblr, and Wayfair.",
+    "current_sectors": [
+      "SaaS",
+      "Consumer",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A",
+      "Series B"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "f4d1c205-4bac-457d-a4c4-7e505fa62628",
+    "name": "Charles Hudson",
+    "firm": "Precursor Ventures",
+    "linkedin_url": "https://linkedin.com/in/charleshudson",
+    "blog_url": null,
+    "current_bio": "Former SoftTech VC partner. Focus on diverse founders and technical teams. 150+ investments.",
+    "current_sectors": [
+      "AI/ML",
+      "API",
+      "Technology"
+    ],
+    "current_stage": [
+      "Pre-seed",
+      "Seed"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "c1bd9623-4584-4056-81ce-c2f681c0345d",
+    "name": "Arlan Hamilton",
+    "firm": "Backstage Capital",
+    "linkedin_url": "https://linkedin.com/in/arlanhamilton",
+    "blog_url": null,
+    "current_bio": "Invested in 200+ underrepresented founders. Author, speaker, advocate for diversity in VC.",
+    "current_sectors": [
+      "saas",
+      "consumer",
+      "fintech",
+      "healthcare"
+    ],
+    "current_stage": [
+      "pre_seed",
+      "seed"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "226a1b97-ea8d-49db-b1cb-00cf6f52d4df",
+    "name": "Million Equity",
+    "firm": "Million Equity",
+    "linkedin_url": "https://linkedin.com/in/million-equity",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "HealthTech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "cc9ede80-4338-46da-a622-cc1318a1a01e",
+    "name": "Renaud Laplanche",
+    "firm": "Upgrade",
+    "linkedin_url": "https://linkedin.com/in/renaud-laplanche",
+    "blog_url": null,
+    "current_bio": "Founded LendingClub (IPO 2014). Leading fintech entrepreneur and investor.",
+    "current_sectors": [
+      "fintech",
+      "lending",
+      "payments"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "560cbf43-98a9-41c0-ac65-c211b268de6a",
+    "name": "Investing About",
+    "firm": "Investing About",
+    "linkedin_url": "https://linkedin.com/in/investing-about",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Healthcare"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "4c62bd20-0a59-4a6b-b611-8321117687c2",
+    "name": "Better Ventures",
+    "firm": "Better Ventures",
+    "linkedin_url": "https://linkedin.com/in/better-ventures",
+    "blog_url": null,
+    "current_bio": "Better Ventures is a vc firm focused on Minority Founders, Female Founders, Social Impact investing at Pre-Seed and Seed stage.",
+    "current_sectors": [
+      "Minority Founders",
+      "Female Founders",
+      "Social Impact",
+      "Health"
+    ],
+    "current_stage": [
+      "Pre-Seed",
+      "Seed"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "7d3227f7-c2e1-4877-8185-64fceda2f057",
+    "name": "an executive coach (Firstround)",
+    "firm": "an executive coach (Firstround)",
+    "linkedin_url": "https://linkedin.com/in/an-executive-coach",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "Software",
+      "Consumer Products",
+      "AI"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "16e8be33-4626-44ab-871a-e40ca4a13ad9",
+    "name": "Red Sea Ventures",
+    "firm": "Red Sea Ventures",
+    "linkedin_url": "https://linkedin.com/in/red-sea-ventures",
+    "blog_url": null,
+    "current_bio": "Red Sea Ventures is a vc firm focused on Consumer, Healthcare, SaaS investing at Seed and Pre-seed stage.",
+    "current_sectors": [
+      "Consumer",
+      "Healthcare",
+      "SaaS",
+      "Food Tech",
+      "E-commerce",
+      "Generalist",
+      "Marketplaces"
+    ],
+    "current_stage": [
+      "Seed",
+      "Pre-seed",
+      "Seed+",
+      "Late Seed"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  }
+]

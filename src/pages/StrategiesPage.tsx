@@ -109,9 +109,9 @@ const StrategiesPage: React.FC = () => {
     revenue: 'from-green-500 to-emerald-600',
     growth: 'from-blue-500 to-cyan-600',
     users: 'from-purple-500 to-violet-600',
-    retention: 'from-orange-500 to-red-500',
-    unit_economics: 'from-yellow-500 to-amber-600',
-    burn: 'from-red-500 to-orange-600',
+    retention: 'from-cyan-600 to-blue-600',
+    unit_economics: 'from-cyan-500 to-blue-600',
+    burn: 'from-blue-500 to-violet-600',
     engagement: 'from-indigo-500 to-purple-600',
   };
 
@@ -142,7 +142,7 @@ const StrategiesPage: React.FC = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950 flex items-center justify-center">
-        <div className="animate-spin w-8 h-8 border-2 border-orange-500 border-t-transparent rounded-full" />
+        <div className="animate-spin w-8 h-8 border-2 border-cyan-500 border-t-transparent rounded-full" />
       </div>
     );
   }
@@ -160,7 +160,7 @@ const StrategiesPage: React.FC = () => {
             <div className="flex items-center gap-3">
               <button
                 onClick={() => navigate('/services')}
-                className="px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-orange-500/25 transition-all flex items-center gap-2"
+                className="px-4 py-2 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-cyan-500/25 transition-all flex items-center gap-2"
               >
                 <Zap className="w-4 h-4" />
                 Get AI Analysis
@@ -171,7 +171,7 @@ const StrategiesPage: React.FC = () => {
       </nav>
 
       {/* Header */}
-      <div className="bg-gradient-to-r from-orange-500/10 via-red-500/10 to-purple-500/10 border-b border-gray-800">
+      <div className="bg-gradient-to-r from-cyan-500/10 via-blue-500/10 to-violet-500/10 border-b border-gray-800">
         <div className="max-w-7xl mx-auto px-4 py-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -199,7 +199,7 @@ const StrategiesPage: React.FC = () => {
                 onClick={() => setActiveTab(tab.id as any)}
                 className={`px-6 py-3 rounded-xl font-medium transition-all flex items-center gap-2 ${
                   activeTab === tab.id
-                    ? 'bg-orange-500 text-white'
+                    ? 'bg-cyan-600 text-white'
                     : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white'
                 }`}
               >
@@ -238,7 +238,7 @@ const StrategiesPage: React.FC = () => {
                         onClick={() => setExpandedStrategy(isExpanded ? null : strategy.id)}
                         className="w-full p-6 text-left flex items-start gap-4 hover:bg-gray-800/80 transition-colors"
                       >
-                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center flex-shrink-0">
+                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-600 to-blue-600 flex items-center justify-center flex-shrink-0">
                           <Icon className="w-6 h-6 text-white" />
                         </div>
                         <div className="flex-1">
@@ -251,7 +251,7 @@ const StrategiesPage: React.FC = () => {
                           <p className="text-gray-400">{strategy.description}</p>
                           <div className="flex gap-2 mt-3">
                             {strategy.stage.map(s => (
-                              <span key={s} className="px-2 py-1 bg-orange-500/20 text-orange-400 rounded text-xs">
+                              <span key={s} className="px-2 py-1 bg-cyan-600/20 text-cyan-400 rounded text-xs">
                                 {s}
                               </span>
                             ))}
@@ -352,7 +352,7 @@ const StrategiesPage: React.FC = () => {
                     onClick={() => setSelectedStage(stage)}
                     className={`px-6 py-3 rounded-xl font-medium transition-all ${
                       selectedStage === stage
-                        ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white'
+                        ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white'
                         : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
                     }`}
                   >
@@ -419,7 +419,7 @@ const StrategiesPage: React.FC = () => {
               </div>
 
               {/* CTA */}
-              <div className="text-center mt-8 p-6 bg-gradient-to-r from-orange-500/10 to-red-500/10 rounded-2xl border border-orange-500/30">
+              <div className="text-center mt-8 p-6 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 rounded-2xl border border-cyan-500/30">
                 <h3 className="text-xl font-bold text-white mb-2">
                   See How You Compare
                 </h3>
@@ -428,7 +428,7 @@ const StrategiesPage: React.FC = () => {
                 </p>
                 <button
                   onClick={() => navigate('/services/traction-improvement')}
-                  className="px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-orange-500/25 transition-all"
+                  className="px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-cyan-500/25 transition-all"
                 >
                   Run Traction Analysis →
                 </button>
@@ -558,7 +558,7 @@ const StrategiesPage: React.FC = () => {
             <div className="flex justify-center gap-4 flex-wrap">
               <button
                 onClick={() => navigate('/services/pitch-analyzer')}
-                className="px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-orange-500/25 transition-all flex items-center gap-2"
+                className="px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-cyan-500/25 transition-all flex items-center gap-2"
               >
                 <FlameIcon variant={5} size="sm" />
                 Analyze My Pitch

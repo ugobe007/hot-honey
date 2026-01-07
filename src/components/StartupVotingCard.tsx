@@ -35,7 +35,7 @@ const StartupVotingCard: React.FC<StartupVotingCardProps> = ({
   const progressPercentage = (startup.votes / startup.totalVotes) * 100;
 
   return (
-    <div className="max-w-md mx-auto bg-gradient-to-br from-orange-100 to-orange-200 rounded-2xl p-6 shadow-xl border border-orange-300">
+    <div className="max-w-md mx-auto bg-gradient-to-br from-slate-700 to-slate-600 rounded-2xl p-6 shadow-xl border border-slate-500">
       {/* Header with Name and Honeypot Icon */}
       <div className="flex justify-between items-start mb-4">
         <div>
@@ -71,7 +71,7 @@ const StartupVotingCard: React.FC<StartupVotingCardProps> = ({
         <button
           onClick={() => handleVote('yes')}
           disabled={hasVoted}
-          className="flex-1 bg-orange-500 hover:bg-orange-600 disabled:bg-gray-400 text-white font-bold py-3 px-4 rounded-lg transition-colors"
+          className="flex-1 bg-cyan-600 hover:bg-cyan-700 disabled:bg-gray-400 text-white font-bold py-3 px-4 rounded-lg transition-colors"
         >
           ❤️ Yes
         </button>

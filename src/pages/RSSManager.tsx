@@ -250,7 +250,7 @@ export default function RSSManager() {
             <Link to="/" className="text-gray-400 hover:text-white">Home</Link>
             <Link to="/admin" className="text-gray-400 hover:text-white">Control Center</Link>
             <Link to="/admin/discovered-startups" className="text-cyan-400 hover:text-cyan-300">Discoveries</Link>
-            <Link to="/matching" className="text-orange-400 hover:text-orange-300 font-bold">⚡ Match</Link>
+            <Link to="/matching" className="text-cyan-400 hover:text-cyan-300 font-bold">⚡ Match</Link>
             <button onClick={refresh} className="text-gray-400 hover:text-white">
               <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
             </button>
@@ -270,7 +270,7 @@ export default function RSSManager() {
             <div className="text-gray-500 text-[10px]">Active</div>
           </div>
           <div className="bg-gray-800/50 rounded-lg px-3 py-2 border border-gray-700">
-            <div className="text-xl font-bold font-mono text-orange-400">{stats.articles}</div>
+            <div className="text-xl font-bold font-mono text-cyan-400">{stats.articles}</div>
             <div className="text-gray-500 text-[10px]">Articles</div>
           </div>
           <button onClick={() => setShowAddForm(true)} className="bg-green-500/20 border border-green-500/30 rounded-lg px-3 py-2 text-green-400 hover:bg-green-500/30">
@@ -335,7 +335,7 @@ export default function RSSManager() {
                           className="w-full bg-gray-700 border border-gray-600 rounded px-2 py-1 text-white text-sm" />
                       ) : (
                         <div className="flex items-center gap-2">
-                          <Rss className="w-4 h-4 text-orange-400" />
+                          <Rss className="w-4 h-4 text-cyan-400" />
                           <span className="text-white font-medium">{s.name}</span>
                         </div>
                       )}

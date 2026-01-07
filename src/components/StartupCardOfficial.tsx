@@ -118,7 +118,7 @@ export default function StartupCardOfficial({ startup, onVote, onSwipeAway }: Pr
     if (!score) return 'text-gray-400';
     if (score >= 80) return 'text-green-400';
     if (score >= 60) return 'text-yellow-400';
-    if (score >= 40) return 'text-orange-400';
+    if (score >= 40) return 'text-cyan-400';
     return 'text-red-400';
   };
 
@@ -204,7 +204,7 @@ export default function StartupCardOfficial({ startup, onVote, onSwipeAway }: Pr
   return (
     <div className={`relative transition-all duration-250 ease-out ${isSwipingAway ? 'transform -translate-x-full opacity-0' : ''}`}>
       {showVoteMessage && (
-        <div className="absolute -top-20 left-1/2 transform -translate-x-1/2 z-[60] bg-white border-4 border-orange-500 px-6 py-3 rounded-2xl shadow-2xl animate-bounce">
+        <div className="absolute -top-20 left-1/2 transform -translate-x-1/2 z-[60] bg-white border-4 border-cyan-500 px-6 py-3 rounded-2xl shadow-2xl animate-bounce">
           <p className="text-base font-black text-gray-900 whitespace-nowrap">{voteMessage}</p>
         </div>
       )}
@@ -228,9 +228,9 @@ export default function StartupCardOfficial({ startup, onVote, onSwipeAway }: Pr
         </div>
       )}
 
-      <div className="bg-gradient-to-br from-[#1a0033] via-[#2d1b4e] to-[#0f0f23] rounded-3xl shadow-2xl overflow-hidden border border-purple-500/30 hover:border-orange-400/60 relative hover:scale-[1.01] transition-all duration-300 w-full max-w-[420px] mx-auto">
+      <div className="bg-gradient-to-br from-[#1a0033] via-[#2d1b4e] to-[#0f0f23] rounded-3xl shadow-2xl overflow-hidden border border-purple-500/30 hover:border-cyan-400/60 relative hover:scale-[1.01] transition-all duration-300 w-full max-w-[420px] mx-auto">
         {/* Hero Header with Flame */}
-        <div className="relative bg-gradient-to-r from-orange-600 via-red-500 to-amber-600 p-4">
+        <div className="relative bg-gradient-to-r from-cyan-600 via-blue-500 to-violet-600 p-4">
           <div className="absolute inset-0 bg-black/20"></div>
           <div className="relative flex items-start gap-3">
             {/* Flame Icon */}
@@ -281,9 +281,9 @@ export default function StartupCardOfficial({ startup, onVote, onSwipeAway }: Pr
                 <div 
                   className={`h-full rounded-full transition-all duration-500 ${
                     startup.total_god_score >= 80 ? 'bg-gradient-to-r from-green-400 to-emerald-500' :
-                    startup.total_god_score >= 60 ? 'bg-gradient-to-r from-yellow-400 to-amber-500' :
-                    startup.total_god_score >= 40 ? 'bg-gradient-to-r from-orange-400 to-red-500' :
-                    'bg-gradient-to-r from-red-400 to-orange-500'
+                    startup.total_god_score >= 60 ? 'bg-gradient-to-r from-yellow-400 to-blue-500' :
+                    startup.total_god_score >= 40 ? 'bg-gradient-to-r from-cyan-400 to-blue-500' :
+                    'bg-gradient-to-r from-blue-400 to-violet-500'
                   }`}
                   style={{ width: `${startup.total_god_score}%` }}
                 />
@@ -316,7 +316,7 @@ export default function StartupCardOfficial({ startup, onVote, onSwipeAway }: Pr
             {formatGrowthRate(startup.growth_rate_monthly) && (
               <div className="bg-white/5 rounded-lg px-3 py-2 border border-white/10">
                 <div className="text-gray-400 text-[10px] mb-0.5">GROWTH</div>
-                <div className="text-orange-400 font-bold text-sm">📈 {formatGrowthRate(startup.growth_rate_monthly)}/mo</div>
+                <div className="text-cyan-400 font-bold text-sm">📈 {formatGrowthRate(startup.growth_rate_monthly)}/mo</div>
               </div>
             )}
           </div>
@@ -345,12 +345,12 @@ export default function StartupCardOfficial({ startup, onVote, onSwipeAway }: Pr
             <div>
               <div className="flex flex-wrap gap-1.5">
                 {startup.sectors.slice(0, 4).map((sector, idx) => (
-                  <span key={idx} className="bg-orange-500/20 border border-orange-500/30 text-orange-300 px-2 py-0.5 rounded-md text-[10px] font-medium">
+                  <span key={idx} className="bg-cyan-600/20 border border-cyan-500/30 text-cyan-300 px-2 py-0.5 rounded-md text-[10px] font-medium">
                     {sector}
                   </span>
                 ))}
                 {startup.sectors.length > 4 && (
-                  <span className="bg-orange-500/20 border border-orange-500/30 text-orange-300 px-2 py-0.5 rounded-md text-[10px] font-medium">
+                  <span className="bg-cyan-600/20 border border-cyan-500/30 text-cyan-300 px-2 py-0.5 rounded-md text-[10px] font-medium">
                     +{startup.sectors.length - 4}
                   </span>
                 )}
@@ -406,7 +406,7 @@ export default function StartupCardOfficial({ startup, onVote, onSwipeAway }: Pr
                 onClick={() => setShowDetails(!showDetails)}
                 className="text-gray-300 font-semibold text-xs hover:text-white transition-colors flex items-center gap-1 w-full"
               >
-                <span className="text-orange-400">{showDetails ? '▼' : '▶'}</span>
+                <span className="text-cyan-400">{showDetails ? '▼' : '▶'}</span>
                 <span>📋 ABOUT</span>
               </button>
               {showDetails && (
@@ -419,10 +419,10 @@ export default function StartupCardOfficial({ startup, onVote, onSwipeAway }: Pr
 
           {/* Five Points - Collapsible */}
           {startup.fivePoints && startup.fivePoints.length > 0 && (
-            <div className="bg-orange-500/10 rounded-xl p-3 border border-orange-500/20">
+            <div className="bg-cyan-600/10 rounded-xl p-3 border border-cyan-500/20">
               <button
                 onClick={() => setShowKeyPoints(!showKeyPoints)}
-                className="text-orange-300 font-semibold text-xs hover:text-orange-200 transition-colors flex items-center gap-1 w-full"
+                className="text-cyan-300 font-semibold text-xs hover:text-cyan-200 transition-colors flex items-center gap-1 w-full"
               >
                 <span>{showKeyPoints ? '▼' : '▶'}</span>
                 <FlameIcon variant={4} size="xs" />
@@ -432,7 +432,7 @@ export default function StartupCardOfficial({ startup, onVote, onSwipeAway }: Pr
                 <div className="space-y-1.5 mt-2">
                   {startup.fivePoints.slice(0, 5).map((point, idx) => (
                     <div key={idx} className="text-gray-300 text-xs flex items-start gap-2">
-                      <span className="text-orange-400 font-bold">•</span>
+                      <span className="text-cyan-400 font-bold">•</span>
                       <span>{point}</span>
                     </div>
                   ))}
@@ -484,7 +484,7 @@ export default function StartupCardOfficial({ startup, onVote, onSwipeAway }: Pr
             <div className="grid grid-cols-2 gap-3 pt-2">
               <button
                 onClick={() => handleVote('yes')}
-                className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-400 hover:to-red-400 text-white font-bold py-3 px-4 rounded-xl transition-all shadow-lg shadow-orange-500/30 border border-orange-400/50 text-sm flex items-center justify-center gap-2"
+                className="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-400 hover:to-blue-400 text-white font-bold py-3 px-4 rounded-xl transition-all shadow-lg shadow-cyan-500/30 border border-cyan-400/50 text-sm flex items-center justify-center gap-2"
               >
                 <FlameIcon variant={1} size="sm" />
                 HOT!

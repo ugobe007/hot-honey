@@ -318,7 +318,7 @@ ${startup.description || 'Based on the information provided, here are our recomm
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-orange-500" />
+        <Loader2 className="w-8 h-8 animate-spin text-cyan-500" />
       </div>
     );
   }
@@ -330,7 +330,7 @@ ${startup.description || 'Based on the information provided, here are our recomm
           <h1 className="text-2xl font-bold text-white mb-4">Service Not Found</h1>
           <button
             onClick={() => navigate('/services')}
-            className="text-orange-500 hover:text-orange-400"
+            className="text-cyan-500 hover:text-cyan-400"
           >
             Back to Services
           </button>
@@ -341,7 +341,7 @@ ${startup.description || 'Based on the information provided, here are our recomm
 
   const tierColors: Record<string, string> = {
     spark: 'bg-gray-600',
-    flame: 'bg-gradient-to-r from-orange-500 to-red-500',
+    flame: 'bg-gradient-to-r from-cyan-600 to-blue-600',
     inferno: 'bg-gradient-to-r from-red-500 to-purple-600'
   };
 
@@ -378,7 +378,7 @@ ${startup.description || 'Based on the information provided, here are our recomm
           className="mb-8"
         >
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-600 to-blue-600 flex items-center justify-center">
               <Sparkles className="w-6 h-6 text-white" />
             </div>
             <div>
@@ -407,7 +407,7 @@ ${startup.description || 'Based on the information provided, here are our recomm
             </p>
             <button
               onClick={() => navigate('/get-matched')}
-              className="px-8 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-orange-500/25 transition-all"
+              className="px-8 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-cyan-500/25 transition-all"
             >
               View Pricing & Upgrade
             </button>
@@ -429,7 +429,7 @@ ${startup.description || 'Based on the information provided, here are our recomm
                 <select
                   value={selectedStartup}
                   onChange={(e) => setSelectedStartup(e.target.value)}
-                  className="w-full bg-gray-700 text-white rounded-xl px-4 py-3 border border-gray-600 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 outline-none"
+                  className="w-full bg-gray-700 text-white rounded-xl px-4 py-3 border border-gray-600 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 outline-none"
                 >
                   <option value="">Choose a startup to analyze...</option>
                   {startups.map(startup => (
@@ -452,7 +452,7 @@ ${startup.description || 'Based on the information provided, here are our recomm
                 <button
                   onClick={runAnalysis}
                   disabled={analyzing}
-                  className="px-12 py-4 bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold text-lg rounded-xl hover:shadow-lg hover:shadow-orange-500/25 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-3 mx-auto"
+                  className="px-12 py-4 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-bold text-lg rounded-xl hover:shadow-lg hover:shadow-cyan-500/25 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-3 mx-auto"
                 >
                   {analyzing ? (
                     <>
@@ -527,7 +527,7 @@ ${startup.description || 'Based on the information provided, here are our recomm
                       setResult(null);
                       setSelectedStartup('');
                     }}
-                    className="text-orange-500 hover:text-orange-400 font-medium"
+                    className="text-cyan-500 hover:text-cyan-400 font-medium"
                   >
                     ← Run Another Analysis
                   </button>

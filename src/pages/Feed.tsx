@@ -215,7 +215,7 @@ const Feed: React.FC = () => {
   const getTypeColor = (type: string) => {
     switch (type) {
       case 'new': return 'from-blue-500 to-cyan-500';
-      case 'trending': return 'from-orange-500 to-red-500';
+      case 'trending': return 'from-cyan-600 to-blue-600';
       case 'approved': return 'from-green-500 to-emerald-500';
       case 'funding': return 'from-purple-500 to-pink-500';
       default: return 'from-purple-500 to-indigo-500';
@@ -278,7 +278,7 @@ const Feed: React.FC = () => {
             onClick={() => setFilter('trending')}
             className={`px-4 py-2 rounded-lg font-medium transition-all ${
               filter === 'trending'
-                ? 'bg-orange-500 text-white shadow-lg'
+                ? 'bg-cyan-600 text-white shadow-lg'
                 : 'text-purple-200 hover:bg-white/10'
             }`}
           >

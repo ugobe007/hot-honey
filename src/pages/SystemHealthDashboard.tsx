@@ -378,16 +378,16 @@ export default function SystemHealthDashboard() {
           </div>
         </Link>
         
-        <Link to="/admin/pipeline" className="bg-gradient-to-br from-amber-900/40 to-amber-950/40 hover:from-amber-800/50 hover:to-amber-900/50 border border-amber-500/30 rounded-xl p-4 transition-all group">
+        <Link to="/admin/pipeline" className="bg-gradient-to-br from-slate-800/40 to-slate-900/40 hover:from-slate-700/50 hover:to-slate-800/50 border border-cyan-500/30 rounded-xl p-4 transition-all group">
           <div className="flex items-center justify-between mb-2">
-            <div className="flex items-center gap-2 text-amber-400">
+            <div className="flex items-center gap-2 text-blue-400">
               <Zap size={18} />
               <span>Matches</span>
             </div>
-            <ExternalLink size={14} className="text-amber-500/50 group-hover:text-amber-400 transition-colors" />
+            <ExternalLink size={14} className="text-blue-400/50 group-hover:text-blue-400 transition-colors" />
           </div>
           <div className="text-2xl font-bold text-white">{stats?.matches.total.toLocaleString()}</div>
-          <div className="text-sm text-amber-400/70">
+          <div className="text-sm text-blue-400/70">
             {stats?.matches.highQuality.toLocaleString()} high quality
           </div>
         </Link>
@@ -554,7 +554,7 @@ export default function SystemHealthDashboard() {
         <div className="flex flex-wrap gap-3">
           <Link 
             to="/admin/review"
-            className="px-5 py-2.5 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 rounded-lg font-medium transition-all flex items-center gap-2 shadow-lg shadow-amber-900/30"
+            className="px-5 py-2.5 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 rounded-lg font-medium transition-all flex items-center gap-2 shadow-lg shadow-cyan-900/30"
           >
             📋 Review Queue ({stats?.startups.pending})
           </Link>

@@ -15,7 +15,7 @@ export default function AdminInstructions() {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-amber-500 bg-clip-text text-transparent mb-2">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-blue-500 bg-clip-text text-transparent mb-2">
             📚 Admin Instructions
           </h1>
           <p className="text-gray-400">Complete guide to using Hot Money admin tools</p>
@@ -33,9 +33,9 @@ export default function AdminInstructions() {
           </button>
           <button
             onClick={() => navigate('/admin/edit-startups')}
-            className="p-4 bg-orange-500/20 backdrop-blur-sm rounded-xl hover:bg-orange-500/30 transition-all text-left"
+            className="p-4 bg-cyan-600/20 backdrop-blur-sm rounded-xl hover:bg-cyan-600/30 transition-all text-left"
           >
-            <Database className="w-8 h-8 text-orange-400 mb-2" />
+            <Database className="w-8 h-8 text-cyan-400 mb-2" />
             <h3 className="font-semibold">Review Queue</h3>
             <p className="text-sm text-gray-400">Approve/reject submissions</p>
           </button>
@@ -71,9 +71,9 @@ export default function AdminInstructions() {
                 </div>
               </div>
               <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center font-bold">2</div>
+                <div className="flex-shrink-0 w-8 h-8 bg-cyan-600 rounded-full flex items-center justify-center font-bold">2</div>
                 <div>
-                  <h3 className="font-semibold text-orange-400">Review RSS Discoveries</h3>
+                  <h3 className="font-semibold text-cyan-400">Review RSS Discoveries</h3>
                   <p className="text-gray-400">Go to RSS Discoveries page to see what the scraper found</p>
                   <p className="text-sm text-gray-500 mt-1">Location: Admin → Live System Monitor → 📡 RSS Feed</p>
                 </div>
@@ -95,9 +95,9 @@ export default function AdminInstructions() {
                 </div>
               </div>
               <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center font-bold">5</div>
+                <div className="flex-shrink-0 w-8 h-8 bg-cyan-600 rounded-full flex items-center justify-center font-bold">5</div>
                 <div>
-                  <h3 className="font-semibold text-orange-400">Goes Live</h3>
+                  <h3 className="font-semibold text-cyan-400">Goes Live</h3>
                   <p className="text-gray-400">Approved startups appear on main site for users to vote</p>
                   <p className="text-sm text-gray-500 mt-1">Published status = visible to public</p>
                 </div>
@@ -130,8 +130,8 @@ export default function AdminInstructions() {
               </div>
 
               {/* Review Queue */}
-              <div className="border-l-4 border-orange-500 pl-4">
-                <h3 className="text-xl font-semibold text-orange-400 mb-2 flex items-center gap-2">
+              <div className="border-l-4 border-cyan-500 pl-4">
+                <h3 className="text-xl font-semibold text-cyan-400 mb-2 flex items-center gap-2">
                   <Database className="w-5 h-5" />
                   Review Queue (Manual Uploads)
                 </h3>
@@ -183,8 +183,8 @@ export default function AdminInstructions() {
               </div>
 
               {/* Bulk Import */}
-              <div className="border-l-4 border-orange-500 pl-4">
-                <h3 className="text-xl font-semibold text-orange-400 mb-2">📤 Bulk Import</h3>
+              <div className="border-l-4 border-cyan-500 pl-4">
+                <h3 className="text-xl font-semibold text-cyan-400 mb-2">📤 Bulk Import</h3>
                 <p className="text-gray-300 mb-2"><strong>What:</strong> Upload many startups at once via CSV file</p>
                 <p className="text-gray-300 mb-2"><strong>Where:</strong> <code className="bg-black/30 px-2 py-1 rounded">/admin/bulk-import</code></p>
                 <p className="text-gray-300 mb-2"><strong>What you can do:</strong></p>
@@ -221,7 +221,7 @@ export default function AdminInstructions() {
               </div>
 
               <div>
-                <h3 className="font-semibold text-orange-400 mb-2">How do I approve a startup?</h3>
+                <h3 className="font-semibold text-cyan-400 mb-2">How do I approve a startup?</h3>
                 <p className="text-gray-300">Go to Review Queue (/admin/edit-startups) → Find startup → Click "Approve"</p>
               </div>
 
@@ -236,7 +236,7 @@ export default function AdminInstructions() {
               </div>
 
               <div>
-                <h3 className="font-semibold text-orange-400 mb-2">How do I upload multiple startups?</h3>
+                <h3 className="font-semibold text-cyan-400 mb-2">How do I upload multiple startups?</h3>
                 <p className="text-gray-300">Bulk Import (/admin/bulk-import) → Download template → Fill CSV → Upload</p>
               </div>
 

@@ -154,7 +154,7 @@ export default function EditStartups() {
             <Link to="/" className="text-gray-400 hover:text-white">Home</Link>
             <Link to="/admin/control" className="text-gray-400 hover:text-white">Control Center</Link>
             <Link to="/admin/discovered-startups" className="text-cyan-400 hover:text-cyan-300">RSS Discoveries</Link>
-            <Link to="/matching" className="text-orange-400 hover:text-orange-300 font-bold">⚡ Match</Link>
+            <Link to="/matching" className="text-cyan-400 hover:text-cyan-300 font-bold">⚡ Match</Link>
             <button onClick={refresh} className="text-gray-400 hover:text-white p-2">
               <RefreshCw className={`w-5 h-5 ${refreshing ? 'animate-spin' : ''}`} />
             </button>
@@ -171,7 +171,7 @@ export default function EditStartups() {
             placeholder="Search startups by name, tagline..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-gray-800 border border-gray-700 rounded-xl pl-12 pr-4 py-3 text-white focus:border-orange-500/50 focus:outline-none"
+            className="w-full bg-gray-800 border border-gray-700 rounded-xl pl-12 pr-4 py-3 text-white focus:border-cyan-500/50 focus:outline-none"
           />
         </div>
 
@@ -187,7 +187,7 @@ export default function EditStartups() {
               key={i} 
               onClick={() => setStatusFilter(s.filter)}
               className={`${s.bg} rounded-xl px-5 py-4 border-2 transition-all text-left ${
-                statusFilter === s.filter ? 'border-orange-500' : 'border-transparent hover:border-gray-600'
+                statusFilter === s.filter ? 'border-cyan-500' : 'border-transparent hover:border-gray-600'
               }`}
             >
               <div className={`text-3xl font-bold font-mono ${s.color}`}>{s.value}</div>
@@ -237,7 +237,7 @@ export default function EditStartups() {
                           onClick={(e) => e.stopPropagation()}
                         />
                       ) : (
-                        <span className="text-white font-medium hover:text-orange-400 text-lg">{s.name}</span>
+                        <span className="text-white font-medium hover:text-cyan-400 text-lg">{s.name}</span>
                       )}
                     </td>
                     <td className="px-6 py-4">
@@ -273,7 +273,7 @@ export default function EditStartups() {
                         }`}>{s.status}</span>
                       )}
                     </td>
-                    <td className="px-6 py-4 text-right font-mono text-amber-400 text-lg">{s.total_god_score || '-'}</td>
+                    <td className="px-6 py-4 text-right font-mono text-blue-400 text-lg">{s.total_god_score || '-'}</td>
                     <td className="px-6 py-4 text-right text-gray-500">{formatTime(s.created_at)}</td>
                     <td className="px-6 py-4">
                       <div className="flex gap-2 justify-center" onClick={(e) => e.stopPropagation()}>
@@ -344,7 +344,7 @@ export default function EditStartups() {
           <div className="flex flex-wrap gap-2 text-xs">
             <Link to="/admin/bulk-import" className="px-3 py-1.5 bg-violet-500/20 border border-violet-500/30 rounded text-violet-400 hover:bg-violet-500/30">📤 Bulk Import</Link>
             <Link to="/admin/discovered-startups" className="px-3 py-1.5 bg-cyan-500/20 border border-cyan-500/30 rounded text-cyan-400 hover:bg-cyan-500/30">🔍 RSS Discoveries</Link>
-            <Link to="/admin/control" className="px-3 py-1.5 bg-orange-500/20 border border-orange-500/30 rounded text-orange-400 hover:bg-orange-500/30">🎛️ Control Center</Link>
+            <Link to="/admin/control" className="px-3 py-1.5 bg-cyan-600/20 border border-cyan-500/30 rounded text-cyan-400 hover:bg-cyan-600/30">🎛️ Control Center</Link>
             <Link to="/matching" className="px-3 py-1.5 bg-green-500/20 border border-green-500/30 rounded text-green-400 hover:bg-green-500/30">🔥 View Matches</Link>
           </div>
         </div>

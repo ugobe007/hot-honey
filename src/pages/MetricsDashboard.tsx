@@ -92,7 +92,7 @@ export default function MetricsDashboard() {
           value: `${avgGodScore}/100`,
           description: 'Algorithm quality assessment',
           icon: Brain,
-          color: 'orange'
+          color: 'cyan'
         },
         {
           label: 'Processing Speed',
@@ -132,7 +132,7 @@ export default function MetricsDashboard() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-6xl font-bold text-white mb-4">
-            Hot Match <span className="bg-gradient-to-r from-orange-400 via-amber-400 to-purple-400 bg-clip-text text-transparent">Metrics</span>
+            Hot Match <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-violet-400 bg-clip-text text-transparent">Metrics</span>
           </h1>
           <p className="text-2xl text-gray-300 mb-2">
             AI-Powered Startup-Investor Matching Platform
@@ -221,11 +221,11 @@ export default function MetricsDashboard() {
               <div>
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-white font-semibold">Avg Match Score</span>
-                  <span className="text-orange-400 font-bold text-xl">{performanceData.avgMatchScore}/100</span>
+                  <span className="text-cyan-400 font-bold text-xl">{performanceData.avgMatchScore}/100</span>
                 </div>
                 <div className="h-4 bg-white/10 rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-gradient-to-r from-orange-400 to-amber-400 rounded-full"
+                    className="h-full bg-gradient-to-r from-cyan-400 to-blue-400 rounded-full"
                     style={{ width: `${performanceData.avgMatchScore}%` }}
                   />
                 </div>
@@ -288,8 +288,8 @@ export default function MetricsDashboard() {
             </div>
 
             <div className="text-center">
-              <div className="w-16 h-16 mx-auto mb-3 rounded-xl bg-orange-500/20 border border-orange-400/30 flex items-center justify-center">
-                <Zap className="w-8 h-8 text-orange-400" />
+              <div className="w-16 h-16 mx-auto mb-3 rounded-xl bg-cyan-600/20 border border-cyan-400/30 flex items-center justify-center">
+                <Zap className="w-8 h-8 text-cyan-400" />
               </div>
               <h4 className="text-white font-bold mb-1">Real-Time Matching</h4>
               <p className="text-gray-400 text-sm">Sub-2-second processing</p>

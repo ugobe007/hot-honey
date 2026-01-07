@@ -1,0 +1,427 @@
+[
+  {
+    "id": "e5b6f6cb-a565-48a0-a9e3-e7ea3bd83b1d",
+    "name": "Todd Dagres (Spark Capital)",
+    "firm": "Todd Dagres (Spark Capital)",
+    "linkedin_url": "https://linkedin.com/in/todd-dagres",
+    "blog_url": null,
+    "current_bio": "Emeritus partner at Spark Capital",
+    "current_sectors": [
+      "SaaS",
+      "Consumer",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A",
+      "Series B"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "85ad8007-382e-46bf-96df-2f0ffdbb54d4",
+    "name": "backed Prometheus Group",
+    "firm": "backed Prometheus Group",
+    "linkedin_url": "https://linkedin.com/in/backed-prometheus-group",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Cloud Computing"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "2c836f2b-469a-4611-91b4-dfd1f41d119f",
+    "name": "Bill Trenchard",
+    "firm": "Bill Trenchard",
+    "linkedin_url": "https://linkedin.com/in/bill-trenchard",
+    "blog_url": null,
+    "current_bio": "Bill Trenchard is a angel investor focused on AI, SaaS, Consumer investing at Seed and Series A stage.",
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Consumer"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "d242c773-992c-4e69-9b33-4973fe9ebe4b",
+    "name": "Alex Finkelstein (Spark Capital)",
+    "firm": "Alex Finkelstein (Spark Capital)",
+    "linkedin_url": "https://linkedin.com/in/alex-finkelstein",
+    "blog_url": null,
+    "current_bio": "Spark Capital is a venture firm that partners with exceptional founders. Invested in Twitter, Slack, Tumblr, and Wayfair.",
+    "current_sectors": [
+      "SaaS",
+      "Consumer",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A",
+      "Series B"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "89b4f581-c74a-4867-8e0b-45ebdec842f5",
+    "name": "of Moore Capital",
+    "firm": "of Moore Capital",
+    "linkedin_url": "https://linkedin.com/in/of-moore-capital",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "FinTech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "bebfd59a-50a4-4d74-b6f5-b64a555eb720",
+    "name": "view profile Senior (Uncorkcapital)",
+    "firm": "view profile Senior (Uncorkcapital)",
+    "linkedin_url": "https://linkedin.com/in/view-profile-senior",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "ffc7aacf-c13e-432b-8294-d96ad768ab7e",
+    "name": "ai Guru Chahal (Lsvp)",
+    "firm": "ai Guru Chahal (Lsvp)",
+    "linkedin_url": "https://linkedin.com/in/ai-guru-chahal",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Cloud Computing"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "d0324079-9b4a-4046-b3d6-f1820d5040b0",
+    "name": "While our (Firstround)",
+    "firm": "While our (Firstround)",
+    "linkedin_url": "https://linkedin.com/in/while-our",
+    "blog_url": null,
+    "current_bio": "While our (Firstround) is a angel investor focused on AI, SaaS, Consumer investing at Seed and Series A stage.",
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Consumer"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "a0e5a2cd-a07f-4e08-8924-752d64dba7e7",
+    "name": "Jonathan Abrams",
+    "firm": "8-Bit Capital",
+    "linkedin_url": "https://linkedin.com/in/jonathan-abrams",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "HealthTech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "0c3ca539-d298-488e-934d-de916b8473e6",
+    "name": "Antoine Moyroud",
+    "firm": "Antoine Moyroud",
+    "linkedin_url": "https://linkedin.com/in/antoine-moyroud",
+    "blog_url": null,
+    "current_bio": "Antoine Moyroud is a angel investor focused on Enterprise, Consumer, Fintech investing at Seed and Series A stage.",
+    "current_sectors": [
+      "Enterprise",
+      "Consumer",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A",
+      "Series B"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "87776b2b-be52-478c-8e18-db1229793170",
+    "name": "Corner Table",
+    "firm": "Corner Table",
+    "linkedin_url": "https://linkedin.com/in/corner-table",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Cloud Computing"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "c48af1cc-6575-4724-8759-0886fe2ba077",
+    "name": "Reuben Gonzalez",
+    "firm": "Reuben Gonzalez",
+    "linkedin_url": "https://linkedin.com/in/reuben-gonzalez",
+    "blog_url": null,
+    "current_bio": "Reuben Gonzalez is a angel investor focused on SaaS, AI/ML, Consumer investing at Pre-Seed and Seed stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML",
+      "Consumer",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Pre-Seed",
+      "Seed"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "d5f9fe16-8bc5-469f-a112-5ac9ab6814ae",
+    "name": "Starting Up The (Firstround)",
+    "firm": "Starting Up The (Firstround)",
+    "linkedin_url": "https://linkedin.com/in/starting-up-the",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "HealthTech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "8312343f-1311-4c2f-bbbd-0b27b8029cf2",
+    "name": "Genacast Ventures",
+    "firm": "Genacast Ventures",
+    "linkedin_url": "https://linkedin.com/in/genacast-ventures",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Healthcare"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "73d782c4-fb9c-4209-875f-f082fadde453",
+    "name": "and joint ventures",
+    "firm": "and joint ventures",
+    "linkedin_url": "https://linkedin.com/in/and-joint-ventures",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "57385641-3768-499a-a11e-e4deac39756a",
+    "name": "John Diaz",
+    "firm": "Stone Mountain Ventures",
+    "linkedin_url": "https://linkedin.com/in/john-diaz",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "HealthTech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "ce3dab70-668c-4129-9919-f026f3a97106",
+    "name": "Shannon Brayton",
+    "firm": "Shannon Brayton",
+    "linkedin_url": "https://linkedin.com/in/shannon-brayton",
+    "blog_url": null,
+    "current_bio": "Partner at Bessemer Venture Partners",
+    "current_sectors": [
+      "SaaS",
+      "Cloud",
+      "Healthcare"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A",
+      "Series B",
+      "Growth"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "50f08564-e52f-46f2-a9b7-256522b8cb0c",
+    "name": "at Hitchwood Capital",
+    "firm": "at Hitchwood Capital",
+    "linkedin_url": "https://linkedin.com/in/at-hitchwood-capital",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "HealthTech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "98127a0c-e254-40f9-8522-cd4a1aa39912",
+    "name": "Dmitry Firskin",
+    "firm": "AltaIR Capital",
+    "linkedin_url": "https://linkedin.com/in/dmitry-firskin",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Cloud Computing"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "2102ab55-5565-4f2e-a080-e1c037447a4d",
+    "name": "Chase Coleman",
+    "firm": "Chase Coleman",
+    "linkedin_url": "https://linkedin.com/in/chase-coleman",
+    "blog_url": null,
+    "current_bio": "Founder of Tiger Global Management",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  }
+]

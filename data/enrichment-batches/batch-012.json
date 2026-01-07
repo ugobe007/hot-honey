@@ -1,0 +1,433 @@
+[
+  {
+    "id": "64c65a9c-3e58-4052-87ea-8b21b48387e1",
+    "name": "Dylan Field",
+    "firm": "Dylan Field",
+    "linkedin_url": "https://linkedin.com/in/dylan-field",
+    "blog_url": null,
+    "current_bio": "Dylan Field is a angel investor focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "57b16664-8923-4b54-a93f-20f1597edc02",
+    "name": "Jessi Brooks (Ribbit Capital)",
+    "firm": "Jessi Brooks (Ribbit Capital)",
+    "linkedin_url": "https://linkedin.com/in/jessi-brooks",
+    "blog_url": null,
+    "current_bio": "Jessi Brooks is an investor at Ribbit Capital focused on technology investing at seed and series_a stage.",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "ad9a9f0f-d969-4d7c-8be8-a37cf68b772a",
+    "name": "Guide to Fund",
+    "firm": "Guide to Fund",
+    "linkedin_url": "https://linkedin.com/in/guide-to-fund",
+    "blog_url": null,
+    "current_bio": "Guide to Fund is a vc firm focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "d70f2120-853c-462c-bb65-85202243fba2",
+    "name": "Sidney Brown",
+    "firm": "Sidney Brown",
+    "linkedin_url": "https://linkedin.com/in/sidney-brown",
+    "blog_url": null,
+    "current_bio": "Principal at Lowercarboncapital",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "bd72cb38-4c19-49e9-ab3f-8f628b4c1ee3",
+    "name": "BoardContactACA PartnershipsPathway Partners",
+    "firm": "BoardContactACA PartnershipsPathway Partners",
+    "linkedin_url": "https://linkedin.com/in/boardcontactaca-partnershipspathway-partners",
+    "blog_url": null,
+    "current_bio": "BoardContactACA PartnershipsPathway Partners is a vc firm focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "b1eaad51-8b4c-4007-b70c-0c7fe521f771",
+    "name": "Kaufman Investor Relations (Dcvc)",
+    "firm": "DCVC",
+    "linkedin_url": "https://linkedin.com/in/kaufman-investor-relations",
+    "blog_url": "https://dcvc.com",
+    "current_bio": "Kaufman Investor Relations is a partner at DCVC. Deep tech in AI, biology, materials, energy, space",
+    "current_sectors": [
+      "AI/ML",
+      "SaaS",
+      "Fintech",
+      "Biotechnology",
+      "Robotics"
+    ],
+    "current_stage": [
+      "Seed"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "413ada84-7bbd-4de8-8f81-f468ff44a527",
+    "name": "Hustle Fund",
+    "firm": "Hustle Fund",
+    "linkedin_url": "https://linkedin.com/in/hustle-fund",
+    "blog_url": null,
+    "current_bio": "Investment firm using AngelList for launching investment vehicles",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "81958714-e5c0-40f6-9eeb-3457b7a9c468",
+    "name": "ARC Financial",
+    "firm": "ARC Financial",
+    "linkedin_url": "https://linkedin.com/in/arc-financial",
+    "blog_url": null,
+    "current_bio": "PE firm completing take-private of Step Energy Services",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "3bbcf080-7c7c-4450-b48d-2ba5c33ff5ae",
+    "name": "GP search Fund",
+    "firm": "GP search Fund",
+    "linkedin_url": "https://linkedin.com/in/gp-search-fund",
+    "blog_url": null,
+    "current_bio": "GP search Fund is a vc firm focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "f235565c-de40-47ae-b5c5-7018883b54bf",
+    "name": "and Managing (Dcvc)",
+    "firm": "DCVC",
+    "linkedin_url": "https://linkedin.com/in/and-managing",
+    "blog_url": "https://dcvc.com",
+    "current_bio": "and Managing is a partner at DCVC. Deep tech in AI, biology, materials, energy, space",
+    "current_sectors": [
+      "AI/ML",
+      "SaaS",
+      "Fintech",
+      "Biotechnology",
+      "Robotics"
+    ],
+    "current_stage": [
+      "Seed"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "6b215b93-e3e6-42d0-beec-1adb2fb13982",
+    "name": "Dr. Justin Kern (DCVC)",
+    "firm": "DCVC",
+    "linkedin_url": "https://linkedin.com/in/dr-justin-kern",
+    "blog_url": "https://dcvc.com",
+    "current_bio": "Dr. Justin Kern is a partner at DCVC. Deep tech in AI, biology, materials, energy, space",
+    "current_sectors": [
+      "AI/ML",
+      "SaaS",
+      "Fintech",
+      "Biotechnology",
+      "Robotics"
+    ],
+    "current_stage": [
+      "Seed"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "4fd8a32c-ad6c-4cd8-a8d1-fd9e9acf0d95",
+    "name": "Cerberus Capital Management",
+    "firm": "Cerberus Capital Management",
+    "linkedin_url": "https://linkedin.com/in/cerberus-capital-management",
+    "blog_url": null,
+    "current_bio": "Private equity firm acquiring EverZinc",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "1e1e57f2-95f9-464c-9f1d-a8284abace44",
+    "name": "When we (Uncorkcapital)",
+    "firm": "When we (Uncorkcapital)",
+    "linkedin_url": "https://linkedin.com/in/when-we",
+    "blog_url": null,
+    "current_bio": "When we is an investor at Uncorkcapital focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "73c43c45-b0d6-451a-a158-7729987e3ce5",
+    "name": "Caie Kelley",
+    "firm": "Caie Kelley",
+    "linkedin_url": "https://linkedin.com/in/caie-kelley",
+    "blog_url": null,
+    "current_bio": "Caie Kelley is a angel investor focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "32f42792-5d93-4dbc-abb2-0866061e006c",
+    "name": "Nicole Johnson",
+    "firm": "Nicole Johnson",
+    "linkedin_url": "https://linkedin.com/in/nicole-johnson",
+    "blog_url": null,
+    "current_bio": "Nicole Johnson is a angel investor focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "ead4c070-9fb5-474a-a332-f840f8952f61",
+    "name": "Rachel Slaybaugh (Dcvc)",
+    "firm": "DCVC",
+    "linkedin_url": "https://linkedin.com/in/rachel-slaybaugh",
+    "blog_url": "https://dcvc.com",
+    "current_bio": "Rachel Slaybaugh is a partner at DCVC. Deep tech in AI, biology, materials, energy, space",
+    "current_sectors": [
+      "AI/ML",
+      "SaaS",
+      "Fintech",
+      "Biotechnology",
+      "Robotics",
+      "DeepTech",
+      "SpaceTech",
+      "Materials",
+      "Climate"
+    ],
+    "current_stage": [
+      "Seed"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "26f46181-484b-4769-a8c9-6b6b4f41fb9a",
+    "name": "David Skok",
+    "firm": "David Skok",
+    "linkedin_url": "https://linkedin.com/in/david-skok",
+    "blog_url": null,
+    "current_bio": "Specializes in B2B and Infrastructure",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "693cfd81-3336-4dc7-929d-aae10f86b4ea",
+    "name": "Luca Rossi",
+    "firm": "Luca Rossi",
+    "linkedin_url": "https://linkedin.com/in/luca-rossi",
+    "blog_url": null,
+    "current_bio": "Endorser of Mario Gabriele's work",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "9b9c5646-9d72-4c2a-9733-a29361b61389",
+    "name": "Jordan Qualls",
+    "firm": "Jordan Qualls",
+    "linkedin_url": "https://linkedin.com/in/jordan-qualls",
+    "blog_url": null,
+    "current_bio": "Jordan Qualls is a angel investor focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "4694405d-8a5b-41ae-b4ec-3ad9128a231c",
+    "name": "Cobie",
+    "firm": "Cobie",
+    "linkedin_url": "https://linkedin.com/in/cobie",
+    "blog_url": null,
+    "current_bio": "Cobie is a angel investor focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  }
+]

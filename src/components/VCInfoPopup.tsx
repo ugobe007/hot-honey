@@ -153,7 +153,7 @@ export default function VCInfoPopup({ isOpen, onClose, investor }: VCInfoPopupPr
             {investor.stage && investor.stage.length > 0 ? (
               <div className="bg-white/10 rounded-xl p-4 hover:bg-white/15 transition-all hover:scale-105">
                 <div className="flex items-center gap-2 mb-2">
-                  <TrendingUp className="w-5 h-5 text-orange-400" />
+                  <TrendingUp className="w-5 h-5 text-cyan-400" />
                   <h4 className="font-semibold text-white text-sm">Stages</h4>
                 </div>
                 <p className="text-cyan-300 font-bold text-sm">{investor.stage.join(', ')}</p>

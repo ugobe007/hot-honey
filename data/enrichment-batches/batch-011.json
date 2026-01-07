@@ -1,0 +1,447 @@
+[
+  {
+    "id": "37c7effe-63fd-4cbb-ab34-cdc0738b503a",
+    "name": "chronic care management",
+    "firm": "chronic care management",
+    "linkedin_url": "https://linkedin.com/in/chronic-care-management",
+    "blog_url": null,
+    "current_bio": "chronic care management is a angel investor focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "966bf9f8-c446-4851-aa02-69f42ef0ce11",
+    "name": "Greylock Ventures",
+    "firm": "Greylock Partners",
+    "linkedin_url": "https://greylock.com",
+    "blog_url": "https://greylock.com",
+    "current_bio": "Leading venture capital firm focused on AI-first companies, partnering with early-stage teams building companies that matter. Over 80% of investments are first checks, working with founders from pre-idea through product-market fit.",
+    "current_sectors": [
+      "Artificial Intelligence",
+      "Cybersecurity",
+      "Infrastructure",
+      "SaaS",
+      "Consumer",
+      "Marketplaces & Commerce",
+      "Fintech & Crypto",
+      "AI/ML",
+      "Enterprise"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "ee027312-b233-4511-bf65-e4bb89333f6a",
+    "name": "Stan Reiss",
+    "firm": "Stan Reiss",
+    "linkedin_url": "https://linkedin.com/in/stan-reiss",
+    "blog_url": null,
+    "current_bio": "Stan Reiss is a angel investor focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "c58335ff-ef0c-49e3-912a-eabdb38da6f6",
+    "name": "Jed Lenzner",
+    "firm": "Tusk Venture Partners",
+    "linkedin_url": "https://linkedin.com/in/jed-lenzner",
+    "blog_url": null,
+    "current_bio": "Invests in early stage tech companies in highly regulated markets.",
+    "current_sectors": [
+      "Climate",
+      "Crypto",
+      "Fintech",
+      "Gaming",
+      "Healthcare",
+      "Marketplace",
+      "SaaS"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "d5641faa-48f3-4277-b8a4-8431a1c7aead",
+    "name": "Index Ventures",
+    "firm": "Index Ventures",
+    "linkedin_url": "https://www.indexventures.com",
+    "blog_url": "https://indexventures.com",
+    "current_bio": "Partnering with exceptional entrepreneurs from SF to NY, London to Tel Aviv, from Seed to IPO. We invest in who you are, not just what you do.",
+    "current_sectors": [
+      "Technology",
+      "Artificial Intelligence",
+      "Enterprise Software",
+      "FinTech",
+      "Gaming",
+      "E-Commerce",
+      "Cybersecurity",
+      "Data Analytics"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "5ed19c7a-0e3f-48df-b04c-f64985d5dfab",
+    "name": "Zach Sweeney, Ph.D.",
+    "firm": "Zach Sweeney, Ph.D.",
+    "linkedin_url": "https://linkedin.com/in/zach-sweeney",
+    "blog_url": null,
+    "current_bio": "Venture Partner at Versantventures",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "a5d592d6-cd95-4ec6-9ef6-6a5d61e1de22",
+    "name": "Ravi Mhatre",
+    "firm": "Ravi Mhatre",
+    "linkedin_url": "https://linkedin.com/in/ravi-mhatre",
+    "blog_url": null,
+    "current_bio": "Partner & Co-Founder at Lightspeed",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "1ca54408-3e61-4c3d-ac0e-5db7f2f450fa",
+    "name": "Lauren Reeder",
+    "firm": "Lauren Reeder",
+    "linkedin_url": "https://linkedin.com/in/lauren-reeder",
+    "blog_url": null,
+    "current_bio": "Sequoia Capital Partner focused on Seed/Early stage investments",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "7be6c839-45cd-49bd-9979-ea8f45705ae5",
+    "name": "Keith Lenden",
+    "firm": "Keith Lenden",
+    "linkedin_url": "https://linkedin.com/in/keith-lenden",
+    "blog_url": null,
+    "current_bio": "Venture Partner at Archventure",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "0d979db5-f521-444d-8847-99579f561634",
+    "name": "Carol Suh",
+    "firm": "Carol Suh",
+    "linkedin_url": "https://linkedin.com/in/carol-suh",
+    "blog_url": null,
+    "current_bio": "Carol Suh is a angel investor focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "4c811420-35dd-4df1-aa78-b0e1e25e27f4",
+    "name": "Amy Hawkins-Leong",
+    "firm": "Amy Hawkins-Leong",
+    "linkedin_url": "https://linkedin.com/in/amy-hawkins-leong",
+    "blog_url": null,
+    "current_bio": "Amy Hawkins-Leong is a angel investor focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "6bd837a4-e3ff-409d-9833-384db2f6f6f3",
+    "name": "Amy Fu",
+    "firm": "Amy Fu",
+    "linkedin_url": "https://linkedin.com/in/amy-fu",
+    "blog_url": null,
+    "current_bio": "Amy Fu is a angel investor focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "97d51989-d79a-42b7-9782-5f7eb935be99",
+    "name": "Farzad Tabaee (Foundation Capital)",
+    "firm": "Farzad Tabaee (Foundation Capital)",
+    "linkedin_url": "https://linkedin.com/in/farzad-tabaee",
+    "blog_url": null,
+    "current_bio": "Team member at Foundation Capital",
+    "current_sectors": [
+      "Consumer",
+      "SaaS"
+    ],
+    "current_stage": [
+      "Pre-seed",
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "b0e02ace-179d-48e5-94af-5fc945f29c05",
+    "name": "Inside the Fund",
+    "firm": "Inside the Fund",
+    "linkedin_url": "https://linkedin.com/in/inside-the-fund",
+    "blog_url": null,
+    "current_bio": "Inside the Fund is a vc firm focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "1e736295-d64a-47a9-b99c-da9abd9ca704",
+    "name": "Tikehau Capital",
+    "firm": "Tikehau Capital",
+    "linkedin_url": "https://linkedin.com/in/tikehau-capital",
+    "blog_url": null,
+    "current_bio": "PE firm acquiring ScioTeq from OpenGate Capital",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "4c82eae9-a796-4584-be04-d14ce88b34eb",
+    "name": "Milo Werner (DCVC)",
+    "firm": "DCVC",
+    "linkedin_url": "https://linkedin.com/in/milo-werner",
+    "blog_url": "https://dcvc.com",
+    "current_bio": "Milo Werner is a partner at DCVC. Deep tech in AI, biology, materials, energy, space",
+    "current_sectors": [
+      "AI/ML",
+      "SaaS",
+      "Fintech",
+      "Biotechnology",
+      "Robotics",
+      "DeepTech",
+      "SpaceTech",
+      "Materials",
+      "Climate"
+    ],
+    "current_stage": [
+      "Seed"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "408d1dc2-6feb-42aa-acf3-6289e1f7e411",
+    "name": "Maddie Maloney (North Pond Ventures)",
+    "firm": "Maddie Maloney (North Pond Ventures)",
+    "linkedin_url": "https://linkedin.com/in/maddie-maloney",
+    "blog_url": null,
+    "current_bio": "Maddie Maloney is an investor at North Pond Ventures focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "53522267-aa23-4dae-bd50-4479b986b723",
+    "name": "Our public equity",
+    "firm": "Our public equity",
+    "linkedin_url": "https://linkedin.com/in/our-public-equity",
+    "blog_url": null,
+    "current_bio": "Our public equity is a angel investor focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "8f4ac201-978b-4961-816a-bc8d619a5eee",
+    "name": "Steve Liapis, Ph.D. (North Pond Ventures)",
+    "firm": "Steve Liapis, Ph.D. (North Pond Ventures)",
+    "linkedin_url": "https://linkedin.com/in/steve-liapis",
+    "blog_url": null,
+    "current_bio": "Steve Liapis, Ph.D. is an investor at North Pond Ventures focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "0952fdc1-7737-4b25-9705-f786c2d3b819",
+    "name": "Arash Rebek",
+    "firm": "Arash Rebek",
+    "linkedin_url": "https://linkedin.com/in/arash-rebek",
+    "blog_url": null,
+    "current_bio": "Arash Rebek is a angel investor focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  }
+]

@@ -25,8 +25,8 @@ const ActivityFeed: React.FC = () => {
   // Sample activity templates for realistic feed
   const activityTemplates = [
     { type: 'match', template: 'matched with', icon: '✨', color: 'from-purple-500 to-violet-500' },
-    { type: 'funding', template: 'just funded', icon: '💰', color: 'from-yellow-500 to-orange-500' },
-    { type: 'trending', template: 'trending in', icon: '🔥', color: 'from-red-500 to-orange-500' },
+    { type: 'funding', template: 'just funded', icon: '💰', color: 'from-cyan-500 to-blue-500' },
+    { type: 'trending', template: 'trending in', icon: '🔥', color: 'from-blue-500 to-violet-500' },
   ];
 
   const investors = [
@@ -127,7 +127,7 @@ const ActivityFeed: React.FC = () => {
               {/* Left: Live Activity */}
               <div>
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="bg-gradient-to-r from-orange-500 to-red-500 p-2 rounded-xl">
+                  <div className="bg-gradient-to-r from-cyan-600 to-blue-600 p-2 rounded-xl">
                     <TrendingUp className="w-5 h-5 text-white" />
                   </div>
                   <div>
@@ -167,7 +167,7 @@ const ActivityFeed: React.FC = () => {
               {/* Right: CTA */}
               <div className="flex flex-col justify-center">
                 <div className="mb-6">
-                  <div className="inline-flex items-center gap-2 bg-yellow-500/20 border border-yellow-500/30 rounded-full px-4 py-1.5 mb-4">
+                  <div className="inline-flex items-center gap-2 bg-yellow-500/20 border border-cyan-500/30 rounded-full px-4 py-1.5 mb-4">
                     <Sparkles className="w-4 h-4 text-yellow-400" />
                     <span className="text-yellow-300 text-xs font-semibold uppercase tracking-wide">Join Now</span>
                   </div>

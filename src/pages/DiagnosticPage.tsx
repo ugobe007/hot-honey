@@ -66,8 +66,8 @@ export default function DiagnosticPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-slate-100 p-8 flex items-center justify-center">
-        <div className="text-orange-600 text-2xl font-bold">Loading diagnostic data...</div>
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-8 flex items-center justify-center">
+        <div className="text-cyan-600 text-2xl font-bold">Loading diagnostic data...</div>
       </div>
     );
   }
@@ -79,14 +79,14 @@ export default function DiagnosticPage() {
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-5xl font-bold bg-gradient-to-r from-orange-500 via-amber-400 to-orange-500 bg-clip-text text-transparent mb-2">
+            <h1 className="text-5xl font-bold bg-gradient-to-r from-cyan-500 via-blue-400 to-cyan-500 bg-clip-text text-transparent mb-2">
               🔍 System Diagnostic
             </h1>
             <p className="text-slate-400 text-lg">Database health check and system monitoring</p>
           </div>
           <button
             onClick={() => navigate('/admin/control')}
-            className="px-6 py-3 bg-gradient-to-r from-slate-700 to-slate-800 hover:from-slate-600 hover:to-slate-700 text-white font-bold rounded-xl transition-all shadow-lg hover:shadow-orange-500/20"
+            className="px-6 py-3 bg-gradient-to-r from-slate-700 to-slate-800 hover:from-slate-600 hover:to-slate-700 text-white font-bold rounded-xl transition-all shadow-lg hover:shadow-cyan-500/20"
           >
             ← Back to Control Center
           </button>
@@ -108,7 +108,7 @@ export default function DiagnosticPage() {
           </button>
           <button
             onClick={() => navigate('/admin/migrate')}
-            className="px-6 py-3 bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-500 hover:to-amber-500 text-white font-bold rounded-xl transition-all shadow-lg hover:shadow-orange-500/30"
+            className="px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-500 hover:to-blue-500 text-white font-bold rounded-xl transition-all shadow-lg hover:shadow-cyan-500/30"
           >
             🔄 Migrate localStorage → Supabase
           </button>
@@ -117,8 +117,8 @@ export default function DiagnosticPage() {
         <div className="grid gap-6">
           
           {/* Supabase Data */}
-          <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-6 border-2 border-orange-500/30 shadow-xl">
-            <h2 className="text-3xl font-bold text-orange-400 mb-4">🗄️ Supabase Database</h2>
+          <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-6 border-2 border-cyan-500/30 shadow-xl">
+            <h2 className="text-3xl font-bold text-cyan-400 mb-4">🗄️ Supabase Database</h2>
             
             {supabaseData?.error && (
               <div className="bg-red-900/30 border-2 border-red-500 rounded-xl p-4 mb-4">
@@ -135,10 +135,10 @@ export default function DiagnosticPage() {
                   <ul className="text-slate-300 text-sm space-y-1 mt-3">
                     {supabaseData.all.map((s: any, i: number) => (
                       <li key={i}>
-                        • <span className="text-orange-400 font-semibold">{s.name}</span> - 
+                        • <span className="text-cyan-400 font-semibold">{s.name}</span> - 
                         <span className={`ml-2 font-bold ${
                           s.status === 'approved' ? 'text-green-400' :
-                          s.status === 'pending' ? 'text-amber-400' :
+                          s.status === 'pending' ? 'text-blue-400' :
                           'text-red-400'
                         }`}>{s.status}</span>
                         <span className="text-slate-500 ml-2 text-xs">
@@ -163,8 +163,8 @@ export default function DiagnosticPage() {
                 )}
               </div>
 
-              <div className="bg-amber-900/20 border-2 border-amber-500/40 rounded-xl p-4">
-                <h3 className="text-amber-300 font-bold text-xl mb-2">
+              <div className="bg-slate-800/40 border-2 border-cyan-500/40 rounded-xl p-4">
+                <h3 className="text-cyan-300 font-bold text-xl mb-2">
                   ⏳ Pending Review: {supabaseData?.pending.length || 0}
                 </h3>
                 {supabaseData?.pending.length > 0 && (
@@ -179,17 +179,17 @@ export default function DiagnosticPage() {
           </div>
 
           {/* localStorage Data */}
-          <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-6 border-2 border-orange-500/30 shadow-xl">
-            <h2 className="text-3xl font-bold text-orange-400 mb-4">💾 localStorage (Legacy)</h2>
+          <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-6 border-2 border-cyan-500/30 shadow-xl">
+            <h2 className="text-3xl font-bold text-cyan-400 mb-4">💾 localStorage (Legacy)</h2>
             
             <div className="grid gap-4">
-              <div className="bg-orange-900/20 border-2 border-orange-500/40 rounded-xl p-4">
-                <h3 className="text-orange-300 font-bold text-xl mb-2">
+              <div className="bg-slate-800/40 border-2 border-cyan-500/40 rounded-xl p-4">
+                <h3 className="text-cyan-300 font-bold text-xl mb-2">
                   📦 Uploaded Startups: {localStorageData?.uploadedStartups.length || 0}
                 </h3>
                 {localStorageData?.uploadedStartups.length > 0 ? (
                   <>
-                    <p className="text-orange-400 text-sm mb-2">
+                    <p className="text-cyan-400 text-sm mb-2">
                       ⚠️ These should be migrated to Supabase!
                     </p>
                     <ul className="text-slate-300 text-sm space-y-1 mt-3">
@@ -218,8 +218,8 @@ export default function DiagnosticPage() {
           </div>
 
           {/* System Status */}
-          <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-6 border-2 border-orange-500/30 shadow-xl">
-            <h2 className="text-3xl font-bold text-orange-400 mb-4">📋 System Status</h2>
+          <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-6 border-2 border-cyan-500/30 shadow-xl">
+            <h2 className="text-3xl font-bold text-cyan-400 mb-4">📋 System Status</h2>
             
             <div className="space-y-3 text-slate-300">
               <p>
@@ -233,16 +233,16 @@ export default function DiagnosticPage() {
                 }
               </p>
               <p>
-                <strong className="text-amber-600">🚀 Total Approved for Voting:</strong> {supabaseData?.approved.length || 0}
+                <strong className="text-cyan-400">🚀 Total Approved for Voting:</strong> {supabaseData?.approved.length || 0}
               </p>
               <p>
-                <strong className="text-orange-600">⏳ Awaiting Review:</strong> {supabaseData?.pending.length || 0}
+                <strong className="text-cyan-600">⏳ Awaiting Review:</strong> {supabaseData?.pending.length || 0}
               </p>
             </div>
 
             {localStorageData?.uploadedStartups.length > 0 && (
-              <div className="mt-4 pt-4 border-t-2 border-orange-500/30">
-                <p className="text-orange-400 font-bold mb-2">
+              <div className="mt-4 pt-4 border-t-2 border-cyan-500/30">
+                <p className="text-cyan-400 font-bold mb-2">
                   ⚠️ Action Required:
                 </p>
                 <p className="text-slate-400 text-sm">
@@ -254,8 +254,8 @@ export default function DiagnosticPage() {
           </div>
 
           {/* Quick Links */}
-          <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-6 border-2 border-orange-500/30 shadow-xl">
-            <h2 className="text-3xl font-bold text-orange-400 mb-4">🔗 Admin Tools</h2>
+          <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-6 border-2 border-cyan-500/30 shadow-xl">
+            <h2 className="text-3xl font-bold text-cyan-400 mb-4">🔗 Admin Tools</h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               <button
                 onClick={() => navigate('/admin/control')}
@@ -277,13 +277,13 @@ export default function DiagnosticPage() {
               </button>
               <button
                 onClick={() => navigate('/admin/ml-dashboard')}
-                className="py-3 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500 text-white font-semibold rounded-xl transition-all shadow-lg hover:shadow-orange-500/30"
+                className="py-3 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-semibold rounded-xl transition-all shadow-lg hover:shadow-cyan-500/30"
               >
                 🤖 ML Dashboard
               </button>
               <button
                 onClick={() => navigate('/admin/god-scores')}
-                className="py-3 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white font-semibold rounded-xl transition-all shadow-lg hover:shadow-orange-500/30"
+                className="py-3 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-semibold rounded-xl transition-all shadow-lg hover:shadow-cyan-500/30"
               >
                 ⭐ GOD Scores
               </button>

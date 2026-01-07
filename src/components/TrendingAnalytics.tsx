@@ -202,7 +202,7 @@ export default function TrendingAnalytics({ startups, selectedAlgorithm }: Props
           <div className="text-2xl font-bold text-white">{analytics.total}</div>
           <div className="text-xs text-gray-500 mt-1">Analyzed</div>
         </div>
-        <div className="bg-gradient-to-br from-orange-900/40 to-red-900/40 backdrop-blur-lg rounded-xl border border-orange-500/30 p-4">
+        <div className="bg-gradient-to-br from-slate-800/40 to-slate-700/40 backdrop-blur-lg rounded-xl border border-cyan-500/30 p-4">
           <div className="text-xs text-gray-400 mb-1">Avg Score</div>
           <div className="text-2xl font-bold text-white">{analytics.avgScore}</div>
           <div className="text-xs text-gray-500 mt-1">Range: {analytics.minScore}-{analytics.maxScore}</div>
@@ -253,9 +253,9 @@ export default function TrendingAnalytics({ startups, selectedAlgorithm }: Props
       </div>
 
       {/* Key Metrics */}
-      <div className="bg-gradient-to-br from-orange-900/40 to-red-900/40 backdrop-blur-lg rounded-2xl border border-orange-500/30 p-6">
+      <div className="bg-gradient-to-br from-slate-800/40 to-slate-700/40 backdrop-blur-lg rounded-2xl border border-cyan-500/30 p-6">
         <div className="flex items-center gap-2 mb-4">
-          <Activity className="w-5 h-5 text-orange-400" />
+          <Activity className="w-5 h-5 text-cyan-400" />
           <h3 className="text-lg font-bold text-white">Key Metrics</h3>
         </div>
         <div className="space-y-4">
@@ -278,7 +278,7 @@ export default function TrendingAnalytics({ startups, selectedAlgorithm }: Props
       </div>
 
       {/* GOD Score Breakdown */}
-      <div className="bg-gradient-to-br from-red-900/40 to-amber-900/40 backdrop-blur-lg rounded-2xl border border-red-500/30 p-6">
+      <div className="bg-gradient-to-br from-slate-800/40 to-slate-700/40 backdrop-blur-lg rounded-2xl border border-red-500/30 p-6">
         <div className="flex items-center gap-2 mb-4">
           <Zap className="w-5 h-5 text-red-400" />
           <h3 className="text-lg font-bold text-white">Avg GOD Breakdown</h3>
@@ -288,7 +288,7 @@ export default function TrendingAnalytics({ startups, selectedAlgorithm }: Props
             { label: 'Team', value: analytics.avgGODBreakdown.team, color: 'from-blue-500 to-cyan-500' },
             { label: 'Traction', value: analytics.avgGODBreakdown.traction, color: 'from-green-500 to-emerald-500' },
             { label: 'Market', value: analytics.avgGODBreakdown.market, color: 'from-purple-500 to-violet-500' },
-            { label: 'Product', value: analytics.avgGODBreakdown.product, color: 'from-orange-500 to-red-500' },
+            { label: 'Product', value: analytics.avgGODBreakdown.product, color: 'from-cyan-600 to-blue-600' },
             { label: 'Vision', value: analytics.avgGODBreakdown.vision, color: 'from-indigo-500 to-violet-500' },
           ].map((item) => (
             <div key={item.label} className="flex items-center gap-3">
@@ -351,8 +351,8 @@ export default function TrendingAnalytics({ startups, selectedAlgorithm }: Props
         </div>
         <div className="space-y-3">
           {[
-            { name: 'GOD', avg: startups.reduce((sum, s) => sum + (s.total_god_score || 0), 0) / startups.length, color: 'from-red-500 to-amber-500' },
-            { name: 'YC', avg: startups.reduce((sum, s) => sum + (s.ycScore || 0), 0) / startups.length, color: 'from-orange-500 to-amber-500' },
+            { name: 'GOD', avg: startups.reduce((sum, s) => sum + (s.total_god_score || 0), 0) / startups.length, color: 'from-red-500 to-blue-500' },
+            { name: 'YC', avg: startups.reduce((sum, s) => sum + (s.ycScore || 0), 0) / startups.length, color: 'from-cyan-500 to-blue-500' },
             { name: 'Sequoia', avg: startups.reduce((sum, s) => sum + (s.sequoiaScore || 0), 0) / startups.length, color: 'from-emerald-500 to-teal-500' },
             { name: 'A16Z', avg: startups.reduce((sum, s) => sum + (s.a16zScore || 0), 0) / startups.length, color: 'from-purple-500 to-indigo-500' },
           ].map((algo) => {

@@ -30,8 +30,8 @@ export default function ProfessionalNav() {
               👤 Dashboard
             </Link>
             <Link
-              to="/signup"
-              className="px-4 py-2 rounded-lg bg-amber-500 text-white hover:bg-amber-600 transition-colors font-medium flex items-center gap-2"
+              to="/login"
+              className="px-4 py-2 rounded-lg bg-cyan-500 text-white hover:bg-cyan-600 transition-colors font-medium flex items-center gap-2"
             >
               Log In
             </Link>

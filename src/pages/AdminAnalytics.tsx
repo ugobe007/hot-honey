@@ -391,8 +391,8 @@ export default function AdminAnalytics() {
   };
 
   const getScoreClass = (score: number) => {
-    if (score >= 90) return 'text-amber-400 font-bold';
-    if (score >= 80) return 'text-orange-400 font-semibold';
+    if (score >= 90) return 'text-blue-400 font-bold';
+    if (score >= 80) return 'text-cyan-400 font-semibold';
     if (score >= 70) return 'text-yellow-400';
     return 'text-gray-400';
   };
@@ -417,7 +417,7 @@ export default function AdminAnalytics() {
             <Link to="/" className="text-gray-400 hover:text-white">Home</Link>
             <Link to="/admin/control" className="text-gray-400 hover:text-white">Control Center</Link>
             <Link to="/market-trends" className="text-gray-400 hover:text-white">Trends</Link>
-            <Link to="/matching" className="text-orange-400 hover:text-orange-300 font-bold">⚡ Match</Link>
+            <Link to="/matching" className="text-cyan-400 hover:text-cyan-300 font-bold">⚡ Match</Link>
             <span className="text-gray-600">|</span>
             <span className="text-gray-500">Updated: {new Date().toLocaleTimeString()}</span>
             <button onClick={refresh} disabled={refreshing} className="text-gray-400 hover:text-white">
@@ -443,7 +443,7 @@ export default function AdminAnalytics() {
           <div className="bg-gray-800/50 rounded-lg border border-gray-700 overflow-hidden">
             <div className="px-3 py-2 border-b border-gray-700 bg-gray-800/80 flex items-center justify-between">
               <h2 className="text-sm font-semibold text-white">🔥 High-Score Matches Pending</h2>
-              <Link to="/matching" className="text-xs text-orange-400 hover:text-orange-300">Manage All →</Link>
+              <Link to="/matching" className="text-xs text-cyan-400 hover:text-cyan-300">Manage All →</Link>
             </div>
             <div className="overflow-x-auto max-h-72">
               <table className="w-full text-xs">
@@ -466,7 +466,7 @@ export default function AdminAnalytics() {
                     matchQueue.slice(0, 15).map((m) => (
                       <tr key={m.id} className="border-t border-gray-700/50 hover:bg-gray-700/30">
                         <td className="px-3 py-1.5">
-                          <Link to={`/startup/${m.startup_id}`} className="text-white hover:text-orange-400">{m.startup_name}</Link>
+                          <Link to={`/startup/${m.startup_id}`} className="text-white hover:text-cyan-400">{m.startup_name}</Link>
                         </td>
                         <td className="px-2 py-1.5">
                           <Link to={`/investor/${m.investor_id}`} className="text-gray-300 hover:text-violet-400">{m.investor_name}</Link>
@@ -524,17 +524,17 @@ export default function AdminAnalytics() {
 
         {/* Startup Data Gaps Panel */}
         {startupGaps && (
-          <div className="bg-gray-800/50 rounded-lg border border-orange-500/30 overflow-hidden">
-            <div className="px-3 py-2 border-b border-gray-700 bg-orange-500/10 flex items-center justify-between">
+          <div className="bg-gray-800/50 rounded-lg border border-cyan-500/30 overflow-hidden">
+            <div className="px-3 py-2 border-b border-gray-700 bg-cyan-600/10 flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Database className="w-4 h-4 text-orange-400" />
+                <Database className="w-4 h-4 text-cyan-400" />
                 <h2 className="text-sm font-semibold text-white">⚠️ Startup Data Gaps ({startupGaps.total - startupGaps.has_all_data} need enrichment)</h2>
               </div>
               <div className="flex items-center gap-2">
                 <button 
                   onClick={bulkEnrichAI} 
                   disabled={enriching}
-                  className="px-2 py-1 bg-orange-600 hover:bg-orange-500 rounded text-xs flex items-center gap-1 disabled:opacity-50"
+                  className="px-2 py-1 bg-cyan-700 hover:bg-cyan-600 rounded text-xs flex items-center gap-1 disabled:opacity-50"
                 >
                   <Zap className="w-3 h-3" /> {enriching ? 'Enriching...' : 'AI Enrich (20)'}
                 </button>
@@ -588,7 +588,7 @@ export default function AdminAnalytics() {
                   {incompleteStartups.map((s) => (
                     <tr key={s.id} className="border-t border-gray-700/50 hover:bg-gray-700/30">
                       <td className="px-3 py-1.5">
-                        <Link to={`/startup/${s.id}`} className="text-white hover:text-orange-400 font-medium">
+                        <Link to={`/startup/${s.id}`} className="text-white hover:text-cyan-400 font-medium">
                           {s.name}
                         </Link>
                       </td>
@@ -632,7 +632,7 @@ export default function AdminAnalytics() {
                                   alert(`❌ Failed to enrich ${s.name}: ${error?.message || 'Unknown error'}`);
                                 }
                               }}
-                              className="px-1.5 py-0.5 bg-orange-500/20 hover:bg-orange-500/40 rounded text-orange-400 text-[10px]"
+                              className="px-1.5 py-0.5 bg-cyan-600/20 hover:bg-cyan-600/40 rounded text-cyan-400 text-[10px]"
                               title="Generate description + infer sectors from tagline"
                             >
                               <Zap className="w-3 h-3 inline" /> AI
@@ -654,10 +654,10 @@ export default function AdminAnalytics() {
             <span className="text-gray-500 font-semibold">Quick Links:</span>
             <Link to="/admin/bulk-upload" className="text-blue-400 hover:text-blue-300">Bulk Upload</Link>
             <Link to="/admin/discovered-investors" className="text-violet-400 hover:text-violet-300">Manage Investors</Link>
-            <Link to="/matching" className="text-orange-400 hover:text-orange-300">Matching Engine</Link>
+            <Link to="/matching" className="text-cyan-400 hover:text-cyan-300">Matching Engine</Link>
             <Link to="/admin/rss-manager" className="text-green-400 hover:text-green-300">RSS Sources</Link>
             <Link to="/admin/discovered-startups" className="text-cyan-400 hover:text-cyan-300">Discovered Startups</Link>
-            <Link to="/market-trends" className="text-amber-400 hover:text-amber-300">Market Trends</Link>
+            <Link to="/market-trends" className="text-blue-400 hover:text-cyan-300">Market Trends</Link>
           </div>
         </div>
       </div>

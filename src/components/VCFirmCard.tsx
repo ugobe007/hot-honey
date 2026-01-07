@@ -42,7 +42,7 @@ export default function VCFirmCard({ company }: VCFirmCardProps) {
   return (
     <Link 
       to={`/investor/${company.id}`}
-      className="block bg-gradient-to-br from-slate-100 to-slate-200 rounded-2xl shadow-xl overflow-hidden border-2 border-purple-400/60 hover:border-orange-400 relative hover:scale-[1.02] transition-all duration-300 w-full max-w-[420px] hover:shadow-purple-500/30"
+      className="block bg-gradient-to-br from-slate-100 to-slate-200 rounded-2xl shadow-xl overflow-hidden border-2 border-purple-400/60 hover:border-cyan-400 relative hover:scale-[1.02] transition-all duration-300 w-full max-w-[420px] hover:shadow-purple-500/30"
     >
       {/* Header - Purple gradient */}
       <div className="bg-gradient-to-r from-purple-600 to-purple-800 p-3 border-b border-purple-400">
@@ -71,9 +71,9 @@ export default function VCFirmCard({ company }: VCFirmCardProps) {
         {/* Key Metrics - Silver boxes with orange accent */}
         <div className="grid grid-cols-3 gap-1.5">
           {company?.fundSize && (
-            <div className="bg-gradient-to-br from-orange-100 to-orange-200 rounded-lg p-2 border border-orange-300">
-              <p className="text-orange-700 text-[8px] font-black">💰 FUND</p>
-              <p className="text-orange-900 font-black text-xs truncate">{company.fundSize}</p>
+            <div className="bg-gradient-to-br from-slate-700 to-slate-600 rounded-lg p-2 border border-slate-500">
+              <p className="text-cyan-300 text-[8px] font-black">💰 FUND</p>
+              <p className="text-cyan-100 font-black text-xs truncate">{company.fundSize}</p>
             </div>
           )}
           {company?.checkSize && (
@@ -105,12 +105,12 @@ export default function VCFirmCard({ company }: VCFirmCardProps) {
         {company?.sectors && company.sectors.length > 0 && (
           <div className="flex flex-wrap gap-1">
             {company.sectors.slice(0, 4).map((sector, idx) => (
-              <span key={idx} className="bg-orange-50 border border-orange-300 text-orange-700 px-2 py-0.5 rounded-full text-[9px] font-semibold">
+              <span key={idx} className="bg-slate-800 border border-slate-500 text-cyan-300 px-2 py-0.5 rounded-full text-[9px] font-semibold">
                 {sector}
               </span>
             ))}
             {company.sectors.length > 4 && (
-              <span className="text-orange-500 text-[9px] font-bold">+{company.sectors.length - 4}</span>
+              <span className="text-cyan-500 text-[9px] font-bold">+{company.sectors.length - 4}</span>
             )}
           </div>
         )}
@@ -127,9 +127,9 @@ export default function VCFirmCard({ company }: VCFirmCardProps) {
 
         {/* Hot Honey Activity */}
         {company?.investmentCount && company.investmentCount > 0 && (
-          <div className="bg-gradient-to-r from-orange-100 to-amber-100 rounded-lg p-2 border border-orange-300">
-            <p className="text-orange-700 text-[9px] font-black">🍯 HOT HONEY</p>
-            <p className="text-orange-900 font-bold text-xs">
+          <div className="bg-gradient-to-r from-slate-700 to-slate-600 rounded-lg p-2 border border-slate-500">
+            <p className="text-cyan-300 text-[9px] font-black">🍯 HOT HONEY</p>
+            <p className="text-cyan-100 font-bold text-xs">
               {company.investmentCount} investment{company.investmentCount !== 1 ? 's' : ''}
             </p>
           </div>

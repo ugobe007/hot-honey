@@ -23,6 +23,8 @@ interface EnhancedInvestorCardProps {
     photo_url?: string;
     linkedin_url?: string;
     investment_thesis?: string;
+    investment_firm_description?: string; // New: enriched firm description
+    firm_description_normalized?: string; // New: normalized firm description (preferred)
     active_fund_size?: number;
     status?: string;
   };
@@ -101,12 +103,15 @@ export default function EnhancedInvestorCard({ investor, compact = false, onClic
   const geography = getGeography();
   const notableInvestments = getNotableInvestments();
   const firmName = getFirmName();
-  const bio = investor.bio || investor.investment_thesis;
+  // Use enriched description (normalized preferred, then raw, then fallback to bio/thesis/tagline)
+  const bio = investor.firm_description_normalized || investor.investment_firm_description || investor.bio || investor.investment_thesis || investor.tagline;
+  // Firm value proposition/description for purple panel (prioritize firm description over thesis)
+  const firmValueProp = investor.firm_description_normalized || investor.investment_firm_description || investor.tagline || investor.bio || investor.investment_thesis;
   const portfolioSize = getPortfolioSize();
 
   return (
     <div
-      className={`bg-gradient-to-br from-[#1a1a1a] via-[#222222] to-[#2a2a2a] rounded-2xl sm:rounded-3xl shadow-xl p-4 sm:p-6 cursor-pointer hover:shadow-2xl transition-all border-2 sm:border-4 border-amber-500/60 hover:border-amber-400/80 h-[380px] sm:h-[440px] flex flex-col ${compact ? 'max-w-[340px] sm:max-w-md' : 'w-full'}`}
+      className={`bg-gradient-to-br from-[#1a1a1a] via-[#222222] to-[#2a2a2a] rounded-2xl sm:rounded-3xl shadow-xl p-4 sm:p-6 cursor-pointer hover:shadow-2xl transition-all border-2 sm:border-4 border-cyan-500/60 hover:border-cyan-400/80 h-[380px] sm:h-[440px] flex flex-col ${compact ? 'max-w-[340px] sm:max-w-md' : 'w-full'}`}
       onClick={onClick}
       tabIndex={0}
       role="button"
@@ -119,16 +124,16 @@ export default function EnhancedInvestorCard({ investor, compact = false, onClic
           <img 
             src={investor.photo_url} 
             alt={investor.name}
-            className="w-14 h-14 sm:w-16 sm:h-16 rounded-full border-2 border-amber-500/50 object-cover flex-shrink-0"
+            className="w-16 h-16 sm:w-20 sm:h-20 rounded-full border-2 border-cyan-500/50 object-cover flex-shrink-0"
             onError={(e) => {
-              (e.target as HTMLImageElement).src = '/images/investor_badge.jpg';
+              (e.target as HTMLImageElement).src = '/images/investor_icon_.png';
             }}
           />
         ) : (
           <img 
-            src="/images/investor_badge.jpg" 
+            src="/images/investor_icon_.png" 
             alt="Investor"
-            className="w-14 h-14 sm:w-16 sm:h-16 rounded-full object-contain flex-shrink-0"
+            className="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-contain flex-shrink-0"
           />
         )}
         
@@ -137,22 +142,17 @@ export default function EnhancedInvestorCard({ investor, compact = false, onClic
             {investor.name.length > 35 ? investor.name.slice(0, 35) + '...' : investor.name}
           </h3>
           {firmName && (
-            <p className="text-amber-400 text-xs sm:text-sm font-medium truncate">{firmName}</p>
+            <p className="text-blue-400 text-xs sm:text-sm font-medium truncate">{firmName}</p>
           )}
           <div className="flex flex-wrap gap-1 mt-1">
             {investor.type && (
-              <span className="px-2 py-0.5 bg-amber-500/20 text-amber-400 rounded text-xs font-semibold uppercase border border-amber-500/40">
+              <span className="px-2 py-0.5 bg-cyan-500/20 text-blue-400 rounded text-xs font-semibold uppercase border border-cyan-500/40">
                 {investor.type}
               </span>
             )}
           </div>
         </div>
       </div>
-      
-      {/* Bio/Thesis */}
-      {bio && (
-        <p className="text-gray-400 text-xs sm:text-sm line-clamp-2 mb-3">{bio}</p>
-      )}
       
       {/* Key metrics row */}
       <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-3">
@@ -162,7 +162,7 @@ export default function EnhancedInvestorCard({ investor, compact = false, onClic
           </span>
         )}
         {fundSize && (
-          <span className="bg-amber-500/20 text-amber-300 px-2 py-1 rounded-lg text-xs font-medium border border-amber-500/30">
+          <span className="bg-cyan-500/20 text-cyan-300 px-2 py-1 rounded-lg text-xs font-medium border border-cyan-500/30">
             🏦 {fundSize} AUM
           </span>
         )}
@@ -178,17 +178,53 @@ export default function EnhancedInvestorCard({ investor, compact = false, onClic
         )}
       </div>
       
-      {/* Notable investments */}
-      {notableInvestments.length > 0 && (
-        <div className="bg-purple-500/10 rounded-lg p-2 mb-3 border border-purple-500/20">
-          <p className="text-purple-300 text-xs font-semibold mb-1">🏆 Notable Investments</p>
-          <p className="text-white text-xs">
-            {notableInvestments.slice(0, 4).join(' • ')}
-            {notableInvestments.length > 4 && <span className="text-purple-400"> +{notableInvestments.length - 4} more</span>}
+      
+      {/* Firm Value Proposition / Description - Purple panel (always show if available) */}
+      {firmValueProp && (
+        <div className="bg-purple-500/10 rounded-lg p-3 mb-3 border border-purple-500/20 flex-1">
+          <p className="text-purple-300 text-xs font-semibold mb-2">
+            ✨ {firmName ? `${firmName} Value Proposition` : 'Firm Value Proposition'}
           </p>
+          <div className="space-y-1.5">
+            <p className="text-white/90 text-xs line-clamp-4">{firmValueProp}</p>
+            {/* Show notable investments below description if available */}
+            {notableInvestments.length > 0 && (
+              <>
+                <div className="pt-2 mt-2 border-t border-purple-500/20">
+                  <p className="text-purple-300 text-xs font-semibold mb-1.5">Notable Investments:</p>
+                  {notableInvestments.slice(0, 2).map((investment: string, idx: number) => (
+                    <div key={idx} className="flex items-start gap-2 text-xs mb-1">
+                      <span className="text-cyan-400 mt-0.5">✦</span>
+                      <p className="text-white/90 line-clamp-1">{investment}</p>
+                    </div>
+                  ))}
+                  {notableInvestments.length > 2 && (
+                    <p className="text-purple-400 text-xs mt-1">+{notableInvestments.length - 2} more</p>
+                  )}
+                </div>
+              </>
+            )}
+          </div>
         </div>
       )}
       
+      {/* Fallback: Show notable investments only if no firm description available */}
+      {!firmValueProp && notableInvestments.length > 0 && (
+        <div className="bg-purple-500/10 rounded-lg p-3 mb-3 border border-purple-500/20 flex-1">
+          <p className="text-purple-300 text-xs font-semibold mb-2">✨ Notable Investments</p>
+          <div className="space-y-1.5">
+            {notableInvestments.slice(0, 3).map((investment: string, idx: number) => (
+              <div key={idx} className="flex items-start gap-2 text-xs">
+                <span className="text-cyan-400 mt-0.5">✦</span>
+                <p className="text-white/90 line-clamp-1">{investment}</p>
+              </div>
+            ))}
+            {notableInvestments.length > 3 && (
+              <p className="text-purple-400 text-xs">+{notableInvestments.length - 3} more</p>
+            )}
+          </div>
+        </div>
+      )}
       {/* Sectors and stages */}
       <div className="flex flex-wrap gap-1.5 mt-auto">
         {investor.sectors && investor.sectors.slice(0, 3).map((sector) => (

@@ -1,0 +1,440 @@
+[
+  {
+    "id": "e7238bca-50b4-45f9-8869-bac0011a173a",
+    "name": "Main Capital",
+    "firm": "Main Capital",
+    "linkedin_url": "https://linkedin.com/in/main-capital",
+    "blog_url": null,
+    "current_bio": "PE firm backing CarWise software acquisitions",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "63e27f88-e477-44a4-89da-f5cd134fc58c",
+    "name": "Brian O'Malley",
+    "firm": "Brian O'Malley",
+    "linkedin_url": "https://linkedin.com/in/brian-o-malley",
+    "blog_url": null,
+    "current_bio": "Board Partner at Forerunnerventures",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "46e2c7d2-7a11-4944-9310-a7f05c6bbb07",
+    "name": "CVC Capital Partners",
+    "firm": "CVC Capital Partners",
+    "linkedin_url": "https://linkedin.com/in/cvc-capital-partners",
+    "blog_url": null,
+    "current_bio": "Private equity firm with new president Rutland",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "08c0b732-7640-4c8d-98f3-7ac01cf3f1a1",
+    "name": "Jessi Brooks",
+    "firm": "Jessi Brooks",
+    "linkedin_url": "https://linkedin.com/in/jessi-brooks",
+    "blog_url": null,
+    "current_bio": "Team Member at Ribbitcap",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "460554ac-f4ec-46e9-a817-049deebc4006",
+    "name": "Lindsay M. Pettingill",
+    "firm": "Lindsay M. Pettingill",
+    "linkedin_url": "https://linkedin.com/in/lindsay-m-pettingill",
+    "blog_url": null,
+    "current_bio": "Investment Partner & Head of Internal AI at Village Global",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "03bc75a3-d545-4c4e-8abf-f532b1089af4",
+    "name": "Luke Pappas",
+    "firm": "Luke Pappas",
+    "linkedin_url": "https://linkedin.com/in/luke-pappas",
+    "blog_url": null,
+    "current_bio": "Luke Pappas is a angel investor focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "5d241c89-6459-4202-9cc5-3553a93b8f1b",
+    "name": "Saar Gur",
+    "firm": "CRV",
+    "linkedin_url": "https://linkedin.com/in/saar-gur",
+    "blog_url": null,
+    "current_bio": "Investing with conviction since 1970.",
+    "current_sectors": [
+      "Consumer"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "d70904ba-fc6e-471d-bdbd-0c5e12826c3e",
+    "name": "Sean Kendall",
+    "firm": "Sean Kendall",
+    "linkedin_url": "https://linkedin.com/in/sean-kendall",
+    "blog_url": null,
+    "current_bio": "Partner (Europe) at Archventure",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "fe8b91e2-2e54-4e19-869f-485bc9bbea13",
+    "name": "National Venture Capital",
+    "firm": "National Venture Capital",
+    "linkedin_url": "https://linkedin.com/in/national-venture-capital",
+    "blog_url": null,
+    "current_bio": "National Venture Capital is a vc firm focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "35916ec8-7719-4ea2-9d31-d2f5de157d60",
+    "name": "Darling Ventures",
+    "firm": "Darling Ventures",
+    "linkedin_url": "https://linkedin.com/in/darling-ventures",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "Enterprise Software",
+      "Minority Founders",
+      "Female Founders"
+    ],
+    "current_stage": [
+      "Pre-Seed",
+      "Seed"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "21a9e9d9-29b9-4f43-a175-912b53266687",
+    "name": "K50 Ventures",
+    "firm": "K50 Ventures",
+    "linkedin_url": "https://linkedin.com/in/k50-ventures",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "FinTech",
+      "Consumer",
+      "Healthcare",
+      "EdTech",
+      "SaaS",
+      "Enterprise",
+      "Food Tech",
+      "B2B Tech",
+      "Real Estate",
+      "Mobile Tech",
+      "Internet Tech",
+      "Agriculture",
+      "PropTech",
+      "Workflow",
+      "Marketplaces",
+      "Applied AI",
+      "DTC",
+      "Climate Change"
+    ],
+    "current_stage": [
+      "Pre-seed",
+      "Seed"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "a07a6537-6d86-4f3b-80f4-71aaae7d941d",
+    "name": "Clinton Bybee",
+    "firm": "Clinton Bybee",
+    "linkedin_url": "https://linkedin.com/in/clinton-bybee",
+    "blog_url": null,
+    "current_bio": "Co-founder & Managing Director, Emeritus at Archventure",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "d7a07d61-5711-44b0-b236-c50de01bd902",
+    "name": "Chamath Palihapitiya",
+    "firm": "Chamath Palihapitiya",
+    "linkedin_url": "https://linkedin.com/in/chamath-palihapitiya",
+    "blog_url": null,
+    "current_bio": "Founder of Social Capital",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "dc850af2-3200-4ad8-a470-cce9c5f18540",
+    "name": "Tiffany Foo",
+    "firm": "Tiffany Foo",
+    "linkedin_url": "https://linkedin.com/in/tiffany-foo",
+    "blog_url": null,
+    "current_bio": "Tiffany Foo is a angel investor focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "cc21df80-fe9f-450e-8a9e-fc4692e25a7c",
+    "name": "and DataMichelle DelcambreExecutive (Felicis)",
+    "firm": "and DataMichelle DelcambreExecutive (Felicis)",
+    "linkedin_url": "https://linkedin.com/in/and-datamichelle-delcambreexecutive",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "SaaS",
+      "Consumer",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "8ca0cd1a-b540-4f3d-a33e-b5a80d05cf28",
+    "name": "Duncan Carlson",
+    "firm": "Duncan Carlson",
+    "linkedin_url": "https://linkedin.com/in/duncan-carlson",
+    "blog_url": null,
+    "current_bio": "Principal at Lowercarboncapital",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "a579b8bc-5be2-4d5c-ae8a-aacb004e9d9d",
+    "name": "Version One Ventures",
+    "firm": "Version One Ventures",
+    "linkedin_url": "https://linkedin.com/in/version-one-ventures",
+    "blog_url": null,
+    "current_bio": "Venture capital firm with partners focusing on seed stage investments",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "547d8c27-f314-478f-a271-808b60d9b644",
+    "name": "Rishika Daryanani (Hustle Fund)",
+    "firm": "Rishika Daryanani (Hustle Fund)",
+    "linkedin_url": "https://linkedin.com/in/rishika-daryanani",
+    "blog_url": null,
+    "current_bio": "Rishika Daryanani (Hustle Fund) is a vc firm focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "9710591e-642a-4fbe-8ee5-3505e162f4d7",
+    "name": "platform Green Mobility (Pehub)",
+    "firm": "platform Green Mobility (Pehub)",
+    "linkedin_url": "https://linkedin.com/in/platform-green-mobility",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "HealthTech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "2b753b86-1547-4cc5-9516-c12b43296fe1",
+    "name": "Sarah Du",
+    "firm": "Sarah Du",
+    "linkedin_url": "https://linkedin.com/in/sarah-du",
+    "blog_url": null,
+    "current_bio": "Senior Associate at Uncorkcapital",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  }
+]

@@ -7,13 +7,13 @@ export default function ProfilePage() {
 
   if (!isLoggedIn || !user) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-purple-800 to-indigo-900 p-8 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-8 flex items-center justify-center">
         <div className="text-center">
           <div className="text-6xl mb-4">🔒</div>
           <h1 className="text-3xl font-bold text-white mb-4">Please Log In</h1>
           <button
             onClick={() => navigate('/login')}
-            className="px-8 py-3 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl transition-all"
+            className="px-8 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold rounded-xl transition-all"
           >
             Go to Login
           </button>
@@ -23,7 +23,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-purple-800 to-indigo-900 p-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-8">
       <div className="max-w-4xl mx-auto">
         
         {/* Header */}
@@ -31,14 +31,14 @@ export default function ProfilePage() {
           <h1 className="text-5xl font-bold text-white">👤 Profile</h1>
           <button
             onClick={() => navigate('/')}
-            className="px-6 py-3 bg-white/20 hover:bg-white/30 text-white font-bold rounded-xl transition-all"
+            className="px-6 py-3 bg-slate-700 hover:bg-slate-600 text-white font-bold rounded-xl transition-all"
           >
             ← Back to Home
           </button>
         </div>
 
         {/* Profile Card */}
-        <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 mb-6 border border-white/20 shadow-2xl">
+        <div className="bg-slate-800/50 backdrop-blur-lg rounded-2xl p-8 mb-6 border border-slate-700 shadow-2xl">
           <div className="flex items-start gap-6">
             <div className="text-8xl">
               {user.isAdmin ? '🍯' : '👤'}
@@ -47,7 +47,7 @@ export default function ProfilePage() {
               <div className="flex items-center gap-3 mb-2">
                 <h2 className="text-3xl font-bold text-white">{user.name}</h2>
                 {user.isAdmin && (
-                  <span className="px-3 py-1 bg-yellow-500 text-purple-900 rounded-full text-sm font-bold">
+                  <span className="px-3 py-1 bg-cyan-500 text-white rounded-full text-sm font-bold">
                     ⭐ ADMIN
                   </span>
                 )}
@@ -84,12 +84,12 @@ export default function ProfilePage() {
 
         {/* Admin Tools - Only show for admins */}
         {user.isAdmin && (
-          <div className="bg-gradient-to-br from-yellow-500/20 to-orange-500/20 backdrop-blur-lg rounded-2xl p-8 border-2 border-yellow-400/50 shadow-2xl">
+          <div className="bg-gradient-to-br from-cyan-500/20 to-blue-500/20 backdrop-blur-lg rounded-2xl p-8 border-2 border-cyan-500/50 shadow-2xl">
             <div className="flex items-center gap-3 mb-6">
               <div className="text-5xl">🍯</div>
               <div>
                 <h2 className="text-3xl font-bold text-white">Administrator Tools</h2>
-                <p className="text-yellow-200">You have access to advanced features</p>
+                <p className="text-cyan-200">You have access to advanced features</p>
               </div>
             </div>
 
@@ -97,10 +97,10 @@ export default function ProfilePage() {
               {/* Admin Dashboard - NEW */}
               <button
                 onClick={() => navigate('/admin/dashboard')}
-                className="p-6 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 rounded-xl border-2 border-yellow-300 transition-all text-left group shadow-xl"
+                className="p-6 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 rounded-xl border-2 border-cyan-400 transition-all text-left group shadow-xl"
               >
                 <div className="text-4xl mb-2">👑</div>
-                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-yellow-100 transition-colors">
+                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-cyan-100 transition-colors">
                   Admin Dashboard
                 </h3>
                 <p className="text-white text-sm">
@@ -111,10 +111,10 @@ export default function ProfilePage() {
               {/* Database Management */}
               <button
                 onClick={() => navigate('/admin/edit-startups')}
-                className="p-6 bg-white/10 hover:bg-white/20 rounded-xl border border-white/20 transition-all text-left group"
+                className="p-6 bg-slate-800/50 hover:bg-white/20 rounded-xl border border-slate-700 transition-all text-left group"
               >
                 <div className="text-4xl mb-2">✏️</div>
-                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-orange-300 transition-colors">
+                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors">
                   Edit Startups
                 </h3>
                 <p className="text-white/70 text-sm">
@@ -124,10 +124,10 @@ export default function ProfilePage() {
 
               <button
                 onClick={() => navigate('/admin/bulk-import')}
-                className="p-6 bg-white/10 hover:bg-white/20 rounded-xl border border-white/20 transition-all text-left group"
+                className="p-6 bg-slate-800/50 hover:bg-white/20 rounded-xl border border-slate-700 transition-all text-left group"
               >
                 <div className="text-4xl mb-2">🚀</div>
-                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-orange-300 transition-colors">
+                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors">
                   Bulk Import
                 </h3>
                 <p className="text-white/70 text-sm">
@@ -137,10 +137,10 @@ export default function ProfilePage() {
 
               <button
                 onClick={() => navigate('/admin/review')}
-                className="p-6 bg-white/10 hover:bg-white/20 rounded-xl border border-white/20 transition-all text-left group"
+                className="p-6 bg-slate-800/50 hover:bg-white/20 rounded-xl border border-slate-700 transition-all text-left group"
               >
                 <div className="text-4xl mb-2">📋</div>
-                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-orange-300 transition-colors">
+                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors">
                   Review Queue
                 </h3>
                 <p className="text-white/70 text-sm">
@@ -150,10 +150,10 @@ export default function ProfilePage() {
 
               <button
                 onClick={() => navigate('/admin/migrate')}
-                className="p-6 bg-white/10 hover:bg-white/20 rounded-xl border border-white/20 transition-all text-left group"
+                className="p-6 bg-slate-800/50 hover:bg-white/20 rounded-xl border border-slate-700 transition-all text-left group"
               >
                 <div className="text-4xl mb-2">🔄</div>
-                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-orange-300 transition-colors">
+                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors">
                   Migrate Data
                 </h3>
                 <p className="text-white/70 text-sm">
@@ -163,10 +163,10 @@ export default function ProfilePage() {
 
               <button
                 onClick={() => navigate('/admin/diagnostic')}
-                className="p-6 bg-white/10 hover:bg-white/20 rounded-xl border border-white/20 transition-all text-left group"
+                className="p-6 bg-slate-800/50 hover:bg-white/20 rounded-xl border border-slate-700 transition-all text-left group"
               >
                 <div className="text-4xl mb-2">🔍</div>
-                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-orange-300 transition-colors">
+                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors">
                   System Diagnostic
                 </h3>
                 <p className="text-white/70 text-sm">
@@ -176,10 +176,10 @@ export default function ProfilePage() {
 
               <button
                 onClick={() => navigate('/admin/setup')}
-                className="p-6 bg-white/10 hover:bg-white/20 rounded-xl border border-white/20 transition-all text-left group"
+                className="p-6 bg-slate-800/50 hover:bg-white/20 rounded-xl border border-slate-700 transition-all text-left group"
               >
                 <div className="text-4xl mb-2">⚙️</div>
-                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-orange-300 transition-colors">
+                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors">
                   Database Setup
                 </h3>
                 <p className="text-white/70 text-sm">
@@ -188,8 +188,8 @@ export default function ProfilePage() {
               </button>
             </div>
 
-            <div className="mt-6 p-4 bg-yellow-500/10 border border-yellow-400/30 rounded-xl">
-              <p className="text-yellow-200 text-sm">
+            <div className="mt-6 p-4 bg-cyan-500/10 border border-cyan-400/30 rounded-xl">
+              <p className="text-cyan-200 text-sm">
                 💡 <strong>Admin Tip:</strong> These tools give you full control over the platform's data and functionality. 
                 Use the diagnostic page to monitor system health.
               </p>
@@ -199,16 +199,16 @@ export default function ProfilePage() {
 
         {/* Regular User Section */}
         {!user.isAdmin && (
-          <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20">
+          <div className="bg-slate-800/50 backdrop-blur-lg rounded-2xl p-8 border border-slate-700">
             <h2 className="text-2xl font-bold text-white mb-4">Your Activity</h2>
             
             <div className="grid gap-4">
               <button
                 onClick={() => navigate('/dashboard')}
-                className="p-6 bg-white/10 hover:bg-white/20 rounded-xl border border-white/20 transition-all text-left group"
+                className="p-6 bg-slate-800/50 hover:bg-white/20 rounded-xl border border-slate-700 transition-all text-left group"
               >
                 <div className="text-4xl mb-2">📊</div>
-                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-orange-300 transition-colors">
+                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors">
                   My Dashboard
                 </h3>
                 <p className="text-white/70 text-sm">
@@ -218,10 +218,10 @@ export default function ProfilePage() {
 
               <button
                 onClick={() => navigate('/vote')}
-                className="p-6 bg-white/10 hover:bg-white/20 rounded-xl border border-white/20 transition-all text-left group"
+                className="p-6 bg-slate-800/50 hover:bg-white/20 rounded-xl border border-slate-700 transition-all text-left group"
               >
                 <div className="text-4xl mb-2">🗳️</div>
-                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-orange-300 transition-colors">
+                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors">
                   Vote on Startups
                 </h3>
                 <p className="text-white/70 text-sm">
@@ -231,10 +231,10 @@ export default function ProfilePage() {
 
               <button
                 onClick={() => navigate('/submit')}
-                className="p-6 bg-white/10 hover:bg-white/20 rounded-xl border border-white/20 transition-all text-left group"
+                className="p-6 bg-slate-800/50 hover:bg-white/20 rounded-xl border border-slate-700 transition-all text-left group"
               >
                 <div className="text-4xl mb-2">📝</div>
-                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-orange-300 transition-colors">
+                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors">
                   Submit Your Startup
                 </h3>
                 <p className="text-white/70 text-sm">

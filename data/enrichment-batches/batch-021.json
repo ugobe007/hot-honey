@@ -1,0 +1,439 @@
+[
+  {
+    "id": "35d66958-2c13-42c7-88c0-bd5e2a2f19d8",
+    "name": "CapVest",
+    "firm": "CapVest",
+    "linkedin_url": "https://linkedin.com/in/capvest",
+    "blog_url": null,
+    "current_bio": "PE firm investing in specialty pharmacy and pharmaceutical assets",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "acba8c4f-8639-4e0e-851a-5bd20e43fcb4",
+    "name": "Netley Capital",
+    "firm": "Netley Capital",
+    "linkedin_url": "https://linkedin.com/in/netley-capital",
+    "blog_url": null,
+    "current_bio": "Described as private equity's new kid on the block",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "e88dda02-5735-4768-83f6-87a4858d81dd",
+    "name": "Milo Werner General (Dcvc)",
+    "firm": "DCVC",
+    "linkedin_url": "https://linkedin.com/in/milo-werner-general",
+    "blog_url": "https://dcvc.com",
+    "current_bio": "Milo Werner General is a partner at DCVC. Deep tech in AI, biology, materials, energy, space",
+    "current_sectors": [
+      "AI/ML",
+      "SaaS",
+      "Fintech",
+      "Biotechnology",
+      "Robotics"
+    ],
+    "current_stage": [
+      "Seed"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "4b70c3b1-4a3d-439e-853c-33c5ab1f70ba",
+    "name": "Clay Hutmacher Operating (Dcvc)",
+    "firm": "DCVC",
+    "linkedin_url": "https://linkedin.com/in/clay-hutmacher-operating",
+    "blog_url": "https://dcvc.com",
+    "current_bio": "Clay Hutmacher Operating is a partner at DCVC. Deep tech in AI, biology, materials, energy, space",
+    "current_sectors": [
+      "AI/ML",
+      "SaaS",
+      "Fintech",
+      "Biotechnology",
+      "Robotics"
+    ],
+    "current_stage": [
+      "Seed"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "cd59139d-36b8-4b52-8e50-fac22e807230",
+    "name": "Tilly McLain",
+    "firm": "Tilly McLain",
+    "linkedin_url": "https://linkedin.com/in/tilly-mclain",
+    "blog_url": null,
+    "current_bio": "Operations and Community Manager at Uncorkcapital",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "6da248c0-2511-4626-99b4-39a933ed1f09",
+    "name": "Mei En Chin",
+    "firm": "Mei En Chin",
+    "linkedin_url": "https://linkedin.com/in/mei-en-chin",
+    "blog_url": null,
+    "current_bio": "Events Coordinator at Firstround",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "6d099562-ee38-4bb7-9a3a-334e38dc324e",
+    "name": "Sid Rajgarhia",
+    "firm": "Sid Rajgarhia",
+    "linkedin_url": "https://linkedin.com/in/sid-rajgarhia",
+    "blog_url": null,
+    "current_bio": "Insights and Operations at Firstround",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "4c1bb629-1640-492f-b487-0667c1340bc4",
+    "name": "Dan Bartus (Felicis)",
+    "firm": "Dan Bartus (Felicis)",
+    "linkedin_url": "https://linkedin.com/in/dan-bartus",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "SaaS",
+      "Consumer",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "061eddb5-1176-4f61-af0b-381ca4bc0b09",
+    "name": "Pamlico Capital",
+    "firm": "Pamlico Capital",
+    "linkedin_url": "https://linkedin.com/in/pamlico-capital",
+    "blog_url": null,
+    "current_bio": "PE firm co-investing with Court Square in Avant",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "c3c83bae-628d-4316-bf91-0b968c8cac50",
+    "name": "Kerry Wang",
+    "firm": "Kerry Wang",
+    "linkedin_url": "https://linkedin.com/in/kerry-wang",
+    "blog_url": null,
+    "current_bio": "New team member at Accel",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "38f7f952-24bd-47aa-9d46-6c83fc1efa70",
+    "name": "Isaiah Baril-Dore",
+    "firm": "Isaiah Baril-Dore",
+    "linkedin_url": "https://linkedin.com/in/isaiah-baril-dore",
+    "blog_url": null,
+    "current_bio": "Index Ventures Investor",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "ef076e9e-36e7-4f8c-aabb-7a3644679645",
+    "name": "Liu view profile (Uncorkcapital)",
+    "firm": "Liu view profile (Uncorkcapital)",
+    "linkedin_url": "https://linkedin.com/in/liu-view-profile",
+    "blog_url": null,
+    "current_bio": "Liu view profile is an investor at Uncorkcapital focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "dd136782-42d7-4f62-a686-435387f546b1",
+    "name": "Serge Messerlian Operating (Dcvc)",
+    "firm": "DCVC",
+    "linkedin_url": "https://linkedin.com/in/serge-messerlian-operating",
+    "blog_url": "https://dcvc.com",
+    "current_bio": "Serge Messerlian Operating is a partner at DCVC. Deep tech in AI, biology, materials, energy, space",
+    "current_sectors": [
+      "AI/ML",
+      "SaaS",
+      "Fintech",
+      "Biotechnology",
+      "Robotics"
+    ],
+    "current_stage": [
+      "Seed"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "28a028bf-3f15-436d-b1e6-548d56669b2c",
+    "name": "Kevin Hrusovsky",
+    "firm": "Kevin Hrusovsky",
+    "linkedin_url": "https://linkedin.com/in/kevin-hrusovsky",
+    "blog_url": null,
+    "current_bio": "Venture Partner at Archventure",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "d73b5e63-7a5d-4206-a3dd-528fabdb66b5",
+    "name": "Rachel Williams",
+    "firm": "Rachel Williams",
+    "linkedin_url": "https://linkedin.com/in/rachel-williams",
+    "blog_url": null,
+    "current_bio": "Associate at Lowercarboncapital",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "78f47c68-e046-420f-92e1-7d63ec615243",
+    "name": "Marketing OfficerMichelle DelcambreExecutive (Felicis)",
+    "firm": "Marketing OfficerMichelle DelcambreExecutive (Felicis)",
+    "linkedin_url": "https://linkedin.com/in/marketing-officermichelle-delcambreexecutive",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "SaaS",
+      "Consumer",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "1f8afbd9-3874-41b0-a6f8-c6d974376cd0",
+    "name": "ChinEvents CoordinatorRichard AlfonsiBoard (Firstround)",
+    "firm": "ChinEvents CoordinatorRichard AlfonsiBoard (Firstround)",
+    "linkedin_url": "https://linkedin.com/in/chinevents-coordinatorrichard-alfonsiboard",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Consumer"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "a32141ce-31f3-428c-839a-44e07e91a5e6",
+    "name": "Victoria Chernow",
+    "firm": "Victoria Chernow",
+    "linkedin_url": "https://linkedin.com/in/victoria-chernow",
+    "blog_url": null,
+    "current_bio": "Advisor at Playground",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "2cf5c5c9-d685-4b8a-99cb-495dfe1ab1bd",
+    "name": "Stephanie Operating (Lererhippeau)",
+    "firm": "Stephanie Operating (Lererhippeau)",
+    "linkedin_url": "https://linkedin.com/in/stephanie-operating",
+    "blog_url": null,
+    "current_bio": "Stephanie Operating (Lererhippeau) is a angel investor focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "d9757d2b-448d-43f4-91a2-374295e68701",
+    "name": "RRE Ventures",
+    "firm": "RRE Ventures",
+    "linkedin_url": "https://rre.com",
+    "blog_url": null,
+    "current_bio": "RRE is a boutique venture capital firm with 30 years of experience, backing bold early-stage founders across diverse sectors. They combine deep expertise and AI-driven insights to identify rare founders with vision and commitment, providing deeper relationships and long-term partnership support. The firm manages $2.5B+ in assets under management with 125+ exits and 400+ companies in their portfolio.",
+    "current_sectors": [
+      "Artificial Intelligence",
+      "Consumer",
+      "Crypto/Web3",
+      "Enterprise/SaaS",
+      "FinTech",
+      "Hardware",
+      "HealthTech",
+      "Media",
+      "Robotics",
+      "Space"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  }
+]

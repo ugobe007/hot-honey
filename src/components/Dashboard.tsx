@@ -126,7 +126,7 @@ const Dashboard: React.FC = () => {
       {/* Background Effects */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-orange-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-cyan-600/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
       </div>
 
       {/* Logo Dropdown Menu */}
@@ -142,7 +142,7 @@ const Dashboard: React.FC = () => {
         </Link>
         <Link 
           to="/get-matched" 
-          className="px-5 py-2.5 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold rounded-xl transition-all shadow-lg"
+          className="px-5 py-2.5 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold rounded-xl transition-all shadow-lg"
         >
           Get Matched
         </Link>
@@ -152,7 +152,7 @@ const Dashboard: React.FC = () => {
         {/* Header */}
         <div className="text-center mb-10">
           <h1 className="text-4xl md:text-5xl font-bold mb-3">
-            <span className="bg-gradient-to-r from-orange-400 via-yellow-400 to-orange-500 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-violet-500 bg-clip-text text-transparent">
               🎯 Your Dashboard
             </span>
           </h1>
@@ -163,13 +163,13 @@ const Dashboard: React.FC = () => {
 
         {/* Stats Overview */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
-          <div className="bg-gradient-to-br from-orange-500/20 to-red-500/20 backdrop-blur-lg rounded-2xl p-5 border border-orange-500/30">
+          <div className="bg-gradient-to-br from-cyan-500/20 to-blue-500/20 backdrop-blur-lg rounded-2xl p-5 border border-cyan-500/30">
             <div className="flex items-center gap-3 mb-2">
-              <Flame className="w-6 h-6 text-orange-400" />
+              <Flame className="w-6 h-6 text-cyan-400" />
               <span className="text-sm text-gray-300">Fire Points</span>
             </div>
             <div className="text-3xl font-bold text-white">{firePoints}</div>
-            <div className="text-xs text-orange-300 mt-1">{tier} Tier</div>
+            <div className="text-xs text-cyan-300 mt-1">{tier} Tier</div>
           </div>
           
           <div className="bg-gradient-to-br from-purple-500/20 to-indigo-500/20 backdrop-blur-lg rounded-2xl p-5 border border-purple-500/30">
@@ -206,7 +206,7 @@ const Dashboard: React.FC = () => {
           <div className="lg:col-span-2 bg-gradient-to-br from-[#1a0033]/80 to-[#2d1b4e]/80 backdrop-blur-lg rounded-2xl border border-purple-500/30 p-6">
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-600 to-blue-600 flex items-center justify-center">
                   <Flame className="w-6 h-6 text-white" />
                 </div>
                 <div>
@@ -223,11 +223,11 @@ const Dashboard: React.FC = () => {
             <div className="mb-6">
               <div className="flex justify-between text-sm mb-2">
                 <span className="text-gray-400">{tier} Tier</span>
-                <span className="text-orange-400 font-bold">{firePoints} / {nextTierThreshold || firePoints} pts</span>
+                <span className="text-cyan-400 font-bold">{firePoints} / {nextTierThreshold || firePoints} pts</span>
               </div>
               <div className="w-full h-4 bg-white/10 rounded-full overflow-hidden">
                 <div 
-                  className="h-full bg-gradient-to-r from-orange-500 via-red-500 to-pink-500 rounded-full transition-all duration-500"
+                  className="h-full bg-gradient-to-r from-cyan-500 via-blue-500 to-violet-500 rounded-full transition-all duration-500"
                   style={{ width: `${Math.min(progress, 100)}%` }}
                 />
               </div>
@@ -248,7 +248,7 @@ const Dashboard: React.FC = () => {
                     key={t}
                     className={`text-center p-3 rounded-xl transition-all ${
                       isCurrent 
-                        ? 'bg-gradient-to-br from-orange-500/30 to-red-500/30 border-2 border-orange-500' 
+                        ? 'bg-gradient-to-br from-cyan-500/30 to-blue-500/30 border-2 border-cyan-500' 
                         : isUnlocked 
                           ? 'bg-white/10 border border-white/20' 
                           : 'bg-white/5 border border-white/10 opacity-50'
@@ -296,16 +296,16 @@ const Dashboard: React.FC = () => {
             </Link>
 
             {/* Explore Startups Card */}
-            <Link to="/trending" className="block bg-gradient-to-br from-orange-500/20 to-red-500/20 backdrop-blur-lg rounded-2xl border border-orange-500/30 p-5 hover:border-orange-400/50 transition-all group">
+            <Link to="/trending" className="block bg-gradient-to-br from-cyan-500/20 to-blue-500/20 backdrop-blur-lg rounded-2xl border border-cyan-500/30 p-5 hover:border-cyan-400/50 transition-all group">
               <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-cyan-600 to-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform">
                   <Rocket className="w-7 h-7 text-white" />
                 </div>
                 <div className="flex-1">
                   <h3 className="font-bold text-white mb-1">Trending Startups</h3>
                   <p className="text-sm text-gray-400">{stats.totalStartups}+ startups by sector</p>
                 </div>
-                <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-orange-400 transition-colors" />
+                <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-cyan-400 transition-colors" />
               </div>
             </Link>
 
@@ -344,7 +344,7 @@ const Dashboard: React.FC = () => {
               <p className="text-gray-400 mb-6">Start voting on startups to build your portfolio</p>
               <Link 
                 to="/vote" 
-                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold rounded-xl transition-all"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold rounded-xl transition-all"
               >
                 <Zap className="w-5 h-5" />
                 Start Voting
@@ -384,8 +384,8 @@ const Dashboard: React.FC = () => {
           </h2>
           <div className="grid grid-cols-3 gap-4">
             <div className="bg-gradient-to-br from-[#1a0033]/80 to-[#2d1b4e]/80 backdrop-blur-lg rounded-2xl border border-purple-500/30 p-6 text-center">
-              <Rocket className="w-8 h-8 text-orange-400 mx-auto mb-3" />
-              <div className="text-3xl font-bold bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">{stats.totalStartups}+</div>
+              <Rocket className="w-8 h-8 text-cyan-400 mx-auto mb-3" />
+              <div className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">{stats.totalStartups}+</div>
               <div className="text-sm text-gray-400 mt-1">Startups</div>
             </div>
             <div className="bg-gradient-to-br from-[#1a0033]/80 to-[#2d1b4e]/80 backdrop-blur-lg rounded-2xl border border-purple-500/30 p-6 text-center">

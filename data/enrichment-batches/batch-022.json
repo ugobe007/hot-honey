@@ -1,0 +1,429 @@
+[
+  {
+    "id": "c25cbcb2-1516-4311-aae9-bc201b414d80",
+    "name": "Joe Medved",
+    "firm": "Joe Medved",
+    "linkedin_url": "https://linkedin.com/in/joe-medved",
+    "blog_url": null,
+    "current_bio": "Partner, Fund Strategy at Lererhippeau since 2015",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "5d01b995-7ddf-42ff-967b-4557f0036da2",
+    "name": "Rock Hill Capital",
+    "firm": "Rock Hill Capital",
+    "linkedin_url": "https://linkedin.com/in/rock-hill-capital",
+    "blog_url": null,
+    "current_bio": "PE firm investing in smart irrigation technology",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "e1897a56-1ae6-4abc-bf49-953109b8e4fc",
+    "name": "Ari Nowacek, M.D, Ph.D.",
+    "firm": "Ari Nowacek, M.D, Ph.D.",
+    "linkedin_url": "https://linkedin.com/in/ari-nowacek",
+    "blog_url": null,
+    "current_bio": "Partner at Archventure",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "f398983b-f405-44f5-a9f7-8924aa0ecb57",
+    "name": "GP search Fund",
+    "firm": "GP search Fund",
+    "linkedin_url": "https://linkedin.com/in/gp-search-fund",
+    "blog_url": null,
+    "current_bio": "GP search Fund is a vc firm focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "095f3387-010d-407f-9fab-f4c70557ff58",
+    "name": "Kim Milosevich",
+    "firm": "Kim Milosevich",
+    "linkedin_url": "https://linkedin.com/in/kim-milosevich",
+    "blog_url": null,
+    "current_bio": "Chief Marketing Officer at A16zcrypto",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "ed4f01d8-7981-4e2b-b5fc-2c75e107db6f",
+    "name": "backed group",
+    "firm": "backed group",
+    "linkedin_url": "https://linkedin.com/in/backed-group",
+    "blog_url": null,
+    "current_bio": "backed group is a angel investor focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "6bfb7efc-36ac-4c5c-9200-d8492c8dc83c",
+    "name": "Tom Hudson, M.D.",
+    "firm": "Tom Hudson, M.D.",
+    "linkedin_url": "https://linkedin.com/in/tom-hudson",
+    "blog_url": null,
+    "current_bio": "Venture Partner at Versantventures",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "6925d319-e8d0-49e4-ab60-ff14846a9a14",
+    "name": "Crosslink Capital",
+    "firm": "Crosslink Capital",
+    "linkedin_url": "https://linkedin.com/in/crosslink-capital",
+    "blog_url": null,
+    "current_bio": "Partnering with ambitious early-stage founders building category-defining companies.",
+    "current_sectors": [
+      "technology"
+    ],
+    "current_stage": [
+      "seed",
+      "series_a"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "dda60656-5e8c-4c44-9c3b-52c887c7cad9",
+    "name": "Michael Wong, Ph.D. (Versant Ventures)",
+    "firm": "Michael Wong, Ph.D. (Versant Ventures)",
+    "linkedin_url": "https://linkedin.com/in/michael-wong",
+    "blog_url": null,
+    "current_bio": "Wong is an investor at Versant Ventures focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "b0b56e55-6d2a-4d8a-968b-0b2bf7487785",
+    "name": "Matthew Ocko (Dcvc)",
+    "firm": "DCVC",
+    "linkedin_url": "https://linkedin.com/in/matthew-ocko",
+    "blog_url": "https://dcvc.com",
+    "current_bio": "Matthew Ocko is a partner at DCVC. Deep tech in AI, biology, materials, energy, space",
+    "current_sectors": [
+      "AI/ML",
+      "SaaS",
+      "Fintech",
+      "Biotechnology",
+      "Robotics",
+      "DeepTech",
+      "SpaceTech",
+      "Materials",
+      "Climate"
+    ],
+    "current_stage": [
+      "Seed"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "e0ebedb8-1f08-4a98-93d8-870220fd7d56",
+    "name": "Harlem Capital",
+    "firm": "Harlem Capital",
+    "linkedin_url": "https://linkedin.com/in/harlem-capital",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "Industry/Sector Agnostic",
+      "Minority Founders",
+      "Female Founders"
+    ],
+    "current_stage": [
+      "Pre-Seed",
+      "Seed"
+    ],
+    "missing_fields": [
+      "Bio",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "fa15cd57-e7a0-4555-84b8-7435d93f86d5",
+    "name": "they throw incredible (Villageglobal)",
+    "firm": "they throw incredible (Villageglobal)",
+    "linkedin_url": "https://linkedin.com/in/they-throw-incredible",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "ded5981f-a8d8-4a3c-af2e-02366e916f81",
+    "name": "DetweilerPartnerFeyza Haskaraman (Felicis)",
+    "firm": "DetweilerPartnerFeyza Haskaraman (Felicis)",
+    "linkedin_url": "https://linkedin.com/in/detweilerpartnerfeyza-haskaraman",
+    "blog_url": null,
+    "current_bio": "Feyza Haskaraman is an investor at Felicis focused on SaaS, Consumer, Fintech investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "Consumer",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "0de6f2a2-6ec5-4931-baa7-81ab37d3b9cb",
+    "name": "launch different fund",
+    "firm": "launch different fund",
+    "linkedin_url": "https://linkedin.com/in/launch-different-fund",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "3ad0302b-3fea-4d37-b597-dac261951a53",
+    "name": "NorthStar Venture Partners",
+    "firm": "NorthStar Venture Partners",
+    "linkedin_url": "https://linkedin.com/in/northstar-venture-partners",
+    "blog_url": null,
+    "current_bio": "NorthStar Venture Partners is a vc firm focused on Direct To Consumer, Enterprise Software, Consumer Software investing at Series A and Series B stage.",
+    "current_sectors": [
+      "Direct To Consumer",
+      "Enterprise Software",
+      "Consumer Software"
+    ],
+    "current_stage": [
+      "Series A",
+      "Series B"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "d83b6bef-89b0-470b-b723-73255dccdbec",
+    "name": "Staff Emery RosanskyVP (Firstround)",
+    "firm": "Staff Emery RosanskyVP (Firstround)",
+    "linkedin_url": "https://linkedin.com/in/staff-emery-rosanskyvp",
+    "blog_url": null,
+    "current_bio": "Staff Emery RosanskyVP is an investor at Firstround focused on AI, SaaS, Consumer investing at Seed and Series A stage.",
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Consumer"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "94255e96-31a5-4470-9f9c-e0673cd4b659",
+    "name": "Olivia Nottebohm",
+    "firm": "Olivia Nottebohm",
+    "linkedin_url": "https://linkedin.com/in/olivia-nottebohm",
+    "blog_url": null,
+    "current_bio": "Operating Partner at Nyca Partners",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML",
+      "Consumer",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Pre-Seed",
+      "Seed"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "23509620-5042-4385-b4ee-f2fc967eb3b3",
+    "name": "Streamlined",
+    "firm": "Streamlined",
+    "linkedin_url": "https://linkedin.com/in/streamlined",
+    "blog_url": null,
+    "current_bio": "Streamlined is a angel investor focused on Enterprise Software, E-Commerce, Gaming/Sports investing at Seed stage.",
+    "current_sectors": [
+      "Enterprise Software",
+      "E-Commerce",
+      "Gaming/Sports",
+      "Marketplace"
+    ],
+    "current_stage": [
+      "Seed"
+    ],
+    "missing_fields": [
+      "Notable Investments"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "0b6fca82-c66f-45c7-acc3-66421e51f4bc",
+    "name": "to Drive Capital",
+    "firm": "to Drive Capital",
+    "linkedin_url": "https://linkedin.com/in/to-drive-capital",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "HealthTech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  },
+  {
+    "id": "82649a59-be67-4ac3-8906-1b84ee01caf7",
+    "name": "note to (Vccafe)",
+    "firm": "note to (Vccafe)",
+    "linkedin_url": "https://linkedin.com/in/note-to",
+    "blog_url": null,
+    "current_bio": null,
+    "current_sectors": [
+      "AI",
+      "SaaS",
+      "Fintech"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Bio"
+    ],
+    "priority": 1
+  }
+]

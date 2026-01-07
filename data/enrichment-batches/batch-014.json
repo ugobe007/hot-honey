@@ -1,0 +1,422 @@
+[
+  {
+    "id": "d882ac3c-2c3f-4a78-9258-d0526002c3cd",
+    "name": "500 Startups",
+    "firm": "500 Startups",
+    "linkedin_url": "https://linkedin.com/in/500-startups",
+    "blog_url": null,
+    "current_bio": "500 Global (formerly 500 Startups) is one of the most active venture capital firms globally, having invested in 2,700+ companies across 80+ countries.",
+    "current_sectors": [
+      "Industry/Sector Agnostic"
+    ],
+    "current_stage": [
+      "Pre-Seed"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "9adbc646-5f6a-45f1-80b7-704804ec5c50",
+    "name": "Brendan Boyle",
+    "firm": "Brendan Boyle",
+    "linkedin_url": "https://linkedin.com/in/brendan-boyle",
+    "blog_url": null,
+    "current_bio": "Brendan Boyle is a angel investor focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "8e1669c8-7402-4292-8760-ca0b5fea8660",
+    "name": "Top Private Equity",
+    "firm": "Top Private Equity",
+    "linkedin_url": "https://linkedin.com/in/top-private-equity",
+    "blog_url": null,
+    "current_bio": "Top Private Equity is a angel investor focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "26bc62ac-8444-46da-9d4a-12a2c90fd0ff",
+    "name": "Hal Paz",
+    "firm": "Hal Paz",
+    "linkedin_url": "https://linkedin.com/in/hal-paz",
+    "blog_url": null,
+    "current_bio": "Hal Paz is a angel investor focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "d6084744-ab75-4792-bcd6-5de76782d866",
+    "name": "Lovell Minnick Partners",
+    "firm": "Lovell Minnick Partners",
+    "linkedin_url": "https://linkedin.com/in/lovell-minnick-partners",
+    "blog_url": null,
+    "current_bio": "PE firm backing Warner Pacific insurance acquisitions",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "d8810510-f5a7-40d9-a185-76ab8394acc0",
+    "name": "Tailwater Capital",
+    "firm": "Tailwater Capital",
+    "linkedin_url": "https://linkedin.com/in/tailwater-capital",
+    "blog_url": null,
+    "current_bio": "Energy-focused PE firm acquiring Central Midstream Partners",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "96d43a6b-ccbf-46ec-8574-ab0aee7e5cc3",
+    "name": "Paul Berns",
+    "firm": "Paul Berns",
+    "linkedin_url": "https://linkedin.com/in/paul-berns",
+    "blog_url": null,
+    "current_bio": "Managing Director at Archventure",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "ca2d6c2b-4c32-4b21-8c24-35488b4b5a56",
+    "name": "Franklin Bi General (Panteracapital)",
+    "firm": "Franklin Bi General (Panteracapital)",
+    "linkedin_url": "https://linkedin.com/in/franklin-bi-general",
+    "blog_url": null,
+    "current_bio": "Franklin Bi is an investor at Panteracapital focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "87aee062-68f5-45e7-b7b5-3f3f3d7670f1",
+    "name": "Tandis Moeini",
+    "firm": "Tandis Moeini",
+    "linkedin_url": "https://linkedin.com/in/tandis-moeini",
+    "blog_url": null,
+    "current_bio": "VP, Finance at Forerunnerventures",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "be9e5bfc-34c5-48e8-842e-11f822e83273",
+    "name": "Mary Chamberlain-Tharp, Ph.D.",
+    "firm": "Mary Chamberlain-Tharp, Ph.D.",
+    "linkedin_url": "https://linkedin.com/in/mary-chamberlain-tharp",
+    "blog_url": null,
+    "current_bio": "Venture Partner at Archventure",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "65488e18-9c4c-4d2c-a804-5365101d95c4",
+    "name": "Ron Zori",
+    "firm": "Ron Zori",
+    "linkedin_url": "https://linkedin.com/in/ron-zori",
+    "blog_url": null,
+    "current_bio": "Venture Partner at Lererhippeau since 2025",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "0dcc32c9-1734-406d-9063-4d0a6b56b441",
+    "name": "Launchfund",
+    "firm": "Launchfund",
+    "linkedin_url": "https://linkedin.com/in/launchfund",
+    "blog_url": null,
+    "current_bio": "Launchfund is a vc firm focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "b6376d5d-1959-48a7-a6fd-b0df45ae9fb8",
+    "name": "Wynnchurch Capital",
+    "firm": "Wynnchurch Capital",
+    "linkedin_url": "https://linkedin.com/in/wynnchurch-capital",
+    "blog_url": null,
+    "current_bio": "Private equity firm backing FloWorks acquiring Cranford Equipment Co",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "18852b7e-e313-4412-8374-0fa6083f9a26",
+    "name": "Ann Payne",
+    "firm": "Ann Payne",
+    "linkedin_url": "https://linkedin.com/in/ann-payne",
+    "blog_url": null,
+    "current_bio": "Ann Payne is a angel investor focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "be1ab0ba-42b5-48c1-8dd8-46764f1097be",
+    "name": "Todd Carlisle",
+    "firm": "Todd Carlisle",
+    "linkedin_url": "https://linkedin.com/in/todd-carlisle",
+    "blog_url": null,
+    "current_bio": "Todd Carlisle is a angel investor focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "e670f968-b2dc-4ff1-a017-6e16b5459785",
+    "name": "MML Partners",
+    "firm": "MML Partners",
+    "linkedin_url": "https://linkedin.com/in/mml-partners",
+    "blog_url": null,
+    "current_bio": "Raised €935m for debut Keystone fund, led by former Macquarie members",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "782a5d36-4f30-48b5-b2fd-b13c47e0ec73",
+    "name": "Andy McLoughlin Founding (Uncorkcapital)",
+    "firm": "Andy McLoughlin Founding (Uncorkcapital)",
+    "linkedin_url": "https://linkedin.com/in/andy-mcloughlin-founding",
+    "blog_url": null,
+    "current_bio": "Andy McLoughlin Founding is an investor at Andy McLoughlin Founding (Uncorkcapital) focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "e1c922a1-a7a3-464f-9471-fc93b73824f4",
+    "name": "Amish Desai",
+    "firm": "Amish Desai",
+    "linkedin_url": "https://linkedin.com/in/amish-desai",
+    "blog_url": null,
+    "current_bio": "Partner, Growth Private Equity at Lightspeed",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "0d7e2d12-a5ff-45e8-9c51-a5b34b3ed1ed",
+    "name": "Partner Andrea Jackson (Northpondventures)",
+    "firm": "Partner Andrea Jackson (Northpondventures)",
+    "linkedin_url": "https://linkedin.com/in/partner-andrea-jackson",
+    "blog_url": null,
+    "current_bio": "Partner Andrea Jackson is an investor at Partner Andrea Jackson (Northpondventures) focused on SaaS, AI/ML investing at Seed and Series A stage.",
+    "current_sectors": [
+      "SaaS",
+      "AI/ML"
+    ],
+    "current_stage": [
+      "Seed",
+      "Series A"
+    ],
+    "missing_fields": [
+      "Investment Thesis",
+      "Notable Investments"
+    ],
+    "priority": 2
+  },
+  {
+    "id": "b55f0a8d-0c70-4b9c-8e88-48730008189b",
+    "name": "Thinh Chialtas Talent (Dcvc)",
+    "firm": "DCVC",
+    "linkedin_url": "https://linkedin.com/in/thinh-chialtas-talent",
+    "blog_url": "https://dcvc.com",
+    "current_bio": "Thinh Chialtas Talent is a partner at DCVC. Deep tech in AI, biology, materials, energy, space",
+    "current_sectors": [
+      "AI/ML",
+      "SaaS",
+      "Fintech",
+      "Biotechnology",
+      "Robotics"
+    ],
+    "current_stage": [
+      "Seed"
+    ],
+    "missing_fields": [
+      "Check Size Min",
+      "Check Size Max"
+    ],
+    "priority": 2
+  }
+]

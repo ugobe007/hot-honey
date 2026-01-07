@@ -90,7 +90,7 @@ export default function SharePortfolioModal({ isOpen, onClose, yesVotes }: Share
         {/* Header */}
         <div className="flex justify-between items-start mb-6">
           <div>
-            <h2 className="text-3xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent mb-2">
+            <h2 className="text-3xl font-bold bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent mb-2">
               Share Your Portfolio
             </h2>
             <p className="text-gray-600">
@@ -117,7 +117,7 @@ export default function SharePortfolioModal({ isOpen, onClose, yesVotes }: Share
                 value={investorName}
                 onChange={(e) => setInvestorName(e.target.value)}
                 placeholder="e.g., Murray's Hot Picks"
-                className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-orange-500 focus:outline-none transition-colors"
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-cyan-500 focus:outline-none transition-colors"
               />
               <p className="text-xs text-gray-500 mt-1">
                 Leave blank to share anonymously
@@ -146,13 +146,13 @@ export default function SharePortfolioModal({ isOpen, onClose, yesVotes }: Share
                     onClick={() => toggleIndustry(industry.id)}
                     className={`p-3 rounded-xl border-2 transition-all text-center ${
                       selectedIndustries.includes(industry.id)
-                        ? 'border-orange-500 bg-orange-50'
-                        : 'border-gray-300 bg-white hover:border-orange-300'
+                        ? 'border-cyan-500 bg-slate-800'
+                        : 'border-gray-300 bg-white hover:border-cyan-300'
                     }`}
                   >
                     <div className="text-2xl mb-1">{industry.emoji}</div>
                     <div className={`font-semibold text-xs ${
-                      selectedIndustries.includes(industry.id) ? 'text-orange-700' : 'text-gray-700'
+                      selectedIndustries.includes(industry.id) ? 'text-cyan-300' : 'text-gray-700'
                     }`}>
                       {industry.name}
                     </div>
@@ -175,7 +175,7 @@ export default function SharePortfolioModal({ isOpen, onClose, yesVotes }: Share
               className={`w-full font-bold py-4 px-8 rounded-2xl shadow-lg transition-all text-lg ${
                 selectedIndustries.length === 0
                   ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                  : 'bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white'
+                  : 'bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white'
               }`}
             >
               {selectedIndustries.length === 0 ? '⚠️ Select at least one industry' : '🔗 Generate Share Link'}
@@ -209,7 +209,7 @@ export default function SharePortfolioModal({ isOpen, onClose, yesVotes }: Share
                 />
                 <button
                   onClick={copyToClipboard}
-                  className="px-6 py-3 bg-orange-500 text-white rounded-xl font-semibold hover:bg-orange-600 transition-colors"
+                  className="px-6 py-3 bg-cyan-600 text-white rounded-xl font-semibold hover:bg-cyan-700 transition-colors"
                 >
                   {copied ? '✅ Copied!' : '📋 Copy'}
                 </button>
@@ -240,7 +240,7 @@ export default function SharePortfolioModal({ isOpen, onClose, yesVotes }: Share
               </button>
               <button
                 onClick={onClose}
-                className="flex-1 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-3 px-6 rounded-2xl transition-all"
+                className="flex-1 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold py-3 px-6 rounded-2xl transition-all"
               >
                 Done
               </button>

@@ -109,10 +109,10 @@ export default function AdminWorkflowDashboard() {
             <h2 className="text-xl font-bold text-white mb-6">Pipeline Workflow</h2>
             <div className="flex items-center justify-between gap-4 overflow-x-auto pb-4">
               <div className="flex-shrink-0 text-center">
-                <div className="w-16 h-16 bg-orange-500/20 border border-orange-500/50 rounded-xl flex items-center justify-center mb-2 mx-auto">
-                  <Zap className="w-6 h-6 text-orange-400" />
+                <div className="w-16 h-16 bg-cyan-600/20 border border-cyan-500/50 rounded-xl flex items-center justify-center mb-2 mx-auto">
+                  <Zap className="w-6 h-6 text-cyan-400" />
                 </div>
-                <p className="text-orange-400 text-sm font-medium">Scrape</p>
+                <p className="text-cyan-400 text-sm font-medium">Scrape</p>
               </div>
               <ArrowRight className="w-5 h-5 text-gray-600 flex-shrink-0" />
               <div className="flex-shrink-0 text-center">
