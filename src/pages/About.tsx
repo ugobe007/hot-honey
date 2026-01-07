@@ -13,24 +13,8 @@ export default function About() {
         <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
       </div>
 
-      {/* Logo Dropdown Menu */}
+      {/* Global Navigation */}
       <LogoDropdownMenu />
-
-      {/* Navigation Buttons - Top Right */}
-      <div className="fixed top-6 right-8 z-50 flex items-center gap-4">
-        <Link 
-          to="/get-matched" 
-          className="px-5 py-2.5 bg-gradient-to-r from-yellow-400 to-blue-500 hover:from-yellow-500 hover:to-blue-600 text-purple-900 font-bold rounded-xl transition-all shadow-lg"
-        >
-          Get Matched
-        </Link>
-        <Link 
-          to="/login" 
-          className="px-5 py-2.5 bg-gradient-to-r from-yellow-400 to-blue-500 hover:from-yellow-500 hover:to-blue-600 text-purple-900 font-bold rounded-xl transition-all shadow-lg"
-        >
-          Log In
-        </Link>
-      </div>
 
       <div className="relative z-10 container mx-auto px-8 pt-32 pb-20">
         {/* Hero Section */}

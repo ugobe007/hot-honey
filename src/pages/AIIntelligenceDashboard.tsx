@@ -18,6 +18,7 @@ import {
   DollarSign,
   Lightbulb
 } from 'lucide-react';
+import LogoDropdownMenu from '../components/LogoDropdownMenu';
 
 interface RSSDataPoint {
   source: string;
@@ -388,21 +389,8 @@ export default function AIIntelligenceDashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0f0729] via-[#1a0f3a] to-[#2d1558] text-white p-8 relative overflow-hidden">
-      {/* Quick Navigation Bar */}
-      <div className="fixed top-4 right-4 z-50 flex gap-2">
-        <button
-          onClick={() => navigate('/admin/instructions')}
-          className="px-4 py-2 bg-pink-600 hover:bg-pink-700 text-white rounded-lg font-semibold shadow-lg transition-all"
-        >
-          📚 Instructions
-        </button>
-        <button
-          onClick={() => navigate('/admin/control')}
-          className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-semibold shadow-lg transition-all"
-        >
-          🏠 Admin Home
-        </button>
-        <button
+      {/* Global Navigation */}
+      <LogoDropdownMenu />
           onClick={() => navigate('/')}
           className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-semibold shadow-lg transition-all"
         >

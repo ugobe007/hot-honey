@@ -149,26 +149,8 @@ const StrategiesPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950">
-      {/* Navigation */}
-      <nav className="border-b border-gray-800 bg-gray-950/80 backdrop-blur-md sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16 items-center">
-            <div className="flex items-center gap-4">
-              <LogoDropdownMenu />
-              <h1 className="text-xl font-bold text-white">Fundraising Playbook</h1>
-            </div>
-            <div className="flex items-center gap-3">
-              <button
-                onClick={() => navigate('/services')}
-                className="px-4 py-2 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-cyan-500/25 transition-all flex items-center gap-2"
-              >
-                <Zap className="w-4 h-4" />
-                Get AI Analysis
-              </button>
-            </div>
-          </div>
-        </div>
-      </nav>
+      {/* Global Navigation */}
+      <LogoDropdownMenu />
 
       {/* Header */}
       <div className="bg-gradient-to-r from-cyan-500/10 via-blue-500/10 to-violet-500/10 border-b border-gray-800">
