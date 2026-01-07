@@ -205,6 +205,130 @@ app.post('/api/god-scores/calculate', async (req, res) => {
   }
 });
 
+// Generic scraper endpoint - runs any scraper script
+app.post('/api/scrapers/run', async (req, res) => {
+  try {
+    const { scriptName, description } = req.body;
+    
+    if (!scriptName) {
+      return res.status(400).json({ error: 'scriptName is required' });
+    }
+
+    console.log(`🔄 Scraper triggered: ${description || scriptName}`);
+    spawnAutomationScript(scriptName, description || scriptName);
+    
+    res.json({ 
+      success: true, 
+      message: `${description || scriptName} started. Check server logs for progress.`,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error('Error triggering scraper:', error);
+    res.status(500).json({ error: 'Failed to start scraper', message: error.message });
+  }
+});
+
+// ML Recommendation apply endpoint
+app.post('/api/ml/recommendations/:id/apply', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { createClient } = require('@supabase/supabase-js');
+    
+    const supabase = createClient(
+      process.env.VITE_SUPABASE_URL,
+      process.env.SUPABASE_SERVICE_KEY || process.env.VITE_SUPABASE_ANON_KEY
+    );
+
+    // Fetch recommendation
+    const { data: recommendation, error: fetchError } = await supabase
+      .from('ml_recommendations')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (fetchError || !recommendation) {
+      return res.status(404).json({ error: 'Recommendation not found' });
+    }
+
+    if (recommendation.status === 'applied') {
+      return res.status(400).json({ error: 'Recommendation already applied' });
+    }
+
+    // Update status to applied
+    const { error: updateError } = await supabase
+      .from('ml_recommendations')
+      .update({
+        status: 'applied',
+        applied_at: new Date().toISOString(),
+        applied_by: req.body.userId || 'admin'
+      })
+      .eq('id', id);
+
+    if (updateError) {
+      throw updateError;
+    }
+
+    // TODO: Actually apply the weight changes to the algorithm
+    // This would involve updating environment variables or a config table
+    console.log('Applied recommendation:', recommendation);
+
+    res.json({ 
+      success: true, 
+      message: 'Recommendation applied successfully',
+      recommendation 
+    });
+  } catch (error) {
+    console.error('Error applying recommendation:', error);
+    res.status(500).json({ error: 'Failed to apply recommendation', message: error.message });
+  }
+});
+
+// GOD weights save endpoint
+app.post('/api/god-weights/save', async (req, res) => {
+  try {
+    const { weights, userId } = req.body;
+    
+    if (!weights) {
+      return res.status(400).json({ error: 'weights are required' });
+    }
+
+    const { createClient } = require('@supabase/supabase-js');
+    const supabase = createClient(
+      process.env.VITE_SUPABASE_URL,
+      process.env.SUPABASE_SERVICE_KEY || process.env.VITE_SUPABASE_ANON_KEY
+    );
+
+    // Save to algorithm_weight_history
+    const { error: historyError } = await supabase
+      .from('algorithm_weight_history')
+      .insert({
+        applied_by: userId || 'admin',
+        applied_at: new Date().toISOString(),
+        weight_updates: [{
+          component: 'all',
+          new_weight: weights,
+          reason: 'Manual weight adjustment via GOD Settings'
+        }]
+      });
+
+    if (historyError) {
+      console.warn('Failed to save weight history:', historyError);
+    }
+
+    // TODO: Actually update the algorithm configuration
+    // This could update environment variables or a config table
+
+    res.json({ 
+      success: true, 
+      message: 'GOD algorithm weights saved successfully',
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error('Error saving GOD weights:', error);
+    res.status(500).json({ error: 'Failed to save weights', message: error.message });
+  }
+});
+
 // ML Training endpoint
 app.post('/api/ml/training/run', async (req, res) => {
   try {

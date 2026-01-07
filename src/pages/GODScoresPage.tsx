@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { RefreshCw, AlertCircle, TrendingUp, TrendingDown, CheckCircle, Clock } from 'lucide-react';
+import { RefreshCw, AlertCircle, TrendingUp, TrendingDown, CheckCircle, Clock, Settings, ArrowRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import LogoDropdownMenu from '../components/LogoDropdownMenu';
 import { supabase } from '../lib/supabase';
 import AdminNavBar from '../components/AdminNavBar';
 
@@ -37,6 +39,7 @@ interface AlgorithmBias {
 }
 
 export default function GODScoresPage() {
+  const navigate = useNavigate();
   const [startups, setStartups] = useState<Startup[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -45,19 +48,37 @@ export default function GODScoresPage() {
   const [algorithmBias, setAlgorithmBias] = useState<AlgorithmBias[]>([]);
   const [showBias, setShowBias] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
+  const [autoRefresh, setAutoRefresh] = useState(true);
+  const [statusFilter, setStatusFilter] = useState<'approved' | 'all'>('approved');
 
   useEffect(() => { 
     loadData();
     loadScoreChanges();
     loadAlgorithmBias();
-  }, []);
+    
+    // Real-time auto-refresh every 30 seconds
+    const interval = setInterval(() => {
+      if (autoRefresh) {
+        loadData();
+        loadScoreChanges();
+      }
+    }, 30000);
+    
+    return () => clearInterval(interval);
+  }, [autoRefresh, statusFilter]);
 
   const loadData = async () => {
     setLoading(true);
-    const { data } = await supabase.from('startup_uploads')
+    let query = supabase.from('startup_uploads')
       .select('id, name, tagline, total_god_score, team_score, traction_score, market_score, product_score, vision_score, status, created_at, updated_at')
-      .not('total_god_score', 'is', null)
-      .order('total_god_score', { ascending: false });
+      .not('total_god_score', 'is', null);
+    
+    // Filter by status - default to approved only
+    if (statusFilter === 'approved') {
+      query = query.eq('status', 'approved');
+    }
+    
+    const { data } = await query.order('total_god_score', { ascending: false });
 
     if (data) {
       setStartups(data);
@@ -189,20 +210,57 @@ export default function GODScoresPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-100 overflow-auto">
-      <AdminNavBar currentPage="GOD Scores" />
+    <div className="min-h-screen bg-gradient-to-br from-[#0f0729] via-[#1a0f3a] to-[#2d1558] text-white">
+      <LogoDropdownMenu />
       
       {/* Header */}
-      <div className="border-b border-gray-800 bg-gray-900/95 sticky top-0 z-30">
-        <div className="max-w-[1800px] mx-auto px-4 py-2 flex items-center justify-between">
-          <h1 className="text-lg font-bold text-white">🎯 GOD Scores</h1>
-          <div className="flex items-center gap-4 text-xs">
-            <button onClick={refresh} className="text-gray-400 hover:text-white">
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-orange-400 to-amber-400 bg-clip-text text-transparent mb-2">
+              🎯 GOD Scores (Real-Time)
+            </h1>
+            <p className="text-slate-400">Live startup scoring and rankings</p>
+          </div>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setAutoRefresh(!autoRefresh)}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium ${
+                autoRefresh
+                  ? 'bg-green-500/20 text-green-400 border border-green-500/30'
+                  : 'bg-slate-700 text-slate-400 border border-slate-600'
+              }`}
+            >
+              <Activity className="w-4 h-4" />
+              Auto-refresh {autoRefresh ? 'ON' : 'OFF'}
+            </button>
+            <button
+              onClick={() => setStatusFilter(statusFilter === 'approved' ? 'all' : 'approved')}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                statusFilter === 'approved'
+                  ? 'bg-green-500/20 text-green-400 border border-green-500/30'
+                  : 'bg-slate-700 text-slate-400 border border-slate-600'
+              }`}
+            >
+              {statusFilter === 'approved' ? '✓ Approved Only' : 'All Statuses'}
+            </button>
+            <button
+              onClick={() => navigate('/admin/god-settings')}
+              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-black font-semibold rounded-lg transition-all"
+            >
+              <Settings className="w-4 h-4" />
+              Settings
+              <ArrowRight className="w-4 h-4" />
+            </button>
+            <button
+              onClick={refresh}
+              disabled={refreshing}
+              className="p-2 bg-slate-700 hover:bg-slate-600 rounded-lg transition-colors disabled:opacity-50"
+            >
               <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
             </button>
           </div>
         </div>
-      </div>
 
       <div className="max-w-[1800px] mx-auto p-4 space-y-4">
         {/* Stats */}

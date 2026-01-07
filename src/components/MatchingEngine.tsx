@@ -899,104 +899,104 @@ export default function MatchingEngine() {
 
         {/* Live Algorithm Visualization - Interactive Demo */}
         <div className="max-w-7xl mx-auto mt-8 mb-16 px-4">
-          {/* Section Header */}
-          <div className="text-center mb-12">
-            <h2 className="text-5xl font-bold text-white mb-4">
+          {/* Section Header - Mobile Responsive */}
+          <div className="text-center mb-8 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-3 sm:mb-4 px-4">
               Watch the <span className="bg-gradient-to-r from-orange-400 via-amber-400 to-orange-500 bg-clip-text text-transparent">Magic</span> Happen
             </h2>
-            <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+            <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-400 max-w-3xl mx-auto px-4">
               Our <span className="text-yellow-400 font-semibold">GOD Algorithm™</span> processes 20+ compatibility factors in real-time
             </p>
           </div>
 
-          {/* Live Processing Dashboard - Dark stage with orange glow */}
-          <div className="bg-gradient-to-br from-[#1a1a1a]/90 via-[#222222]/90 to-[#1a1a1a]/90 backdrop-blur-xl rounded-3xl p-8 border border-cyan-500/30 shadow-[0_0_60px_rgba(255,90,9,0.2)] mb-12">
-            {/* Real-time Status */}
-            <div className="flex items-center justify-between mb-8 pb-6 border-b border-white/10">
-              <div className="flex items-center gap-3">
+          {/* Live Processing Dashboard - Dark stage with orange glow - Mobile Responsive */}
+          <div className="bg-gradient-to-br from-[#1a1a1a]/90 via-[#222222]/90 to-[#1a1a1a]/90 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 border border-cyan-500/30 shadow-[0_0_60px_rgba(255,90,9,0.2)] mb-8 sm:mb-12">
+            {/* Real-time Status - Mobile Responsive */}
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-0 mb-6 sm:mb-8 pb-4 sm:pb-6 border-b border-white/10">
+              <div className="flex items-center gap-2 sm:gap-3">
                 <div className="relative">
-                  <div className="w-4 h-4 bg-green-400 rounded-full animate-pulse"></div>
-                  <div className="absolute inset-0 w-4 h-4 bg-green-400 rounded-full animate-ping"></div>
+                  <div className="w-3 h-3 sm:w-4 sm:h-4 bg-green-400 rounded-full animate-pulse"></div>
+                  <div className="absolute inset-0 w-3 h-3 sm:w-4 sm:h-4 bg-green-400 rounded-full animate-ping"></div>
                 </div>
-                <span className="text-green-300 font-semibold text-lg">AI Processing Live</span>
+                <span className="text-green-300 font-semibold text-sm sm:text-base md:text-lg">AI Processing Live</span>
               </div>
-              <div className="flex items-center gap-6">
+              <div className="flex items-center gap-3 sm:gap-4 md:gap-6 w-full sm:w-auto justify-between sm:justify-start">
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-orange-400">{matches.length}</div>
-                  <div className="text-xs text-gray-400 uppercase tracking-wide">Active Matches</div>
+                  <div className="text-xl sm:text-2xl md:text-3xl font-bold text-orange-400">{matches.length}</div>
+                  <div className="text-[10px] sm:text-xs text-gray-400 uppercase tracking-wide">Active</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-orange-400">{match.matchScore}%</div>
-                  <div className="text-xs text-gray-400 uppercase tracking-wide">Match Score</div>
+                  <div className="text-xl sm:text-2xl md:text-3xl font-bold text-orange-400">{match.matchScore}%</div>
+                  <div className="text-[10px] sm:text-xs text-gray-400 uppercase tracking-wide">Score</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-cyan-400">&lt;2s</div>
-                  <div className="text-xs text-gray-400 uppercase tracking-wide">Process Time</div>
+                  <div className="text-xl sm:text-2xl md:text-3xl font-bold text-cyan-400">&lt;2s</div>
+                  <div className="text-[10px] sm:text-xs text-gray-400 uppercase tracking-wide">Time</div>
                 </div>
               </div>
             </div>
 
-            {/* Compatibility Metrics - Animated Bars */}
-            <div className="space-y-4">
-              <div className="flex items-center gap-4">
-                <div className="w-40 text-white font-semibold text-sm">Industry Fit</div>
+            {/* Compatibility Metrics - Animated Bars - Mobile Responsive */}
+            <div className="space-y-3 sm:space-y-4">
+              <div className="flex items-center gap-2 sm:gap-4">
+                <div className="w-20 sm:w-32 md:w-40 text-white font-semibold text-xs sm:text-sm">Industry Fit</div>
                 <div className="flex-1 h-3 bg-white/10 rounded-full overflow-hidden">
                   <div 
                     className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full transition-all duration-1000 ease-out"
                     style={{ width: `${Math.min(95, match.matchScore + 5)}%` }}
                   />
                 </div>
-                <div className="w-12 text-right text-orange-400 font-bold">{Math.min(95, match.matchScore + 5)}%</div>
+                <div className="w-10 sm:w-12 text-right text-orange-400 font-bold text-xs sm:text-sm">{Math.min(95, match.matchScore + 5)}%</div>
               </div>
 
-              <div className="flex items-center gap-4">
-                <div className="w-40 text-white font-semibold text-sm">Stage Match</div>
+              <div className="flex items-center gap-2 sm:gap-4">
+                <div className="w-20 sm:w-32 md:w-40 text-white font-semibold text-xs sm:text-sm">Stage Match</div>
                 <div className="flex-1 h-3 bg-white/10 rounded-full overflow-hidden">
                   <div 
                     className="h-full bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full transition-all duration-1000 ease-out delay-150"
                     style={{ width: `${Math.min(92, match.matchScore + 2)}%` }}
                   />
                 </div>
-                <div className="w-12 text-right text-cyan-400 font-bold">{Math.min(92, match.matchScore + 2)}%</div>
+                <div className="w-10 sm:w-12 text-right text-cyan-400 font-bold text-xs sm:text-sm">{Math.min(92, match.matchScore + 2)}%</div>
               </div>
 
-              <div className="flex items-center gap-4">
-                <div className="w-40 text-white font-semibold text-sm">Check Size</div>
+              <div className="flex items-center gap-2 sm:gap-4">
+                <div className="w-20 sm:w-32 md:w-40 text-white font-semibold text-xs sm:text-sm">Check Size</div>
                 <div className="flex-1 h-3 bg-white/10 rounded-full overflow-hidden">
                   <div 
                     className="h-full bg-gradient-to-r from-green-500 to-emerald-500 rounded-full transition-all duration-1000 ease-out delay-300"
                     style={{ width: `${Math.min(88, match.matchScore - 3)}%` }}
                   />
                 </div>
-                <div className="w-12 text-right text-cyan-400 font-bold">{Math.min(88, match.matchScore - 3)}%</div>
+                <div className="w-10 sm:w-12 text-right text-cyan-400 font-bold text-xs sm:text-sm">{Math.min(88, match.matchScore - 3)}%</div>
               </div>
 
-              <div className="flex items-center gap-4">
-                <div className="w-40 text-white font-semibold text-sm">Geography</div>
+              <div className="flex items-center gap-2 sm:gap-4">
+                <div className="w-20 sm:w-32 md:w-40 text-white font-semibold text-xs sm:text-sm">Geography</div>
                 <div className="flex-1 h-3 bg-white/10 rounded-full overflow-hidden">
                   <div 
                     className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full transition-all duration-1000 ease-out delay-450"
                     style={{ width: `${Math.min(90, match.matchScore)}%` }}
                   />
                 </div>
-                <div className="w-12 text-right text-cyan-400 font-bold">{Math.min(90, match.matchScore)}%</div>
+                <div className="w-10 sm:w-12 text-right text-cyan-400 font-bold text-xs sm:text-sm">{Math.min(90, match.matchScore)}%</div>
               </div>
 
-              <div className="flex items-center gap-4">
-                <div className="w-40 text-white font-semibold text-sm">Thesis Alignment</div>
+              <div className="flex items-center gap-2 sm:gap-4">
+                <div className="w-20 sm:w-32 md:w-40 text-white font-semibold text-xs sm:text-sm">Thesis Alignment</div>
                 <div className="flex-1 h-3 bg-white/10 rounded-full overflow-hidden">
                   <div 
                     className="h-full bg-gradient-to-r from-teal-500 to-cyan-500 rounded-full transition-all duration-1000 ease-out delay-600"
                     style={{ width: `${Math.min(87, match.matchScore - 5)}%` }}
                   />
                 </div>
-                <div className="w-12 text-right text-teal-400 font-bold">{Math.min(87, match.matchScore - 5)}%</div>
+                <div className="w-10 sm:w-12 text-right text-teal-400 font-bold text-xs sm:text-sm">{Math.min(87, match.matchScore - 5)}%</div>
               </div>
             </div>
 
-            {/* Processing Steps */}
-            <div className="mt-8 pt-6 border-t border-white/10">
-              <div className="grid grid-cols-4 gap-4">
+            {/* Processing Steps - Mobile Responsive */}
+            <div className="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-white/10">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4">
                 <div className="text-center">
                   <div className="w-12 h-12 mx-auto bg-gradient-to-br from-cyan-600 to-blue-600 rounded-xl flex items-center justify-center mb-2 shadow-lg shadow-cyan-500/50">
                     <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">

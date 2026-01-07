@@ -20,7 +20,6 @@ import Contact from './pages/Contact';
 import Settings from './pages/Settings';
 import SharedPortfolio from './pages/SharedPortfolio';
 import BulkUpload from './pages/BulkUpload';
-import BulkImport from './pages/BulkImport';
 import DocumentUpload from './pages/DocumentUpload';
 import Analytics from './pages/Analytics';
 import Login from './pages/Login';
@@ -37,11 +36,8 @@ import MigrateStartupData from './pages/MigrateStartupData';
 import DiagnosticPage from './pages/DiagnosticPage';
 import DatabaseDiagnostic from './pages/DatabaseDiagnostic';
 import ProfilePage from './pages/ProfilePage';
-import AdminDashboard from './pages/AdminDashboard';
-import AdminOperations from './pages/AdminOperations';
 import AIIntelligenceDashboard from './pages/AIIntelligenceDashboard';
 import CommandCenter from './components/CommandCenter';
-import AdminWorkflowDashboard from './components/AdminWorkflowDashboard';
 import QuickAddInvestor from './pages/QuickAddInvestor';
 import SyncStartups from './pages/SyncStartups';
 import DataIntelligence from './pages/DataIntelligence';
@@ -57,7 +53,6 @@ import MLDashboard from './pages/MLDashboard';
 import ControlCenter from './pages/ControlCenter';
 import MetricsDashboard from './pages/MetricsDashboard';
 import LiveDemo from './pages/LiveDemo';
-import MasterControlCenter from './pages/MasterControlCenter';
 import UnifiedAdminDashboard from './pages/UnifiedAdminDashboard';
 import InvestorEnrichmentPage from './pages/InvestorEnrichmentPage';
 import DiscoveredInvestors from './pages/DiscoveredInvestors';
@@ -80,6 +75,8 @@ import PipelineMonitor from './pages/PipelineMonitor';
 import FundingForecasts from './pages/FundingForecasts';
 import StartupBenchmarksDashboard from './pages/StartupBenchmarksDashboard';
 import SocialSignalsDashboard from './components/SocialSignalsDashboard';
+import GODSettingsPage from './pages/GODSettingsPage';
+import ScraperManagementPage from './pages/ScraperManagementPage';
 import './App.css';
 import LogoDropdownMenu from './components/LogoDropdownMenu';
 
@@ -156,16 +153,14 @@ const App: React.FC = () => {
           <Route path="/admin" element={<AdminRouteWrapper />}>
             <Route index element={<UnifiedAdminDashboard />} />
             <Route path="dashboard" element={<UnifiedAdminDashboard />} />
-            {/* Legacy routes - keeping for backwards compatibility */}
-            <Route path="control" element={<MasterControlCenter />} />
+            <Route path="control" element={<ControlCenter />} />
             <Route path="review" element={<AdminReview />} />
             <Route path="rss-manager" element={<RSSManager />} />
             <Route path="discovered-startups" element={<DiscoveredStartups />} />
             <Route path="discovered-investors" element={<DiscoveredInvestors />} />
-            <Route path="startups" element={<DiscoveredStartups />} />
-            <Route path="investors" element={<DiscoveredInvestors />} />
             <Route path="bulk-upload" element={<BulkUpload />} />
             <Route path="god-scores" element={<GODScoresPage />} />
+            <Route path="god-settings" element={<GODSettingsPage />} />
             <Route path="tier-matching" element={<TierMatchingAdmin />} />
             <Route path="investor-enrichment" element={<InvestorEnrichmentPage />} />
             <Route path="ai-logs" element={<AILogsPage />} />
@@ -182,13 +177,9 @@ const App: React.FC = () => {
             <Route path="pipeline" element={<PipelineMonitor />} />
             <Route path="forecasts" element={<FundingForecasts />} />
             <Route path="scripts" element={<ScriptsControlPage />} />
-            {/* Legacy routes - keeping for backwards compatibility */}
-            <Route path="operations" element={<ControlCenter />} />
-            <Route path="dashboard" element={<AdminWorkflowDashboard />} />
+            <Route path="scrapers" element={<ScraperManagementPage />} />
             <Route path="command-center" element={<CommandCenter />} />
-            <Route path="bulk-import" element={<BulkImport />} />
             <Route path="document-upload" element={<DocumentUpload />} />
-            <Route path="legacy-dashboard" element={<AdminDashboard />} />
             <Route path="setup" element={<SetupPage />} />
             <Route path="sync" element={<SyncStartups />} />
             <Route path="migrate" element={<MigrateLocalStorage />} />

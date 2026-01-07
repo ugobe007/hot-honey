@@ -216,29 +216,30 @@ export default function GetMatchedPage() {
           </p>
           
           {/* Resource Cards - Startup Playbook & Fundraising Toolkit */}
-          <div className="flex flex-wrap justify-center gap-4 mt-8">
+          {/* Resource Cards - Mobile Responsive */}
+          <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4 mt-6 sm:mt-8 px-4">
             <Link
               to="/strategies"
-              className="group flex items-center gap-3 px-5 py-3 bg-gradient-to-r from-orange-500/20 to-amber-500/20 border border-orange-500/40 hover:border-orange-400/60 rounded-xl transition-all hover:scale-105 shadow-lg shadow-orange-500/20 hover:shadow-orange-500/40"
+              className="group flex items-center gap-2 sm:gap-3 px-4 sm:px-5 py-2.5 sm:py-3 bg-gradient-to-r from-orange-500/20 to-amber-500/20 border border-orange-500/40 hover:border-orange-400/60 rounded-xl transition-all hover:scale-105 shadow-lg shadow-orange-500/20 hover:shadow-orange-500/40 w-full sm:w-auto"
             >
-              <BookOpen className="w-5 h-5 text-orange-400 group-hover:text-orange-300" />
-              <div className="text-left">
-                <div className="text-white font-bold text-sm">Startup Fundraising Playbook</div>
-                <div className="text-orange-300 text-xs">Y Combinator & a16z strategies</div>
+              <BookOpen className="w-4 h-4 sm:w-5 sm:h-5 text-orange-400 group-hover:text-orange-300 flex-shrink-0" />
+              <div className="text-left flex-1 min-w-0">
+                <div className="text-white font-bold text-xs sm:text-sm">Startup Fundraising Playbook</div>
+                <div className="text-orange-300 text-[10px] sm:text-xs">Y Combinator & a16z strategies</div>
               </div>
-              <ChevronRight className="w-4 h-4 text-orange-400 group-hover:translate-x-1 transition-transform" />
+              <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 text-orange-400 group-hover:translate-x-1 transition-transform flex-shrink-0" />
             </Link>
             
             <Link
               to="/services"
-              className="group flex items-center gap-3 px-5 py-3 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 border border-cyan-500/40 hover:border-cyan-400/60 rounded-xl transition-all hover:scale-105 shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/40"
+              className="group flex items-center gap-2 sm:gap-3 px-4 sm:px-5 py-2.5 sm:py-3 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 border border-cyan-500/40 hover:border-cyan-400/60 rounded-xl transition-all hover:scale-105 shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/40 w-full sm:w-auto"
             >
-              <Brain className="w-5 h-5 text-cyan-400 group-hover:text-cyan-300" />
-              <div className="text-left">
-                <div className="text-white font-bold text-sm">Fundraising Toolkit</div>
-                <div className="text-cyan-300 text-xs">AI-powered pitch & strategy tools</div>
+              <Brain className="w-4 h-4 sm:w-5 sm:h-5 text-cyan-400 group-hover:text-cyan-300 flex-shrink-0" />
+              <div className="text-left flex-1 min-w-0">
+                <div className="text-white font-bold text-xs sm:text-sm">Fundraising Toolkit</div>
+                <div className="text-cyan-300 text-[10px] sm:text-xs">AI-powered pitch & strategy tools</div>
               </div>
-              <ChevronRight className="w-4 h-4 text-cyan-400 group-hover:translate-x-1 transition-transform" />
+              <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 text-cyan-400 group-hover:translate-x-1 transition-transform flex-shrink-0" />
             </Link>
           </div>
         </div>
@@ -360,10 +361,10 @@ export default function GetMatchedPage() {
           </div>
         </div>
 
-        {/* Main Content Grid */}
-        <div className="grid lg:grid-cols-5 gap-8">
+        {/* Main Content Grid - Mobile Responsive */}
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 sm:gap-8">
           {/* Left side - Benefits */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2 space-y-4 sm:space-y-6">
             {/* Stats */}
             <div className="bg-slate-800/50 border border-slate-700 rounded-2xl p-6">
               <h3 className="text-lg font-bold text-white mb-4">Why Startups Choose Hot Match</h3>
@@ -424,11 +425,11 @@ export default function GetMatchedPage() {
             </div>
           </div>
 
-          {/* Right side - Sign Up Form */}
+          {/* Right side - Sign Up Form - Mobile Responsive */}
           <div className="lg:col-span-3">
-            <div className="bg-slate-800/80 border border-slate-700 rounded-2xl p-8">
-              {/* Progress Steps */}
-              <div className="flex items-center justify-between mb-8">
+            <div className="bg-slate-800/80 border border-slate-700 rounded-2xl p-4 sm:p-6 md:p-8">
+              {/* Progress Steps - Mobile Responsive */}
+              <div className="flex items-center justify-between mb-6 sm:mb-8 gap-2 overflow-x-auto pb-2">
                 {[
                   { id: 'info', label: 'Your Startup', num: 1 },
                   { id: 'details', label: 'Details', num: 2 },

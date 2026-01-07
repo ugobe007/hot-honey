@@ -87,10 +87,10 @@ export default function LogoDropdownMenu() {
 
   return (
     <>
-      {/* Floating Nav Buttons - Simplified & Consistent - Hidden on matching pages */}
+      {/* Floating Nav Buttons - Simplified & Consistent - Hidden on matching pages - Mobile Responsive */}
       {!isMatchingPage && (
-        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-40">
-          <div className="flex items-center gap-1.5 px-2 py-1.5 bg-black/60 backdrop-blur-md rounded-full border border-white/20 shadow-xl">
+        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-40 max-w-[95vw]">
+          <div className="flex items-center gap-1 sm:gap-1.5 px-1.5 sm:px-2 py-1 sm:py-1.5 bg-black/60 backdrop-blur-md rounded-full border border-white/20 shadow-xl overflow-x-auto">
             {/* Back Button - Consistent style */}
             <button
               onClick={() => navigate(-1)}
@@ -149,18 +149,18 @@ export default function LogoDropdownMenu() {
         </div>
       )}
 
-      {/* Hamburger Menu Button */}
-      <div ref={menuRef} className="fixed top-4 left-6 z-50">
+      {/* Hamburger Menu Button - Mobile Responsive */}
+      <div ref={menuRef} className="fixed top-4 left-2 sm:left-6 z-50">
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="p-4 rounded-xl bg-gradient-to-br from-[#1a1a1a] to-[#2d2d2d] hover:from-[#2d2d2d] hover:to-[#393939] backdrop-blur-sm border border-[#FF5A09]/30 hover:border-[#FF5A09]/60 transition-all hover:scale-105 shadow-lg shadow-black/20"
-        aria-label="Menu"
-      >
-        <div className="flex flex-col gap-2 w-8">
-          <div className="h-1.5 rounded-full bg-gradient-to-r from-[#FF5A09] to-[#FF9900]" />
-          <div className="h-1.5 rounded-full bg-gradient-to-r from-[#FF9900] to-[#FFCC00]" />
-          <div className="h-1.5 rounded-full bg-gradient-to-r from-[#FF5A09] to-[#FF9900]" />
-        </div>
+          className="p-2 sm:p-4 rounded-lg sm:rounded-xl bg-gradient-to-br from-[#1a1a1a] to-[#2d2d2d] hover:from-[#2d2d2d] hover:to-[#393939] backdrop-blur-sm border border-[#FF5A09]/30 hover:border-[#FF5A09]/60 transition-all hover:scale-105 shadow-lg shadow-black/20"
+          aria-label="Menu"
+        >
+          <div className="flex flex-col gap-1 sm:gap-2 w-6 sm:w-8">
+            <div className="h-1 sm:h-1.5 rounded-full bg-gradient-to-r from-[#FF5A09] to-[#FF9900]" />
+            <div className="h-1 sm:h-1.5 rounded-full bg-gradient-to-r from-[#FF9900] to-[#FFCC00]" />
+            <div className="h-1 sm:h-1.5 rounded-full bg-gradient-to-r from-[#FF5A09] to-[#FF9900]" />
+          </div>
       </button>
 
       {/* Dropdown Menu */}
@@ -172,8 +172,8 @@ export default function LogoDropdownMenu() {
             onClick={() => setIsOpen(false)}
           />
           
-          {/* Menu Panel - Clean Dark Theme with Orange Accents - Larger */}
-          <div className="absolute top-full left-0 mt-2 w-80 bg-gradient-to-b from-[#1a1a1a] to-[#0f0f0f] rounded-2xl shadow-2xl border border-[#FF5A09]/20 overflow-hidden animate-fadeIn">
+          {/* Menu Panel - Clean Dark Theme with Orange Accents - Mobile Responsive */}
+          <div className="absolute top-full left-0 mt-2 w-[calc(100vw-2rem)] sm:w-80 max-w-[90vw] bg-gradient-to-b from-[#1a1a1a] to-[#0f0f0f] rounded-2xl shadow-2xl border border-[#FF5A09]/20 overflow-hidden animate-fadeIn">
             <div className="p-5 max-h-[75vh] overflow-y-auto">
               {/* Header */}
               <div className="flex items-center gap-3 mb-5 pb-4 border-b border-[#FF5A09]/30">

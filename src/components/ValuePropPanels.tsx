@@ -31,23 +31,23 @@ export default function ValuePropPanels() {
           <Sparkles className="w-4 h-4 text-orange-400" />
           <span className="text-orange-300 text-sm font-medium">AI-Powered Matching • Real-Time Intelligence</span>
         </div>
-        <h2 className="text-4xl md:text-5xl font-bold mb-4">
+        <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 px-4">
           <span className="bg-gradient-to-r from-white via-gray-100 to-gray-300 bg-clip-text text-transparent">
             Choose Your Path
           </span>
         </h2>
-        <p className="text-lg text-gray-400 max-w-2xl mx-auto">
+        <p className="text-base sm:text-lg text-gray-400 max-w-2xl mx-auto px-4">
           Matches are calculated on-demand using live data from 500+ investors and
           thousands of startups. Every score reflects current market conditions.
         </p>
       </div>
 
-      {/* Value Prop Cards - Side by Side */}
-      <div className="grid md:grid-cols-2 gap-6 mb-8">
+      {/* Value Prop Cards - Side by Side - Mobile Responsive */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-8">
         
         {/* FOUNDER CARD */}
         <Link to="/get-matched" className="group">
-          <div className="relative h-full bg-gradient-to-br from-orange-500/10 via-slate-900 to-slate-800 border-2 border-orange-500/30 rounded-3xl p-8 hover:border-orange-500/60 hover:shadow-2xl hover:shadow-orange-500/20 transition-all duration-300 hover:scale-[1.02]">
+          <div className="relative h-full bg-gradient-to-br from-orange-500/10 via-slate-900 to-slate-800 border-2 border-orange-500/30 rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 hover:border-orange-500/60 hover:shadow-2xl hover:shadow-orange-500/20 transition-all duration-300 hover:scale-[1.02]">
             
             {/* Glow Effect */}
             <div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -66,15 +66,15 @@ export default function ValuePropPanels() {
                 </div>
               </div>
 
-              {/* Features */}
+              {/* Features - Law of 3 */}
               <div className="space-y-4 mb-8">
                 <div className="flex items-start gap-3">
                   <div className="w-10 h-10 bg-orange-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
                     <Zap className="w-5 h-5 text-orange-400" />
                   </div>
                   <div>
-                    <h4 className="text-white font-semibold mb-1">5+ Investor Matches</h4>
-                    <p className="text-gray-400 text-sm">Matched to your stage, sector, geography</p>
+                    <h4 className="text-white font-semibold mb-1">Perfect-Fit Investor Matches</h4>
+                    <p className="text-gray-400 text-sm">AI-powered matching to your stage, sector, and geography</p>
                   </div>
                 </div>
 
@@ -83,42 +83,22 @@ export default function ValuePropPanels() {
                     <Brain className="w-5 h-5 text-orange-400" />
                   </div>
                   <div>
-                    <h4 className="text-white font-semibold mb-1">AI Explains Why</h4>
-                    <p className="text-gray-400 text-sm">See exactly why each VC is a good fit</p>
+                    <h4 className="text-white font-semibold mb-1">Clear Action Plan</h4>
+                    <p className="text-gray-400 text-sm">AI explains why each VC fits + next steps + timing intelligence</p>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-3">
                   <div className="w-10 h-10 bg-orange-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <BarChart3 className="w-5 h-5 text-orange-400" />
+                    <Diamond className="w-5 h-5 text-orange-400" />
                   </div>
                   <div>
-                    <h4 className="text-white font-semibold mb-1">Next Steps Included</h4>
-                    <p className="text-gray-400 text-sm">Clear action plan for each investor</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 bg-orange-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <Calendar className="w-5 h-5 text-orange-400" />
-                  </div>
-                  <div>
-                    <h4 className="text-white font-semibold mb-1">Timing Intelligence</h4>
-                    <p className="text-gray-400 text-sm">Know when VCs are actively deploying</p>
+                    <h4 className="text-white font-semibold mb-1">Premium Strategy Support</h4>
+                    <p className="text-gray-400 text-sm">1-on-1 fundraising strategy + pitch deck review + intro prep</p>
                   </div>
                 </div>
               </div>
 
-              {/* Premium Badge */}
-              <div className="bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-500/30 rounded-2xl p-4 mb-6">
-                <div className="flex items-center gap-2 mb-2">
-                  <Diamond className="w-5 h-5 text-amber-400" />
-                  <span className="text-amber-400 font-bold">Premium Strategy Service</span>
-                </div>
-                <p className="text-gray-300 text-sm">
-                  1-on-1 fundraising strategy + pitch deck review + intro prep
-                </p>
-              </div>
 
               {/* CTA Button */}
               <button className="w-full bg-gradient-to-r from-orange-500 to-amber-500 text-white font-bold py-4 px-6 rounded-xl hover:from-orange-600 hover:to-amber-600 shadow-lg shadow-orange-500/30 transition-all group-hover:shadow-2xl group-hover:shadow-orange-500/40 flex items-center justify-center gap-2">
@@ -131,7 +111,7 @@ export default function ValuePropPanels() {
 
         {/* INVESTOR CARD */}
         <Link to="/investor/signup" className="group">
-          <div className="relative h-full bg-gradient-to-br from-purple-500/10 via-slate-900 to-slate-800 border-2 border-purple-500/30 rounded-3xl p-8 hover:border-purple-500/60 hover:shadow-2xl hover:shadow-purple-500/20 transition-all duration-300 hover:scale-[1.02]">
+          <div className="relative h-full bg-gradient-to-br from-purple-500/10 via-slate-900 to-slate-800 border-2 border-purple-500/30 rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 hover:border-purple-500/60 hover:shadow-2xl hover:shadow-purple-500/20 transition-all duration-300 hover:scale-[1.02]">
             
             {/* Glow Effect */}
             <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -150,25 +130,15 @@ export default function ValuePropPanels() {
                 </div>
               </div>
 
-              {/* Features */}
+              {/* Features - Law of 3 */}
               <div className="space-y-4 mb-8">
                 <div className="flex items-start gap-3">
                   <div className="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
                     <FlameIconComponent className="w-5 h-5 text-purple-400" />
                   </div>
                   <div>
-                    <h4 className="text-white font-semibold mb-1">10+ Startup Matches</h4>
-                    <p className="text-gray-400 text-sm">Pre-screened for your criteria</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <Target className="w-5 h-5 text-purple-400" />
-                  </div>
-                  <div>
-                    <h4 className="text-white font-semibold mb-1">AI Quality Scoring</h4>
-                    <p className="text-gray-400 text-sm">Momentum, traction, and growth signals</p>
+                    <h4 className="text-white font-semibold mb-1">Pre-Screened Quality Startups</h4>
+                    <p className="text-gray-400 text-sm">AI quality scoring with momentum, traction, and growth signals</p>
                   </div>
                 </div>
 
@@ -177,31 +147,20 @@ export default function ValuePropPanels() {
                     <TrendingUp className="w-5 h-5 text-purple-400" />
                   </div>
                   <div>
-                    <h4 className="text-white font-semibold mb-1">Market Intelligence</h4>
-                    <p className="text-gray-400 text-sm">See trends before competitors</p>
+                    <h4 className="text-white font-semibold mb-1">Market Intelligence & Automation</h4>
+                    <p className="text-gray-400 text-sm">See trends before competitors + automated deal flow discovery</p>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-3">
                   <div className="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <Zap className="w-5 h-5 text-purple-400" />
+                    <Diamond className="w-5 h-5 text-purple-400" />
                   </div>
                   <div>
-                    <h4 className="text-white font-semibold mb-1">Deal Flow Automation</h4>
-                    <p className="text-gray-400 text-sm">Stop manually searching TechCrunch</p>
+                    <h4 className="text-white font-semibold mb-1">Premium Intelligence Access</h4>
+                    <p className="text-gray-400 text-sm">Early access to deals + founder background checks + social signals</p>
                   </div>
                 </div>
-              </div>
-
-              {/* Premium Badge */}
-              <div className="bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-500/30 rounded-2xl p-4 mb-6">
-                <div className="flex items-center gap-2 mb-2">
-                  <Diamond className="w-5 h-5 text-blue-400" />
-                  <span className="text-blue-400 font-bold">Premium Intelligence</span>
-                </div>
-                <p className="text-gray-300 text-sm">
-                  Early access to deals + founder background checks + social signals
-                </p>
               </div>
 
               {/* CTA Button */}
@@ -231,4 +190,5 @@ export default function ValuePropPanels() {
     </div>
   );
 }
+
 
