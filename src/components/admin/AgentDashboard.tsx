@@ -293,7 +293,7 @@ const AgentDashboard: React.FC = () => {
               <Brain className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h1 className="text-xl font-bold">Hot Match Command Center</h1>
+              <h1 className="text-xl font-bold">[pyth] ai Command Center</h1>
               <p className="text-sm text-gray-400">AI Agent & System Monitoring</p>
             </div>
           </div>

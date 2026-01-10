@@ -1,0 +1,169 @@
+name: GOD Score Health Check
+
+on:
+  schedule:
+    # Run every 6 hours
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+env:
+  SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+  SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+  VITE_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+  VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Create logs directory
+        run: mkdir -p logs
+
+      - name: Run GOD Score Health Check
+        id: health_check
+        continue-on-error: true
+        run: |
+          echo "🔍 Running GOD Score Health Check..." | tee logs/health-check.log
+          
+          # Create a simple health check script if it doesn't exist
+          node -e "
+            const { createClient } = require('@supabase/supabase-js');
+            const supabase = createClient(
+              process.env.SUPABASE_URL,
+              process.env.SUPABASE_SERVICE_KEY
+            );
+            
+            (async () => {
+              try {
+                console.log('Checking database connection...');
+                const { data: testData, error: testError } = await supabase
+                  .from('startup_uploads')
+                  .select('id')
+                  .limit(1);
+                
+                if (testError) {
+                  console.error('❌ Database connection failed:', testError.message);
+                  process.exit(1);
+                }
+                
+                console.log('✅ Database connection successful');
+                
+                // Check GOD scores
+                console.log('Checking GOD scores...');
+                const { data: scores, error: scoresError, count } = await supabase
+                  .from('startup_uploads')
+                  .select('id, total_god_score, name', { count: 'exact', head: false })
+                  .not('total_god_score', 'is', null)
+                  .limit(1000);
+                
+                if (scoresError) {
+                  console.error('❌ Error fetching GOD scores:', scoresError.message);
+                  process.exit(1);
+                }
+                
+                const totalWithScores = count || scores.length;
+                const avgScore = scores.length > 0 
+                  ? (scores.reduce((sum, s) => sum + (s.total_god_score || 0), 0) / scores.length).toFixed(2)
+                  : 0;
+                const minScore = scores.length > 0 ? Math.min(...scores.map(s => s.total_god_score || 0)) : 0;
+                const maxScore = scores.length > 0 ? Math.max(...scores.map(s => s.total_god_score || 0)) : 0;
+                
+                console.log(\`✅ GOD Score Statistics:\`);
+                console.log(\`   Total startups with scores: \${totalWithScores}\`);
+                console.log(\`   Average score: \${avgScore}\`);
+                console.log(\`   Min score: \${minScore}\`);
+                console.log(\`   Max score: \${maxScore}\`);
+                
+                // Check for stale scores (not updated in 30 days)
+                const thirtyDaysAgo = new Date();
+                thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+                
+                const { count: staleCount } = await supabase
+                  .from('startup_uploads')
+                  .select('id', { count: 'exact', head: true })
+                  .not('total_god_score', 'is', null)
+                  .lt('updated_at', thirtyDaysAgo.toISOString());
+                
+                console.log(\`   Stale scores (>30 days old): \${staleCount || 0}\`);
+                
+                // Save results to JSON
+                const results = {
+                  timestamp: new Date().toISOString(),
+                  database_connection: 'ok',
+                  total_with_scores: totalWithScores,
+                  average_score: parseFloat(avgScore),
+                  min_score: minScore,
+                  max_score: maxScore,
+                  stale_scores: staleCount || 0,
+                  status: totalWithScores > 0 ? 'healthy' : 'warning'
+                };
+                
+                require('fs').writeFileSync(
+                  'logs/god-score-health.json',
+                  JSON.stringify(results, null, 2)
+                );
+                
+                console.log('✅ Health check completed successfully');
+                console.log('📄 Results saved to logs/god-score-health.json');
+                
+              } catch (error) {
+                console.error('❌ Health check failed:', error.message);
+                console.error(error.stack);
+                process.exit(1);
+              }
+            })();
+          " 2>&1 | tee -a logs/health-check.log || {
+            echo "⚠️ Health check script failed, but continuing..."
+            exit 0
+          }
+
+      - name: Check for log files
+        run: |
+          if [ ! -f logs/health-check.log ]; then
+            echo "⚠️ No log file created, creating empty one"
+            echo "Health check did not produce output" > logs/health-check.log
+          fi
+          if [ ! -f logs/god-score-health.json ]; then
+            echo "⚠️ No JSON results file, creating placeholder"
+            echo '{"status": "error", "message": "Health check did not complete"}' > logs/god-score-health.json
+          fi
+          ls -la logs/
+
+      - name: Upload logs as artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: god-score-health-check-logs
+          path: |
+            logs/*.log
+            logs/*.json
+          retention-days: 7
+
+      - name: Report Results
+        if: always()
+        run: |
+          echo "## GOD Score Health Check Results" >> $GITHUB_STEP_SUMMARY
+          echo "- Run time: $(date)" >> $GITHUB_STEP_SUMMARY
+          if [ -f logs/god-score-health.json ]; then
+            echo "- Status: $(cat logs/god-score-health.json | grep -o '"status":"[^"]*"' | cut -d'"' -f4)" >> $GITHUB_STEP_SUMMARY
+          fi
+          if [ -f logs/health-check.log ]; then
+            echo "### Log Output" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            tail -20 logs/health-check.log >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          fi

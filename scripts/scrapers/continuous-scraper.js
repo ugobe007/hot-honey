@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Continuous Scraper for Hot Money Honey
+ * Continuous Scraper for pyth ai
  * 
  * Runs continuously to discover:
  * 1. Startups from RSS feeds (TechCrunch, VentureBeat, etc.)
@@ -25,7 +25,7 @@ const VC_ENRICHMENT_INTERVAL = 2 * 60 * 60 * 1000; // 2 hours
 let lastStartupScrape = 0;
 let lastVcEnrichment = 0;
 
-console.log('🚀 Starting Continuous Scraper for Hot Money Honey');
+console.log('🚀 Starting Continuous Scraper for pyth ai');
 console.log('📅', new Date().toISOString());
 console.log('⏱️  RSS Scraping every 30 minutes');
 console.log('🔍 Startup Discovery every 1 hour');

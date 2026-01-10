@@ -53,7 +53,7 @@ export default function ShareMatchModal({
   const handleEmailShare = () => {
     const subject = encodeURIComponent(`Investor Match: ${match.investor.name} for ${startupName}`);
     const body = encodeURIComponent(
-      `I found a great investor match on Hot Match!\n\n` +
+      `I found a great investor match on [pyth] ai!\n\n` +
       `Investor: ${match.investor.name}\n` +
       `${match.investor.firm ? `Firm: ${match.investor.firm}\n` : ''}` +
       `Match Score: ${match.score}%\n\n` +

@@ -555,7 +555,7 @@ async function saveStartups(startups, sourceUrl, fullText = '') {
  */
 async function scrape(url, targetType = 'auto') {
   console.log('═'.repeat(70));
-  console.log('🔥 INTELLIGENT SCRAPER - Hot Match');
+  console.log('🔥 INTELLIGENT SCRAPER - pyth ai');
   console.log('═'.repeat(70));
   console.log(`\n🌐 Scraping: ${url}`);
   console.log(`🎯 Target: ${targetType}\n`);
@@ -661,7 +661,7 @@ async function main() {
   
   if (args.length === 0) {
     console.log(`
-🔥 INTELLIGENT SCRAPER - Hot Match
+🔥 INTELLIGENT SCRAPER - pyth ai
 
 Usage:
   node intelligent-scraper.js <url> [type]

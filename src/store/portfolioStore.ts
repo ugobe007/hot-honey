@@ -194,7 +194,7 @@ export const usePortfolioStore = create<PortfolioState>((set, get) => ({
       newStage = 'Stage 4: Final Round';
       shouldAdvance = true;
     } else if (startup.stage === 'Stage 4: Final Round' && startup.yesVotes >= 50) {
-      newStage = 'HOT MONEY!!!';
+      newStage = 'pyth ai!!!';
       shouldAdvance = true;
     }
 

@@ -320,7 +320,7 @@ function generateEmailHTML(data: DailyReportData): string {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hot Money Honey - Daily Report</title>
+  <title>pyth ai - Daily Report</title>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; margin: 0; padding: 20px; }
     .container { max-width: 600px; margin: 0 auto; background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
@@ -563,7 +563,7 @@ function generateEmailHTML(data: DailyReportData): string {
     </div>
     
     <div class="footer">
-      <p>This is an automated daily report from Hot Money Honey.</p>
+      <p>This is an automated daily report from pyth ai.</p>
       <p><a href="${SITE_URL}">Visit Site</a> • <a href="${SITE_URL}/admin">Admin Panel</a></p>
     </div>
   </div>
@@ -577,7 +577,7 @@ function generateEmailHTML(data: DailyReportData): string {
  */
 function generateEmailText(data: DailyReportData): string {
   return `
-HOT MONEY HONEY - DAILY REPORT
+PYTH AI HONEY - DAILY REPORT
 ${data.date}
 ================================
 
@@ -626,7 +626,7 @@ ${data.vcNews.topVCs.map(vc => {
 • Investor Directory: ${SITE_URL}/investors
 
 ---
-This is an automated daily report from Hot Money Honey.
+This is an automated daily report from pyth ai.
 `;
 }
 
@@ -652,7 +652,7 @@ export async function sendDailyReport(recipientEmail?: string): Promise<{ succes
       console.log('Sending daily report via Resend to:', email);
       
       const { data: emailData, error } = await resend.emails.send({
-        from: 'Hot Money Honey <onboarding@resend.dev>', // Use verified domain in production
+        from: 'pyth ai <onboarding@resend.dev>', // Use verified domain in production
         to: [email],
         subject,
         html,
@@ -677,7 +677,7 @@ export async function sendDailyReport(recipientEmail?: string): Promise<{ succes
       
       const transporter = createTransporter();
       const info = await transporter.sendMail({
-        from: `"Hot Money Honey" <${SMTP_USER}>`,
+        from: `"pyth ai" <${SMTP_USER}>`,
         to: email,
         subject,
         text,

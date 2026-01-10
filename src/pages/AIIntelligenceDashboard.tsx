@@ -410,7 +410,7 @@ export default function AIIntelligenceDashboard() {
             </button>
             <div>
               <h1 className="text-4xl font-bold flex items-center gap-3 mb-2">
-                <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">Hot Money</span>
+                <span className="bg-gradient-to-r from-amber-400 via-orange-400 to-cyan-400 bg-clip-text text-transparent">[pyth]</span> <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-violet-400 bg-clip-text text-transparent">ai</span>
                 <span className="text-white">AI Intelligence</span>
               </h1>
               <p className="text-gray-300 mt-1 text-lg">
@@ -595,7 +595,7 @@ export default function AIIntelligenceDashboard() {
                 <div className="flex items-start gap-3">
                   <Lightbulb className="w-5 h-5 text-blue-400 mt-1" />
                   <div>
-                    <h4 className="font-semibold text-blue-300 mb-1">How This Data Powers Hot Money</h4>
+                    <h4 className="font-semibold text-blue-300 mb-1">How This Data Powers [pyth] ai</h4>
                     <ul className="text-sm text-gray-300 space-y-1">
                       <li>• <strong>ML Training:</strong> Each article trains models to recognize funding patterns</li>
                       <li>• <strong>Trend Detection:</strong> Aggregated data reveals which sectors are heating up</li>
@@ -747,7 +747,7 @@ export default function AIIntelligenceDashboard() {
               </h2>
               <p className="text-gray-400 mb-6">
                 AI analyzes RSS data to detect funding trends, valuation patterns, and sector momentum.
-                These insights give Hot Money users an edge in spotting opportunities before competitors.
+                These insights give [pyth] ai users an edge in spotting opportunities before competitors.
               </p>
 
               <div className="space-y-3" id="trends-section">
@@ -804,7 +804,7 @@ export default function AIIntelligenceDashboard() {
                   <div>
                     <h4 className="font-semibold text-yellow-300 mb-1">Competitive Intelligence Edge</h4>
                     <p className="text-sm text-gray-300">
-                      Hot Money's RSS feed processes <strong>847 articles</strong> from top sources, analyzing funding patterns 
+                      [pyth] ai's RSS feed processes <strong>847 articles</strong> from top sources, analyzing funding patterns 
                       <strong> 3-4 weeks before</strong> they become common knowledge. This gives our users first-mover advantage 
                       in hot sectors like AI/ML Infrastructure and Healthcare Tech.
                     </p>
@@ -905,7 +905,7 @@ export default function AIIntelligenceDashboard() {
                   <div>
                     <h4 className="font-semibold text-purple-300 mb-1">Dynamic Profile Evolution</h4>
                     <p className="text-sm text-gray-300 mb-2">
-                      Traditional platforms have stale data. Hot Money's profiles evolve in real-time as RSS data flows in:
+                      Traditional platforms have stale data. [pyth] ai's profiles evolve in real-time as RSS data flows in:
                     </p>
                     <ul className="text-sm text-gray-300 space-y-1">
                       <li>• <strong>Investor Focus Shifts:</strong> Detect new sector interests from deal announcements</li>
@@ -940,11 +940,10 @@ export default function AIIntelligenceDashboard() {
           <div className="space-y-4">
             <div className="bg-white/5 border border-pink-500/30 rounded-xl p-6">
               <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
-                <Sparkles className="w-6 h-6 text-pink-400" />
                 Match Score Optimization
               </h2>
               <p className="text-gray-400 mb-6">
-                RSS data reveals investor activity patterns, enabling Hot Money to dynamically adjust match scores.
+                RSS data reveals investor activity patterns, enabling [pyth] ai to dynamically adjust match scores.
                 See how real-world signals improve match quality beyond static profile matching.
               </p>
 
@@ -1033,7 +1032,7 @@ export default function AIIntelligenceDashboard() {
                         </ul>
                       </div>
                       <div>
-                        <strong className="text-white">Hot Money Matching:</strong>
+                        <strong className="text-white">[pyth] ai Matching:</strong>
                         <ul className="mt-1 space-y-1">
                           <li>• Real-time activity detection</li>
                           <li>• Investment pattern analysis</li>

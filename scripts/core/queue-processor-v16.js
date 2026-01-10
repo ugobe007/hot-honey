@@ -235,26 +235,34 @@ function calculateMatchScore(startup, investor) {
   if (sectorType === 'none') score -= 5; // Penalty for no sector match
   if (stageType === 'far') score -= 5;   // Penalty for far stage mismatch
   
-  // Scale to create bell curve: most matches should be 30-60, not 70-80
-  // Raw score range: ~15-100, we want output: 10-95
-  // Use a curve that compresses high scores and expands mid-range
+  // FIXED: Better score distribution to avoid clustering
+  // Raw score range: ~15-110 (after all bonuses)
+  // Target: Wide distribution from 20-95 with proper bell curve
+  // We want: ~20% poor, ~40% fair, ~30% good, ~10% excellent
   let final;
-  if (score <= 30) {
-    // Low scores: linear scale 15-30 -> 10-25
-    final = Math.round(10 + (score - 15) * 0.75);
-  } else if (score <= 60) {
-    // Mid scores: linear scale 30-60 -> 25-55 (most matches here)
-    final = Math.round(25 + (score - 30) * 1.0);
-  } else if (score <= 80) {
-    // High scores: compressed 60-80 -> 55-75
-    final = Math.round(55 + (score - 60) * 1.0);
+  
+  // Ensure minimum base score
+  const baseScore = Math.max(15, score);
+  
+  if (baseScore <= 25) {
+    // Poor matches: 15-25 -> 20-35 (20% of matches)
+    final = Math.round(20 + (baseScore - 15) * 1.5);
+  } else if (baseScore <= 50) {
+    // Fair matches: 25-50 -> 35-55 (40% of matches)
+    final = Math.round(35 + (baseScore - 25) * 0.8);
+  } else if (baseScore <= 75) {
+    // Good matches: 50-75 -> 55-75 (30% of matches)
+    final = Math.round(55 + (baseScore - 50) * 0.8);
+  } else if (baseScore <= 95) {
+    // Very good matches: 75-95 -> 75-88 (8% of matches)
+    final = Math.round(75 + (baseScore - 75) * 0.65);
   } else {
-    // Very high: compressed 80-100 -> 75-90 (rare)
-    final = Math.round(75 + (score - 80) * 0.75);
+    // Excellent matches: 95+ -> 88-95 (2% of matches - rare)
+    final = Math.round(88 + Math.min(7, (baseScore - 95) * 0.5));
   }
   
-  // Final clamp
-  final = Math.min(95, Math.max(10, final));
+  // Final clamp to ensure valid range
+  final = Math.min(95, Math.max(20, final));
   
   const confidence = (sectorType === 'exact' && (stageType === 'exact' || stageType === 'next')) ? 'high' :
                      (sectorType === 'none' || stageType === 'far') ? 'low' : 'medium';
@@ -315,8 +323,9 @@ async function processStartup(startupId) {
     };
   });
   
-  // FILTER: Only keep high-quality matches (score >= 35, same as frontend)
-  const MIN_MATCH_SCORE = 35;
+  // FILTER: Lower threshold to allow better distribution (was 35, now 20)
+  // This allows poor/fair matches through so distribution isn't all clustered in "good"
+  const MIN_MATCH_SCORE = 20;
   const MAX_MATCHES_PER_STARTUP = 100; // Limit to top 100 matches
   
   const qualityMatches = allMatches

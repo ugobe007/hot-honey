@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * HOT MATCH AUTOPILOT
+ * PYTH AI AUTOPILOT
  * ===================
  * Master automation script that runs the entire data pipeline:
  * 
@@ -32,11 +32,13 @@ const supabase = createClient(
 
 // Configuration
 const CONFIG = {
-  DISCOVERY_INTERVAL: 30 * 60 * 1000,    // 30 minutes
+  DISCOVERY_INTERVAL: 15 * 60 * 1000,    // 15 minutes (increased frequency for 200-500 startups/day)
   ENRICHMENT_INTERVAL: 60 * 60 * 1000,   // 1 hour
   SCORING_INTERVAL: 2 * 60 * 60 * 1000,  // 2 hours
   MATCHING_INTERVAL: 4 * 60 * 60 * 1000, // 4 hours
   VALIDATION_INTERVAL: 24 * 60 * 60 * 1000, // Daily
+  SOCIAL_SIGNALS_INTERVAL: 7 * 24 * 60 * 60 * 1000, // Weekly (7 days)
+  FULL_SCORE_RECALC_INTERVAL: 7 * 24 * 60 * 60 * 1000, // Weekly (7 days)
 };
 
 // Timestamps for daemon mode
@@ -45,6 +47,8 @@ let lastEnrichment = 0;
 let lastScoring = 0;
 let lastMatching = 0;
 let lastValidation = 0;
+let lastSocialSignals = 0;
+let lastFullRecalc = 0;
 
 // Colors for logging
 const c = {
@@ -107,8 +111,9 @@ async function runDiscovery() {
   log('📊', `Active RSS sources: ${sources?.length || 0}`);
   
   // Run simple RSS scraper first (no AI, fast)
+  // Increased timeout to 30 minutes (84 feeds × 30s timeout = ~42 min worst case, but most finish in 10-15 min)
   log('🔄', 'Running simple RSS scraper...');
-  const rssResult = runScript('simple-rss-scraper.js', [], 10 * 60 * 1000);
+  const rssResult = runScript('scripts/core/simple-rss-scraper.js', [], 30 * 60 * 1000);
   
   if (rssResult.success) {
     log('✅', 'RSS scrape complete', c.green);
@@ -126,7 +131,8 @@ async function runDiscovery() {
   // Auto-import high-confidence discoveries
   if (discoveredCount > 0) {
     log('🔄', 'Importing high-confidence discoveries...');
-    const importResult = runScript('import-discovered-startups.js', ['--auto'], 5 * 60 * 1000);
+    // Note: import-discovered-startups.js may not exist, skip if missing
+    const importResult = runScript('scripts/core/auto-import-pipeline.js', [], 5 * 60 * 1000);
     if (importResult.success) {
       log('✅', 'Import complete', c.green);
     }
@@ -153,7 +159,7 @@ async function runInferenceEnrichment() {
   if (needsEnrichment?.length > 0) {
     // Run startup inference engine
     log('🔄', 'Running startup inference engine...');
-    const startupResult = runScript('startup-inference-engine.js', ['--limit', '50'], 10 * 60 * 1000);
+    const startupResult = runScript('scripts/core/startup-inference-engine.js', ['--limit', '50'], 10 * 60 * 1000);
     if (startupResult.success) {
       log('✅', 'Startup inference complete', c.green);
     }
@@ -170,7 +176,7 @@ async function runInferenceEnrichment() {
   
   if (investorsNeedEnrich?.length > 0) {
     log('🔄', 'Running investor inference engine...');
-    const investorResult = runScript('investor-inference-engine.js', ['--limit', '50'], 10 * 60 * 1000);
+    const investorResult = runScript('scripts/core/investor-inference-engine.js', ['--limit', '50'], 10 * 60 * 1000);
     if (investorResult.success) {
       log('✅', 'Investor inference complete', c.green);
     }
@@ -196,7 +202,7 @@ async function runGODScoring() {
   
   if (unscored?.length > 0) {
     log('🔄', 'Running GOD Score V5 (tiered)...');
-    const scoreResult = runScript('god-score-v5-tiered.js', [], 15 * 60 * 1000);
+    const scoreResult = runScript('scripts/core/god-score-v5-tiered.js', [], 15 * 60 * 1000);
     if (scoreResult.success) {
       log('✅', 'GOD scoring complete', c.green);
       
@@ -240,7 +246,7 @@ async function runMatchGeneration() {
   
   if (!matchCount || matchCount < expectedMatches * 0.5) {
     log('🔄', 'Running queue processor to generate matches...');
-    const matchResult = runScript('queue-processor-v16.js', [], 30 * 60 * 1000);
+    const matchResult = runScript('scripts/core/queue-processor-v16.js', [], 30 * 60 * 1000);
     if (matchResult.success) {
       log('✅', 'Match generation complete', c.green);
     }
@@ -341,7 +347,7 @@ async function runFullPipeline(skipDiscovery = false) {
   console.log(`
 ${c.magenta}╔═══════════════════════════════════════════════════════════╗
 ║                                                           ║
-║   🔥 HOT MATCH AUTOPILOT                                  ║
+║   🔥 PYTH AI AUTOPILOT                                  ║
 ║   Automated Data Pipeline                                 ║
 ║                                                           ║
 ╚═══════════════════════════════════════════════════════════╝${c.reset}
@@ -387,12 +393,50 @@ ${c.magenta}╔═════════════════════�
 /**
  * Daemon mode - run continuously
  */
+/**
+ * Run weekly social signals collection
+ */
+async function runSocialSignalsCollection() {
+  section('📱 WEEKLY: SOCIAL SIGNALS COLLECTION');
+  
+  log('📱', 'Collecting social media mentions for all startups...', c.cyan);
+  const result = runScript('scripts/enrichment/social-signals-scraper.js', [], 60 * 60 * 1000); // 1 hour timeout
+  
+  if (result.success) {
+    log('✅', 'Social signals collection complete', c.green);
+    return true;
+  } else {
+    log('❌', 'Social signals collection failed', c.red);
+    return false;
+  }
+}
+
+/**
+ * Run weekly full GOD score recalculation
+ */
+async function runFullScoreRecalculation() {
+  section('🎯 WEEKLY: FULL GOD SCORE RECALCULATION');
+  
+  log('🎯', 'Running full GOD score recalculation (including industry scores)...', c.cyan);
+  const result = runScript('scripts/core/god-score-formula.js', [], 30 * 60 * 1000); // 30 min timeout
+  
+  if (result.success) {
+    log('✅', 'Full score recalculation complete', c.green);
+    return true;
+  } else {
+    log('❌', 'Full score recalculation failed', c.red);
+    return false;
+  }
+}
+
 async function runDaemon() {
   log('🚀', 'Starting autopilot in daemon mode...', c.green);
   log('📅', `Discovery every ${CONFIG.DISCOVERY_INTERVAL / 60000} min`);
   log('📅', `Enrichment every ${CONFIG.ENRICHMENT_INTERVAL / 60000} min`);
   log('📅', `Scoring every ${CONFIG.SCORING_INTERVAL / 60000} min`);
   log('📅', `Matching every ${CONFIG.MATCHING_INTERVAL / 60000} min`);
+  log('📅', `Social Signals weekly (every ${CONFIG.SOCIAL_SIGNALS_INTERVAL / (24 * 60 * 60 * 1000)} days)`);
+  log('📅', `Full Recalc weekly (every ${CONFIG.FULL_SCORE_RECALC_INTERVAL / (24 * 60 * 60 * 1000)} days)`);
   
   // Initial run
   await runFullPipeline();
@@ -424,6 +468,24 @@ async function runDaemon() {
     if (now - lastValidation >= CONFIG.VALIDATION_INTERVAL) {
       await runDataValidation();
       lastValidation = now;
+    }
+    
+    // Weekly: Social Signals Collection (Sunday 2 AM equivalent)
+    if (now - lastSocialSignals >= CONFIG.SOCIAL_SIGNALS_INTERVAL) {
+      const hour = new Date(now).getHours();
+      if (hour === 2 || hour === 3) { // Run between 2-3 AM
+        await runSocialSignalsCollection();
+        lastSocialSignals = now;
+      }
+    }
+    
+    // Weekly: Full Score Recalculation (Sunday 3 AM equivalent, after social signals)
+    if (now - lastFullRecalc >= CONFIG.FULL_SCORE_RECALC_INTERVAL) {
+      const hour = new Date(now).getHours();
+      if (hour === 3 || hour === 4) { // Run between 3-4 AM
+        await runFullScoreRecalculation();
+        lastFullRecalc = now;
+      }
     }
   }, 5 * 60 * 1000); // Check every 5 minutes
 }

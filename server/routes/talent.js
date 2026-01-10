@@ -7,7 +7,23 @@
 const express = require('express');
 const router = express.Router();
 const { createClient } = require('@supabase/supabase-js');
-const { matchFounderToHires, getMatchQualityTier } = require('../services/talentMatchingService');
+
+// Try to load talent matching service, but make it optional (it's TypeScript, so we'll use stubs)
+let matchFounderToHires, getMatchQualityTier;
+
+try {
+  // Try to require JS version (if it exists)
+  const service = require('../services/talentMatchingService');
+  matchFounderToHires = service.matchFounderToHires;
+  getMatchQualityTier = service.getMatchQualityTier;
+} catch (error) {
+  // Service doesn't exist or is TypeScript - use stub functions
+  console.warn('⚠️  Talent matching service not available (TypeScript requires compilation). Using stubs.');
+  matchFounderToHires = () => { 
+    throw new Error('Talent matching service requires TypeScript compilation. Please compile the service or implement JS version.'); 
+  };
+  getMatchQualityTier = () => 'medium';
+}
 
 // Fallback credentials
 const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL || 'https://unkpogyhhjbvxxjvmxlt.supabase.co';
@@ -80,7 +96,7 @@ router.get('/matches/:startupId', async (req, res) => {
     const availableTalent = (talentPool || []).filter(t => !existingTalentIds.has(t.id));
 
     // Calculate matches
-    const matches = require('../services/talentMatchingService').matchFounderToHires(
+    const matches = matchFounderToHires(
       founderProfile,
       availableTalent,
       {
@@ -164,7 +180,7 @@ router.post('/matches/:startupId/:talentId', async (req, res) => {
       stage: startup.stage
     };
 
-    const matchResult = require('../services/talentMatchingService').matchFounderToHires(
+    const matchResult = matchFounderToHires(
       founderProfile,
       [talent],
       { minScore: 0, maxResults: 1 }

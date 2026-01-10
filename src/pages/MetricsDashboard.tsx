@@ -132,7 +132,7 @@ export default function MetricsDashboard() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-6xl font-bold text-white mb-4">
-            Hot Match <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-violet-400 bg-clip-text text-transparent">Metrics</span>
+            <span className="bg-gradient-to-r from-amber-400 via-orange-400 to-cyan-400 bg-clip-text text-transparent">[pyth]</span> <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-violet-400 bg-clip-text text-transparent">ai</span> <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-violet-400 bg-clip-text text-transparent">Metrics</span>
           </h1>
           <p className="text-2xl text-gray-300 mb-2">
             AI-Powered Startup-Investor Matching Platform
@@ -299,7 +299,7 @@ export default function MetricsDashboard() {
 
         {/* Footer */}
         <div className="text-center mt-12 text-gray-400">
-          <p className="mb-2">Powered by Hot Match • Built with React, TypeScript, Supabase, and OpenAI</p>
+          <p className="mb-2">Powered by [pyth] ai • Built with React, TypeScript, Supabase, and OpenAI</p>
           <p className="text-sm">Data updates in real-time • All metrics are live</p>
         </div>
       </div>

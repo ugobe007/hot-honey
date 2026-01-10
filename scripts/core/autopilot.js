@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Hot Match Autopilot
+ * pyth ai Autopilot
  * 
  * Consolidated monitoring and health management system.
  * Replaces: watchdog, system-guardian, god-score-monitor, match-health-monitor, daily-report

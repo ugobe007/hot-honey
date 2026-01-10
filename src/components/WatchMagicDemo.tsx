@@ -189,9 +189,9 @@ export default function WatchMagicDemo({ isOpen, onClose }: Props) {
               <div>
                 <h2 className="text-2xl font-bold text-white flex items-center gap-2">
                   Watch the Magic
-                  <Sparkles className="w-6 h-6 text-yellow-400 animate-pulse" />
                 </h2>
                 <p className="text-gray-400">AI-powered matching in real-time</p>
+                <p className="text-xs text-gray-500 mt-1 italic">Advanced pattern recognition, like Pythia—predicting outcomes from data.</p>
               </div>
             </div>
             <div className="flex items-center gap-4">
@@ -329,7 +329,7 @@ export default function WatchMagicDemo({ isOpen, onClose }: Props) {
         <div className="p-4 border-t border-purple-500/20 bg-black/20">
           <div className="flex items-center justify-between">
             <p className="text-gray-500 text-sm">
-              ⚡ Hot Match processes 1,000+ data points per match
+              ⚡ [pyth] ai processes 1,000+ data points per match
             </p>
             <button
               onClick={onClose}

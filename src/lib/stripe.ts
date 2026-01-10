@@ -1,4 +1,4 @@
-// Stripe configuration and utilities for Hot Match subscriptions
+// Stripe configuration and utilities for [pyth] ai subscriptions
 
 // Stripe Price IDs - These will be created in your Stripe Dashboard
 // Replace these with your actual Stripe Price IDs after creating products

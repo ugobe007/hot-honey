@@ -50,7 +50,7 @@ const HotMoneyVotingFlow: React.FC<HotMoneyVotingFlowProps> = ({
       case 2: return "Round #2"; 
       case 3: return "Round #3";
       case 4: return "Round #4";
-      default: return "HOT MONEY!!!";
+      default: return "pyth ai!!!";
     }
   };
 
@@ -63,7 +63,7 @@ const HotMoneyVotingFlow: React.FC<HotMoneyVotingFlowProps> = ({
       case 1: return "IF hot, then #2";
       case 2: return "IF hot, then #3";
       case 3: return "IF hot, then #4"; 
-      case 4: return "IF hot, then HOT MONEY!!!";
+      case 4: return "IF hot, then pyth ai!!!";
       default: return "🎉 SUCCESS!";
     }
   };
@@ -74,7 +74,7 @@ const HotMoneyVotingFlow: React.FC<HotMoneyVotingFlowProps> = ({
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-cyan-600 mb-4">
-            Hot Money creates demand...
+            pyth ai creates demand...
           </h1>
           <p className="text-lg text-gray-600 mb-2">
             {startup.currentRound <= 1 && "The ability to communicate your value to investors is timely, literally. You need to capture their interest in the first 3 minutes, otherwise they will \"pass\" on you."}
@@ -143,7 +143,7 @@ const HotMoneyVotingFlow: React.FC<HotMoneyVotingFlowProps> = ({
               </button>
             ) : showNextSteps ? (
               <div className={`${getRoundColor(startup.currentRound)} text-white font-bold text-4xl px-12 py-8 rounded-lg`}>
-                {startup.currentRound >= 4 ? "HOT MONEY!!!" : getRoundTitle(startup.currentRound + 1)}
+                {startup.currentRound >= 4 ? "pyth ai!!!" : getRoundTitle(startup.currentRound + 1)}
               </div>
             ) : null}
             

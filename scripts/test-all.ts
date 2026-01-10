@@ -12,7 +12,7 @@ const supabase = createClient(
 );
 
 async function test() {
-  console.log('\n🔥 HOT MATCH - FULL SYSTEM CHECK\n');
+  console.log('\n🔥 PYTH AI - FULL SYSTEM CHECK\n');
   console.log('═'.repeat(50));
 
   const checks: { name: string; status: string; value: any }[] = [];

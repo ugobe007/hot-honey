@@ -517,6 +517,30 @@ export default function TrendingPage() {
         {/* Algorithm Selector */}
         <div className="mb-12">
           <p className="text-center text-gray-400 text-sm mb-4">👆 Click an algorithm to see how top VCs would rank startups 👇</p>
+          
+          {/* Active Filter Indicator - Shows immediately when filter is selected */}
+          {selectedAlgorithm && selectedAlgorithm !== 'god' && (
+            <div className={`mb-6 flex items-center justify-center gap-3 px-6 py-4 rounded-xl border-2 ${
+              selectedAlgorithm === 'yc' 
+                ? 'bg-orange-500/20 border-orange-500/50 shadow-lg shadow-orange-500/30' 
+                : selectedAlgorithm === 'sequoia'
+                ? 'bg-emerald-500/20 border-emerald-500/50 shadow-lg shadow-emerald-500/30'
+                : 'bg-purple-500/20 border-purple-500/50 shadow-lg shadow-purple-500/30'
+            } animate-pulse`}>
+              {selectedAlgorithm === 'yc' && <Lightbulb className="w-6 h-6 text-orange-400" />}
+              {selectedAlgorithm === 'sequoia' && <TrendingUp className="w-6 h-6 text-emerald-400" />}
+              {selectedAlgorithm === 'a16z' && <Code2 className="w-6 h-6 text-purple-400" />}
+              <span className={`font-bold text-lg ${
+                selectedAlgorithm === 'yc' ? 'text-orange-300' :
+                selectedAlgorithm === 'sequoia' ? 'text-emerald-300' :
+                'text-purple-300'
+              }`}>
+                Filter Active: {ALGORITHMS.find(a => a.id === selectedAlgorithm)?.name}
+              </span>
+              <span className="text-sm text-gray-400">({sortedStartups.length} startups)</span>
+            </div>
+          )}
+          
           <div className="flex flex-col md:flex-row gap-4 justify-center pb-8">
             {ALGORITHMS.map((algo) => {
               const Icon = algo.icon;
@@ -526,10 +550,10 @@ export default function TrendingPage() {
                 <button
                   key={algo.id}
                   onClick={() => setSelectedAlgorithm(algo.id)}
-                  className={`relative group flex-1 max-w-sm p-4 rounded-2xl border-2 transition-all duration-300 ${
+                  className={`relative group flex-1 max-w-sm p-4 rounded-2xl border-2 transition-all duration-300 transform ${
                     isSelected 
-                      ? `bg-gradient-to-br ${algo.bgColor} ${algo.borderColor} shadow-lg` 
-                      : 'bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/20'
+                      ? `bg-gradient-to-br ${algo.bgColor} ${algo.borderColor} shadow-lg shadow-${algo.id === 'yc' ? 'orange' : algo.id === 'sequoia' ? 'green' : 'purple'}-500/50 scale-105` 
+                      : 'bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/20 hover:scale-102'
                   }`}
                 >
                   <div className="flex items-start gap-3">

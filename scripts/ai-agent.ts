@@ -1,5 +1,5 @@
 /**
- * HOT MATCH - AI AGENT
+ * PYTH AI - AI AGENT
  * 
  * Intelligent monitoring and self-healing system
  * Sits on top of the watchdog and makes smart decisions
@@ -190,7 +190,7 @@ async function analyzeWithAI(
   pastFixes: string[]
 ): Promise<AgentDecision[]> {
   
-  const prompt = `You are an AI agent monitoring a startup-investor matching platform called Hot Match.
+  const prompt = `You are an AI agent monitoring a startup-investor matching platform called pyth ai.
 
 CURRENT SYSTEM STATUS:
 ${JSON.stringify(currentReport, null, 2)}
@@ -501,7 +501,7 @@ async function getPastSuccessfulFixes(): Promise<string[]> {
 
 async function runAgent(): Promise<AgentReport> {
   console.log('\n' + '═'.repeat(60));
-  console.log('🤖 HOT MATCH AI AGENT');
+  console.log('🤖 PYTH AI AI AGENT');
   console.log('═'.repeat(60) + '\n');
 
   const report: AgentReport = {

@@ -23,7 +23,7 @@ export async function sendEmail(options: EmailOptions) {
 
   try {
     const { data, error } = await resend.emails.send({
-      from: options.from || 'Hot Money Honey <notifications@hotmoneyhoney.com>',
+      from: options.from || 'pyth ai <notifications@hotmoneyhoney.com>',
       to: options.to,
       subject: options.subject,
       html: options.html,
@@ -75,7 +75,7 @@ export async function sendStageAdvancementEmail(
           <tr>
             <td style="background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); padding: 40px 32px; text-align: center;">
               <h1 style="margin: 0; color: #ffffff; font-size: 28px; font-weight: 700;">
-                🍯 Hot Money Honey
+                🔮 pyth ai
               </h1>
               <p style="margin: 12px 0 0 0; color: #fed7aa; font-size: 14px; font-weight: 500;">
                 Deal Progress Update
@@ -121,7 +121,7 @@ export async function sendStageAdvancementEmail(
               
               <!-- CTA Button -->
               <div style="text-align: center; margin: 32px 0;">
-                <a href="https://hot-honey.fly.dev/startup/${startupId}" 
+                <a href="https://pythai.fly.dev/startup/${startupId}" 
                    style="display: inline-block; background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); color: #ffffff; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-weight: 600; font-size: 16px; box-shadow: 0 4px 6px rgba(249, 115, 22, 0.3);">
                   View ${startupName} →
                 </a>
@@ -136,7 +136,7 @@ export async function sendStageAdvancementEmail(
                 You're receiving this because you voted YES on ${startupName}
               </p>
               <p style="margin: 0; color: #9ca3af; font-size: 12px; text-align: center;">
-                © 2025 Hot Money Honey. All rights reserved.
+                © 2025 pyth ai. All rights reserved.
               </p>
             </td>
           </tr>
@@ -159,7 +159,7 @@ export async function sendWeeklyDigestEmail(
   recipientEmail: string,
   startups: Array<{ name: string; stage: number; yesVotes: number; id: string }>
 ) {
-  const subject = '📊 Your Weekly Portfolio Digest - Hot Money Honey';
+  const subject = '📊 Your Weekly Portfolio Digest - pyth ai';
   
   const startupsHtml = startups.map(s => `
     <tr>
@@ -168,7 +168,7 @@ export async function sendWeeklyDigestEmail(
         <div style="font-size: 14px; color: #6b7280;">Stage ${s.stage} • ${s.yesVotes} YES votes</div>
       </td>
       <td style="padding: 16px; border-bottom: 1px solid #e5e7eb; text-align: right;">
-        <a href="https://hot-honey.fly.dev/startup/${s.id}" style="color: #f97316; text-decoration: none; font-weight: 500; font-size: 14px;">
+        <a href="https://pythai.fly.dev/startup/${s.id}" style="color: #f97316; text-decoration: none; font-weight: 500; font-size: 14px;">
           View →
         </a>
       </td>
@@ -189,7 +189,7 @@ export async function sendWeeklyDigestEmail(
           <tr>
             <td style="background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); padding: 40px 32px; text-align: center;">
               <h1 style="margin: 0; color: #ffffff; font-size: 28px; font-weight: 700;">
-                🍯 Hot Money Honey
+                🔮 pyth ai
               </h1>
               <p style="margin: 12px 0 0 0; color: #fed7aa; font-size: 14px; font-weight: 500;">
                 Your Weekly Portfolio Digest
@@ -214,7 +214,7 @@ export async function sendWeeklyDigestEmail(
               
               <!-- CTA -->
               <div style="text-align: center; margin: 32px 0 0 0;">
-                <a href="https://hot-honey.fly.dev/portfolio" 
+                <a href="https://pythai.fly.dev/portfolio" 
                    style="display: inline-block; background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); color: #ffffff; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-weight: 600; font-size: 16px;">
                   View Full Portfolio →
                 </a>
@@ -226,7 +226,7 @@ export async function sendWeeklyDigestEmail(
           <tr>
             <td style="background-color: #f9fafb; padding: 24px 32px; border-top: 1px solid #e5e7eb;">
               <p style="margin: 0; color: #9ca3af; font-size: 12px; text-align: center;">
-                © 2025 Hot Money Honey. All rights reserved.
+                © 2025 pyth ai. All rights reserved.
               </p>
             </td>
           </tr>

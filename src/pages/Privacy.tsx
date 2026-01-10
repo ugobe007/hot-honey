@@ -121,7 +121,7 @@ export default function Privacy() {
             <div className="bg-slate-900 rounded-2xl p-4">
               <p className="text-gray-700">
                 <strong>Email:</strong> privacy@hotmoneyhoney.com<br />
-                <strong>Mail:</strong> Hot Honey, Inc.<br />
+                <strong>Mail:</strong> pyth ai, Inc.<br />
                 [Your Address Here]
               </p>
             </div>

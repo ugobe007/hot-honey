@@ -2,8 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Animated gradient for pyth.ai branding */
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-gradient {
+  animation: gradient 3s ease infinite;
+  background-size: 200% 200%;
+}
+
 /* ════════════════════════════════════════════════════════════════════════════
-   🔥 HOT MATCH - FLAME ORANGE & CYAN PALETTE
+   [pyth] ai - ORACLE OF TRUTH - AMBER/ORANGE & CYAN/BLUE PALETTE
    ════════════════════════════════════════════════════════════════════════════ */
 :root {
   /* Primary: Flame Orange (70% - Headlines, CTAs, Main Actions) */

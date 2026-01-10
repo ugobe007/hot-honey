@@ -1,15 +1,63 @@
 // --- FILE: server/index.js ---
+// Load environment variables first (from project root, not server directory)
+const path = require('path');
+const fs = require('fs');
+
+const envPath = path.join(__dirname, '..', '.env');
+console.log('[Server Startup] Loading .env from:', envPath);
+console.log('[Server Startup] .env file exists:', fs.existsSync(envPath));
+
+// Try to load dotenv - Node.js should find it in parent node_modules
+let dotenv;
+try {
+  dotenv = require('dotenv');
+} catch (dotenvError) {
+  // If not found, try from root node_modules explicitly
+  try {
+    dotenv = require(path.join(__dirname, '..', 'node_modules', 'dotenv'));
+  } catch (rootError) {
+    console.error('[Server Startup] ❌ Could not load dotenv module:', rootError.message);
+    console.error('[Server Startup] Please install dotenv: cd .. && npm install dotenv');
+  }
+}
+
+// Load the .env file
+let envResult;
+if (dotenv) {
+  envResult = dotenv.config({ path: envPath });
+} else {
+  console.error('[Server Startup] ❌ Cannot load .env - dotenv module not available');
+}
+
+if (envResult.error) {
+  console.warn('[Server Startup] ⚠️  Error loading .env:', envResult.error.message);
+} else {
+  console.log('[Server Startup] ✅ .env loaded successfully');
+  const loadedVars = Object.keys(envResult.parsed || {});
+  console.log('[Server Startup] Loaded', loadedVars.length, 'environment variables');
+  const supabaseVars = loadedVars.filter(k => k.includes('SUPABASE'));
+  if (supabaseVars.length > 0) {
+    console.log('[Server Startup] Supabase variables found:', supabaseVars.join(', '));
+  } else {
+    console.warn('[Server Startup] ⚠️  No Supabase variables found in .env file');
+  }
+}
+
 const express = require('express');
 const multer = require('multer');
 const cors = require('cors');
-const fs = require('fs');
-const path = require('path');
+// fs and path are already declared above
 
 const app = express();
 const PORT = process.env.PORT || 3002;
 
-// Enable CORS
-app.use(cors());
+// Enable CORS with explicit configuration
+app.use(cors({
+  origin: true, // Allow all origins in development
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json());
 
 // Request logging
@@ -24,6 +72,43 @@ const upload = multer({ dest: 'uploads/' });
 // Serve uploaded files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+// Helper function to get Supabase client with validation
+function getSupabaseClient() {
+  const { createClient } = require('@supabase/supabase-js');
+  
+  // Check for all possible environment variable names (flexible matching)
+  const supabaseUrl = process.env.SUPABASE_URL || 
+                      process.env.VITE_SUPABASE_URL ||
+                      process.env.NEXT_PUBLIC_SUPABASE_URL ||
+                      process.env.REACT_APP_SUPABASE_URL;
+  
+  const supabaseKey = process.env.SUPABASE_SERVICE_KEY || 
+                      process.env.SUPABASE_SERVICE_ROLE_KEY || 
+                      process.env.VITE_SUPABASE_SERVICE_ROLE_KEY ||
+                      process.env.VITE_SUPABASE_ANON_KEY ||
+                      process.env.SUPABASE_ANON_KEY ||
+                      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  
+  // Debug logging - show all env vars that start with SUPABASE
+  console.log('[getSupabaseClient] Environment check:');
+  const supabaseEnvVars = Object.keys(process.env).filter(k => k.includes('SUPABASE'));
+  console.log('  Found Supabase env vars:', supabaseEnvVars.length > 0 ? supabaseEnvVars.join(', ') : 'NONE');
+  console.log('  Resolved URL:', supabaseUrl ? `${supabaseUrl.substring(0, 30)}...` : 'NONE');
+  console.log('  Resolved Key:', supabaseKey ? `${supabaseKey.substring(0, 20)}...` : 'NONE');
+  
+  if (!supabaseUrl) {
+    console.error('Available env vars:', Object.keys(process.env).filter(k => k.includes('SUPABASE')));
+    throw new Error('SUPABASE_URL or VITE_SUPABASE_URL environment variable is required. Check .env file in project root.');
+  }
+  
+  if (!supabaseKey) {
+    console.error('Available env vars:', Object.keys(process.env).filter(k => k.includes('SUPABASE')));
+    throw new Error('SUPABASE_SERVICE_KEY or VITE_SUPABASE_ANON_KEY environment variable is required. Check .env file in project root.');
+  }
+  
+  return createClient(supabaseUrl, supabaseKey);
+}
+
 // Health check endpoint
 app.get('/api/health', (req, res) => {
   res.json({
@@ -37,7 +122,7 @@ app.get('/api/health', (req, res) => {
 // API info endpoint
 app.get('/api', (req, res) => {
   res.json({
-    name: 'Hot Money Honey API',
+    name: 'pyth ai API',
     version: '0.1.0',
     endpoints: [
       'GET /api/health',
@@ -232,12 +317,20 @@ app.post('/api/scrapers/run', async (req, res) => {
 app.post('/api/ml/recommendations/:id/apply', async (req, res) => {
   try {
     const { id } = req.params;
-    const { createClient } = require('@supabase/supabase-js');
     
-    const supabase = createClient(
-      process.env.VITE_SUPABASE_URL,
-      process.env.SUPABASE_SERVICE_KEY || process.env.VITE_SUPABASE_ANON_KEY
-    );
+    // Get Supabase client with error handling
+    let supabase;
+    try {
+      supabase = getSupabaseClient();
+    } catch (clientError) {
+      console.error('[API /api/ml/recommendations/:id/apply] Error creating Supabase client:', clientError.message);
+      console.error('[API] Available Supabase env vars:', Object.keys(process.env).filter(k => k.includes('SUPABASE')));
+      return res.status(500).json({ 
+        error: 'Server configuration error',
+        message: clientError.message,
+        details: 'The server could not connect to Supabase. Please check environment variables in .env file.'
+      });
+    }
 
     // Fetch recommendation
     const { data: recommendation, error: fetchError } = await supabase
@@ -292,11 +385,7 @@ app.post('/api/god-weights/save', async (req, res) => {
       return res.status(400).json({ error: 'weights are required' });
     }
 
-    const { createClient } = require('@supabase/supabase-js');
-    const supabase = createClient(
-      process.env.VITE_SUPABASE_URL,
-      process.env.SUPABASE_SERVICE_KEY || process.env.VITE_SUPABASE_ANON_KEY
-    );
+    const supabase = getSupabaseClient();
 
     // Save to algorithm_weight_history
     const { error: historyError } = await supabase
@@ -342,13 +431,26 @@ app.post('/api/ml/training/run', async (req, res) => {
     const rootDir = path.join(__dirname, '..');
     const trainingScript = path.join(rootDir, 'run-ml-training.js');
     
+    // Check if script exists
+    if (!fs.existsSync(trainingScript)) {
+      console.error(`❌ Training script not found: ${trainingScript}`);
+      return res.status(500).json({ 
+        error: 'Training script not found',
+        message: `Expected file: ${trainingScript}` 
+      });
+    }
+    
     // Check if tsx is available (for TypeScript support)
     const rootPackageJson = path.join(rootDir, 'package.json');
     let useTsx = false;
     if (fs.existsSync(rootPackageJson)) {
-      const pkg = JSON.parse(fs.readFileSync(rootPackageJson, 'utf8'));
-      if (pkg.dependencies && (pkg.dependencies['tsx'] || pkg.devDependencies && pkg.devDependencies['tsx'])) {
-        useTsx = true;
+      try {
+        const pkg = JSON.parse(fs.readFileSync(rootPackageJson, 'utf8'));
+        if (pkg.dependencies && (pkg.dependencies['tsx'] || (pkg.devDependencies && pkg.devDependencies['tsx']))) {
+          useTsx = true;
+        }
+      } catch (e) {
+        console.warn('Could not parse package.json:', e.message);
       }
     }
     
@@ -361,7 +463,7 @@ app.post('/api/ml/training/run', async (req, res) => {
     const trainingProcess = spawn(command, args, {
       cwd: rootDir,
       stdio: ['ignore', 'pipe', 'pipe'],
-      detached: true,
+      detached: false, // Changed to false for better error handling
       shell: true // Use shell for npx to work
     });
     
@@ -417,6 +519,22 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+// Start server with error handling
+try {
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`✅ Server is running on http://localhost:${PORT}`);
+    console.log(`📡 API endpoints available at http://localhost:${PORT}/api`);
+  });
+
+  // Handle server errors
+  process.on('uncaughtException', (error) => {
+    console.error('❌ Uncaught Exception:', error);
+  });
+
+  process.on('unhandledRejection', (reason, promise) => {
+    console.error('❌ Unhandled Rejection at:', promise, 'reason:', reason);
+  });
+} catch (error) {
+  console.error('❌ Failed to start server:', error);
+  process.exit(1);
+}

@@ -60,35 +60,77 @@ export default function SmartSearchBar({ className = '' }: SmartSearchBarProps) 
         .maybeSingle();
 
       if (exactMatch && !exactError) {
-        console.log('Found exact match:', exactMatch.id, exactMatch.name);
-        navigate(`/startup/${exactMatch.id}/matches`);
+        console.log('✅ Found exact URL match:', {
+          startupId: exactMatch.id,
+          name: exactMatch.name,
+          website: exactMatch.website,
+          searchedUrl: normalizedUrl
+        });
+        navigate(`/startup/${exactMatch.id}/matches`, { replace: true });
         return;
       }
 
-      // Then try domain match - be very specific to avoid false matches
-      // Use the full domain (e.g., "x.ai") not just ".ai" to avoid matching "llamaindex.ai"
-      const domainPattern = `%${domain}%`;
+      // Then try domain match - be VERY specific to avoid false matches
+      // Match exact domain in URL (not partial strings)
+      const normalizedDomain = domain.toLowerCase();
+      
+      // First try: Exact domain match in website field (most precise)
+      const { data: exactDomainMatch, error: exactDomainError } = await supabase
+        .from('startup_uploads')
+        .select('id, name, website')
+        .or(`website.ilike.%${normalizedDomain}%,website.ilike.%www.${normalizedDomain}%`)
+        .limit(5);
+
+      if (exactDomainMatch && exactDomainMatch.length > 0 && !exactDomainError) {
+        // Find the best exact domain match
+        const bestMatch = exactDomainMatch.find(s => {
+          if (!s.website) return false;
+          const sDomain = extractDomain(s.website).toLowerCase();
+          return sDomain === normalizedDomain || sDomain === `www.${normalizedDomain}`;
+        }) || exactDomainMatch.find(s => {
+          if (!s.website) return false;
+          return s.website.toLowerCase().includes(normalizedDomain);
+        }) || exactDomainMatch[0];
+        
+        console.log('✅ Found exact domain match:', {
+          startupId: bestMatch.id,
+          name: bestMatch.name,
+          website: bestMatch.website,
+          searchedDomain: normalizedDomain,
+          candidates: exactDomainMatch.length
+        });
+        navigate(`/startup/${bestMatch.id}/matches`, { replace: true });
+        return;
+      }
+      
+      // Fallback: Broader search but still specific
+      const domainPattern = `%${normalizedDomain}%`;
       const { data: existingStartups, error: startupError } = await supabase
         .from('startup_uploads')
         .select('id, name, website')
         .ilike('website', domainPattern)
-        .limit(10); // Get multiple to find the best match
+        .limit(10);
 
       if (existingStartups && existingStartups.length > 0 && !startupError) {
         // Find the best match - prioritize exact domain match
-        // Normalize all websites for comparison
-        const normalizedDomain = domain.toLowerCase();
         const bestMatch = existingStartups.find(s => {
           if (!s.website) return false;
           const sDomain = extractDomain(s.website).toLowerCase();
           return sDomain === normalizedDomain;
         }) || existingStartups.find(s => {
           if (!s.website) return false;
-          return s.website.toLowerCase().includes(normalizedDomain);
+          const websiteLower = s.website.toLowerCase();
+          return websiteLower.includes(`.${normalizedDomain}`) || websiteLower.includes(`://${normalizedDomain}`);
         }) || existingStartups[0];
         
-        console.log('✅ Found domain match:', bestMatch.id, bestMatch.name, bestMatch.website, 'from', existingStartups.length, 'candidates');
-        navigate(`/startup/${bestMatch.id}/matches`);
+        console.log('✅ Found domain match (fallback):', {
+          startupId: bestMatch.id,
+          name: bestMatch.name,
+          website: bestMatch.website,
+          searchedDomain: normalizedDomain,
+          candidates: existingStartups.length
+        });
+        navigate(`/startup/${bestMatch.id}/matches`, { replace: true });
         return;
       }
 
@@ -174,7 +216,7 @@ export default function SmartSearchBar({ className = '' }: SmartSearchBarProps) 
             const { data: byName } = await supabase
               .from('startup_uploads')
               .select('id')
-              .ilike('name', capitalizedName)
+              .ilike('name', startupName)
               .maybeSingle();
             
             if (byName) {
@@ -183,8 +225,11 @@ export default function SmartSearchBar({ className = '' }: SmartSearchBarProps) 
           }
           
           if (existingStartup) {
-            console.log('Found existing startup, navigating to matches');
-            navigate(`/startup/${existingStartup.id}/matches`);
+            console.log('✅ Found existing startup (duplicate), navigating to matches:', {
+              startupId: existingStartup.id,
+              searchedUrl: normalizedUrl
+            });
+            navigate(`/startup/${existingStartup.id}/matches`, { replace: true });
             return;
           }
         }

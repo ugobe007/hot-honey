@@ -1,5 +1,5 @@
 /**
- * HOT MATCH - SYSTEM TEST SUITE
+ * PYTH AI - SYSTEM TEST SUITE
  * 
  * Run: npx tsx scripts/test-hotmatch.ts
  * 
@@ -269,7 +269,7 @@ async function testSchemaIntegrity() {
 
 async function main() {
   console.log('');
-  console.log('🔥 HOT MATCH - SYSTEM TEST SUITE');
+  console.log('🔥 PYTH AI - SYSTEM TEST SUITE');
   console.log('═'.repeat(50));
   console.log('');
 

@@ -112,7 +112,7 @@ export default function LiveDemo() {
         <div className="text-center mb-12">
           <h1 className="text-6xl font-bold text-white mb-4">
             <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-violet-400 bg-clip-text text-transparent">
-              Hot Match
+              <span className="bg-gradient-to-r from-amber-400 via-orange-400 to-cyan-400 bg-clip-text text-transparent">[pyth]</span> <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-violet-400 bg-clip-text text-transparent">ai</span>
             </span>{' '}
             Live Demo
           </h1>
@@ -310,7 +310,7 @@ export default function LiveDemo() {
 
         {/* Footer */}
         <div className="text-center mt-12 text-gray-400">
-          <p className="text-lg">Powered by Hot Match • Real-time AI matching in action</p>
+          <p className="text-lg">Powered by [pyth] ai • Real-time AI matching in action</p>
         </div>
       </div>
     </div>

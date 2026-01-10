@@ -1,5 +1,5 @@
 /**
- * HOT MATCH SCORE RECALCULATOR
+ * PYTH AI SCORE RECALCULATOR
  * ============================
  * Recalculates GOD scores for startups using the SINGLE SOURCE OF TRUTH:
  * ../server/services/startupScoringService.ts

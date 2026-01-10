@@ -23,10 +23,25 @@
 require('dotenv').config();
 const { createClient } = require('@supabase/supabase-js');
 
-const supabase = createClient(
-  process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_KEY || process.env.VITE_SUPABASE_ANON_KEY
-);
+// Validate environment variables
+const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_SERVICE_KEY || process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY;
+
+if (!supabaseUrl || !supabaseKey) {
+  console.error('❌ Missing required environment variables!');
+  console.error('   Please ensure your .env file contains:');
+  console.error('   - VITE_SUPABASE_URL or SUPABASE_URL');
+  console.error('   - SUPABASE_SERVICE_KEY or VITE_SUPABASE_ANON_KEY');
+  console.error('');
+  console.error('   Current values:');
+  console.error(`   - VITE_SUPABASE_URL: ${process.env.VITE_SUPABASE_URL ? '✅ Set' : '❌ Missing'}`);
+  console.error(`   - SUPABASE_URL: ${process.env.SUPABASE_URL ? '✅ Set' : '❌ Missing'}`);
+  console.error(`   - SUPABASE_SERVICE_KEY: ${process.env.SUPABASE_SERVICE_KEY ? '✅ Set' : '❌ Missing'}`);
+  console.error(`   - VITE_SUPABASE_ANON_KEY: ${process.env.VITE_SUPABASE_ANON_KEY ? '✅ Set' : '❌ Missing'}`);
+  process.exit(1);
+}
+
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 // GETLATE API KEY - for Twitter scraping
 const GETLATE_API_KEY = process.env.GETLATE_API_KEY || 'sk_096f15a9dc12b3fa1d05dc08e1ec84425c733d2cb3532888ce7f5addb692f2a9';
@@ -175,7 +190,7 @@ CREATE INDEX IF NOT EXISTS idx_social_signals_sentiment ON social_signals(sentim
 }
 
 // REDDIT SCRAPER
-async function scrapeReddit(subreddit, startupName) {
+async function scrapeReddit(subreddit, startupName, startup) {
   const url = `https://www.reddit.com/r/${subreddit}/search.json?q=${encodeURIComponent(startupName)}&sort=new&limit=100`;
   
   try {
@@ -199,15 +214,18 @@ async function scrapeReddit(subreddit, startupName) {
     
     for (const post of data.data?.children || []) {
       const p = post.data;
-      const content = `${p.title} ${p.selftext}`.toLowerCase();
+      const content = `${p.title} ${p.selftext}`;
       
-      // Only include if startup name is mentioned
-      if (!content.includes(startupName.toLowerCase())) continue;
+      // Validate it's actually about the startup (not a false positive)
+      if (!isValidStartupMention(content, { name: startupName, description: startup.description, website: startup.website })) {
+        continue;
+      }
       
-      // Analyze sentiment
+      // Analyze sentiment (on lowercased content)
+      const contentLower = content.toLowerCase();
       let sentiment = 'neutral';
       for (const [type, patterns] of Object.entries(SENTIMENT)) {
-        if (patterns.some(pattern => pattern.test(content))) {
+        if (patterns.some(pattern => pattern.test(contentLower))) {
           sentiment = type;
           break;
         }
@@ -240,7 +258,7 @@ async function scrapeReddit(subreddit, startupName) {
 }
 
 // HACKER NEWS SCRAPER
-async function scrapeHackerNews(startupName) {
+async function scrapeHackerNews(startupName, startup) {
   const url = `https://hn.algolia.com/api/v1/search?query=${encodeURIComponent(startupName)}&tags=story&hitsPerPage=100`;
   
   try {
@@ -251,14 +269,18 @@ async function scrapeHackerNews(startupName) {
     const signals = [];
     
     for (const hit of data.hits || []) {
-      const content = `${hit.title} ${hit.story_text || ''}`.toLowerCase();
+      const content = `${hit.title} ${hit.story_text || ''}`;
       
-      // Only include if startup name is mentioned
-      if (!content.includes(startupName.toLowerCase())) continue;
+      // Validate it's actually about the startup (not a false positive)
+      if (!isValidStartupMention(content, { name: startupName, description: startup.description, website: startup.website })) {
+        continue;
+      }
       
+      // Analyze sentiment (on lowercased content)
+      const contentLower = content.toLowerCase();
       let sentiment = 'neutral';
       for (const [type, patterns] of Object.entries(SENTIMENT)) {
-        if (patterns.some(pattern => pattern.test(content))) {
+        if (patterns.some(pattern => pattern.test(contentLower))) {
           sentiment = type;
           break;
         }
@@ -290,13 +312,13 @@ async function scrapeHackerNews(startupName) {
 }
 
 // TWITTER SCRAPER - Using Getlate API
-async function scrapeTwitterGetlate(startupName) {
+async function scrapeTwitterGetlate(startupName, startup) {
   const signals = [];
   
   try {
     console.log(`  🐦 Searching Twitter via Getlate...`);
     
-    // Search tweets using Getlate API
+    // Search tweets using Getlate API (fallback to Nitter if unavailable)
     const url = `https://getlate.dev/api/v1/search/tweets?query=${encodeURIComponent(startupName)}&count=50`;
     
     const response = await fetch(url, {
@@ -308,8 +330,12 @@ async function scrapeTwitterGetlate(startupName) {
     
     if (!response.ok) {
       const errorText = await response.text();
-      console.error(`  ❌ Getlate error (${response.status}):`, errorText.substring(0, 200));
-      return [];
+      if (response.status === 404) {
+        console.log(`  ⚠️  Getlate API endpoint changed or unavailable (404), skipping Twitter for now`);
+      } else {
+        console.error(`  ❌ Getlate error (${response.status}):`, errorText.substring(0, 200));
+      }
+      return []; // Skip Twitter if API is unavailable, continue with other platforms
     }
     
     const data = await response.json();
@@ -328,13 +354,16 @@ async function scrapeTwitterGetlate(startupName) {
       
       if (content.length < 10) continue;
       
-      // Only include if startup name is mentioned
-      if (!content.toLowerCase().includes(startupName.toLowerCase())) continue;
+      // Validate it's actually about the startup (not a false positive)
+      if (!isValidStartupMention(content, { name: startupName, description: startup.description, website: startup.website })) {
+        continue;
+      }
       
-      // Analyze sentiment
+      // Analyze sentiment (on lowercased content)
+      const contentLower = content.toLowerCase();
       let sentiment = 'neutral';
       for (const [type, patterns] of Object.entries(SENTIMENT)) {
-        if (patterns.some(pattern => pattern.test(content))) {
+        if (patterns.some(pattern => pattern.test(contentLower))) {
           sentiment = type;
           break;
         }
@@ -418,16 +447,17 @@ async function scrapeTwitterNitter(startupName) {
         
         if (content.length < 10) continue;
         
-        // Analyze sentiment
-        let sentiment = 'neutral';
-        for (const [type, patterns] of Object.entries(SENTIMENT)) {
-          if (patterns.some(pattern => pattern.test(content))) {
-            sentiment = type;
-            break;
-          }
+      // Analyze sentiment (on lowercased content)
+      const contentLower = content.toLowerCase();
+      let sentiment = 'neutral';
+      for (const [type, patterns] of Object.entries(SENTIMENT)) {
+        if (patterns.some(pattern => pattern.test(contentLower))) {
+          sentiment = type;
+          break;
         }
-        
-        let signalType = 'mention';
+      }
+      
+      let signalType = 'mention';
         if (sentiment === 'help') signalType = 'help_offered';
         else if (sentiment === 'interest') signalType = 'seeking_help';
         else if (sentiment === 'concern') signalType = 'criticism';
@@ -562,6 +592,73 @@ async function scrapeFacebookApify(startupName) {
   }
 }
 
+// VALIDATE IF MENTION IS ACTUALLY ABOUT THE STARTUP (not a false positive)
+function isValidStartupMention(content, startup) {
+  const startupName = startup.name.toLowerCase().trim();
+  const contentLower = content.toLowerCase();
+  
+  // 1. Word boundary check - ensure it's a full word match (prevents "Corli" matching "Corliss")
+  const wordBoundaryRegex = new RegExp(`\\b${startupName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i');
+  if (!wordBoundaryRegex.test(content)) {
+    return false;
+  }
+  
+  // 2. Filter out common person name patterns
+  const personNamePatterns = [
+    /(first|last|middle)\s+name/i,
+    /^[A-Z][a-z]+\s+[A-Z]/i, // "Jeb Corliss", "William R. Corliss"
+    /\b(professor|dr\.|mr\.|mrs\.|ms\.|captain|colonel)\s+/i,
+  ];
+  
+  // If content looks like it's about a person, skip unless we have strong startup signals
+  const looksLikePersonName = personNamePatterns.some(pattern => pattern.test(content));
+  
+  // 3. Check for startup/company context keywords
+  const startupKeywords = [
+    'startup', 'company', 'app', 'product', 'saas', 'platform',
+    'raised', 'funding', 'investor', 'venture', 'seed', 'series',
+    'launched', 'beta', 'yc', 'ycombinator', 'demo', 'trial',
+    startup.description?.toLowerCase().split(' ').slice(0, 5) || []
+  ].flat();
+  
+  const hasStartupContext = startupKeywords.some(keyword => 
+    keyword && contentLower.includes(keyword.toLowerCase())
+  );
+  
+  // 4. Check if website domain is mentioned (strong signal)
+  let hasWebsiteMention = false;
+  if (startup.website) {
+    try {
+      const domain = new URL(startup.website).hostname.replace('www.', '');
+      const domainParts = domain.split('.');
+      if (domainParts.length > 0) {
+        hasWebsiteMention = contentLower.includes(domainParts[0].toLowerCase());
+      }
+    } catch (e) {
+      // Invalid URL, skip
+    }
+  }
+  
+  // 5. For Hacker News "Show HN" posts, be more lenient (these are usually about startups)
+  const isShowHN = /show\s+hn/i.test(content);
+  
+  // Decision logic:
+  // - If it looks like a person name AND no startup context, reject
+  // - If it has startup context OR website mention OR Show HN, accept
+  // - Otherwise, reject to avoid false positives
+  
+  if (looksLikePersonName && !hasStartupContext && !hasWebsiteMention && !isShowHN) {
+    return false;
+  }
+  
+  if (hasStartupContext || hasWebsiteMention || isShowHN) {
+    return true;
+  }
+  
+  // Default: reject if we can't confirm it's about the startup
+  return false;
+}
+
 // AGGREGATE SIGNALS FOR A STARTUP
 async function collectSignalsForStartup(startup) {
   const signals = [];
@@ -570,7 +667,7 @@ async function collectSignalsForStartup(startup) {
   
   // Reddit
   for (const subreddit of PLATFORMS.reddit.subreddits) {
-    const redditSignals = await scrapeReddit(subreddit, startup.name);
+    const redditSignals = await scrapeReddit(subreddit, startup.name, startup);
     signals.push(...redditSignals.map(s => ({ 
       ...s, 
       startup_id: startup.id, 
@@ -582,7 +679,7 @@ async function collectSignalsForStartup(startup) {
   }
   
   // Twitter - Using Getlate API (primary)
-  const twitterSignals = await scrapeTwitterGetlate(startup.name);
+  const twitterSignals = await scrapeTwitterGetlate(startup.name, startup);
   signals.push(...twitterSignals.map(s => ({ 
     ...s, 
     startup_id: startup.id, 
@@ -591,7 +688,7 @@ async function collectSignalsForStartup(startup) {
   await new Promise(resolve => setTimeout(resolve, 2000));
   
   // Hacker News
-  const hnSignals = await scrapeHackerNews(startup.name);
+  const hnSignals = await scrapeHackerNews(startup.name, startup);
   signals.push(...hnSignals.map(s => ({ 
     ...s, 
     startup_id: startup.id, 
@@ -694,10 +791,10 @@ async function main() {
   // Check/create table
   await createSocialSignalsTable();
   
-  // Get startups to analyze
+  // Get startups to analyze (include website for better filtering)
   const { data: startups, error } = await supabase
     .from('startup_uploads')
-    .select('id, name, description')
+    .select('id, name, description, website')
     .eq('status', 'approved')
     .limit(limit);
   
@@ -715,7 +812,7 @@ async function main() {
     const signals = await collectSignalsForStartup(startup);
     
     if (signals.length > 0) {
-      console.log(`  📊 Found ${signals.length} mentions`);
+      console.log(`  📊 Found ${signals.length} valid mentions (false positives filtered)`);
       
       // Use raw SQL to bypass cache - batch insert for efficiency
       // Escape single quotes in text fields

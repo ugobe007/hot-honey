@@ -51,9 +51,9 @@ export interface InvestorFirm {
   followsRounds?: boolean; // Whether they follow rounds
   dryPowder?: number; // Dry powder estimate
   
-  // Hot Honey specific
-  hotHoneyInvestments?: number; // Investments made through Hot Honey
-  hotHoneyStartups?: string[]; // Startups they've invested in via Hot Honey
+  // pyth ai specific
+  hotHoneyInvestments?: number; // Investments made through pyth ai
+  hotHoneyStartups?: string[]; // Startups they've invested in via pyth ai
   
   // Social
   linkedin?: string;

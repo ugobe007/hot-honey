@@ -10,7 +10,7 @@ const supabase = createClient(
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'ugobe07@gmail.com';
-const FROM_EMAIL = 'Hot Money Honey <notifications@hotmoneyhoney.com>';
+const FROM_EMAIL = 'pyth ai <notifications@hotmoneyhoney.com>';
 
 export class EmailNotificationService {
   /**
@@ -70,7 +70,7 @@ export class EmailNotificationService {
         <body>
           <div class="container">
             <div class="header">
-              <h1 style="margin: 0;">💰 Hot Money Honey</h1>
+              <h1 style="margin: 0;">💰 pyth ai</h1>
               <p style="margin: 10px 0 0 0;">Admin Notification</p>
             </div>
             <div class="content">
@@ -82,11 +82,11 @@ export class EmailNotificationService {
                 <li>CSV Bulk Upload</li>
                 <li>Document Scanner</li>
               </ul>
-              <a href="https://hot-honey.fly.dev/admin/uploads" class="button">Review Pending Startups →</a>
+              <a href="https://pythai.fly.dev/admin/uploads" class="button">Review Pending Startups →</a>
             </div>
             <div class="footer">
-              <p>Hot Money Honey - Discover the Next Unicorn 🦄</p>
-              <p><a href="https://hot-honey.fly.dev/admin/dashboard">Admin Dashboard</a></p>
+              <p>pyth ai - Discover the Next Unicorn 🦄</p>
+              <p><a href="https://pythai.fly.dev/admin/dashboard">Admin Dashboard</a></p>
             </div>
           </div>
         </body>
@@ -143,7 +143,7 @@ export class EmailNotificationService {
         .eq('status', 'completed')
         .gte('created_at', oneWeekAgo.toISOString());
 
-      const subject = `📈 Weekly Digest - Hot Money Honey`;
+      const subject = `📈 Weekly Digest - pyth ai`;
       
       const topStartupsList = topStartups
         ?.map((s, i) => `
@@ -178,7 +178,7 @@ export class EmailNotificationService {
             <div class="container">
               <div class="header">
                 <h1 style="margin: 0;">📊 Weekly Activity Digest</h1>
-                <p style="margin: 10px 0 0 0;">Hot Money Honey Performance Report</p>
+                <p style="margin: 10px 0 0 0;">pyth ai Performance Report</p>
               </div>
 
               <h2 style="margin-top: 30px;">📈 This Week's Metrics</h2>
@@ -220,17 +220,17 @@ export class EmailNotificationService {
                 <div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 20px; margin-top: 20px; border-radius: 10px;">
                   <h3 style="margin: 0 0 10px 0;">⚠️ Action Required</h3>
                   <p style="margin: 0;">You have <strong>${pendingCount} startup${pendingCount > 1 ? 's' : ''}</strong> waiting for approval.</p>
-                  <a href="https://hot-honey.fly.dev/admin/uploads" class="button" style="background: #f59e0b;">Review Now →</a>
+                  <a href="https://pythai.fly.dev/admin/uploads" class="button" style="background: #f59e0b;">Review Now →</a>
                 </div>
               ` : ''}
 
               <div style="text-align: center; margin-top: 30px;">
-                <a href="https://hot-honey.fly.dev/admin/dashboard" class="button">View Full Dashboard →</a>
+                <a href="https://pythai.fly.dev/admin/dashboard" class="button">View Full Dashboard →</a>
               </div>
 
               <div class="footer">
-                <p>Hot Money Honey - Weekly Report</p>
-                <p><a href="https://hot-honey.fly.dev">Visit Site</a> | <a href="https://hot-honey.fly.dev/admin/analytics">View Analytics</a></p>
+                <p>pyth ai - Weekly Report</p>
+                <p><a href="https://pythai.fly.dev">Visit Site</a> | <a href="https://pythai.fly.dev/admin/analytics">View Analytics</a></p>
               </div>
             </div>
           </body>
@@ -273,7 +273,7 @@ export class EmailNotificationService {
               <p><strong>Companies Found:</strong> ${companiesFound}</p>
               <p><strong>Job ID:</strong> ${jobId}</p>
               <p>All companies have been saved to the pending uploads queue and are ready for your review.</p>
-              <a href="https://hot-honey.fly.dev/admin/uploads" class="button">Review Companies →</a>
+              <a href="https://pythai.fly.dev/admin/uploads" class="button">Review Companies →</a>
             </div>
           </div>
         </body>

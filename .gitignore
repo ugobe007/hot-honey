@@ -1,15 +1,3 @@
-.vercel
-.DS_Store
-node_modules
-.DS_Store
-.DS_Store
-.env.local
-.env
-dist/
-
-# Backup and old files
-*.backup
-*_OLD.tsx
-*_OLD.ts
-*_old.tsx
-*_old.ts
+# Reports directory (if it doesn't already exist)
+reports/
+*.log

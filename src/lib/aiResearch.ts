@@ -1,9 +1,24 @@
 import OpenAI from 'openai';
 
-const openai = new OpenAI({
-  apiKey: import.meta.env.VITE_OPENAI_API_KEY,
-  dangerouslyAllowBrowser: true, // Note: In production, this should be done server-side
-});
+// Lazy initialization - only create client when API key is available
+let openaiClient: OpenAI | null = null;
+
+function getOpenAIClient(): OpenAI {
+  if (!openaiClient) {
+    const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
+    
+    if (!apiKey) {
+      throw new Error('OpenAI API key is not configured. Please set VITE_OPENAI_API_KEY in your .env file.');
+    }
+    
+    openaiClient = new OpenAI({
+      apiKey: apiKey,
+      dangerouslyAllowBrowser: true, // Note: In production, this should be done server-side
+    });
+  }
+  
+  return openaiClient;
+}
 
 export interface InvestorResearchData {
   name: string;
@@ -68,6 +83,7 @@ IMPORTANT:
 - Return ONLY valid JSON, no additional text`;
 
   try {
+    const openai = getOpenAIClient();
     const response = await openai.chat.completions.create({
       model: 'gpt-4o-mini',
       messages: [

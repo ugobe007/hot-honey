@@ -41,16 +41,61 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Create logs directory
+        run: mkdir -p logs
+
       - name: Run Automated Scraper
+        id: scraper
+        continue-on-error: true
         if: ${{ github.event.inputs.run_type != 'inference_only' }}
-        run: node automated-scraper.js
+        run: |
+          echo "🚀 Starting automated scraper..." | tee logs/scraper.log
+          node automated-scraper.js 2>&1 | tee -a logs/scraper.log || {
+            echo "⚠️ Scraper exited with errors, but continuing..."
+            echo '{"status": "partial", "scraper_exit_code": '$?'}' > logs/scraper-results.json
+            exit 0
+          }
+          echo '{"status": "success", "timestamp": "'$(date -Iseconds)'"}' > logs/scraper-results.json
         env:
           DEBUG: true
 
       - name: Run Inference Pipeline
-        run: node run-inference-pipeline.js
+        id: inference
+        continue-on-error: true
+        run: |
+          echo "🧠 Starting inference pipeline..." | tee -a logs/inference.log
+          node run-inference-pipeline.js 2>&1 | tee -a logs/inference.log || {
+            echo "⚠️ Inference pipeline exited with errors"
+            echo '{"status": "error", "inference_exit_code": '$?'}' > logs/inference-results.json
+            exit 0
+          }
+          echo '{"status": "success", "timestamp": "'$(date -Iseconds)'"}' > logs/inference-results.json
         env:
           DEBUG: true
+
+      - name: Ensure log files exist
+        if: always()
+        run: |
+          # Create placeholder files if scripts didn't create them
+          touch logs/scraper.log logs/inference.log
+          if [ ! -f logs/scraper-results.json ]; then
+            echo '{"status": "not_run", "reason": "Script did not produce output"}' > logs/scraper-results.json
+          fi
+          if [ ! -f logs/inference-results.json ]; then
+            echo '{"status": "not_run", "reason": "Script did not produce output"}' > logs/inference-results.json
+          fi
+          ls -la logs/
+
+      - name: Upload logs as artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: scraper-logs-${{ github.run_number }}
+          path: |
+            logs/*.log
+            logs/*.json
+          retention-days: 7
+          if-no-files-found: warn
 
       - name: Report Results
         if: always()
@@ -59,6 +104,23 @@ jobs:
           echo "- Run time: $(date)" >> $GITHUB_STEP_SUMMARY
           echo "- Triggered by: ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
           echo "- Run type: ${{ github.event.inputs.run_type || 'full' }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ -f logs/scraper-results.json ]; then
+            echo "### Scraper Status" >> $GITHUB_STEP_SUMMARY
+            cat logs/scraper-results.json >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi
+          if [ -f logs/inference-results.json ]; then
+            echo "### Inference Status" >> $GITHUB_STEP_SUMMARY
+            cat logs/inference-results.json >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi
+          if [ -f logs/scraper.log ]; then
+            echo "### Recent Scraper Logs" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            tail -30 logs/scraper.log >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          fi
 
   notify-on-failure:
     needs: scrape

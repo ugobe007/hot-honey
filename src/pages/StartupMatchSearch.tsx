@@ -78,15 +78,28 @@ export default function StartupMatchSearch() {
 
   useEffect(() => {
     if (startupId) {
+      // Clear previous matches when startupId changes
+      setMatches([]);
+      setStats(null);
+      setLoading(true);
+      setError(null);
+      
+      console.log('🔄 Loading matches for startup:', startupId);
       loadMatches();
       loadStats();
     }
   }, [startupId, filters]);
 
   const loadMatches = async () => {
-    if (!startupId) return;
+    if (!startupId) {
+      console.warn('⚠️ loadMatches called without startupId');
+      return;
+    }
     
+    console.log('📊 Loading matches for startup:', startupId);
     setLoading(true);
+    setError(null);
+    
     try {
       const params = new URLSearchParams();
       
@@ -125,7 +138,14 @@ export default function StartupMatchSearch() {
       const data = await response.json();
       
       if (data.success) {
-        setMatches(data.data.matches || []);
+        const matchesData = data.data.matches || [];
+        console.log(`✅ Loaded ${matchesData.length} matches for startup ${startupId}`, {
+          total: data.data.total || 0,
+          filtered: data.data.filtered_total || 0,
+          limitApplied: data.data.limit_applied || false
+        });
+        
+        setMatches(matchesData);
         setTotalMatches(data.data.total || 0);
         setFilteredTotal(data.data.filtered_total || 0);
         setLimitApplied(data.data.limit_applied || false);

@@ -1,5 +1,5 @@
 /**
- * Hot Match Official Color Palette
+ * [pyth] ai Official Color Palette
  * 
  * USAGE: Import these colors for consistent branding.
  * These are the ONLY colors to use for UI elements.

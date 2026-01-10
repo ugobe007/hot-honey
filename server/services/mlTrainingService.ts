@@ -65,31 +65,81 @@ interface OptimizationResult {
 
 /**
  * Collect training data from all matches with feedback
+ * Uses pagination to avoid statement timeouts
  */
 export async function collectTrainingData(): Promise<MatchOutcome[]> {
   console.log('🎓 Collecting ML training data from match outcomes...');
 
-  const { data: matches, error } = await supabase
-    .from('startup_investor_matches')
-    .select(`
-      id,
-      startup_id,
-      investor_id,
-      match_score,
-      reasoning,
-      status,
-      viewed_at,
-      contacted_at,
-      startup:startup_uploads!startup_investor_matches_startup_id_fkey(
-        total_god_score
-      )
-    `)
-    .not('status', 'eq', 'suggested'); // Only matches with some interaction
+  // Limit to recent matches with pagination to avoid timeout
+  const oneWeekAgo = new Date();
+  oneWeekAgo.setDate(oneWeekAgo.getDate() - 7); // Only last week
 
-  if (error || !matches) {
-    console.error('❌ Error fetching training data:', error);
-    return [];
+  const BATCH_SIZE = 100; // Smaller batches to prevent timeout
+  const MAX_RECORDS = 500; // Reduced total limit
+  let allMatches: any[] = [];
+  let offset = 0;
+  let hasMore = true;
+
+  // Fetch matches in batches (without join first - faster)
+  while (hasMore && allMatches.length < MAX_RECORDS) {
+    const { data: matchesBatch, error } = await supabase
+      .from('startup_investor_matches')
+      .select(`
+        id,
+        startup_id,
+        investor_id,
+        match_score,
+        reasoning,
+        status,
+        viewed_at,
+        contacted_at
+      `)
+      .not('status', 'eq', 'suggested') // Only matches with some interaction
+      .gte('created_at', oneWeekAgo.toISOString())
+      .order('created_at', { ascending: false })
+      .range(offset, offset + BATCH_SIZE - 1);
+
+    if (error) {
+      console.error(`❌ Error fetching batch at offset ${offset}:`, error);
+      break;
+    }
+
+    if (!matchesBatch || matchesBatch.length === 0) {
+      hasMore = false;
+      break;
+    }
+
+    allMatches = allMatches.concat(matchesBatch);
+    offset += BATCH_SIZE;
+
+    // If we got fewer than BATCH_SIZE, we've reached the end
+    if (matchesBatch.length < BATCH_SIZE) {
+      hasMore = false;
+    }
+
+    // Small delay to avoid overwhelming the database
+    await new Promise(resolve => setTimeout(resolve, 100));
   }
+
+  console.log(`   ✅ Fetched ${allMatches.length} matches in ${Math.ceil(allMatches.length / BATCH_SIZE)} batches`);
+
+  // Now fetch GOD scores separately (more efficient than join)
+  const startupIds = [...new Set(allMatches.map(m => m.startup_id))].slice(0, 100);
+  const { data: startups, error: startupError } = await supabase
+    .from('startup_uploads')
+    .select('id, total_god_score')
+    .in('id', startupIds);
+
+  const godScoreMap: Record<string, number> = {};
+  (startups || []).forEach((s: any) => {
+    godScoreMap[s.id] = s.total_god_score || 0;
+  });
+
+  // Attach GOD scores to matches
+  const matches = allMatches.map(m => ({
+    ...m,
+    startup: { total_god_score: godScoreMap[m.startup_id] || 0 }
+  }));
 
   // Convert matches to training outcomes
   // NOTE: Use status column, not investment_made (doesn't exist)
@@ -357,7 +407,8 @@ export async function trackAlgorithmPerformance(
       )
     `)
     .gte('created_at', periodStart.toISOString())
-    .lte('created_at', periodEnd.toISOString());
+    .lte('created_at', periodEnd.toISOString())
+    .limit(10000); // Limit to prevent timeout
 
   if (error || !matches) {
     console.error('Error fetching performance data:', error);

@@ -150,7 +150,7 @@ const StrategiesPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950">
       {/* Global Navigation */}
-      <LogoDropdownMenu />
+              <LogoDropdownMenu />
 
       {/* Header */}
       <div className="bg-gradient-to-r from-cyan-500/10 via-blue-500/10 to-violet-500/10 border-b border-gray-800">

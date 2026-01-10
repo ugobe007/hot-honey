@@ -217,7 +217,7 @@ const FrontPageNew: React.FC = () => {
               textShadow: '2px 2px 0px #fb9f05, 4px 4px 0px #f99006, 6px 6px 0px #ae3e07',
               transform: 'translateZ(0)'
             }}>
-              Hot Money
+              pyth ai
             </h1>
             {/* Mr. Bee leaning on title */}
             <img 

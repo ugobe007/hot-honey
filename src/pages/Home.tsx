@@ -96,7 +96,7 @@ function StartupCard({ startup, onVote }: { startup: Startup; onVote: (id: numbe
 
   const handleHoneypot = () => {
     console.log('Added to Honeypot:', startup.name);
-    alert(`🍯 ${startup.name} added to your Honeypot!`);
+    alert(`🔮 ${startup.name} added to your Honeypot!`);
   };
 
   return (
@@ -124,7 +124,7 @@ function StartupCard({ startup, onVote }: { startup: Startup; onVote: (id: numbe
           className="text-4xl hover:scale-110 transition-transform"
           title="Add to Honeypot"
         >
-          🍯
+          🔮
         </button>
       </div>
 
@@ -249,7 +249,7 @@ export default function Home() {
       <div className="relative overflow-hidden bg-gradient-to-r from-cyan-600 via-blue-600 to-violet-600 text-white py-20 px-8">
         <div className="max-w-6xl mx-auto text-center relative z-10">
           <h1 className="text-6xl md:text-7xl font-bold mb-6 drop-shadow-lg">
-            🍯 Hot Honey
+            🔮 pyth ai
           </h1>
           <p className="text-3xl md:text-4xl font-semibold mb-4">
             "Get Them While They're Hot."
@@ -326,7 +326,7 @@ export default function Home() {
               <div className="text-6xl mb-4">🤝</div>
               <h3 className="text-2xl font-bold text-gray-900 mb-3">Connect</h3>
               <p className="text-gray-700">
-                When you find a startup you love, add it to your Honeypot 🍯 and connect directly with founders.
+                When you find a startup you love, add it to your Honeypot 🔮 and connect directly with founders.
               </p>
             </div>
           </div>

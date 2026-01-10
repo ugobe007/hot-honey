@@ -64,9 +64,9 @@ export default function StartupVotePopup({ isOpen, onClose, startup }: StartupVo
         className="relative bg-gradient-to-br from-slate-800 to-slate-700 rounded-3xl p-8 max-w-md w-full border-2 border-slate-500 shadow-2xl shadow-cyan-500/20"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Hot Money Accent */}
+        {/* pyth ai Accent */}
         <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white text-xs font-bold px-4 py-1 rounded-full">
-          🔥 HOT MONEY
+          🔥 pyth ai
         </div>
 
         {/* Close Button */}
@@ -93,7 +93,7 @@ export default function StartupVotePopup({ isOpen, onClose, startup }: StartupVo
                 disabled={isSubmitting}
                 className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white font-bold py-5 px-6 rounded-2xl transition-all shadow-lg shadow-cyan-500/30 hover:scale-105 hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex flex-col items-center gap-2"
               >
-                <span className="text-2xl">🍯</span>
+                <span className="text-2xl">🔮</span>
                 <span>Sweet Deal!</span>
               </button>
 
@@ -116,7 +116,7 @@ export default function StartupVotePopup({ isOpen, onClose, startup }: StartupVo
             {/* Thank You Message */}
             <div className="text-center py-4">
               <div className="text-6xl mb-4">
-                {voteType === 'yes' ? '🍯' : '👋'}
+                {voteType === 'yes' ? '🔮' : '👋'}
               </div>
               <h2 className="text-2xl font-bold text-gray-800 mb-2">
                 {voteType === 'yes' ? 'Great taste!' : 'Got it!'}

@@ -81,7 +81,11 @@ function extractCompanyName(title) {
     'healthcare\'s', 'healthcare', 'much', 'slc', 'zork', 'golden', 'team', 'culture', 'investor',
     'updates', 'launches', 'launch', 'saastr', 'european', 'software', 'zork golden',
     'team culture', 'investor updates', 'investments', 'battlefield', 'and', 'coveted', 'startup',
-    'era', 'sandbar', 'stand', 'wars', 'break', 'power', 'bank', 'finnish', 'swedish', 'estonian', 'danish'
+    'era', 'sandbar', 'stand', 'wars', 'break', 'power', 'bank', 'finnish', 'swedish', 'estonian', 'danish',
+    // Common false positives found in scraping
+    'kids', 'congress', 'china', 'texas', 'nyc', 'actors', 'lobbies', 'north', 'south', 'east', 'west',
+    'america', 'europe', 'asia', 'africa', 'latin', 'america', 'canada', 'mexico', 'india', 'japan',
+    'korea', 'germany', 'france', 'italy', 'spain', 'brazil', 'australia', 'britain', 'uk', 'usa'
     // Note: Removed 'tin' and 'can' - "Tin Can" is a valid company name
     // Note: Removed 'clicks' - "Clicks" is a valid company name
   ]);
@@ -430,12 +434,13 @@ function isStartupNews(title, description) {
 async function scrapeRssFeeds() {
   console.log('📡 Simple RSS Feed Scraper (No AI Required)\n');
   
-  // Get active RSS sources
+  // Get active RSS sources (increased limit to handle hundreds of sources)
   const { data: sources } = await supabase
     .from('rss_sources')
     .select('id, name, url, category')
     .eq('active', true)
-    .limit(20);
+    .order('last_scraped', { ascending: true, nullsFirst: true }) // Scrape oldest first
+    .limit(200); // Process up to 200 sources per run (covers all 84+ active sources)
   
   console.log(`Found ${sources?.length || 0} active RSS sources\n`);
   
@@ -447,8 +452,15 @@ async function scrapeRssFeeds() {
     console.log(`   ${source.url}`);
     
     try {
-      const feed = await parser.parseURL(source.url);
-      const items = feed.items?.slice(0, 10) || [];
+      // Add timeout protection for individual feeds (30 seconds max per feed)
+      const feedPromise = parser.parseURL(source.url);
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Feed timeout after 30s')), 30000)
+      );
+      
+      const feed = await Promise.race([feedPromise, timeoutPromise]);
+      // Increased from 10 to 50 items per feed to scale to 200-500 startups/day
+      const items = feed.items?.slice(0, 50) || [];
       
       console.log(`   Found ${items.length} items`);
       
@@ -544,17 +556,44 @@ async function scrapeRssFeeds() {
         console.log(`   ℹ️  ${skipped} items skipped (no company name found or duplicates)`);
       }
       
-      // Update last_scraped
-      await supabase.from('rss_sources')
-        .update({ last_scraped: new Date().toISOString() })
-        .eq('id', source.id);
+      // Update last_scraped (with timeout protection)
+      try {
+        await Promise.race([
+          supabase.from('rss_sources')
+            .update({ last_scraped: new Date().toISOString() })
+            .eq('id', source.id),
+          new Promise((_, reject) => setTimeout(() => reject(new Error('Update timeout')), 5000))
+        ]);
+      } catch (updateError) {
+        // Silently fail - don't hang on DB updates
+      }
       
       if (added > 0) {
         console.log(`   Added: ${added}`);
       }
       
     } catch (err) {
-      console.log(`   ❌ Error: ${err.message}`);
+      // Check if it's a timeout
+      if (err.message.includes('timeout') || err.message.includes('ETIMEDOUT') || err.message.includes('Feed timeout')) {
+        console.log(`   ⏱️  Timeout: Feed took too long, skipping...`);
+      } else {
+        console.log(`   ❌ Error: ${err.message}`);
+      }
+      
+      // Update last_scraped even on error (with timeout protection)
+      try {
+        await Promise.race([
+          supabase.from('rss_sources')
+            .update({ last_scraped: new Date().toISOString() })
+            .eq('id', source.id),
+          new Promise((_, reject) => setTimeout(() => reject(new Error('Update timeout')), 5000))
+        ]);
+      } catch (updateError) {
+        // Silently fail - continue to next feed
+      }
+      
+      // Continue to next feed - don't let one broken feed stop everything
+      continue;
     }
   }
   

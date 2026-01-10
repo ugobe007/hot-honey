@@ -149,7 +149,7 @@ Content: ${cleanContent.substring(0, 600)}...
       })
       .join('\n---\n');
 
-    const prompt = `You are a startup discovery analyst. Extract ALL startup companies mentioned in these articles with HOT MONEY 5-POINT FORMAT.
+    const prompt = `You are a startup discovery analyst. Extract ALL startup companies mentioned in these articles with PYTH AI 5-POINT FORMAT.
 
 ARTICLES:
 ${articlesText}
@@ -308,7 +308,7 @@ RESPONSE FORMAT (JSON only, no markdown):
             name: startup.name,
             website: startup.website,
             description: startup.description,
-            // 🔥 HOT MONEY 5-POINT FORMAT
+            // 🔥 PYTH AI 5-POINT FORMAT
             value_proposition: startup.value_proposition,
             problem: startup.problem,
             solution: startup.solution,
@@ -402,7 +402,7 @@ RESPONSE FORMAT (JSON only, no markdown):
 
         // Create startup record
         const { data: newStartup, error: insertError } = await supabase
-          .from('startups')
+          .from('startup_uploads')
           .insert({
             name: discovered.name,
             website: discovered.website,

@@ -1,10 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { RefreshCw, AlertCircle, TrendingUp, TrendingDown, CheckCircle, Clock, Settings, ArrowRight } from 'lucide-react';
+import { RefreshCw, AlertCircle, TrendingUp, TrendingDown, CheckCircle, Clock, Settings, ArrowRight, Activity } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import LogoDropdownMenu from '../components/LogoDropdownMenu';
 import { supabase } from '../lib/supabase';
-import AdminNavBar from '../components/AdminNavBar';
 
 interface Startup {
   id: string;
@@ -68,28 +66,42 @@ export default function GODScoresPage() {
   }, [autoRefresh, statusFilter]);
 
   const loadData = async () => {
-    setLoading(true);
-    let query = supabase.from('startup_uploads')
-      .select('id, name, tagline, total_god_score, team_score, traction_score, market_score, product_score, vision_score, status, created_at, updated_at')
-      .not('total_god_score', 'is', null);
-    
-    // Filter by status - default to approved only
-    if (statusFilter === 'approved') {
-      query = query.eq('status', 'approved');
-    }
-    
-    const { data } = await query.order('total_god_score', { ascending: false });
+    try {
+      setLoading(true);
+      let query = supabase.from('startup_uploads')
+        .select('id, name, tagline, total_god_score, team_score, traction_score, market_score, product_score, vision_score, status, created_at, updated_at')
+        .not('total_god_score', 'is', null);
+      
+      // Filter by status - default to approved only
+      if (statusFilter === 'approved') {
+        query = query.eq('status', 'approved');
+      }
+      
+      const { data, error } = await query.order('total_god_score', { ascending: false });
 
-    if (data) {
-      setStartups(data);
-      const scores = data.map(s => s.total_god_score || 0);
-      setStats({
-        avgScore: scores.length ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0,
-        topScore: scores.length ? Math.max(...scores) : 0,
-        totalScored: data.length
-      });
+      if (error) {
+        console.error('Error loading GOD scores:', error);
+        setStartups([]);
+        setStats({ avgScore: 0, topScore: 0, totalScored: 0 });
+      } else if (data) {
+        setStartups(data);
+        const scores = data.map(s => s.total_god_score || 0);
+        setStats({
+          avgScore: scores.length ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0,
+          topScore: scores.length ? Math.max(...scores) : 0,
+          totalScored: data.length
+        });
+      } else {
+        setStartups([]);
+        setStats({ avgScore: 0, topScore: 0, totalScored: 0 });
+      }
+    } catch (error) {
+      console.error('Error in loadData:', error);
+      setStartups([]);
+      setStats({ avgScore: 0, topScore: 0, totalScored: 0 });
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const loadScoreChanges = async () => {
@@ -211,8 +223,6 @@ export default function GODScoresPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0f0729] via-[#1a0f3a] to-[#2d1558] text-white">
-      <LogoDropdownMenu />
-      
       {/* Header */}
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-6">
@@ -459,6 +469,8 @@ export default function GODScoresPage() {
         <div className="bg-gray-800/30 rounded-lg border border-gray-700/50 p-4">
           <h3 className="text-sm font-semibold text-white mb-3">⚡ Related Tools</h3>
           <div className="flex flex-wrap gap-2 text-xs">
+            <Link to="/admin/industry-rankings" className="px-3 py-1.5 bg-blue-500/20 border border-blue-500/30 rounded text-blue-400 hover:bg-blue-500/30">📊 Industry Rankings</Link>
+            <Link to="/admin/god-settings" className="px-3 py-1.5 bg-orange-500/20 border border-orange-500/30 rounded text-orange-400 hover:bg-orange-500/30">⚙️ GOD Settings</Link>
             <Link to="/admin/ml-dashboard" className="px-3 py-1.5 bg-purple-500/20 border border-purple-500/30 rounded text-purple-400 hover:bg-purple-500/30">🧠 ML Dashboard</Link>
             <Link to="/admin/analytics" className="px-3 py-1.5 bg-cyan-500/20 border border-cyan-500/30 rounded text-cyan-400 hover:bg-cyan-500/30">📊 Analytics</Link>
             <Link to="/admin/edit-startups" className="px-3 py-1.5 bg-cyan-600/20 border border-cyan-500/30 rounded text-cyan-400 hover:bg-cyan-600/30">✏️ Edit Startups</Link>

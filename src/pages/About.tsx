@@ -21,37 +21,104 @@ export default function About() {
         <div className="text-center mb-20">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-500/20 to-cyan-500/20 border border-purple-500/30 rounded-full mb-6">
             <Sparkles className="w-4 h-4 text-purple-400" />
-            <span className="text-purple-300 text-sm font-medium">AI-Powered Startup-Investor Matching</span>
+            <span className="text-purple-300 text-sm font-medium">Oracle of Truth</span>
           </div>
           <h1 className="text-5xl md:text-7xl font-bold mb-6">
-            About <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-violet-400 bg-clip-text text-transparent">Hot Match</span>
+            <span className="bg-gradient-to-r from-amber-400 via-orange-400 to-cyan-400 bg-clip-text text-transparent">[pyth]</span> <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-violet-400 bg-clip-text text-transparent">ai</span>
           </h1>
-          <p className="text-2xl text-gray-300 max-w-3xl mx-auto mb-8">
-            Where AI meets intuition to create perfect startup-investor connections in seconds.
+          <p className="text-2xl text-gray-300 max-w-3xl mx-auto mb-4 italic">
+            Not prophecy. Probability perfected.
           </p>
         </div>
 
-        {/* Mission Statement */}
+        {/* Origin Story */}
         <div className="max-w-4xl mx-auto mb-20">
-          <div className="bg-gradient-to-br from-purple-900/50 to-indigo-900/50 backdrop-blur-lg rounded-3xl p-10 border border-purple-500/30 shadow-2xl">
-            <div className="flex items-center gap-4 mb-6">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-cyan-600 to-blue-600 flex items-center justify-center shadow-lg">
-                <Target className="w-8 h-8 text-white" />
+          <div className="bg-gradient-to-br from-slate-900/80 to-slate-800/80 backdrop-blur-lg rounded-3xl p-10 md:p-12 border border-slate-700/50 shadow-2xl">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-8 text-center">
+              The Origin Story
+            </h2>
+            
+            <div className="space-y-6 text-lg text-gray-300 leading-relaxed">
+              <p>
+                <span className="text-white font-semibold">Venture capital runs on gut feeling disguised as pattern matching.</span>
+              </p>
+              
+              <p>
+                VCs say they recognize great founders. They point to their wins. But for every success story, 
+                there are <span className="text-red-400 font-semibold">ten brilliant founders they rejected</span>—founders who went on to raise elsewhere, scale, and exit.
+              </p>
+              
+              <p>
+                The pattern isn't in the pitch deck. It's not in the warm intro. <span className="text-cyan-400 font-semibold">It's in the data.</span>
+              </p>
+              
+              <div className="my-8 p-6 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 border-l-4 border-cyan-500 rounded-r-xl">
+                <p className="text-xl font-semibold text-white mb-4">Success has signatures.</p>
+                <div className="grid md:grid-cols-2 gap-3 text-base">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-cyan-400"></div>
+                    <span>Team velocity</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-cyan-400"></div>
+                    <span>Market timing</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-cyan-400"></div>
+                    <span>Traction acceleration</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-cyan-400"></div>
+                    <span>Competitive positioning</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-cyan-400"></div>
+                    <span>Founder psychology</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-cyan-400"></div>
+                    <span>Investor thesis fit</span>
+                  </div>
+                </div>
+                <p className="mt-4 text-lg font-semibold text-cyan-300">
+                  Twenty different dimensions—each one revealing part of the truth.
+                </p>
               </div>
-              <h2 className="text-3xl font-bold text-white">Our Mission</h2>
+              
+              <p>
+                <span className="text-cyan-400 font-bold">[pyth] ai</span> processes all twenty at once.
+              </p>
+              
+              <p>
+                <span className="text-white font-semibold">Not predictions.</span> Pattern recognition at scale. Twenty algorithms trained daily on thousands of real outcomes. 
+                Each match makes the system smarter. Each rejection refines the model.
+              </p>
+              
+              <div className="my-8 p-6 bg-gradient-to-r from-purple-500/10 to-indigo-500/10 border border-purple-500/30 rounded-xl">
+                <p className="text-xl font-semibold text-white mb-2">
+                  Where VCs see 100 pitches and pick 3 based on feeling,
+                </p>
+                <p className="text-xl font-semibold text-cyan-400">
+                  [pyth] ai sees 100 startups and reveals which 3 have the mathematical signatures of success.
+                </p>
+              </div>
+              
+              <div className="text-center mt-10 pt-8 border-t border-slate-700">
+                <p className="text-3xl font-bold text-white mb-2">
+                  [pyth] ai: <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">oracle of truth.</span>
+                </p>
+                <p className="text-2xl text-gray-400 italic">
+                  Not prophecy. Probability perfected.
+                </p>
+              </div>
             </div>
-            <p className="text-xl text-gray-300 leading-relaxed">
-              Hot Match transforms the chaotic world of startup fundraising into an intelligent, 
-              data-driven experience. We believe every great startup deserves to meet their perfect 
-              investor match—and every investor deserves to discover their next portfolio winner.
-            </p>
           </div>
         </div>
 
         {/* How It Works */}
         <div className="mb-20">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-white mb-4">How Hot Match Works</h2>
+            <h2 className="text-4xl font-bold text-white mb-4">How [pyth] ai Works</h2>
             <p className="text-xl text-gray-400">AI-powered matching in three simple steps</p>
           </div>
 
@@ -147,10 +214,10 @@ export default function About() {
           </div>
         </div>
 
-        {/* Why Hot Match */}
+        {/* Why [pyth] ai */}
         <div className="mb-20">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-white mb-4">Why Choose Hot Match?</h2>
+            <h2 className="text-4xl font-bold text-white mb-4">Why Choose [pyth] ai?</h2>
             <p className="text-xl text-gray-400">Built for the modern fundraising landscape</p>
           </div>
 
@@ -282,7 +349,7 @@ export default function About() {
           <div className="bg-gradient-to-br from-purple-900/50 to-indigo-900/50 backdrop-blur-lg rounded-3xl p-12 border border-purple-500/30 max-w-4xl mx-auto">
             <h2 className="text-4xl font-bold text-white mb-4">Ready to Find Your Perfect Match?</h2>
             <p className="text-xl text-gray-300 mb-8">
-              Join hundreds of startups and investors already making connections on Hot Match.
+              Join hundreds of startups and investors already making connections on [pyth] ai.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
@@ -306,7 +373,7 @@ export default function About() {
 
         {/* Footer */}
         <div className="text-center mt-16 text-gray-500 text-sm">
-          <p>© 2025 Hot Match. All rights reserved.</p>
+          <p>© 2025 [pyth] ai. All rights reserved.</p>
           <p className="mt-2">Made with 🔥 for founders and investors everywhere.</p>
         </div>
       </div>

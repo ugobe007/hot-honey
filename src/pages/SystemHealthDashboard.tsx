@@ -288,7 +288,7 @@ export default function SystemHealthDashboard() {
             🛡️ System Health Dashboard
           </h1>
           <p className="text-gray-400 mt-1">
-            Real-time monitoring of all Hot Match systems
+            Real-time monitoring of all [pyth] ai systems
           </p>
         </div>
         <div className="flex items-center gap-4">

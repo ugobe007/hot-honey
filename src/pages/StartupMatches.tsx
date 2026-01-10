@@ -166,6 +166,14 @@ export default function StartupMatches() {
 
   useEffect(() => {
     if (!id) return;
+    
+    // Clear previous state when ID changes (critical fix for duplicate results)
+    console.log('🔄 Startup ID changed, clearing previous state:', id);
+    setStartup(null);
+    setMatches([]);
+    setError(null);
+    setIsLoading(true);
+    
     loadStartupAndMatches();
   }, [id]);
 
@@ -208,11 +216,14 @@ export default function StartupMatches() {
       }
 
       // Log for debugging - this will show what startup is actually loaded
-      console.log('✅ Loaded startup:', {
-        id: startupData.id,
+      console.log('✅ Loaded startup for matches:', {
+        requestedId: id,
+        actualId: startupData.id,
         name: startupData.name,
         website: startupData.website,
-        requestedId: id
+        godScore: startupData.total_god_score,
+        sectors: startupData.sectors,
+        stage: startupData.stage
       });
 
       // Convert null to undefined for optional fields
@@ -280,11 +291,31 @@ export default function StartupMatches() {
       });
       
       setMatchingStatus(`Found ${matchResults.length} matches!`);
+      
+      // Log match generation with startup details
+      console.log('✅ Generated matches for startup:', {
+        startupId: startupData.id,
+        startupName: startupData.name,
+        website: startupData.website,
+        matchCount: matchResults.length,
+        godScore: godScore,
+        minScore: minScore,
+        sectors: startupData.sectors,
+        stage: startupData.stage
+      });
+      
+      if (matchResults.length > 0) {
+        console.log('   Sample matches:', matchResults.slice(0, 3).map(m => ({
+          investor: m.investor.name,
+          score: m.score
+        })));
+      }
+      
       setMatches(matchResults);
       
       // If no matches found, log for debugging
       if (matchResults.length === 0) {
-        console.warn('No matches found for startup:', {
+        console.warn('⚠️ No matches found for startup:', {
           id: startupData.id,
           name: startupData.name,
           godScore: godScore,

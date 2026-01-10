@@ -2,7 +2,7 @@
  * PROBLEM VALIDATION AI SERVICE
  * Uses GPT-4 to analyze startup problem statements with VC-grade rigor
  * 
- * This is THE critical filter that makes Hot Money Honey world-class.
+ * This is THE critical filter that makes pyth ai world-class.
  * Based on Mitsubishi Chemical VC philosophy: If founders can't clearly
  * articulate the customer problem and prove it's worth solving, they
  * don't get matched to investors (regardless of other metrics).

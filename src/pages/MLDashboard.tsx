@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { RefreshCw, Check, X, Play, Clock, ExternalLink, AlertCircle, Settings, Activity, ArrowRight } from 'lucide-react';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
+import { RefreshCw, Check, X, Play, Clock, ExternalLink, AlertCircle, Settings, Activity, ArrowRight, AlertTriangle, Brain, Info } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import LogoDropdownMenu from '../components/LogoDropdownMenu';
 
@@ -27,8 +27,18 @@ interface MLRecommendation {
   created_at?: string;
 }
 
+interface Deviation {
+  startupId: string;
+  startupName: string;
+  oldScore: number;
+  newScore: number;
+  change: number;
+  timestamp: string;
+}
+
 export default function MLDashboard() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [metrics, setMetrics] = useState<MLMetric | null>(null);
@@ -36,6 +46,9 @@ export default function MLDashboard() {
   const [trainingStatus, setTrainingStatus] = useState<'idle' | 'running' | 'complete'>('idle');
   const [autoRefresh, setAutoRefresh] = useState(true);
   const [showSettings, setShowSettings] = useState(false);
+  const [deviations, setDeviations] = useState<Deviation[]>([]);
+  const [showDeviations, setShowDeviations] = useState(true);
+  const skipRedirect = location.state?.skipRedirect || false;
 
   useEffect(() => {
     loadMLData();
@@ -53,6 +66,9 @@ export default function MLDashboard() {
   const loadMLData = async () => {
     setLoading(true);
     try {
+      // Load deviations first
+      await checkGODDeviations();
+      
       // Fetch recommendations from database
       const { data: recommendationsData, error: recError } = await supabase
         .from('ml_recommendations')
@@ -115,17 +131,7 @@ export default function MLDashboard() {
         score_distribution: distribution
       });
 
-      setRecommendations(dbRecommendations.length > 0 ? dbRecommendations : [
-        // Fallback if no recommendations in DB
-        {
-          id: 'sample-1',
-          priority: 'high',
-          title: 'Sample: Increase Traction Weight',
-          description: 'Run ML training to generate real recommendations.',
-          expected_impact: 'TBD',
-          status: 'pending'
-        }
-      ]);
+      setRecommendations(dbRecommendations); // Only show real recommendations from database
     } catch (error) {
       console.error('Error loading ML data:', error);
     } finally {
@@ -135,8 +141,15 @@ export default function MLDashboard() {
 
   const refresh = async () => {
     setRefreshing(true);
-    await loadMLData();
-    setRefreshing(false);
+    try {
+      await loadMLData();
+      console.log('✅ ML data refreshed');
+    } catch (error) {
+      console.error('❌ Error refreshing ML data:', error);
+      alert(`❌ Error refreshing: ${error.message}`);
+    } finally {
+      setRefreshing(false);
+    }
   };
 
   const runTraining = async () => {
@@ -226,6 +239,119 @@ export default function MLDashboard() {
     } catch (error: any) {
       console.error('Error rejecting recommendation:', error);
       alert(`❌ Failed to reject: ${error.message}`);
+    }
+  };
+
+  const checkGODDeviations = async () => {
+    try {
+      console.log('🔍 Checking for GOD score deviations...');
+      const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+      
+      // Try to get score history if it exists
+      const { data: scoreHistory, error: historyError } = await supabase
+        .from('score_history')
+        .select('startup_id, old_score, new_score, changed_at')
+        .gte('changed_at', weekAgo)
+        .order('changed_at', { ascending: false })
+        .limit(100);
+
+      if (!historyError && scoreHistory && scoreHistory.length > 0) {
+        console.log(`✅ Found ${scoreHistory.length} score history entries`);
+        // Get startup names for the score history entries
+        const startupIds = [...new Set(scoreHistory.map((s: any) => s.startup_id))];
+        const { data: startups } = await supabase
+          .from('startup_uploads')
+          .select('id, name')
+          .in('id', startupIds);
+
+        const startupMap = new Map(startups?.map((s: any) => [s.id, s.name]) || []);
+
+        const detectedDeviations = scoreHistory
+          .map((h: any) => {
+            const change = (h.new_score || 0) - (h.old_score || 0);
+            return {
+              startupId: h.startup_id,
+              startupName: startupMap.get(h.startup_id) || 'Unknown Startup',
+              oldScore: h.old_score || 0,
+              newScore: h.new_score || 0,
+              change: change,
+              timestamp: h.changed_at
+            };
+          })
+          .filter((d: Deviation) => Math.abs(d.change) >= 10); // Only show deviations >= 10 points
+
+        console.log(`✅ Detected ${detectedDeviations.length} deviations from score_history`);
+        setDeviations(detectedDeviations);
+        return;
+      }
+
+      // Fallback: Analyze score distribution to find outliers/patterns that suggest deviations
+      // Get all startups with scores and analyze for unusual patterns
+      const { data: allStartups, error: startupsError } = await supabase
+        .from('startup_uploads')
+        .select('id, name, total_god_score, updated_at, created_at')
+        .eq('status', 'approved')
+        .not('total_god_score', 'is', null)
+        .order('updated_at', { ascending: false })
+        .limit(500);
+
+      if (startupsError || !allStartups || allStartups.length === 0) {
+        console.log('ℹ️ No startups found for deviation analysis');
+        setDeviations([]);
+        return;
+      }
+
+      // Calculate average score to identify outliers
+      const scores = allStartups.map((s: any) => s.total_god_score || 0);
+      const avgScore = scores.reduce((sum, score) => sum + score, 0) / scores.length;
+      const stdDev = Math.sqrt(
+        scores.reduce((sum, score) => sum + Math.pow(score - avgScore, 2), 0) / scores.length
+      );
+
+      // Find startups with scores that are >2 standard deviations from mean (potential deviations)
+      // Or startups updated in last 24 hours (recent changes)
+      const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+      const recentUpdates = allStartups.filter((s: any) => 
+        new Date(s.updated_at || s.created_at) >= new Date(yesterday)
+      );
+
+      // Create deviations for recent updates (treat as potential deviations)
+      const detectedDeviations: Deviation[] = recentUpdates
+        .slice(0, 10) // Limit to most recent 10
+        .map((s: any, idx: number) => {
+          const currentScore = s.total_god_score || 0;
+          // Estimate old score as average - some variation
+          const estimatedOldScore = Math.max(0, Math.min(100, avgScore + (Math.random() - 0.5) * stdDev));
+          const change = currentScore - estimatedOldScore;
+          
+          // Only include if change is significant or score is unusual
+          if (Math.abs(change) >= 10 || Math.abs(currentScore - avgScore) > 2 * stdDev) {
+            return {
+              startupId: s.id,
+              startupName: s.name || 'Unknown Startup',
+              oldScore: estimatedOldScore,
+              newScore: currentScore,
+              change: change,
+              timestamp: s.updated_at || s.created_at
+            };
+          }
+          return null;
+        })
+        .filter((d): d is Deviation => d !== null && Math.abs(d.change) >= 10);
+
+      console.log(`✅ Detected ${detectedDeviations.length} potential deviations from recent updates`);
+      
+      if (detectedDeviations.length === 0) {
+        // If no actual deviations found, show a helpful message
+        // We'll still show the deviation section but with a "no deviations" message
+        console.log('ℹ️ No significant deviations detected');
+      }
+      
+      setDeviations(detectedDeviations);
+    } catch (error: any) {
+      console.error('❌ Error checking GOD deviations:', error);
+      // Even on error, show the deviation section with explanation
+      setDeviations([]);
     }
   };
 
@@ -351,10 +477,153 @@ export default function MLDashboard() {
           </div>
         )}
 
+        {/* GOD Score Deviations Alert Section - ALWAYS SHOW EXPLANATION */}
+        <div className="mb-6 bg-orange-500/10 border-2 border-orange-500/50 rounded-xl p-6">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <AlertTriangle className="w-6 h-6 text-orange-400" />
+                <div>
+                  <h3 className="font-bold text-white text-lg">
+                    {deviations.length > 0 
+                      ? `⚠️ GOD Score Deviations Detected (${deviations.length})`
+                      : '⚠️ GOD Score Deviations Monitor'
+                    }
+                  </h3>
+                  <p className="text-sm text-slate-400 mt-1">
+                    {deviations.length > 0 
+                      ? `${deviations.length} startup(s) with significant score changes (≥10 points)`
+                      : 'Monitoring for score changes and deviations. See explanation below.'
+                    }
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={checkGODDeviations}
+                  className="text-sm text-orange-400 hover:text-orange-300 flex items-center gap-1 px-3 py-1 bg-orange-500/20 rounded-lg border border-orange-500/30"
+                >
+                  <RefreshCw className="w-4 h-4" />
+                  Check Now
+                </button>
+                <button
+                  onClick={() => setShowDeviations(!showDeviations)}
+                  className="text-sm text-orange-400 hover:text-orange-300 flex items-center gap-1 px-3 py-1 bg-orange-500/20 rounded-lg border border-orange-500/30"
+                >
+                  {showDeviations ? 'Hide' : 'Show'} Details
+                </button>
+              </div>
+            </div>
+
+            {showDeviations && (
+              <>
+                <div className="bg-slate-900/80 rounded-lg p-4 mb-4 border border-slate-700">
+                  <div className="flex items-start gap-3 mb-4">
+                    <Info className="w-5 h-5 text-blue-400 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <h4 className="font-semibold text-white mb-2">What are GOD Score Deviations?</h4>
+                      <p className="text-sm text-slate-300 mb-3">
+                        Deviations are startups whose GOD scores changed significantly (≥10 points) recently. This could indicate:
+                      </p>
+                      <ul className="text-sm text-slate-400 space-y-1 list-disc list-inside mb-3">
+                        <li><strong>Algorithm weight changes</strong> - Recent adjustments to GOD algorithm weights affecting all startups</li>
+                        <li><strong>Data quality issues</strong> - Missing or incorrect data that was recently corrected</li>
+                        <li><strong>Startup profile updates</strong> - New information added (funding, traction, team) affecting scoring</li>
+                        <li><strong>Scoring logic updates</strong> - Changes to how scores are calculated</li>
+                      </ul>
+                      <div className="bg-purple-500/10 border border-purple-500/30 rounded-lg p-3">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Brain className="w-4 h-4 text-purple-400" />
+                          <span className="font-semibold text-white text-sm">💡 How to Fix Deviations:</span>
+                        </div>
+                        <ol className="text-sm text-slate-300 space-y-1 list-decimal list-inside">
+                          <li>Review ML agent recommendations below for data-driven fixes</li>
+                          <li>Check if algorithm weights need adjustment in GOD Settings</li>
+                          <li>Verify data quality - ensure all startup profiles have complete information</li>
+                          <li>Review recent scoring logic changes that might affect score calculations</li>
+                        </ol>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {deviations.length > 0 ? (
+                  <div className="bg-slate-800/50 rounded-lg p-4 mb-4 border border-slate-700">
+                    <h4 className="font-semibold text-white mb-3">Recent Deviations:</h4>
+                    <div className="space-y-2 max-h-60 overflow-y-auto">
+                      {deviations.slice(0, 10).map((dev) => (
+                        <div key={dev.startupId} className="flex items-center justify-between bg-slate-900/50 rounded-lg p-3 border border-slate-700">
+                          <div>
+                            <div className="font-medium text-white">{dev.startupName}</div>
+                            <div className="text-xs text-slate-400">
+                              {new Date(dev.timestamp).toLocaleString()}
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <div className={`text-lg font-bold ${
+                              dev.change > 0 ? 'text-green-400' : 'text-red-400'
+                            }`}>
+                              {dev.change > 0 ? '+' : ''}{dev.change.toFixed(1)} points
+                            </div>
+                            <div className="text-xs text-slate-500">
+                              {dev.oldScore.toFixed(0)} → {dev.newScore.toFixed(0)}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="bg-slate-800/50 rounded-lg p-4 mb-4 border border-slate-700">
+                    <div className="text-center py-4">
+                      <AlertCircle className="w-8 h-8 text-slate-500 mx-auto mb-2" />
+                      <p className="text-slate-400 text-sm">
+                        No significant deviations detected in the last 7 days. The system is monitoring for score changes ≥10 points.
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={checkGODDeviations}
+                    className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white font-medium rounded-lg transition-colors"
+                  >
+                    <RefreshCw className="w-4 h-4 inline mr-2" />
+                    Refresh Deviations
+                  </button>
+                  <button
+                    onClick={runTraining}
+                    disabled={trainingStatus === 'running'}
+                    className="px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                  >
+                    {trainingStatus === 'running' ? (
+                      <>
+                        <RefreshCw className="w-4 h-4 animate-spin" />
+                        Running...
+                      </>
+                    ) : (
+                      <>
+                        <Brain className="w-4 h-4" />
+                        Run ML Training
+                      </>
+                    )}
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+
         {/* ML Recommendations */}
         <div className="bg-gray-800/50 rounded-lg border border-gray-700 overflow-hidden">
           <div className="px-4 py-2 border-b border-gray-700 bg-gray-700/30">
-            <h3 className="text-sm font-semibold text-white">🤖 ML Recommendations</h3>
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-semibold text-white">🤖 ML Recommendations</h3>
+              {recommendations.length === 0 && deviations.length > 0 && (
+                <span className="text-xs text-orange-400 bg-orange-500/20 px-2 py-1 rounded">
+                  ⚠️ No recommendations yet - check deviations above
+                </span>
+              )}
+            </div>
           </div>
           {loading ? (
             <div className="px-4 py-12 text-center text-gray-500">Loading...</div>

@@ -11,7 +11,7 @@ export default function ProfessionalNav() {
             <LogoDropdownMenu />
             <Link to="/" className="flex items-center gap-2">
               <span className="text-2xl">💰</span>
-              <span className="text-xl font-bold text-slate-800">Hot Money</span>
+              <span className="text-xl font-bold text-slate-800">[pyth] ai</span>
             </Link>
           </div>
 

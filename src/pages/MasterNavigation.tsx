@@ -42,7 +42,7 @@ const publicPages: NavSection[] = [
     links: [
       { path: '/strategies', label: 'Playbook', icon: BookOpen, description: 'Investment strategies guide' },
       { path: '/submit', label: 'Submit Startup', icon: FileText, description: 'Submit your startup for review' },
-      { path: '/about', label: 'About', icon: Map, description: 'About Hot Match' },
+      { path: '/about', label: 'About', icon: Map, description: 'About [pyth] ai' },
       { path: '/settings', label: 'Settings', icon: Settings, description: 'Account settings' },
     ]
   },
@@ -131,7 +131,7 @@ export default function MasterNavigation() {
             🗺️ Master Navigation
           </h1>
           <p className="text-[#B0B0B0] text-lg max-w-2xl mx-auto">
-            Complete directory of all Hot Match pages. Click any card to navigate directly.
+            Complete directory of all [pyth] ai pages. Click any card to navigate directly.
           </p>
         </div>
 
@@ -217,7 +217,7 @@ export default function MasterNavigation() {
 
         {/* Footer note */}
         <div className="mt-8 text-center text-[#6E6E6E] text-sm">
-          <p>Hot Match Navigation Directory • Updated December 2025</p>
+          <p>[pyth] ai Navigation Directory • Updated December 2025</p>
         </div>
       </div>
     </div>

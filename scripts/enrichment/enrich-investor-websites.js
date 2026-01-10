@@ -336,20 +336,37 @@ async function scrapeWebsite(url) {
     }
     
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 10000);
+    const timeout = setTimeout(() => {
+      controller.abort();
+    }, 5000); // Reduced to 5s for faster failures
     
-    const response = await fetch(cleanUrl, {
-      signal: controller.signal,
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36'
-      }
-    });
+    let response;
+    try {
+      response = await Promise.race([
+        fetch(cleanUrl, {
+          signal: controller.signal,
+          headers: {
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36'
+          }
+        }),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Fetch timeout')), 5000))
+      ]);
+      clearTimeout(timeout);
+    } catch (err) {
+      clearTimeout(timeout);
+      // Timeout or network error - silently fail
+      return null;
+    }
     
-    clearTimeout(timeout);
+    if (!response || !response.ok) return null;
     
-    if (!response.ok) return null;
+    // Also timeout the text() call
+    const html = await Promise.race([
+      response.text(),
+      new Promise((_, reject) => setTimeout(() => reject(new Error('Read timeout')), 5000))
+    ]).catch(() => null);
     
-    const html = await response.text();
+    if (!html) return null;
     
     // Extract meta description
     const metaMatch = html.match(/<meta[^>]+name=["']description["'][^>]+content=["']([^"']+)["']/i) ||
@@ -1231,15 +1248,30 @@ async function getInvestorDescription(investor) {
     urlsToTry.push(investor.linkedin_url);
   }
   
-  for (const urlToScrape of urlsToTry) {
-    const scraped = await scrapeWebsite(urlToScrape);
-    if (scraped && scraped.length > 30 && !isLinkedInProfile(scraped)) {
-      const normalized = normalizeFirmDescription(scraped, firmNameForNormalization);
-      return { 
-        bio: scraped, // Raw scraped description
-        normalized: normalized, // Normalized version
-        thesis: null 
-      };
+  // Skip website scraping if --no-scrape flag is set (faster, uses only known/generated descriptions)
+  const skipScraping = process.argv.includes('--no-scrape') || process.argv.includes('--skip-scrape');
+  
+  if (!skipScraping) {
+    // Try scraping websites with timeout per URL
+    for (const urlToScrape of urlsToTry) {
+      try {
+        const scraped = await Promise.race([
+          scrapeWebsite(urlToScrape),
+          new Promise((resolve) => setTimeout(() => resolve(null), 8000)) // 8s timeout per URL
+        ]);
+        
+        if (scraped && scraped.length > 30 && !isLinkedInProfile(scraped)) {
+          const normalized = normalizeFirmDescription(scraped, firmNameForNormalization);
+          return { 
+            bio: scraped, // Raw scraped description
+            normalized: normalized, // Normalized version
+            thesis: null 
+          };
+        }
+      } catch (err) {
+        // Silently continue to next URL
+        continue;
+      }
     }
   }
   
@@ -1276,7 +1308,17 @@ async function enrichInvestors(limit = 100) {
   let enriched = 0;
   let skipped = 0;
   
-  for (const investor of (investors || [])) {
+  for (let i = 0; i < (investors || []).length; i++) {
+    const investor = investors[i];
+    
+    // Progress logging every 10 investors
+    if ((i + 1) % 10 === 0 || i === 0) {
+      console.log(`\n[${i + 1}/${investors.length}] Processing investors...`);
+    }
+    
+    // Log every investor for better visibility
+    process.stdout.write(`\r  Processing: ${investor.name}${investor.firm ? ` @ ${investor.firm}` : ''}...`);
+    
     // Skip if already has good descriptions (both raw and normalized)
     if (investor.bio && investor.bio.length > 50 && 
         investor.investment_firm_description && investor.investment_firm_description.length > 50 &&
@@ -1293,7 +1335,11 @@ async function enrichInvestors(limit = 100) {
       continue;
     }
     
-    const description = await getInvestorDescription(investor);
+    // Add timeout for the entire getInvestorDescription call
+    const description = await Promise.race([
+      getInvestorDescription(investor),
+      new Promise((resolve) => setTimeout(() => resolve(null), 15000)) // 15 second timeout per investor
+    ]).catch(() => null); // Catch any errors and return null
     
     if (description) {
       const updates = {};
@@ -1346,8 +1392,10 @@ async function enrichInvestors(limit = 100) {
       skipped++;
     }
     
-    // Small delay to be polite
-    await new Promise(r => setTimeout(r, 100));
+    // Small delay to be polite (skip delay on last item to speed up)
+    if (i < (investors || []).length - 1) {
+      await new Promise(r => setTimeout(r, 100));
+    }
   }
   
   console.log(`\n📊 SUMMARY`);

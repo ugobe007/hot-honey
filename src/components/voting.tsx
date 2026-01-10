@@ -43,7 +43,7 @@ const startupDeals: StartupDeal[] = [
 export default function HotMoney() {
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-6 text-center">Hot Money: Startup Deal Review</h1>
+      <h1 className="text-3xl font-bold mb-6 text-center">pyth ai: Startup Deal Review</h1>
       <ScrollArea className="h-[calc(100vh-100px)]">
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {startupDeals.map((deal, index) => (

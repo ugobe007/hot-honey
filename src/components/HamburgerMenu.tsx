@@ -80,7 +80,7 @@ export default function HamburgerMenu() {
               </div>
               <div>
                 <h2 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 via-blue-500 to-violet-400 bg-clip-text text-transparent">
-                  Hot Money
+                  pyth ai
                 </h2>
                 <p className="text-xs text-purple-300">AI-Powered Matching</p>
               </div>

@@ -51,7 +51,7 @@ export default function SharedPortfolio() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-purple-900 via-green-400 to-purple-950 flex items-center justify-center">
         <div className="text-center">
-          <div className="text-6xl mb-4 animate-bounce">🍯</div>
+          <div className="text-6xl mb-4 animate-bounce">🔮</div>
           <p className="text-2xl text-white font-bold">Loading portfolio...</p>
         </div>
       </div>
@@ -71,7 +71,7 @@ export default function SharedPortfolio() {
             onClick={() => navigate('/')}
             className="px-8 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold rounded-2xl transition-all"
           >
-            Go to Hot Honey
+            Go to pyth ai
           </button>
         </div>
       </div>
@@ -88,7 +88,7 @@ export default function SharedPortfolio() {
       <div className="max-w-6xl mx-auto relative z-10">
         {/* Header */}
         <div className="text-center mb-12">
-          <div className="text-7xl mb-4">🍯</div>
+          <div className="text-7xl mb-4">🔮</div>
           <h1 className="text-5xl font-bold bg-gradient-to-r from-cyan-300 via-blue-400 to-violet-500 bg-clip-text text-transparent mb-3">
             {shareData.investorName}'s Hot Picks
           </h1>
@@ -145,14 +145,14 @@ export default function SharedPortfolio() {
             Want to Discover Hot Startups Too?
           </h2>
           <p className="text-xl text-gray-700 mb-6 max-w-2xl mx-auto">
-            Join Hot Honey to discover, vote on, and track the hottest startup deals. Build your own portfolio and share it with your network!
+            Join pyth ai to discover, vote on, and track the hottest startup deals. Build your own portfolio and share it with your network!
           </p>
           <div className="flex gap-4 justify-center">
             <button
               onClick={() => navigate('/get-matched')}
               className="px-8 py-4 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold rounded-2xl shadow-lg transition-all text-lg"
             >
-              🚀 Join Hot Honey
+              🚀 Join pyth ai
             </button>
             <button
               onClick={() => navigate('/vote')}
@@ -191,7 +191,7 @@ export default function SharedPortfolio() {
         {/* Branding Footer */}
         <div className="text-center mt-8">
           <p className="text-purple-200 text-sm">
-            Powered by <span className="font-bold text-yellow-300">Hot Honey</span> 🍯
+            Powered by <span className="font-bold text-yellow-300">pyth ai</span> 🔮
           </p>
         </div>
       </div>

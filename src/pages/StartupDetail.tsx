@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../hooks/useAuth';
 import { useVotes } from '../hooks/useVotes';
+import TemplateCompletionWidget from '../components/TemplateCompletionWidget';
 
 interface NewsArticle {
   id: string;
@@ -277,6 +278,22 @@ const StartupDetail: React.FC = () => {
               </a>
             </div>
           )}
+
+          {/* Template Completion Report */}
+          <div className="mb-8 bg-gradient-to-br from-cyan-500/10 to-blue-500/10 rounded-xl p-6 border border-cyan-400/30">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-2xl font-bold text-white flex items-center gap-2">
+                <span>📚</span> Fundraising Toolkit Progress
+              </h3>
+              <Link
+                to={`/startup/${id}/templates`}
+                className="px-4 py-2 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-lg hover:shadow-lg transition-all text-sm font-medium"
+              >
+                View All Templates →
+              </Link>
+            </div>
+            <TemplateCompletionWidget startupId={id || ''} />
+          </div>
 
           {/* Recent News */}
           {news.length > 0 && (

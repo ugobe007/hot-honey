@@ -137,19 +137,28 @@ export default function ServicesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#1a1140] via-[#2d1b69] to-[#4a2a8f]">
+    <div className="min-h-screen bg-gradient-to-br from-[#0a0015] via-[#1a0a2e] to-[#0f0520] relative overflow-hidden">
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 left-10 w-96 h-96 bg-orange-500/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-orange-500/10 to-cyan-500/10 rounded-full blur-3xl"></div>
+      </div>
+
       {/* Logo Dropdown Menu - Global Navigation */}
       <LogoDropdownMenu />
 
-      <div className="container mx-auto px-8 py-8 pt-24">
+      <div className="relative z-10 container mx-auto px-6 pt-28 pb-16">
         {/* Header */}
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-500/20 to-amber-500/20 border border-orange-500/40 rounded-full mb-6">
             <Brain className="w-4 h-4 text-orange-400" />
             <span className="text-orange-300 text-sm font-medium">AI-Powered Services</span>
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            � <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">Fundraising</span> Toolkit
+          <h1 className="text-5xl md:text-6xl font-bold mb-4 flex items-center justify-center gap-3">
+            <span className="bg-gradient-to-r from-orange-400 via-cyan-400 to-blue-500 bg-clip-text text-transparent">
+              Founder Toolkit
+            </span>
           </h1>
           <p className="text-xl text-gray-300 max-w-2xl mx-auto">
             AI-powered tools to improve your pitch, strategy, traction, and more
@@ -164,26 +173,27 @@ export default function ServicesPage() {
           </div>
         </div>
 
-        {/* Category Filter */}
-        <div className="flex flex-wrap justify-center gap-2 mb-8">
-          {categories.map(cat => (
+        {/* Category Filter - Enhanced */}
+        <div className="flex flex-wrap justify-center gap-3 mb-12">
+          {categories.map((cat, index) => (
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
-              className={`px-4 py-2 rounded-xl font-medium transition-all ${
+              className={`px-5 py-2.5 rounded-xl font-medium transition-all transform ${
                 selectedCategory === cat
-                  ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-black font-bold shadow-lg shadow-orange-500/40'
-                  : 'bg-gradient-to-r from-cyan-600/40 to-blue-600/40 text-white hover:from-cyan-500/60 hover:to-blue-500/60 border border-cyan-400/30'
+                  ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-black font-bold shadow-lg shadow-orange-500/50 scale-105 border-2 border-orange-300'
+                  : 'bg-gradient-to-r from-slate-800/60 to-slate-700/60 text-white hover:from-cyan-600/60 hover:to-blue-600/60 border border-cyan-500/30 hover:border-cyan-400/50 hover:scale-102 backdrop-blur-sm'
               }`}
+              style={{ animationDelay: `${index * 50}ms` }}
             >
               {cat === 'all' ? 'All Services' : cat.charAt(0).toUpperCase() + cat.slice(1)}
             </button>
           ))}
         </div>
 
-        {/* Services Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-          {filteredServices.map(service => {
+        {/* Services Grid - Enhanced */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
+          {filteredServices.map((service, index) => {
             const colors = categoryColors[service.category] || categoryColors.pitch;
             const IconComponent = iconMap[service.icon] || Brain;
             const canAccess = canAccessService(service.tier_required);
@@ -193,50 +203,65 @@ export default function ServicesPage() {
               <button
                 key={service.id}
                 onClick={() => handleServiceClick(service)}
-                className={`relative text-left bg-gradient-to-br ${colors.bg} border ${colors.border} rounded-2xl p-6 transition-all hover:scale-105 ${
-                  !canAccess ? 'opacity-60' : ''
+                className={`group relative text-left bg-gradient-to-br ${colors.bg} border-2 ${colors.border} rounded-2xl p-6 transition-all duration-300 hover:scale-105 hover:shadow-2xl backdrop-blur-sm overflow-hidden ${
+                  !canAccess ? 'opacity-90' : 'hover:shadow-cyan-500/20'
                 }`}
+                style={{ animationDelay: `${index * 100}ms` }}
               >
-                {/* Tier Badge */}
-                <div className="absolute top-4 right-4">
+                {/* Shine effect on hover */}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 group-hover:translate-x-full transition-all duration-700"></div>
+                
+                {/* Tier Badge - Enhanced */}
+                <div className="absolute top-4 right-4 z-10">
                   {!canAccess ? (
-                    <div className="flex items-center gap-1 px-2 py-1 bg-gray-700 rounded-full">
-                      <Lock className="w-3 h-3 text-gray-400" />
-                      <span className="text-xs text-gray-400">{tierBadges[service.tier_required]?.label}</span>
+                    <div className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900/80 backdrop-blur-md rounded-full border border-gray-700 shadow-lg">
+                      <Lock className="w-3.5 h-3.5 text-gray-400" />
+                      <span className="text-xs font-medium text-gray-400">{tierBadges[service.tier_required]?.label}</span>
                     </div>
                   ) : isCompleted ? (
-                    <div className="flex items-center gap-1 px-2 py-1 bg-green-500/20 rounded-full">
-                      <CheckCircle className="w-3 h-3 text-green-400" />
-                      <span className="text-xs text-green-400">Done</span>
+                    <div className="flex items-center gap-1.5 px-3 py-1.5 bg-green-500/30 backdrop-blur-md rounded-full border border-green-500/50 shadow-lg">
+                      <CheckCircle className="w-3.5 h-3.5 text-green-400" />
+                      <span className="text-xs font-medium text-green-400">Completed</span>
                     </div>
                   ) : (
-                    <div className={`px-2 py-1 ${tierBadges[service.tier_required]?.color} rounded-full`}>
-                      <span className="text-xs text-white font-medium">{tierBadges[service.tier_required]?.label}</span>
+                    <div className={`px-3 py-1.5 ${tierBadges[service.tier_required]?.color} rounded-full shadow-lg backdrop-blur-sm border border-white/20`}>
+                      <span className="text-xs text-white font-bold">{tierBadges[service.tier_required]?.label}</span>
                     </div>
                   )}
                 </div>
 
-                {/* Icon */}
-                <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${colors.bg} border ${colors.border} flex items-center justify-center mb-4`}>
-                  <IconComponent className={`w-7 h-7 ${colors.text}`} />
+                {/* Icon - Enhanced with glow */}
+                <div className={`relative w-16 h-16 rounded-xl bg-gradient-to-br ${colors.bg} border-2 ${colors.border} flex items-center justify-center mb-5 shadow-lg group-hover:shadow-xl transition-all duration-300 ${!canAccess ? 'opacity-60' : ''}`}>
+                  {/* Glow effect - always visible */}
+                  <div className={`absolute inset-0 rounded-xl bg-gradient-to-br ${colors.bg} opacity-30 blur-md animate-pulse`}></div>
+                  {/* Stronger glow on hover */}
+                  <div className={`absolute inset-0 rounded-xl bg-gradient-to-br ${colors.bg} opacity-0 group-hover:opacity-60 blur-xl transition-opacity duration-300`}></div>
+                  {IconComponent && typeof IconComponent !== 'string' ? (
+                    <IconComponent className={`relative w-8 h-8 ${colors.text} transition-transform duration-300 group-hover:scale-110 drop-shadow-lg filter brightness-110`} style={{ filter: 'drop-shadow(0 0 8px currentColor) brightness(1.2)' }} />
+                  ) : (
+                    <Brain className={`relative w-8 h-8 ${colors.text} transition-transform duration-300 group-hover:scale-110 drop-shadow-lg filter brightness-110`} style={{ filter: 'drop-shadow(0 0 8px currentColor) brightness(1.2)' }} />
+                  )}
                 </div>
 
                 {/* Content */}
-                <h3 className="text-xl font-bold text-white mb-2">{service.name}</h3>
-                <p className="text-gray-300 text-sm mb-4 line-clamp-2">{service.description}</p>
+                <h3 className="text-xl font-bold text-white mb-3 group-hover:text-cyan-300 transition-colors">{service.name}</h3>
+                <p className="text-gray-300 text-sm mb-5 line-clamp-3 leading-relaxed">{service.description}</p>
 
-                {/* Footer */}
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-500 text-xs">{service.estimated_time}</span>
-                  <div className={`flex items-center gap-1 ${colors.text}`}>
+                {/* Footer - Enhanced */}
+                <div className="flex items-center justify-between pt-4 border-t border-white/10">
+                  <div className="flex items-center gap-2">
+                    <Play className="w-3.5 h-3.5 text-gray-500" />
+                    <span className="text-gray-400 text-xs font-medium">{service.estimated_time}</span>
+                  </div>
+                  <div className={`flex items-center gap-2 ${colors.text} group-hover:translate-x-1 transition-transform duration-300`}>
                     {canAccess ? (
                       <>
-                        <span className="text-sm font-medium">Start</span>
+                        <span className="text-sm font-semibold">Start</span>
                         <ArrowRight className="w-4 h-4" />
                       </>
                     ) : (
                       <>
-                        <span className="text-sm font-medium">Unlock</span>
+                        <span className="text-sm font-semibold">Unlock</span>
                         <Lock className="w-4 h-4" />
                       </>
                     )}
@@ -247,21 +272,29 @@ export default function ServicesPage() {
           })}
         </div>
 
-        {/* Upgrade CTA */}
+        {/* Upgrade CTA - Enhanced */}
         {userTier === 'spark' && (
-          <div className="mt-16 max-w-2xl mx-auto text-center bg-gradient-to-br from-slate-800/40 to-slate-700/30 border border-cyan-500/30 rounded-2xl p-8">
-            <Crown className="w-12 h-12 text-cyan-400 mx-auto mb-4" />
-            <h3 className="text-2xl font-bold text-white mb-2">Unlock All Services</h3>
-            <p className="text-gray-300 mb-6">
-              Upgrade to Flame or Inferno to access AI-powered tools that help you raise faster.
-            </p>
-            <Link
-              to="/get-matched"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold rounded-xl transition-all shadow-lg"
-            >
-              <Sparkles className="w-5 h-5" />
-              View Pricing
-            </Link>
+          <div className="mt-20 max-w-3xl mx-auto text-center relative">
+            <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 via-cyan-500/20 to-blue-500/20 rounded-3xl blur-2xl"></div>
+            <div className="relative bg-gradient-to-br from-slate-900/90 via-slate-800/80 to-slate-900/90 backdrop-blur-xl border-2 border-cyan-500/40 rounded-3xl p-10 shadow-2xl">
+              <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-cyan-500/20 to-orange-500/20 border border-cyan-400/50 mb-6">
+                <Crown className="w-10 h-10 text-cyan-400 animate-pulse" />
+              </div>
+              <h3 className="text-3xl font-bold text-white mb-3 bg-gradient-to-r from-cyan-400 to-orange-400 bg-clip-text text-transparent">
+                Unlock All Services
+              </h3>
+              <p className="text-gray-300 mb-8 text-lg max-w-xl mx-auto">
+                Upgrade to Flame or Inferno to access AI-powered tools that help you raise faster and smarter.
+              </p>
+              <Link
+                to="/pricing"
+                className="inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-cyan-600 via-blue-600 to-orange-600 hover:from-cyan-500 hover:via-blue-500 hover:to-orange-500 text-white font-bold rounded-xl transition-all shadow-2xl shadow-cyan-500/30 hover:shadow-cyan-500/50 hover:scale-105 transform duration-300"
+              >
+            <Sparkles className="w-6 h-6 animate-pulse" />
+                <span>View Pricing & Upgrade</span>
+                <ArrowRight className="w-5 h-5" />
+              </Link>
+            </div>
           </div>
         )}
       </div>

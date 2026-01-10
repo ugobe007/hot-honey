@@ -280,7 +280,6 @@ export default function AlgorithmComparisonDemo({ isOpen, onClose }: Props) {
               <div>
                 <h2 className="text-2xl font-bold text-white flex items-center gap-2">
                   Algorithm Showdown
-                  <Sparkles className="w-6 h-6 text-yellow-400 animate-pulse" />
                 </h2>
                 <p className="text-gray-400">See how different VCs would score the same startup</p>
               </div>
@@ -467,7 +466,7 @@ export default function AlgorithmComparisonDemo({ isOpen, onClose }: Props) {
         {/* Footer */}
         <div className="p-4 border-t border-purple-500/20 bg-black/20">
           <p className="text-center text-gray-500 text-sm">
-            💡 Different algorithms reveal different investment opportunities. Hot Match helps you see them all.
+            💡 Different algorithms reveal different investment opportunities. [pyth] ai helps you see them all.
           </p>
         </div>
       </div>

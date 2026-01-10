@@ -1,14 +1,17 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Home, Zap, Vote as VoteIcon, Briefcase, TrendingUp, FileText, BookOpen, Settings, Crown, Activity, Search, Users, Upload, BarChart3, Shield, Sliders, Rocket, ArrowLeft, ChartBar } from 'lucide-react';
+import { Home, Zap, Vote as VoteIcon, Briefcase, TrendingUp, FileText, BookOpen, Settings, Crown, Activity, Search, Users, Upload, BarChart3, Shield, Sliders, Rocket, ArrowLeft, ChartBar, LogIn, LogOut } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
 import FlameIcon from './FlameIcon';
 
 export default function LogoDropdownMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const location = useLocation();
+  const { user, logout } = useAuth();
 
   // Check if user is admin - RESTRICTED ACCESS
   // Admin emails: aabramson@comunicano.com, ugobe07@gmail.com, ugobe1@mac.com
@@ -22,10 +25,17 @@ export default function LogoDropdownMenu() {
     const checkAdmin = () => {
       const currentUser = localStorage.getItem('currentUser');
       const userProfile = localStorage.getItem('userProfile');
+      const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
+      
+      setIsLoggedIn(loggedIn || !!currentUser || !!userProfile || !!user);
       
       let adminStatus = false;
       
-      if (currentUser) {
+      // Check AuthContext user first
+      if (user) {
+        adminStatus = user.isAdmin === true || 
+                     (user.email && ADMIN_EMAILS.includes(user.email.toLowerCase()));
+      } else if (currentUser) {
         try {
           const user = JSON.parse(currentUser);
           // Check if explicitly set OR if email is in admin list
@@ -50,8 +60,13 @@ export default function LogoDropdownMenu() {
     
     checkAdmin();
     window.addEventListener('storage', checkAdmin);
-    return () => window.removeEventListener('storage', checkAdmin);
-  }, []);
+    // Also check when AuthContext updates
+    const interval = setInterval(checkAdmin, 1000);
+    return () => {
+      window.removeEventListener('storage', checkAdmin);
+      clearInterval(interval);
+    };
+  }, [user]);
 
   // Close menu when clicking outside
   useEffect(() => {
@@ -182,7 +197,7 @@ export default function LogoDropdownMenu() {
                 </div>
                 <div>
                   <h2 className="text-xl font-bold bg-gradient-to-r from-[#FF5A09] to-[#FF9900] bg-clip-text text-transparent">
-                    Hot Match
+                    [pyth] ai
                   </h2>
                   <p className="text-sm text-[#888888]">AI-Powered Matching</p>
                 </div>
@@ -283,6 +298,36 @@ export default function LogoDropdownMenu() {
                   <Settings className="w-5 h-5 text-[#666666]" />
                   <span className="text-base text-[#888888] group-hover:text-[#e0e0e0]">Site Map</span>
                 </Link>
+
+                {/* Login/Logout Section */}
+                <div className="my-3 border-t border-[#333333]"></div>
+                {!isLoggedIn ? (
+                  <Link
+                    to="/login"
+                    onClick={() => setIsOpen(false)}
+                    className="group px-4 py-3 rounded-lg bg-gradient-to-r from-[#FF5A09] to-[#FF9900] hover:from-[#FF9900] hover:to-[#FFCC00] transition-all font-medium flex items-center gap-3 shadow-lg shadow-[#FF5A09]/30"
+                  >
+                    <LogIn className="w-5 h-5 text-white" />
+                    <span className="text-base text-white font-semibold">Login</span>
+                  </Link>
+                ) : (
+                  <>
+                    <div className="px-4 py-2 text-xs text-[#666666] mb-2">
+                      Logged in as: <span className="text-[#FF5A09]">{user?.email || 'User'}</span>
+                    </div>
+                    <button
+                      onClick={() => {
+                        logout();
+                        setIsOpen(false);
+                        navigate('/');
+                      }}
+                      className="w-full group px-4 py-3 rounded-lg bg-[#1f1f1f] hover:bg-[#2a2a2a] border border-[#FF5A09]/30 hover:border-[#FF5A09]/60 transition-all font-medium flex items-center gap-3"
+                    >
+                      <LogOut className="w-5 h-5 text-[#FF5A09]" />
+                      <span className="text-base text-[#e0e0e0] group-hover:text-[#FF9900]">Logout</span>
+                    </button>
+                  </>
+                )}
 
                 {/* Admin Section - RESTRICTED TO ADMINS ONLY */}
                 {isAdmin && (

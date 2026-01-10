@@ -1,5 +1,5 @@
 /**
- * HOT MATCH - SYSTEM STATUS SERVICE (Frontend)
+ * [pyth] ai - SYSTEM STATUS SERVICE (Frontend)
  * 
  * Fetches real-time system status from the database
  * for the Agent Dashboard.

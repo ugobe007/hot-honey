@@ -401,7 +401,7 @@ const AdminDashboard: React.FC = () => {
               <div>
                 <h1 className="text-5xl font-bold">
                   <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
-                    Hot Money
+                    pyth ai
                   </span>
                   <span className="text-white"> Command Center</span>
                 </h1>

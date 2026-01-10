@@ -1,5 +1,5 @@
 /**
- * HOT MATCH - DAILY REPORT GENERATOR
+ * PYTH AI - DAILY REPORT GENERATOR
  * 
  * Generates comprehensive daily reports on:
  * - Startups discovered & approved
@@ -302,7 +302,7 @@ function formatReport(stats: DailyStats): string {
   });
 
   return `
-📊 *HOT MATCH DAILY REPORT*
+📊 *PYTH AI DAILY REPORT*
 ${date}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -359,7 +359,7 @@ ${stats.issues.map(i => `• ${i}`).join('\n')}
 
 async function generateAndSendReport(): Promise<void> {
   console.log('\n' + '═'.repeat(60));
-  console.log('📊 HOT MATCH DAILY REPORT GENERATOR');
+  console.log('📊 PYTH AI DAILY REPORT GENERATOR');
   console.log('═'.repeat(60) + '\n');
 
   console.log('📈 Gathering statistics...');
@@ -379,7 +379,7 @@ async function generateAndSendReport(): Promise<void> {
   console.log('📤 Sending to Slack...');
   const slackSent = await sendSlackAlert({
     level: alertLevel,
-    title: 'Hot Match Daily Report',
+    title: 'pyth ai Daily Report',
     message: reportText,
     details: {
       startups: stats.totalStartups,
@@ -395,7 +395,7 @@ async function generateAndSendReport(): Promise<void> {
   console.log('📧 Sending email...');
   const emailSent = await sendEmailAlert({
     level: alertLevel,
-    title: 'Hot Match Daily Report',
+    title: 'pyth ai Daily Report',
     message: reportText.replace(/\*/g, '').replace(/━/g, '-'),
     details: {
       startups: stats.totalStartups,

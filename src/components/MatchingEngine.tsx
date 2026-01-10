@@ -20,6 +20,7 @@ import TransparencyPanel from './TransparencyPanel';
 import DataQualityBadge from './DataQualityBadge';
 import MatchConfidenceBadge from './MatchConfidenceBadge';
 import SmartSearchBar from './SmartSearchBar';
+import EducationalMatchModal from './EducationalMatchModal';
 import { saveMatch, unsaveMatch, isMatchSaved } from '../lib/savedMatches';
 import { StartupComponent, InvestorComponent } from '../types';
 
@@ -98,6 +99,9 @@ export default function MatchingEngine() {
   const [selectedInvestor, setSelectedInvestor] = useState<any>(null);
   const [cardFadeOut, setCardFadeOut] = useState(false);
   const [showScoreBreakdown, setShowScoreBreakdown] = useState(false);
+  const [isEducationalMatch, setIsEducationalMatch] = useState(false);
+  const [showEducationalModal, setShowEducationalModal] = useState(false);
+  const [educationalMatchTimer, setEducationalMatchTimer] = useState<NodeJS.Timeout | null>(null);
   const [isSaved, setIsSaved] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
   const [showHotMatchInfo, setShowHotMatchInfo] = useState(false);
@@ -124,6 +128,10 @@ export default function MatchingEngine() {
     if (matches.length === 0) return;
     const match = matches[currentIndex];
     
+    if (!match || !match.startup || !match.investor || !match.startup.id || !match.investor.id) {
+      return;
+    }
+    
     if (isSaved) {
       unsaveMatch(match.startup.id, match.investor.id);
       setIsSaved(false);
@@ -131,10 +139,10 @@ export default function MatchingEngine() {
       saveMatch({
         startupId: match.startup.id,
         investorId: match.investor.id,
-        startupName: match.startup.name,
-        investorName: match.investor.name,
+        startupName: match.startup.name || 'Unknown Startup',
+        investorName: match.investor.name || 'Unknown Investor',
         matchScore: match.matchScore,
-        tags: match.startup.tags,
+        tags: match.startup.tags || [],
       });
       setIsSaved(true);
     }
@@ -282,13 +290,42 @@ export default function MatchingEngine() {
     return () => clearInterval(godInterval);
   });
 
-  // Auto-cycle to next match every 3 seconds
+  // Educational match logic: Show educational match every ~30 seconds, stay for 10 seconds
   useEffect(() => {
     if (batchMatches.length === 0) return;
-    const cycleInterval = setInterval(() => {
-      handleNextMatch();
-    }, 3000);
-    return () => clearInterval(cycleInterval);
+    
+    let normalCycleInterval: NodeJS.Timeout;
+    let educationalShowInterval: NodeJS.Timeout;
+    let educationalHideTimer: NodeJS.Timeout | null = null;
+    
+    const startNormalCycle = () => {
+      normalCycleInterval = setInterval(() => {
+        handleNextMatch();
+      }, 3000);
+    };
+    
+    // Schedule educational matches every 30 seconds
+    educationalShowInterval = setInterval(() => {
+      // Clear normal cycle while showing educational match
+      if (normalCycleInterval) clearInterval(normalCycleInterval);
+      
+      setIsEducationalMatch(true);
+      
+      // After 10 seconds, hide educational match and resume normal cycle
+      educationalHideTimer = setTimeout(() => {
+        setIsEducationalMatch(false);
+        startNormalCycle(); // Resume normal 3-second cycling
+      }, 10000);
+    }, 30000); // Show educational match every 30 seconds
+    
+    // Start normal cycle initially
+    startNormalCycle();
+    
+    return () => {
+      if (normalCycleInterval) clearInterval(normalCycleInterval);
+      if (educationalShowInterval) clearInterval(educationalShowInterval);
+      if (educationalHideTimer) clearTimeout(educationalHideTimer);
+    };
   }, [batchMatches.length]);
 
   // REMOVED: saveMatchesToDatabase - Queue processor handles match creation
@@ -301,20 +338,50 @@ export default function MatchingEngine() {
       setMatches([]);
       setCurrentIndex(0);
       
+      // Check if Supabase is properly configured
+      const supabaseLib = await import('../lib/supabase');
+      if (!supabaseLib.hasValidSupabaseCredentials) {
+        setLoadError('⚠️ Supabase credentials not configured. Please add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to your .env file and restart the dev server.');
+        setIsAnalyzing(false);
+        return;
+      }
+      
       // Query PRE-CALCULATED matches from database
       // These were created by queue-processor-v16.js using the official algorithm
       // Step 1: Get match IDs only (fast)
+      // Lowered threshold from 35 to 20 to show more matches (can be adjusted)
+      const MIN_MATCH_SCORE = 20; // Lowered to show matches with score >= 20
       const { data: matchIds, error: matchError } = await supabase
         .from('startup_investor_matches')
-        .select('id, match_score, confidence_level, startup_id, investor_id')
+        .select('id, match_score, confidence_level, startup_id, investor_id, reasoning, why_you_match')
         .eq('status', 'suggested')
-        .gte('match_score', 35)
+        .gte('match_score', MIN_MATCH_SCORE)
         .order('match_score', { ascending: false })
         .limit(100);
       
-      if (matchError || !matchIds?.length) {
+      if (matchError) {
         console.error('❌ Error fetching match IDs:', matchError);
-        setLoadError('Failed to load matches');
+        
+        // Provide more specific error messages
+        let errorMsg = 'Failed to load matches';
+        if (matchError.message?.includes('JWT')) {
+          errorMsg = 'Authentication error. Please check your Supabase credentials in .env file.';
+        } else if (matchError.message?.includes('relation') || matchError.message?.includes('does not exist')) {
+          errorMsg = 'Database table not found. Please ensure migrations are run.';
+        } else if (matchError.message?.includes('permission') || matchError.message?.includes('RLS')) {
+          errorMsg = 'Permission denied. Check Supabase Row Level Security settings.';
+        } else {
+          errorMsg = `Failed to load matches: ${matchError.message || 'Unknown error'}`;
+        }
+        
+        setLoadError(errorMsg);
+        setIsAnalyzing(false);
+        return;
+      }
+      
+      if (!matchIds?.length) {
+        console.warn(`⚠️ No matches found with status="suggested" and score >= ${MIN_MATCH_SCORE}`);
+        setLoadError(`No matches available. This could mean:\n1. No matches have been generated yet\n2. Queue processor needs to run\n3. Matches exist but have different status\n4. All matches have score < ${MIN_MATCH_SCORE}`);
         setIsAnalyzing(false);
         return;
       }
@@ -331,7 +398,7 @@ export default function MatchingEngine() {
       }
       
       const [startupsRes, investorsRes] = await Promise.all([
-        supabase.from('startup_uploads').select('id, name, tagline, description, sectors, stage, total_god_score, raise_amount, extracted_data, location, website, has_revenue, has_customers, is_launched, team_size, growth_rate_monthly, deployment_frequency, mrr, arr').in('id', startupIds),
+        supabase.from('startup_uploads').select('id, name, tagline, description, sectors, stage, total_god_score, team_score, traction_score, market_score, product_score, vision_score, raise_amount, extracted_data, location, website, has_revenue, has_customers, is_launched, team_size, growth_rate_monthly, deployment_frequency, mrr, arr').in('id', startupIds),
         supabase.from('investors').select('id, name, firm, bio, type, sectors, stage, check_size_min, check_size_max, geography_focus, notable_investments, investment_thesis, investment_firm_description, firm_description_normalized, photo_url, linkedin_url, total_investments, active_fund_size').in('id', investorIds)
       ]);
       
@@ -373,7 +440,18 @@ export default function MatchingEngine() {
 
       if (!matchData || matchData.length === 0) {
         console.warn('⚠️ No matches found in startup_investor_matches table');
-        setLoadError('No matches available. Please ensure the queue processor is running.');
+        
+        // Check if there are ANY matches at all (different status)
+        const { count: totalMatches } = await supabase
+          .from('startup_investor_matches')
+          .select('*', { count: 'exact', head: true });
+        
+        if (totalMatches === 0) {
+          setLoadError('No matches found in database. The queue processor needs to generate matches first. Check /admin/dashboard for queue processor status.');
+        } else {
+          setLoadError(`Found ${totalMatches} total matches, but none with status="suggested" and score >= ${MIN_MATCH_SCORE}. Check match statuses in the database.`);
+        }
+        
         setIsAnalyzing(false);
         return;
       }
@@ -382,9 +460,16 @@ export default function MatchingEngine() {
 
       // Transform database results to display format
       // Preserves the existing MatchPair interface used by the UI
-      const displayMatches: MatchPair[] = matchData.map((m: any) => {
+      const displayMatches: MatchPair[] = matchData
+        .filter((m: any) => m.startup_uploads && m.investors) // Filter out null/undefined
+        .map((m: any) => {
         const startup = m.startup_uploads;
         const investor = m.investors;
+        
+        // Additional safety check
+        if (!startup || !investor || !startup.id || !investor.id) {
+          return null;
+        }
         
         return {
           startup: {
@@ -397,6 +482,11 @@ export default function MatchingEngine() {
             sectors: startup.sectors || [],
             stage: startup.stage,
             total_god_score: startup.total_god_score,
+            team_score: startup.team_score,
+            traction_score: startup.traction_score,
+            market_score: startup.market_score,
+            product_score: startup.product_score,
+            vision_score: startup.vision_score,
             seeking: startup.raise_amount,
             market: (startup.extracted_data as any)?.market,
             product: (startup.extracted_data as any)?.product,
@@ -407,6 +497,11 @@ export default function MatchingEngine() {
             seeking?: string;
             market?: string;
             product?: string;
+            team_score?: number;
+            traction_score?: number;
+            market_score?: number;
+            product_score?: number;
+            vision_score?: number;
           },
           investor: {
             id: investor.id,
@@ -429,9 +524,11 @@ export default function MatchingEngine() {
             notable_investments: investor.notable_investments,
           },
           matchScore: m.match_score || 0,  // FROM DATABASE - calculated by queue-processor-v16
-          reasoning: [],
+          reasoning: Array.isArray(m.why_you_match) ? m.why_you_match : 
+                     (m.reasoning ? [m.reasoning] : []),
         };
-      });
+      })
+      .filter((match): match is MatchPair => match !== null); // Filter out null matches
 
       // Smart shuffle: ensure startup variety (no same startup back-to-back)
       // Group by startup, then interleave to ensure variety
@@ -476,7 +573,21 @@ export default function MatchingEngine() {
       
     } catch (error) {
       console.error('❌ Error in loadMatches:', error);
-      setLoadError('Error loading matches: ' + (error instanceof Error ? error.message : String(error)));
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      
+      // Provide user-friendly error messages
+      let userMessage = 'Failed to load matches';
+      if (errorMessage.includes('JWT') || errorMessage.includes('auth')) {
+        userMessage = 'Authentication error. Check your Supabase credentials in .env file.';
+      } else if (errorMessage.includes('network') || errorMessage.includes('fetch')) {
+        userMessage = 'Network error. Check your internet connection and Supabase URL.';
+      } else if (errorMessage.includes('permission') || errorMessage.includes('RLS')) {
+        userMessage = 'Permission denied. Check Supabase Row Level Security settings.';
+      } else {
+        userMessage = `Error: ${errorMessage}`;
+      }
+      
+      setLoadError(userMessage);
       setIsAnalyzing(false);
     }
   };
@@ -504,7 +615,7 @@ export default function MatchingEngine() {
 
   // DEBUG: Log current batch and match
   useEffect(() => {
-    if (match) {
+    if (match && match.startup && match.investor) {
       console.log(`\n📍 RENDERING - currentBatch: ${currentBatch + 1}/${totalBatches}, currentMatch:`, match.startup?.name, match.matchScore);
       console.log(`   currentIndex (in batch): ${currentIndex}`);
       console.log(`   batchMatches.length: ${batchMatches.length}`);
@@ -512,7 +623,7 @@ export default function MatchingEngine() {
     }
   }, [currentBatch, currentIndex, match, batchMatches.length, matches.length, totalBatches]);
 
-  if (!match) {
+  if (!match || !match.startup || !match.investor || !match.startup.id || !match.investor.id) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-[#0a0a0a] via-[#141414] to-[#1a1a1a] flex flex-col items-center justify-center">
         {/* Animated background glows */}
@@ -564,11 +675,29 @@ export default function MatchingEngine() {
       {/* Data Quality Banner - Shows when data is stale */}
       {/* <DataQualityBadge variant="banner" /> */}
       
-      {/* Animated background - subtle orange/amber glows */}
+      {/* Animated background - two worlds: amber/orange (pyth) and cyan/blue (ai) */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-64 h-64 bg-orange-600/5 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute top-20 left-10 w-96 h-96 bg-amber-500/15 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-cyan-500/15 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute top-1/4 right-1/4 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '0.5s' }}></div>
       </div>
+
+      {/* Hamburger Menu - Use LogoDropdownMenu component which already has full functionality */}
+      <LogoDropdownMenu />
+
+      {/* Logo - Top Left - Floating independently to the right of hamburger menu, vertically centered */}
+      {/* LogoDropdownMenu already includes the hamburger menu, so we don't need a separate one */}
+      <Link to="/about" className="fixed top-5 left-14 sm:top-6 sm:left-28 z-50">
+        <div className="flex items-center gap-1.5 sm:gap-2 cursor-pointer">
+          <span className="bg-gradient-to-r from-amber-400 via-orange-500 to-amber-500 bg-clip-text text-transparent text-xl sm:text-2xl md:text-3xl font-semibold tracking-tight opacity-90 hover:opacity-100 transition-opacity">
+            [pyth]
+          </span>
+          <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent text-xl sm:text-2xl md:text-3xl font-semibold tracking-tight opacity-90 hover:opacity-100 transition-opacity">
+            ai
+          </span>
+        </div>
+      </Link>
 
       {/* Get Matched Button - Top Right - Hidden on small mobile, visible sm+ */}
       <div className="hidden sm:block fixed top-20 right-4 sm:right-8 z-50">
@@ -583,20 +712,25 @@ export default function MatchingEngine() {
       </div>
 
       {/* Main Headline - AT TOP */}
-      <div className="relative z-10 container mx-auto px-4 sm:px-8 pt-2 pb-4">
+      <div className="relative z-10 container mx-auto px-4 sm:px-8 pt-12 sm:pt-16 pb-4">
         <div className="text-center">
           <h2 className="text-3xl sm:text-5xl md:text-7xl font-bold mb-2 sm:mb-3">
-            <span className="text-white text-2xl sm:text-4xl md:text-5xl">Find Your </span>
-            <span className="bg-gradient-to-r from-orange-400 via-amber-400 to-orange-500 bg-clip-text text-transparent">
+            <span className="text-white/90 text-2xl sm:text-4xl md:text-5xl">Find Your </span>
+            <span className="bg-gradient-to-r from-cyan-400 via-purple-500 via-pink-500 to-orange-400 bg-clip-text text-transparent animate-pulse">
               Perfect Match
             </span>
           </h2>
-          <h3 className="text-2xl sm:text-4xl md:text-6xl font-bold text-white mb-2 sm:mb-4">
-            In 60 Seconds
+          <h3 className="text-2xl sm:text-4xl md:text-6xl font-bold mb-2 sm:mb-4">
+            <span className="bg-gradient-to-r from-white via-purple-200 to-white bg-clip-text text-transparent">
+              In Under 2 Seconds
+            </span>
           </h3>
 
-          <p className="text-base sm:text-xl md:text-2xl text-gray-300 max-w-2xl mx-auto mb-4 sm:mb-6">
-            AI finds your perfect startup-investor matches with explanations and next steps.
+          <p className="text-base sm:text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto mb-4 sm:mb-6 leading-relaxed">
+            <Link to="/about" className="inline-block hover:opacity-80 transition-opacity cursor-pointer">
+              <span className="bg-gradient-to-r from-amber-400 via-orange-400 to-cyan-400 bg-clip-text text-transparent font-semibold">[pyth]</span>{' '}
+              <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-violet-400 bg-clip-text text-transparent font-semibold">ai</span>
+            </Link>, oracle of matches.
           </p>
           
           {/* Smart Search Bar - Search or submit URL */}
@@ -608,10 +742,12 @@ export default function MatchingEngine() {
 
         {/* Match Display with Lightning Animation */}
         <div className="max-w-7xl mx-auto mb-16">
-          {/* Match Badge & Explore Button */}
+            {/* Match Badge & Explore Button */}
           <div className="flex flex-col items-center gap-3 mb-8">
-            <div className="bg-gradient-to-r from-orange-500 to-amber-500 rounded-full px-8 py-3 shadow-xl flex items-center gap-3">
-              <span className="text-xl font-bold text-gray-900 flex items-center gap-2">
+            <div className="relative bg-gradient-to-r from-amber-500 via-orange-500 via-cyan-500 to-blue-500 rounded-full px-8 py-3 shadow-2xl shadow-purple-500/50 flex items-center gap-3 animate-pulse">
+              {/* Animated glow ring */}
+              <div className="absolute -inset-1 bg-gradient-to-r from-amber-400 via-orange-400 via-cyan-400 to-blue-400 rounded-full blur-lg opacity-75 animate-pulse"></div>
+              <span className="relative text-xl font-black text-white flex items-center gap-2 drop-shadow-lg">
                 ⚡ {match.matchScore}% Match ✨
               </span>
               <MatchConfidenceBadge 
@@ -646,8 +782,26 @@ export default function MatchingEngine() {
                 <div 
                   className="relative group cursor-pointer bg-gradient-to-br from-[#1a1a1a] via-[#222222] to-[#2a2a2a] backdrop-blur-md border-2 sm:border-4 border-emerald-500/60 hover:border-emerald-400/80 rounded-2xl sm:rounded-3xl p-2 shadow-2xl shadow-emerald-600/40 transition-all duration-300 h-[360px] sm:h-[420px] flex flex-col hover:scale-[1.02] sm:hover:scale-[1.03]"
                 >
-                {/* Fire Icon in Upper Right - Click to reveal secret */}
-                <div className="absolute top-4 right-4 z-20">
+                {/* Fire Icon in Upper Right - Click to reveal secret OR educational match */}
+                <div className="absolute top-4 right-4 z-20 flex gap-2">
+                  {isEducationalMatch && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setShowEducationalModal(true);
+                      }}
+                      className="relative group"
+                      title="Learn why this match works"
+                    >
+                      <span className="text-3xl hover:scale-125 transition-transform inline-block animate-pulse">
+                        🔥
+                      </span>
+                      <div className="absolute -inset-2 bg-orange-500/30 rounded-full blur-lg animate-pulse group-hover:bg-orange-500/50"></div>
+                      <div className="absolute top-full right-0 mt-2 bg-gradient-to-r from-orange-600 to-amber-600 text-white px-3 py-2 rounded-lg shadow-xl text-xs font-bold whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
+                        Learn Why This Match Works
+                      </div>
+                    </button>
+                  )}
                   <div 
                     className="relative cursor-pointer"
                     onMouseEnter={() => setShowSecret(true)}
@@ -657,8 +811,10 @@ export default function MatchingEngine() {
                       setShowSecret(!showSecret);
                     }}
                   >
-                    <span className="text-2xl hover:scale-125 transition-transform inline-block animate-pulse">🔥</span>
-                    {showSecret && (
+                    <span className={`text-2xl hover:scale-125 transition-transform inline-block ${isEducationalMatch ? '' : 'animate-pulse'}`}>
+                      {isEducationalMatch ? '💡' : '🔥'}
+                    </span>
+                    {showSecret && !isEducationalMatch && (
                       <div className="absolute top-full right-0 mt-2 bg-gradient-to-r from-orange-600 to-amber-600 text-white px-4 py-3 rounded-xl shadow-2xl text-sm font-bold w-64 z-50 animate-fadeIn">
                         <div className="absolute -top-2 right-4 w-4 h-4 bg-orange-700 rotate-45"></div>
                         💡 {currentSecret}
@@ -670,6 +826,10 @@ export default function MatchingEngine() {
                 {/* ENHANCED STARTUP CARD - MODERN GLASSMORPHISM */}
                 <div 
                   onClick={() => {
+                    if (!match.startup || !match.startup.id) {
+                      alert('Startup details unavailable');
+                      return;
+                    }
                     const id = match.startup.id;
                     const isValidUUID = typeof id === 'string' && id.length > 8 && id.includes('-');
                     if (isValidUUID) {
@@ -856,13 +1016,39 @@ export default function MatchingEngine() {
                 
                 {/* Remove clipped border wrapper - apply border directly */}
                 <div className="relative">
+                  {/* Educational Match Flame Icon - Investor Card */}
+                  {isEducationalMatch && (
+                    <div className="absolute top-4 right-4 z-20">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setShowEducationalModal(true);
+                        }}
+                        className="relative group"
+                        title="Learn why this match works"
+                      >
+                        <span className="text-3xl hover:scale-125 transition-transform inline-block animate-pulse">
+                          🔥
+                        </span>
+                        <div className="absolute -inset-2 bg-orange-500/30 rounded-full blur-lg animate-pulse group-hover:bg-orange-500/50"></div>
+                        <div className="absolute top-full right-0 mt-2 bg-gradient-to-r from-orange-600 to-amber-600 text-white px-3 py-2 rounded-lg shadow-xl text-xs font-bold whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
+                          Learn Why This Match Works
+                        </div>
+                      </button>
+                    </div>
+                  )}
+                  
                   <EnhancedInvestorCard
                     investor={{
                       ...match.investor,
                       notable_investments: match.investor.notableInvestments,
                     }}
                     compact={true}
-                    onClick={() => navigate(`/investor/${match.investor.id}`)}
+                    onClick={() => {
+                      if (match.investor && match.investor.id) {
+                        navigate(`/investor/${match.investor.id}`);
+                      }
+                    }}
                   />
                   
                   {/* Info Link Overlay */}
@@ -885,10 +1071,17 @@ export default function MatchingEngine() {
             {/* Match Counter */}
             <div className="text-center mt-12">
               <p className="text-gray-400 text-sm">
-                Match {currentIndex + 1} of {matches.length} • Powered by GOD Algorithm™
+                Match {currentIndex + 1} of {matches.length} • Powered by{' '}
+                <span className="bg-gradient-to-r from-amber-400 via-orange-400 to-cyan-400 bg-clip-text text-transparent font-semibold">
+                  [pyth] ai Oracle Score™
+                </span>
               </p>
               <p className="text-gray-500 text-xs mt-1">
-                ⚡ Cycling every 3 seconds • 10 matches per minute
+                {isEducationalMatch ? (
+                  <>🔥 Educational Match • Click flame icon to learn more • Shows for 10 seconds</>
+                ) : (
+                  <>⚡ Cycling every 3 seconds • 10 matches per minute</>
+                )}
               </p>
             </div>
           </div>
@@ -1079,7 +1272,7 @@ export default function MatchingEngine() {
           showSignupButton={true}
         />
 
-        {/* Hot Match Popup - Comprehensive platform description */}
+        {/* [pyth] ai Popup - Comprehensive platform description */}
         <HotMatchPopup
           isOpen={showHotMatchPopup}
           onClose={() => setShowHotMatchPopup(false)}
@@ -1092,8 +1285,8 @@ export default function MatchingEngine() {
           <div className="bg-gradient-to-br from-[#1a1a1a] to-[#222222] border border-orange-500/50 rounded-3xl p-8 max-w-md mx-4 shadow-[0_0_50px_rgba(255,90,9,0.3)]" onClick={e => e.stopPropagation()}>
             <div className="text-center mb-6">
               <span className="text-6xl">🧠</span>
-              <h2 className="text-3xl font-bold text-white mt-4">How Hot Money Works</h2>
-              <p className="text-orange-400 mt-2">AI-Powered Startup-Investor Matching</p>
+              <h2 className="text-3xl font-bold text-white mt-4">How [pyth] ai Works</h2>
+              <p className="bg-gradient-to-r from-amber-400 via-orange-400 to-cyan-400 bg-clip-text text-transparent mt-2 font-semibold">Oracle of Truth for Venture Capital</p>
             </div>
             
             <p className="text-gray-300 mb-6 text-center">
@@ -1206,6 +1399,26 @@ export default function MatchingEngine() {
         />
       )}
 
+      {/* Educational Match Modal */}
+      <EducationalMatchModal
+        isOpen={showEducationalModal}
+        onClose={() => setShowEducationalModal(false)}
+        matchScore={match.matchScore}
+        startupName={match.startup.name}
+        investorName={match.investor.name}
+        investorFirm={match.investor.firm}
+        godScores={match.startup.total_god_score ? {
+          total: match.startup.total_god_score,
+          team: match.startup.team_score || 0,
+          traction: match.startup.traction_score || 0,
+          market: match.startup.market_score || 0,
+          product: match.startup.product_score || 0,
+          vision: match.startup.vision_score || 0,
+        } : undefined}
+        breakdown={match.breakdown}
+        reasoning={match.reasoning}
+      />
+
       {/* HotMatch Info Modal */}
       {showHotMatchInfo && (
         <div 
@@ -1266,6 +1479,15 @@ export default function MatchingEngine() {
           </div>
         </div>
       )}
+
+      {/* Footer */}
+      <div className="relative z-10 container mx-auto px-4 sm:px-8 py-8 mt-16 border-t border-gray-800/50">
+        <div className="text-center">
+          <p className="text-sm text-gray-500 italic max-w-2xl mx-auto">
+            [pyth] ai serves as an advanced matching system that predicts outcomes from data, similar to Pythia, the oracle of truth.
+          </p>
+        </div>
+      </div>
 
     </div>
   );

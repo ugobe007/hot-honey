@@ -506,9 +506,9 @@ export default function UnifiedAdminDashboard() {
             
             <PanelCard
               title="Matching Engine"
-              description="Core matching system - startup-investor compatibility"
+              description="Backend admin view - monitor and manage matching system"
               icon={Target}
-              onClick={() => navigate('/matching')}
+              onClick={() => navigate('/admin/matching-engine')}
               status={matchingStatus}
               stat={stats.totalMatches.toLocaleString()}
               gradient="from-cyan-500 to-blue-500"
@@ -525,10 +525,24 @@ export default function UnifiedAdminDashboard() {
             />
             
             <PanelCard
+              title="Industry Rankings"
+              description="GOD scores by industry/sector - see which industries score highest"
+              icon={BarChart3}
+              onClick={() => navigate('/admin/industry-rankings')}
+              gradient="from-blue-500 to-cyan-500"
+            />
+            
+            <PanelCard
               title="GOD Agent"
               description="Monitor score deviations & adjust algorithm weights"
               icon={Zap}
-              onClick={() => navigate('/admin/god-settings')}
+              onClick={() => {
+                if (godDeviations.length > 0) {
+                  navigate('/admin/god-settings', { state: { showDeviations: true, deviations: godDeviations } });
+                } else {
+                  navigate('/admin/god-settings');
+                }
+              }}
               stat={godDeviations.length > 0 ? `${godDeviations.length} deviations` : 'Monitoring'}
               gradient="from-orange-500 to-red-500"
               badge={godDeviations.length > 0 ? 'ALERT' : undefined}
@@ -591,22 +605,20 @@ export default function UnifiedAdminDashboard() {
           {/* Scrapers Panel */}
           <div className="mb-8">
             <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center justify-between">
-                <h3 className="text-xl font-semibold text-white flex items-center gap-2">
-                  <Webhook className="w-5 h-5 text-orange-400" />
-                  Data Scrapers
-                </h3>
-                <div className="flex items-center gap-3">
-                  <span className="text-sm text-slate-400">{scrapers.length} available</span>
-                  <button
-                    onClick={() => navigate('/admin/scrapers')}
-                    className="px-4 py-2 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-black font-semibold rounded-lg transition-all text-sm flex items-center gap-2"
-                  >
-                    <Settings className="w-4 h-4" />
-                    Manage & Configure
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
-                </div>
+              <h3 className="text-xl font-semibold text-white flex items-center gap-2">
+                <Webhook className="w-5 h-5 text-orange-400" />
+                Data Scrapers
+              </h3>
+              <div className="flex items-center gap-3">
+                <span className="text-sm text-slate-400">{scrapers.length} available</span>
+                <button
+                  onClick={() => navigate('/admin/scrapers')}
+                  className="px-4 py-2 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-black font-semibold rounded-lg transition-all text-sm flex items-center gap-2"
+                >
+                  <Settings className="w-4 h-4" />
+                  Manage & Configure
+                  <ArrowRight className="w-4 h-4" />
+                </button>
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 bg-slate-800/30 rounded-xl p-4 border border-slate-700">
@@ -649,16 +661,41 @@ export default function UnifiedAdminDashboard() {
             <div className="bg-orange-500/10 border border-orange-500/30 rounded-xl p-6 mb-4">
               <div className="flex items-center gap-3 mb-4">
                 <AlertTriangle className="w-6 h-6 text-orange-400" />
-                <h3 className="text-lg font-semibold text-white">
-                  {godDeviations.length} Startup(s) with Significant Score Changes (≥10 points)
-                </h3>
+                <div className="flex-1">
+                  <h3 className="text-lg font-semibold text-white mb-2">
+                    {godDeviations.length} Startup(s) with Significant Score Changes (≥10 points)
+                  </h3>
+                  <p className="text-sm text-slate-300">
+                    ⚠️ <strong>What are deviations?</strong> These are startups whose GOD scores changed significantly (≥10 points) recently. 
+                    This could indicate:
+                  </p>
+                  <ul className="text-sm text-slate-400 mt-2 ml-4 list-disc space-y-1">
+                    <li>Algorithm weight changes affecting scoring</li>
+                    <li>Data quality issues or missing information</li>
+                    <li>Startup profile updates that impact scoring</li>
+                    <li>Potential need to review and adjust algorithm weights</li>
+                  </ul>
+                </div>
               </div>
-              <p className="text-slate-300 mb-4">
-                Review these changes and adjust algorithm weights if needed.
-              </p>
+              <div className="bg-purple-500/10 border border-purple-500/30 rounded-lg p-4 mb-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <Brain className="w-5 h-5 text-purple-400" />
+                  <h4 className="font-semibold text-white">🤖 ML Agent Recommended Fixes</h4>
+                </div>
+                <p className="text-sm text-slate-300 mb-3">
+                  Before making manual adjustments, review ML agent recommendations. The ML agent analyzes patterns 
+                  in successful matches and suggests optimal weight adjustments.
+                </p>
+                <button
+                  onClick={() => navigate('/admin/god-settings', { state: { showDeviations: true, deviations: godDeviations } })}
+                  className="px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold rounded-lg transition-all"
+                >
+                  View ML Recommendations & Fix Deviations
+                </button>
+              </div>
               <div className="space-y-2 mb-4 max-h-48 overflow-y-auto">
                 {godDeviations.slice(0, 5).map((dev) => (
-                  <div key={dev.startupId} className="bg-slate-800/50 rounded-lg p-3 border border-slate-700">
+                  <div key={dev.startupId} className="bg-slate-800/50 rounded-lg p-3 border border-slate-700 hover:border-orange-500/50 transition-colors">
                     <div className="flex items-center justify-between">
                       <div>
                         <div className="font-semibold text-white">{dev.startupName}</div>
@@ -683,12 +720,20 @@ export default function UnifiedAdminDashboard() {
                   </div>
                 ))}
               </div>
-              <button
-                onClick={() => navigate('/admin/god-settings')}
-                className="px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white font-semibold rounded-lg transition-colors"
-              >
-                Adjust GOD Algorithm Weights
-              </button>
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => navigate('/admin/god-settings', { state: { showDeviations: true, deviations: godDeviations } })}
+                  className="px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white font-semibold rounded-lg transition-colors"
+                >
+                  Review & Fix Deviations
+                </button>
+                <button
+                  onClick={() => navigate('/admin/ml-dashboard')}
+                  className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-lg transition-colors"
+                >
+                  View ML Agent Dashboard
+                </button>
+              </div>
             </div>
           </section>
         )}
@@ -723,38 +768,127 @@ export default function UnifiedAdminDashboard() {
           </section>
         )}
 
-        {/* Additional Quick Links */}
+        {/* ============================================ */}
+        {/* 📋 QUICK ACCESS - Organized Sections */}
+        {/* ============================================ */}
         <section>
-          <h3 className="text-xl font-semibold text-white mb-4">Quick Access</h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <button
-              onClick={() => navigate('/admin/review')}
-              className="p-4 bg-slate-800/50 hover:bg-slate-800/70 border border-slate-700 rounded-lg text-left transition-all hover:border-orange-500/50"
-            >
-              <FileText className="w-5 h-5 text-orange-400 mb-2" />
-              <div className="font-semibold text-white text-sm">Review Queue</div>
-            </button>
-            <button
-              onClick={() => navigate('/admin/edit-startups')}
-              className="p-4 bg-slate-800/50 hover:bg-slate-800/70 border border-slate-700 rounded-lg text-left transition-all hover:border-orange-500/50"
-            >
-              <Database className="w-5 h-5 text-orange-400 mb-2" />
-              <div className="font-semibold text-white text-sm">Edit Startups</div>
-            </button>
-            <button
-              onClick={() => navigate('/admin/discovered-startups')}
-              className="p-4 bg-slate-800/50 hover:bg-slate-800/70 border border-slate-700 rounded-lg text-left transition-all hover:border-orange-500/50"
-            >
-              <Search className="w-5 h-5 text-orange-400 mb-2" />
-              <div className="font-semibold text-white text-sm">Discovered</div>
-            </button>
-            <button
-              onClick={() => navigate('/admin/health')}
-              className="p-4 bg-slate-800/50 hover:bg-slate-800/70 border border-slate-700 rounded-lg text-left transition-all hover:border-orange-500/50"
-            >
-              <Shield className="w-5 h-5 text-orange-400 mb-2" />
-              <div className="font-semibold text-white text-sm">System Health</div>
-            </button>
+          <h3 className="text-xl font-semibold text-white mb-6">Quick Access</h3>
+          
+          {/* Data Management Section */}
+          <div className="mb-6">
+            <h4 className="text-sm font-semibold text-slate-400 mb-3 uppercase tracking-wider">Data Management</h4>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <button
+                onClick={() => navigate('/admin/edit-startups')}
+                className="p-4 bg-slate-800/50 hover:bg-slate-800/70 border border-slate-700 rounded-lg text-left transition-all hover:border-orange-500/50 hover:scale-[1.02]"
+              >
+                <Database className="w-5 h-5 text-orange-400 mb-2" />
+                <div className="font-semibold text-white text-sm">Edit Startups</div>
+                <div className="text-xs text-slate-500 mt-1">Manage startup data</div>
+              </button>
+              <button
+                onClick={() => navigate('/admin/discovered-startups')}
+                className="p-4 bg-slate-800/50 hover:bg-slate-800/70 border border-slate-700 rounded-lg text-left transition-all hover:border-orange-500/50 hover:scale-[1.02]"
+              >
+                <Search className="w-5 h-5 text-cyan-400 mb-2" />
+                <div className="font-semibold text-white text-sm">Discovered Startups</div>
+                <div className="text-xs text-slate-500 mt-1">Review scraped data</div>
+              </button>
+              <button
+                onClick={() => navigate('/admin/discovered-investors')}
+                className="p-4 bg-slate-800/50 hover:bg-slate-800/70 border border-slate-700 rounded-lg text-left transition-all hover:border-orange-500/50 hover:scale-[1.02]"
+              >
+                <Users className="w-5 h-5 text-blue-400 mb-2" />
+                <div className="font-semibold text-white text-sm">Discovered Investors</div>
+                <div className="text-xs text-slate-500 mt-1">Investor discovery queue</div>
+              </button>
+              <button
+                onClick={() => navigate('/admin/bulk-upload')}
+                className="p-4 bg-slate-800/50 hover:bg-slate-800/70 border border-slate-700 rounded-lg text-left transition-all hover:border-orange-500/50 hover:scale-[1.02]"
+              >
+                <FileText className="w-5 h-5 text-purple-400 mb-2" />
+                <div className="font-semibold text-white text-sm">Bulk Upload</div>
+                <div className="text-xs text-slate-500 mt-1">Import data in bulk</div>
+              </button>
+            </div>
+          </div>
+
+          {/* Review & Quality Section */}
+          <div className="mb-6">
+            <h4 className="text-sm font-semibold text-slate-400 mb-3 uppercase tracking-wider">Review & Quality</h4>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <button
+                onClick={() => navigate('/admin/review')}
+                className="p-4 bg-slate-800/50 hover:bg-slate-800/70 border border-slate-700 rounded-lg text-left transition-all hover:border-orange-500/50 hover:scale-[1.02]"
+              >
+                <FileText className="w-5 h-5 text-yellow-400 mb-2" />
+                <div className="font-semibold text-white text-sm">Review Queue</div>
+                <div className="text-xs text-slate-500 mt-1">Pending approvals</div>
+              </button>
+              <button
+                onClick={() => navigate('/admin/rss-manager')}
+                className="p-4 bg-slate-800/50 hover:bg-slate-800/70 border border-slate-700 rounded-lg text-left transition-all hover:border-orange-500/50 hover:scale-[1.02]"
+              >
+                <Rss className="w-5 h-5 text-green-400 mb-2" />
+                <div className="font-semibold text-white text-sm">RSS Manager</div>
+                <div className="text-xs text-slate-500 mt-1">News sources</div>
+              </button>
+              <button
+                onClick={() => navigate('/admin/investor-enrichment')}
+                className="p-4 bg-slate-800/50 hover:bg-slate-800/70 border border-slate-700 rounded-lg text-left transition-all hover:border-orange-500/50 hover:scale-[1.02]"
+              >
+                <Globe className="w-5 h-5 text-indigo-400 mb-2" />
+                <div className="font-semibold text-white text-sm">Investor Enrichment</div>
+                <div className="text-xs text-slate-500 mt-1">Enhance investor data</div>
+              </button>
+              <button
+                onClick={() => navigate('/admin/tier-matching')}
+                className="p-4 bg-slate-800/50 hover:bg-slate-800/70 border border-slate-700 rounded-lg text-left transition-all hover:border-orange-500/50 hover:scale-[1.02]"
+              >
+                <Target className="w-5 h-5 text-pink-400 mb-2" />
+                <div className="font-semibold text-white text-sm">Tier Matching</div>
+                <div className="text-xs text-slate-500 mt-1">Tier configuration</div>
+              </button>
+            </div>
+          </div>
+
+          {/* System & Diagnostics Section */}
+          <div>
+            <h4 className="text-sm font-semibold text-slate-400 mb-3 uppercase tracking-wider">System & Diagnostics</h4>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <button
+                onClick={() => navigate('/admin/health')}
+                className="p-4 bg-slate-800/50 hover:bg-slate-800/70 border border-slate-700 rounded-lg text-left transition-all hover:border-orange-500/50 hover:scale-[1.02]"
+              >
+                <Shield className="w-5 h-5 text-green-400 mb-2" />
+                <div className="font-semibold text-white text-sm">System Health</div>
+                <div className="text-xs text-slate-500 mt-1">Health monitoring</div>
+              </button>
+              <button
+                onClick={() => navigate('/admin/diagnostic')}
+                className="p-4 bg-slate-800/50 hover:bg-slate-800/70 border border-slate-700 rounded-lg text-left transition-all hover:border-orange-500/50 hover:scale-[1.02]"
+              >
+                <Activity className="w-5 h-5 text-red-400 mb-2" />
+                <div className="font-semibold text-white text-sm">Diagnostics</div>
+                <div className="text-xs text-slate-500 mt-1">System diagnostics</div>
+              </button>
+              <button
+                onClick={() => navigate('/admin/database-check')}
+                className="p-4 bg-slate-800/50 hover:bg-slate-800/70 border border-slate-700 rounded-lg text-left transition-all hover:border-orange-500/50 hover:scale-[1.02]"
+              >
+                <Database className="w-5 h-5 text-cyan-400 mb-2" />
+                <div className="font-semibold text-white text-sm">Database Check</div>
+                <div className="text-xs text-slate-500 mt-1">DB health check</div>
+              </button>
+              <button
+                onClick={() => navigate('/admin/ai-logs')}
+                className="p-4 bg-slate-800/50 hover:bg-slate-800/70 border border-slate-700 rounded-lg text-left transition-all hover:border-orange-500/50 hover:scale-[1.02]"
+              >
+                <Brain className="w-5 h-5 text-purple-400 mb-2" />
+                <div className="font-semibold text-white text-sm">AI Logs</div>
+                <div className="text-xs text-slate-500 mt-1">AI processing logs</div>
+              </button>
+            </div>
           </div>
         </section>
       </div>

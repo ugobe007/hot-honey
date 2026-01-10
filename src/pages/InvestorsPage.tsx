@@ -169,7 +169,7 @@ export default function InvestorsPage() {
           </p>
         </div>
 
-        {/* Stats Overview - Hot Money Orange Theme */}
+        {/* Stats Overview - [pyth] ai Orange Theme */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           <div className="bg-gradient-to-br from-cyan-500/20 to-blue-500/20 backdrop-blur-md rounded-2xl p-6 text-center border-2 border-cyan-400/50 hover:scale-105 transition-transform">
             <div className="text-4xl mb-2">💼</div>

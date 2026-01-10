@@ -18,7 +18,7 @@ export default function AdminInstructions() {
           <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-blue-500 bg-clip-text text-transparent mb-2">
             📚 Admin Instructions
           </h1>
-          <p className="text-gray-400">Complete guide to using Hot Money admin tools</p>
+          <p className="text-gray-400">Complete guide to using pyth ai admin tools</p>
         </div>
 
         {/* Quick Navigation */}

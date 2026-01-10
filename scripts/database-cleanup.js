@@ -2,7 +2,7 @@
 /**
  * DATABASE CLEANUP SCRIPT
  * =======================
- * Removes low-quality data from Hot Match database:
+ * Removes low-quality data from pyth ai database:
  * 
  * 1. Public companies (IPO'd, acquired by public companies)
  * 2. Late-stage companies that should be public
@@ -81,18 +81,19 @@ const PUBLIC_COMPANIES = [
 ];
 
 // 2. LATE STAGE INDICATORS - Companies that raised too much to be "startups"
+// MORE CONSERVATIVE: Only flag if we're CERTAIN they're late-stage
 const LATE_STAGE_PATTERNS = [
-  /series [d-z]/i,
-  /series [d-z]\+/i,
-  /\$[5-9]\d{2}m/i,        // $500M+
-  /\$[1-9]\d{3}m/i,        // $1B+
-  /\$\d+(\.\d+)?\s*b/i,    // $XB (billions)
-  /ipo/i,
-  /going public/i,
-  /pre-ipo/i,
-  /spac/i,
-  /unicorn/i,
-  /decacorn/i,
+  /series [e-z]/i,           // Series E+ only (not D - too aggressive)
+  /series [e-z]\+/i,
+  /\$[8-9]\d{2}m/i,          // $800M+ (raised threshold from $500M to be more conservative)
+  /\$[1-9]\d{3}m/i,          // $1B+
+  /\$\d+(\.\d+)?\s*b/i,      // $XB (billions)
+  /\bipo\b/i,                // Word boundary - only "IPO" as standalone word
+  /\bgoing public\b/i,       // Word boundary
+  /\bpre-ipo\b/i,            // Word boundary
+  // REMOVED: /spac/i - too aggressive, "SPAC" can appear in company names that aren't late-stage
+  /\bunicorn\b/i,            // Word boundary
+  /\bdecacorn\b/i,           // Word boundary
 ];
 
 // 3. ERRANT INVESTOR NAME PATTERNS
@@ -250,24 +251,15 @@ function isPublicCompany(startup) {
       return { match: true, reason: `Exact name match: ${publicCo}` };
     }
     
-    // Whole word match (not substring) - e.g., "intel" matches "Intel" but not "intelligent"
-    const wordBoundaryRegex = new RegExp(`\\b${publicCo}\\b`, 'i');
-    if (wordBoundaryRegex.test(name)) {
-      // Additional check: if the name is longer, make sure it's not a false positive
-      // Only match if publicCo is at the start or end, or if it's a reasonable compound
-      const nameLower = name.toLowerCase();
-      if (nameLower.startsWith(publicCo + ' ') || nameLower.endsWith(' ' + publicCo) || 
-          nameLower === publicCo || nameLower.startsWith(publicCo + '-') || 
-          nameLower.endsWith('-' + publicCo)) {
-        // But exclude if it's clearly a different company (e.g., "GitLab CI" is about GitLab, but "CI" alone isn't GitLab)
-        // If the name is much longer than the public company name, be more careful
-        if (name.length <= publicCo.length + 5) {
-          return { match: true, reason: `Name contains public company: ${publicCo}` };
-        }
-        // For longer names, only match if publicCo is at the very start
-        if (nameLower.startsWith(publicCo + ' ')) {
-          return { match: true, reason: `Name starts with public company: ${publicCo}` };
-        }
+    // MORE CONSERVATIVE: Only match if publicCo appears at the START of the name
+    // This prevents false positives like "AI" matching "Intelligent AI Solutions"
+    const nameLower = name.toLowerCase();
+    if (nameLower === publicCo || nameLower.startsWith(publicCo + ' ') || nameLower.startsWith(publicCo + '-')) {
+      // Additional safety: check if the name is a known variant or subsidiary
+      // For example, "Google Cloud" is Google, but "GoogleDocsClone" might be a different company
+      // Only match if it's a reasonable compound or exact match
+      if (nameLower.length <= publicCo.length + 15) { // Allow up to 15 extra chars (e.g., "Google Cloud Build")
+        return { match: true, reason: `Name starts with public company: ${publicCo}` };
       }
     }
   }
@@ -361,11 +353,12 @@ function isLateStage(startup) {
   }
   
   // Check funding amount (parse from raise_amount string like "$500M")
+  // MORE CONSERVATIVE: Only flag if > $800M (raised from $500M threshold)
   const fundingMatch = String(raiseAmount).match(/\$?([\d.]+)\s*(m|b)/i);
   if (fundingMatch) {
     let funding = parseFloat(fundingMatch[1]);
     if (fundingMatch[2].toLowerCase() === 'b') funding *= 1000; // Convert billions to millions
-    if (funding > 500) { // Over $500M
+    if (funding > 800) { // Over $800M (more conservative threshold)
       return { match: true, reason: `Funding too high: $${funding}M` };
     }
   }
@@ -635,8 +628,8 @@ function printReport() {
     }
   }
   
-  // 6. Incomplete Investors
-  console.log('\n⚠️  INCOMPLETE INVESTOR CARDS:', stats.incompleteInvestors.length);
+  // 6. Incomplete Investors (NOT DELETED - just need enrichment)
+  console.log('\n⚠️  INCOMPLETE INVESTOR CARDS (NOT DELETED - need enrichment):', stats.incompleteInvestors.length);
   if (stats.incompleteInvestors.length > 0) {
     stats.incompleteInvestors.slice(0, 20).forEach(i => {
       console.log(`   • ${i.name} (${i.firm || 'no firm'}) - ${i.reasons.join(', ')}`);
@@ -644,17 +637,19 @@ function printReport() {
     if (stats.incompleteInvestors.length > 20) {
       console.log(`   ... and ${stats.incompleteInvestors.length - 20} more`);
     }
+    console.log(`   ℹ️  These investors will NOT be deleted - they just need data enrichment.`);
   }
   
   // Summary
   const totalStartupsToRemove = stats.badStartupNames.length + stats.publicCompanies.length + stats.lateStage.length;
-  const totalInvestorsToRemove = stats.badInvestorNames.length + stats.incompleteInvestors.length;
+  // IMPORTANT: Incomplete investors are NOT deleted - they just need enrichment
+  const totalInvestorsToRemove = stats.badInvestorNames.length;
   
   console.log('\n' + '='.repeat(70));
   console.log('📊 SUMMARY');
   console.log('='.repeat(70));
   console.log(`   Startups to remove:  ${totalStartupsToRemove}`);
-  console.log(`   Investors to remove: ${totalInvestorsToRemove}`);
+  console.log(`   Investors to remove: ${totalInvestorsToRemove} (incomplete investors: ${stats.incompleteInvestors.length} - NOT deleted, just need enrichment)`);
   console.log(`   Descriptions to fix: ${stats.badDescriptions.length}`);
   console.log('='.repeat(70));
   
@@ -680,9 +675,11 @@ async function executeCleanup() {
   ];
   
   // Collect all investor IDs to delete
+  // IMPORTANT: Only delete bad names, NOT incomplete investors (they just need enrichment)
   const investorIdsToDelete = [
     ...stats.badInvestorNames.map(i => i.id),
-    ...stats.incompleteInvestors.map(i => i.id),
+    // REMOVED: incompleteInvestors - these should NOT be deleted, just enriched
+    // ...stats.incompleteInvestors.map(i => i.id),
   ];
   
   // Remove duplicates
@@ -806,7 +803,7 @@ async function main() {
   const isAudit = args.includes('--audit') || args.includes('--dry-run') || !isExecute;
   
   console.log('\n' + '🔥'.repeat(30));
-  console.log('   HOT MATCH DATABASE CLEANUP');
+  console.log('   PYTH AI DATABASE CLEANUP');
   console.log('🔥'.repeat(30));
   console.log(`\n   Mode: ${isExecute ? '⚠️  EXECUTE (will delete data)' : '👁️  AUDIT (dry run)'}`);
   

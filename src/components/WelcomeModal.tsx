@@ -67,8 +67,11 @@ export default function WelcomeModal({ forceOpen = false, onClose }: WelcomeModa
           <div className="text-center mb-8 relative z-10">
             <div className="text-7xl mb-4">🔥</div>
             <h2 className="text-5xl font-bold mb-3">
-              <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
-                Hot Money
+              <span className="bg-gradient-to-r from-amber-400 via-orange-400 to-cyan-400 bg-clip-text text-transparent">
+                [pyth]
+              </span>
+              <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-violet-400 bg-clip-text text-transparent">
+                ai
               </span>
             </h2>
             <p className="text-2xl text-cyan-400 font-bold mb-2">
@@ -234,7 +237,7 @@ export default function WelcomeModal({ forceOpen = false, onClose }: WelcomeModa
               <strong className="text-white">Investing in early-stage startups is highly risky.</strong> You may lose all of your investment. Only invest what you can afford to lose. Past performance is not indicative of future results.
             </p>
             <p className="text-sm text-gray-300 leading-relaxed">
-              By using Hot Money, you acknowledge these risks and are making your own decisions. We are not financial advisors. Always do your own research.
+              By using [pyth] ai, you acknowledge these risks and are making your own decisions. We are not financial advisors. Always do your own research.
             </p>
           </div>
 

@@ -125,10 +125,10 @@ export default function VCFirmCard({ company }: VCFirmCardProps) {
           </div>
         )}
 
-        {/* Hot Honey Activity */}
+        {/* pyth ai Activity */}
         {company?.investmentCount && company.investmentCount > 0 && (
           <div className="bg-gradient-to-r from-slate-700 to-slate-600 rounded-lg p-2 border border-slate-500">
-            <p className="text-cyan-300 text-[9px] font-black">🍯 HOT HONEY</p>
+            <p className="text-cyan-300 text-[9px] font-black">🔮 pyth ai</p>
             <p className="text-cyan-100 font-bold text-xs">
               {company.investmentCount} investment{company.investmentCount !== 1 ? 's' : ''}
             </p>

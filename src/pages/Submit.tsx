@@ -567,7 +567,7 @@ Fill ONLY the EMPTY fields with your research. Return JSON with ALL fields fille
             Get discovered by investors who want to find you
           </p>
           <p className="text-lg text-cyan-600">
-            Fill out the form below to join Hot Honey 🍯
+            Fill out the form below to join pyth ai 🔮
           </p>
         </div>
 

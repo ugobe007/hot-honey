@@ -12,7 +12,7 @@ const supabase = createClient(
 );
 
 async function test() {
-  console.log('🔍 HOT MATCH - MATCHING TEST\n');
+  console.log('🔍 PYTH AI - MATCHING TEST\n');
 
   // Get sample startup
   const { data: startups } = await supabase

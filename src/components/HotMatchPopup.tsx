@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { X, Sparkles, Brain, Zap, Target, TrendingUp, Users, Shield, Flame, ChevronRight, Clock, CheckCircle2, BarChart3, Cpu, Globe, Layers, ArrowRight, Play, Rocket, Briefcase } from 'lucide-react';
+import GODScoreDemo from './GODScoreDemo';
 
 interface HotMatchPopupProps {
   isOpen: boolean;
@@ -11,6 +12,7 @@ interface HotMatchPopupProps {
 export default function HotMatchPopup({ isOpen, onClose, onGetMatched }: HotMatchPopupProps) {
   const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState<'problem' | 'solution' | 'how' | 'why'>('problem');
+  const [showDemo, setShowDemo] = useState(false);
   
   useEffect(() => {
     if (isOpen) {
@@ -81,8 +83,11 @@ export default function HotMatchPopup({ isOpen, onClose, onGetMatched }: HotMatc
             </div>
             
             <h1 className="text-5xl md:text-6xl font-black mb-4">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-orange-400 to-cyan-400">
+                [pyth]
+              </span>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-300 to-violet-400">
-                Hot Match
+                ai
               </span>
             </h1>
             
@@ -146,7 +151,7 @@ export default function HotMatchPopup({ isOpen, onClose, onGetMatched }: HotMatc
           {/* The Solution - Three Pillars */}
           <div className="px-8 pb-8">
             <h2 className="text-2xl font-bold text-white mb-6 text-center">
-              Three Pillars of <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">Hot Match</span>
+              Three Pillars of <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-orange-400 to-cyan-400">[pyth]</span> <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">ai</span>
             </h2>
             
             <div className="grid md:grid-cols-3 gap-4">
@@ -255,7 +260,7 @@ export default function HotMatchPopup({ isOpen, onClose, onGetMatched }: HotMatc
           <div className="px-8 pb-8">
             <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
               <Layers className="w-5 h-5 text-cyan-400" />
-              How Hot Match Works
+              How [pyth] ai Works
             </h2>
             
             <div className="relative">
@@ -303,9 +308,9 @@ export default function HotMatchPopup({ isOpen, onClose, onGetMatched }: HotMatc
             </div>
           </div>
 
-          {/* Why Hot Match - Competitive Advantages */}
+          {/* Why [pyth] ai - Competitive Advantages */}
           <div className="px-8 pb-8">
-            <h2 className="text-xl font-bold text-white mb-4">Why Hot Match Wins</h2>
+            <h2 className="text-xl font-bold text-white mb-4">Why [pyth] ai Wins</h2>
             
             <div className="grid md:grid-cols-2 gap-4">
               {[
@@ -378,7 +383,7 @@ export default function HotMatchPopup({ isOpen, onClose, onGetMatched }: HotMatc
                 "This is not a novelty. This is the <span className="text-white font-semibold">future of fundraising</span>."
               </p>
               <p className="text-cyan-400 font-bold">
-                Hot Match: Where AI meets venture capital. 🔥
+                [pyth] ai: Where Oracle meets Algorithm. 🔥
               </p>
             </div>
           </div>
@@ -387,7 +392,7 @@ export default function HotMatchPopup({ isOpen, onClose, onGetMatched }: HotMatc
           <div className="px-8 pb-10">
             <div className="bg-gradient-to-r from-cyan-500/20 to-blue-500/20 border border-cyan-500/30 rounded-2xl p-6 text-center">
               <h3 className="text-2xl font-bold text-white mb-2">Ready to Get Matched?</h3>
-              <p className="text-gray-400 mb-6">Join 3,400+ startups and 3,200+ investors using Hot Match</p>
+              <p className="text-gray-400 mb-6">Join 3,400+ startups and 3,200+ investors using [pyth] ai</p>
               
               {/* Two Primary CTAs */}
               <div className="grid md:grid-cols-2 gap-4 mb-4">
@@ -427,7 +432,7 @@ export default function HotMatchPopup({ isOpen, onClose, onGetMatched }: HotMatc
 
               {/* Secondary CTA */}
               <button
-                onClick={onClose}
+                onClick={() => setShowDemo(true)}
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white/5 border border-white/10 text-white font-medium hover:bg-white/10 transition-all"
               >
                 <Play className="w-4 h-4" />
@@ -440,7 +445,20 @@ export default function HotMatchPopup({ isOpen, onClose, onGetMatched }: HotMatc
             </div>
           </div>
         </div>
+
+        {/* Footer */}
+        <div className="px-8 pb-6 pt-4 border-t border-white/10">
+          <p className="text-xs text-gray-500 italic text-center max-w-xl mx-auto">
+            [pyth] ai serves as an advanced matching system that predicts outcomes from data, similar to Pythia, the oracle of truth.
+          </p>
+        </div>
       </div>
+
+      {/* GOD Score Demo Modal */}
+      <GODScoreDemo 
+        isOpen={showDemo} 
+        onClose={() => setShowDemo(false)} 
+      />
     </div>
   );
 }

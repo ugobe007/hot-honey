@@ -215,36 +215,61 @@ export default function GetMatchedPage() {
             <span className="text-orange-400 font-semibold"> In under 2 seconds.</span>
           </p>
           
-          {/* Resource Cards - Startup Playbook & Fundraising Toolkit */}
-          {/* Resource Cards - Mobile Responsive */}
-          <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4 mt-6 sm:mt-8 px-4">
+          {/* Primary Action Buttons - Fundraising Toolkit & Founder Toolkit */}
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mt-8 sm:mt-10 px-4">
+            {/* Fundraising Toolkit Button - Dark Purple with Yellow Lightning (Merlin Style) */}
             <Link
               to="/strategies"
-              className="group flex items-center gap-2 sm:gap-3 px-4 sm:px-5 py-2.5 sm:py-3 bg-gradient-to-r from-orange-500/20 to-amber-500/20 border border-orange-500/40 hover:border-orange-400/60 rounded-xl transition-all hover:scale-105 shadow-lg shadow-orange-500/20 hover:shadow-orange-500/40 w-full sm:w-auto"
+              className="group relative w-full sm:w-auto min-w-[280px] sm:min-w-[320px] px-6 sm:px-8 py-4 sm:py-5 bg-gradient-to-br from-purple-900 via-purple-800 to-indigo-900 border-2 border-purple-600/50 rounded-2xl shadow-2xl shadow-purple-900/40 hover:shadow-purple-600/60 transition-all hover:scale-[1.02] hover:border-purple-500/70"
             >
-              <BookOpen className="w-4 h-4 sm:w-5 sm:h-5 text-orange-400 group-hover:text-orange-300 flex-shrink-0" />
-              <div className="text-left flex-1 min-w-0">
-                <div className="text-white font-bold text-xs sm:text-sm">Startup Fundraising Playbook</div>
-                <div className="text-orange-300 text-[10px] sm:text-xs">Y Combinator & a16z strategies</div>
+              <div className="flex items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-yellow-400 to-yellow-500 flex items-center justify-center shadow-lg shadow-yellow-500/50">
+                    <BookOpen className="w-5 h-5 sm:w-6 sm:h-6 text-purple-900" strokeWidth={2.5} />
+                  </div>
+                  <div className="text-left">
+                    <div className="text-white font-bold text-base sm:text-lg">Fundraising Toolkit</div>
+                    <div className="text-purple-300 text-xs sm:text-sm">Guides • Strategies • Playbooks</div>
+                  </div>
+                </div>
+                <ChevronRight className="w-5 h-5 text-purple-400 group-hover:translate-x-1 transition-transform flex-shrink-0" />
               </div>
-              <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 text-orange-400 group-hover:translate-x-1 transition-transform flex-shrink-0" />
             </Link>
             
+            {/* Founder Toolkit Button - Light Blue to Violet to White Gradient */}
             <Link
               to="/services"
-              className="group flex items-center gap-2 sm:gap-3 px-4 sm:px-5 py-2.5 sm:py-3 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 border border-cyan-500/40 hover:border-cyan-400/60 rounded-xl transition-all hover:scale-105 shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/40 w-full sm:w-auto"
+              className="group relative w-full sm:w-auto min-w-[280px] sm:min-w-[320px] px-6 sm:px-8 py-4 sm:py-5 bg-gradient-to-br from-blue-400 via-violet-400 to-white border-2 border-blue-300/50 rounded-2xl shadow-2xl shadow-blue-400/40 hover:shadow-blue-500/60 transition-all hover:scale-[1.02] hover:from-blue-300 hover:via-violet-300 hover:to-white/90"
             >
-              <Brain className="w-4 h-4 sm:w-5 sm:h-5 text-cyan-400 group-hover:text-cyan-300 flex-shrink-0" />
-              <div className="text-left flex-1 min-w-0">
-                <div className="text-white font-bold text-xs sm:text-sm">Fundraising Toolkit</div>
-                <div className="text-cyan-300 text-[10px] sm:text-xs">AI-powered pitch & strategy tools</div>
+              <div className="flex items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white/30 backdrop-blur-sm flex items-center justify-center border border-white/40 shadow-lg">
+                    <Brain className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" strokeWidth={2.5} />
+                  </div>
+                  <div className="text-left">
+                    <div className="text-slate-900 font-bold text-base sm:text-lg drop-shadow-sm">Founder Toolkit</div>
+                    <div className="text-slate-700 text-xs sm:text-sm font-medium">AI tools • Pitch helpers • Resources</div>
+                  </div>
+                </div>
+                <ChevronRight className="w-5 h-5 text-slate-900 group-hover:translate-x-1 transition-transform flex-shrink-0" />
               </div>
-              <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 text-cyan-400 group-hover:translate-x-1 transition-transform flex-shrink-0" />
+            </Link>
+          </div>
+
+          {/* Secondary Action - View Pricing */}
+          <div className="flex justify-center mt-6">
+            <Link
+              to="/pricing"
+              className="px-6 py-3 bg-slate-800/50 border border-slate-700 hover:border-orange-500/50 hover:bg-slate-700/50 rounded-xl text-slate-300 hover:text-white transition-all flex items-center gap-2 text-sm font-medium"
+            >
+              <Briefcase className="w-4 h-4" />
+              <span>View Pricing & Plans</span>
+              <ChevronRight className="w-4 h-4" />
             </Link>
           </div>
         </div>
 
-        {/* How Hot Match Works - Process Visualization */}
+        {/* How [pyth] ai Works - Process Visualization */}
         <div className="mb-10">
           <div className="text-center mb-6">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/20 border border-blue-500/30">
@@ -254,7 +279,7 @@ export default function GetMatchedPage() {
           </div>
           
           <h2 className="text-2xl md:text-3xl font-bold text-center text-white mb-2">
-            How Hot Match <span className="text-orange-400">Works</span>
+            How <span className="bg-gradient-to-r from-amber-400 via-orange-400 to-cyan-400 bg-clip-text text-transparent">[pyth]</span> <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-violet-400 bg-clip-text text-transparent">ai</span> <span className="text-orange-400">Works</span>
           </h2>
           <p className="text-center text-slate-400 mb-8">
             Watch the machinery process your startup and deliver perfect matches in under 2 seconds
@@ -367,7 +392,7 @@ export default function GetMatchedPage() {
           <div className="lg:col-span-2 space-y-4 sm:space-y-6">
             {/* Stats */}
             <div className="bg-slate-800/50 border border-slate-700 rounded-2xl p-6">
-              <h3 className="text-lg font-bold text-white mb-4">Why Startups Choose Hot Match</h3>
+              <h3 className="text-lg font-bold text-white mb-4">Why Startups Choose [pyth] ai</h3>
               <div className="space-y-4">
                 {[
                   { icon: <Target className="w-5 h-5" />, title: 'Pre-Qualified Investors', desc: 'Only see investors who fund your sector & stage', color: 'cyan' },
@@ -399,7 +424,7 @@ export default function GetMatchedPage() {
                 ))}
               </div>
               <p className="text-white italic mb-3">
-                "We got 12 investor meetings in our first week on Hot Match. The GOD Score helped us understand exactly what VCs were looking for."
+                "We got 12 investor meetings in our first week on [pyth] ai. The GOD Score helped us understand exactly what VCs were looking for."
               </p>
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center text-white font-bold">
@@ -722,9 +747,19 @@ export default function GetMatchedPage() {
                 </div>
               )}
 
-              {/* Already have account */}
-              <div className="mt-6 pt-6 border-t border-slate-700 text-center">
-                <p className="text-slate-400">
+              {/* Pricing Link & Account Login */}
+              <div className="mt-6 pt-6 border-t border-slate-700 space-y-3">
+                <div className="text-center">
+                  <Link 
+                    to="/pricing" 
+                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-orange-500/20 to-amber-500/20 border border-orange-500/40 hover:border-orange-400/60 rounded-xl text-orange-300 hover:text-orange-200 font-medium transition-all text-sm"
+                  >
+                    <DollarSign className="w-4 h-4" />
+                    View Pricing & Plans
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+                </div>
+                <p className="text-slate-400 text-center text-sm">
                   Already have an account?{' '}
                   <Link to="/login" className="text-cyan-400 hover:text-cyan-300 font-medium transition-colors">
                     Log in
@@ -733,6 +768,15 @@ export default function GetMatchedPage() {
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="relative z-10 container mx-auto px-4 py-8 mt-16 border-t border-slate-800/50">
+        <div className="text-center">
+          <p className="text-sm text-slate-500 italic max-w-2xl mx-auto">
+            [pyth] ai serves as an advanced matching system that predicts outcomes from data, similar to Pythia, the oracle of truth.
+          </p>
         </div>
       </div>
     </div>

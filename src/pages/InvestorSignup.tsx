@@ -247,7 +247,7 @@ export default function InvestorSignup() {
                 ))}
               </div>
               <p className="text-white italic mb-3">
-                "Hot Match cut my deal sourcing time by 70%. The GOD Score actually predicts which founders will execute."
+                "[pyth] ai cut my deal sourcing time by 70%. The GOD Score actually predicts which founders will execute."
               </p>
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center text-white font-bold">
@@ -604,6 +604,15 @@ export default function InvestorSignup() {
               )}
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="relative z-10 container mx-auto px-4 py-8 mt-16 border-t border-slate-800/50">
+        <div className="text-center">
+          <p className="text-sm text-gray-500 italic max-w-2xl mx-auto">
+            [pyth] ai serves as an advanced matching system that predicts outcomes from data, similar to Pythia, the oracle of truth.
+          </p>
         </div>
       </div>
     </div>

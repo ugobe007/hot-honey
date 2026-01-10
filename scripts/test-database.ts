@@ -12,7 +12,7 @@ const supabase = createClient(
 );
 
 async function test() {
-  console.log('🔍 HOT MATCH - DATABASE TEST\n');
+  console.log('🔍 PYTH AI - DATABASE TEST\n');
 
   // Test 1: Connection
   const { error } = await supabase.from('startup_uploads').select('id').limit(1);

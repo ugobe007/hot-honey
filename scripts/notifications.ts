@@ -1,5 +1,5 @@
 /**
- * HOT MATCH - NOTIFICATION SERVICE
+ * PYTH AI - NOTIFICATION SERVICE
  * 
  * Sends alerts to Slack and/or Email
  * 
@@ -89,7 +89,7 @@ export async function sendDailyDigest(stats: {
 }): Promise<boolean> {
   return sendSlackAlert({
     level: 'info',
-    title: 'Hot Match - Daily Digest',
+    title: 'pyth ai - Daily Digest',
     message: [
       `📊 *Daily Summary*`,
       `• Startups processed: ${stats.startupsProcessed}`,
@@ -113,7 +113,7 @@ export async function sendHealthAlert(status: 'healthy' | 'warning' | 'critical'
 
   return sendSlackAlert({
     level: status,
-    title: `Hot Match - System ${status.toUpperCase()}`,
+    title: `pyth ai - System ${status.toUpperCase()}`,
     message: failedChecks.length > 0 
       ? `Failed checks:\n${failedChecks.map(c => `• ${c}`).join('\n')}`
       : 'System experiencing issues',
@@ -136,7 +136,7 @@ export async function sendEmailAlert(alert: Alert): Promise<boolean> {
   
   try {
     const { error } = await resend.emails.send({
-      from: 'Hot Match <alerts@resend.dev>', // Use your verified domain later
+      from: 'pyth ai <alerts@resend.dev>', // Use your verified domain later
       to: [toEmail],
       subject: `${emoji} ${alert.title}`,
       html: `
@@ -177,7 +177,7 @@ export async function sendEmailAlert(alert: Alert): Promise<boolean> {
 export async function sendEscalationAlert(issues: string[]): Promise<boolean> {
   const alert: Alert = {
     level: 'critical',
-    title: 'Hot Match - Escalation Required',
+    title: 'pyth ai - Escalation Required',
     message: issues.map(i => `• ${i}`).join('\n'),
     details: { issueCount: issues.length, timestamp: new Date().toISOString() }
   };

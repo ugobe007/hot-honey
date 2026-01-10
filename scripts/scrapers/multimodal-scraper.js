@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * MULTIMODAL SCRAPER - Hot Match
+ * MULTIMODAL SCRAPER - pyth ai
  * ==============================
  * A robust scraper that handles multiple data sources:
  * 
@@ -642,7 +642,7 @@ process.on('SIGTERM', () => {
 
 async function main() {
   console.log('═'.repeat(60));
-  console.log('🔥 HOT MATCH MULTIMODAL SCRAPER');
+  console.log('🔥 PYTH AI MULTIMODAL SCRAPER');
   console.log('═'.repeat(60));
   console.log('📡 RSS + Web Scraping Combined');
   console.log('🔄 Running 24/7 with auto-retry');

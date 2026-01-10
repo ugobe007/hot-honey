@@ -12,11 +12,30 @@
 
 require('dotenv').config();
 const { createClient } = require('@supabase/supabase-js');
+const path = require('path');
 
-const supabase = createClient(
-  process.env.VITE_SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY
-);
+// Validate environment variables
+const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY;
+
+if (!supabaseUrl || !supabaseKey) {
+  console.error('❌ Missing required environment variables!');
+  console.error('   Please ensure your .env file contains VITE_SUPABASE_URL and SUPABASE_SERVICE_KEY');
+  process.exit(1);
+}
+
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+// Load resilient scraper with fault tolerance (won't break if it fails to load)
+let ResilientScraper = null;
+try {
+  const scraperPath = path.join(__dirname, '../scrapers/resilient-scraper.js');
+  const scraperModule = require(scraperPath);
+  ResilientScraper = scraperModule?.ResilientScraper || null;
+} catch (error) {
+  // Silent fail - resilient scraper is optional enhancement
+  console.warn('⚠️  Resilient scraper unavailable (will use basic import):', error.message);
+}
 
 // Quality filters - reject junk names
 const JUNK_PATTERNS = [
@@ -87,6 +106,7 @@ async function importDiscoveredStartups(limit = 50) {
   
   console.log(`   Found ${discovered.length} unimported, ${quality.length} quality names`);
   
+  
   const imported = [];
   
   for (const startup of toImport) {
@@ -106,20 +126,79 @@ async function importDiscoveredStartups(limit = 50) {
       continue;
     }
     
-    // Generate GOD score (55-75 range for RSS imports)
+    // Start with basic data - will enrich if resilient scraper is available
+    let enrichedData = {
+      name: startup.name,
+      website: startup.website,
+      description: startup.description || 'Startup discovered from news feeds',
+      sectors: ['Technology'],
+      status: 'approved',
+      stage: 2, // Seed
+      source_type: 'rss_discovery',
+    };
+    
+    // FAULT-TOLERANT ENRICHMENT: Try resilient scraper, but NEVER fail the import if it errors
+    // This is wrapped in extensive error handling so failures are isolated
+    if (ResilientScraper && startup.website && startup.website.startsWith('http')) {
+      try {
+        const isArticleUrl = startup.website.match(/\/\d{4}\/\d{2}\/|article|news|blog|post|techcrunch|venturebeat/i);
+        
+        // Only try to scrape if it looks like a company website (not article URL)
+        // Article URLs will be handled by inference engine later
+        if (!isArticleUrl) {
+          try {
+            const scraper = new ResilientScraper({
+              enableAutoRecovery: true,
+              enableRateLimiting: true,
+              useAI: false, // Faster, no API costs
+            });
+            
+            const fields = {
+              name: { type: 'string', required: true },
+              description: { type: 'string', required: false },
+              funding: { type: 'currency', required: false },
+              url: { type: 'url', required: false }
+            };
+            
+            // Add timeout to prevent hanging
+            const scrapePromise = scraper.scrapeResilient(startup.website, 'startup', fields);
+            const timeoutPromise = new Promise((_, reject) => 
+              setTimeout(() => reject(new Error('Scraper timeout after 10s')), 10000)
+            );
+            
+            const result = await Promise.race([scrapePromise, timeoutPromise]);
+            
+            if (result && result.success && result.data) {
+              // Merge scraped data safely
+              if (result.data.description && result.data.description.length > 10) {
+                enrichedData.description = result.data.description;
+              }
+              if (result.data.funding) {
+                enrichedData.extracted_data = {
+                  ...(enrichedData.extracted_data || {}),
+                  funding_amount: result.data.funding
+                };
+              }
+            }
+          } catch (scrapeError) {
+            // Completely silent - enrichment is optional, never block import
+            // Log at debug level only if needed
+          }
+        }
+      } catch (enrichError) {
+        // Catch-all for any enrichment errors - never break the import
+        // Continue with basic data
+      }
+    }
+    
+    // Generate GOD score (will be recalculated later, but provide initial estimate)
     const godScore = 55 + Math.floor(Math.random() * 20);
     
     // Insert into startup_uploads
     const { data: inserted, error: insertError } = await supabase
       .from('startup_uploads')
       .insert({
-        name: startup.name,
-        website: startup.website,
-        description: startup.description || 'Startup discovered from news feeds',
-        sectors: ['Technology'],
-        status: 'approved',
-        stage: 2, // Seed
-        source_type: 'url',
+        ...enrichedData,
         total_god_score: godScore,
         team_score: 50 + Math.floor(Math.random() * 20),
         traction_score: 45 + Math.floor(Math.random() * 25),
@@ -145,18 +224,20 @@ async function importDiscoveredStartups(limit = 50) {
       })
       .eq('id', startup.id);
     
-    // Add to matching queue
-    await supabase
-      .from('matching_queue')
-      .insert({
-        startup_id: inserted.id,
-        status: 'pending',
-        attempts: 0,
-        created_at: new Date().toISOString()
-      })
-      .catch(() => {
-        // Ignore duplicate queue entries
-      });
+    // Add to matching queue (ignore errors - duplicates are OK)
+    try {
+      const { error } = await supabase
+        .from('matching_queue')
+        .insert({
+          startup_id: inserted.id,
+          status: 'pending',
+          attempts: 0,
+          created_at: new Date().toISOString()
+        });
+      // Silently ignore errors (duplicates are fine)
+    } catch (queueError) {
+      // Ignore duplicate queue entries
+    }
     
     imported.push(inserted);
   }

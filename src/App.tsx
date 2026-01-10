@@ -48,6 +48,7 @@ import DiscoveredStartups from './pages/DiscoveredStartups';
 import AILogsPage from './pages/AILogsPage';
 import TierMatchingAdmin from './pages/TierMatchingAdmin';
 import GODScoresPage from './pages/GODScoresPage';
+import IndustryRankingsPage from './pages/IndustryRankingsPage';
 import AdminInstructions from './pages/AdminInstructions';
 import MLDashboard from './pages/MLDashboard';
 import ControlCenter from './pages/ControlCenter';
@@ -60,10 +61,12 @@ import SystemHealthDashboard from './pages/SystemHealthDashboard';
 import ScriptsControlPage from './pages/ScriptsControlPage';
 import MasterNavigation from './pages/MasterNavigation';
 import GetMatchedPage from './pages/GetMatchedPage';
+import PricingPage from './pages/PricingPage';
 import InvestorSignup from './pages/InvestorSignup';
 import TrendingPage from './pages/TrendingPage';
 import ServicesPage from './pages/ServicesPage';
 import ServiceDetailPage from './pages/ServiceDetailPage';
+import TemplateSequentialFlow from './pages/TemplateSequentialFlow';
 import CheckoutPage from './pages/CheckoutPage';
 import SubscriptionSuccessPage from './pages/SubscriptionSuccessPage';
 import StrategiesPage from './pages/StrategiesPage';
@@ -77,6 +80,7 @@ import StartupBenchmarksDashboard from './pages/StartupBenchmarksDashboard';
 import SocialSignalsDashboard from './components/SocialSignalsDashboard';
 import GODSettingsPage from './pages/GODSettingsPage';
 import ScraperManagementPage from './pages/ScraperManagementPage';
+import MatchingEngineAdmin from './pages/MatchingEngineAdmin';
 import './App.css';
 import LogoDropdownMenu from './components/LogoDropdownMenu';
 
@@ -99,17 +103,21 @@ const App: React.FC = () => {
   return (
     <AuthProvider>
       <div className="min-h-screen">
-      {/* Hot Match Navigation Bar */}
-      <LogoDropdownMenu />
+      {/* [pyth] ai Navigation Bar - Hidden on landing/matching page */}
+      {location.pathname !== '/' && location.pathname !== '/matching' && location.pathname !== '/matching-engine' && location.pathname !== '/match' && (
+        <LogoDropdownMenu />
+      )}
       <main>
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/home" element={<LandingPage />} />
+          <Route path="/pricing" element={<PricingPage />} /> {/* 💰 Pricing Page */}
           <Route path="/get-matched" element={<GetMatchedPage />} /> {/* ✅ Pricing & Signup */}
           <Route path="/checkout" element={<CheckoutPage />} /> {/* 💳 Stripe Checkout */}
           <Route path="/get-matched/success" element={<SubscriptionSuccessPage />} /> {/* ✅ Success */}
           <Route path="/services" element={<ServicesPage />} /> {/* 🛠️ AI Services */}
           <Route path="/services/:slug" element={<ServiceDetailPage />} /> {/* 🛠️ Service Detail */}
+          <Route path="/startup/:startupId/templates" element={<TemplateSequentialFlow />} /> {/* 📚 Sequential Template Flow */}
           <Route path="/strategies" element={<StrategiesPage />} /> {/* 📚 Fundraising Playbook */}
           <Route path="/trending" element={<TrendingPage />} /> {/* 🔥 Trending & Discovery */}
           <Route path="/discover" element={<TrendingPage />} /> {/* 🔥 Alias for Trending */}
@@ -161,6 +169,7 @@ const App: React.FC = () => {
             <Route path="bulk-upload" element={<BulkUpload />} />
             <Route path="god-scores" element={<GODScoresPage />} />
             <Route path="god-settings" element={<GODSettingsPage />} />
+            <Route path="industry-rankings" element={<IndustryRankingsPage />} />
             <Route path="tier-matching" element={<TierMatchingAdmin />} />
             <Route path="investor-enrichment" element={<InvestorEnrichmentPage />} />
             <Route path="ai-logs" element={<AILogsPage />} />
@@ -169,6 +178,7 @@ const App: React.FC = () => {
             <Route path="ai-intelligence" element={<AIIntelligenceDashboard />} />
             <Route path="ml-dashboard" element={<MLDashboard />} />
             <Route path="analytics" element={<AdminAnalytics />} />
+            <Route path="matching-engine" element={<MatchingEngineAdmin />} />
             <Route path="agent" element={<AgentDashboard />} />
             <Route path="edit-startups" element={<EditStartups />} />
             <Route path="investors/add" element={<QuickAddInvestor />} />

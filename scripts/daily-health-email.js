@@ -7,7 +7,7 @@
  * 
  * Setup:
  *   1. Set SLACK_WEBHOOK_URL or ALERT_EMAIL in .env
- *   2. Add to cron: 0 9 * * * cd /path/to/hot-honey && node scripts/daily-health-email.js
+ *   2. Add to cron: 0 9 * * * cd /path/to/pythai && node scripts/daily-health-email.js
  *   
  * Can also be triggered manually: node scripts/daily-health-email.js
  */
@@ -178,7 +178,7 @@ async function sendSlackAlert(metrics) {
   const blocks = [
     {
       type: 'header',
-      text: { type: 'plain_text', text: `${emoji} Hot Match Daily Health: ${status}` }
+      text: { type: 'plain_text', text: `${emoji} pyth ai Daily Health: ${status}` }
     }
   ];
 
@@ -226,7 +226,7 @@ async function sendEmailAlert(metrics) {
   const hasWarnings = metrics.warnings.length > 0;
   
   const status = hasAlerts ? '🚨 ALERTS DETECTED' : hasWarnings ? '⚠️ Warnings' : '✅ All Systems OK';
-  const subject = `Hot Match Health: ${status}`;
+  const subject = `pyth ai Health: ${status}`;
   
   let html = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -272,7 +272,7 @@ async function sendEmailAlert(metrics) {
   html += `
       <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 24px 0;">
       <p style="color: #9ca3af; font-size: 12px;">
-        Hot Match System Guardian • <a href="http://localhost:5173/admin/health">View Dashboard</a>
+        pyth ai System Guardian • <a href="http://localhost:5173/admin/health">View Dashboard</a>
       </p>
     </div>
   `;
@@ -287,7 +287,7 @@ async function sendEmailAlert(metrics) {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          from: 'Hot Match <alerts@resend.dev>',
+          from: 'pyth ai <alerts@resend.dev>',
           to: ALERT_EMAIL,
           subject: subject,
           html: html
@@ -343,7 +343,7 @@ async function logToDatabase(metrics) {
 
 async function main() {
   console.log('═'.repeat(60));
-  console.log('    🏥 HOT MATCH DAILY HEALTH CHECK');
+  console.log('    🏥 PYTH AI DAILY HEALTH CHECK');
   console.log('═'.repeat(60));
   console.log(`\n📅 ${new Date().toLocaleString()}\n`);
 

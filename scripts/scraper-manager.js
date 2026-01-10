@@ -1,5 +1,5 @@
 /**
- * HOT MATCH SCRAPER MANAGER
+ * PYTH AI SCRAPER MANAGER
  * =========================
  * Manages continuous scraping operations.
  * Coordinates RSS fetching, startup discovery, and data enrichment.

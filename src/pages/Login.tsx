@@ -24,7 +24,7 @@ export default function Login() {
       // Check if admin and redirect accordingly
       const isAdmin = email.includes('admin') || email.includes('ugobe');
       if (isAdmin) {
-        navigate('/admin/control');
+        navigate('/admin'); // Redirect to main admin dashboard
       } else {
         // Check if there's a redirect parameter in the URL
         const params = new URLSearchParams(window.location.search);

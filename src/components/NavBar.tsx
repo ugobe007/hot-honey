@@ -61,12 +61,12 @@ export default function NavBar() {
                 fill="#FCD34D" 
               />
               
-              {/* HOT MATCH Text */}
+              {/* [pyth] ai Text */}
               <g transform="translate(0, 370)">
-                {/* HOT */}
-                <text x="384" y="60" fontSize="140" fontWeight="900" fill="#F8FAFC" textAnchor="middle" fontFamily="Arial Black, sans-serif" stroke="#1E293B" strokeWidth="12">HOT</text>
-                {/* MATCH */}
-                <text x="384" y="180" fontSize="140" fontWeight="900" fill="#F8FAFC" textAnchor="middle" fontFamily="Arial Black, sans-serif" stroke="#1E293B" strokeWidth="12">MATCH</text>
+                {/* [pyth] */}
+                <text x="384" y="60" fontSize="120" fontWeight="900" fill="#F8FAFC" textAnchor="middle" fontFamily="Arial Black, sans-serif" stroke="#1E293B" strokeWidth="12">[pyth]</text>
+                {/* ai */}
+                <text x="384" y="180" fontSize="120" fontWeight="900" fill="#F8FAFC" textAnchor="middle" fontFamily="Arial Black, sans-serif" stroke="#1E293B" strokeWidth="12">ai</text>
                 
                 {/* Wavy bottom decoration */}
                 <path d="M 140 200 Q 180 210, 220 200 Q 260 190, 300 200 Q 340 210, 384 200 Q 428 190, 468 200 Q 508 210, 548 200 Q 588 190, 628 200" 

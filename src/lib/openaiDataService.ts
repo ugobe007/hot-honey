@@ -1,7 +1,7 @@
 import { supabase } from './supabase';
 
 /**
- * Data structure matching Hot Money Honey's existing startup format
+ * Data structure matching pyth ai's existing startup format
  * This is what OpenAI extracts and what gets stored in Supabase
  */
 export interface ScrapedStartupData {
