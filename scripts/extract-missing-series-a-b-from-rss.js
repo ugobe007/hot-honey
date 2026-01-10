@@ -76,7 +76,8 @@ if (!anthropicApiKey) {
   }
   
   console.error('\n   Make sure your .env file has:');
-  console.error('   HOT_HOT_API_KEY=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');
+  console.error('   HOT_HOT_API_KEY=sk-ant-api03-...');
+  console.error('\n   Get your API key from: https://platform.claude.com/settings/keys');
   process.exit(1);
 }
 
