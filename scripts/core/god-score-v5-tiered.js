@@ -76,14 +76,14 @@ function scoreTierA(s) {
   if (allText.includes('platform')) marketScore += 2;
   if (allText.includes('automat')) marketScore += 2;
   
-  // TRACTION (0-25)
-  if (s.mrr > 100000) tractionScore += 15;
-  else if (s.mrr > 10000) tractionScore += 10;
-  else if (s.mrr > 1000) tractionScore += 6;
-  else if (s.mrr > 0) tractionScore += 3;
+  // TRACTION (0-25) - Lowered thresholds for early-stage
+  if (s.mrr > 50000) tractionScore += 15;
+  else if (s.mrr > 5000) tractionScore += 10;
+  else if (s.mrr > 500) tractionScore += 6;
+  else if (s.mrr > 0) tractionScore += 4;
   
-  if (s.customer_count > 100) tractionScore += 8;
-  else if (s.customer_count > 10) tractionScore += 5;
+  if (s.customer_count > 50) tractionScore += 8;
+  else if (s.customer_count > 5) tractionScore += 5;
   else if (s.customer_count > 0) tractionScore += 3;
   
   if (s.is_launched) tractionScore += 3;
@@ -93,13 +93,13 @@ function scoreTierA(s) {
   if (allText.includes('customer')) tractionScore += 2;
   if (/\d+k|\d+m/i.test(allText)) tractionScore += 2;
   
-  // TEAM (0-25)
-  if (s.team_size >= 20) teamScore += 10;
-  else if (s.team_size >= 10) teamScore += 7;
-  else if (s.team_size >= 5) teamScore += 5;
-  else if (s.team_size >= 2) teamScore += 3;
+  // TEAM (0-25) - Lowered thresholds, reward small strong teams
+  if (s.team_size >= 10) teamScore += 10;
+  else if (s.team_size >= 5) teamScore += 8;
+  else if (s.team_size >= 2) teamScore += 5;
+  else if (s.team_size >= 1) teamScore += 3;
   
-  if (s.has_technical_cofounder) teamScore += 6;
+  if (s.has_technical_cofounder) teamScore += 7;
   
   if (/google|meta|amazon|microsoft|apple|stripe/i.test(allText)) teamScore += 5;
   if (/stanford|mit|harvard|berkeley/i.test(allText)) teamScore += 4;
@@ -107,8 +107,13 @@ function scoreTierA(s) {
   if (/sequoia|a16z|andreessen/i.test(allText)) teamScore += 5;
   if (/serial|exited|founded/i.test(allText)) teamScore += 4;
   
+  // A) QUALITY BONUS: Reward solid team + product/market fit
+  const hasStrongTeam = teamScore >= 10;
+  const hasGoodMarket = marketScore >= 10;
+  const qualityBonus = (hasStrongTeam && hasGoodMarket) ? 8 : 0;
+  
   return {
-    total: Math.min(contentScore, 25) + Math.min(marketScore, 25) + Math.min(tractionScore, 25) + Math.min(teamScore, 25),
+    total: Math.min(contentScore, 25) + Math.min(marketScore, 25) + Math.min(tractionScore, 25) + Math.min(teamScore, 25) + qualityBonus,
     content: Math.min(contentScore, 25),
     market: Math.min(marketScore, 25),
     traction: Math.min(tractionScore, 25),
@@ -120,7 +125,7 @@ function scoreTierB(s) {
   // Medium scoring - some data available
   const allText = ((s.description || '') + ' ' + (s.tagline || '') + ' ' + (s.pitch || '')).toLowerCase();
   
-  let score = 15; // Baseline for Tier B
+  let score = 20; // Baseline for Tier B (raised from 18)
   
   // Sector bonus (0-15)
   score += getSectorBonus(s.sectors);
@@ -137,7 +142,16 @@ function scoreTierB(s) {
   // Product signals
   if (s.is_launched) score += 3;
   
-  const total = Math.min(score, 50); // Cap Tier B at 50
+  // Team signals for Tier B
+  if (s.has_technical_cofounder) score += 5;
+  if (/yc|y combinator|techstars|sequoia|a16z/i.test(allText)) score += 6;
+  if (/google|meta|amazon|microsoft|stripe/i.test(allText)) score += 4;
+  
+  // A) Quality bonus for Tier B with strong signals
+  const hasStrongSignals = (allText.includes('ai') || allText.includes('enterprise')) && s.is_launched;
+  if (hasStrongSignals) score += 5;
+  
+  const total = Math.min(score, 55); // Cap Tier B at 55 (raised from 50)
   
   return {
     total,
@@ -150,16 +164,17 @@ function scoreTierB(s) {
 
 function scoreTierC(s) {
   // Sparse data - score based on sector only
-  let score = 10; // Baseline for Tier C
+  let score = 15; // Baseline for Tier C (raised from 12)
   
   // Sector bonus (0-15)
   score += getSectorBonus(s.sectors);
   
   // Minimal signals
-  if (s.website) score += 3;
-  if (s.is_launched) score += 2;
+  if (s.website) score += 4;
+  if (s.is_launched) score += 3;
+  if (s.has_technical_cofounder) score += 4;
   
-  const total = Math.min(score, 35); // Cap Tier C at 35
+  const total = Math.min(score, 40); // Cap Tier C at 40 (raised from 35)
   
   return {
     total,
@@ -171,10 +186,12 @@ function scoreTierC(s) {
 }
 
 async function main() {
-  console.log('\n🔥 GOD SCORE V5 - TIERED SCORING\n');
+  console.log('\n🔥 GOD SCORE V5 - TIERED SCORING (with Oracle Scores)\n');
   console.log('Tier A (Rich): Full scoring, up to 100 pts');
   console.log('Tier B (Some): Partial scoring, up to 50 pts');
-  console.log('Tier C (Sparse): Sector-based, up to 35 pts\n');
+  console.log('Tier C (Sparse): Sector-based, up to 35 pts');
+  console.log('Founder Voice Score: 12.5% weighted component');
+  console.log('Pythia Score: 15% weighted component (when available)\n');
   
   // Get total count first
   const { count: totalCount } = await supabase
@@ -190,9 +207,10 @@ async function main() {
   
   while (true) {
     // Optimized query - only select essential columns to prevent timeout
+    // Added founder_voice_score to incorporate Linguistic Oracle analysis
     const { data: startups, error } = await supabase
       .from('startup_uploads')
-      .select('id, name, description, tagline, pitch, website, sectors, stage, mrr, customer_count, team_size, is_launched, has_demo, has_technical_cofounder')
+      .select('id, name, description, tagline, pitch, website, sectors, stage, mrr, customer_count, team_size, is_launched, has_demo, has_technical_cofounder, founder_voice_score')
       .eq('status', 'approved')
       .range(offset, offset + batchSize - 1)
       .limit(batchSize);
@@ -207,10 +225,37 @@ async function main() {
       const tier = getDataTier(s);
       stats[tier]++;
       
+      // C) Completeness bonus: +5 if startup has 3+ data points
+      const dataPoints = [
+        s.description && s.description.length > 50,
+        s.team_size > 0,
+        (s.mrr > 0 || s.customer_count > 0),
+        s.website && s.website.length > 5
+      ].filter(Boolean).length;
+      const completenessBonus = dataPoints >= 3 ? 5 : 0;
+      
       let scores;
       if (tier === 'A') scores = scoreTierA(s);
       else if (tier === 'B') scores = scoreTierB(s);
       else scores = scoreTierC(s);
+      
+      // Add founder_voice_score contribution (12.5% weight)
+      // founder_voice_score is 0-100, so we scale to 12.5 points max (12.5% of 100)
+      const founderVoiceContribution = s.founder_voice_score != null 
+        ? Math.round((s.founder_voice_score / 100) * 12.5)
+        : 0;
+      
+      // Add pythia_score contribution (15% weight) - boosted from 10%
+      // pythia_score is 0-100, so we scale to 15 points max (15% of 100)
+      const pythiaContribution = s.pythia_score != null 
+        ? Math.round((s.pythia_score / 100) * 15)
+        : 0;
+      
+      // Calculate final total with oracle scores and completeness bonus
+      // Cap at tier limits: A=100, B=55, C=40
+      const tierMax = tier === 'A' ? 100 : tier === 'B' ? 55 : 40;
+      const baseTotal = scores.total;
+      const finalTotal = Math.min(baseTotal + founderVoiceContribution + pythiaContribution + completenessBonus, tierMax);
       
       // Individual updates with error handling and retry logic
       let retries = 3;
@@ -219,7 +264,7 @@ async function main() {
       while (retries > 0 && !success) {
         try {
           const updateResult = await supabase.from('startup_uploads').update({
-            total_god_score: scores.total,
+            total_god_score: finalTotal,
             vision_score: scores.content,
             market_score: scores.market,
             traction_score: scores.traction,

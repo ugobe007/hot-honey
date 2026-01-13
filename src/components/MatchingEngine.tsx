@@ -215,11 +215,11 @@ export default function MatchingEngine() {
   useEffect(() => {
     loadMatches();
     
-    // Refresh matches every 5 minutes to get new ones
+    // Refresh matches every 10 minutes to get new batch
     const refreshInterval = setInterval(() => {
-      console.log('🔄 Refreshing matches...');
+      console.log('🔄 Refreshing matches (10-minute replenish)...');
       loadMatches();
-    }, 5 * 60 * 1000); // 5 minutes
+    }, 10 * 60 * 1000); // 10 minutes
     
     return () => clearInterval(refreshInterval);
   }, []);
@@ -268,7 +268,7 @@ export default function MatchingEngine() {
     }
   }, [showLightning]);
 
-  // Auto-advance to next batch every 5 minutes (300,000 ms)
+  // Auto-advance to next batch every 10 minutes
   useEffect(() => {
     if (matches.length === 0) return;
     const batchAdvanceInterval = setInterval(() => {
@@ -277,7 +277,7 @@ export default function MatchingEngine() {
         setCurrentIndex(0); // Reset to first match in new batch
         return nextBatch;
       });
-    }, 300000); // 5 minutes
+    }, 10 * 60 * 1000); // 10 minutes
     return () => clearInterval(batchAdvanceInterval);
   }, [matches.length, totalBatches]);
 
@@ -290,42 +290,17 @@ export default function MatchingEngine() {
     return () => clearInterval(godInterval);
   });
 
-  // Educational match logic: Show educational match every ~30 seconds, stay for 10 seconds
+  // Simple match cycling: show each match for 3 seconds, no duplicates within batch
+  // Each startup-investor pair appears exactly once per batch
   useEffect(() => {
     if (batchMatches.length === 0) return;
     
-    let normalCycleInterval: NodeJS.Timeout;
-    let educationalShowInterval: NodeJS.Timeout;
-    let educationalHideTimer: NodeJS.Timeout | null = null;
+    // Cycle to next match every 3 seconds
+    const cycleInterval = setInterval(() => {
+      handleNextMatch();
+    }, 3000);
     
-    const startNormalCycle = () => {
-      normalCycleInterval = setInterval(() => {
-        handleNextMatch();
-      }, 3000);
-    };
-    
-    // Schedule educational matches every 30 seconds
-    educationalShowInterval = setInterval(() => {
-      // Clear normal cycle while showing educational match
-      if (normalCycleInterval) clearInterval(normalCycleInterval);
-      
-      setIsEducationalMatch(true);
-      
-      // After 10 seconds, hide educational match and resume normal cycle
-      educationalHideTimer = setTimeout(() => {
-        setIsEducationalMatch(false);
-        startNormalCycle(); // Resume normal 3-second cycling
-      }, 10000);
-    }, 30000); // Show educational match every 30 seconds
-    
-    // Start normal cycle initially
-    startNormalCycle();
-    
-    return () => {
-      if (normalCycleInterval) clearInterval(normalCycleInterval);
-      if (educationalShowInterval) clearInterval(educationalShowInterval);
-      if (educationalHideTimer) clearTimeout(educationalHideTimer);
-    };
+    return () => clearInterval(cycleInterval);
   }, [batchMatches.length]);
 
   // REMOVED: saveMatchesToDatabase - Queue processor handles match creation
@@ -549,8 +524,19 @@ export default function MatchingEngine() {
         }
       }
       
-      // Final shuffle within groups of different startups
-      const shuffledMatches = interleavedMatches;
+      // DEDUPLICATION: Ensure each startup-investor pair appears only once
+      const seenPairs = new Set<string>();
+      const uniqueMatches = interleavedMatches.filter(m => {
+        const pairKey = `${m.startup.id}-${m.investor.id}`;
+        if (seenPairs.has(pairKey)) return false;
+        seenPairs.add(pairKey);
+        return true;
+      });
+      
+      console.log(`✅ Deduplicated: ${interleavedMatches.length} → ${uniqueMatches.length} unique matches`);
+      
+      // Final shuffled matches (no duplicates)
+      const shuffledMatches = uniqueMatches;
       
       setDebugInfo({
         source: 'startup_investor_matches table (pre-calculated)',
@@ -1077,11 +1063,7 @@ export default function MatchingEngine() {
                 </span>
               </p>
               <p className="text-gray-500 text-xs mt-1">
-                {isEducationalMatch ? (
-                  <>🔥 Educational Match • Click flame icon to learn more • Shows for 10 seconds</>
-                ) : (
-                  <>⚡ Cycling every 3 seconds • 10 matches per minute</>
-                )}
+                <>⚡ Cycling every 3 seconds • New batch every 10 minutes • No duplicates</>
               </p>
             </div>
           </div>
@@ -1456,7 +1438,7 @@ export default function MatchingEngine() {
 
               <div className="bg-white/10 rounded-xl p-4">
                 <h3 className="font-bold text-xl mb-2">🔄 Fresh Opportunities</h3>
-                <p className="text-gray-300">New matches cycle every 3 seconds with automatic rotation every 60 minutes, ensuring you always see the latest and most relevant opportunities.</p>
+                <p className="text-gray-300">New matches cycle every 3 seconds with automatic batch refresh every 10 minutes, ensuring you always see the latest and most relevant opportunities.</p>
               </div>
 
               <div className="bg-white/10 rounded-xl p-4">
