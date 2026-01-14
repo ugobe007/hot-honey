@@ -752,7 +752,7 @@ export default function MatchingEngine() {
             <Link to="/about" className="inline-block hover:opacity-80 transition-opacity cursor-pointer">
               <span className="bg-gradient-to-r from-amber-400 via-orange-400 to-cyan-400 bg-clip-text text-transparent font-semibold">[pyth]</span>{' '}
               <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-violet-400 bg-clip-text text-transparent font-semibold">ai</span>
-            </Link> • Social Signaling + GOD Score™
+            </Link> • GOD Score™
           </p>
           
           {/* Trending Button - Explore Startups & Investors */}
