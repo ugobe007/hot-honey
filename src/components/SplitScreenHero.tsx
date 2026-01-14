@@ -103,7 +103,7 @@ const SplitScreenHero: React.FC<SplitScreenHeroProps> = ({ onAnalysisComplete })
   return (
     <div className="w-full px-2 sm:px-4">
       {/* Match the card grid width - aligned with startup card left edge to investor card right edge */}
-      <div className="max-w-[340px] sm:max-w-[940px] lg:max-w-[968px] mx-auto">
+      <div className="max-w-[340px] sm:max-w-[978px] lg:max-w-[1006px] mx-auto">
         {/* COMPACT UNIFIED PANEL */}
         <div className="relative bg-gradient-to-r from-[#0f0f0f] via-[#131313] to-[#0f0f0f] border border-violet-500/30 rounded-xl overflow-hidden">
           {/* Gradient accent line */}
@@ -150,7 +150,7 @@ const SplitScreenHero: React.FC<SplitScreenHeroProps> = ({ onAnalysisComplete })
                   </div>
                   <button
                     type="submit"
-                    className="flex items-center gap-1.5 px-3 sm:px-4 py-2 bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white font-bold rounded-lg transition-all text-xs sm:text-sm whitespace-nowrap"
+                    className="flex items-center gap-1.5 px-3 sm:px-4 py-2 bg-[#0a0a0a] border border-cyan-400 hover:bg-cyan-400/10 text-cyan-400 font-semibold rounded-lg transition-all text-xs sm:text-sm whitespace-nowrap"
                   >
                     <Sparkles className="w-4 h-4" />
                     <span className="hidden sm:inline">Find My Investors</span>
