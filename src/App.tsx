@@ -123,11 +123,11 @@ const App: React.FC = () => {
           <Route path="/trending" element={<TrendingPage />} /> {/* 🔥 Trending & Discovery */}
           <Route path="/discover" element={<TrendingPage />} /> {/* 🔥 Alias for Trending */}
           <Route path="/social-signals" element={<SocialSignalsDashboard />} /> {/* 🕵️ Social Signals Intelligence */}
-          <Route path="/matching-engine" element={<MatchingEngine />} />
-          <Route path="/matching" element={<MatchingEngine />} />
-          <Route path="/match" element={<MatchingEngine />} />
+          <Route path="/match" element={<MatchingEngine />} /> {/* 🎯 Primary Matching Page */}
+          <Route path="/matching-engine" element={<Navigate to="/match" replace />} /> {/* Redirect alias */}
+          <Route path="/matching" element={<Navigate to="/match" replace />} /> {/* Redirect alias */}
           <Route path="/instant-matches" element={<InstantMatches />} /> {/* 🚀 Instant URL analysis results */}
-          <Route path="/saved-matches" element={<SavedMatches />} />
+          <Route path="/saved-matches" element={<SavedMatches />} /> {/* 💾 Saved Matches */}
           <Route path="/vote-cards" element={<FrontPageNew />} />
           {/* Old /signup route removed - use /get-matched for startups or /investor/signup for investors */}
           <Route path="/login" element={<Login />} />
@@ -148,7 +148,7 @@ const App: React.FC = () => {
           <Route path="/startup/:id" element={<StartupDetail />} />
           <Route path="/startup/:id/matches" element={<StartupMatches />} /> {/* ✅ Startup matches page */}
           <Route path="/investor/:id/matches" element={<InvestorMatches />} /> {/* ✅ Investor matches page */}
-          <Route path="/match-review" element={<MatchReviewPage />} /> {/* ✅ Match review dashboard */}
+          {/* /match-review moved to admin routes */}
           <Route path="/deals" element={<Deals />} />
           <Route path="/startups" element={<DashboardRouter />} /> {/* ✅ Redirects to unified dashboard */}
           <Route path="/dashboard" element={<DashboardRouter />} /> {/* ✅ UNIFIED DASHBOARD - redirects admins */}
@@ -181,6 +181,7 @@ const App: React.FC = () => {
             <Route path="ml-dashboard" element={<MLDashboard />} />
             <Route path="analytics" element={<AdminAnalytics />} />
             <Route path="matching-engine" element={<MatchingEngineAdmin />} />
+            <Route path="match-review" element={<MatchReviewPage />} /> {/* Test/dev match review */}
             <Route path="agent" element={<AgentDashboard />} />
             <Route path="edit-startups" element={<EditStartups />} />
             <Route path="investors/add" element={<QuickAddInvestor />} />
