@@ -104,8 +104,8 @@ const SplitScreenHero: React.FC<SplitScreenHeroProps> = ({ onAnalysisComplete })
     <div className="w-full px-2 sm:px-4">
       {/* Match the card grid width - aligned with startup card left edge to investor card right edge */}
       <div className="max-w-[340px] sm:max-w-[1030px] lg:max-w-[1058px] mx-auto">
-        {/* COMPACT UNIFIED PANEL */}
-        <div className="relative bg-gradient-to-r from-[#0f0f0f] via-[#131313] to-[#0f0f0f] border border-violet-500/30 rounded-xl overflow-hidden">
+        {/* COMPACT UNIFIED PANEL with purple glow */}
+        <div className="relative bg-gradient-to-r from-[#0f0f0f] via-[#131313] to-[#0f0f0f] border border-violet-500/40 rounded-xl overflow-hidden shadow-[0_0_30px_rgba(139,92,246,0.3)] hover:shadow-[0_0_40px_rgba(139,92,246,0.4)] transition-shadow duration-300">
           {/* Gradient accent line */}
           <div className="h-0.5 bg-gradient-to-r from-violet-600 via-cyan-500 to-emerald-500"></div>
           
