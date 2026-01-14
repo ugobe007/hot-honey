@@ -207,12 +207,11 @@ export default function GetMatchedPage() {
           </div>
           
           <h1 className="text-4xl md:text-5xl font-black text-white mb-3">
-            Find Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-amber-400 to-orange-500">Perfect Investor</span>
+            Find Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-amber-400 to-orange-500">Perfect Match in Seconds</span>
           </h1>
           
           <p className="text-xl text-slate-400 max-w-2xl mx-auto">
-            Get matched with investors who actually fund your sector and stage. 
-            <span className="text-orange-400 font-semibold"> In under 2 seconds.</span>
+            Get matched with investors who actually fund your sector and stage.
           </p>
           
           {/* Primary Action Buttons - Fundraising Toolkit & Founder Toolkit */}

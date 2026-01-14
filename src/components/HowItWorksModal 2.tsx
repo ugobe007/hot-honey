@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { X, Brain, Users, Zap, Target, TrendingUp, Sparkles, ChevronRight, BarChart3, Flame, Lightbulb, Code2 } from 'lucide-react';
+import { X, Brain, Users, Zap, Target, TrendingUp, Sparkles, ChevronRight, Flame, Lightbulb, Code2, Rocket, Briefcase, Building2 } from 'lucide-react';
 import FlameIcon from './FlameIcon';
 
 interface HowItWorksModalProps {
@@ -15,18 +15,19 @@ const HowItWorksModal: React.FC<HowItWorksModalProps> = ({ isOpen, onClose, show
   const [isAnimating, setIsAnimating] = useState(false);
   const [demoScores, setDemoScores] = useState({ god: 0, yc: 0, sequoia: 0, a16z: 0 });
   const [showDemoScores, setShowDemoScores] = useState(false);
+  const [matchAnimationPhase, setMatchAnimationPhase] = useState(0); // 0=idle, 1=cards fly in, 2=match revealed, 3=score animates
 
   const steps = [
     {
-      icon: Flame,
+      icon: Rocket,
       title: "Startups Submit",
       description: "Founders submit their pitch, team background, traction metrics, and funding goals.",
-      color: "from-cyan-500 to-blue-500",
+      color: "from-emerald-500 to-green-500",
       details: ["Company overview", "Team credentials", "Traction data", "Funding ask"]
     },
     {
       icon: Brain,
-      title: "AI Analyzes with GOD Algorithm",
+      title: "AI Analyzes with GOD Score™",
       description: "Our proprietary scoring system evaluates startups using criteria from top 20 VCs.",
       color: "from-purple-500 to-indigo-500",
       details: ["Team Score (20%)", "Traction Score (18%)", "Market Score (15%)", "Product Score (12%)"]
@@ -42,7 +43,7 @@ const HowItWorksModal: React.FC<HowItWorksModalProps> = ({ isOpen, onClose, show
       icon: Users,
       title: "Anonymous Discovery",
       description: "Investors browse matches anonymously. Identity revealed only when they engage.",
-      color: "from-cyan-500 to-blue-500",
+      color: "from-orange-500 to-amber-500",
       details: ["Private browsing", "Swipe to save", "No cold outreach", "Quality signal"]
     },
     {
@@ -53,11 +54,11 @@ const HowItWorksModal: React.FC<HowItWorksModalProps> = ({ isOpen, onClose, show
       details: ["User voting impact", "News integration", "Competitor tracking", "Growth signals"]
     },
     {
-      icon: BarChart3,
-      title: "Multi-VC Algorithm Views",
-      description: "See how top VCs would score the same startup - YC, Sequoia, A16Z styles all in one place.",
-      color: "from-cyan-500 to-blue-500",
-      details: ["GOD Algorithm", "YC Smell Test", "Sequoia Style", "A16Z Style"],
+      icon: Zap,
+      title: "Perfect Matches... in Seconds",
+      description: "Watch how we match startups with their ideal investors using GOD Score™",
+      color: "from-violet-500 to-purple-500",
+      details: ["GOD Score™", "YC Style", "Sequoia Style", "A16Z Style"],
       isDemo: true
     }
   ];
@@ -86,27 +87,31 @@ const HowItWorksModal: React.FC<HowItWorksModalProps> = ({ isOpen, onClose, show
     if (currentStep === 5 && isOpen) {
       setShowDemoScores(false);
       setDemoScores({ god: 0, yc: 0, sequoia: 0, a16z: 0 });
+      setMatchAnimationPhase(0);
       
-      setTimeout(() => setShowDemoScores(true), 300);
+      // Phase 1: Cards fly in
+      setTimeout(() => setMatchAnimationPhase(1), 300);
       
-      // Animate each score
-      const targetScores = { god: 94, yc: 87, sequoia: 91, a16z: 89 };
-      const keys = ['god', 'yc', 'sequoia', 'a16z'] as const;
+      // Phase 2: Match revealed
+      setTimeout(() => setMatchAnimationPhase(2), 1200);
       
-      keys.forEach((key, index) => {
-        setTimeout(() => {
-          let current = 0;
-          const target = targetScores[key];
-          const interval = setInterval(() => {
-            current += 3;
-            if (current >= target) {
-              current = target;
-              clearInterval(interval);
-            }
-            setDemoScores(prev => ({ ...prev, [key]: current }));
-          }, 25);
-        }, index * 200);
-      });
+      // Phase 3: Score animates
+      setTimeout(() => {
+        setMatchAnimationPhase(3);
+        setShowDemoScores(true);
+        
+        // Animate the GOD score
+        let current = 0;
+        const target = 94;
+        const interval = setInterval(() => {
+          current += 4;
+          if (current >= target) {
+            current = target;
+            clearInterval(interval);
+          }
+          setDemoScores(prev => ({ ...prev, god: current }));
+        }, 30);
+      }, 1800);
     }
   }, [currentStep, isOpen]);
 
@@ -209,34 +214,110 @@ const HowItWorksModal: React.FC<HowItWorksModalProps> = ({ isOpen, onClose, show
                   {steps[currentStep].description}
                 </p>
                 
-                {/* Step 6: Algorithm Demo with animated scores */}
-                {currentStep === 5 && showDemoScores ? (
-                  <div className="grid grid-cols-2 gap-3">
-                    {[
-                      { key: 'god', name: 'GOD', icon: Flame, color: 'from-red-500 to-blue-500', textColor: 'text-red-400' },
-                      { key: 'yc', name: 'YC', icon: Lightbulb, color: 'from-cyan-500 to-blue-500', textColor: 'text-cyan-400' },
-                      { key: 'sequoia', name: 'Sequoia', icon: TrendingUp, color: 'from-emerald-500 to-green-500', textColor: 'text-emerald-400' },
-                      { key: 'a16z', name: 'A16Z', icon: Code2, color: 'from-purple-500 to-indigo-500', textColor: 'text-purple-400' },
-                    ].map((algo) => {
-                      const AlgoIcon = algo.icon;
-                      const score = demoScores[algo.key as keyof typeof demoScores];
-                      return (
-                        <div key={algo.key} className="bg-white/5 rounded-xl p-3 border border-white/10">
+                {/* Step 6: Matching Cards Animation Demo */}
+                {currentStep === 5 ? (
+                  <div className="relative">
+                    {/* Matching Cards Container */}
+                    <div className="flex items-center justify-center gap-2 md:gap-4">
+                      {/* Startup Card - flies in from left */}
+                      <div 
+                        className={`relative w-28 md:w-36 transition-all duration-700 ease-out ${
+                          matchAnimationPhase >= 1 
+                            ? 'opacity-100 translate-x-0' 
+                            : 'opacity-0 -translate-x-20'
+                        }`}
+                      >
+                        <div className="bg-gradient-to-br from-emerald-900/80 to-emerald-950/80 rounded-xl p-3 border-2 border-emerald-500/60 shadow-lg shadow-emerald-500/30">
                           <div className="flex items-center gap-2 mb-2">
-                            <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${algo.color} flex items-center justify-center`}>
-                              <AlgoIcon className="w-4 h-4 text-white" />
+                            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center">
+                              <Rocket className="w-4 h-4 text-white" />
                             </div>
-                            <span className="text-white text-sm font-semibold">{algo.name}</span>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-white text-xs font-bold truncate">TechStartup</p>
+                              <p className="text-emerald-300 text-[10px]">AI/ML</p>
+                            </div>
                           </div>
-                          <div className={`text-2xl font-bold ${algo.textColor} font-mono`}>
-                            {score > 0 ? score : '---'}<span className="text-gray-500 text-sm">/100</span>
-                          </div>
-                          <div className="h-1.5 bg-black/30 rounded-full mt-2 overflow-hidden">
-                            <div className={`h-full bg-gradient-to-r ${algo.color} transition-all duration-300`} style={{ width: `${score}%` }} />
+                          <div className="text-[10px] text-gray-400">Series A • $5M</div>
+                        </div>
+                      </div>
+
+                      {/* Center Match Indicator */}
+                      <div 
+                        className={`relative flex flex-col items-center transition-all duration-500 ${
+                          matchAnimationPhase >= 2 
+                            ? 'opacity-100 scale-100' 
+                            : 'opacity-0 scale-50'
+                        }`}
+                      >
+                        {/* Fire icon */}
+                        <div className="relative mb-1">
+                          <img 
+                            src="/images/fire_icon_01.jpg" 
+                            alt="Match" 
+                            className="w-10 h-10 md:w-12 md:h-12 object-contain animate-pulse"
+                          />
+                          <div className="absolute inset-0 bg-orange-500/30 rounded-full blur-xl animate-pulse" />
+                        </div>
+                        
+                        {/* GOD Score */}
+                        <div 
+                          className={`bg-gradient-to-r from-slate-800 to-slate-900 rounded-full px-3 py-1 border border-violet-500/50 transition-all duration-300 ${
+                            matchAnimationPhase >= 3 ? 'opacity-100' : 'opacity-0'
+                          }`}
+                        >
+                          <div className="flex items-center gap-1">
+                            <Brain className="w-3 h-3 text-violet-400" />
+                            <span className="text-white font-bold text-sm">{demoScores.god}</span>
+                            <span className="text-gray-400 text-xs">%</span>
                           </div>
                         </div>
-                      );
-                    })}
+                        
+                        {/* Match text */}
+                        <p className={`text-orange-400 text-xs font-bold mt-1 transition-opacity duration-300 ${
+                          matchAnimationPhase >= 3 ? 'opacity-100' : 'opacity-0'
+                        }`}>
+                          HOT MATCH!
+                        </p>
+                      </div>
+
+                      {/* Investor Card - flies in from right */}
+                      <div 
+                        className={`relative w-28 md:w-36 transition-all duration-700 ease-out ${
+                          matchAnimationPhase >= 1 
+                            ? 'opacity-100 translate-x-0' 
+                            : 'opacity-0 translate-x-20'
+                        }`}
+                      >
+                        <div className="bg-gradient-to-br from-violet-900/80 to-purple-950/80 rounded-xl p-3 border-2 border-violet-500/60 shadow-lg shadow-violet-500/30">
+                          <div className="flex items-center gap-2 mb-2">
+                            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center">
+                              <Briefcase className="w-4 h-4 text-white" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-white text-xs font-bold truncate">Top VC Fund</p>
+                              <p className="text-violet-300 text-[10px]">Series A-B</p>
+                            </div>
+                          </div>
+                          <div className="text-[10px] text-gray-400">$500K-$10M</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Connection lines (animated) */}
+                    <svg 
+                      className={`absolute inset-0 w-full h-full pointer-events-none transition-opacity duration-500 ${
+                        matchAnimationPhase >= 2 ? 'opacity-100' : 'opacity-0'
+                      }`}
+                      style={{ zIndex: -1 }}
+                    >
+                      <defs>
+                        <linearGradient id="matchLineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                          <stop offset="0%" stopColor="#10b981" stopOpacity="0.5" />
+                          <stop offset="50%" stopColor="#f97316" stopOpacity="0.8" />
+                          <stop offset="100%" stopColor="#8b5cf6" stopOpacity="0.5" />
+                        </linearGradient>
+                      </defs>
+                    </svg>
                   </div>
                 ) : (
                   /* Detail pills for other steps */

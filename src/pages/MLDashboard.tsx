@@ -182,10 +182,21 @@ export default function MLDashboard() {
         }, 5000);
       }, 2000);
       
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error running ML training:', error);
       setTrainingStatus('idle');
-      alert(`❌ Failed to start ML training: ${error.message}\n\nYou can also run training manually:\n  node run-ml-training.js`);
+      
+      // Check if it's a network/connection error
+      const isNetworkError = error.message?.includes('Load failed') || 
+                             error.message?.includes('Failed to fetch') ||
+                             error.message?.includes('NetworkError') ||
+                             error.name === 'TypeError';
+      
+      if (isNetworkError) {
+        alert(`❌ Cannot connect to API server\n\nThe API server at ${import.meta.env.VITE_API_URL || 'http://localhost:3002'} is not running.\n\nTo fix:\n1. Start the server: cd server && node index.js\n2. Or run training manually: node run-ml-training.js`);
+      } else {
+        alert(`❌ Failed to start ML training: ${error.message}\n\nYou can also run training manually:\n  node run-ml-training.js`);
+      }
     }
   };
 
@@ -658,11 +669,58 @@ export default function MLDashboard() {
                     <tr key={rec.id} className="border-t border-slate-700/50 hover:bg-slate-800/30">
                       <td className="px-4 py-3 text-white font-medium">{rec.title}</td>
                       <td className="px-4 py-3 text-slate-400 text-sm max-w-md">
-                        {rec.description}
+                        {rec.description && !rec.current_value && !rec.proposed_value && (
+                          <div>{rec.description}</div>
+                        )}
                         {rec.current_value && rec.proposed_value && (
-                          <div className="mt-2 text-xs text-slate-500">
-                            <div>Current: {JSON.stringify(rec.current_value)}</div>
-                            <div>Proposed: {JSON.stringify(rec.proposed_value)}</div>
+                          <div className="space-y-2">
+                            {rec.description && (
+                              <div className="text-slate-300 mb-2">{rec.description}</div>
+                            )}
+                            {rec.recommendation_type === 'weight_change' || (typeof rec.current_value === 'object' && typeof rec.proposed_value === 'object') ? (
+                              <div className="bg-slate-800/50 rounded-lg p-3 border border-slate-700/50">
+                                <div className="grid grid-cols-2 gap-3 text-xs">
+                                  <div>
+                                    <div className="text-slate-500 mb-1.5 font-medium">Current:</div>
+                                    <div className="space-y-1">
+                                      {Object.entries(rec.current_value).map(([key, value]) => (
+                                        <div key={key} className="flex justify-between">
+                                          <span className="text-slate-400 capitalize">{key.replace(/_/g, ' ')}:</span>
+                                          <span className="text-slate-300 font-mono">{value as any}</span>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  </div>
+                                  <div>
+                                    <div className="text-slate-500 mb-1.5 font-medium">Proposed:</div>
+                                    <div className="space-y-1">
+                                      {Object.entries(rec.proposed_value).map(([key, value]) => {
+                                        const currentVal = rec.current_value[key];
+                                        const changed = currentVal !== value;
+                                        return (
+                                          <div key={key} className={`flex justify-between ${changed ? 'text-green-400' : 'text-slate-300'}`}>
+                                            <span className="capitalize">{key.replace(/_/g, ' ')}:</span>
+                                            <span className={`font-mono ${changed ? 'font-semibold' : ''}`}>
+                                              {value as any}
+                                              {changed && (
+                                                <span className="ml-1 text-green-500">
+                                                  ({currentVal > (value as number) ? '↓' : '↑'} {Math.abs((value as number) - currentVal).toFixed(1)})
+                                                </span>
+                                              )}
+                                            </span>
+                                          </div>
+                                        );
+                                      })}
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="mt-2 text-xs space-y-1">
+                                <div className="text-slate-500">Current: <span className="text-slate-300">{JSON.stringify(rec.current_value)}</span></div>
+                                <div className="text-slate-500">Proposed: <span className="text-green-400">{JSON.stringify(rec.proposed_value)}</span></div>
+                              </div>
+                            )}
                           </div>
                         )}
                       </td>

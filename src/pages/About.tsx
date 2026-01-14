@@ -347,7 +347,7 @@ export default function About() {
         {/* CTA Section */}
         <div className="text-center">
           <div className="bg-gradient-to-br from-purple-900/50 to-indigo-900/50 backdrop-blur-lg rounded-3xl p-12 border border-purple-500/30 max-w-4xl mx-auto">
-            <h2 className="text-4xl font-bold text-white mb-4">Ready to Find Your Perfect Match?</h2>
+            <h2 className="text-4xl font-bold text-white mb-4">Perfect Matches... in Seconds</h2>
             <p className="text-xl text-gray-300 mb-8">
               Join hundreds of startups and investors already making connections on [pyth] ai.
             </p>

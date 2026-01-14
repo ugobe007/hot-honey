@@ -1,0 +1,4 @@
+id,startup_id,source_type,tier,source_url,created_at,date_published,text,author
+1,s1,forum_post,1,https://news.ycombinator.com/item?id=1,2026-01-01T12:00:00Z,2026-01-01T12:00:00Z,"We built an API that drops latency from 220ms to 35ms. Paying customers in fintech.",someone
+2,s1,company_blog,3,https://example.com/blog/launch,2026-01-03T12:00:00Z,2026-01-03T12:00:00Z,"We launched v2 with SOC2 controls and a new SDK.",founder
+3,s2,forum_post,1,https://news.ycombinator.com/item?id=2,2026-01-02T12:00:00Z,2026-01-02T12:00:00Z,"No moat here, feels like a commodity. Competition already solved this.",critic

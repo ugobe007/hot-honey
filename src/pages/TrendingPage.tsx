@@ -10,7 +10,7 @@ import {
 import FlameIcon from '../components/FlameIcon';
 import { supabase } from '../lib/supabase';
 import LogoDropdownMenu from '../components/LogoDropdownMenu';
-import HowItWorksModal from '../components/HowItWorksModal';
+import LiveMatchDemo from '../components/LiveMatchDemo';
 import TrendingAnalytics from '../components/TrendingAnalytics';
 
 // Algorithm Definitions
@@ -20,8 +20,8 @@ const ALGORITHMS = [
     name: 'GOD Algorithm',
     shortName: 'GOD',
     icon: Flame,
-    color: 'from-red-500 to-blue-500',
-    bgColor: 'from-slate-800/40 to-slate-700/30',
+    color: 'from-red-500 to-amber-500',
+    bgColor: 'from-red-900/40 to-amber-900/30',
     borderColor: 'border-red-500/40',
     description: 'Our proprietary 14-factor scoring system: Team, Traction, Market, Product, Vision + YC Philosophy + Smell Tests.',
     formula: 'Balanced composite (0-100)',
@@ -32,9 +32,9 @@ const ALGORITHMS = [
     name: 'YC Smell Test',
     shortName: 'YC',
     icon: Lightbulb,
-    color: 'from-cyan-600 to-blue-600',
-    bgColor: 'from-slate-800/40 to-slate-700/30',
-    borderColor: 'border-cyan-500/40',
+    color: 'from-orange-500 to-amber-500',
+    bgColor: 'from-orange-900/40 to-amber-900/30',
+    borderColor: 'border-orange-500/40',
     description: "Paul Graham's 5 heuristics: Can 2 people build this? Users emotionally attached? Learning in public? Inevitable? Massive if works?",
     formula: 'Smell Tests + GOD (0-100)',
     weight: { smell_test: 20, god: 1 }
@@ -109,134 +109,90 @@ interface Startup {
 }
 
 // ALL SCORES NORMALIZED TO 0-100 SCALE
+// GOD score is our comprehensive baseline using 50+ data points
+// VC scores apply their unique investment thesis as modifiers to create differentiation
 
 // Calculate YC Score (normalized 0-100)
+// YC philosophy: Favors early-stage velocity, user obsession, lean teams
+// Penalizes: Over-capitalization, slow iteration, weak founder-market fit
 function calculateYCScore(startup: Startup): number {
   const godScore = startup.total_god_score || 0;
-  const smellTestScore = startup.smell_test_score;
   
-  // If smell test score exists, use the combined formula
-  if (smellTestScore !== null && smellTestScore !== undefined) {
-    // Original: (smellTest × 20) + godScore = max 200
-    // Normalized: divide by 2 to get 0-100
-    const smellBonus = smellTestScore * 20;
-    return Math.round((smellBonus + godScore) / 2);
-  }
+  // YC modifiers (can increase OR decrease from GOD baseline)
+  let modifier = 0;
   
-  // If no smell test data, use GOD score directly but apply YC-style weighting
-  // YC values speed, insight, user love - these are already in GOD score
-  // So we use GOD score as base, but don't penalize for missing smell tests
-  // Add a small bonus to account for YC's preference for execution over polish
-  return Math.min(Math.round(godScore * 1.1), 100); // 10% boost, cap at 100
+  // YC loves strong smell test (founder intuition/passion)
+  modifier += (startup.smell_test_score || 0) * 2; // Up to +10
+  
+  // YC penalizes over-funded early stage (prefer lean)
+  const funding = startup.funding_amount || 0;
+  if (funding > 5000000) modifier -= 5; // Raised too much too early
+  
+  // YC values technical founders
+  if (startup.has_technical_cofounder) modifier += 3;
+  
+  // YC is tough on market timing
+  modifier -= 3; // Base penalty (YC is selective)
+  
+  return Math.max(0, Math.min(100, Math.round(godScore + modifier)));
 }
 
 // Calculate Sequoia Score (normalized 0-100)
-// Sequoia focuses on: Traction (execution) > Market (TAM) > Team
+// Sequoia philosophy: Market size obsessed, execution focused, metrics driven
+// Penalizes: Small TAM, weak traction, unclear path to scale
 function calculateSequoiaScore(startup: Startup): number {
-  const traction = startup.traction_score;
-  const market = startup.market_score;
-  const team = startup.team_score;
-  
-  // If component scores exist, use the original formula
-  if (traction !== null && traction !== undefined && 
-      market !== null && market !== undefined && 
-      team !== null && team !== undefined) {
-    // Original: traction×2 + market×1.5 + team×1 = max 450
-    // Normalized: divide by 4.5 to get 0-100
-    return Math.round((traction * 2.0 + market * 1.5 + team * 1.0) / 4.5);
-  }
-  
-  // If component scores don't exist, derive from available data
-  // Sequoia heavily weights traction (execution), then market size, then team
   const godScore = startup.total_god_score || 0;
   
-  // Derive traction signal from available data
-  let tractionSignal = 0;
-  if (startup.mrr && startup.mrr > 0) tractionSignal += 30;
-  if (startup.arr && startup.arr > 100000) tractionSignal += 20;
-  if (startup.growth_rate_monthly && startup.growth_rate_monthly > 10) tractionSignal += 20;
-  if (startup.customer_count && startup.customer_count > 100) tractionSignal += 10;
-  tractionSignal = Math.min(tractionSignal, 100);
+  // Sequoia modifiers
+  let modifier = 0;
   
-  // Derive market signal
-  let marketSignal = 0;
-  const hotSectors = ['AI', 'ML', 'Fintech', 'Healthcare', 'Climate', 'Enterprise', 'SaaS'];
-  if (startup.sectors?.some(s => hotSectors.some(h => s.includes(h)))) marketSignal += 30;
-  if (startup.sectors && startup.sectors.length >= 2) marketSignal += 10;
-  marketSignal = Math.min(marketSignal, 100);
+  // Sequoia LOVES strong traction
+  const traction = startup.traction_score || 0;
+  if (traction > 70) modifier += 5;
+  else if (traction < 40) modifier -= 5;
   
-  // Derive team signal
-  let teamSignal = 0;
-  if (startup.technical_cofounders && startup.technical_cofounders > 0) teamSignal += 20;
-  if (startup.team_size && startup.team_size >= 3) teamSignal += 10;
-  teamSignal = Math.min(teamSignal, 100);
+  // Sequoia values large markets
+  const market = startup.market_score || 0;
+  if (market > 70) modifier += 5;
+  else if (market < 40) modifier -= 8; // Harsh on small TAM
   
-  // Sequoia formula: traction×2 + market×1.5 + team×1
-  // If we have derived signals, use them; otherwise fall back to GOD score
-  if (tractionSignal > 0 || marketSignal > 0 || teamSignal > 0) {
-    return Math.round((tractionSignal * 2.0 + marketSignal * 1.5 + teamSignal * 1.0) / 4.5);
-  }
+  // Sequoia is execution focused - penalize if weak team
+  const team = startup.team_score || 0;
+  if (team < 40) modifier -= 5;
   
-  // Final fallback: use GOD score but penalize slightly (Sequoia is more selective)
-  return Math.min(Math.round(godScore * 0.90), 100);
+  // Sequoia has high bar
+  modifier -= 5; // Base penalty (Sequoia is very selective)
+  
+  return Math.max(0, Math.min(100, Math.round(godScore + modifier)));
 }
 
-// Calculate A16Z Score (normalized 0-100)
-// A16Z focuses on: Product (technical moat) > Vision (contrarian bets) > Team (technical founders)
+// Calculate A16Z Score (normalized 0-100)  
+// A16Z philosophy: Tech-first, network effects, bold vision, founder empowerment
+// Penalizes: Incremental innovation, weak moats, non-technical founders
 function calculateA16ZScore(startup: Startup): number {
-  const product = startup.product_score;
-  const vision = startup.vision_score;
-  const team = startup.team_score;
-  
-  // If component scores exist, use the original formula
-  if (product !== null && product !== undefined && 
-      vision !== null && vision !== undefined && 
-      team !== null && team !== undefined) {
-    // Original: product×1.8 + vision×1.5 + team×1.2 + techBonus(20) = max 470
-    // Normalized: divide by 4.7 to get 0-100
-    const techBonus = startup.has_technical_cofounder ? 20 : 0;
-    return Math.round((product * 1.8 + vision * 1.5 + team * 1.2 + techBonus) / 4.7);
-  }
-  
-  // If component scores don't exist, derive from available data
-  // A16Z heavily weights product (technical innovation), then vision (contrarian), then team
   const godScore = startup.total_god_score || 0;
   
-  // Derive product signal (technical moat, innovation)
-  let productSignal = 0;
-  if (startup.has_demo) productSignal += 25;
-  if (startup.is_launched) productSignal += 20;
-  const techKeywords = ['AI', 'ML', 'blockchain', 'crypto', 'quantum', 'biotech', 'hardware'];
-  if (startup.sectors?.some(s => techKeywords.some(k => s.includes(k)))) productSignal += 25;
-  if (startup.description?.toLowerCase().includes('patent') || startup.description?.toLowerCase().includes('proprietary')) productSignal += 15;
-  productSignal = Math.min(productSignal, 100);
+  // A16Z modifiers
+  let modifier = 0;
   
-  // Derive vision signal (contrarian bets, category creation)
-  let visionSignal = 0;
-  const visionKeywords = ['revolutionary', 'disrupt', 'transform', 'new category', 'contrarian', 'bold'];
-  if (startup.pitch && visionKeywords.some(k => startup.pitch.toLowerCase().includes(k))) visionSignal += 30;
-  if (startup.tagline && visionKeywords.some(k => startup.tagline.toLowerCase().includes(k))) visionSignal += 20;
-  if (startup.stage && ['Pre-seed', 'Seed'].includes(startup.stage)) visionSignal += 15; // Early stage = bold vision
-  visionSignal = Math.min(visionSignal, 100);
+  // A16Z values product innovation
+  const product = startup.product_score || 0;
+  if (product > 70) modifier += 5;
+  else if (product < 40) modifier -= 8; // Harsh on weak product
   
-  // Derive team signal (technical founders)
-  let teamSignal = 0;
-  if (startup.technical_cofounders && startup.technical_cofounders > 0) teamSignal += 30;
-  if (startup.team_size && startup.team_size >= 3) teamSignal += 10;
-  teamSignal = Math.min(teamSignal, 100);
+  // A16Z loves bold vision
+  const vision = startup.vision_score || 0;
+  if (vision > 70) modifier += 5;
+  else if (vision < 40) modifier -= 5;
   
-  // Tech bonus (A16Z loves technical innovation)
-  const techBonus = (startup.technical_cofounders && startup.technical_cofounders > 0) ? 20 : 0;
+  // A16Z strongly favors technical founders
+  if (startup.has_technical_cofounder) modifier += 5;
+  else modifier -= 3;
   
-  // A16Z formula: product×1.8 + vision×1.5 + team×1.2 + techBonus(20)
-  // If we have derived signals, use them; otherwise fall back to GOD score
-  if (productSignal > 0 || visionSignal > 0 || teamSignal > 0) {
-    return Math.round((productSignal * 1.8 + visionSignal * 1.5 + teamSignal * 1.2 + techBonus) / 4.7);
-  }
+  // A16Z has high standards
+  modifier -= 4; // Base penalty
   
-  // Final fallback: use GOD score with tech boost (A16Z values technical innovation)
-  const finalTechBonus = (startup.technical_cofounder || startup.technical_cofounders > 0) ? 4 : 0;
-  return Math.min(Math.round(godScore * 1.05 + finalTechBonus), 100);
+  return Math.max(0, Math.min(100, Math.round(godScore + modifier)));
 }
 
 // Format currency
@@ -284,7 +240,7 @@ export default function TrendingPage() {
         `)
         .eq('status', 'approved')
         .order('total_god_score', { ascending: false })
-        .limit(500);
+        .limit(5000);
       
       if (error) {
         console.error('Error fetching startups:', error);
@@ -302,19 +258,16 @@ export default function TrendingPage() {
       setStartups(startupsWithScores);
       
       // Fetch stats
-      const [{ count: startupCount }, { count: investorCount }] = await Promise.all([
+      const [{ count: startupCount }, { count: investorCount }, { count: matchCount }] = await Promise.all([
         supabase.from('startup_uploads').select('*', { count: 'exact', head: true }).eq('status', 'approved'),
-        supabase.from('investors').select('*', { count: 'exact', head: true })
+        supabase.from('investors').select('*', { count: 'exact', head: true }),
+        supabase.from('startup_investor_matches').select('*', { count: 'exact', head: true })
       ]);
-      
-      // Get match count via fast RPC instead of slow COUNT(*)
-      const { data: matchEstimate } = await supabase
-        .rpc('get_match_count_estimate');
       
       setStats({
         startups: startupCount || 0,
         investors: investorCount || 0,
-        matches: matchEstimate || 0
+        matches: matchCount || 0
       });
       
       setLoading(false);
@@ -467,14 +420,37 @@ export default function TrendingPage() {
     <div className="min-h-screen bg-gradient-to-br from-[#0a0015] via-[#1a0a2e] to-[#0f0520] text-white relative overflow-hidden">
       {/* Background Effects */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-96 h-96 bg-orange-500/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute top-20 left-10 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-orange-500/10 to-cyan-500/10 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-orange-500/10 to-amber-500/10 rounded-full blur-3xl"></div>
       </div>
 
       {/* Logo Dropdown Menu */}
       <LogoDropdownMenu />
 
+      {/* Navigation Buttons - Top Right */}
+      <div className="fixed top-6 right-8 z-50 flex items-center gap-3">
+        <button
+          onClick={() => setShowHowItWorks(true)}
+          className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-purple-600/60 to-indigo-600/60 hover:from-purple-500 hover:to-indigo-500 text-white font-semibold rounded-xl transition-all border border-purple-400/50"
+        >
+          <FlameIcon variant={3} size="sm" />
+          How It Works
+        </button>
+        <Link 
+          to="/about" 
+          className="px-5 py-2.5 bg-gradient-to-r from-slate-600/60 to-gray-600/60 hover:from-slate-500 hover:to-gray-500 text-white font-semibold rounded-xl transition-all border border-slate-400/50"
+        >
+          About
+        </Link>
+        <Link 
+          to="/get-matched" 
+          className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold rounded-xl transition-all shadow-lg"
+        >
+          <Sparkles className="w-4 h-4" />
+          Get Matched
+        </Link>
+      </div>
 
       <div className="relative z-10 container mx-auto px-6 pt-28 pb-16">
         {/* Header */}
@@ -485,12 +461,14 @@ export default function TrendingPage() {
           </div>
           <h1 className="text-4xl md:text-5xl font-bold mb-3 flex items-center justify-center gap-3">
             <FlameIcon variant={1} size="xl" />
-            <span className="bg-gradient-to-r from-orange-400 via-red-500 to-yellow-500 bg-clip-text text-transparent">
-              Hot Startup Rankings
+            <span className="bg-gradient-to-r from-orange-400 via-red-500 to-amber-500 bg-clip-text text-transparent">
+              Perfect Matches... in Seconds
             </span>
-            <FlameIcon variant={9} size="xl" />
           </h1>
-          <p className="text-lg text-gray-300 max-w-3xl mx-auto">
+          <p className="text-lg text-gray-300 max-w-3xl mx-auto mb-4">
+            Our <span className="text-yellow-400 font-bold">GOD Score™</span> + <span className="text-cyan-400 font-bold">Social Signaling</span> analyzes 50+ factors to find your perfect match.
+          </p>
+          <p className="text-sm text-gray-400 max-w-2xl mx-auto">
             See startups through the lens of top VCs. Compare how YC, Sequoia, and A16Z would rank the same companies using their unique investment philosophies.
           </p>
         </div>
@@ -503,44 +481,25 @@ export default function TrendingPage() {
             <span className="text-sm text-gray-400">Startups</span>
           </div>
           <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-xl border border-white/10">
-            <Building2 className="w-5 h-5 text-orange-400" />
+            <Building2 className="w-5 h-5 text-purple-400" />
             <span className="text-2xl font-bold text-white">{stats.investors.toLocaleString()}</span>
             <span className="text-sm text-gray-400">Investors</span>
           </div>
           <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-xl border border-white/10">
-            <Zap className="w-5 h-5 text-cyan-400" />
+            <Zap className="w-5 h-5 text-yellow-400" />
             <span className="text-2xl font-bold text-white">{stats.matches.toLocaleString()}</span>
             <span className="text-sm text-gray-400">Matches</span>
           </div>
         </div>
 
+        {/* Analytics & Insights Section */}
+        <div className="mb-8">
+          <TrendingAnalytics startups={startups} selectedAlgorithm={selectedAlgorithm} />
+        </div>
+
         {/* Algorithm Selector */}
         <div className="mb-12">
           <p className="text-center text-gray-400 text-sm mb-4">👆 Click an algorithm to see how top VCs would rank startups 👇</p>
-          
-          {/* Active Filter Indicator - Shows immediately when filter is selected */}
-          {selectedAlgorithm && selectedAlgorithm !== 'god' && (
-            <div className={`mb-6 flex items-center justify-center gap-3 px-6 py-4 rounded-xl border-2 ${
-              selectedAlgorithm === 'yc' 
-                ? 'bg-orange-500/20 border-orange-500/50 shadow-lg shadow-orange-500/30' 
-                : selectedAlgorithm === 'sequoia'
-                ? 'bg-emerald-500/20 border-emerald-500/50 shadow-lg shadow-emerald-500/30'
-                : 'bg-purple-500/20 border-purple-500/50 shadow-lg shadow-purple-500/30'
-            } animate-pulse`}>
-              {selectedAlgorithm === 'yc' && <Lightbulb className="w-6 h-6 text-orange-400" />}
-              {selectedAlgorithm === 'sequoia' && <TrendingUp className="w-6 h-6 text-emerald-400" />}
-              {selectedAlgorithm === 'a16z' && <Code2 className="w-6 h-6 text-purple-400" />}
-              <span className={`font-bold text-lg ${
-                selectedAlgorithm === 'yc' ? 'text-orange-300' :
-                selectedAlgorithm === 'sequoia' ? 'text-emerald-300' :
-                'text-purple-300'
-              }`}>
-                Filter Active: {ALGORITHMS.find(a => a.id === selectedAlgorithm)?.name}
-              </span>
-              <span className="text-sm text-gray-400">({sortedStartups.length} startups)</span>
-            </div>
-          )}
-          
           <div className="flex flex-col md:flex-row gap-4 justify-center pb-8">
             {ALGORITHMS.map((algo) => {
               const Icon = algo.icon;
@@ -550,10 +509,10 @@ export default function TrendingPage() {
                 <button
                   key={algo.id}
                   onClick={() => setSelectedAlgorithm(algo.id)}
-                  className={`relative group flex-1 max-w-sm p-4 rounded-2xl border-2 transition-all duration-300 transform ${
+                  className={`relative group flex-1 max-w-sm p-4 rounded-2xl border-2 transition-all duration-300 ${
                     isSelected 
-                      ? `bg-gradient-to-br ${algo.bgColor} ${algo.borderColor} shadow-lg shadow-${algo.id === 'yc' ? 'orange' : algo.id === 'sequoia' ? 'green' : 'purple'}-500/50 scale-105` 
-                      : 'bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/20 hover:scale-102'
+                      ? `bg-gradient-to-br ${algo.bgColor} ${algo.borderColor} shadow-lg` 
+                      : 'bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/20'
                   }`}
                 >
                   <div className="flex items-start gap-3">
@@ -585,19 +544,6 @@ export default function TrendingPage() {
             })}
           </div>
         </div>
-
-        {/* Analytics Section */}
-        {!loading && startups.length > 0 && (
-          <div className="mb-12">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-white flex items-center gap-2">
-                <BarChart3 className="w-6 h-6 text-purple-400" />
-                Analytics & Insights
-              </h2>
-            </div>
-            <TrendingAnalytics startups={startups} selectedAlgorithm={selectedAlgorithm} />
-          </div>
-        )}
 
         {/* Search Bar */}
         <div className="max-w-xl mx-auto mb-8">
@@ -669,7 +615,6 @@ export default function TrendingPage() {
                       </th>
                       <th className="py-4 hidden xl:table-cell">GOD Score</th>
                       <th className="py-4 text-right pr-4">{currentAlgo.shortName} Score</th>
-                      <th className="py-4 text-center pr-4">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-purple-500/10">
@@ -687,11 +632,11 @@ export default function TrendingPage() {
                           <td className="py-4 pl-4">
                             <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold text-sm ${
                               index === 0 
-                                ? 'bg-gradient-to-br from-yellow-400 to-blue-500 text-black shadow-lg shadow-yellow-500/30' 
+                                ? 'bg-gradient-to-br from-yellow-400 to-amber-500 text-black shadow-lg shadow-yellow-500/30' 
                                 : index === 1
                                   ? 'bg-gradient-to-br from-gray-200 to-gray-400 text-black shadow-lg'
                                   : index === 2
-                                    ? 'bg-gradient-to-br from-cyan-500 to-cyan-700 text-white shadow-lg'
+                                    ? 'bg-gradient-to-br from-orange-500 to-orange-700 text-white shadow-lg'
                                     : 'bg-white/10 text-gray-300 border border-white/20'
                             }`}>
                               {index === 0 ? '👑' : index + 1}
@@ -766,23 +711,8 @@ export default function TrendingPage() {
                               <span className={`text-xl font-bold bg-gradient-to-r ${currentAlgo.color} bg-clip-text text-transparent min-w-[60px]`}>
                                 {score}
                               </span>
-                              <ChevronRight className="w-4 h-4 text-gray-500 group-hover:text-cyan-400 transition-colors" />
+                              <ChevronRight className="w-4 h-4 text-gray-500 group-hover:text-orange-400 transition-colors" />
                             </div>
-                          </td>
-                          
-                          {/* Actions */}
-                          <td className="py-4 pr-4 text-center">
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                window.location.href = `/startup/${startup.id}/matches`;
-                              }}
-                              className="px-3 py-1.5 bg-purple-500/20 hover:bg-purple-500/30 rounded-lg text-purple-300 text-xs flex items-center gap-1.5 border border-purple-500/30"
-                              title="View Matches"
-                            >
-                              <Target className="w-3 h-3" />
-                              Matches
-                            </button>
                           </td>
                         </tr>
                       );
@@ -866,7 +796,7 @@ export default function TrendingPage() {
               </button>
               <Link
                 to="/get-matched"
-                className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold rounded-xl transition-all shadow-lg"
+                className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold rounded-xl transition-all shadow-lg"
               >
                 <Zap className="w-5 h-5" />
                 Get Matched Now
@@ -889,7 +819,7 @@ export default function TrendingPage() {
             </button>
 
             <div className="text-center mb-8">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-red-500 to-blue-500 flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-red-500 to-amber-500 flex items-center justify-center mx-auto mb-4">
                 <FlameIcon variant={7} size="xl" />
               </div>
               <h2 className="text-3xl font-bold text-white mb-2">GOD Algorithm</h2>
@@ -907,7 +837,7 @@ export default function TrendingPage() {
                   { name: 'Team', icon: Users, color: 'from-blue-500 to-cyan-500', factors: ['Technical founders', 'Domain expertise', 'Team size', 'Prior exits'] },
                   { name: 'Traction', icon: TrendingUp, color: 'from-green-500 to-emerald-500', factors: ['ARR/MRR', 'Growth rate', 'Customer count', 'NRR'] },
                   { name: 'Market', icon: Target, color: 'from-purple-500 to-violet-500', factors: ['TAM estimate', 'Market timing', 'Competition', 'Winner-take-all'] },
-                  { name: 'Product', icon: Layers, color: 'from-cyan-600 to-blue-600', factors: ['Launch status', 'Demo ready', 'NPS score', 'User engagement'] },
+                  { name: 'Product', icon: Layers, color: 'from-orange-500 to-red-500', factors: ['Launch status', 'Demo ready', 'NPS score', 'User engagement'] },
                   { name: 'Vision', icon: Eye, color: 'from-indigo-500 to-violet-500', factors: ['Contrarian belief', 'Why now', 'Unfair advantage', '10x potential'] },
                 ].map((component) => (
                   <div key={component.name} className="bg-black/30 rounded-xl p-4 border border-white/10">
@@ -930,10 +860,10 @@ export default function TrendingPage() {
             {/* YC Smell Tests */}
             <div className="mb-8">
               <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-                <Lightbulb className="w-5 h-5 text-cyan-400" />
+                <Lightbulb className="w-5 h-5 text-orange-400" />
                 YC Smell Tests (5 Binary Tests)
               </h3>
-              <div className="bg-black/30 rounded-xl p-4 border border-cyan-500/20">
+              <div className="bg-black/30 rounded-xl p-4 border border-orange-500/20">
                 <p className="text-gray-300 text-sm mb-4">Paul Graham's quick heuristics for evaluating early-stage startups:</p>
                 <div className="grid md:grid-cols-5 gap-3">
                   {[
@@ -974,7 +904,7 @@ export default function TrendingPage() {
                 <div className="bg-black/30 rounded-xl p-4 border border-white/10">
                   <h4 className="font-bold text-white mb-3">Investor Tiers</h4>
                   <ul className="text-sm space-y-2">
-                    <li className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-gradient-to-r from-yellow-400 to-blue-500"></span> <span className="text-yellow-400 font-semibold">Elite</span> <span className="text-gray-400">- Top-tier VCs, proven track record</span></li>
+                    <li className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-gradient-to-r from-yellow-400 to-amber-500"></span> <span className="text-yellow-400 font-semibold">Elite</span> <span className="text-gray-400">- Top-tier VCs, proven track record</span></li>
                     <li className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-gradient-to-r from-purple-400 to-violet-500"></span> <span className="text-purple-400 font-semibold">Strong</span> <span className="text-gray-400">- Active investors, good portfolios</span></li>
                     <li className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-gradient-to-r from-blue-400 to-cyan-500"></span> <span className="text-blue-400 font-semibold">Solid</span> <span className="text-gray-400">- Reliable, sector-focused</span></li>
                     <li className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-gradient-to-r from-green-400 to-emerald-500"></span> <span className="text-green-400 font-semibold">Emerging</span> <span className="text-gray-400">- New funds, angels</span></li>
@@ -1044,8 +974,8 @@ export default function TrendingPage() {
 
             {/* Score Cards */}
             <div className="grid grid-cols-3 gap-3 mb-5">
-              <div className="bg-cyan-600/10 rounded-xl p-3 text-center border border-cyan-500/20">
-                <div className="text-2xl font-bold text-cyan-400">{selectedStartup.ycScore}</div>
+              <div className="bg-orange-500/10 rounded-xl p-3 text-center border border-orange-500/20">
+                <div className="text-2xl font-bold text-orange-400">{selectedStartup.ycScore}</div>
                 <div className="text-xs text-gray-400">YC Score</div>
               </div>
               <div className="bg-emerald-500/10 rounded-xl p-3 text-center border border-emerald-500/20">
@@ -1069,7 +999,7 @@ export default function TrendingPage() {
                   { label: 'Team', score: selectedStartup.team_score, color: 'from-blue-500 to-cyan-500' },
                   { label: 'Traction', score: selectedStartup.traction_score, color: 'from-green-500 to-emerald-500' },
                   { label: 'Market', score: selectedStartup.market_score, color: 'from-purple-500 to-violet-500' },
-                  { label: 'Product', score: selectedStartup.product_score, color: 'from-cyan-600 to-blue-600' },
+                  { label: 'Product', score: selectedStartup.product_score, color: 'from-orange-500 to-red-500' },
                   { label: 'Vision', score: selectedStartup.vision_score, color: 'from-indigo-500 to-violet-500' },
                 ].map((item) => (
                   <div key={item.label} className="flex items-center gap-3">
@@ -1128,7 +1058,7 @@ export default function TrendingPage() {
               </p>
               <Link
                 to="/get-matched"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold rounded-xl transition-all shadow-lg w-full justify-center"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold rounded-xl transition-all shadow-lg w-full justify-center"
               >
                 <Sparkles className="w-5 h-5" />
                 Find Matching Investors
@@ -1138,8 +1068,8 @@ export default function TrendingPage() {
         </div>
       )}
 
-      {/* How It Works Modal */}
-      <HowItWorksModal 
+      {/* Live Match Demo Modal */}
+      <LiveMatchDemo 
         isOpen={showHowItWorks} 
         onClose={() => setShowHowItWorks(false)} 
       />

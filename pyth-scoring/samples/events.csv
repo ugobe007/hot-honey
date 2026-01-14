@@ -1,0 +1,5 @@
+id,startup_id,investor_id,investor_tier,event_type,occurred_at
+e1,s1,i1,1,view,2026-01-06T10:00:00Z
+e2,s1,i2,2,save,2026-01-07T10:00:00Z
+e3,s1,i3,1,intro_request,2026-01-09T10:00:00Z
+e4,s2,i4,3,view,2026-01-07T10:00:00Z

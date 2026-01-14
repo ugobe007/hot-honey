@@ -39,6 +39,7 @@ const CONFIG = {
   VALIDATION_INTERVAL: 24 * 60 * 60 * 1000, // Daily
   SOCIAL_SIGNALS_INTERVAL: 7 * 24 * 60 * 60 * 1000, // Weekly (7 days)
   FULL_SCORE_RECALC_INTERVAL: 7 * 24 * 60 * 60 * 1000, // Weekly (7 days)
+  ML_TRAINING_INTERVAL: 24 * 60 * 60 * 1000, // Daily (24 hours)
 };
 
 // Timestamps for daemon mode
@@ -49,6 +50,7 @@ let lastMatching = 0;
 let lastValidation = 0;
 let lastSocialSignals = 0;
 let lastFullRecalc = 0;
+let lastMLTraining = 0;
 
 // Colors for logging
 const c = {
@@ -429,12 +431,31 @@ async function runFullScoreRecalculation() {
   }
 }
 
+/**
+ * Run ML training cycle
+ */
+async function runMLTraining() {
+  section('🤖 ML TRAINING CYCLE');
+  
+  log('🤖', 'Running ML training to generate algorithm optimization recommendations...', c.cyan);
+  const result = runScript('run-ml-training.js', [], 10 * 60 * 1000); // 10 min timeout
+  
+  if (result.success) {
+    log('✅', 'ML training complete', c.green);
+    return true;
+  } else {
+    log('❌', 'ML training failed', c.red);
+    return false;
+  }
+}
+
 async function runDaemon() {
   log('🚀', 'Starting autopilot in daemon mode...', c.green);
   log('📅', `Discovery every ${CONFIG.DISCOVERY_INTERVAL / 60000} min`);
   log('📅', `Enrichment every ${CONFIG.ENRICHMENT_INTERVAL / 60000} min`);
   log('📅', `Scoring every ${CONFIG.SCORING_INTERVAL / 60000} min`);
   log('📅', `Matching every ${CONFIG.MATCHING_INTERVAL / 60000} min`);
+  log('📅', `ML Training daily (every ${CONFIG.ML_TRAINING_INTERVAL / (60 * 60 * 1000)} hours)`);
   log('📅', `Social Signals weekly (every ${CONFIG.SOCIAL_SIGNALS_INTERVAL / (24 * 60 * 60 * 1000)} days)`);
   log('📅', `Full Recalc weekly (every ${CONFIG.FULL_SCORE_RECALC_INTERVAL / (24 * 60 * 60 * 1000)} days)`);
   
@@ -468,6 +489,15 @@ async function runDaemon() {
     if (now - lastValidation >= CONFIG.VALIDATION_INTERVAL) {
       await runDataValidation();
       lastValidation = now;
+    }
+    
+    // Daily: ML Training (runs once per day, prefer 3 AM hour)
+    if (now - lastMLTraining >= CONFIG.ML_TRAINING_INTERVAL) {
+      const hour = new Date(now).getHours();
+      if (hour === 3 || hour === 4) { // Run between 3-4 AM
+        await runMLTraining();
+        lastMLTraining = now;
+      }
     }
     
     // Weekly: Social Signals Collection (Sunday 2 AM equivalent)

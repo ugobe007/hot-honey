@@ -567,8 +567,45 @@ URL:`;
   async saveToDatabase(companies: any[], jobId: string): Promise<void> {
     console.log(`\n💾 Saving ${companies.length} enriched companies to database...`);
 
+    // Import validators (dynamic import to avoid circular deps)
+    const { shouldRejectStartupCandidate, generateCanonicalKey } = await import('../utils/startupValidator');
+
+    let rejected = 0;
+    let saved = 0;
+    let skipped = 0;
+
     for (const company of companies) {
       try {
+        // Step 1: Validate candidate (reject headlines/junk)
+        const validation = shouldRejectStartupCandidate({
+          name: company.name,
+          website: company.website,
+          sourceUrl: company.source_url
+        });
+
+        if (validation.reject) {
+          console.log(`⏭️  Rejected: ${company.name} (${validation.reason})`);
+          rejected++;
+          continue;
+        }
+
+        // Step 2: Generate canonical key for deduplication
+        const canonicalKey = generateCanonicalKey(company.name, company.website);
+
+        // Step 3: Check if startup with this canonical_key already exists
+        const { data: existing } = await supabase
+          .from('startup_uploads')
+          .select('id, name')
+          .eq('canonical_key', canonicalKey)
+          .maybeSingle();
+
+        if (existing) {
+          console.log(`⏭️  Skipped: ${company.name} (canonical_key exists: ${existing.name})`);
+          skipped++;
+          continue;
+        }
+
+        // Step 4: Insert new startup with canonical_key
         const { error } = await supabase.from('startup_uploads').insert({
           name: company.name,
           tagline: company.tagline,
@@ -583,19 +620,21 @@ URL:`;
           extracted_data: company,
           submitted_by: 'RSS Scraper',
           submitted_email: 'scraper@hotmoneyhoney.com',
+          canonical_key: canonicalKey, // Store canonical key for deduplication
         });
 
         if (error) {
           console.error(`❌ Error saving ${company.name}:`, error.message);
         } else {
-          console.log(`✅ Saved ${company.name} (auto-approved for matching)`);
+          console.log(`✅ Saved ${company.name} (canonical_key=${canonicalKey})`);
+          saved++;
         }
       } catch (err) {
         console.error(`❌ Error saving company:`, err);
       }
     }
 
-    console.log('✅ All companies saved to database');
+    console.log(`✅ Save complete: ${saved} saved, ${skipped} skipped (canonical_key exists), ${rejected} rejected (headlines/junk)`);
   }
 
   /**

@@ -5,8 +5,7 @@ import { supabase } from '../lib/supabase';
 // REMOVED: Tier classification - now handled by queue-processor-v16.js during match generation
 
 import { DotLottie } from '@lottiefiles/dotlottie-web';
-import HowItWorksModal from './HowItWorksModal';
-import HowItWorksModalDetailed from './HowItWorksModal 2';
+import LiveMatchDemo from './LiveMatchDemo';
 import HotMatchPopup from './HotMatchPopup';
 import InvestorCard from './InvestorCard';
 import EnhancedInvestorCard from './EnhancedInvestorCard';
@@ -21,6 +20,7 @@ import DataQualityBadge from './DataQualityBadge';
 import MatchConfidenceBadge from './MatchConfidenceBadge';
 import SmartSearchBar from './SmartSearchBar';
 import EducationalMatchModal from './EducationalMatchModal';
+import GetMatchedPopup from './GetMatchedPopup';
 import { saveMatch, unsaveMatch, isMatchSaved } from '../lib/savedMatches';
 import { StartupComponent, InvestorComponent } from '../types';
 
@@ -33,10 +33,22 @@ interface MatchPair {
     seeking?: string; // fivePoints[4] - Investment
     market?: string; // fivePoints[1] - Market
     product?: string; // fivePoints[2] - Product
+    mrr?: number | null;
+    arr?: number | null;
+    has_revenue?: boolean | null;
+    is_launched?: boolean | null;
+    team_size?: number | null;
+    growth_rate_monthly?: number | null;
+    team_score?: number | null;
+    traction_score?: number | null;
+    market_score?: number | null;
+    product_score?: number | null;
+    vision_score?: number | null;
   };
   investor: {
     id: string;
     name: string; // name @ firm
+    firm?: string; // firm name
     description: string; // bio
     tagline?: string; // tagline or investment thesis
     type?: string; // 'VC', 'Angel', 'Family Office', 'PE'
@@ -58,6 +70,12 @@ interface MatchPair {
     linkedin?: string;
     twitter?: string;
     partners?: string[]; // Partner names - TO BE SCRAPED
+    // Extended fields from database
+    bio?: string;
+    blog_url?: string;
+    check_size_min?: number | null;
+    check_size_max?: number | null;
+    notable_investments?: string[] | string | null;
   };
   matchScore: number;
   reasoning?: string[];
@@ -106,6 +124,9 @@ export default function MatchingEngine() {
   const [showShareModal, setShowShareModal] = useState(false);
   const [showHotMatchInfo, setShowHotMatchInfo] = useState(false);
   const [showHotMatchPopup, setShowHotMatchPopup] = useState(false);
+  const [showMatchLogic, setShowMatchLogic] = useState(false);
+  const [showGetMatchedPopup, setShowGetMatchedPopup] = useState(false);
+  const [matchViewCount, setMatchViewCount] = useState(0);
   const lottieCanvasRef = useRef<HTMLCanvasElement>(null);
   const dotLottieRef = useRef<any>(null);
 
@@ -290,18 +311,27 @@ export default function MatchingEngine() {
     return () => clearInterval(godInterval);
   });
 
-  // Simple match cycling: show each match for 3 seconds, no duplicates within batch
-  // Each startup-investor pair appears exactly once per batch
+  // Match cycling: show each match for 10 seconds
+  // After every 4 matches, show the "Get Matched" popup to capture conversions
   useEffect(() => {
     if (batchMatches.length === 0) return;
     
-    // Cycle to next match every 3 seconds
+    // Cycle to next match every 10 seconds
     const cycleInterval = setInterval(() => {
+      // Track view count and show popup every 4 matches
+      setMatchViewCount(prev => {
+        const newCount = prev + 1;
+        // Show popup after 4th, 8th, 12th match etc. (but not if already showing)
+        if (newCount % 4 === 0 && !showGetMatchedPopup) {
+          setShowGetMatchedPopup(true);
+        }
+        return newCount;
+      });
       handleNextMatch();
-    }, 3000);
+    }, 10000); // 10 seconds per match
     
     return () => clearInterval(cycleInterval);
-  }, [batchMatches.length]);
+  }, [batchMatches.length, showGetMatchedPopup]);
 
   // REMOVED: saveMatchesToDatabase - Queue processor handles match creation
   // Frontend should only READ matches, not write them
@@ -328,7 +358,7 @@ export default function MatchingEngine() {
       const MIN_MATCH_SCORE = 20; // Lowered to show matches with score >= 20
       const { data: matchIds, error: matchError } = await supabase
         .from('startup_investor_matches')
-        .select('id, match_score, confidence_level, startup_id, investor_id, reasoning, why_you_match')
+        .select('id, match_score, confidence_level, startup_id, investor_id, reasoning')
         .eq('status', 'suggested')
         .gte('match_score', MIN_MATCH_SCORE)
         .order('match_score', { ascending: false })
@@ -361,9 +391,22 @@ export default function MatchingEngine() {
         return;
       }
       
+      // EARLY DEDUPLICATION: Remove duplicate startup-investor pairs from database results
+      // Keep only the highest-scoring match for each pair
+      const seenPairsEarly = new Map<string, typeof matchIds[0]>();
+      matchIds.forEach(m => {
+        const pairKey = `${m.startup_id}-${m.investor_id}`;
+        const existing = seenPairsEarly.get(pairKey);
+        if (!existing || (m.match_score || 0) > (existing.match_score || 0)) {
+          seenPairsEarly.set(pairKey, m);
+        }
+      });
+      const uniqueMatchIds = Array.from(seenPairsEarly.values());
+      console.log(`🔍 Early dedup: ${matchIds.length} → ${uniqueMatchIds.length} unique pairs`);
+      
       // Step 2: Fetch startup and investor details separately
-      const startupIds = [...new Set(matchIds.map(m => m.startup_id).filter((id): id is string => Boolean(id)))];
-      const investorIds = [...new Set(matchIds.map(m => m.investor_id).filter((id): id is string => Boolean(id)))];
+      const startupIds = [...new Set(uniqueMatchIds.map(m => m.startup_id).filter((id): id is string => Boolean(id)))];
+      const investorIds = [...new Set(uniqueMatchIds.map(m => m.investor_id).filter((id): id is string => Boolean(id)))];
       
       if (startupIds.length === 0 || investorIds.length === 0) {
         console.error('❌ No valid startup or investor IDs');
@@ -394,8 +437,8 @@ export default function MatchingEngine() {
       const startupMap = new Map((startupsRes.data || []).map((s: any) => [s.id, s]));
       const investorMap = new Map(((investorsRes.data || []) as any[]).map((i: any) => [i.id, i]));
       
-      // Combine into matchData format
-      let matchData = matchIds
+      // Combine into matchData format (using uniqueMatchIds, not matchIds)
+      let matchData = uniqueMatchIds
         .filter(m => m.startup_id && m.investor_id)
         .map(m => ({
           ...m,
@@ -472,11 +515,11 @@ export default function MatchingEngine() {
             seeking?: string;
             market?: string;
             product?: string;
-            team_score?: number;
-            traction_score?: number;
-            market_score?: number;
-            product_score?: number;
-            vision_score?: number;
+            team_score?: number | null;
+            traction_score?: number | null;
+            market_score?: number | null;
+            product_score?: number | null;
+            vision_score?: number | null;
           },
           investor: {
             id: investor.id,
@@ -499,44 +542,36 @@ export default function MatchingEngine() {
             notable_investments: investor.notable_investments,
           },
           matchScore: m.match_score || 0,  // FROM DATABASE - calculated by queue-processor-v16
-          reasoning: Array.isArray(m.why_you_match) ? m.why_you_match : 
-                     (m.reasoning ? [m.reasoning] : []),
+          reasoning: m.reasoning ? (Array.isArray(m.reasoning) ? m.reasoning : [m.reasoning]) : [],
         };
       })
-      .filter((match): match is MatchPair => match !== null); // Filter out null matches
+      .filter(Boolean) as MatchPair[]; // Filter out null matches
 
-      // Smart shuffle: ensure startup variety (no same startup back-to-back)
-      // Group by startup, then interleave to ensure variety
-      const byStartup = new Map<string, typeof displayMatches>();
+      // ONE STARTUP = ONE MATCH: Keep only the best investor match per startup
+      // This ensures each startup appears exactly once in the rotation
+      const bestMatchPerStartup = new Map<string, typeof displayMatches[0]>();
       displayMatches.forEach(m => {
-        const key = m.startup.id.toString();
-        if (!byStartup.has(key)) byStartup.set(key, []);
-        byStartup.get(key)!.push(m);
+        const startupId = m.startup.id.toString();
+        const existing = bestMatchPerStartup.get(startupId);
+        // Keep the highest scoring match for each startup
+        if (!existing || m.matchScore > existing.matchScore) {
+          bestMatchPerStartup.set(startupId, m);
+        }
       });
       
-      // Interleave: take one match from each startup in rotation
-      const interleavedMatches: typeof displayMatches = [];
-      const startupQueues = Array.from(byStartup.values());
-      let maxLen = Math.max(...startupQueues.map(q => q.length));
-      for (let i = 0; i < maxLen; i++) {
-        for (const queue of startupQueues) {
-          if (queue[i]) interleavedMatches.push(queue[i]);
-        }
+      // Convert to array and shuffle for variety
+      const uniqueStartupMatches = Array.from(bestMatchPerStartup.values());
+      
+      // Fisher-Yates shuffle
+      for (let i = uniqueStartupMatches.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [uniqueStartupMatches[i], uniqueStartupMatches[j]] = [uniqueStartupMatches[j], uniqueStartupMatches[i]];
       }
       
-      // DEDUPLICATION: Ensure each startup-investor pair appears only once
-      const seenPairs = new Set<string>();
-      const uniqueMatches = interleavedMatches.filter(m => {
-        const pairKey = `${m.startup.id}-${m.investor.id}`;
-        if (seenPairs.has(pairKey)) return false;
-        seenPairs.add(pairKey);
-        return true;
-      });
+      console.log(`✅ One startup per match: ${displayMatches.length} → ${uniqueStartupMatches.length} unique startups`);
       
-      console.log(`✅ Deduplicated: ${interleavedMatches.length} → ${uniqueMatches.length} unique matches`);
-      
-      // Final shuffled matches (no duplicates)
-      const shuffledMatches = uniqueMatches;
+      // Final matches (each startup appears exactly once)
+      const shuffledMatches = uniqueStartupMatches;
       
       setDebugInfo({
         source: 'startup_investor_matches table (pre-calculated)',
@@ -700,66 +735,40 @@ export default function MatchingEngine() {
       {/* Main Headline - AT TOP */}
       <div className="relative z-10 container mx-auto px-4 sm:px-8 pt-12 sm:pt-16 pb-4">
         <div className="text-center">
-          <h2 className="text-3xl sm:text-5xl md:text-7xl font-bold mb-2 sm:mb-3">
-            <span className="text-white/90 text-2xl sm:text-4xl md:text-5xl">Find Your </span>
-            <span className="bg-gradient-to-r from-cyan-400 via-purple-500 via-pink-500 to-orange-400 bg-clip-text text-transparent animate-pulse">
-              Perfect Match
+          <h2 className="text-3xl sm:text-5xl md:text-6xl font-bold mb-1 sm:mb-2">
+            <span className="bg-gradient-to-r from-cyan-400 via-purple-500 via-pink-500 to-orange-400 bg-clip-text text-transparent">
+              Perfect Matches... in Seconds
             </span>
           </h2>
-          <h3 className="text-2xl sm:text-4xl md:text-6xl font-bold mb-2 sm:mb-4">
-            <span className="bg-gradient-to-r from-white via-purple-200 to-white bg-clip-text text-transparent">
-              In Under 2 Seconds
-            </span>
-          </h3>
-
-          <p className="text-base sm:text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto mb-4 sm:mb-6 leading-relaxed">
+          <p className="text-sm sm:text-lg text-gray-400 mb-4">
             <Link to="/about" className="inline-block hover:opacity-80 transition-opacity cursor-pointer">
               <span className="bg-gradient-to-r from-amber-400 via-orange-400 to-cyan-400 bg-clip-text text-transparent font-semibold">[pyth]</span>{' '}
               <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-violet-400 bg-clip-text text-transparent font-semibold">ai</span>
-            </Link>, oracle of matches.
+            </Link> • Social Signaling + GOD Score™
           </p>
           
-          {/* Smart Search Bar - Search or submit URL */}
-          <SmartSearchBar className="mb-3" />
+          {/* Trending Button - Explore Startups & Investors */}
+          <Link
+            to="/trending"
+            className="group relative inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 backdrop-blur-sm border border-cyan-400/50 hover:border-cyan-400 text-white font-semibold text-sm rounded-xl shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50 transition-all hover:scale-105 mb-3"
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/0 via-cyan-400/20 to-cyan-500/0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity blur-sm"></div>
+            <Search className="w-4 h-4 text-cyan-400 group-hover:text-cyan-300 relative z-10" />
+            <span className="bg-gradient-to-r from-cyan-300 to-blue-300 bg-clip-text text-transparent relative z-10">
+              Explore Startups & Investors
+            </span>
+            <TrendingUp className="w-4 h-4 text-cyan-400 group-hover:text-cyan-300 group-hover:translate-x-1 transition-transform relative z-10" />
+          </Link>
         </div>
       </div>
 
-      <div className="relative z-10 container mx-auto px-8 py-2">
+      <div className="relative z-10 container mx-auto px-4 py-2">
 
-        {/* Match Display with Lightning Animation */}
-        <div className="max-w-7xl mx-auto mb-16">
-            {/* Match Badge & Explore Button */}
-          <div className="flex flex-col items-center gap-3 mb-8">
-            <div className="relative bg-gradient-to-r from-amber-500 via-orange-500 via-cyan-500 to-blue-500 rounded-full px-8 py-3 shadow-2xl shadow-purple-500/50 flex items-center gap-3 animate-pulse">
-              {/* Animated glow ring */}
-              <div className="absolute -inset-1 bg-gradient-to-r from-amber-400 via-orange-400 via-cyan-400 to-blue-400 rounded-full blur-lg opacity-75 animate-pulse"></div>
-              <span className="relative text-xl font-black text-white flex items-center gap-2 drop-shadow-lg">
-                ⚡ {match.matchScore}% Match ✨
-              </span>
-              <MatchConfidenceBadge 
-                matchScore={match.matchScore} 
-                godScore={match.startup.total_god_score ?? undefined}
-                hasInference={!!(match.startup.sectors?.length && match.startup.sectors.length > 0)}
-                hasSectorMatch={match.startup.tags?.some((t: string) => match.investor.sectors?.includes(t))}
-                variant="tooltip"
-              />
-            </div>
-            <Link
-              to="/trending"
-              className="group relative flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 backdrop-blur-sm border border-cyan-400/50 hover:border-cyan-400 text-white font-semibold text-sm rounded-xl shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50 transition-all hover:scale-105"
-            >
-              {/* Glowing effect */}
-              <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/0 via-cyan-400/20 to-cyan-500/0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity blur-sm"></div>
-              <Search className="w-4 h-4 text-cyan-400 group-hover:text-cyan-300 relative z-10" />
-              <span className="bg-gradient-to-r from-cyan-300 to-blue-300 bg-clip-text text-transparent relative z-10">
-                Explore Startups & Investors
-              </span>
-              <TrendingUp className="w-4 h-4 text-cyan-400 group-hover:text-cyan-300 group-hover:translate-x-1 transition-transform relative z-10" />
-            </Link>
-          </div>
+        {/* Match Display */}
+        <div className="max-w-7xl mx-auto">
           <div className="relative">
-            {/* Cards Grid - CENTERED - Stacks vertically on mobile */}
-            <div className="grid grid-cols-1 lg:grid-cols-[1fr,auto,1fr] gap-6 lg:gap-12 items-center justify-items-center max-w-7xl mx-auto px-2 sm:px-4">
+            {/* Cards Grid - 3 COLUMNS with Brain Center */}
+            <div className="grid grid-cols-1 lg:grid-cols-[1fr,auto,1fr] gap-4 lg:gap-8 items-start justify-items-center max-w-6xl mx-auto px-2 sm:px-4">
               {/* Startup Card - DARK CHARCOAL with Kelly Green Stroke */}
               <div className={`relative w-full max-w-[340px] sm:max-w-[400px] transition-all duration-400 ${cardFadeOut ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}>
                 {/* Kelly green glow effect - reduced on mobile */}
@@ -911,34 +920,12 @@ export default function MatchingEngine() {
                 </div>
               </div>
 
-              {/* Brain Icon with Energy Bolts - Smaller on mobile */}
-              <div className="relative flex justify-center items-center h-[120px] lg:h-[320px] order-first lg:order-none">
+              {/* CENTER: Brain Icon - Clean */}
+              <div className="relative flex flex-col justify-center items-center h-[120px] lg:h-[320px] order-first lg:order-none">
                 {/* Animated energy lines - Hidden on mobile */}
                 <svg className="hidden lg:block absolute inset-0 w-full h-full pointer-events-none z-0" style={{ overflow: 'visible' }}>
-                  {/* Energy line to left card */}
-                  <line 
-                    x1="50%" 
-                    y1="50%" 
-                    x2="5%" 
-                    y2="50%" 
-                    stroke="url(#gradient-left)" 
-                    strokeWidth="4"
-                    className="animate-pulse"
-                    strokeDasharray="8,8"
-                  />
-                  {/* Energy line to right card */}
-                  <line 
-                    x1="50%" 
-                    y1="50%" 
-                    x2="95%" 
-                    y2="50%" 
-                    stroke="url(#gradient-right)" 
-                    strokeWidth="4"
-                    className="animate-pulse"
-                    strokeDasharray="8,8"
-                    style={{ animationDelay: '0.3s' }}
-                  />
-                  {/* Gradient definitions - Orange/Amber energy */}
+                  <line x1="50%" y1="50%" x2="5%" y2="50%" stroke="url(#gradient-left)" strokeWidth="4" className="animate-pulse" strokeDasharray="8,8" />
+                  <line x1="50%" y1="50%" x2="95%" y2="50%" stroke="url(#gradient-right)" strokeWidth="4" className="animate-pulse" strokeDasharray="8,8" style={{ animationDelay: '0.3s' }} />
                   <defs>
                     <linearGradient id="gradient-left" x1="0%" y1="0%" x2="100%" y2="0%">
                       <stop offset="0%" stopColor="#22c55e" stopOpacity="0.1" />
@@ -953,38 +940,25 @@ export default function MatchingEngine() {
                   </defs>
                 </svg>
 
+                {/* Brain Only - No Match Button */}
                 <button onClick={() => setShowHowItWorks(true)} className="relative z-10 cursor-pointer hover:scale-110 transition-transform">
-                  {/* Pulsing glow background - ORANGE for hot deals */}
+                  {/* Pulsing glow */}
                   <div className="absolute inset-0 bg-orange-600/40 rounded-full blur-3xl animate-pulse"></div>
                   
-                  {/* Brain Icon Image with animation - orange glow */}
+                  {/* Brain Icon */}
                   <div className={`relative transition-all duration-700 ${brainSpin ? 'scale-150 drop-shadow-[0_0_50px_rgba(255,90,9,1)]' : matchPulse ? 'scale-125 drop-shadow-[0_0_40px_rgba(255,90,9,1)]' : 'scale-100 drop-shadow-[0_0_25px_rgba(255,90,9,0.8)]'}`}>
                     <img 
                       src="/images/brain-icon.png" 
                       alt="AI Brain" 
                       className={`w-20 h-20 sm:w-28 sm:h-28 lg:w-40 lg:h-40 object-contain ${brainSpin ? '' : 'animate-pulse'}`}
-                      style={{ 
-                        animationDuration: '2s',
-                        transform: brainSpin ? 'rotate(360deg)' : 'rotate(0deg)',
-                        transition: 'transform 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55)'
-                      }}
+                      style={{ animationDuration: '2s', transform: brainSpin ? 'rotate(360deg)' : 'rotate(0deg)', transition: 'transform 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55)' }}
                     />
                   </div>
                   
-                  {/* Lottie Electrical Charge Animation */}
+                  {/* Lottie Animation */}
                   {showLightning && (
                     <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
-                      <canvas 
-                        ref={lottieCanvasRef}
-                        width="300"
-                        height="300"
-                        className="w-[300px] h-[300px]"
-                        style={{ 
-                          filter: 'brightness(1.3) saturate(1.8) hue-rotate(270deg)',
-                          mixBlendMode: 'screen',
-                          transform: 'scale(1.2)'
-                        }}
-                      />
+                      <canvas ref={lottieCanvasRef} width="300" height="300" className="w-[300px] h-[300px]" style={{ filter: 'brightness(1.3) saturate(1.8) hue-rotate(270deg)', mixBlendMode: 'screen', transform: 'scale(1.2)' }} />
                     </div>
                   )}
                   
@@ -997,8 +971,23 @@ export default function MatchingEngine() {
 
               {/* Investor Card - Enhanced Component with Glow and Stroke */}
               <div className={`relative w-full max-w-[340px] sm:max-w-[400px] transition-all duration-400 ${cardFadeOut ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}>
+                {/* 🔥 HOT MATCH Badge - Shows when score >= 95% */}
+                {match.matchScore >= 95 && (
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-30 animate-bounce">
+                    <div className="flex items-center gap-1.5 px-4 py-1.5 bg-gradient-to-r from-orange-500 to-orange-600 rounded-full shadow-lg shadow-orange-500/50 border border-orange-400/50">
+                      <img src="/images/fire_icon_01.jpg" alt="" className="w-5 h-5 object-contain" />
+                      <span className="text-white font-bold text-sm tracking-wide">HOT MATCH</span>
+                      <img src="/images/fire_icon_01.jpg" alt="" className="w-5 h-5 object-contain" />
+                    </div>
+                  </div>
+                )}
+                
                 {/* Hot amber/orange glow effect - reduced on mobile */}
-                <div className="absolute -inset-2 sm:-inset-4 bg-gradient-to-r from-blue-500 via-blue-500 to-blue-500 rounded-[2rem] sm:rounded-[2.5rem] blur-xl sm:blur-2xl opacity-50 hover:opacity-70 transition-opacity"></div>
+                <div className={`absolute -inset-2 sm:-inset-4 rounded-[2rem] sm:rounded-[2.5rem] blur-xl sm:blur-2xl transition-opacity ${
+                  match.matchScore >= 95 
+                    ? 'bg-gradient-to-r from-orange-500 via-orange-400 to-violet-500 opacity-60 hover:opacity-80' 
+                    : 'bg-gradient-to-r from-violet-500 via-blue-500 to-violet-500 opacity-50 hover:opacity-70'
+                }`}></div>
                 
                 {/* Remove clipped border wrapper - apply border directly */}
                 <div className="relative">
@@ -1028,6 +1017,8 @@ export default function MatchingEngine() {
                     investor={{
                       ...match.investor,
                       notable_investments: match.investor.notableInvestments,
+                      check_size_min: match.investor.check_size_min ?? undefined,
+                      check_size_max: match.investor.check_size_max ?? undefined,
                     }}
                     compact={true}
                     onClick={() => {
@@ -1054,17 +1045,75 @@ export default function MatchingEngine() {
               </div>
             </div>
 
+            {/* Match Logic - Inline Expandable Button */}
+            <div className="flex flex-col items-center mt-8">
+              <div className={`flex flex-col items-center ${showMatchLogic ? 'bg-gradient-to-br from-[#1a1a1a] to-[#2a2a2a] rounded-xl border border-orange-500/40 shadow-2xl shadow-orange-500/30 overflow-hidden' : ''}`}>
+                <button
+                  onClick={() => setShowMatchLogic(!showMatchLogic)}
+                  className={`group inline-flex items-center gap-2 px-4 py-2 text-white font-semibold text-sm transition-all hover:scale-105 ${showMatchLogic ? 'bg-gradient-to-r from-orange-500/30 to-amber-500/30 w-full justify-center border-b border-orange-500/30' : 'bg-gradient-to-r from-orange-500/20 to-amber-500/20 backdrop-blur-sm border border-orange-400/50 hover:border-orange-400 rounded-xl shadow-lg shadow-orange-500/20 hover:shadow-orange-500/40'}`}
+                >
+                  <span className="text-orange-400">💡</span>
+                  <span className="text-orange-300">Match Logic</span>
+                  <span className={`text-orange-400 transition-transform ${showMatchLogic ? 'rotate-180' : ''}`}>▼</span>
+                </button>
+                
+                {/* Expanded Content - Inside same container */}
+                {showMatchLogic && (
+                  <div className="w-full max-w-md animate-fadeIn p-4">
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="text-orange-400 text-sm font-bold">WHY THIS MATCH WORKS</span>
+                      <span className="bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs font-bold px-2.5 py-1 rounded-full">{match.matchScore}%</span>
+                    </div>
+                    <p className="text-sm text-gray-300 leading-relaxed mb-3">
+                      {match.reasoning && match.reasoning.length > 0 
+                        ? match.reasoning[0]
+                        : (() => {
+                            const startupSectors = match.startup.sectors || match.startup.tags || [];
+                            const investorSectors = match.investor.sectors || [];
+                            const commonSectors = startupSectors.filter((s: string) => 
+                              investorSectors.some((is: string) => is.toLowerCase().includes(s.toLowerCase()) || s.toLowerCase().includes(is.toLowerCase()))
+                            );
+                            if (commonSectors.length > 0) {
+                              return `${match.investor.name?.split(' ')[0]} actively invests in ${commonSectors[0]} — exactly where ${match.startup.name} operates.`;
+                            }
+                            if (match.startup.stage && match.investor.stage?.includes(String(match.startup.stage))) {
+                              return `${match.investor.name?.split(' ')[0]} focuses on ${match.startup.stage} stage companies like ${match.startup.name}.`;
+                            }
+                            return `Strong alignment on sector focus, stage preference, and investment thesis.`;
+                          })()
+                      }
+                    </p>
+                    <div className="flex flex-wrap gap-2 pt-3 border-t border-white/10">
+                      <span className="text-xs text-cyan-400 bg-cyan-400/10 px-2 py-1 rounded">🎯 Sector Match</span>
+                      <span className="text-xs text-green-400 bg-green-400/10 px-2 py-1 rounded">✓ Stage Fit</span>
+                      <span className="text-xs text-purple-400 bg-purple-400/10 px-2 py-1 rounded">📊 Thesis Aligned</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
             {/* Match Counter */}
-            <div className="text-center mt-12">
+            <div className="text-center mt-4">
               <p className="text-gray-400 text-sm">
                 Match {currentIndex + 1} of {matches.length} • Powered by{' '}
                 <span className="bg-gradient-to-r from-amber-400 via-orange-400 to-cyan-400 bg-clip-text text-transparent font-semibold">
-                  [pyth] ai Oracle Score™
+                  GOD Score™
                 </span>
               </p>
               <p className="text-gray-500 text-xs mt-1">
-                <>⚡ Cycling every 3 seconds • New batch every 10 minutes • No duplicates</>
+                <>⚡ New match every 10 seconds • Unique startups only</>
               </p>
+            </div>
+            
+            {/* URL Submission Bar - Get Matched */}
+            <div className="mt-8 max-w-2xl mx-auto px-4">
+              <div className="text-center mb-4">
+                <p className="text-gray-300 text-sm">
+                  <span className="text-orange-400 font-semibold">Are you a startup?</span> Submit your URL to see your top investor matches
+                </p>
+              </div>
+              <SmartSearchBar className="w-full" />
             </div>
           </div>
         </div>
@@ -1247,8 +1296,8 @@ export default function MatchingEngine() {
         {/* VALUE PROP PANELS */}
         <ValuePropPanels />
 
-        {/* How It Works Modal - Detailed version with technology, process, and product */}
-        <HowItWorksModalDetailed 
+        {/* Live Match Demo Modal */}
+        <LiveMatchDemo 
           isOpen={showHowItWorks} 
           onClose={() => setShowHowItWorks(false)}
           showSignupButton={true}
@@ -1461,6 +1510,36 @@ export default function MatchingEngine() {
           </div>
         </div>
       )}
+
+      {/* Get Matched Popup - Conversion CTA */}
+      <GetMatchedPopup
+        isOpen={showGetMatchedPopup}
+        onClose={() => setShowGetMatchedPopup(false)}
+        lastMatchScore={match?.matchScore}
+        lastStartupName={match?.startup?.name}
+      />
+
+      {/* Floating CTA Button - Persistent pulsing button */}
+      <div className="fixed bottom-6 right-6 z-40">
+        <button
+          onClick={() => setShowGetMatchedPopup(true)}
+          className="group relative flex items-center gap-2 px-5 py-3 bg-gradient-to-r from-slate-800 to-slate-900 hover:from-slate-700 hover:to-slate-800 text-white font-bold rounded-full shadow-2xl shadow-violet-500/30 transition-all hover:scale-105 border border-violet-500/50"
+        >
+          {/* Pulsing ring animation */}
+          <div className="absolute inset-0 rounded-full bg-violet-500 animate-ping opacity-20" />
+          <div className="absolute -inset-1 rounded-full bg-violet-500/30 blur-md opacity-50 group-hover:opacity-70 transition-opacity" />
+          
+          {/* Button content */}
+          <span className="relative flex items-center gap-2">
+            <img src="/images/fire_icon_02.jpg" alt="" className="w-6 h-6 object-contain" />
+            <span className="hidden sm:inline">Get Your Matches</span>
+            <span className="sm:hidden">Match Me</span>
+            <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </span>
+        </button>
+      </div>
 
       {/* Footer */}
       <div className="relative z-10 container mx-auto px-4 sm:px-8 py-8 mt-16 border-t border-gray-800/50">

@@ -337,11 +337,13 @@ export async function generateOptimizationRecommendations(): Promise<Optimizatio
 
   // Recommendation logic
   let recommendedWeights = { ...currentWeights };
+  let hasChanges = false;
 
   if (avgSuccessScore > 80 && successful.length > 10) {
     // High scores predict success - algorithm working well
     reasoning.push('✅ GOD algorithm shows strong predictive power (high scores = success)');
     reasoning.push(`Average successful match GOD score: ${avgSuccessScore.toFixed(1)}/100`);
+    // No changes needed - algorithm is working well
   } else if (avgSuccessScore < 70 && successful.length > 5) {
     // Successful matches have lower scores - may need recalibration
     reasoning.push('⚠️ Successful matches showing lower GOD scores than expected');
@@ -349,6 +351,7 @@ export async function generateOptimizationRecommendations(): Promise<Optimizatio
     
     // Boost traction weight (often indicates real progress)
     recommendedWeights.traction = 3.5;
+    hasChanges = true;
     reasoning.push('📈 Recommended: Increase traction weight to 3.5 (from 3.0)');
   }
 
@@ -359,13 +362,32 @@ export async function generateOptimizationRecommendations(): Promise<Optimizatio
     reasoning.push('Consider adding qualitative factors to GOD algorithm');
   }
 
+  // Only create recommendation if there are actual changes
+  if (!hasChanges) {
+    // Check if any weights actually changed
+    hasChanges = Object.keys(currentWeights).some(
+      key => currentWeights[key as keyof AlgorithmWeights] !== recommendedWeights[key as keyof AlgorithmWeights]
+    );
+  }
+
+  if (!hasChanges) {
+    console.log('ℹ️  No weight changes recommended - algorithm weights are optimal');
+    return {
+      current_weights: currentWeights,
+      recommended_weights: recommendedWeights,
+      expected_improvement: 0,
+      confidence: 0,
+      reasoning: ['No changes recommended - current weights are performing well']
+    };
+  }
+
   // Calculate expected improvement
   const currentSuccessRate = successful.length / Math.max(outcomes.length, 1);
   const expectedImprovement = currentSuccessRate < 0.3 ? 15 : 8; // % improvement
 
   const confidence = successful.length > 20 ? 0.85 : successful.length > 10 ? 0.7 : 0.5;
 
-  // Save recommendation to database
+  // Save recommendation to database (only if there are changes)
   await supabase.from('ml_recommendations').insert({
     recommendation_type: 'weight_change',
     priority: confidence > 0.8 ? 'high' : 'medium',

@@ -153,7 +153,7 @@ export default function InvestorSignup() {
           </div>
           
           <h1 className="text-4xl md:text-5xl font-black text-white mb-4">
-            Stop Drowning in <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-violet-400">Bad Deal Flow</span>
+            Find Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-violet-400">Perfect Match in Seconds</span>
           </h1>
           
           <p className="text-xl text-gray-400 max-w-2xl mx-auto">
