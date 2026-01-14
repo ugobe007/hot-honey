@@ -1,39 +1,29 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Rocket, Briefcase, Sparkles, ArrowRight, CheckCircle, Loader2, Globe, TrendingUp, Zap, Users, Target, Brain } from 'lucide-react';
+import { Rocket, Sparkles, ArrowRight, CheckCircle, Loader2, Globe, Zap, Lock, TrendingUp, Brain, Target, Users } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
 interface SplitScreenHeroProps {
   onAnalysisComplete?: (startupData: any, matches: any[]) => void;
 }
 
-// Sample match data for the live demo
-const SAMPLE_MATCHES = [
-  {
-    startup: { name: 'NeuralFlow AI', sector: 'AI/ML', stage: 'Series A' },
-    investor: { name: 'Sequoia Capital', focus: 'Enterprise AI' },
-    score: 94
-  },
-  {
-    startup: { name: 'GreenTech Solar', sector: 'CleanTech', stage: 'Seed' },
-    investor: { name: 'Khosla Ventures', focus: 'Climate Tech' },
-    score: 87
-  },
-  {
-    startup: { name: 'HealthPulse', sector: 'HealthTech', stage: 'Series B' },
-    investor: { name: 'a16z Bio', focus: 'Digital Health' },
-    score: 91
-  },
-  {
-    startup: { name: 'FinanceBot', sector: 'FinTech', stage: 'Series A' },
-    investor: { name: 'Ribbit Capital', focus: 'Financial Services' },
-    score: 89
-  },
-  {
-    startup: { name: 'DataMesh Pro', sector: 'Data Infra', stage: 'Seed' },
-    investor: { name: 'Y Combinator', focus: 'Dev Tools' },
-    score: 96
-  }
+// Recent matches for the ticker (will be replaced with real data)
+const SAMPLE_RECENT_MATCHES = [
+  { startup: 'NeuralFlow AI', investor: 'Sequoia Capital', score: 94 },
+  { startup: 'GreenTech Solar', investor: 'Khosla Ventures', score: 87 },
+  { startup: 'HealthPulse', investor: 'a16z Bio', score: 91 },
+  { startup: 'FinanceBot', investor: 'Ribbit Capital', score: 89 },
+  { startup: 'DataMesh Pro', investor: 'Y Combinator', score: 96 },
+  { startup: 'CloudSecure', investor: 'Accel', score: 88 },
+  { startup: 'AIWriter', investor: 'Greylock', score: 92 },
+  { startup: 'EduTech Plus', investor: 'Reach Capital', score: 85 },
+];
+
+// Blurred investor names for teaser
+const TEASER_INVESTORS = [
+  { name: 'Top VC Firm', focus: 'AI/ML' },
+  { name: 'Growth Fund', focus: 'B2B SaaS' },
+  { name: 'Seed Investor', focus: 'FinTech' },
 ];
 
 // Analysis steps shown during loading
@@ -53,44 +43,23 @@ const SplitScreenHero: React.FC<SplitScreenHeroProps> = ({ onAnalysisComplete })
   const [analysisResult, setAnalysisResult] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
   
-  // Mini demo state
-  const [currentMatchIndex, setCurrentMatchIndex] = useState(0);
-  const [animationPhase, setAnimationPhase] = useState(0);
-  const [displayScore, setDisplayScore] = useState(0);
+  // Ticker state
+  const [tickerIndex, setTickerIndex] = useState(0);
+  const [tickerFade, setTickerFade] = useState(false);
 
-  const currentMatch = SAMPLE_MATCHES[currentMatchIndex];
-
-  // Mini demo animation
-  const runMatchAnimation = useCallback(() => {
-    setAnimationPhase(0);
-    setDisplayScore(0);
-    
-    setTimeout(() => setAnimationPhase(1), 100);
-    setTimeout(() => setAnimationPhase(2), 600);
-    setTimeout(() => {
-      setAnimationPhase(3);
-      const targetScore = SAMPLE_MATCHES[currentMatchIndex].score;
-      let current = 0;
-      const interval = setInterval(() => {
-        current += 8;
-        if (current >= targetScore) {
-          current = targetScore;
-          clearInterval(interval);
-        }
-        setDisplayScore(current);
-      }, 25);
-    }, 1000);
-    setTimeout(() => setAnimationPhase(4), 1600);
-    setTimeout(() => {
-      setCurrentMatchIndex((prev) => (prev + 1) % SAMPLE_MATCHES.length);
-    }, 3000);
-  }, [currentMatchIndex]);
-
-  // Start demo animation loop
+  // Animate ticker
   useEffect(() => {
-    const timer = setTimeout(() => runMatchAnimation(), 500);
-    return () => clearTimeout(timer);
-  }, [currentMatchIndex, runMatchAnimation]);
+    const interval = setInterval(() => {
+      setTickerFade(true);
+      setTimeout(() => {
+        setTickerIndex((prev) => (prev + 1) % SAMPLE_RECENT_MATCHES.length);
+        setTickerFade(false);
+      }, 300);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const currentTickerMatch = SAMPLE_RECENT_MATCHES[tickerIndex];
 
   // Analysis step progression
   useEffect(() => {
@@ -148,16 +117,17 @@ const SplitScreenHero: React.FC<SplitScreenHeroProps> = ({ onAnalysisComplete })
         setAnalysisComplete(true);
         onAnalysisComplete?.(existingStartup, matches || []);
       } else {
-        // New startup - queue for analysis
-        // For now, redirect to get-matched form with URL pre-filled
+        // New startup - redirect to get-matched form with URL pre-filled
         setTimeout(() => {
           navigate(`/get-matched?url=${encodeURIComponent(cleanUrl)}`);
         }, 3000);
       }
     } catch (err) {
       console.error('Analysis error:', err);
-      setError('Something went wrong. Please try again.');
-      setIsAnalyzing(false);
+      // Still redirect on error
+      setTimeout(() => {
+        navigate(`/get-matched?url=${encodeURIComponent(url)}`);
+      }, 2000);
     }
   };
 
@@ -170,19 +140,42 @@ const SplitScreenHero: React.FC<SplitScreenHeroProps> = ({ onAnalysisComplete })
   };
 
   return (
-    <div className="w-full">
-      {/* Split Screen Container */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 items-center max-w-6xl mx-auto">
+    <div className="w-full max-w-4xl mx-auto">
+      {/* Single Unified Panel */}
+      <div className="relative bg-gradient-to-br from-[#1a1a1a]/90 via-[#1f1f1f]/90 to-[#252525]/90 backdrop-blur-md border border-violet-500/30 rounded-2xl overflow-hidden">
+        {/* Subtle animated glow */}
+        <div className="absolute inset-0 bg-gradient-to-br from-violet-500/5 via-transparent to-cyan-500/5"></div>
         
-        {/* LEFT SIDE - CTA Zone */}
-        <div className="order-1 lg:order-1">
-          <div className="bg-gradient-to-br from-[#1a1a1a]/80 via-[#1f1f1f]/80 to-[#252525]/80 backdrop-blur-md border border-violet-500/30 rounded-2xl p-6 sm:p-8">
-            
+        {/* Live Ticker Bar at Top */}
+        <div className="relative bg-gradient-to-r from-emerald-500/10 via-cyan-500/10 to-emerald-500/10 border-b border-emerald-500/20 px-4 py-2">
+          <div className="flex items-center justify-center gap-2">
+            <div className="flex items-center gap-1.5">
+              <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+              <span className="text-xs text-emerald-400 font-medium uppercase tracking-wider">Live</span>
+            </div>
+            <div className={`flex items-center gap-2 transition-opacity duration-300 ${tickerFade ? 'opacity-0' : 'opacity-100'}`}>
+              <span className="text-sm text-gray-300">
+                <span className="text-white font-semibold">{currentTickerMatch.startup}</span>
+                {' '}just matched with{' '}
+                <span className="text-cyan-400 font-semibold">{currentTickerMatch.investor}</span>
+              </span>
+              <span className={`text-sm font-bold ${getScoreColor(currentTickerMatch.score)}`}>
+                ({currentTickerMatch.score}%)
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Main Content - Split Layout */}
+        <div className="relative grid grid-cols-1 md:grid-cols-2 gap-0">
+          
+          {/* LEFT SIDE - URL Input */}
+          <div className="p-6 sm:p-8 border-b md:border-b-0 md:border-r border-gray-800">
             {!isAnalyzing && !analysisComplete && (
               <>
                 {/* CTA Header */}
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 bg-gradient-to-br from-violet-500/20 to-purple-600/20 rounded-xl border border-violet-500/30">
+                <div className="flex items-center gap-3 mb-5">
+                  <div className="p-2.5 bg-gradient-to-br from-violet-500/20 to-purple-600/20 rounded-xl border border-violet-500/30">
                     <Rocket className="w-6 h-6 text-violet-400" />
                   </div>
                   <div>
@@ -215,18 +208,18 @@ const SplitScreenHero: React.FC<SplitScreenHeroProps> = ({ onAnalysisComplete })
                 </form>
 
                 {/* Trust Indicators */}
-                <div className="flex flex-wrap items-center justify-center gap-4 mt-6 pt-6 border-t border-gray-800">
-                  <div className="flex items-center gap-2 text-sm text-gray-400">
-                    <CheckCircle className="w-4 h-4 text-emerald-400" />
-                    <span>1000+ startups</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-400">
-                    <CheckCircle className="w-4 h-4 text-emerald-400" />
+                <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 mt-5 pt-5 border-t border-gray-800">
+                  <div className="flex items-center gap-1.5 text-xs text-gray-400">
+                    <CheckCircle className="w-3.5 h-3.5 text-emerald-400" />
                     <span>50+ data points</span>
                   </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-400">
-                    <CheckCircle className="w-4 h-4 text-emerald-400" />
-                    <span>Instant results</span>
+                  <div className="flex items-center gap-1.5 text-xs text-gray-400">
+                    <CheckCircle className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>Instant GOD Score™</span>
+                  </div>
+                  <div className="flex items-center gap-1.5 text-xs text-gray-400">
+                    <CheckCircle className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>500+ investors</span>
                   </div>
                 </div>
               </>
@@ -234,17 +227,17 @@ const SplitScreenHero: React.FC<SplitScreenHeroProps> = ({ onAnalysisComplete })
 
             {/* Analyzing State */}
             {isAnalyzing && !analysisComplete && (
-              <div className="text-center py-8">
-                <div className="mb-6">
-                  <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-violet-500/20 to-purple-600/20 rounded-2xl border border-violet-500/50 animate-pulse">
-                    <Loader2 className="w-8 h-8 text-violet-400 animate-spin" />
+              <div className="text-center py-4">
+                <div className="mb-5">
+                  <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-violet-500/20 to-purple-600/20 rounded-2xl border border-violet-500/50 animate-pulse">
+                    <Loader2 className="w-7 h-7 text-violet-400 animate-spin" />
                   </div>
                 </div>
-                <h3 className="text-xl font-bold text-white mb-2">Analyzing Your Startup</h3>
-                <p className="text-gray-400 mb-6">{url}</p>
+                <h3 className="text-lg font-bold text-white mb-1">Analyzing Your Startup</h3>
+                <p className="text-sm text-gray-400 mb-5 truncate max-w-[250px] mx-auto">{url}</p>
                 
                 {/* Analysis Steps */}
-                <div className="space-y-3 text-left max-w-xs mx-auto">
+                <div className="space-y-2 text-left">
                   {ANALYSIS_STEPS.map((step, index) => {
                     const StepIcon = step.icon;
                     const isActive = index === analysisStep;
@@ -253,18 +246,18 @@ const SplitScreenHero: React.FC<SplitScreenHeroProps> = ({ onAnalysisComplete })
                     return (
                       <div 
                         key={index}
-                        className={`flex items-center gap-3 p-2 rounded-lg transition-all ${
+                        className={`flex items-center gap-2.5 p-2 rounded-lg transition-all ${
                           isActive ? 'bg-violet-500/10 border border-violet-500/30' : ''
                         }`}
                       >
                         {isComplete ? (
-                          <CheckCircle className="w-5 h-5 text-emerald-400" />
+                          <CheckCircle className="w-4 h-4 text-emerald-400 flex-shrink-0" />
                         ) : isActive ? (
-                          <StepIcon className="w-5 h-5 text-violet-400 animate-pulse" />
+                          <StepIcon className="w-4 h-4 text-violet-400 animate-pulse flex-shrink-0" />
                         ) : (
-                          <StepIcon className="w-5 h-5 text-gray-600" />
+                          <StepIcon className="w-4 h-4 text-gray-600 flex-shrink-0" />
                         )}
-                        <span className={isComplete ? 'text-emerald-400' : isActive ? 'text-white' : 'text-gray-500'}>
+                        <span className={`text-sm ${isComplete ? 'text-emerald-400' : isActive ? 'text-white' : 'text-gray-500'}`}>
                           {step.text}
                         </span>
                       </div>
@@ -278,132 +271,82 @@ const SplitScreenHero: React.FC<SplitScreenHeroProps> = ({ onAnalysisComplete })
             {analysisComplete && analysisResult && (
               <div className="text-center py-4">
                 <div className="mb-4">
-                  <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-emerald-500/20 to-green-600/20 rounded-2xl border border-emerald-500/50">
-                    <CheckCircle className="w-7 h-7 text-emerald-400" />
+                  <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br from-emerald-500/20 to-green-600/20 rounded-xl border border-emerald-500/50">
+                    <CheckCircle className="w-6 h-6 text-emerald-400" />
                   </div>
                 </div>
-                <h3 className="text-xl font-bold text-white mb-1">{analysisResult.startup.name}</h3>
-                <p className="text-sm text-gray-400 mb-4">GOD Score™: <span className="text-emerald-400 font-bold">{analysisResult.startup.total_god_score}</span></p>
-                
-                {/* Top Matches Preview */}
-                {analysisResult.matches.length > 0 && (
-                  <div className="space-y-2 mb-4">
-                    <p className="text-sm text-gray-400">Top Investor Matches:</p>
-                    {analysisResult.matches.slice(0, 3).map((match: any, i: number) => (
-                      <div key={i} className="flex items-center justify-between p-2 bg-[#0d0d0d] rounded-lg border border-gray-800">
-                        <span className="text-white text-sm">{match.investors?.name}</span>
-                        <span className={`text-sm font-bold ${getScoreColor(match.match_score)}`}>
-                          {match.match_score}%
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                )}
+                <h3 className="text-lg font-bold text-white mb-1">{analysisResult.startup.name}</h3>
+                <p className="text-sm text-gray-400 mb-4">
+                  GOD Score™: <span className="text-emerald-400 font-bold">{analysisResult.startup.total_god_score}</span>
+                </p>
                 
                 <button
                   onClick={() => navigate('/trending')}
-                  className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white font-bold rounded-xl transition-all"
+                  className="w-full flex items-center justify-center gap-2 px-5 py-3 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white font-bold rounded-xl transition-all"
                 >
-                  See All {analysisResult.matches.length}+ Matches
-                  <ArrowRight className="w-5 h-5" />
+                  See Your {analysisResult.matches.length}+ Matches
+                  <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
             )}
+          </div>
 
-            {/* Error State */}
-            {error && (
-              <div className="mt-4 p-3 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 text-sm text-center">
-                {error}
+          {/* RIGHT SIDE - Pending Matches Teaser */}
+          <div className="p-6 sm:p-8 bg-gradient-to-br from-transparent to-cyan-500/5">
+            <div className="text-center mb-5">
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <Zap className="w-4 h-4 text-amber-400" />
+                <h4 className="text-sm font-semibold text-gray-300 uppercase tracking-wider">Your Matches Await</h4>
               </div>
-            )}
+              <p className="text-xs text-gray-500">Unlock your personalized investor matches</p>
+            </div>
+
+            {/* Blurred/Locked Investor Cards */}
+            <div className="space-y-3 mb-5">
+              {TEASER_INVESTORS.map((investor, index) => (
+                <div 
+                  key={index}
+                  className="relative flex items-center gap-3 p-3 bg-[#0d0d0d]/60 border border-gray-800 rounded-xl overflow-hidden"
+                >
+                  {/* Blur overlay */}
+                  <div className="absolute inset-0 backdrop-blur-[2px] bg-[#0d0d0d]/40 z-10 flex items-center justify-center">
+                    <Lock className="w-4 h-4 text-gray-500" />
+                  </div>
+                  
+                  {/* Content (visible but blurred) */}
+                  <div className="w-10 h-10 bg-gradient-to-br from-orange-500/20 to-amber-600/20 rounded-lg flex items-center justify-center">
+                    <span className="text-lg">🔥</span>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-gray-300 truncate">{investor.name}</p>
+                    <p className="text-xs text-gray-500">{investor.focus}</p>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-sm font-bold text-emerald-400/50">??%</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Stats */}
+            <div className="grid grid-cols-2 gap-3">
+              <div className="text-center p-3 bg-[#0d0d0d]/40 rounded-xl border border-gray-800">
+                <p className="text-2xl font-bold text-cyan-400">500+</p>
+                <p className="text-xs text-gray-500">Active Investors</p>
+              </div>
+              <div className="text-center p-3 bg-[#0d0d0d]/40 rounded-xl border border-gray-800">
+                <p className="text-2xl font-bold text-violet-400">25+</p>
+                <p className="text-xs text-gray-500">Avg. Matches</p>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* RIGHT SIDE - Mini Live Match Demo */}
-        <div className="order-2 lg:order-2">
-          <div className="relative bg-gradient-to-br from-[#1a1a1a]/60 via-[#1f1f1f]/60 to-[#252525]/60 backdrop-blur-sm border border-cyan-500/20 rounded-2xl p-4 sm:p-6 overflow-hidden">
-            {/* Subtle animated glow */}
-            <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-violet-500/5 animate-pulse"></div>
-            
-            {/* Demo Header */}
-            <div className="relative flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
-                <span className="text-xs text-gray-400 uppercase tracking-wider">Live Matching</span>
-              </div>
-              <div className="flex items-center gap-1 text-xs text-gray-500">
-                <Zap className="w-3 h-3 text-amber-400" />
-                <span>GOD Score™ Active</span>
-              </div>
-            </div>
-
-            {/* Mini Cards Container */}
-            <div className="relative flex items-center justify-center gap-3 sm:gap-4 py-4">
-              {/* Mini Startup Card */}
-              <div 
-                className={`relative bg-gradient-to-br from-[#1a1a1a] to-[#222222] border-2 border-emerald-500/40 rounded-xl p-3 sm:p-4 w-[120px] sm:w-[140px] transition-all duration-500 ${
-                  animationPhase >= 1 ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'
-                }`}
-              >
-                <div className="flex items-center gap-2 mb-2">
-                  <Rocket className="w-4 h-4 text-emerald-400" />
-                  <span className="text-[10px] text-emerald-400 uppercase">Startup</span>
-                </div>
-                <p className="text-white text-sm font-semibold truncate">{currentMatch.startup.name}</p>
-                <p className="text-gray-400 text-xs truncate">{currentMatch.startup.sector}</p>
-                <div className="mt-2 px-2 py-0.5 bg-emerald-500/10 border border-emerald-500/30 rounded-full text-[10px] text-emerald-400 inline-block">
-                  {currentMatch.startup.stage}
-                </div>
-              </div>
-
-              {/* Center Brain/Match Indicator */}
-              <div className={`relative transition-all duration-300 ${animationPhase >= 2 ? 'scale-110' : 'scale-100'}`}>
-                <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center transition-all duration-300 ${
-                  animationPhase >= 2 
-                    ? 'bg-gradient-to-br from-amber-500 to-orange-600 shadow-lg shadow-amber-500/50' 
-                    : 'bg-gradient-to-br from-gray-700 to-gray-800'
-                }`}>
-                  {animationPhase >= 3 ? (
-                    <span className={`text-lg sm:text-xl font-bold ${getScoreColor(displayScore)}`}>
-                      {displayScore}
-                    </span>
-                  ) : (
-                    <Brain className={`w-5 h-5 sm:w-6 sm:h-6 ${animationPhase >= 2 ? 'text-white' : 'text-gray-500'}`} />
-                  )}
-                </div>
-                {animationPhase >= 4 && (
-                  <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap">
-                    <span className="text-[10px] sm:text-xs text-amber-400 font-bold animate-bounce">IT'S A MATCH!</span>
-                  </div>
-                )}
-              </div>
-
-              {/* Mini Investor Card */}
-              <div 
-                className={`relative bg-gradient-to-br from-[#1a1a1a] to-[#222222] border-2 border-orange-500/40 rounded-xl p-3 sm:p-4 w-[120px] sm:w-[140px] transition-all duration-500 ${
-                  animationPhase >= 1 ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'
-                }`}
-              >
-                <div className="absolute top-2 right-2">
-                  <span className="text-xs">🔥</span>
-                </div>
-                <div className="flex items-center gap-2 mb-2">
-                  <Briefcase className="w-4 h-4 text-orange-400" />
-                  <span className="text-[10px] text-orange-400 uppercase">Investor</span>
-                </div>
-                <p className="text-white text-sm font-semibold truncate">{currentMatch.investor.name}</p>
-                <p className="text-gray-400 text-xs truncate">{currentMatch.investor.focus}</p>
-                <div className="mt-2 px-2 py-0.5 bg-orange-500/10 border border-orange-500/30 rounded-full text-[10px] text-orange-400 inline-block">
-                  VC Firm
-                </div>
-              </div>
-            </div>
-
-            {/* Demo Footer */}
-            <div className="relative mt-6 pt-4 border-t border-gray-800 flex items-center justify-center gap-2 text-xs text-gray-500">
-              <TrendingUp className="w-3 h-3 text-cyan-400" />
-              <span>Matching engine running 24/7</span>
-            </div>
+        {/* Bottom Bar */}
+        <div className="relative bg-[#0d0d0d]/50 border-t border-gray-800 px-4 py-3">
+          <div className="flex items-center justify-center gap-2 text-xs text-gray-500">
+            <TrendingUp className="w-3 h-3 text-cyan-400" />
+            <span>Matching engine running 24/7 • Updated in real-time</span>
           </div>
         </div>
       </div>
