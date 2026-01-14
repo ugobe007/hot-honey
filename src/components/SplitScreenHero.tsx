@@ -101,64 +101,96 @@ const SplitScreenHero: React.FC<SplitScreenHeroProps> = ({ onAnalysisComplete })
   };
 
   return (
-    <div className="w-full max-w-6xl mx-auto">
-      {/* COMPACT UNIFIED PANEL */}
-      <div className="relative bg-gradient-to-r from-[#0f0f0f] via-[#131313] to-[#0f0f0f] border border-violet-500/30 rounded-xl overflow-hidden">
-        {/* Gradient accent line */}
-        <div className="h-0.5 bg-gradient-to-r from-violet-600 via-cyan-500 to-emerald-500"></div>
-        
-        {/* Live Ticker - SINGLE LINE */}
-        <div className="bg-[#080808] px-4 py-1 flex items-center justify-center gap-2 border-b border-gray-800/30">
-          <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></div>
-          <span className="text-[10px] text-emerald-400 font-medium uppercase">Live</span>
-          <div className={`transition-opacity duration-300 ${tickerFade ? 'opacity-0' : 'opacity-100'}`}>
-            <span className="text-[11px] text-gray-400">
-              <span className="text-white font-medium">{currentTickerMatch.startup}</span>
-              {' '}→{' '}
-              <span className="text-cyan-400 font-medium">{currentTickerMatch.investor}</span>
-              {' '}
-              <span className={`font-bold ${getScoreColor(currentTickerMatch.score)}`}>
-                {currentTickerMatch.score}%
+    <div className="w-full px-2 sm:px-4">
+      {/* Match the card grid width: max-w-[340px] + gap-8 + brain + gap-8 + max-w-[340px] on mobile, 400px on desktop */}
+      <div className="max-w-[340px] sm:max-w-[900px] lg:max-w-[920px] mx-auto">
+        {/* COMPACT UNIFIED PANEL */}
+        <div className="relative bg-gradient-to-r from-[#0f0f0f] via-[#131313] to-[#0f0f0f] border border-violet-500/30 rounded-xl overflow-hidden">
+          {/* Gradient accent line */}
+          <div className="h-0.5 bg-gradient-to-r from-violet-600 via-cyan-500 to-emerald-500"></div>
+          
+          {/* Live Ticker - SINGLE LINE */}
+          <div className="bg-[#080808] px-4 py-1 flex items-center justify-center gap-2 border-b border-gray-800/30">
+            <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></div>
+            <span className="text-[10px] text-emerald-400 font-medium uppercase">Live</span>
+            <div className={`transition-opacity duration-300 ${tickerFade ? 'opacity-0' : 'opacity-100'}`}>
+              <span className="text-[11px] text-gray-400">
+                <span className="text-white font-medium">{currentTickerMatch.startup}</span>
+                {' '}→{' '}
+                <span className="text-cyan-400 font-medium">{currentTickerMatch.investor}</span>
+                {' '}
+                <span className={`font-bold ${getScoreColor(currentTickerMatch.score)}`}>
+                  {currentTickerMatch.score}%
+                </span>
               </span>
-            </span>
-          </div>
-        </div>
-
-        {/* MAIN CONTENT - CENTERED FORM */}
-        <div className="flex items-center justify-center px-4 py-3">
-          {!isAnalyzing ? (
-            <form onSubmit={handleSubmit} className="flex gap-2 w-full max-w-xl">
-              <div className="relative flex-1">
-                <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
-                <input
-                  type="text"
-                  value={url}
-                  onChange={(e) => setUrl(e.target.value)}
-                  placeholder="yourcompany.com"
-                  className="w-full pl-9 pr-3 py-2 bg-[#080808] border border-gray-700 focus:border-violet-500 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500/30 transition-all text-sm"
-                />
-              </div>
-              <button
-                type="submit"
-                className="flex items-center gap-1.5 px-5 py-2 bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white font-bold rounded-lg transition-all text-sm whitespace-nowrap"
-              >
-                <Sparkles className="w-4 h-4" />
-                Find My Investors
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            </form>
-          ) : (
-            <div className="flex items-center gap-2 text-violet-400">
-              <Loader2 className="w-5 h-5 animate-spin" />
-              <span className="text-sm">Analyzing...</span>
             </div>
-          )}
-        </div>
+          </div>
 
-        {/* Bottom bar - MINIMAL */}
-        <div className="bg-[#080808] border-t border-gray-800/30 px-4 py-1 flex items-center justify-center gap-1.5 text-[9px] text-gray-600">
-          <TrendingUp className="w-2.5 h-2.5 text-cyan-500" />
-          <span>Matching 24/7 • Real-time updates</span>
+          {/* MAIN CONTENT - FLAME | FORM | BLURRED INVESTOR */}
+          <div className="flex items-center px-3 sm:px-4 py-2.5 gap-3 sm:gap-4">
+            
+            {/* LEFT - Flame icon */}
+            <div className="flex items-center gap-2 shrink-0">
+              <span className="text-xl sm:text-2xl">🔥</span>
+            </div>
+
+            {/* CENTER - URL Form */}
+            <div className="flex-1">
+              {!isAnalyzing ? (
+                <form onSubmit={handleSubmit} className="flex gap-2">
+                  <div className="relative flex-1">
+                    <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                    <input
+                      type="text"
+                      value={url}
+                      onChange={(e) => setUrl(e.target.value)}
+                      placeholder="yourcompany.com"
+                      className="w-full pl-9 pr-3 py-2 bg-[#080808] border border-gray-700 focus:border-violet-500 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500/30 transition-all text-sm"
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    className="flex items-center gap-1.5 px-3 sm:px-4 py-2 bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white font-bold rounded-lg transition-all text-xs sm:text-sm whitespace-nowrap"
+                  >
+                    <Sparkles className="w-4 h-4" />
+                    <span className="hidden sm:inline">Find My Investors</span>
+                    <span className="sm:hidden">Find</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+                </form>
+              ) : (
+                <div className="flex items-center justify-center gap-2 text-violet-400">
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                  <span className="text-sm">Analyzing...</span>
+                </div>
+              )}
+            </div>
+
+            {/* RIGHT - Blurred potential investor match */}
+            <div className="hidden sm:flex items-center gap-2 shrink-0">
+              <div className="w-px h-8 bg-gray-800"></div>
+              <div className="relative flex items-center gap-2 px-3 py-1.5 bg-[#0a0a0a] rounded-lg border border-gray-800/50">
+                {/* Blur overlay */}
+                <div className="absolute inset-0 backdrop-blur-[3px] bg-[#0a0a0a]/70 rounded-lg z-10 flex items-center justify-center gap-1">
+                  <Lock className="w-3 h-3 text-gray-500" />
+                  <span className="text-[10px] text-gray-500">Your match</span>
+                </div>
+                {/* Blurred content */}
+                <span className="text-sm">🏦</span>
+                <div>
+                  <p className="text-xs text-gray-400">Sequoia Capital</p>
+                  <p className="text-[9px] text-gray-600">Series A • AI/ML</p>
+                </div>
+                <span className="text-xs font-bold text-emerald-500/30">94%</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom bar - MINIMAL */}
+          <div className="bg-[#080808] border-t border-gray-800/30 px-4 py-1 flex items-center justify-center gap-1.5 text-[9px] text-gray-600">
+            <TrendingUp className="w-2.5 h-2.5 text-cyan-500" />
+            <span>Matching 24/7 • Real-time updates</span>
+          </div>
         </div>
       </div>
     </div>
