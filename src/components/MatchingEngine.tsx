@@ -745,10 +745,8 @@ export default function MatchingEngine() {
       <div className="relative z-10 container mx-auto px-4 sm:px-8 pt-12 sm:pt-16 pb-4">
         <div className="text-center">
           <h2 className="text-3xl sm:text-5xl md:text-6xl font-bold mb-1 sm:mb-2">
-            <span className="bg-gradient-to-r from-cyan-400 via-purple-500 via-pink-500 to-orange-400 bg-clip-text text-transparent">
-              <span className="block">Perfect Matches</span>
-              <span className="block">... in Seconds</span>
-            </span>
+            <span className="block bg-gradient-to-r from-cyan-400 via-purple-500 via-pink-500 to-orange-400 bg-clip-text text-transparent">Perfect Matches</span>
+            <span className="block bg-gradient-to-r from-cyan-400 via-purple-500 via-pink-500 to-orange-400 bg-clip-text text-transparent">... in Seconds</span>
           </h2>
           <p className="text-sm sm:text-lg text-gray-400 mb-4">
             <Link to="/about" className="inline-block hover:opacity-80 transition-opacity cursor-pointer">

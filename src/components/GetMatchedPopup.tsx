@@ -86,10 +86,8 @@ export default function GetMatchedPopup({ isOpen, onClose, lastMatchScore, lastS
           
           {/* Headline */}
           <h2 className="text-2xl font-bold text-center mb-2">
-            <span className="bg-gradient-to-r from-violet-300 via-blue-200 to-white bg-clip-text text-transparent">
-              <span className="block">Perfect Matches</span>
-              <span className="block">... in Seconds</span>
-            </span>
+            <span className="block bg-gradient-to-r from-violet-300 via-blue-200 to-white bg-clip-text text-transparent">Perfect Matches</span>
+            <span className="block bg-gradient-to-r from-violet-300 via-blue-200 to-white bg-clip-text text-transparent">... in Seconds</span>
           </h2>
           
           {/* Subheadline */}

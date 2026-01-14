@@ -163,10 +163,8 @@ const LiveMatchDemo: React.FC<LiveMatchDemoProps> = ({ isOpen, onClose, showSign
               <span className="text-orange-300 text-sm font-bold">LIVE MATCHING DEMO</span>
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-2">
-              <span className="bg-gradient-to-r from-orange-400 via-amber-400 to-violet-400 bg-clip-text text-transparent">
-                <span className="block">Perfect Matches</span>
-                <span className="block">... in Seconds</span>
-              </span>
+              <span className="block bg-gradient-to-r from-orange-400 via-amber-400 to-violet-400 bg-clip-text text-transparent">Perfect Matches</span>
+              <span className="block bg-gradient-to-r from-orange-400 via-amber-400 to-violet-400 bg-clip-text text-transparent">... in Seconds</span>
             </h2>
             <p className="text-gray-400">
               Watch how <span className="text-orange-400 font-semibold">GOD Score™</span> finds perfect investor matches
