@@ -20,6 +20,7 @@ import DataQualityBadge from './DataQualityBadge';
 import MatchConfidenceBadge from './MatchConfidenceBadge';
 import SmartSearchBar from './SmartSearchBar';
 import EducationalMatchModal from './EducationalMatchModal';
+import SplitScreenHero from './SplitScreenHero';
 import GetMatchedPopup from './GetMatchedPopup';
 import { saveMatch, unsaveMatch, isMatchSaved } from '../lib/savedMatches';
 import { StartupComponent, InvestorComponent } from '../types';
@@ -741,9 +742,9 @@ export default function MatchingEngine() {
         </button>
       </div>
 
-      {/* Main Headline - AT TOP */}
-      <div className="relative z-10 container mx-auto px-4 sm:px-8 pt-12 sm:pt-16 pb-4">
-        <div className="text-center">
+      {/* Split Screen Hero - CTA + Live Demo */}
+      <div className="relative z-10 container mx-auto px-4 sm:px-8 pt-12 sm:pt-16 pb-6">
+        <div className="text-center mb-8">
           <h2 className="text-3xl sm:text-5xl md:text-6xl font-bold mb-1 sm:mb-2">
             <span className="block bg-gradient-to-r from-purple-600 via-violet-400 to-cyan-400 bg-clip-text text-transparent">Perfect Matches</span>
             <span className="block bg-gradient-to-r from-violet-500 via-blue-400 to-cyan-300 bg-clip-text text-transparent">... in Seconds</span>
@@ -754,11 +755,16 @@ export default function MatchingEngine() {
               <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-violet-400 bg-clip-text text-transparent font-semibold">ai</span>
             </Link> • GOD Score™
           </p>
-          
-          {/* Trending Button - Explore Startups & Investors */}
+        </div>
+        
+        {/* Split Screen: URL Input (Left) + Live Demo (Right) */}
+        <SplitScreenHero />
+        
+        {/* Trending Button - Below Split Screen */}
+        <div className="text-center mt-6">
           <Link
             to="/trending"
-            className="group relative inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 backdrop-blur-sm border border-cyan-400/50 hover:border-cyan-400 text-white font-semibold text-sm rounded-xl shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50 transition-all hover:scale-105 mb-3"
+            className="group relative inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 backdrop-blur-sm border border-cyan-400/50 hover:border-cyan-400 text-white font-semibold text-sm rounded-xl shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50 transition-all hover:scale-105"
           >
             <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/0 via-cyan-400/20 to-cyan-500/0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity blur-sm"></div>
             <Search className="w-4 h-4 text-cyan-400 group-hover:text-cyan-300 relative z-10" />
@@ -767,6 +773,15 @@ export default function MatchingEngine() {
             </span>
             <TrendingUp className="w-4 h-4 text-cyan-400 group-hover:text-cyan-300 group-hover:translate-x-1 transition-transform relative z-10" />
           </Link>
+        </div>
+      </div>
+
+      {/* Divider */}
+      <div className="relative z-10 container mx-auto px-4 py-4">
+        <div className="flex items-center gap-4 max-w-6xl mx-auto">
+          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gray-700 to-transparent"></div>
+          <span className="text-xs text-gray-500 uppercase tracking-wider">Live Matches</span>
+          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gray-700 to-transparent"></div>
         </div>
       </div>
 
