@@ -746,7 +746,8 @@ export default function MatchingEngine() {
         <div className="text-center">
           <h2 className="text-3xl sm:text-5xl md:text-6xl font-bold mb-1 sm:mb-2">
             <span className="bg-gradient-to-r from-cyan-400 via-purple-500 via-pink-500 to-orange-400 bg-clip-text text-transparent">
-              Perfect Matches... in Seconds
+              <span className="block">Perfect Matches</span>
+              <span className="block">... in Seconds</span>
             </span>
           </h2>
           <p className="text-sm sm:text-lg text-gray-400 mb-4">

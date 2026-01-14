@@ -271,7 +271,8 @@ export default function StartupMatchSearch() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-2 text-white">
-            Perfect Matches... in Seconds
+            <span className="block">Perfect Matches</span>
+            <span className="block">... in Seconds</span>
           </h1>
           <p className="text-gray-400">
             Search and filter your investor matches to find the best fit for your startup

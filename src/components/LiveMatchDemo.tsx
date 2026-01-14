@@ -164,7 +164,8 @@ const LiveMatchDemo: React.FC<LiveMatchDemoProps> = ({ isOpen, onClose, showSign
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-2">
               <span className="bg-gradient-to-r from-orange-400 via-amber-400 to-violet-400 bg-clip-text text-transparent">
-                Perfect Matches... in Seconds
+                <span className="block">Perfect Matches</span>
+                <span className="block">... in Seconds</span>
               </span>
             </h2>
             <p className="text-gray-400">
