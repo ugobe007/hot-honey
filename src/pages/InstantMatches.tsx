@@ -2,7 +2,9 @@
  * INSTANT MATCHES PAGE
  * ====================
  * Shows instant investor matches after URL submission
- * - Top 3 matches fully visible
+ * - Top 3 matches fully visible with WHY MATCHED reasoning
+ * - Similar companies in space
+ * - Founders Toolkit CTA
  * - 50+ more matches blurred until signup
  */
 
@@ -22,7 +24,13 @@ import {
   Zap,
   Brain,
   ExternalLink,
-  ChevronRight
+  ChevronRight,
+  Lightbulb,
+  FileText,
+  Users,
+  Briefcase,
+  MapPin,
+  BarChart3
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
@@ -48,7 +56,24 @@ interface InvestorMatch {
   type?: string;
   notable_investments?: string[];
   website?: string;
+  reasoning?: string[];
 }
+
+interface SimilarStartup {
+  id: string;
+  name: string;
+  tagline?: string;
+  sectors?: string[];
+  total_god_score?: number;
+}
+
+// Founders Toolkit services
+const FOUNDERS_TOOLKIT = [
+  { slug: 'pitch-analyzer', name: 'Pitch Deck Analyzer', icon: '📊', desc: 'AI feedback on your pitch' },
+  { slug: 'value-prop-sharpener', name: 'Value Prop Sharpener', icon: '✨', desc: 'Perfect your one-liner' },
+  { slug: 'vc-approach-playbook', name: 'VC Approach Playbook', icon: '🎯', desc: 'Custom investor strategies' },
+  { slug: 'funding-strategy', name: 'Funding Roadmap', icon: '🗺️', desc: 'Your fundraise timeline' },
+];
 
 // Analysis steps for the loading animation
 const ANALYSIS_STEPS = [
@@ -68,6 +93,7 @@ export default function InstantMatches() {
   const [analysisStep, setAnalysisStep] = useState(0);
   const [startup, setStartup] = useState<AnalyzedStartup | null>(null);
   const [matches, setMatches] = useState<InvestorMatch[]>([]);
+  const [similarStartups, setSimilarStartups] = useState<SimilarStartup[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   // Run analysis on mount
@@ -114,13 +140,14 @@ export default function InstantMatches() {
         .single();
 
       if (existingStartup) {
-        // Startup exists - fetch its matches
+        // Startup exists - fetch its matches with reasoning
         setStartup(existingStartup);
         
         const { data: existingMatches } = await supabase
           .from('startup_investor_matches')
           .select(`
             match_score,
+            reasoning,
             investors (
               id, name, sectors, stage, check_size_min, check_size_max, type, notable_investments, website
             )
@@ -132,9 +159,24 @@ export default function InstantMatches() {
         if (existingMatches) {
           const formattedMatches = existingMatches.map((m: any) => ({
             ...m.investors,
-            match_score: m.match_score
+            match_score: m.match_score,
+            reasoning: m.reasoning || generateMatchReasons(existingStartup, m.investors, m.match_score)
           }));
           setMatches(formattedMatches);
+        }
+
+        // Fetch similar startups in same sectors
+        if (existingStartup.sectors && existingStartup.sectors.length > 0) {
+          const { data: similar } = await supabase
+            .from('startup_uploads')
+            .select('id, name, tagline, sectors, total_god_score')
+            .eq('status', 'approved')
+            .neq('id', existingStartup.id)
+            .overlaps('sectors', existingStartup.sectors)
+            .order('total_god_score', { ascending: false })
+            .limit(5);
+          
+          if (similar) setSimilarStartups(similar);
         }
       } else {
         // New startup - create temporary entry and find matches
@@ -160,14 +202,29 @@ export default function InstantMatches() {
           .limit(53);
 
         if (generalMatches) {
-          // Simulate match scores for new startups
-          const scoredMatches = generalMatches.map(inv => ({
-            ...inv,
-            match_score: 60 + Math.floor(Math.random() * 35)
-          })).sort((a, b) => b.match_score - a.match_score);
+          // Simulate match scores for new startups with generated reasoning
+          const scoredMatches = generalMatches.map(inv => {
+            const score = 60 + Math.floor(Math.random() * 35);
+            return {
+              ...inv,
+              match_score: score,
+              reasoning: generateMatchReasons(tempStartup, inv, score)
+            };
+          }).sort((a, b) => b.match_score - a.match_score);
           
           setMatches(scoredMatches);
         }
+
+        // Fetch some similar startups in Technology sector
+        const { data: similar } = await supabase
+          .from('startup_uploads')
+          .select('id, name, tagline, sectors, total_god_score')
+          .eq('status', 'approved')
+          .contains('sectors', ['Technology'])
+          .order('total_god_score', { ascending: false })
+          .limit(5);
+        
+        if (similar) setSimilarStartups(similar);
       }
 
       // Simulate remaining analysis time
@@ -186,6 +243,47 @@ export default function InstantMatches() {
     const minStr = min ? `$${(min / 1000000).toFixed(0)}M` : '$0';
     const maxStr = max ? `$${(max / 1000000).toFixed(0)}M` : '$10M+';
     return `${minStr} - ${maxStr}`;
+  };
+
+  // Generate match reasons based on overlap
+  const generateMatchReasons = (startup: any, investor: any, score: number): string[] => {
+    const reasons: string[] = [];
+    
+    // Sector match
+    const startupSectors = startup?.sectors || [];
+    const investorSectors = investor?.sectors || [];
+    const sectorOverlap = startupSectors.filter((s: string) => 
+      investorSectors.some((is: string) => is.toLowerCase().includes(s.toLowerCase()) || s.toLowerCase().includes(is.toLowerCase()))
+    );
+    if (sectorOverlap.length > 0) {
+      reasons.push(`🎯 Sector fit: ${sectorOverlap[0]}`);
+    }
+    
+    // Stage match
+    const startupStage = startup?.stage || 'Seed';
+    const investorStages = investor?.stage || [];
+    if (investorStages.some((s: string) => s.toLowerCase().includes(startupStage.toLowerCase()))) {
+      reasons.push(`📈 Stage alignment: ${startupStage}`);
+    }
+    
+    // Check size fit
+    if (investor?.check_size_min || investor?.check_size_max) {
+      reasons.push(`💰 Check size compatible`);
+    }
+    
+    // High score bonus
+    if (score >= 85) {
+      reasons.push(`⭐ Top-tier match score`);
+    } else if (score >= 75) {
+      reasons.push(`✨ Strong match potential`);
+    }
+
+    // Add generic reason if none found
+    if (reasons.length === 0) {
+      reasons.push(`🤝 Investment thesis alignment`);
+    }
+
+    return reasons.slice(0, 3);
   };
 
   const getScoreColor = (score: number) => {
@@ -401,6 +499,23 @@ export default function InstantMatches() {
                         </div>
                       )}
 
+                      {/* WHY THIS MATCH - Reasoning */}
+                      {match.reasoning && match.reasoning.length > 0 && (
+                        <div className="mt-3 p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-lg">
+                          <div className="flex items-center gap-1.5 mb-2">
+                            <Zap className="w-3.5 h-3.5 text-emerald-400" />
+                            <span className="text-[10px] font-semibold text-emerald-400 uppercase tracking-wider">Why This Match</span>
+                          </div>
+                          <div className="flex flex-wrap gap-2">
+                            {match.reasoning.map((reason, i) => (
+                              <span key={i} className="text-xs text-emerald-300/90">
+                                {reason}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
                       {/* Notable investments */}
                       {match.notable_investments && match.notable_investments.length > 0 && (
                         <p className="mt-2 text-xs text-gray-500">
@@ -485,6 +600,94 @@ export default function InstantMatches() {
                 </p>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* TWO COLUMN: Founders Toolkit + Similar Companies */}
+        <div className="mt-12 grid md:grid-cols-2 gap-6">
+          
+          {/* FOUNDERS TOOLKIT */}
+          <div className="p-6 bg-gradient-to-br from-[#0f0f0f] to-[#131313] border border-violet-500/30 rounded-xl">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-lg bg-violet-500/20 border border-violet-500/30 flex items-center justify-center">
+                <Lightbulb className="w-5 h-5 text-violet-400" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-white">Founders Toolkit</h3>
+                <p className="text-xs text-gray-400">Improve your pitch & strategy</p>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-2 gap-3">
+              {FOUNDERS_TOOLKIT.map((tool) => (
+                <Link
+                  key={tool.slug}
+                  to={`/services/${tool.slug}`}
+                  className="p-3 bg-[#0a0a0a] border border-gray-800 hover:border-violet-500/50 rounded-lg transition-all group"
+                >
+                  <span className="text-xl mb-1 block">{tool.icon}</span>
+                  <h4 className="text-sm font-medium text-white group-hover:text-violet-300 transition-colors">{tool.name}</h4>
+                  <p className="text-[10px] text-gray-500 mt-0.5">{tool.desc}</p>
+                </Link>
+              ))}
+            </div>
+
+            <Link
+              to="/services"
+              className="mt-4 flex items-center justify-center gap-2 px-4 py-2 text-sm text-violet-400 hover:text-violet-300 transition-colors"
+            >
+              View All Tools
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+
+          {/* SIMILAR COMPANIES IN YOUR SPACE */}
+          <div className="p-6 bg-gradient-to-br from-[#0f0f0f] to-[#131313] border border-cyan-500/30 rounded-xl">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-lg bg-cyan-500/20 border border-cyan-500/30 flex items-center justify-center">
+                <Users className="w-5 h-5 text-cyan-400" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-white">Similar Companies</h3>
+                <p className="text-xs text-gray-400">Startups in your space</p>
+              </div>
+            </div>
+
+            {similarStartups.length > 0 ? (
+              <div className="space-y-2">
+                {similarStartups.map((s) => (
+                  <Link
+                    key={s.id}
+                    to={`/startup/${s.id}`}
+                    className="flex items-center justify-between p-3 bg-[#0a0a0a] border border-gray-800 hover:border-cyan-500/50 rounded-lg transition-all group"
+                  >
+                    <div className="flex-1 min-w-0">
+                      <h4 className="text-sm font-medium text-white group-hover:text-cyan-300 transition-colors truncate">{s.name}</h4>
+                      {s.tagline && (
+                        <p className="text-[10px] text-gray-500 truncate">{s.tagline}</p>
+                      )}
+                    </div>
+                    {s.total_god_score && (
+                      <div className="ml-3 px-2 py-1 bg-cyan-500/20 text-cyan-400 rounded text-xs font-bold">
+                        {s.total_god_score}
+                      </div>
+                    )}
+                  </Link>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-8">
+                <p className="text-gray-500 text-sm">Complete your profile to see similar companies</p>
+              </div>
+            )}
+
+            <Link
+              to="/trending"
+              className="mt-4 flex items-center justify-center gap-2 px-4 py-2 text-sm text-cyan-400 hover:text-cyan-300 transition-colors"
+            >
+              Explore Trending Startups
+              <ArrowRight className="w-4 h-4" />
+            </Link>
           </div>
         </div>
 

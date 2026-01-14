@@ -3368,3 +3368,16 @@
 [2026-01-14T18:07:35.173Z] ℹ️ Discovered startups pending: 1637
 [2026-01-14T18:48:06.455Z] ℹ️ Discovered startups pending: 1650
 [2026-01-14T19:23:05.955Z] ℹ️ Discovered startups pending: 1662
+[2026-01-14T20:02:44.170Z] ℹ️ Discovered startups pending: 1666
+[2026-01-14T20:02:44.171Z] ℹ️ Running: GOD Score calculation
+[2026-01-14T20:02:44.171Z] 🔍 Command: node scripts/core/god-score-v5-tiered.js 
+[2026-01-14T20:02:44.171Z] 🔍 Timeout: 900s
+[2026-01-14T20:02:44.171Z] 🔍 Spawning: node scripts/core/god-score-v5-tiered.js 
+[2026-01-14T20:07:43.742Z] ℹ️ Running: GOD Score calculation
+[2026-01-14T20:07:43.766Z] 🔍 Command: node scripts/core/god-score-v5-tiered.js 
+[2026-01-14T20:07:43.766Z] 🔍 Timeout: 900s
+[2026-01-14T20:07:43.766Z] 🔍 Spawning: node scripts/core/god-score-v5-tiered.js 
+[2026-01-14T20:12:43.743Z] ℹ️ Running: GOD Score calculation
+[2026-01-14T20:12:43.744Z] 🔍 Command: node scripts/core/god-score-v5-tiered.js 
+[2026-01-14T20:12:43.745Z] 🔍 Timeout: 900s
+[2026-01-14T20:12:43.745Z] 🔍 Spawning: node scripts/core/god-score-v5-tiered.js 
