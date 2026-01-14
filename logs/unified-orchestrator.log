@@ -3340,3 +3340,22 @@
 [2026-01-14T17:22:34.948Z] 🔍 Command: node scripts/core/god-score-v5-tiered.js 
 [2026-01-14T17:22:34.948Z] 🔍 Timeout: 900s
 [2026-01-14T17:22:34.949Z] 🔍 Spawning: node scripts/core/god-score-v5-tiered.js 
+[2026-01-14T17:27:34.944Z] ℹ️ Running: GOD Score calculation
+[2026-01-14T17:27:34.946Z] 🔍 Command: node scripts/core/god-score-v5-tiered.js 
+[2026-01-14T17:27:34.946Z] 🔍 Timeout: 900s
+[2026-01-14T17:27:34.948Z] 🔍 Spawning: node scripts/core/god-score-v5-tiered.js 
+[2026-01-14T17:32:35.145Z] ℹ️ Discovered startups pending: 1632
+[2026-01-14T17:32:35.152Z] ℹ️ Running: GOD Score calculation
+[2026-01-14T17:32:35.152Z] 🔍 Command: node scripts/core/god-score-v5-tiered.js 
+[2026-01-14T17:32:35.152Z] 🔍 Timeout: 900s
+[2026-01-14T17:32:35.153Z] 🔍 Spawning: node scripts/core/god-score-v5-tiered.js 
+[2026-01-14T17:37:34.945Z] ℹ️ Running: GOD Score calculation
+[2026-01-14T17:37:34.953Z] 🔍 Command: node scripts/core/god-score-v5-tiered.js 
+[2026-01-14T17:37:34.954Z] 🔍 Timeout: 900s
+[2026-01-14T17:37:34.955Z] 🔍 Spawning: node scripts/core/god-score-v5-tiered.js 
+[2026-01-14T17:37:34.961Z] ❌ Script timed out after 900s: GOD Score calculation
+[2026-01-14T17:37:34.968Z] ❌ ❌ Failed: GOD Score calculation
+  {"error":"Exit code null"}
+[2026-01-14T17:42:34.950Z] ❌ Script timed out after 900s: GOD Score calculation
+[2026-01-14T17:42:34.959Z] ❌ ❌ Failed: GOD Score calculation
+  {"error":"Exit code null"}
