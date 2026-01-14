@@ -462,8 +462,8 @@ export default function TrendingPage() {
           <h1 className="text-4xl md:text-5xl font-bold mb-3 flex items-center justify-center gap-3">
             <FlameIcon variant={1} size="xl" />
             <span>
-              <span className="block bg-gradient-to-r from-orange-400 via-red-500 to-yellow-400 bg-clip-text text-transparent">Perfect Matches</span>
-              <span className="block bg-gradient-to-r from-amber-400 via-orange-500 to-red-400 bg-clip-text text-transparent">... in Seconds</span>
+              <span className="block bg-gradient-to-r from-purple-600 via-violet-400 to-cyan-400 bg-clip-text text-transparent">Perfect Matches</span>
+              <span className="block bg-gradient-to-r from-violet-500 via-blue-400 to-cyan-300 bg-clip-text text-transparent">... in Seconds</span>
             </span>
           </h1>
           <p className="text-lg text-gray-300 max-w-3xl mx-auto mb-4">
