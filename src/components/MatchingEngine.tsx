@@ -742,22 +742,19 @@ export default function MatchingEngine() {
         </button>
       </div>
 
-      {/* Split Screen Hero - CTA + Live Demo */}
-      <div className="relative z-10 container mx-auto px-4 sm:px-8 pt-12 sm:pt-16 pb-6">
-        <div className="text-center mb-8">
-          <h2 className="text-3xl sm:text-5xl md:text-6xl font-bold mb-1 sm:mb-2">
-            <span className="block bg-gradient-to-r from-purple-600 via-violet-400 to-cyan-400 bg-clip-text text-transparent">Perfect Matches</span>
-            <span className="block bg-gradient-to-r from-violet-500 via-blue-400 to-cyan-300 bg-clip-text text-transparent">... in Seconds</span>
+      {/* Hero Section */}
+      <div className="relative z-10 container mx-auto px-4 sm:px-8 pt-8 sm:pt-12 pb-4">
+        <div className="text-center mb-6">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2">
+            <span className="bg-gradient-to-r from-purple-500 via-violet-400 to-cyan-400 bg-clip-text text-transparent">Find Investors Who </span>
+            <span className="bg-gradient-to-r from-cyan-400 via-emerald-400 to-green-400 bg-clip-text text-transparent">Get You</span>
           </h2>
-          <p className="text-sm sm:text-lg text-gray-400 mb-4">
-            <Link to="/about" className="inline-block hover:opacity-80 transition-opacity cursor-pointer">
-              <span className="bg-gradient-to-r from-amber-400 via-orange-400 to-cyan-400 bg-clip-text text-transparent font-semibold">[pyth]</span>{' '}
-              <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-violet-400 bg-clip-text text-transparent font-semibold">ai</span>
-            </Link> • GOD Score™
+          <p className="text-sm text-gray-500">
+            Powered by <span className="text-amber-400 font-semibold">GOD Score™</span> • 50+ data points analyzed instantly
           </p>
         </div>
         
-        {/* Split Screen: URL Input (Left) + Live Demo (Right) */}
+        {/* Unified CTA Panel */}
         <SplitScreenHero />
         
         {/* Trending Button - Below Split Screen */}
