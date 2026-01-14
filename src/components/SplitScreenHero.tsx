@@ -62,35 +62,11 @@ const SplitScreenHero: React.FC<SplitScreenHeroProps> = ({ onAnalysisComplete })
         cleanUrl = 'https://' + cleanUrl;
       }
       
-      // Check if startup already exists
-      const { data: existingStartup } = await supabase
-        .from('startup_uploads')
-        .select('*')
-        .eq('website', cleanUrl)
-        .eq('status', 'approved')
-        .single();
-      
-      if (existingStartup) {
-        const { data: matches } = await supabase
-          .from('startup_investor_matches')
-          .select('*, investors(*)')
-          .eq('startup_id', existingStartup.id)
-          .eq('status', 'suggested')
-          .order('match_score', { ascending: false })
-          .limit(5);
-        
-        onAnalysisComplete?.(existingStartup, matches || []);
-        navigate('/trending');
-      } else {
-        setTimeout(() => {
-          navigate(`/get-matched?url=${encodeURIComponent(cleanUrl)}`);
-        }, 1500);
-      }
+      // Navigate to instant matches page - shows top 3 free, rest locked
+      navigate(`/instant-matches?url=${encodeURIComponent(cleanUrl)}`);
     } catch (err) {
       console.error('Analysis error:', err);
-      setTimeout(() => {
-        navigate(`/get-matched?url=${encodeURIComponent(url)}`);
-      }, 1000);
+      navigate(`/instant-matches?url=${encodeURIComponent(url)}`);
     }
   };
 

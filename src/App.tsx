@@ -72,6 +72,7 @@ import SubscriptionSuccessPage from './pages/SubscriptionSuccessPage';
 import StrategiesPage from './pages/StrategiesPage';
 import MarketTrends from './pages/MarketTrends';
 import AdminAnalytics from './pages/AdminAnalytics';
+import InstantMatches from './pages/InstantMatches';
 import AgentDashboard from './components/admin/AgentDashboard';
 import AdminRouteWrapper from './components/AdminRouteWrapper';
 import PipelineMonitor from './pages/PipelineMonitor';
@@ -125,6 +126,7 @@ const App: React.FC = () => {
           <Route path="/matching-engine" element={<MatchingEngine />} />
           <Route path="/matching" element={<MatchingEngine />} />
           <Route path="/match" element={<MatchingEngine />} />
+          <Route path="/instant-matches" element={<InstantMatches />} /> {/* 🚀 Instant URL analysis results */}
           <Route path="/saved-matches" element={<SavedMatches />} />
           <Route path="/vote-cards" element={<FrontPageNew />} />
           {/* Old /signup route removed - use /get-matched for startups or /investor/signup for investors */}
