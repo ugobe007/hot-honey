@@ -124,73 +124,35 @@ const SplitScreenHero: React.FC<SplitScreenHeroProps> = ({ onAnalysisComplete })
           </div>
         </div>
 
-        {/* MAIN CONTENT - HORIZONTAL */}
-        <div className="flex flex-col md:flex-row items-center px-4 py-3 gap-4">
-          
-          {/* LEFT - URL Input Form */}
-          <div className="flex-1 flex flex-col sm:flex-row items-center gap-3 w-full">
-            <div className="flex items-center gap-2 shrink-0">
-              <span className="text-xl">🔥</span>
-              <span className="text-sm font-bold text-white whitespace-nowrap">Get Your Matches</span>
-            </div>
-
-            {!isAnalyzing ? (
-              <form onSubmit={handleSubmit} className="flex-1 flex gap-2 w-full sm:w-auto">
-                <div className="relative flex-1 min-w-[180px]">
-                  <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
-                  <input
-                    type="text"
-                    value={url}
-                    onChange={(e) => setUrl(e.target.value)}
-                    placeholder="yourcompany.com"
-                    className="w-full pl-9 pr-3 py-2 bg-[#080808] border border-gray-700 focus:border-violet-500 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500/30 transition-all text-sm"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white font-bold rounded-lg transition-all text-sm whitespace-nowrap"
-                >
-                  <Sparkles className="w-4 h-4" />
-                  Find My Investors
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-              </form>
-            ) : (
-              <div className="flex items-center gap-2 text-violet-400">
-                <Loader2 className="w-5 h-5 animate-spin" />
-                <span className="text-sm">Analyzing...</span>
+        {/* MAIN CONTENT - CENTERED FORM */}
+        <div className="flex items-center justify-center px-4 py-3">
+          {!isAnalyzing ? (
+            <form onSubmit={handleSubmit} className="flex gap-2 w-full max-w-xl">
+              <div className="relative flex-1">
+                <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                <input
+                  type="text"
+                  value={url}
+                  onChange={(e) => setUrl(e.target.value)}
+                  placeholder="yourcompany.com"
+                  className="w-full pl-9 pr-3 py-2 bg-[#080808] border border-gray-700 focus:border-violet-500 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500/30 transition-all text-sm"
+                />
               </div>
-            )}
-          </div>
-
-          {/* DIVIDER */}
-          <div className="hidden md:block w-px h-10 bg-gray-800"></div>
-
-          {/* RIGHT - Investor Teasers (INLINE, NO BOXES) */}
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-1">
-              <Lock className="w-3 h-3 text-gray-600" />
-              <span className="text-[10px] text-gray-500 uppercase">Matches await:</span>
+              <button
+                type="submit"
+                className="flex items-center gap-1.5 px-5 py-2 bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white font-bold rounded-lg transition-all text-sm whitespace-nowrap"
+              >
+                <Sparkles className="w-4 h-4" />
+                Find My Investors
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </form>
+          ) : (
+            <div className="flex items-center gap-2 text-violet-400">
+              <Loader2 className="w-5 h-5 animate-spin" />
+              <span className="text-sm">Analyzing...</span>
             </div>
-            
-            {/* Blurred investor names - INLINE */}
-            <div className="flex items-center gap-3">
-              {TEASER_INVESTORS.map((investor, index) => (
-                <div key={index} className="relative">
-                  <span className="text-xs text-gray-500 blur-[2px]">{investor.name}</span>
-                  <span className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-[10px] text-emerald-500/50 font-bold">??%</span>
-                  </span>
-                </div>
-              ))}
-            </div>
-
-            {/* Stats INLINE */}
-            <div className="flex items-center gap-3 text-[10px] text-gray-500">
-              <span><span className="text-cyan-400 font-bold">500+</span> investors</span>
-              <span><span className="text-violet-400 font-bold">25+</span> avg matches</span>
-            </div>
-          </div>
+          )}
         </div>
 
         {/* Bottom bar - MINIMAL */}
