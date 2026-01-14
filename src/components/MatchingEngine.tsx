@@ -362,7 +362,7 @@ export default function MatchingEngine() {
         .eq('status', 'suggested')
         .gte('match_score', MIN_MATCH_SCORE)
         .order('match_score', { ascending: false })
-        .limit(100);
+        .limit(500); // Increased from 100 to get more unique startups after dedup
       
       if (matchError) {
         console.error('❌ Error fetching match IDs:', matchError);
@@ -623,7 +623,16 @@ export default function MatchingEngine() {
       setBrainSpin(true);
       setTimeout(() => setBrainSpin(false), 800);
       setCurrentIndex((prev) => {
-        const nextIndex = (prev + 1) % batchMatches.length;
+        const nextIndex = prev + 1;
+        // If we've reached the end of this batch, move to next batch
+        if (nextIndex >= batchMatches.length) {
+          setCurrentBatch((prevBatch) => {
+            const nextBatch = (prevBatch + 1) % totalBatches;
+            console.log(`📦 Moving to batch ${nextBatch + 1}/${totalBatches}`);
+            return nextBatch;
+          });
+          return 0; // Reset to first match in new batch
+        }
         return nextIndex;
       });
       setTimeout(() => setCardFadeOut(false), 100);
