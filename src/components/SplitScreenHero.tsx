@@ -140,7 +140,7 @@ const SplitScreenHero: React.FC<SplitScreenHeroProps> = ({ onAnalysisComplete })
   };
 
   return (
-    <div className="w-full max-w-3xl mx-auto">
+    <div className="w-full max-w-2xl mx-auto">
       {/* Single Unified Panel */}
       <div className="relative bg-gradient-to-br from-[#0f0f0f] via-[#151515] to-[#1a1a1a] backdrop-blur-md border border-violet-500/40 rounded-xl overflow-hidden shadow-2xl shadow-violet-900/20">
         {/* Gradient accent line at top */}
@@ -170,22 +170,20 @@ const SplitScreenHero: React.FC<SplitScreenHeroProps> = ({ onAnalysisComplete })
         <div className="relative grid grid-cols-1 md:grid-cols-2 gap-0">
           
           {/* LEFT SIDE - URL Input */}
-          <div className="p-4 sm:p-5 border-b md:border-b-0 md:border-r border-gray-800/50">
+          <div className="p-4 border-b md:border-b-0 md:border-r border-gray-800/50">
             {!isAnalyzing && !analysisComplete && (
               <>
                 {/* CTA Header */}
-                <div className="flex items-center gap-2.5 mb-4">
-                  <div className="p-2 bg-gradient-to-br from-violet-500/30 to-purple-600/30 rounded-lg border border-violet-500/40">
-                    <Rocket className="w-5 h-5 text-violet-400" />
-                  </div>
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-2xl">🔥</span>
                   <div>
-                    <h3 className="text-lg font-bold text-white">Get Your Matches</h3>
-                    <p className="text-xs text-gray-500">Enter your startup URL</p>
+                    <h3 className="text-base font-bold text-white">Get Your Matches</h3>
+                    <p className="text-[10px] text-gray-500">Enter your startup URL</p>
                   </div>
                 </div>
 
                 {/* URL Input Form */}
-                <form onSubmit={handleSubmit} className="space-y-3">
+                <form onSubmit={handleSubmit} className="space-y-2.5">
                   <div className="relative">
                     <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
                     <input
@@ -193,22 +191,22 @@ const SplitScreenHero: React.FC<SplitScreenHeroProps> = ({ onAnalysisComplete })
                       value={url}
                       onChange={(e) => setUrl(e.target.value)}
                       placeholder="yourcompany.com"
-                      className="w-full pl-10 pr-4 py-3 bg-[#080808] border border-gray-700 focus:border-violet-500 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500/30 transition-all text-sm"
+                      className="w-full pl-9 pr-3 py-2.5 bg-[#080808] border border-gray-700 focus:border-violet-500 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500/30 transition-all text-sm"
                     />
                   </div>
                   
                   <button
                     type="submit"
-                    className="w-full flex items-center justify-center gap-2 px-5 py-3 bg-gradient-to-r from-violet-600 via-purple-600 to-violet-600 hover:from-violet-500 hover:via-purple-500 hover:to-violet-500 text-white font-bold rounded-lg transition-all transform hover:scale-[1.02] shadow-lg shadow-violet-600/25 text-sm"
+                    className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-violet-600 via-purple-600 to-violet-600 hover:from-violet-500 hover:via-purple-500 hover:to-violet-500 text-white font-bold rounded-lg transition-all transform hover:scale-[1.02] shadow-lg shadow-violet-600/25 text-sm"
                   >
                     <Sparkles className="w-4 h-4" />
-                    Analyze My Startup
+                    Find My Investors
                     <ArrowRight className="w-4 h-4" />
                   </button>
                 </form>
 
                 {/* Trust Indicators */}
-                <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 mt-4 pt-3 border-t border-gray-800/50">
+                <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 mt-3 pt-2.5 border-t border-gray-800/50">
                   <div className="flex items-center gap-1 text-[10px] text-gray-500">
                     <CheckCircle className="w-3 h-3 text-emerald-500" />
                     <span>50+ data points</span>
@@ -292,59 +290,55 @@ const SplitScreenHero: React.FC<SplitScreenHeroProps> = ({ onAnalysisComplete })
           </div>
 
           {/* RIGHT SIDE - Pending Matches Teaser */}
-          <div className="p-4 sm:p-5 bg-gradient-to-br from-cyan-500/5 via-transparent to-violet-500/5">
-            <div className="text-center mb-3">
-              <div className="flex items-center justify-center gap-1.5 mb-1">
+          <div className="p-4 bg-gradient-to-br from-cyan-500/5 via-transparent to-violet-500/5">
+            <div className="text-center mb-2">
+              <div className="flex items-center justify-center gap-1.5 mb-0.5">
                 <Zap className="w-3 h-3 text-amber-400" />
-                <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Your Matches Await</h4>
+                <h4 className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">Your Matches Await</h4>
               </div>
-              <p className="text-[10px] text-gray-600">Unlock personalized investor matches</p>
+              <p className="text-[9px] text-gray-600">Unlock personalized investor matches</p>
             </div>
 
-            {/* Blurred/Locked Investor Cards */}
-            <div className="space-y-2 mb-3">
+            {/* Blurred/Locked Investor Cards - NO BOXES, stacked tight */}
+            <div className="space-y-1 mb-2">
               {TEASER_INVESTORS.map((investor, index) => (
                 <div 
                   key={index}
-                  className="relative flex items-center gap-2 p-2 bg-[#080808] border border-gray-800/50 rounded-lg overflow-hidden"
+                  className="relative flex items-center gap-2 py-1.5 px-2 rounded overflow-hidden"
                 >
                   {/* Blur overlay */}
-                  <div className="absolute inset-0 backdrop-blur-[2px] bg-[#080808]/50 z-10 flex items-center justify-center">
+                  <div className="absolute inset-0 backdrop-blur-[2px] bg-[#0a0a0a]/60 z-10 flex items-center justify-center">
                     <Lock className="w-3 h-3 text-gray-600" />
                   </div>
                   
                   {/* Content (visible but blurred) */}
-                  <div className="w-8 h-8 bg-gradient-to-br from-orange-500/20 to-amber-600/20 rounded-md flex items-center justify-center">
-                    <span className="text-sm">🔥</span>
-                  </div>
+                  <span className="text-sm">🔥</span>
                   <div className="flex-1 min-w-0">
                     <p className="text-xs font-medium text-gray-400 truncate">{investor.name}</p>
-                    <p className="text-[10px] text-gray-600">{investor.focus}</p>
+                    <p className="text-[9px] text-gray-600">{investor.focus}</p>
                   </div>
-                  <div className="text-right">
-                    <span className="text-xs font-bold text-emerald-500/40">??%</span>
-                  </div>
+                  <span className="text-xs font-bold text-emerald-500/40">??%</span>
                 </div>
               ))}
             </div>
 
-            {/* Stats */}
-            <div className="grid grid-cols-2 gap-2">
-              <div className="text-center p-2 bg-[#080808] rounded-lg border border-cyan-500/20">
-                <p className="text-lg font-bold text-cyan-400">500+</p>
-                <p className="text-[10px] text-gray-600">Investors</p>
+            {/* Stats - smaller */}
+            <div className="grid grid-cols-2 gap-1.5">
+              <div className="text-center py-1.5 px-2 bg-[#080808] rounded border border-cyan-500/20">
+                <p className="text-base font-bold text-cyan-400">500+</p>
+                <p className="text-[9px] text-gray-600">Investors</p>
               </div>
-              <div className="text-center p-2 bg-[#080808] rounded-lg border border-violet-500/20">
-                <p className="text-lg font-bold text-violet-400">25+</p>
-                <p className="text-[10px] text-gray-600">Avg. Matches</p>
+              <div className="text-center py-1.5 px-2 bg-[#080808] rounded border border-violet-500/20">
+                <p className="text-base font-bold text-violet-400">25+</p>
+                <p className="text-[9px] text-gray-600">Avg. Matches</p>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="relative bg-[#080808] border-t border-gray-800/50 px-3 py-2">
-          <div className="flex items-center justify-center gap-1.5 text-[10px] text-gray-600">
+        {/* Bottom Bar - tighter */}
+        <div className="relative bg-[#080808] border-t border-gray-800/50 px-3 py-1.5">
+          <div className="flex items-center justify-center gap-1.5 text-[9px] text-gray-600">
             <TrendingUp className="w-2.5 h-2.5 text-cyan-500" />
             <span>Matching 24/7 • Real-time updates</span>
           </div>

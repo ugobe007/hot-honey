@@ -3336,3 +3336,7 @@
 [2026-01-14T16:25:31.913Z] ℹ️ Discovered startups pending: 1601
 [2026-01-14T16:37:34.946Z] ⚠️ Match generation script not found
 [2026-01-14T16:57:35.105Z] ℹ️ Discovered startups pending: 1616
+[2026-01-14T17:22:34.946Z] ℹ️ Running: GOD Score calculation
+[2026-01-14T17:22:34.948Z] 🔍 Command: node scripts/core/god-score-v5-tiered.js 
+[2026-01-14T17:22:34.948Z] 🔍 Timeout: 900s
+[2026-01-14T17:22:34.949Z] 🔍 Spawning: node scripts/core/god-score-v5-tiered.js 
