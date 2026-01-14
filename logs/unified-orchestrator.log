@@ -3365,3 +3365,4 @@
 [2026-01-14T17:52:34.947Z] ❌ Script timed out after 900s: GOD Score calculation
 [2026-01-14T17:52:34.957Z] ❌ ❌ Failed: GOD Score calculation
   {"error":"Exit code null"}
+[2026-01-14T18:07:35.173Z] ℹ️ Discovered startups pending: 1637

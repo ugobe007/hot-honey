@@ -102,8 +102,8 @@ const SplitScreenHero: React.FC<SplitScreenHeroProps> = ({ onAnalysisComplete })
 
   return (
     <div className="w-full px-2 sm:px-4">
-      {/* Match the card grid width: max-w-[340px] + gap-8 + brain + gap-8 + max-w-[340px] on mobile, 400px on desktop */}
-      <div className="max-w-[340px] sm:max-w-[900px] lg:max-w-[920px] mx-auto">
+      {/* Match the card grid width - aligned with startup card left edge to investor card right edge */}
+      <div className="max-w-[340px] sm:max-w-[940px] lg:max-w-[968px] mx-auto">
         {/* COMPACT UNIFIED PANEL */}
         <div className="relative bg-gradient-to-r from-[#0f0f0f] via-[#131313] to-[#0f0f0f] border border-violet-500/30 rounded-xl overflow-hidden">
           {/* Gradient accent line */}
