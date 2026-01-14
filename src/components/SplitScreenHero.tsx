@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Sparkles, ArrowRight, Loader2, Globe, Lock, TrendingUp } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
@@ -103,7 +103,7 @@ const SplitScreenHero: React.FC<SplitScreenHeroProps> = ({ onAnalysisComplete })
   return (
     <div className="w-full px-2 sm:px-4">
       {/* Match the card grid width - aligned with startup card left edge to investor card right edge */}
-      <div className="max-w-[340px] sm:max-w-[1005px] lg:max-w-[1034px] mx-auto">
+      <div className="max-w-[340px] sm:max-w-[1030px] lg:max-w-[1058px] mx-auto">
         {/* COMPACT UNIFIED PANEL */}
         <div className="relative bg-gradient-to-r from-[#0f0f0f] via-[#131313] to-[#0f0f0f] border border-violet-500/30 rounded-xl overflow-hidden">
           {/* Gradient accent line */}
@@ -166,10 +166,13 @@ const SplitScreenHero: React.FC<SplitScreenHeroProps> = ({ onAnalysisComplete })
               )}
             </div>
 
-            {/* RIGHT - Blurred potential investor match */}
+            {/* RIGHT - Blurred potential investor match - CLICKABLE */}
             <div className="hidden sm:flex items-center gap-2 shrink-0">
               <div className="w-px h-8 bg-gray-800"></div>
-              <div className="relative flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#0a0a0a] to-[#0f0f0f] rounded-lg border border-amber-500/40 shadow-lg shadow-amber-500/10">
+              <Link 
+                to="/get-matched" 
+                className="relative flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#0a0a0a] to-[#0f0f0f] rounded-lg border border-amber-500/40 shadow-lg shadow-amber-500/10 hover:border-amber-400/60 hover:shadow-amber-500/20 transition-all cursor-pointer"
+              >
                 {/* Blur overlay with enticing message */}
                 <div className="absolute inset-0 backdrop-blur-[3px] bg-[#0a0a0a]/60 rounded-lg z-10 flex items-center justify-center gap-1.5">
                   <Lock className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
@@ -183,7 +186,7 @@ const SplitScreenHero: React.FC<SplitScreenHeroProps> = ({ onAnalysisComplete })
                   <p className="text-[10px] text-gray-600">Series A • AI/ML</p>
                 </div>
                 <span className="text-sm font-bold text-emerald-500/40">94%</span>
-              </div>
+              </Link>
             </div>
           </div>
 
