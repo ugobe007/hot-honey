@@ -6,6 +6,7 @@ import {
   Brain, Info, BarChart3, Eye, CheckCircle2
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
+import { API_BASE } from '../lib/apiConfig';
 import LogoDropdownMenu from '../components/LogoDropdownMenu';
 
 interface GODWeights {
@@ -194,14 +195,17 @@ export default function GODSettingsPage() {
   };
 
   const runMLTraining = async () => {
+    console.log('🚀 runMLTraining called, API_BASE:', API_BASE);
+    
     if (!confirm('Run ML Training?\n\nThis will analyze match data and deviations to generate optimization recommendations.\n\nTraining runs in the background and may take a few minutes.')) {
+      console.log('❌ User cancelled ML training');
       return;
     }
 
+    console.log('✅ User confirmed, starting ML training...');
+    
     try {
       setTrainingStatus('running');
-      
-      const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3002';
       
       // First check if server is running
       try {
@@ -317,8 +321,6 @@ export default function GODSettingsPage() {
     }
 
     try {
-      const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3002';
-      
       // First check if server is reachable
       try {
         const healthCheck = await fetch(`${API_BASE}/api/health`, { 

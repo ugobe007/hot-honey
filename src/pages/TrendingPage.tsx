@@ -438,7 +438,7 @@ export default function TrendingPage() {
           How It Works
         </button>
         <Link 
-          to="/about" 
+          to="/why" 
           className="px-5 py-2.5 bg-gradient-to-r from-slate-600/60 to-gray-600/60 hover:from-slate-500 hover:to-gray-500 text-white font-semibold rounded-xl transition-all border border-slate-400/50"
         >
           About

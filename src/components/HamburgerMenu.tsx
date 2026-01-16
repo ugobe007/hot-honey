@@ -166,7 +166,7 @@ export default function HamburgerMenu() {
             
             {/* Secondary Navigation */}
             <Link
-              to="/about"
+              to="/why"
               onClick={() => setIsOpen(false)}
               className="group px-4 py-3 rounded-xl bg-gradient-to-r from-slate-600/40 to-gray-600/40 hover:from-slate-500/60 hover:to-gray-500/60 text-white transition-all font-bold flex items-center gap-3 border border-slate-400/50 hover:border-slate-300 shadow-lg"
             >

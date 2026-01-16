@@ -26,6 +26,71 @@ const parser = new Parser({
   }
 });
 
+// Rate limiting configuration
+const RATE_LIMIT_CONFIG = {
+  DEFAULT_DELAY: 3000,  // 3 seconds between sources
+  RATE_LIMITED_SOURCES: {
+    'hacker news': 45000,      // 45 seconds for HN (strict rate limiting)
+    'hackernews': 45000,
+    'hn': 45000,
+    'show hn': 45000,
+    'crunchbase': 20000,       // 20 seconds for Crunchbase
+    'techcrunch': 10000,       // 10 seconds for TechCrunch
+  },
+  BACKOFF: {
+    initial: 5000,
+    max: 180000,               // 3 minutes max
+    multiplier: 2,
+  }
+};
+
+// Track backoff state per source
+const sourceBackoffState = {};
+
+// Helper to get delay for a source
+function getSourceDelay(sourceName) {
+  const lower = sourceName.toLowerCase();
+  for (const [key, delay] of Object.entries(RATE_LIMIT_CONFIG.RATE_LIMITED_SOURCES)) {
+    if (lower.includes(key)) return delay;
+  }
+  return RATE_LIMIT_CONFIG.DEFAULT_DELAY;
+}
+
+// Helper to check if source should be skipped due to backoff
+function shouldSkipSource(sourceName) {
+  const state = sourceBackoffState[sourceName.toLowerCase()];
+  if (!state) return false;
+  
+  const timeSinceError = Date.now() - state.lastError;
+  if (timeSinceError < state.backoff) {
+    return { skip: true, waitTime: Math.ceil((state.backoff - timeSinceError) / 1000) };
+  }
+  return false;
+}
+
+// Helper to record error for a source
+function recordSourceError(sourceName, isRateLimit = false) {
+  const lower = sourceName.toLowerCase();
+  const state = sourceBackoffState[lower] || { backoff: RATE_LIMIT_CONFIG.BACKOFF.initial, errorCount: 0 };
+  
+  const newBackoff = isRateLimit 
+    ? Math.min(state.backoff * RATE_LIMIT_CONFIG.BACKOFF.multiplier, RATE_LIMIT_CONFIG.BACKOFF.max)
+    : state.backoff;
+    
+  sourceBackoffState[lower] = {
+    backoff: newBackoff,
+    lastError: Date.now(),
+    errorCount: state.errorCount + 1
+  };
+  
+  return newBackoff;
+}
+
+// Helper to reset backoff on success
+function resetSourceBackoff(sourceName) {
+  delete sourceBackoffState[sourceName.toLowerCase()];
+}
+
 // Keywords that indicate startup/funding news
 const STARTUP_KEYWORDS = [
   'startup', 'funding', 'raised', 'series', 'seed', 'venture', 'launches',
@@ -432,7 +497,7 @@ function isStartupNews(title, description) {
 }
 
 async function scrapeRssFeeds() {
-  console.log('📡 Simple RSS Feed Scraper (No AI Required)\n');
+  console.log('📡 Simple RSS Feed Scraper (with Smart Rate Limiting)\n');
   
   // Get active RSS sources (increased limit to handle hundreds of sources)
   const { data: sources } = await supabase
@@ -446,8 +511,24 @@ async function scrapeRssFeeds() {
   
   let totalDiscovered = 0;
   let totalAdded = 0;
+  let sourcesSkipped = 0;
   
   for (const source of sources || []) {
+    // Check if source should be skipped due to backoff
+    const skipCheck = shouldSkipSource(source.name);
+    if (skipCheck && skipCheck.skip) {
+      console.log(`⏳ Skipping ${source.name} (in backoff: ${skipCheck.waitTime}s remaining)`);
+      sourcesSkipped++;
+      continue;
+    }
+    
+    // Apply rate limiting delay
+    const delay = getSourceDelay(source.name);
+    if (delay > RATE_LIMIT_CONFIG.DEFAULT_DELAY) {
+      console.log(`⏱️ Rate-limited source: ${source.name} - waiting ${delay / 1000}s`);
+    }
+    await new Promise(resolve => setTimeout(resolve, delay));
+    
     console.log(`\n📰 ${source.name}`);
     console.log(`   ${source.url}`);
     
@@ -459,6 +540,10 @@ async function scrapeRssFeeds() {
       );
       
       const feed = await Promise.race([feedPromise, timeoutPromise]);
+      
+      // Success - reset backoff for this source
+      resetSourceBackoff(source.name);
+      
       // Increased from 10 to 50 items per feed to scale to 200-500 startups/day
       const items = feed.items?.slice(0, 50) || [];
       
@@ -573,9 +658,25 @@ async function scrapeRssFeeds() {
       }
       
     } catch (err) {
-      // Check if it's a timeout
-      if (err.message.includes('timeout') || err.message.includes('ETIMEDOUT') || err.message.includes('Feed timeout')) {
-        console.log(`   ⏱️  Timeout: Feed took too long, skipping...`);
+      // Check error type
+      const isRateLimit = err.message.includes('429') || 
+                          err.message.includes('Too Many') ||
+                          err.message.includes('rate limit');
+      const isTimeout = err.message.includes('timeout') || 
+                        err.message.includes('ETIMEDOUT') || 
+                        err.message.includes('Feed timeout');
+      const isConnectionError = err.message.includes('ECONNRESET') ||
+                                err.message.includes('ENOTFOUND');
+      
+      // Record error and get new backoff time
+      const newBackoff = recordSourceError(source.name, isRateLimit);
+      
+      if (isRateLimit) {
+        console.log(`   🚫 Rate limited (429) - backing off for ${newBackoff / 1000}s`);
+      } else if (isTimeout) {
+        console.log(`   ⏱️  Timeout: Feed took too long, backing off for ${newBackoff / 1000}s`);
+      } else if (isConnectionError) {
+        console.log(`   🔌 Connection error - backing off for ${newBackoff / 1000}s`);
       } else {
         console.log(`   ❌ Error: ${err.message}`);
       }
@@ -602,6 +703,7 @@ async function scrapeRssFeeds() {
   console.log('='.repeat(50));
   console.log(`Total discovered: ${totalDiscovered}`);
   console.log(`Total added: ${totalAdded}`);
+  console.log(`Sources skipped (backoff): ${sourcesSkipped}`);
   console.log('='.repeat(50));
 }
 

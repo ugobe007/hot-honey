@@ -42,7 +42,7 @@ const publicPages: NavSection[] = [
     links: [
       { path: '/strategies', label: 'Playbook', icon: BookOpen, description: 'Investment strategies guide' },
       { path: '/submit', label: 'Submit Startup', icon: FileText, description: 'Submit your startup for review' },
-      { path: '/about', label: 'About', icon: Map, description: 'About [pyth] ai' },
+      { path: '/why', label: 'About', icon: Map, description: 'Why Pythh Exists' },
       { path: '/settings', label: 'Settings', icon: Settings, description: 'Account settings' },
     ]
   },

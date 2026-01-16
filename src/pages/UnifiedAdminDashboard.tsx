@@ -8,6 +8,7 @@ import {
   ArrowRight, Clock, AlertCircle, TrendingDown, TrendingFlat
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
+import { API_BASE } from '../lib/apiConfig';
 import { useAuth } from '../contexts/AuthContext';
 import LogoDropdownMenu from '../components/LogoDropdownMenu';
 
@@ -343,8 +344,6 @@ export default function UnifiedAdminDashboard() {
 
       setRunning(true);
       try {
-        const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3002';
-        
         // Determine script path based on scraper ID
         let scriptPath = scraper.script;
         if (!scriptPath.includes('/')) {

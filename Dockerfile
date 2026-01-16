@@ -1,33 +1,35 @@
-# Multi-stage build for Fly.io
-# This builds the app with environment variables available
+# Combined Frontend + Backend for Fly.io
+# Serves React frontend AND Express API from a single container
 
-FROM node:20-alpine AS builder
+FROM node:20-alpine
 
 WORKDIR /app
 
+# Install build dependencies
+RUN apk add --no-cache python3 make g++
+
 # Copy package files
 COPY package*.json ./
-# Use --legacy-peer-deps to resolve peer dependency conflicts
-RUN npm ci --legacy-peer-deps --legacy-peer-deps
+
+# Install all dependencies (including dev for build)
+RUN npm ci --legacy-peer-deps
 
 # Copy source code
 COPY . .
 
-# Fly.io secrets are available as environment variables during build
-# They're automatically injected by Fly.io, but we need to verify they're set
-# Vite will read VITE_* prefixed env vars and embed them at build time
-
-# Build the app (Vite will use VITE_* env vars automatically from Fly.io secrets)
+# Build the frontend
 RUN npm run build
 
-# Production stage
-FROM nginx:alpine
+# The server will serve both:
+# - Static files from /app/dist (frontend)
+# - API endpoints at /api/* (backend)
 
-# Copy built files from builder
-COPY --from=builder /app/dist /usr/share/nginx/html
+# Set production environment
+ENV NODE_ENV=production
+ENV PORT=8080
 
-# Copy nginx configuration
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Expose the port Fly.io expects
+EXPOSE 8080
 
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+# Start the Express server (which serves both frontend + API)
+CMD ["node", "server/index.js"]

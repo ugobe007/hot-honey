@@ -165,7 +165,7 @@ export default function Login() {
         <div className="mt-6 text-center text-sm text-slate-500">
           <Link to="/privacy" className="hover:text-slate-400 transition-colors">Privacy Policy</Link>
           <span className="mx-2">•</span>
-          <Link to="/about" className="hover:text-slate-400 transition-colors">Terms of Service</Link>
+          <Link to="/why" className="hover:text-slate-400 transition-colors">About</Link>
         </div>
       </div>
     </div>

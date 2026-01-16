@@ -290,6 +290,315 @@ app.post('/api/god-scores/calculate', async (req, res) => {
   }
 });
 
+// ═══════════════════════════════════════════════════════════════════════════
+// URL SUBMISSION WITH PYTH INFERENCE ENGINE
+// ═══════════════════════════════════════════════════════════════════════════
+app.post('/api/startup/enrich-url', async (req, res) => {
+  const startTime = Date.now();
+  const supabase = getSupabaseClient();
+  
+  try {
+    const { url, startupId } = req.body;
+    
+    if (!url) {
+      return res.status(400).json({ error: 'url is required' });
+    }
+    
+    console.log(`🔥 Enriching URL with inference engine: ${url}`);
+    
+    // Log to ai_logs for admin visibility (non-blocking)
+    try {
+      await supabase.from('ai_logs').insert({
+        operation: 'inference_engine',
+        model: 'pyth_inference',
+        status: 'pending',
+        error_message: JSON.stringify({ action: 'enrich_url_start', url, startupId, started_at: new Date().toISOString() })
+      });
+    } catch (logErr) { /* ignore logging errors */ }
+    
+    // Import inference extractor
+    const { extractInferenceData } = require('../lib/inference-extractor');
+    const axios = require('axios');
+    
+    // Fetch website content
+    let websiteContent = '';
+    try {
+      const fullUrl = url.startsWith('http') ? url : `https://${url}`;
+      const response = await axios.get(fullUrl, {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
+          'Accept': 'text/html',
+        },
+        timeout: 15000,
+        maxRedirects: 5,
+      });
+      
+      // Strip HTML tags
+      websiteContent = response.data
+        .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
+        .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
+        .replace(/<[^>]*>/g, ' ')
+        .replace(/&nbsp;/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .substring(0, 15000);
+    } catch (fetchError) {
+      console.log(`⚠️  Could not fetch ${url}: ${fetchError.message}`);
+    }
+    
+    // Run inference engine
+    const inference = extractInferenceData(websiteContent, url) || {};
+    
+    // Calculate GOD score from inference
+    const SECTOR_WEIGHTS = {
+      'AI/ML': 15, 'FinTech': 12, 'HealthTech': 12, 'CleanTech': 10, 'DevTools': 10,
+      'SaaS': 8, 'Cybersecurity': 8, 'E-Commerce': 6, 'LegalTech': 6, 'Gaming': 5,
+    };
+    
+    // Determine data tier
+    const hasRichData = !!(
+      inference.funding_amount ||
+      inference.customer_count ||
+      inference.has_revenue ||
+      (inference.execution_signals?.length >= 3)
+    );
+    const hasSomeData = !!(
+      inference.sectors?.length > 0 ||
+      inference.team_signals?.length > 0 ||
+      inference.is_launched ||
+      inference.has_customers
+    );
+    const tier = hasRichData ? 'A' : (hasSomeData ? 'B' : 'C');
+    
+    let godScore = 40; // Default Tier C
+    let scores = { vision: 10, market: 10, traction: 8, team: 8, product: 8 };
+    
+    if (tier === 'A') {
+      // Full scoring
+      let vision = 0, market = 0, traction = 0, team = 0, product = 0;
+      if (inference.problem_keywords?.length > 0) vision += 10;
+      if (inference.problem_severity_estimate >= 7) vision += 10;
+      vision += 5;
+      vision = Math.min(25, vision);
+      
+      if (inference.sectors?.length > 0) {
+        for (const sector of inference.sectors) {
+          market = Math.max(market, SECTOR_WEIGHTS[sector] || 5);
+        }
+        market += 5;
+      }
+      market = Math.min(25, market);
+      
+      if (inference.has_revenue) traction += 15;
+      if (inference.has_customers) traction += 8;
+      if (inference.customer_count && inference.customer_count > 10) traction += 5;
+      if (inference.growth_rate) traction += 5;
+      if (inference.funding_amount) {
+        const amt = parseFloat(String(inference.funding_amount));
+        if (amt >= 10000000) traction += 10;
+        else if (amt >= 1000000) traction += 5;
+      }
+      traction = Math.min(25, traction);
+      
+      if (inference.has_technical_cofounder) team += 10;
+      if (inference.credential_signals?.length > 0) {
+        team += Math.min(10, inference.credential_signals.length * 3);
+      }
+      if (inference.grit_signals?.length > 0) {
+        team += Math.min(5, inference.grit_signals.length * 2);
+      }
+      team = Math.min(25, team);
+      
+      if (inference.is_launched) product += 15;
+      if (inference.has_demo) product += 5;
+      product = Math.min(20, product);
+      
+      godScore = Math.min(100, vision + market + traction + team + product + (tier === 'A' && (vision + market + traction + team + product) >= 60 ? 5 : 0));
+      scores = { vision, market, traction, team, product };
+    } else if (tier === 'B') {
+      // Capped at 55
+      let base = 40;
+      if (inference.sectors?.length > 0) {
+        for (const sector of inference.sectors) {
+          base = Math.max(base, 40 + (SECTOR_WEIGHTS[sector] || 0) / 2);
+        }
+      }
+      if (inference.is_launched) base += 4;
+      if (inference.has_demo) base += 2;
+      if (inference.has_customers) base += 3;
+      if (inference.has_technical_cofounder) base += 2;
+      if (inference.team_signals?.length > 0) base += 2;
+      godScore = Math.min(55, Math.round(base));
+      scores = {
+        vision: 12,
+        market: Math.min(20, (SECTOR_WEIGHTS[inference.sectors?.[0]] || 5)),
+        traction: inference.is_launched ? 15 : 8,
+        team: inference.has_technical_cofounder ? 15 : 8,
+        product: (inference.is_launched ? 10 : 5) + (inference.has_demo ? 5 : 0)
+      };
+    }
+    
+    // If we have a startupId, update the database
+    if (startupId) {
+      const supabase = getSupabaseClient();
+      const { error: updateError } = await supabase
+        .from('startup_uploads')
+        .update({
+          sectors: inference.sectors || ['Technology'],
+          is_launched: inference.is_launched || false,
+          has_demo: inference.has_demo || false,
+          has_technical_cofounder: inference.has_technical_cofounder || false,
+          total_god_score: godScore,
+          vision_score: scores.vision,
+          market_score: scores.market,
+          traction_score: scores.traction,
+          team_score: scores.team,
+          product_score: scores.product,
+          extracted_data: {
+            ...inference,
+            data_tier: tier,
+            inference_method: 'pyth_inference_engine',
+            enriched_at: new Date().toISOString(),
+          },
+        })
+        .eq('id', startupId);
+      
+      if (updateError) {
+        console.error('Failed to update startup:', updateError);
+      } else {
+        console.log(`✅ Updated startup ${startupId} with GOD score ${godScore} (Tier ${tier})`);
+      }
+    }
+    
+    // Log success to ai_logs for admin visibility (non-blocking)
+    const duration = Date.now() - startTime;
+    try {
+      await supabase.from('ai_logs').insert({
+        operation: 'inference_engine',
+        model: 'pyth_inference',
+        status: 'success',
+        error_message: JSON.stringify({ 
+          action: 'enrich_url_complete',
+          url, 
+          startupId, 
+          godScore, 
+          tier, 
+          signals_found: (inference.team_signals?.length || 0) + (inference.execution_signals?.length || 0),
+          duration_ms: duration,
+          completed_at: new Date().toISOString() 
+        })
+      });
+    } catch (logErr) { /* ignore */ }
+    
+    res.json({
+      success: true,
+      godScore,
+      tier,
+      scores,
+      inference: {
+        sectors: inference.sectors,
+        is_launched: inference.is_launched,
+        has_demo: inference.has_demo,
+        has_technical_cofounder: inference.has_technical_cofounder,
+        has_revenue: inference.has_revenue,
+        has_customers: inference.has_customers,
+        funding_amount: inference.funding_amount,
+        team_signals: inference.team_signals,
+        credential_signals: inference.credential_signals,
+        execution_signals: inference.execution_signals,
+      }
+    });
+  } catch (error) {
+    console.error('Error enriching URL:', error);
+    
+    // Log failure to ai_logs (non-blocking)
+    try {
+      const supabase = getSupabaseClient();
+      await supabase.from('ai_logs').insert({
+        operation: 'inference_engine',
+        model: 'pyth_inference',
+        status: 'error',
+        error_message: JSON.stringify({ action: 'enrich_url_error', url: req.body?.url, error: error.message, failed_at: new Date().toISOString() })
+      });
+    } catch (logErr) { /* ignore */ }
+    
+    res.status(500).json({ error: 'Failed to enrich URL', message: error.message });
+  }
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// ADMIN: INFERENCE ENGINE STATUS
+// ═══════════════════════════════════════════════════════════════════════════
+app.get('/api/admin/inference-status', async (req, res) => {
+  try {
+    const supabase = getSupabaseClient();
+    
+    // Get recent enrichment logs
+    const { data: logs } = await supabase
+      .from('ai_logs')
+      .select('*')
+      .eq('operation', 'inference_engine')
+      .order('created_at', { ascending: false })
+      .limit(20);
+    
+    // Get stats
+    const { count: totalEnriched } = await supabase
+      .from('startup_uploads')
+      .select('*', { count: 'exact', head: true })
+      .not('extracted_data->inference_method', 'is', null);
+    
+    const { count: pendingEnrichment } = await supabase
+      .from('startup_uploads')
+      .select('*', { count: 'exact', head: true })
+      .eq('total_god_score', 45)
+      .is('extracted_data', null);
+    
+    const { count: recentErrors } = await supabase
+      .from('ai_logs')
+      .select('*', { count: 'exact', head: true })
+      .eq('operation', 'inference_engine')
+      .eq('status', 'error')
+      .gte('created_at', new Date(Date.now() - 24*60*60*1000).toISOString());
+    
+    // Parse error_message JSON and get average duration from recent successes
+    const successLogs = logs?.filter(l => l.status === 'success') || [];
+    let avgDuration = null;
+    if (successLogs.length > 0) {
+      const durations = successLogs.map(l => {
+        try { return JSON.parse(l.error_message)?.duration_ms; } catch { return null; }
+      }).filter(Boolean);
+      if (durations.length > 0) {
+        avgDuration = Math.round(durations.reduce((a, d) => a + d, 0) / durations.length);
+      }
+    }
+    
+    res.json({
+      status: recentErrors > 5 ? 'degraded' : 'healthy',
+      stats: {
+        total_enriched: totalEnriched || 0,
+        pending_enrichment: pendingEnrichment || 0,
+        errors_last_24h: recentErrors || 0,
+        avg_duration_ms: avgDuration,
+      },
+      recent_logs: logs?.slice(0, 10).map(l => {
+        let parsed = {};
+        try { parsed = JSON.parse(l.error_message); } catch {}
+        return {
+          action: parsed.action,
+          status: l.status,
+          url: parsed.url,
+          godScore: parsed.godScore,
+          tier: parsed.tier,
+          duration_ms: parsed.duration_ms,
+          created_at: l.created_at,
+        };
+      }) || [],
+    });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to get inference status', message: error.message });
+  }
+});
+
 // Generic scraper endpoint - runs any scraper script
 app.post('/api/scrapers/run', async (req, res) => {
   try {
@@ -298,6 +607,7 @@ app.post('/api/scrapers/run', async (req, res) => {
     if (!scriptName) {
       return res.status(400).json({ error: 'scriptName is required' });
     }
+
 
     console.log(`🔄 Scraper triggered: ${description || scriptName}`);
     spawnAutomationScript(scriptName, description || scriptName);
@@ -502,13 +812,29 @@ app.post('/api/ml/training/run', async (req, res) => {
   }
 });
 
-// 404 handler
-app.use((req, res) => {
-  res.status(404).json({
-    error: 'Not Found',
-    path: req.path
+// === PRODUCTION: Serve Frontend Static Files ===
+// This serves the built React app from /app/dist in production
+const distPath = path.join(__dirname, '..', 'dist');
+if (fs.existsSync(distPath)) {
+  console.log('[Server] Serving static files from:', distPath);
+  app.use(express.static(distPath));
+  
+  // SPA fallback - serve index.html for all non-API routes
+  // Use regex pattern instead of '*' for Express 5 / path-to-regexp compatibility
+  app.get(/^(?!\/api\/)(?!\/uploads\/).*/, (req, res) => {
+    res.sendFile(path.join(distPath, 'index.html'));
   });
-});
+} else {
+  console.log('[Server] No dist folder found - API-only mode');
+  
+  // 404 handler for API-only mode
+  app.use((req, res) => {
+    res.status(404).json({
+      error: 'Not Found',
+      path: req.path
+    });
+  });
+}
 
 // Error handling middleware
 app.use((err, req, res, next) => {

@@ -5,7 +5,6 @@ import {
   Globe,
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '../lib/supabase';
 
 interface SmartSearchBarProps {
   className?: string;
@@ -19,19 +18,9 @@ export default function SmartSearchBar({ className = '' }: SmartSearchBarProps) 
 
   const normalizeUrl = (input: string): string => {
     let normalized = input.trim().toLowerCase();
-    if (!normalized.startsWith('http://') && !normalized.startsWith('https://')) {
-      normalized = 'https://' + normalized;
-    }
+    // Remove protocol for cleaner URL param
+    normalized = normalized.replace(/^(https?:\/\/)?(www\.)?/, '');
     return normalized.replace(/\/$/, '');
-  };
-
-  const extractDomain = (input: string): string => {
-    try {
-      const url = new URL(normalizeUrl(input));
-      return url.hostname.replace('www.', '');
-    } catch {
-      return input.replace(/^(https?:\/\/)?(www\.)?/, '').split('/')[0];
-    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -46,213 +35,12 @@ export default function SmartSearchBar({ className = '' }: SmartSearchBarProps) 
     setIsSubmitting(true);
     setError(null);
 
-    const domain = extractDomain(trimmed);
-    const normalizedUrl = normalizeUrl(trimmed);
-
-    try {
-      // Check if startup exists with this exact domain (more precise matching)
-      // First try exact match
-      const { data: exactMatch, error: exactError } = await supabase
-        .from('startup_uploads')
-        .select('id, name, website')
-        .eq('website', normalizedUrl)
-        .limit(1)
-        .maybeSingle();
-
-      if (exactMatch && !exactError) {
-        console.log('✅ Found exact URL match:', {
-          startupId: exactMatch.id,
-          name: exactMatch.name,
-          website: exactMatch.website,
-          searchedUrl: normalizedUrl
-        });
-        navigate(`/startup/${exactMatch.id}/matches`, { replace: true });
-        return;
-      }
-
-      // Then try domain match - be VERY specific to avoid false matches
-      // Match exact domain in URL (not partial strings)
-      const normalizedDomain = domain.toLowerCase();
-      
-      // First try: Exact domain match in website field (most precise)
-      const { data: exactDomainMatch, error: exactDomainError } = await supabase
-        .from('startup_uploads')
-        .select('id, name, website')
-        .or(`website.ilike.%${normalizedDomain}%,website.ilike.%www.${normalizedDomain}%`)
-        .limit(5);
-
-      if (exactDomainMatch && exactDomainMatch.length > 0 && !exactDomainError) {
-        // Find the best exact domain match
-        const bestMatch = exactDomainMatch.find(s => {
-          if (!s.website) return false;
-          const sDomain = extractDomain(s.website).toLowerCase();
-          return sDomain === normalizedDomain || sDomain === `www.${normalizedDomain}`;
-        }) || exactDomainMatch.find(s => {
-          if (!s.website) return false;
-          return s.website.toLowerCase().includes(normalizedDomain);
-        }) || exactDomainMatch[0];
-        
-        console.log('✅ Found exact domain match:', {
-          startupId: bestMatch.id,
-          name: bestMatch.name,
-          website: bestMatch.website,
-          searchedDomain: normalizedDomain,
-          candidates: exactDomainMatch.length
-        });
-        navigate(`/startup/${bestMatch.id}/matches`, { replace: true });
-        return;
-      }
-      
-      // Fallback: Broader search but still specific
-      const domainPattern = `%${normalizedDomain}%`;
-      const { data: existingStartups, error: startupError } = await supabase
-        .from('startup_uploads')
-        .select('id, name, website')
-        .ilike('website', domainPattern)
-        .limit(10);
-
-      if (existingStartups && existingStartups.length > 0 && !startupError) {
-        // Find the best match - prioritize exact domain match
-        const bestMatch = existingStartups.find(s => {
-          if (!s.website) return false;
-          const sDomain = extractDomain(s.website).toLowerCase();
-          return sDomain === normalizedDomain;
-        }) || existingStartups.find(s => {
-          if (!s.website) return false;
-          const websiteLower = s.website.toLowerCase();
-          return websiteLower.includes(`.${normalizedDomain}`) || websiteLower.includes(`://${normalizedDomain}`);
-        }) || existingStartups[0];
-        
-        console.log('✅ Found domain match (fallback):', {
-          startupId: bestMatch.id,
-          name: bestMatch.name,
-          website: bestMatch.website,
-          searchedDomain: normalizedDomain,
-          candidates: existingStartups.length
-        });
-        navigate(`/startup/${bestMatch.id}/matches`, { replace: true });
-        return;
-      }
-
-      // Check if it's an investor (LinkedIn URL)
-      if (domain.includes('linkedin.com')) {
-        const linkedinPath = trimmed.split('/').pop() || trimmed.split('/').slice(-2).join('/');
-        const { data: existingInvestor, error: investorError } = await supabase
-          .from('investors')
-          .select('id, name')
-          .ilike('linkedin_url', `%${linkedinPath}%`)
-          .limit(1)
-          .maybeSingle();
-
-        if (existingInvestor && !investorError) {
-          navigate(`/investor/${existingInvestor.id}/matches`);
-          return;
-        }
-      }
-
-      // Not found - create new startup profile
-      // Extract company name from domain (better extraction)
-      let companyName = domain.split('.')[0];
-      
-      // Handle special cases like "x.ai" -> "X" (not "X")
-      // For single-letter domains, use the full domain as name
-      if (companyName.length === 1) {
-        // For single letters, try to get a better name from the domain
-        // e.g., "x.ai" -> "X" (the company formerly known as Twitter)
-        companyName = companyName.toUpperCase();
-      } else {
-        // Capitalize first letter, handle camelCase domains
-        companyName = companyName.charAt(0).toUpperCase() + companyName.slice(1);
-      }
-      
-      // Try to fetch the actual company name from the website using AI
-      // For now, use the extracted name, but we'll improve this later
-      const startupName = companyName;
-      
-      // Try to insert new startup
-      const { data: newStartup, error: createError } = await supabase
-        .from('startup_uploads')
-        .insert({
-          name: startupName,
-          website: normalizedUrl,
-          status: 'approved', // Auto-approve so matches can be generated
-          source_type: 'url',
-          source_url: normalizedUrl,
-        })
-        .select('id, name')
-        .single();
-
-      if (createError) {
-        console.error('Error creating startup:', createError);
-        console.error('Error code:', createError.code);
-        console.error('Error message:', createError.message);
-        console.error('Error details:', createError.details);
-        console.error('Error hint:', createError.hint);
-        
-        // Handle duplicate/conflict errors - try to find existing startup
-        const isDuplicateError = 
-          createError.code === '23505' || // Unique violation
-          createError.code === 'PGRST116' || // PostgREST duplicate
-          createError.message?.toLowerCase().includes('duplicate') ||
-          createError.message?.toLowerCase().includes('already exists') ||
-          createError.message?.toLowerCase().includes('409') ||
-          createError.hint?.toLowerCase().includes('duplicate');
-        
-        if (isDuplicateError) {
-          // Try multiple ways to find existing startup
-          let existingStartup = null;
-          
-          // Try by website first
-          const { data: byWebsite } = await supabase
-            .from('startup_uploads')
-            .select('id')
-            .eq('website', normalizedUrl)
-            .maybeSingle();
-          
-          if (byWebsite) {
-            existingStartup = byWebsite;
-          } else {
-            // Try by name (case insensitive)
-            const { data: byName } = await supabase
-              .from('startup_uploads')
-              .select('id')
-              .ilike('name', startupName)
-              .maybeSingle();
-            
-            if (byName) {
-              existingStartup = byName;
-            }
-          }
-          
-          if (existingStartup) {
-            console.log('✅ Found existing startup (duplicate), navigating to matches:', {
-              startupId: existingStartup.id,
-              searchedUrl: normalizedUrl
-            });
-            navigate(`/startup/${existingStartup.id}/matches`, { replace: true });
-            return;
-          }
-        }
-        
-        // Show user-friendly error message
-        const errorMessage = isDuplicateError 
-          ? 'This startup already exists in our database.'
-          : createError.message || 'Failed to create profile. Please try again.';
-        
-        setError(errorMessage);
-        return;
-      }
-
-      // Go to matches page - it will show "no matches yet" or trigger matching
-      console.log('✅ Created new startup:', newStartup.id, newStartup.name, newStartup.website);
-      navigate(`/startup/${newStartup.id}/matches`);
-      
-    } catch (err) {
-      console.error('Error:', err);
-      setError('Something went wrong. Please try again.');
-    } finally {
-      setIsSubmitting(false);
-    }
+    // Clean the URL (same as SplitScreenHero)
+    const cleanUrl = normalizeUrl(trimmed);
+    
+    // Navigate to InstantMatches - same as SplitScreenHero
+    // This uses the same backend: resolveStartupFromUrl + getInvestorMatchesForStartup
+    navigate(`/instant-matches?url=${encodeURIComponent(cleanUrl)}`);
   };
 
   return (

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { 
   FileText, 
   Brain, 
@@ -29,6 +29,16 @@ import LogoDropdownMenu from '../components/LogoDropdownMenu';
 
 export default function GetMatchedPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const urlParam = searchParams.get('url');
+  
+  // If user came here with a URL param, redirect to InstantMatches
+  useEffect(() => {
+    if (urlParam) {
+      navigate(`/instant-matches?url=${encodeURIComponent(urlParam)}`, { replace: true });
+    }
+  }, [urlParam, navigate]);
+  
   const [step, setStep] = useState<'info' | 'details' | 'pitch'>('info');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');

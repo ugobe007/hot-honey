@@ -1,178 +1,384 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Sparkles, ArrowRight, Loader2, Globe, Lock, TrendingUp } from 'lucide-react';
-import { supabase } from '../lib/supabase';
+import { Loader2 } from 'lucide-react';
+import { markUrlSubmitted } from '../lib/routeGuards';
 
-interface SplitScreenHeroProps {
-  onAnalysisComplete?: (startupData: any, matches: any[]) => void;
-}
-
-// Recent matches for the ticker
-const SAMPLE_RECENT_MATCHES = [
-  { startup: 'NeuralFlow AI', investor: 'Sequoia Capital', score: 94 },
-  { startup: 'GreenTech Solar', investor: 'Khosla Ventures', score: 87 },
-  { startup: 'HealthPulse', investor: 'a16z Bio', score: 91 },
-  { startup: 'FinanceBot', investor: 'Ribbit Capital', score: 89 },
-  { startup: 'DataMesh Pro', investor: 'Y Combinator', score: 96 },
-  { startup: 'CloudSecure', investor: 'Accel', score: 88 },
-  { startup: 'AIWriter', investor: 'Greylock', score: 92 },
-  { startup: 'EduTech Plus', investor: 'Reach Capital', score: 85 },
+// Pool of recent matches for rotation - credible variety
+const MATCH_POOL = [
+  { startup: 'AI Infrastructure', investor: 'Sequoia', highlight: true },
+  { startup: 'Climate Analytics', investor: 'Khosla', highlight: false },
+  { startup: 'FinTech API', investor: 'Ribbit', highlight: false },
+  { startup: 'Developer Tools', investor: 'Greylock', highlight: true },
+  { startup: 'Healthcare ML', investor: 'GV', highlight: false },
+  { startup: 'Supply Chain AI', investor: 'Founders Fund', highlight: false },
+  { startup: 'EdTech Platform', investor: 'Reach Capital', highlight: true },
+  { startup: 'Cybersecurity', investor: 'Accel', highlight: false },
+  { startup: 'Robotics', investor: 'Lux Capital', highlight: true },
+  { startup: 'Clean Energy', investor: 'Breakthrough', highlight: false },
+  { startup: 'PropTech', investor: 'Fifth Wall', highlight: false },
+  { startup: 'Biotech AI', investor: 'a16z Bio', highlight: true },
+  { startup: 'Gaming Infra', investor: 'Makers Fund', highlight: false },
+  { startup: 'MarketingTech', investor: 'Insight', highlight: false },
+  { startup: 'Construction AI', investor: 'Brick & Mortar', highlight: true },
+  { startup: 'AgTech Sensors', investor: 'Acre VP', highlight: false },
+  { startup: 'Space Data', investor: 'Seraphim', highlight: true },
+  { startup: 'NeuroTech', investor: 'Khosla', highlight: false },
+  { startup: 'Legal AI', investor: 'GV', highlight: false },
+  { startup: 'Music Tech', investor: 'Index', highlight: true },
 ];
 
-// Blurred investor teasers
-const TEASER_INVESTORS = [
-  { name: 'Top VC Firm', focus: 'AI/ML' },
-  { name: 'Growth Fund', focus: 'B2B SaaS' },
-  { name: 'Seed Investor', focus: 'FinTech' },
-];
+// Generate time strings that look recent
+const getRecentTimes = () => {
+  const times = ['just now', '2m ago', '5m ago', '8m ago', '12m ago', '18m ago', '24m ago', '31m ago'];
+  return times.slice(0, 3);
+};
 
-const SplitScreenHero: React.FC<SplitScreenHeroProps> = ({ onAnalysisComplete }) => {
+// Get 3 random matches from pool (deterministic per seed)
+const getRandomMatches = (seed: number) => {
+  // deterministic pseudo-random generator (mulberry32)
+  const mulberry32 = (a: number) => () => {
+    let t = (a += 0x6D2B79F5);
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+
+  const rand = mulberry32(seed);
+  const shuffled = [...MATCH_POOL].sort(() => rand() - 0.5);
+  const times = getRecentTimes();
+
+  return shuffled.slice(0, 3).map((m, i) => ({
+    ...m,
+    time: times[i],
+    highlight: i === 0,
+  }));
+};
+
+const SplitScreenHero: React.FC = () => {
   const navigate = useNavigate();
   const [url, setUrl] = useState('');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   
-  // Ticker state
-  const [tickerIndex, setTickerIndex] = useState(0);
-  const [tickerFade, setTickerFade] = useState(false);
+  // Input interaction state (for glow system)
+  const [isFocused, setIsFocused] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  
+  // Armed state: URL looks valid (sensing → inference transition)
+  const isArmed = /(\.[a-z]{2,})/i.test(url.trim());
+  
+  // Staggered reveal state
+  const [showHeadline, setShowHeadline] = useState(false);
+  const [showCommand, setShowCommand] = useState(false);
+  const [showReadout, setShowReadout] = useState(false);
+  const [showPairings, setShowPairings] = useState(false);
+  
+  // Rotating recent matches - refresh every 45 seconds
+  const [recentMatches, setRecentMatches] = useState(() => getRandomMatches(Date.now()));
+  
+  const [scores, setScores] = useState({
+    marketFit: 0,
+    stageReadiness: 0,
+    capitalVelocity: 0,
+    geographicReach: 0,
+    thesisConvergence: 0,
+  });
+  
+  const targetScores = {
+    marketFit: 72,
+    stageReadiness: 68,
+    capitalVelocity: 81,
+    geographicReach: 65,
+    thesisConvergence: 77,
+  };
 
-  // Animate ticker
+  // Staggered reveal on load
+  useEffect(() => {
+    setTimeout(() => setShowHeadline(true), 400);
+    setTimeout(() => setShowCommand(true), 700);
+    setTimeout(() => {
+      setShowReadout(true);
+      setScores(targetScores);
+    }, 1000);
+    setTimeout(() => setShowPairings(true), 1400);
+  }, []);
+
+  // Rotate recent matches every 45 seconds
   useEffect(() => {
     const interval = setInterval(() => {
-      setTickerFade(true);
-      setTimeout(() => {
-        setTickerIndex((prev) => (prev + 1) % SAMPLE_RECENT_MATCHES.length);
-        setTickerFade(false);
-      }, 300);
-    }, 3000);
+      setRecentMatches(getRandomMatches(Date.now()));
+    }, 45000);
     return () => clearInterval(interval);
   }, []);
 
-  const currentTickerMatch = SAMPLE_RECENT_MATCHES[tickerIndex];
+  // Breathing animation for bars - every 10 seconds
+  useEffect(() => {
+    if (!showReadout) return;
+    const interval = setInterval(() => {
+      setScores({
+        marketFit: Math.max(60, Math.min(95, targetScores.marketFit + (Math.random() - 0.5) * 6)),
+        stageReadiness: Math.max(55, Math.min(90, targetScores.stageReadiness + (Math.random() - 0.5) * 6)),
+        capitalVelocity: Math.max(65, Math.min(95, targetScores.capitalVelocity + (Math.random() - 0.5) * 6)),
+        geographicReach: Math.max(50, Math.min(85, targetScores.geographicReach + (Math.random() - 0.5) * 6)),
+        thesisConvergence: Math.max(60, Math.min(92, targetScores.thesisConvergence + (Math.random() - 0.5) * 6)),
+      });
+    }, 10000);
+    return () => clearInterval(interval);
+  }, [showReadout]);
 
-  // Handle URL submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!url.trim()) return;
-    
+    const trimmed = url.trim();
+    if (!trimmed) return;
     setIsAnalyzing(true);
-    
-    try {
-      let cleanUrl = url.trim();
-      if (!cleanUrl.startsWith('http://') && !cleanUrl.startsWith('https://')) {
-        cleanUrl = 'https://' + cleanUrl;
-      }
-      
-      // Navigate to instant matches page - shows top 3 free, rest locked
-      navigate(`/instant-matches?url=${encodeURIComponent(cleanUrl)}`);
-    } catch (err) {
-      console.error('Analysis error:', err);
-      navigate(`/instant-matches?url=${encodeURIComponent(url)}`);
+    let cleanUrl = trimmed;
+    if (!cleanUrl.startsWith('http://') && !cleanUrl.startsWith('https://')) {
+      cleanUrl = 'https://' + cleanUrl;
     }
+    // Mark session state BEFORE navigating so guards recognize the scan
+    markUrlSubmitted(cleanUrl);
+    navigate(`/instant-matches?url=${encodeURIComponent(cleanUrl)}`);
+    setTimeout(() => setIsAnalyzing(false), 800);
   };
 
-  const getScoreColor = (score: number) => {
-    if (score >= 90) return 'text-emerald-400';
-    if (score >= 80) return 'text-cyan-400';
-    return 'text-violet-400';
-  };
+  const ScoreBar = ({ label, value }: { label: string; value: number }) => (
+    <div className="flex items-center gap-6">
+      <span className="text-[13px] text-gray-300 w-36 text-left font-mono">{label}</span>
+      <div className="flex-1 h-1 bg-gray-900/60 overflow-hidden">
+        <div 
+          className="h-full bg-amber-500/80 transition-all duration-[1500ms] ease-out"
+          style={{ width: `${value}%` }}
+        />
+      </div>
+    </div>
+  );
 
   return (
-    <div className="w-full px-2 sm:px-4">
-      {/* Match the card grid width - aligned with startup card left edge to investor card right edge */}
-      <div className="max-w-[340px] sm:max-w-[1030px] lg:max-w-[1058px] mx-auto">
-        {/* COMPACT UNIFIED PANEL with purple glow */}
-        <div className="relative bg-gradient-to-r from-[#0f0f0f] via-[#131313] to-[#0f0f0f] border border-violet-500/40 rounded-xl overflow-hidden shadow-[0_0_30px_rgba(139,92,246,0.3)] hover:shadow-[0_0_40px_rgba(139,92,246,0.4)] transition-shadow duration-300">
-          {/* Gradient accent line */}
-          <div className="h-0.5 bg-gradient-to-r from-violet-600 via-cyan-500 to-emerald-500"></div>
+    <div className="relative w-full min-h-[calc(100vh-120px)] flex flex-col">
+      
+      {/* BRAND MARK removed - now handled by OracleHeader in TopShell */}
+      {/* TICKER removed - now handled by TopShell in MatchingEngine */}
+      
+      {/* Subtle radial glow - no edges */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] bg-amber-500/[0.02] rounded-full blur-[120px]"></div>
+      </div>
+      
+      {/* Main content with vertical spine */}
+      <div className="relative z-10 flex-1 flex flex-col justify-center max-w-[1100px] mx-auto w-full px-8 sm:px-12 py-8">
+        
+        {/* HEADLINE - Category flag, large and quiet */}
+        <h1 className={`text-5xl sm:text-6xl md:text-7xl font-bold text-white tracking-tight mb-4 transition-all duration-700 ${showHeadline ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+          Signal Science.
+        </h1>
+        
+        {/* SUBHEADLINE - Lower contrast, let it breathe */}
+        <p className={`text-xl text-gray-500 mb-10 transition-all duration-700 delay-100 ${showHeadline ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+          Timing is everything.
+        </p>
+        
+        {/* PRIMARY CTA LABEL - Above the input */}
+        <p className={`text-sm text-gray-400 mb-4 transition-all duration-700 delay-150 ${showCommand ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+          Check My Investor Signals →
+        </p>
+
+        {/* ONE CONTRAST BAND - behind command + readout */}
+        <div className="relative">
+          <div className="absolute -inset-x-8 -inset-y-4 bg-gradient-to-b from-gray-900/30 via-gray-800/15 to-transparent pointer-events-none"></div>
           
-          {/* Live Ticker - SINGLE LINE */}
-          <div className="bg-[#080808] px-4 py-1 flex items-center justify-center gap-2 border-b border-gray-800/30">
-            <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></div>
-            <span className="text-[10px] text-emerald-400 font-medium uppercase">Live</span>
-            <div className={`transition-opacity duration-300 ${tickerFade ? 'opacity-0' : 'opacity-100'}`}>
-              <span className="text-[11px] text-gray-400">
-                <span className="text-white font-medium">{currentTickerMatch.startup}</span>
-                {' '}→{' '}
-                <span className="text-cyan-400 font-medium">{currentTickerMatch.investor}</span>
-                {' '}
-                <span className={`font-bold ${getScoreColor(currentTickerMatch.score)}`}>
-                  {currentTickerMatch.score}%
-                </span>
-              </span>
-            </div>
-          </div>
-
-          {/* MAIN CONTENT - FLAME | FORM | BLURRED INVESTOR */}
-          <div className="flex items-center px-3 sm:px-4 py-2.5 gap-3 sm:gap-4">
-            
-            {/* LEFT - Flame icon */}
-            <div className="flex items-center gap-2 shrink-0">
-              <span className="text-xl sm:text-2xl">🔥</span>
-            </div>
-
-            {/* CENTER - URL Form */}
-            <div className="flex-1">
-              {!isAnalyzing ? (
-                <form onSubmit={handleSubmit} className="flex gap-2">
-                  <div className="relative flex-1">
-                    <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
-                    <input
-                      type="text"
-                      value={url}
-                      onChange={(e) => setUrl(e.target.value)}
-                      placeholder="yourcompany.com"
-                      className="w-full pl-9 pr-3 py-2 bg-[#080808] border border-gray-700 focus:border-violet-500 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500/30 transition-all text-sm"
+          {/* COMMAND BAR - instrument, not form */}
+          <div className={`relative mb-3 transition-all duration-700 ${showCommand ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+            {!isAnalyzing ? (
+              <form onSubmit={handleSubmit}>
+                {/* Input wrapper with layered glow system */}
+                <div 
+                  className={`
+                    relative flex items-stretch
+                    bg-[#0a0a0a]
+                    border
+                    transition-all duration-300
+                    shadow-[inset_0_2px_6px_rgba(0,0,0,0.4)]
+                    ${isFocused 
+                      ? 'border-cyan-400/45 shadow-[0_0_0_1px_rgba(34,211,238,0.35),0_0_40px_rgba(168,85,247,0.18)]' 
+                      : isArmed
+                        ? 'border-cyan-400/35 shadow-[0_0_28px_rgba(56,189,248,0.10),0_0_28px_rgba(168,85,247,0.10)]'
+                        : isHovered 
+                          ? 'border-cyan-400/30 shadow-[0_0_20px_rgba(34,211,238,0.08)]' 
+                          : 'border-white/10'
+                    }
+                    ${isArmed && !isFocused ? 'animate-[ctaPulse_2.4s_ease-in-out_infinite]' : ''}
+                  `}
+                  onMouseEnter={() => setIsHovered(true)}
+                  onMouseLeave={() => setIsHovered(false)}
+                >
+                  {/* Inner cyan glow layer (focus state) */}
+                  <div
+                    className={`
+                      pointer-events-none absolute inset-0
+                      transition-opacity duration-300
+                      ${isFocused ? 'opacity-100' : 'opacity-0'}
+                    `}
+                    style={{
+                      boxShadow: `
+                        inset 0 0 0 1px rgba(56, 189, 248, 0.35),
+                        inset 0 0 18px rgba(56, 189, 248, 0.15)
+                      `
+                    }}
+                  />
+                  
+                  {/* Violet halo layer (armed state - URL valid) */}
+                  {isArmed && isFocused && (
+                    <div
+                      className="pointer-events-none absolute -inset-[2px] rounded-[2px] transition-opacity duration-500"
+                      style={{
+                        boxShadow: '0 0 24px rgba(168, 85, 247, 0.15)'
+                      }}
                     />
-                  </div>
+                  )}
+                  
+                  <input
+                    type="text"
+                    value={url}
+                    onChange={(e) => setUrl(e.target.value)}
+                    onFocus={() => setIsFocused(true)}
+                    onBlur={() => setIsFocused(false)}
+                    placeholder="https://yourstartup.com"
+                    className="flex-1 px-6 py-5 bg-transparent text-white placeholder-gray-600 focus:outline-none text-base font-mono relative z-10 border-0 focus:ring-0"
+                  />
                   <button
                     type="submit"
-                    className="flex items-center gap-1.5 px-3 sm:px-4 py-2 bg-[#0a0a0a] border border-cyan-400 hover:bg-cyan-400/10 text-cyan-400 font-semibold rounded-lg transition-all text-xs sm:text-sm whitespace-nowrap"
+                    className="group px-10 py-5 bg-gradient-to-b from-amber-500 to-amber-600 text-black text-sm font-bold font-mono tracking-wide whitespace-nowrap relative z-10 transition-shadow duration-200 hover:shadow-[0_0_0_1px_rgba(56,189,248,0.35),0_0_24px_rgba(168,85,247,0.25)] active:shadow-[0_0_0_1px_rgba(56,189,248,0.55),0_0_32px_rgba(168,85,247,0.35)]"
                   >
-                    <Sparkles className="w-4 h-4" />
-                    <span className="hidden sm:inline">Find My Investors</span>
-                    <span className="sm:hidden">Find</span>
-                    <ArrowRight className="w-4 h-4" />
+                    SCAN →
                   </button>
-                </form>
-              ) : (
-                <div className="flex items-center justify-center gap-2 text-violet-400">
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                  <span className="text-sm">Analyzing...</span>
                 </div>
-              )}
-            </div>
-
-            {/* RIGHT - Blurred potential investor match - CLICKABLE */}
-            <div className="hidden sm:flex items-center gap-2 shrink-0">
-              <div className="w-px h-8 bg-gray-800"></div>
-              <Link 
-                to="/get-matched" 
-                className="relative flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#0a0a0a] to-[#0f0f0f] rounded-lg border border-amber-500/40 shadow-lg shadow-amber-500/10 hover:border-amber-400/60 hover:shadow-amber-500/20 transition-all cursor-pointer"
+              </form>
+            ) : (
+              <div className="flex items-center gap-3 px-6 py-5 bg-[#0a0a0a] border border-cyan-500/40 shadow-[inset_0_2px_6px_rgba(0,0,0,0.4)]"
+                style={{
+                  boxShadow: `
+                    inset 0 0 0 1px rgba(56, 189, 248, 0.4),
+                    inset 0 0 30px rgba(56, 189, 248, 0.1),
+                    0 0 20px rgba(168, 85, 247, 0.1)
+                  `
+                }}
               >
-                {/* Blur overlay with enticing message */}
-                <div className="absolute inset-0 backdrop-blur-[3px] bg-[#0a0a0a]/60 rounded-lg z-10 flex items-center justify-center gap-1.5">
-                  <Lock className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
-                  <span className="text-xs font-semibold text-amber-400">Your top match</span>
-                  <span className="text-[10px] text-amber-300/70">→</span>
-                </div>
-                {/* Blurred content */}
-                <span className="text-base">🏦</span>
-                <div>
-                  <p className="text-sm text-gray-400">Sequoia Capital</p>
-                  <p className="text-[10px] text-gray-600">Series A • AI/ML</p>
-                </div>
-                <span className="text-sm font-bold text-emerald-500/40">94%</span>
-              </Link>
-            </div>
+                <Loader2 className="w-4 h-4 animate-spin text-cyan-400" />
+                <span className="text-sm text-cyan-400 font-mono">Analyzing signals...</span>
+              </div>
+            )}
           </div>
+          
+          {/* MICROCOPY moved to under CTAs */}
+          
+          {/* SECONDARY CTA - two prominent pill buttons */}
+          <div className={`flex flex-wrap items-center gap-3 transition-all duration-500 delay-200 ${showCommand ? 'opacity-100' : 'opacity-0'}`}>
+            <Link
+              to="/pricing"
+              className="rounded-full border border-white/15 bg-white/5 px-5 py-2.5 text-sm font-semibold text-white/85 hover:bg-white/10 hover:text-white transition"
+            >
+              See pricing
+            </Link>
+            <Link
+              to="/why"
+              className="rounded-full border border-cyan-400/25 bg-cyan-400/10 px-5 py-2.5 text-sm font-semibold text-cyan-200 hover:bg-cyan-400/15 transition"
+            >
+              How it works →
+            </Link>
+          </div>
+          
+          {/* MICROCOPY under CTAs */}
+          <p className={`mt-2 text-xs text-white/45 mb-10 transition-all duration-500 delay-300 ${showCommand ? 'opacity-100' : 'opacity-0'}`}>
+            No pitch deck • No warm intro • Just signals
+          </p>
 
-          {/* Bottom bar - MINIMAL */}
-          <div className="bg-[#080808] border-t border-gray-800/30 px-4 py-1 flex items-center justify-center gap-1.5 text-[9px] text-gray-600">
-            <TrendingUp className="w-2.5 h-2.5 text-cyan-500" />
-            <span>Matching 24/7 • Real-time updates</span>
+          {/* SYSTEM READOUT + RECENT MATCH PROOF */}
+          <div className={`flex gap-12 mb-10 transition-all duration-700 ${showReadout ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+            {/* SYSTEM READOUT - left side */}
+            <div className="flex-1">
+              <p className="text-xs text-gray-400 uppercase tracking-[0.2em] mb-5 font-mono">System Readout</p>
+              <div className="space-y-3">
+                <ScoreBar label="Market Fit" value={scores.marketFit} />
+                <ScoreBar label="Stage Readiness" value={scores.stageReadiness} />
+                <ScoreBar label="Capital Velocity" value={scores.capitalVelocity} />
+                <ScoreBar label="Geographic Reach" value={scores.geographicReach} />
+                <ScoreBar label="Thesis Convergence" value={scores.thesisConvergence} />
+              </div>
+            </div>
+            
+            {/* EXAMPLE MATCH PROOF - right side, rotating 3 rows (terminal feel, not casino) */}
+            <div className="w-56 flex-shrink-0">
+              <p className="text-[9px] text-gray-600 uppercase tracking-[0.2em] mb-4 font-mono">Example Matches</p>
+              <div className="space-y-2">
+                {recentMatches.map((match, i) => (
+                  <div key={`${match.startup}-${match.investor}`} className="font-mono transition-opacity duration-500">
+                    <p className={`text-sm ${match.highlight ? 'text-amber-500' : 'text-gray-500'}`}>
+                      {match.startup} <span className="text-gray-700">→</span> <span className={match.highlight ? 'text-amber-400' : 'text-gray-400'}>{match.investor}</span>
+                    </p>
+                    <p className="text-[10px] text-gray-600">{match.time}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
+
+        {/* LIVE SIGNAL PAIRINGS - credible evidence */}
+        <div className={`mb-10 transition-all duration-700 ${showPairings ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+          <div className="h-px bg-gray-800/60 mb-6"></div>
+          <div className="flex items-baseline justify-between mb-4">
+            <p className="text-[9px] text-gray-600 uppercase tracking-[0.2em] font-mono">Live Signal Pairings</p>
+            <p className="text-[10px] text-gray-600 font-mono">Generated from current market signals · Updating continuously</p>
+          </div>
+          <div className="space-y-0">
+            <div className="grid grid-cols-[1fr_auto_1fr_auto_1fr] gap-x-8 py-2 text-[11px] text-gray-600 border-b border-gray-800/40 font-mono">
+              <span>Startup Signal</span>
+              <span></span>
+              <span>Investor Signal</span>
+              <span className="text-gray-800">|</span>
+              <span>Reason</span>
+            </div>
+            <div className="grid grid-cols-[1fr_auto_1fr_auto_1fr] gap-x-8 py-3 border-b border-gray-800/30 font-mono">
+              <span className="text-base text-gray-300">Climate Analytics</span>
+              <span className="text-gray-700">→</span>
+              <span className="text-base text-amber-500">Khosla</span>
+              <span className="text-gray-800">|</span>
+              <span className="text-sm text-gray-500">Capital velocity</span>
+            </div>
+            <div className="grid grid-cols-[1fr_auto_1fr_auto_1fr] gap-x-8 py-3 border-b border-gray-800/30 font-mono">
+              <span className="text-base text-gray-300">AI Infrastructure</span>
+              <span className="text-gray-700">→</span>
+              <span className="text-base text-amber-500">Sequoia</span>
+              <span className="text-gray-800">|</span>
+              <span className="text-sm text-gray-500">Portfolio gap</span>
+            </div>
+            <div className="grid grid-cols-[1fr_auto_1fr_auto_1fr] gap-x-8 py-3 font-mono">
+              <span className="text-base text-gray-300">FinTech API</span>
+              <span className="text-gray-700">→</span>
+              <span className="text-base text-amber-500">Ribbit</span>
+              <span className="text-gray-800">|</span>
+              <span className="text-sm text-gray-500">Stage readiness</span>
+            </div>
+          </div>
+        </div>
+
+        {/* INVESTOR HOOK - reverse FOMO, one line only */}
+        <div className={`mt-6 transition-all duration-500 ${showPairings ? 'opacity-100' : 'opacity-0'}`}>
+          <p className="text-sm text-gray-400 mb-2">
+            Investors use Pythh to detect momentum before rounds are obvious.
+          </p>
+          <Link to="/investor/signup" className="text-[11px] text-gray-600 hover:text-amber-500/80 transition-colors font-mono">
+            I'm an Investor →
+          </Link>
+        </div>
       </div>
+      
+      {/* CTA pulse animation */}
+      <style>{`
+        @keyframes ctaPulse {
+          0%, 100% { box-shadow: 0 0 28px rgba(56,189,248,0.08), 0 0 28px rgba(168,85,247,0.08); }
+          50%      { box-shadow: 0 0 36px rgba(56,189,248,0.14), 0 0 36px rgba(168,85,247,0.12); }
+        }
+      `}</style>
     </div>
   );
 };

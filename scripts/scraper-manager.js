@@ -29,11 +29,28 @@ const parser = new Parser({ timeout: 30000 });
 // Configuration
 const CONFIG = {
   BATCH_SIZE: 10,
-  DELAY_BETWEEN_SOURCES: 5000,  // 5 seconds
-  DELAY_BETWEEN_ARTICLES: 1000, // 1 second
+  DELAY_BETWEEN_SOURCES: 10000,  // 10 seconds (increased from 5)
+  DELAY_BETWEEN_ARTICLES: 2000,  // 2 seconds (increased from 1)
   MAX_ARTICLES_PER_SOURCE: 20,
-  CYCLE_DELAY: 300000,          // 5 minutes between full cycles
+  CYCLE_DELAY: 600000,           // 10 minutes between full cycles (increased from 5)
+  
+  // Rate limiting for problematic sources
+  RATE_LIMITED_SOURCES: {
+    'hacker news': { delay: 30000, maxRetries: 2 },      // 30 second delay for HN
+    'hackernews': { delay: 30000, maxRetries: 2 },
+    'hn': { delay: 30000, maxRetries: 2 },
+    'crunchbase': { delay: 20000, maxRetries: 3 },       // 20 second delay for Crunchbase
+    'techcrunch': { delay: 15000, maxRetries: 3 },
+  },
+  
+  // Backoff settings
+  INITIAL_BACKOFF: 5000,
+  MAX_BACKOFF: 120000,  // 2 minutes max
+  BACKOFF_MULTIPLIER: 2,
 };
+
+// Track rate limit state per source
+const rateLimitState = {};
 
 let isRunning = true;
 let currentSource = null;
@@ -69,12 +86,65 @@ async function getActiveRssSources() {
 }
 
 async function fetchRssFeed(source) {
+  const sourceLower = source.name.toLowerCase();
+  
+  // Check if source is rate-limited and has backoff
+  const state = rateLimitState[sourceLower] || { backoff: 0, lastError: null, errorCount: 0 };
+  
+  // Skip if we're in backoff period
+  if (state.backoff > 0 && state.lastError && (Date.now() - state.lastError) < state.backoff) {
+    const waitTime = Math.ceil((state.backoff - (Date.now() - state.lastError)) / 1000);
+    console.log(`⏳ ${source.name}: In backoff period, skipping (${waitTime}s remaining)`);
+    return [];
+  }
+  
+  // Apply source-specific delay for known rate-limited sources
+  for (const [key, config] of Object.entries(CONFIG.RATE_LIMITED_SOURCES)) {
+    if (sourceLower.includes(key)) {
+      console.log(`⏱️ ${source.name}: Applying ${config.delay / 1000}s delay (rate-limited source)`);
+      await sleep(config.delay);
+      break;
+    }
+  }
+  
   try {
     console.log(`📡 Fetching: ${source.name}`);
     const feed = await parser.parseURL(source.url);
+    
+    // Success - reset backoff
+    rateLimitState[sourceLower] = { backoff: 0, lastError: null, errorCount: 0 };
+    
     return feed.items || [];
   } catch (error) {
-    console.error(`❌ Failed to fetch ${source.name}:`, error.message);
+    const isRateLimit = error.message.includes('429') || 
+                        error.message.includes('Too Many') ||
+                        error.message.includes('rate limit');
+    const isConnectionError = error.message.includes('ECONNRESET') ||
+                              error.message.includes('ETIMEDOUT') ||
+                              error.message.includes('timeout');
+    
+    // Calculate backoff
+    const currentBackoff = state.backoff || CONFIG.INITIAL_BACKOFF;
+    const newBackoff = Math.min(currentBackoff * CONFIG.BACKOFF_MULTIPLIER, CONFIG.MAX_BACKOFF);
+    
+    if (isRateLimit) {
+      console.error(`🚫 ${source.name}: Rate limited (429) - backing off for ${newBackoff / 1000}s`);
+      rateLimitState[sourceLower] = {
+        backoff: newBackoff,
+        lastError: Date.now(),
+        errorCount: (state.errorCount || 0) + 1
+      };
+    } else if (isConnectionError) {
+      console.error(`🔌 ${source.name}: Connection error - backing off for ${newBackoff / 1000}s`);
+      rateLimitState[sourceLower] = {
+        backoff: newBackoff,
+        lastError: Date.now(),
+        errorCount: (state.errorCount || 0) + 1
+      };
+    } else {
+      console.error(`❌ Failed to fetch ${source.name}:`, error.message);
+    }
+    
     return [];
   }
 }

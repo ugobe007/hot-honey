@@ -8,7 +8,7 @@ const LandingPage: React.FC = () => {
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-purple-400 mb-4"></div>
           <div className="text-white text-2xl font-bold">
-            <span className="bg-gradient-to-r from-amber-400 via-orange-400 to-cyan-400 bg-clip-text text-transparent">Loading [pyth] ai...</span>
+            <span className="bg-gradient-to-r from-amber-400 via-orange-400 to-cyan-400 bg-clip-text text-transparent">Loading pythh.ai...</span>
           </div>
         </div>
       </div>

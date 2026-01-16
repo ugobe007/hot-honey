@@ -1,5 +1,17 @@
 // Centralized API configuration
-export const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3002';
+// In production on Fly.io, frontend and backend are served from the same origin
+const isProduction = typeof window !== 'undefined' && !window.location.hostname.includes('localhost');
+
+// In production, ALWAYS use same-origin (empty string) regardless of VITE_API_URL
+// This prevents the built bundle from trying to call localhost from production
+const envApiUrl = import.meta.env.VITE_API_URL;
+const isLocalhostUrl = envApiUrl?.includes('localhost');
+
+// Use empty string for production (same origin), or the env URL if it's not localhost, or fallback to localhost for dev
+export const API_BASE = isProduction 
+  ? (isLocalhostUrl ? '' : (envApiUrl || ''))  // In production: ignore localhost URLs, use same-origin
+  : (envApiUrl || 'http://localhost:3002');     // In dev: use env URL or default to localhost
+
 export const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 export const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 

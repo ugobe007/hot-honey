@@ -5,6 +5,7 @@ import {
   CheckCircle, Clock, Edit2, Save, X, ArrowRight, Activity
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
+import { API_BASE } from '../lib/apiConfig';
 import LogoDropdownMenu from '../components/LogoDropdownMenu';
 
 interface ScraperConfig {
@@ -180,7 +181,6 @@ export default function ScraperManagementPage() {
 
     setRunning(prev => ({ ...prev, [scraper.id]: true }));
     try {
-      const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3002';
       const response = await fetch(`${API_BASE}/api/scrapers/run`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

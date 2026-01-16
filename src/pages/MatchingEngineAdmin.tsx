@@ -24,6 +24,7 @@ import {
   ChevronRight
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
+import { API_BASE } from '../lib/apiConfig';
 
 interface MatchStats {
   totalMatches: number;
@@ -260,8 +261,6 @@ export default function MatchingEngineAdmin() {
 
   const triggerQueueProcessor = async () => {
     try {
-      const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3002';
-      
       const response = await fetch(`${API_BASE}/api/scrapers/run`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

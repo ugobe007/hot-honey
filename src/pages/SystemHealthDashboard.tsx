@@ -22,12 +22,29 @@ interface SystemStats {
   godScores: { avgScore: number; distribution: { low: number; medium: number; high: number; elite: number } };
 }
 
+interface Deltas {
+  startups24h: number;
+  investors24h: number;
+  matches24h: number;
+  avgGod7dDelta: number;
+  avgMatch7dDelta: number;
+  hqRate7dDeltaPct: number;
+}
+
+interface ChangeStripItem {
+  label: string;
+  value: string;
+  trend: 'up' | 'down' | 'neutral';
+}
+
 export default function SystemHealthDashboard() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const [stats, setStats] = useState<SystemStats | null>(null);
+  const [deltas, setDeltas] = useState<Deltas | null>(null);
+  const [changeStrip, setChangeStrip] = useState<ChangeStripItem[]>([]);
   const [checks, setChecks] = useState<HealthCheck[]>([]);
   const [recentLogs, setRecentLogs] = useState<any[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -96,10 +113,69 @@ export default function SystemHealthDashboard() {
       
       // Get recent discoveries
       const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+      const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+      
       const { count: discovered24h } = await supabase
         .from('discovered_startups')
         .select('*', { count: 'exact', head: true })
         .gte('created_at', oneDayAgo);
+
+      // 24h delta queries
+      const { count: startups24h } = await supabase
+        .from('startup_uploads')
+        .select('*', { count: 'exact', head: true })
+        .gte('created_at', oneDayAgo);
+
+      const { count: investors24h } = await supabase
+        .from('investors')
+        .select('*', { count: 'exact', head: true })
+        .gte('created_at', oneDayAgo);
+
+      const { count: matches24h } = await supabase
+        .from('startup_investor_matches')
+        .select('*', { count: 'exact', head: true })
+        .gte('created_at', oneDayAgo);
+
+      // 7-day GOD score data for delta calculation
+      const { data: god7dData } = await supabase
+        .from('startup_uploads')
+        .select('total_god_score, created_at')
+        .eq('status', 'approved')
+        .not('total_god_score', 'is', null)
+        .lte('created_at', sevenDaysAgo);
+
+      const avgGod7dAgo = god7dData && god7dData.length > 0
+        ? god7dData.reduce((acc, s) => acc + (s.total_god_score || 0), 0) / god7dData.length
+        : avgGodScore;
+
+      // 7-day match data for delta calculation
+      const { data: match7dData } = await supabase
+        .from('startup_investor_matches')
+        .select('match_score')
+        .lte('created_at', sevenDaysAgo)
+        .limit(1000);
+
+      const avgMatch7dAgo = match7dData && match7dData.length > 0
+        ? match7dData.reduce((acc, m) => acc + (m.match_score || 0), 0) / match7dData.length
+        : avgMatchScore;
+
+      const { count: totalMatches7d } = await supabase
+        .from('startup_investor_matches')
+        .select('*', { count: 'exact', head: true })
+        .lte('created_at', sevenDaysAgo);
+
+      const { count: highQualityMatches7d } = await supabase
+        .from('startup_investor_matches')
+        .select('*', { count: 'exact', head: true })
+        .gte('match_score', 70)
+        .lte('created_at', sevenDaysAgo);
+
+      const hqRate7dAgo = (totalMatches7d || 1) > 0 
+        ? ((highQualityMatches7d || 0) / (totalMatches7d || 1)) * 100 
+        : 0;
+      const hqRateNow = (totalMatches || 1) > 0 
+        ? ((highQualityMatches || 0) / (totalMatches || 1)) * 100 
+        : 0;
       
       // Get last activity
       const { data: lastActivity } = await supabase
@@ -167,6 +243,56 @@ export default function SystemHealthDashboard() {
           distribution
         }
       });
+
+      // Compute and set deltas
+      const computedDeltas: Deltas = {
+        startups24h: startups24h || 0,
+        investors24h: investors24h || 0,
+        matches24h: matches24h || 0,
+        avgGod7dDelta: avgGodScore - avgGod7dAgo,
+        avgMatch7dDelta: avgMatchScore - avgMatch7dAgo,
+        hqRate7dDeltaPct: hqRateNow - hqRate7dAgo
+      };
+      setDeltas(computedDeltas);
+
+      // Build change strip items
+      const stripItems: ChangeStripItem[] = [];
+      if (computedDeltas.startups24h > 0) {
+        stripItems.push({ 
+          label: 'Startups', 
+          value: `+${computedDeltas.startups24h}`, 
+          trend: 'up' 
+        });
+      }
+      if (computedDeltas.investors24h > 0) {
+        stripItems.push({ 
+          label: 'Investors', 
+          value: `+${computedDeltas.investors24h}`, 
+          trend: 'up' 
+        });
+      }
+      if (computedDeltas.matches24h > 0) {
+        stripItems.push({ 
+          label: 'Matches', 
+          value: `+${computedDeltas.matches24h}`, 
+          trend: 'up' 
+        });
+      }
+      if (Math.abs(computedDeltas.avgGod7dDelta) > 0.5) {
+        stripItems.push({
+          label: 'GOD Avg',
+          value: `${computedDeltas.avgGod7dDelta > 0 ? '+' : ''}${computedDeltas.avgGod7dDelta.toFixed(1)}`,
+          trend: computedDeltas.avgGod7dDelta > 0 ? 'up' : 'down'
+        });
+      }
+      if (Math.abs(computedDeltas.hqRate7dDeltaPct) > 0.1) {
+        stripItems.push({
+          label: 'HQ Rate',
+          value: `${computedDeltas.hqRate7dDeltaPct > 0 ? '+' : ''}${computedDeltas.hqRate7dDeltaPct.toFixed(1)}%`,
+          trend: computedDeltas.hqRate7dDeltaPct > 0 ? 'up' : 'down'
+        });
+      }
+      setChangeStrip(stripItems);
       
       // Generate health checks
       const newChecks: HealthCheck[] = [];
@@ -206,7 +332,7 @@ export default function SystemHealthDashboard() {
       newChecks.push({
         name: 'Data Freshness',
         status: freshnessHealth,
-        value: `Last: ${hoursSinceActivity.toFixed(0)}h ago, 24h: ${discovered24h}`,
+        value: `Last: ${hoursSinceActivity.toFixed(0)}h ago · Discovered (24h): ${discovered24h}`,
         issues: freshnessHealth !== 'OK' ? ['Data may be stale'] : []
       });
       
@@ -348,17 +474,44 @@ export default function SystemHealthDashboard() {
         </div>
       )}
 
+      {/* What Changed? Strip */}
+      {changeStrip.length > 0 && (
+        <div className="mb-6 p-3 bg-gray-800/50 border border-gray-700/50 rounded-lg">
+          <div className="flex items-center gap-6 overflow-x-auto">
+            <span className="text-xs text-gray-500 uppercase tracking-wider whitespace-nowrap">What changed?</span>
+            {changeStrip.map((item, i) => (
+              <div key={i} className="flex items-center gap-2 whitespace-nowrap">
+                <span className="text-sm text-gray-400">{item.label}:</span>
+                <span className={`text-sm font-medium ${
+                  item.trend === 'up' ? 'text-emerald-400' : 
+                  item.trend === 'down' ? 'text-red-400' : 
+                  'text-gray-300'
+                }`}>
+                  {item.value}
+                </span>
+              </div>
+            ))}
+            <span className="text-xs text-gray-600 ml-auto whitespace-nowrap">24h / 7d</span>
+          </div>
+        </div>
+      )}
+
       {/* Quick Stats Grid - All Clickable */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         <Link to="/admin/edit-startups" className="bg-gradient-to-br from-emerald-900/40 to-emerald-950/40 hover:from-emerald-800/50 hover:to-emerald-900/50 border border-emerald-500/30 rounded-xl p-4 transition-all group">
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2 text-emerald-400">
               <Building2 size={18} />
-              <span>Startups</span>
+              <span>Approved Startups</span>
             </div>
             <ExternalLink size={14} className="text-emerald-500/50 group-hover:text-emerald-400 transition-colors" />
           </div>
-          <div className="text-2xl font-bold text-white">{stats?.startups.approved.toLocaleString()}</div>
+          <div className="flex items-center gap-2">
+            <span className="text-2xl font-bold text-white">{stats?.startups.approved.toLocaleString()}</span>
+            {deltas && deltas.startups24h > 0 && (
+              <span className="text-xs text-emerald-400 bg-emerald-500/20 px-1.5 py-0.5 rounded">+{deltas.startups24h}</span>
+            )}
+          </div>
           <div className="text-sm text-emerald-400/70">
             {stats?.startups.pending} pending review
           </div>
@@ -372,7 +525,12 @@ export default function SystemHealthDashboard() {
             </div>
             <ExternalLink size={14} className="text-blue-500/50 group-hover:text-blue-400 transition-colors" />
           </div>
-          <div className="text-2xl font-bold text-white">{stats?.investors.total.toLocaleString()}</div>
+          <div className="flex items-center gap-2">
+            <span className="text-2xl font-bold text-white">{stats?.investors.total.toLocaleString()}</span>
+            {deltas && deltas.investors24h > 0 && (
+              <span className="text-xs text-blue-400 bg-blue-500/20 px-1.5 py-0.5 rounded">+{deltas.investors24h}</span>
+            )}
+          </div>
           <div className="text-sm text-blue-400/70">
             {((stats?.investors.withEmbedding || 0) / (stats?.investors.total || 1) * 100).toFixed(0)}% with ML
           </div>
@@ -386,9 +544,14 @@ export default function SystemHealthDashboard() {
             </div>
             <ExternalLink size={14} className="text-blue-400/50 group-hover:text-blue-400 transition-colors" />
           </div>
-          <div className="text-2xl font-bold text-white">{stats?.matches.total.toLocaleString()}</div>
+          <div className="flex items-center gap-2">
+            <span className="text-2xl font-bold text-white">{stats?.matches.total.toLocaleString()}</span>
+            {deltas && deltas.matches24h > 0 && (
+              <span className="text-xs text-cyan-400 bg-cyan-500/20 px-1.5 py-0.5 rounded">+{deltas.matches24h}</span>
+            )}
+          </div>
           <div className="text-sm text-blue-400/70">
-            {stats?.matches.highQuality.toLocaleString()} high quality
+            {stats?.matches.highQuality.toLocaleString()} high quality · avg {stats?.matches.avgScore.toFixed(0)}
           </div>
         </Link>
         
@@ -400,7 +563,18 @@ export default function SystemHealthDashboard() {
             </div>
             <ExternalLink size={14} className="text-purple-500/50 group-hover:text-purple-400 transition-colors" />
           </div>
-          <div className="text-2xl font-bold text-white">{stats?.godScores.avgScore.toFixed(1)}</div>
+          <div className="flex items-center gap-2">
+            <span className="text-2xl font-bold text-white">{stats?.godScores.avgScore.toFixed(1)}</span>
+            {deltas && Math.abs(deltas.avgGod7dDelta) > 0.5 && (
+              <span className={`text-xs px-1.5 py-0.5 rounded ${
+                deltas.avgGod7dDelta > 0 
+                  ? 'text-emerald-400 bg-emerald-500/20' 
+                  : 'text-red-400 bg-red-500/20'
+              }`}>
+                {deltas.avgGod7dDelta > 0 ? '+' : ''}{deltas.avgGod7dDelta.toFixed(1)} 7d
+              </span>
+            )}
+          </div>
           <div className="text-sm text-purple-400/70">
             {stats?.godScores.distribution.elite} elite startups
           </div>
@@ -451,10 +625,10 @@ export default function SystemHealthDashboard() {
       {/* GOD Score Distribution - Clickable */}
       <Link to="/admin/god-scores" className="block bg-gradient-to-br from-gray-800/80 to-gray-900/80 border border-gray-700/50 hover:border-purple-500/30 rounded-xl p-6 mb-8 transition-all group">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold">GOD Score Distribution</h3>
+          <h3 className="text-xl font-semibold">GOD Score Distribution</h3>
           <div className="flex items-center gap-2 text-gray-500 group-hover:text-purple-400 transition-colors">
-            <span className="text-sm">View Details</span>
-            <ArrowRight size={16} />
+            <span className="text-base">View Details</span>
+            <ArrowRight size={18} />
           </div>
         </div>
         <div className="flex items-end gap-4 h-40">
@@ -474,12 +648,12 @@ export default function SystemHealthDashboard() {
             const height = (bar.value / maxVal) * 100;
             return (
               <div key={i} className="flex-1 flex flex-col items-center">
-                <div className={`text-lg font-bold ${bar.textColor} mb-2`}>{bar.value}</div>
+                <div className={`text-2xl font-bold ${bar.textColor} mb-2`}>{bar.value}</div>
                 <div 
                   className={`w-full ${bar.color} rounded-t-lg transition-all duration-500 shadow-lg`}
                   style={{ height: `${Math.max(height, 8)}%` }}
                 />
-                <div className="text-xs text-gray-400 mt-3 text-center">{bar.label}</div>
+                <div className="text-sm text-gray-400 mt-3 text-center">{bar.label}</div>
               </div>
             );
           })}

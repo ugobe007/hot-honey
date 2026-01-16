@@ -20,6 +20,15 @@
   background-size: 200% 200%;
 }
 
+/* Ticker animation */
+@keyframes ticker {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.animate-ticker {
+  animation: ticker 60s linear infinite;
+}
+
 /* ════════════════════════════════════════════════════════════════════════════
    [pyth] ai - ORACLE OF TRUTH - AMBER/ORANGE & CYAN/BLUE PALETTE
    ════════════════════════════════════════════════════════════════════════════ */

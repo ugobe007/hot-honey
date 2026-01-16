@@ -253,7 +253,7 @@ export default function WelcomeModal({ forceOpen = false, onClose }: WelcomeModa
             <Link to="/privacy" className="text-cyan-400 hover:text-cyan-300 font-semibold underline">
               Privacy Policy
             </Link>
-            <Link to="/about" className="text-cyan-400 hover:text-cyan-300 font-semibold underline">
+            <Link to="/why" className="text-cyan-400 hover:text-cyan-300 font-semibold underline">
               About Us
             </Link>
           </div>

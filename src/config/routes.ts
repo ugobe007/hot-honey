@@ -71,7 +71,7 @@ export const ROUTES = {
   SITEMAP: '/navigation',
   
   // Static Pages
-  ABOUT: '/about',
+  ABOUT: '/why',
   PRIVACY: '/privacy',
   CONTACT: '/contact',
   

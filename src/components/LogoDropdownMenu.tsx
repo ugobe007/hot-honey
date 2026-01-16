@@ -1,450 +1,387 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Home, Zap, Vote as VoteIcon, Briefcase, TrendingUp, FileText, BookOpen, Settings, Crown, Activity, Search, Users, Upload, BarChart3, Shield, Sliders, Rocket, ArrowLeft, ChartBar, LogIn, LogOut } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import {
+  User,
+  Settings,
+  Bookmark,
+  History,
+  FileText,
+  Lock,
+  Cpu,
+  Home,
+  ArrowLeft,
+  LogIn,
+  LogOut,
+  Sliders,
+  Activity,
+  Shield
+} from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
-import FlameIcon from './FlameIcon';
+import { trackEvent } from '../lib/analytics';
+import { getSession } from '../lib/routeGuards';
 
-export default function LogoDropdownMenu() {
-  const [isOpen, setIsOpen] = useState(false);
+interface Props {
+  onPythClick?: () => void;
+  /** External control: when true, drawer opens */
+  externalOpen?: boolean;
+  /** Callback when open state changes (for external control) */
+  onOpenChange?: (open: boolean) => void;
+  /** 
+   * Mode controls what UI gets rendered:
+   * - 'app': Full UI with trigger button and Back/Home pills (default)
+   * - 'oracle': Drawer content only, no floating UI (OracleHeader provides trigger)
+   */
+  mode?: 'app' | 'oracle';
+}
+
+/**
+ * SYSTEM DRAWER - Pyth "Quiet Instrument" Design
+ *
+ * Goals:
+ * - Monochrome base (no yellow buttons)
+ * - Thin rows, clear hierarchy
+ * - Accent (amber) only for emphasis/hover/admin
+ * - Admin section not in DOM unless admin
+ */
+export default function LogoDropdownMenu({ onPythClick, externalOpen, onOpenChange, mode = 'app' }: Props) {
+  const [internalOpen, setInternalOpen] = useState(false);
+  
+  // Oracle mode = drawer content only, no floating trigger/pills
+  const isOracleMode = mode === 'oracle';
+  
+  // Use external control if provided, otherwise internal state
+  const isOpen = externalOpen !== undefined ? externalOpen : internalOpen;
+  const setIsOpen = (open: boolean) => {
+    if (onOpenChange) {
+      onOpenChange(open);
+    } else {
+      setInternalOpen(open);
+    }
+  };
   const [isAdmin, setIsAdmin] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [hasScan, setHasScan] = useState(false);
+  const [userRole, setUserRole] = useState<'founder' | 'investor'>('founder');
+
   const menuRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
-  const location = useLocation();
   const { user, logout } = useAuth();
+  
+  // Single source of truth: logged in = user exists
+  const isLoggedIn = !!user;
 
-  // Check if user is admin - RESTRICTED ACCESS
-  // Admin emails: aabramson@comunicano.com, ugobe07@gmail.com, ugobe1@mac.com
   const ADMIN_EMAILS = [
     'aabramson@comunicano.com',
     'ugobe07@gmail.com',
     'ugobe1@mac.com'
   ];
-  
+
   useEffect(() => {
-    const checkAdmin = () => {
-      const currentUser = localStorage.getItem('currentUser');
-      const userProfile = localStorage.getItem('userProfile');
-      const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    const checkAuth = () => {
+      // Get session state (scan status)
+      const session = getSession();
+      setHasScan(session.hasSubmittedUrl);
       
-      setIsLoggedIn(loggedIn || !!currentUser || !!userProfile || !!user);
-      
+      // Get role from localStorage (this is intentional - role persists across sessions)
+      const savedRole = (localStorage.getItem('userRole') as 'founder' | 'investor') || 'founder';
+      setUserRole(savedRole);
+
+      // Admin check: use user from useAuth() as primary source
       let adminStatus = false;
-      
-      // Check AuthContext user first
+
       if (user) {
-        adminStatus = user.isAdmin === true || 
-                     (user.email && ADMIN_EMAILS.includes(user.email.toLowerCase()));
-      } else if (currentUser) {
-        try {
-          const user = JSON.parse(currentUser);
-          // Check if explicitly set OR if email is in admin list
-          adminStatus = user.isAdmin === true || 
-                       (user.email && ADMIN_EMAILS.includes(user.email.toLowerCase()));
-        } catch (e) {
-          adminStatus = false;
-        }
-      } else if (userProfile) {
-        try {
-          const profile = JSON.parse(userProfile);
-          // Check if explicitly set OR if email is in admin list
-          adminStatus = profile.isAdmin === true || 
-                       (profile.email && ADMIN_EMAILS.includes(profile.email.toLowerCase()));
-        } catch (e) {
-          adminStatus = false;
-        }
+        adminStatus =
+          Boolean(user.isAdmin) ||
+          (user.email ? ADMIN_EMAILS.includes(user.email.toLowerCase()) : false);
       }
-      
+
       setIsAdmin(adminStatus);
     };
-    
-    checkAdmin();
-    window.addEventListener('storage', checkAdmin);
-    // Also check when AuthContext updates
-    const interval = setInterval(checkAdmin, 1000);
-    return () => {
-      window.removeEventListener('storage', checkAdmin);
-      clearInterval(interval);
-    };
+
+    checkAuth();
+    window.addEventListener('storage', checkAuth);
+    return () => window.removeEventListener('storage', checkAuth);
   }, [user]);
 
-  // Close menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) setIsOpen(false);
     };
-
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Close on escape key
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        setIsOpen(false);
-      }
+      if (event.key === 'Escape') setIsOpen(false);
     };
-
     document.addEventListener('keydown', handleEscape);
     return () => document.removeEventListener('keydown', handleEscape);
   }, []);
 
-  // Check if path is active
-  const isActive = (path: string) => location.pathname === path || location.pathname.startsWith(path + '/');
-  
-  // Hide nav bar on matching engine pages - users don't need to see this
-  const isMatchingPage = ['/matching', '/matching-engine', '/match', '/'].some(
-    path => location.pathname === path
+  const handleOpen = () => {
+    setIsOpen(true);
+    trackEvent('drawer_opened');
+  };
+
+  const handleClose = () => {
+    setIsOpen(false);
+    trackEvent('drawer_closed');
+  };
+
+  const toggleRole = () => {
+    const newRole = userRole === 'founder' ? 'investor' : 'founder';
+    setUserRole(newRole);
+    localStorage.setItem('userRole', newRole);
+    trackEvent('role_toggled', { from: userRole, to: newRole });
+  };
+
+  const Row = ({
+    to,
+    icon: Icon,
+    label,
+    subtle,
+    onClick
+  }: {
+    to: string;
+    icon: any;
+    label: string;
+    subtle?: boolean;
+    onClick?: () => void;
+  }) => (
+    <Link
+      to={to}
+      onClick={() => {
+        onClick?.();
+        handleClose();
+      }}
+      className={`group flex items-center gap-3 px-3 py-2 rounded-lg transition-all
+        ${subtle ? 'opacity-70 hover:opacity-100' : ''}
+        hover:bg-white/5`}
+    >
+      <Icon className="w-4 h-4 text-gray-500 group-hover:text-gray-300 transition-colors" />
+      <span className="text-sm text-gray-300 group-hover:text-white transition-colors">
+        {label}
+      </span>
+    </Link>
+  );
+
+  const SectionLabel = ({ children }: { children: string }) => (
+    <p className="text-[10px] text-gray-600 px-3 mt-4 mb-2 uppercase tracking-[0.18em]">
+      {children}
+    </p>
   );
 
   return (
     <>
-      {/* Floating Nav Buttons - Simplified & Consistent - Hidden on matching pages - Mobile Responsive */}
-      {!isMatchingPage && (
+      {/* Minimal top nav: back + home - hidden on Oracle Gate (OracleHeader handles nav) */}
+      {!isOracleMode && (
         <div className="fixed top-4 left-1/2 -translate-x-1/2 z-40 max-w-[95vw]">
-          <div className="flex items-center gap-1 sm:gap-1.5 px-1.5 sm:px-2 py-1 sm:py-1.5 bg-black/60 backdrop-blur-md rounded-full border border-white/20 shadow-xl overflow-x-auto">
-            {/* Back Button - Consistent style */}
+          <div className="flex items-center gap-1.5 px-2 py-1.5 bg-black/35 backdrop-blur-md rounded-full border border-white/10">
             <button
               onClick={() => navigate(-1)}
-              className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/10 hover:bg-orange-500/30 text-gray-300 hover:text-orange-300 transition-all border border-white/10 hover:border-orange-500/50"
+              className="flex items-center gap-1 px-2 py-1 rounded-full text-gray-500 hover:text-gray-200 transition-all"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
-              <span className="text-xs font-medium hidden sm:inline">Back</span>
+              <span className="text-xs hidden sm:inline">Back</span>
             </button>
-            
-            {/* Key Navigation - Only essential items */}
+
             <Link
               to="/"
-              className={`flex items-center justify-center w-8 h-8 rounded-full transition-all ${
-                isActive('/') && location.pathname === '/' 
-                  ? 'bg-orange-500/40 text-orange-300 border border-orange-500/60' 
-                  : 'bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white border border-white/10'
-              }`}
+              className="flex items-center justify-center w-7 h-7 rounded-full text-gray-500 hover:text-white transition-all"
             >
               <Home className="w-4 h-4" />
-            </Link>
-            
-            {/* Dashboard/Rocket button - ADMIN ONLY */}
-            {isAdmin && (
-              <Link
-                to="/dashboard"
-                className={`flex items-center justify-center w-8 h-8 rounded-full transition-all ${
-                  isActive('/dashboard') 
-                    ? 'bg-orange-500/40 text-orange-300 border border-orange-500/60' 
-                    : 'bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white border border-white/10'
-                }`}
-              >
-                <Rocket className="w-4 h-4" />
-              </Link>
-            )}
-            
-            <Link
-              to="/trending"
-              className={`flex items-center justify-center w-8 h-8 rounded-full transition-all ${
-                isActive('/trending') 
-                  ? 'bg-orange-500/40 text-orange-300 border border-orange-500/60' 
-                  : 'bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white border border-white/10'
-              }`}
-            >
-              <TrendingUp className="w-4 h-4" />
-            </Link>
-            
-            {/* Match - Primary CTA with orange */}
-            <Link
-              to="/matching"
-              className="flex items-center gap-1 px-3 py-1 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 text-white hover:from-orange-400 hover:to-amber-400 transition-all border border-orange-400/60 shadow-lg shadow-orange-500/30"
-            >
-              <Zap className="w-3.5 h-3.5" />
-              <span className="text-xs font-bold hidden sm:inline">Match</span>
             </Link>
           </div>
         </div>
       )}
 
-      {/* Hamburger Menu Button - Mobile Responsive */}
-      <div ref={menuRef} className="fixed top-4 left-2 sm:left-6 z-50">
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="p-2 sm:p-4 rounded-lg sm:rounded-xl bg-gradient-to-br from-[#1a1a1a] to-[#2d2d2d] hover:from-[#2d2d2d] hover:to-[#393939] backdrop-blur-sm border border-[#FF5A09]/30 hover:border-[#FF5A09]/60 transition-all hover:scale-105 shadow-lg shadow-black/20"
-          aria-label="Menu"
-        >
-          <div className="flex flex-col gap-1 sm:gap-2 w-6 sm:w-8">
-            <div className="h-1 sm:h-1.5 rounded-full bg-gradient-to-r from-[#FF5A09] to-[#FF9900]" />
-            <div className="h-1 sm:h-1.5 rounded-full bg-gradient-to-r from-[#FF9900] to-[#FFCC00]" />
-            <div className="h-1 sm:h-1.5 rounded-full bg-gradient-to-r from-[#FF5A09] to-[#FF9900]" />
-          </div>
-      </button>
+      {/* Drawer button - hidden on Oracle Gate (OracleHeader provides trigger) */}
+      {!isOracleMode && (
+        <div ref={menuRef} className="fixed top-4 left-3 z-50">
+          <button
+            onClick={() => (isOpen ? handleClose() : handleOpen())}
+            className="p-2.5 rounded-lg bg-black/25 hover:bg-black/45 backdrop-blur-md
+                       border border-white/10 hover:border-white/15 transition-all"
+            aria-label="System Menu"
+          >
+            <div className="flex flex-col gap-1.5 w-5">
+              <div className="h-0.5 rounded-full bg-gray-600" />
+              <div className="h-0.5 rounded-full bg-gray-600" />
+              <div className="h-0.5 rounded-full bg-gray-600" />
+            </div>
+          </button>
+        </div>
+      )}
 
-      {/* Dropdown Menu */}
+      {/* Menu ref for Oracle mode (OracleHeader triggers drawer) */}
+      {isOracleMode && <div ref={menuRef} />}
+
       {isOpen && (
         <>
           {/* Backdrop */}
-          <div 
-            className="fixed inset-0 bg-black/30 backdrop-blur-sm -z-10"
-            onClick={() => setIsOpen(false)}
-          />
-          
-          {/* Menu Panel - Clean Dark Theme with Orange Accents - Mobile Responsive */}
-          <div className="absolute top-full left-0 mt-2 w-[calc(100vw-2rem)] sm:w-80 max-w-[90vw] bg-gradient-to-b from-[#1a1a1a] to-[#0f0f0f] rounded-2xl shadow-2xl border border-[#FF5A09]/20 overflow-hidden animate-fadeIn">
-            <div className="p-5 max-h-[75vh] overflow-y-auto">
-              {/* Header */}
-              <div className="flex items-center gap-3 mb-5 pb-4 border-b border-[#FF5A09]/30">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#FF5A09] to-[#FF9900] flex items-center justify-center shadow-lg shadow-[#FF5A09]/30">
-                  <span className="text-2xl">🔥</span>
-                </div>
-                <div>
-                  <h2 className="text-xl font-bold bg-gradient-to-r from-[#FF5A09] to-[#FF9900] bg-clip-text text-transparent">
-                    [pyth] ai
-                  </h2>
-                  <p className="text-sm text-[#888888]">AI-Powered Matching</p>
+          <div className="fixed inset-0 bg-black/35 z-50" onClick={handleClose} />
+
+          {/* Panel - Fixed position in Oracle mode */}
+          <div
+            className={`${isOracleMode ? 'fixed top-16 left-4' : 'absolute top-full left-0 mt-2'} w-[300px] z-50
+                       bg-[#0b0b0b] rounded-2xl shadow-2xl
+                       border border-white/10 overflow-hidden`}
+          >
+              {/* Header - Simple Menu title (brand is in OracleHeader) */}
+              <div className="px-5 pt-5 pb-3 border-b border-white/10">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="text-sm font-semibold text-white/80">Menu</div>
+                    <div className="text-xs text-white/40 mt-1">Navigation & settings</div>
+                  </div>
+                  {/* Operator Mode badge for admins */}
+                  {isAdmin && (
+                    <span className="text-[9px] text-amber-500/70 uppercase tracking-widest font-medium">
+                      Operator
+                    </span>
+                  )}
                 </div>
               </div>
 
-              <nav className="flex flex-col gap-1.5">
-                {/* Main Navigation - Dark backgrounds with orange accents */}
-                <Link
-                  to="/"
-                  onClick={() => setIsOpen(false)}
-                  className="group px-4 py-3 rounded-lg bg-[#1f1f1f] hover:bg-[#2a2a2a] border-l-2 border-l-transparent hover:border-l-[#FF5A09] transition-all font-medium flex items-center gap-3"
-                >
-                  <Home className="w-5 h-5 text-[#FF5A09]" />
-                  <span className="text-base text-[#e0e0e0] group-hover:text-[#FF9900]">Home</span>
-                </Link>
-                
-                <Link
-                  to="/match"
-                  onClick={() => setIsOpen(false)}
-                  className="group px-4 py-3 rounded-lg bg-[#1f1f1f] hover:bg-[#2a2a2a] border-l-2 border-l-transparent hover:border-l-[#FF5A09] transition-all font-medium flex items-center gap-3"
-                >
-                  <Zap className="w-5 h-5 text-[#FF5A09]" />
-                  <span className="text-base text-[#e0e0e0] group-hover:text-[#FF9900]">AI Matching</span>
-                </Link>
-                
-                <Link
-                  to="/vote"
-                  onClick={() => setIsOpen(false)}
-                  className="group px-4 py-3 rounded-lg bg-[#1f1f1f] hover:bg-[#2a2a2a] border-l-2 border-l-transparent hover:border-l-[#FF5A09] transition-all font-medium flex items-center gap-3"
-                >
-                  <VoteIcon className="w-5 h-5 text-[#FF5A09]" />
-                  <span className="text-base text-[#e0e0e0] group-hover:text-[#FF9900]">Vote</span>
-                </Link>
-                
-                <Link
-                  to="/investors"
-                  onClick={() => setIsOpen(false)}
-                  className="group px-4 py-3 rounded-lg bg-[#1f1f1f] hover:bg-[#2a2a2a] border-l-2 border-l-transparent hover:border-l-[#FF5A09] transition-all font-medium flex items-center gap-3"
-                >
-                  <Briefcase className="w-5 h-5 text-[#FF5A09]" />
-                  <span className="text-base text-[#e0e0e0] group-hover:text-[#FF9900]">Investors</span>
-                </Link>
-                
-                <Link
-                  to="/dashboard"
-                  onClick={() => setIsOpen(false)}
-                  className="group px-4 py-3 rounded-lg bg-[#1f1f1f] hover:bg-[#2a2a2a] border-l-2 border-l-transparent hover:border-l-[#FF5A09] transition-all font-medium flex items-center gap-3"
-                >
-                  <FlameIcon variant={8} size="sm" />
-                  <span className="text-base text-[#e0e0e0] group-hover:text-[#FF9900]">Startups</span>
-                </Link>
-                
-                <Link
-                  to="/trending"
-                  onClick={() => setIsOpen(false)}
-                  className="group px-4 py-3 rounded-lg bg-[#1f1f1f] hover:bg-[#2a2a2a] border-l-2 border-l-transparent hover:border-l-[#FF5A09] transition-all font-medium flex items-center gap-3"
-                >
-                  <TrendingUp className="w-5 h-5 text-[#FF5A09]" />
-                  <span className="text-base text-[#e0e0e0] group-hover:text-[#FF9900]">Trending</span>
-                </Link>
-                
-                <Link
-                  to="/strategies"
-                  onClick={() => setIsOpen(false)}
-                  className="group px-4 py-3 rounded-lg bg-[#1f1f1f] hover:bg-[#2a2a2a] border-l-2 border-l-transparent hover:border-l-[#FF5A09] transition-all font-medium flex items-center gap-3"
-                >
-                  <BookOpen className="w-5 h-5 text-[#FF5A09]" />
-                  <span className="text-base text-[#e0e0e0] group-hover:text-[#FF9900]">Playbook</span>
-                </Link>
-                
-                <Link
-                  to="/submit"
-                  onClick={() => setIsOpen(false)}
-                  className="group px-4 py-3 rounded-lg bg-[#1f1f1f] hover:bg-[#2a2a2a] border-l-2 border-l-transparent hover:border-l-[#FF5A09] transition-all font-medium flex items-center gap-3"
-                >
-                  <FileText className="w-5 h-5 text-[#FF5A09]" />
-                  <span className="text-base text-[#e0e0e0] group-hover:text-[#FF9900]">Submit Startup</span>
-                </Link>
-                
-                {/* Divider */}
-                <div className="my-3 border-t border-[#333333]"></div>
-                
-                {/* Secondary */}
-                <Link
-                  to="/about"
-                  onClick={() => setIsOpen(false)}
-                  className="group px-4 py-2.5 rounded-lg bg-[#1f1f1f] hover:bg-[#2a2a2a] transition-all font-medium flex items-center gap-3"
-                >
-                  <BookOpen className="w-5 h-5 text-[#666666]" />
-                  <span className="text-base text-[#888888] group-hover:text-[#e0e0e0]">About</span>
-                </Link>
-                
-                <Link
-                  to="/navigation"
-                  onClick={() => setIsOpen(false)}
-                  className="group px-4 py-2.5 rounded-lg bg-[#1f1f1f] hover:bg-[#2a2a2a] transition-all font-medium flex items-center gap-3"
-                >
-                  <Settings className="w-5 h-5 text-[#666666]" />
-                  <span className="text-base text-[#888888] group-hover:text-[#e0e0e0]">Site Map</span>
-                </Link>
-
-                {/* Login/Logout Section */}
-                <div className="my-3 border-t border-[#333333]"></div>
-                {!isLoggedIn ? (
-                  <Link
-                    to="/login"
-                    onClick={() => setIsOpen(false)}
-                    className="group px-4 py-3 rounded-lg bg-gradient-to-r from-[#FF5A09] to-[#FF9900] hover:from-[#FF9900] hover:to-[#FFCC00] transition-all font-medium flex items-center gap-3 shadow-lg shadow-[#FF5A09]/30"
-                  >
-                    <LogIn className="w-5 h-5 text-white" />
-                    <span className="text-base text-white font-semibold">Login</span>
-                  </Link>
-                ) : (
+              <div className="p-2 max-h-[72vh] overflow-y-auto">
+                {/* Account */}
+                <SectionLabel>Account</SectionLabel>
+                {isLoggedIn ? (
                   <>
-                    <div className="px-4 py-2 text-xs text-[#666666] mb-2">
-                      Logged in as: <span className="text-[#FF5A09]">{user?.email || 'User'}</span>
+                    <Row to="/profile" icon={User} label="Profile" />
+                    <Row to="/settings" icon={Settings} label="Settings" />
+
+                    {/* Role toggle (quiet pill) */}
+                    <button
+                      onClick={toggleRole}
+                      className="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-white/5 transition-all"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-4 h-4 rounded-sm border border-white/10 bg-white/5" />
+                        <span className="text-sm text-gray-300">Role</span>
+                      </div>
+
+                      <span
+                        className={`text-[10px] px-2 py-0.5 rounded-full border
+                          ${
+                            userRole === 'investor'
+                              ? 'border-sky-500/30 text-sky-300 bg-sky-500/10'
+                              : 'border-amber-500/30 text-amber-300 bg-amber-500/10'
+                          }`}
+                      >
+                        {userRole === 'investor' ? 'Investor' : 'Founder'}
+                      </span>
+                    </button>
+                  </>
+                ) : (
+                  <Row to="/login" icon={LogIn} label="Login" />
+                )}
+
+                {/* Signals */}
+                {(isLoggedIn || hasScan) && (
+                  <>
+                    <SectionLabel>Signals</SectionLabel>
+                    <Row to="/feed" icon={Bookmark} label="Saved Signals" />
+                  </>
+                )}
+
+                {/* Matches */}
+                {(isLoggedIn || hasScan) && (
+                  <>
+                    <SectionLabel>Matches</SectionLabel>
+                    <Row to="/saved-matches" icon={Bookmark} label="Saved Matches" />
+                    <div className="flex items-center gap-3 px-3 py-2 rounded-lg opacity-40">
+                      <History className="w-4 h-4 text-gray-600" />
+                      <span className="text-sm text-gray-500">Match History</span>
+                      <span className="text-[10px] text-gray-600 ml-auto">Soon</span>
                     </div>
+                  </>
+                )}
+
+                {/* About */}
+                <SectionLabel>About</SectionLabel>
+                <Row to="/why" icon={FileText} label="Why Pythh Exists" />
+                <Row to="/privacy" icon={Lock} label="Privacy" />
+
+                {/* System - Admin section (only in DOM if admin) */}
+                {isAdmin && (
+                  <>
+                    <p className="text-[10px] text-amber-500 px-3 mt-4 mb-2 uppercase tracking-[0.18em]">
+                      System
+                    </p>
+
+                    <Link
+                      to="/admin/control"
+                      onClick={handleClose}
+                      className="group flex items-center gap-3 px-3 py-2 rounded-lg
+                                 hover:bg-amber-500/10 transition-all"
+                    >
+                      <Sliders className="w-4 h-4 text-amber-500" />
+                      <span className="text-sm text-gray-200 group-hover:text-white">Control</span>
+                    </Link>
+
+                    <Link
+                      to="/admin/health"
+                      onClick={handleClose}
+                      className="group flex items-center gap-3 px-3 py-2 rounded-lg
+                                 hover:bg-amber-500/10 transition-all"
+                    >
+                      <Activity className="w-4 h-4 text-amber-500" />
+                      <span className="text-sm text-gray-200 group-hover:text-white">Health</span>
+                    </Link>
+
+                    <Link
+                      to="/admin/pipeline"
+                      onClick={handleClose}
+                      className="group flex items-center gap-3 px-3 py-2 rounded-lg
+                                 hover:bg-amber-500/10 transition-all"
+                    >
+                      <Activity className="w-4 h-4 text-amber-500" />
+                      <span className="text-sm text-gray-200 group-hover:text-white">Pipelines</span>
+                    </Link>
+
+                    <Link
+                      to="/admin/diagnostic"
+                      onClick={handleClose}
+                      className="group flex items-center gap-3 px-3 py-2 rounded-lg
+                                 hover:bg-amber-500/10 transition-all"
+                    >
+                      <Shield className="w-4 h-4 text-amber-500" />
+                      <span className="text-sm text-gray-200 group-hover:text-white">Diagnostics</span>
+                    </Link>
+                  </>
+                )}
+
+                {/* Logout */}
+                {isLoggedIn && (
+                  <div className="mt-3 pt-3 border-t border-white/10">
                     <button
                       onClick={() => {
                         logout();
-                        setIsOpen(false);
+                        trackEvent('logout_completed');
+                        handleClose();
                         navigate('/');
                       }}
-                      className="w-full group px-4 py-3 rounded-lg bg-[#1f1f1f] hover:bg-[#2a2a2a] border border-[#FF5A09]/30 hover:border-[#FF5A09]/60 transition-all font-medium flex items-center gap-3"
+                      className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-red-500/10 transition-all"
                     >
-                      <LogOut className="w-5 h-5 text-[#FF5A09]" />
-                      <span className="text-base text-[#e0e0e0] group-hover:text-[#FF9900]">Logout</span>
+                      <LogOut className="w-4 h-4 text-gray-500 group-hover:text-red-300" />
+                      <span className="text-sm text-gray-300 hover:text-red-200">
+                        Logout
+                      </span>
                     </button>
-                  </>
-                )}
 
-                {/* Admin Section - RESTRICTED TO ADMINS ONLY */}
-                {isAdmin && (
-                  <>
-                    <div className="my-3 border-t border-[#333333]"></div>
-                    <p className="text-sm text-[#FF5A09] px-3 mb-2 font-semibold tracking-wider">ADMIN</p>
-                    
-                    <Link
-                      to="/admin"
-                      onClick={() => setIsOpen(false)}
-                      className="group px-4 py-2.5 rounded-lg bg-[#1f1f1f] hover:bg-[#2a2a2a] border-l-2 border-l-transparent hover:border-l-[#FF5A09] transition-all font-medium flex items-center gap-3"
-                    >
-                      <Shield className="w-5 h-5 text-[#FF5A09]" />
-                      <span className="text-base text-[#e0e0e0] group-hover:text-[#FF9900]">Admin Panel</span>
-                    </Link>
-                    
-                    <Link
-                      to="/admin/control"
-                      onClick={() => setIsOpen(false)}
-                      className="group px-4 py-2.5 rounded-lg bg-[#1f1f1f] hover:bg-[#2a2a2a] border-l-2 border-l-transparent hover:border-l-[#FF5A09] transition-all font-medium flex items-center gap-3"
-                    >
-                      <Sliders className="w-5 h-5 text-[#FF5A09]" />
-                      <span className="text-base text-[#e0e0e0] group-hover:text-[#FF9900]">Control Center</span>
-                    </Link>
-                    
-                    <Link
-                      to="/admin/forecasts"
-                      onClick={() => setIsOpen(false)}
-                      className="group px-4 py-2.5 rounded-lg bg-[#1f1f1f] hover:bg-[#2a2a2a] border-l-2 border-l-transparent hover:border-l-[#FF5A09] transition-all font-medium flex items-center gap-3"
-                    >
-                      <ChartBar className="w-5 h-5 text-[#FF5A09]" />
-                      <span className="text-base text-[#e0e0e0] group-hover:text-[#FF9900]">🔮 Forecasts</span>
-                    </Link>
-                    
-                    <Link
-                      to="/admin/pipeline"
-                      onClick={() => setIsOpen(false)}
-                      className="group px-4 py-2.5 rounded-lg bg-[#1f1f1f] hover:bg-[#2a2a2a] border-l-2 border-l-transparent hover:border-l-[#FF5A09] transition-all font-medium flex items-center gap-3"
-                    >
-                      <Activity className="w-5 h-5 text-[#FF5A09]" />
-                      <span className="text-base text-[#e0e0e0] group-hover:text-[#FF9900]">Pipeline</span>
-                    </Link>
-                    
-                    <Link
-                      to="/admin/discovered-startups"
-                      onClick={() => setIsOpen(false)}
-                      className="group px-4 py-2.5 rounded-lg bg-[#1f1f1f] hover:bg-[#2a2a2a] border-l-2 border-l-transparent hover:border-l-[#FF5A09] transition-all font-medium flex items-center gap-3"
-                    >
-                      <Search className="w-5 h-5 text-[#FF5A09]" />
-                      <span className="text-base text-[#e0e0e0] group-hover:text-[#FF9900]">Discovered</span>
-                    </Link>
-                    
-                    <Link
-                      to="/admin/edit-startups"
-                      onClick={() => setIsOpen(false)}
-                      className="group px-4 py-2.5 rounded-lg bg-[#1f1f1f] hover:bg-[#2a2a2a] border-l-2 border-l-transparent hover:border-l-[#FF5A09] transition-all font-medium flex items-center gap-3"
-                    >
-                      <FileText className="w-5 h-5 text-[#FF5A09]" />
-                      <span className="text-base text-[#e0e0e0] group-hover:text-[#FF9900]">Edit Startups</span>
-                    </Link>
-                    
-                    <Link
-                      to="/admin/discovered-investors"
-                      onClick={() => setIsOpen(false)}
-                      className="group px-4 py-2.5 rounded-lg bg-[#1f1f1f] hover:bg-[#2a2a2a] border-l-2 border-l-transparent hover:border-l-[#FF5A09] transition-all font-medium flex items-center gap-3"
-                    >
-                      <Users className="w-5 h-5 text-[#FF5A09]" />
-                      <span className="text-base text-[#e0e0e0] group-hover:text-[#FF9900]">Investors</span>
-                    </Link>
-                    
-                    <Link
-                      to="/bulkupload"
-                      onClick={() => setIsOpen(false)}
-                      className="group px-4 py-2.5 rounded-lg bg-[#1f1f1f] hover:bg-[#2a2a2a] border-l-2 border-l-transparent hover:border-l-[#FF5A09] transition-all font-medium flex items-center gap-3"
-                    >
-                      <Upload className="w-5 h-5 text-[#FF5A09]" />
-                      <span className="text-base text-[#e0e0e0] group-hover:text-[#FF9900]">Bulk Upload</span>
-                    </Link>
-                  </>
+                    {/* Investor value prop (quiet) */}
+                    {userRole === 'investor' && (
+                      <p className="text-[11px] text-gray-400 text-center mt-3 italic">
+                        Investors use Pythh to detect momentum before rounds are obvious.
+                      </p>
+                    )}
+                  </div>
                 )}
-              </nav>
-
-              {/* Footer */}
-              <div className="mt-5 pt-4 border-t border-[#333333]">
-                <div className="text-center">
-                  <p className="text-sm text-[#555555]">Powered by AI</p>
-                  <p className="text-sm bg-gradient-to-r from-[#FF5A09] to-[#FF9900] bg-clip-text text-transparent font-semibold mt-1">GOD Algorithm™</p>
-                </div>
               </div>
             </div>
-          </div>
-        </>
-      )}
-
-      <style>{`
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(-10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        .animate-fadeIn {
-          animation: fadeIn 0.2s ease-out;
-        }
-        .scrollbar-hide::-webkit-scrollbar {
-          display: none;
-        }
-        .scrollbar-hide {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-      `}</style>
-      </div>
+          </>
+        )}
     </>
   );
 }

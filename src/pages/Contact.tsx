@@ -183,7 +183,7 @@ export default function Contact() {
             </p>
             <div className="flex flex-wrap gap-3">
               <button
-                onClick={() => navigate('/about')}
+                onClick={() => navigate('/why')}
                 className="px-4 py-2 bg-white border-2 border-purple-300 rounded-lg text-purple-700 font-semibold hover:bg-purple-50 transition-colors"
               >
                 📖 About Us
