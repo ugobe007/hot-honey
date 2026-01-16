@@ -270,16 +270,16 @@ const SplitScreenHero: React.FC = () => {
           
           {/* MICROCOPY moved to under CTAs */}
           
-          {/* SECONDARY CTA - two prominent pill buttons */}
+          {/* SECONDARY CTA - Demo-first, benefits-first (Fix #2 + #3) */}
           <div className={`flex flex-wrap items-center gap-3 transition-all duration-500 delay-200 ${showCommand ? 'opacity-100' : 'opacity-0'}`}>
             <Link
-              to="/pricing"
+              to="/value"
               className="rounded-full border border-white/15 bg-white/5 px-5 py-2.5 text-sm font-semibold text-white/85 hover:bg-white/10 hover:text-white transition"
             >
-              See pricing
+              What you get
             </Link>
             <Link
-              to="/why"
+              to="/how-it-works"
               className="rounded-full border border-cyan-400/25 bg-cyan-400/10 px-5 py-2.5 text-sm font-semibold text-cyan-200 hover:bg-cyan-400/15 transition"
             >
               How it works →

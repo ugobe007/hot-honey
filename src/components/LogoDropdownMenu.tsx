@@ -217,171 +217,123 @@ export default function LogoDropdownMenu({ onPythClick, externalOpen, onOpenChan
       {isOracleMode && <div ref={menuRef} />}
 
       {isOpen && (
-        <>
-          {/* Backdrop */}
-          <div className="fixed inset-0 bg-black/35 z-50" onClick={handleClose} />
+        <div className="fixed inset-0 z-[60]">
+          {/* Overlay - button element so clicks close the drawer but don't propagate */}
+          <button
+            type="button"
+            aria-label="Close menu"
+            onClick={handleClose}
+            className="absolute inset-0 bg-black/55 backdrop-blur-sm"
+          />
 
-          {/* Panel - Fixed position in Oracle mode */}
+          {/* Panel - positioned within the fixed container, z-index higher than overlay */}
           <div
-            className={`${isOracleMode ? 'fixed top-16 left-4' : 'absolute top-full left-0 mt-2'} w-[300px] z-50
-                       bg-[#0b0b0b] rounded-2xl shadow-2xl
-                       border border-white/10 overflow-hidden`}
+            ref={menuRef}
+            className={`absolute ${isOracleMode ? 'right-4 top-4' : 'left-4 top-16'} w-[320px] z-10 rounded-2xl border border-white/10 bg-[#0a0a0a]/95 shadow-2xl overflow-hidden`}
           >
-              {/* Header - Simple Menu title (brand is in OracleHeader) */}
-              <div className="px-5 pt-5 pb-3 border-b border-white/10">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="text-sm font-semibold text-white/80">Menu</div>
-                    <div className="text-xs text-white/40 mt-1">Navigation & settings</div>
-                  </div>
-                  {/* Operator Mode badge for admins */}
-                  {isAdmin && (
-                    <span className="text-[9px] text-amber-500/70 uppercase tracking-widest font-medium">
-                      Operator
-                    </span>
-                  )}
-                </div>
-              </div>
-
-              <div className="p-2 max-h-[72vh] overflow-y-auto">
-                {/* Account */}
-                <SectionLabel>Account</SectionLabel>
-                {isLoggedIn ? (
-                  <>
-                    <Row to="/profile" icon={User} label="Profile" />
-                    <Row to="/settings" icon={Settings} label="Settings" />
-
-                    {/* Role toggle (quiet pill) */}
-                    <button
-                      onClick={toggleRole}
-                      className="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-white/5 transition-all"
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className="w-4 h-4 rounded-sm border border-white/10 bg-white/5" />
-                        <span className="text-sm text-gray-300">Role</span>
-                      </div>
-
-                      <span
-                        className={`text-[10px] px-2 py-0.5 rounded-full border
-                          ${
-                            userRole === 'investor'
-                              ? 'border-sky-500/30 text-sky-300 bg-sky-500/10'
-                              : 'border-amber-500/30 text-amber-300 bg-amber-500/10'
-                          }`}
-                      >
-                        {userRole === 'investor' ? 'Investor' : 'Founder'}
-                      </span>
-                    </button>
-                  </>
-                ) : (
-                  <Row to="/login" icon={LogIn} label="Login" />
-                )}
-
-                {/* Signals */}
-                {(isLoggedIn || hasScan) && (
-                  <>
-                    <SectionLabel>Signals</SectionLabel>
-                    <Row to="/feed" icon={Bookmark} label="Saved Signals" />
-                  </>
-                )}
-
-                {/* Matches */}
-                {(isLoggedIn || hasScan) && (
-                  <>
-                    <SectionLabel>Matches</SectionLabel>
-                    <Row to="/saved-matches" icon={Bookmark} label="Saved Matches" />
-                    <div className="flex items-center gap-3 px-3 py-2 rounded-lg opacity-40">
-                      <History className="w-4 h-4 text-gray-600" />
-                      <span className="text-sm text-gray-500">Match History</span>
-                      <span className="text-[10px] text-gray-600 ml-auto">Soon</span>
-                    </div>
-                  </>
-                )}
-
-                {/* About */}
-                <SectionLabel>About</SectionLabel>
-                <Row to="/why" icon={FileText} label="Why Pythh Exists" />
-                <Row to="/privacy" icon={Lock} label="Privacy" />
-
-                {/* System - Admin section (only in DOM if admin) */}
-                {isAdmin && (
-                  <>
-                    <p className="text-[10px] text-amber-500 px-3 mt-4 mb-2 uppercase tracking-[0.18em]">
-                      System
-                    </p>
-
-                    <Link
-                      to="/admin/control"
-                      onClick={handleClose}
-                      className="group flex items-center gap-3 px-3 py-2 rounded-lg
-                                 hover:bg-amber-500/10 transition-all"
-                    >
-                      <Sliders className="w-4 h-4 text-amber-500" />
-                      <span className="text-sm text-gray-200 group-hover:text-white">Control</span>
-                    </Link>
-
-                    <Link
-                      to="/admin/health"
-                      onClick={handleClose}
-                      className="group flex items-center gap-3 px-3 py-2 rounded-lg
-                                 hover:bg-amber-500/10 transition-all"
-                    >
-                      <Activity className="w-4 h-4 text-amber-500" />
-                      <span className="text-sm text-gray-200 group-hover:text-white">Health</span>
-                    </Link>
-
-                    <Link
-                      to="/admin/pipeline"
-                      onClick={handleClose}
-                      className="group flex items-center gap-3 px-3 py-2 rounded-lg
-                                 hover:bg-amber-500/10 transition-all"
-                    >
-                      <Activity className="w-4 h-4 text-amber-500" />
-                      <span className="text-sm text-gray-200 group-hover:text-white">Pipelines</span>
-                    </Link>
-
-                    <Link
-                      to="/admin/diagnostic"
-                      onClick={handleClose}
-                      className="group flex items-center gap-3 px-3 py-2 rounded-lg
-                                 hover:bg-amber-500/10 transition-all"
-                    >
-                      <Shield className="w-4 h-4 text-amber-500" />
-                      <span className="text-sm text-gray-200 group-hover:text-white">Diagnostics</span>
-                    </Link>
-                  </>
-                )}
-
-                {/* Logout */}
-                {isLoggedIn && (
-                  <div className="mt-3 pt-3 border-t border-white/10">
-                    <button
-                      onClick={() => {
-                        logout();
-                        trackEvent('logout_completed');
-                        handleClose();
-                        navigate('/');
-                      }}
-                      className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-red-500/10 transition-all"
-                    >
-                      <LogOut className="w-4 h-4 text-gray-500 group-hover:text-red-300" />
-                      <span className="text-sm text-gray-300 hover:text-red-200">
-                        Logout
-                      </span>
-                    </button>
-
-                    {/* Investor value prop (quiet) */}
-                    {userRole === 'investor' && (
-                      <p className="text-[11px] text-gray-400 text-center mt-3 italic">
-                        Investors use Pythh to detect momentum before rounds are obvious.
-                      </p>
-                    )}
-                  </div>
-                )}
-              </div>
+            {/* Header - Brand lockup */}
+            <div className="px-4 py-4 border-b border-white/10">
+              <div className="text-xs tracking-[0.25em] text-white/40">PYTHH.AI</div>
+              <div className="text-sm font-semibold text-white/90">Signal Science</div>
+              <div className="text-xs text-white/45 mt-1">Demo-first. Benefits-first.</div>
             </div>
-          </>
-        )}
+
+            <div className="p-2 max-h-[72vh] overflow-y-auto space-y-1">
+              {/* DEMO FIRST - Before anything else */}
+              <MenuItem to="/" label="Live Demo" sub="See the oracle work in 10 seconds" onClose={handleClose} />
+              <MenuItem to="/how-it-works" label="How it works" sub="GOD scoring + signals + matching engine" onClose={handleClose} />
+              <MenuItem to="/value" label="What you get" sub="Free vs paid features" onClose={handleClose} />
+
+              <div className="h-px bg-white/10 my-2" />
+
+              {/* PRICING AFTER BENEFITS */}
+              <MenuItem to="/pricing" label="Pricing" sub="Only after you understand the value" onClose={handleClose} />
+              
+              {isLoggedIn ? (
+                <>
+                  <MenuItem to="/profile" label="Profile" sub="Your account settings" onClose={handleClose} />
+                  <MenuItem to="/saved-matches" label="Saved Matches" sub="Your signal map" onClose={handleClose} />
+                </>
+              ) : (
+                <MenuItem to="/login" label="Sign in" sub="Access saved matches + outreach" onClose={handleClose} />
+              )}
+
+              {/* What is Pythh - special button */}
+              {onPythClick && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    handleClose();
+                    onPythClick();
+                  }}
+                  className="w-full text-left rounded-xl px-4 py-3 hover:bg-white/5 transition"
+                >
+                  <div className="text-sm font-semibold text-white/90">What is Pythh?</div>
+                  <div className="text-xs text-white/45 mt-0.5">The oracle behind investor timing</div>
+                </button>
+              )}
+
+              {/* Admin Section */}
+              {isAdmin && (
+                <>
+                  <div className="h-px bg-amber-500/20 my-2" />
+                  <div className="text-[9px] text-amber-500/70 uppercase tracking-widest px-4 py-1">
+                    Operator
+                  </div>
+                  <MenuItem to="/admin/control" label="Control" sub="System settings" onClose={handleClose} />
+                  <MenuItem to="/admin/health" label="Health" sub="System status" onClose={handleClose} />
+                  <MenuItem to="/admin/pipeline" label="Pipelines" sub="Data flows" onClose={handleClose} />
+                </>
+              )}
+
+              {/* Logout */}
+              {isLoggedIn && (
+                <div className="mt-2 pt-2 border-t border-white/10">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      logout();
+                      trackEvent('logout_completed');
+                      handleClose();
+                      navigate('/');
+                    }}
+                    className="w-full text-left rounded-xl px-4 py-3 hover:bg-red-500/10 transition"
+                  >
+                    <div className="text-sm font-semibold text-red-400/80">Logout</div>
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </>
+  );
+}
+
+/** 
+ * MenuItem - Real Link route that navigates AND closes drawer 
+ * This is the fix for "menu links don't work"
+ */
+function MenuItem({ 
+  to, 
+  label, 
+  sub, 
+  onClose 
+}: { 
+  to: string; 
+  label: string; 
+  sub?: string; 
+  onClose: () => void;
+}) {
+  return (
+    <Link
+      to={to}
+      onClick={() => onClose()}
+      className="block rounded-xl px-4 py-3 hover:bg-white/5 transition"
+    >
+      <div className="text-sm font-semibold text-white/90">{label}</div>
+      {sub && <div className="text-xs text-white/45 mt-0.5">{sub}</div>}
+    </Link>
   );
 }

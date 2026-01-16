@@ -25,6 +25,8 @@ import Login from './pages/Login';
 import SignupFounder from './pages/SignupFounder';
 import SignalConfirmation from './pages/SignalConfirmation';
 import WhyPythhExists from './pages/WhyPythhExists';
+import HowItWorksPage from './pages/HowItWorksPage';
+import ValuePage from './pages/ValuePage';
 import SharedSignalView from './pages/SharedSignalView';
 import PricingPage from './pages/PricingPage';
 import CheckoutPage from './pages/CheckoutPage';
@@ -140,6 +142,8 @@ const App: React.FC = () => {
             <Route path="/signup" element={<SignupFounder />} />
             <Route path="/signal-confirmation" element={<SignalConfirmation />} />
             <Route path="/why" element={<WhyPythhExists />} />
+            <Route path="/how-it-works" element={<HowItWorksPage />} />
+            <Route path="/value" element={<ValuePage />} />
             <Route path="/shared/:shareToken" element={<SharedSignalView />} />
             <Route path="/pricing" element={<PricingPage />} />
             <Route path="/checkout" element={<CheckoutPage />} />
