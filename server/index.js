@@ -76,9 +76,9 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 function getSupabaseClient() {
   const { createClient } = require('@supabase/supabase-js');
   
-  // Check for all possible environment variable names (flexible matching)
-  const supabaseUrl = process.env.SUPABASE_URL || 
-                      process.env.VITE_SUPABASE_URL ||
+  // Check for all possible environment variable names (VITE_ first since that's the real one)
+  const supabaseUrl = process.env.VITE_SUPABASE_URL ||
+                      process.env.SUPABASE_URL || 
                       process.env.NEXT_PUBLIC_SUPABASE_URL ||
                       process.env.REACT_APP_SUPABASE_URL;
   
@@ -117,6 +117,127 @@ app.get('/api/health', (req, res) => {
     port: PORT,
     version: '0.1.0'
   });
+});
+
+// ============================================================
+// GET /api/live-pairings - Live Signal Pairings for landing page
+// Returns top startups paired with matching investors
+// ============================================================
+app.get('/api/live-pairings', async (req, res) => {
+  try {
+    const limit = Math.min(parseInt(req.query.limit) || 3, 10); // Max 10
+    const supabase = getSupabaseClient();
+    
+    // Step 1: Get top startups from v5_sector view
+    const { data: startups, error: startupError } = await supabase
+      .from('startup_intel_v5_sector')
+      .select('id, name, sector_key, investor_signal_sector_0_10, investor_state_sector, sector_momentum_0_10, sector_evidence_0_10, sector_narrative_0_10')
+      .not('sector_key', 'is', null)
+      .not('investor_signal_sector_0_10', 'is', null)
+      .gte('investor_signal_sector_0_10', 5)
+      .order('investor_signal_sector_0_10', { ascending: false })
+      .limit(50);
+    
+    if (startupError) {
+      console.error('[live-pairings] Startup query error:', startupError);
+      return res.status(500).json({ error: 'Failed to fetch startups' });
+    }
+    
+    if (!startups || startups.length === 0) {
+      return res.status(200).json([]);
+    }
+    
+    // Step 2: Get investors
+    const { data: investors, error: investorError } = await supabase
+      .from('investors')
+      .select('id, name, sectors, investment_thesis, firm_description_normalized')
+      .not('name', 'is', null)
+      .limit(200);
+    
+    if (investorError) {
+      console.error('[live-pairings] Investor query error:', investorError);
+      return res.status(500).json({ error: 'Failed to fetch investors' });
+    }
+    
+    // Step 3: Create pairings by matching sectors
+    const pairings = [];
+    const usedStartups = new Set();
+    const usedInvestors = new Set();
+    
+    // Sort startups: 'hot' first, then by signal score
+    const sortedStartups = [...startups].sort((a, b) => {
+      if (a.investor_state_sector === 'hot' && b.investor_state_sector !== 'hot') return -1;
+      if (b.investor_state_sector === 'hot' && a.investor_state_sector !== 'hot') return 1;
+      return (b.investor_signal_sector_0_10 || 0) - (a.investor_signal_sector_0_10 || 0);
+    });
+    
+    for (const startup of sortedStartups) {
+      if (pairings.length >= limit) break;
+      if (usedStartups.has(startup.id)) continue;
+      
+      const sectorKey = startup.sector_key?.toLowerCase() || '';
+      
+      // Find matching investor
+      const matchingInvestor = investors.find(inv => {
+        if (usedInvestors.has(inv.id)) return false;
+        
+        // Check sectors array
+        if (inv.sectors && Array.isArray(inv.sectors)) {
+          if (inv.sectors.some(s => s?.toLowerCase()?.includes(sectorKey) || sectorKey.includes(s?.toLowerCase() || ''))) {
+            return true;
+          }
+        }
+        // Check investment_thesis
+        if (inv.investment_thesis?.toLowerCase()?.includes(sectorKey)) {
+          return true;
+        }
+        // Check firm description
+        if (inv.firm_description_normalized?.toLowerCase()?.includes(sectorKey)) {
+          return true;
+        }
+        return false;
+      });
+      
+      if (matchingInvestor) {
+        usedStartups.add(startup.id);
+        usedInvestors.add(matchingInvestor.id);
+        
+        // Determine reason based on strongest dimension
+        const momentum = startup.sector_momentum_0_10 || 0;
+        const evidence = startup.sector_evidence_0_10 || 0;
+        const narrative = startup.sector_narrative_0_10 || 0;
+        
+        let reason = 'Thesis convergence';
+        if (momentum >= evidence && momentum >= narrative) {
+          reason = 'Capital velocity';
+        } else if (evidence >= momentum && evidence >= narrative) {
+          reason = 'Stage readiness';
+        }
+        
+        // Confidence = signal / 10, clamped 0-1
+        const confidence = Math.min(Math.max((startup.investor_signal_sector_0_10 || 0) / 10, 0), 1);
+        
+        pairings.push({
+          startup_id: startup.id,
+          startup_name: startup.name,
+          investor_id: matchingInvestor.id,
+          investor_name: matchingInvestor.name,
+          reason,
+          confidence,
+          sector_key: startup.sector_key,
+          created_at: new Date().toISOString()
+        });
+      }
+    }
+    
+    // Set caching headers (15 second cache)
+    res.set('Cache-Control', 'public, max-age=15');
+    res.json(pairings);
+    
+  } catch (error) {
+    console.error('[live-pairings] Error:', error);
+    res.status(500).json({ error: error.message || 'Internal server error' });
+  }
 });
 
 // API info endpoint

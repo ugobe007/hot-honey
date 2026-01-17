@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 import { markUrlSubmitted } from '../lib/routeGuards';
+import { useLivePairings } from '../hooks/useLivePairings';
 
 // Pool of recent matches for rotation - credible variety
 const MATCH_POOL = [
@@ -74,6 +75,9 @@ const SplitScreenHero: React.FC = () => {
   
   // Rotating recent matches - refresh every 45 seconds
   const [recentMatches, setRecentMatches] = useState(() => getRandomMatches(Date.now()));
+  
+  // Live Signal Pairings from API (no polling - single fetch on mount)
+  const { data: livePairings, loading: pairingsLoading, error: pairingsError } = useLivePairings(3, false);
   
   const [scores, setScores] = useState({
     marketFit: 0,
@@ -320,7 +324,7 @@ const SplitScreenHero: React.FC = () => {
           </div>
         </div>
 
-        {/* LIVE SIGNAL PAIRINGS - credible evidence */}
+        {/* LIVE SIGNAL PAIRINGS - real data from API */}
         <div className={`mb-10 transition-all duration-700 ${showPairings ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
           <div className="h-px bg-gray-800/60 mb-6"></div>
           <div className="flex items-baseline justify-between mb-4">
@@ -328,6 +332,7 @@ const SplitScreenHero: React.FC = () => {
             <p className="text-[10px] text-gray-600 font-mono">Generated from current market signals · Updating continuously</p>
           </div>
           <div className="space-y-0">
+            {/* Header row */}
             <div className="grid grid-cols-[1fr_auto_1fr_auto_1fr] gap-x-8 py-2 text-[11px] text-gray-600 border-b border-gray-800/40 font-mono">
               <span>Startup Signal</span>
               <span></span>
@@ -335,27 +340,53 @@ const SplitScreenHero: React.FC = () => {
               <span className="text-gray-800">|</span>
               <span>Reason</span>
             </div>
-            <div className="grid grid-cols-[1fr_auto_1fr_auto_1fr] gap-x-8 py-3 border-b border-gray-800/30 font-mono">
-              <span className="text-base text-gray-300">Climate Analytics</span>
-              <span className="text-gray-700">→</span>
-              <span className="text-base text-amber-500">Khosla</span>
-              <span className="text-gray-800">|</span>
-              <span className="text-sm text-gray-500">Capital velocity</span>
-            </div>
-            <div className="grid grid-cols-[1fr_auto_1fr_auto_1fr] gap-x-8 py-3 border-b border-gray-800/30 font-mono">
-              <span className="text-base text-gray-300">AI Infrastructure</span>
-              <span className="text-gray-700">→</span>
-              <span className="text-base text-amber-500">Sequoia</span>
-              <span className="text-gray-800">|</span>
-              <span className="text-sm text-gray-500">Portfolio gap</span>
-            </div>
-            <div className="grid grid-cols-[1fr_auto_1fr_auto_1fr] gap-x-8 py-3 font-mono">
-              <span className="text-base text-gray-300">FinTech API</span>
-              <span className="text-gray-700">→</span>
-              <span className="text-base text-amber-500">Ribbit</span>
-              <span className="text-gray-800">|</span>
-              <span className="text-sm text-gray-500">Stage readiness</span>
-            </div>
+            
+            {/* Loading state: skeleton rows */}
+            {pairingsLoading && (
+              <>
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="grid grid-cols-[1fr_auto_1fr_auto_1fr] gap-x-8 py-3 border-b border-gray-800/30 font-mono animate-pulse">
+                    <span className="h-4 bg-gray-800/40 rounded w-32"></span>
+                    <span className="text-gray-700">→</span>
+                    <span className="h-4 bg-amber-500/20 rounded w-24"></span>
+                    <span className="text-gray-800">|</span>
+                    <span className="h-4 bg-gray-800/30 rounded w-28"></span>
+                  </div>
+                ))}
+              </>
+            )}
+            
+            {/* Error state */}
+            {pairingsError && !pairingsLoading && (
+              <div className="py-4 text-center">
+                <p className="text-xs text-gray-600 font-mono">Unable to load live pairings</p>
+              </div>
+            )}
+            
+            {/* Empty state */}
+            {!pairingsLoading && !pairingsError && livePairings.length === 0 && (
+              <div className="py-4 text-center">
+                <p className="text-xs text-gray-600 font-mono">No live pairings yet</p>
+              </div>
+            )}
+            
+            {/* Success state: real data rows */}
+            {!pairingsLoading && livePairings.length > 0 && livePairings.map((pairing, index) => (
+              <div 
+                key={`${pairing.startup_id}-${pairing.investor_id}`} 
+                className={`grid grid-cols-[1fr_auto_1fr_auto_1fr] gap-x-8 py-3 font-mono ${index < livePairings.length - 1 ? 'border-b border-gray-800/30' : ''}`}
+              >
+                <span className="text-base text-gray-300 truncate" title={pairing.startup_name}>
+                  {pairing.startup_name}
+                </span>
+                <span className="text-gray-700">→</span>
+                <span className="text-base text-amber-500 truncate" title={pairing.investor_name}>
+                  {pairing.investor_name}
+                </span>
+                <span className="text-gray-800">|</span>
+                <span className="text-sm text-gray-500">{pairing.reason}</span>
+              </div>
+            ))}
           </div>
         </div>
 
