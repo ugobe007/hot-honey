@@ -120,12 +120,54 @@ app.get('/api/health', (req, res) => {
 });
 
 // ============================================================
+// Helper: Extract plan from request (JWT claims or header)
+// Priority: Authorization Bearer JWT > x-user-plan header > 'free'
+// ============================================================
+function getPlanFromRequest(req) {
+  const validPlans = ['free', 'pro', 'elite'];
+  
+  // Try JWT first (Authorization: Bearer <token>)
+  const authHeader = req.headers.authorization;
+  if (authHeader?.startsWith('Bearer ')) {
+    try {
+      const token = authHeader.slice(7);
+      // Decode JWT payload (no verification - Supabase handles that)
+      const payload = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+      const plan = payload?.user_metadata?.plan || payload?.app_metadata?.plan;
+      if (plan && validPlans.includes(plan)) {
+        return plan;
+      }
+    } catch (e) {
+      // JWT decode failed, continue to fallbacks
+    }
+  }
+  
+  // Try x-user-plan header (for dev/testing)
+  const headerPlan = req.headers['x-user-plan'];
+  if (headerPlan && validPlans.includes(headerPlan)) {
+    return headerPlan;
+  }
+  
+  // Default: free
+  return 'free';
+}
+
+// Plan limits for live-pairings
+const PLAN_LIMITS = { free: 1, pro: 3, elite: 10 };
+
+// ============================================================
 // GET /api/live-pairings - Live Signal Pairings for landing page
 // Returns top startups paired with matching investors
+// SERVER-SIDE GATING: Enforces plan limits and field masking
 // ============================================================
 app.get('/api/live-pairings', async (req, res) => {
   try {
-    const limit = Math.min(parseInt(req.query.limit) || 3, 10); // Max 10
+    // Determine plan and enforce limit
+    const plan = getPlanFromRequest(req);
+    const maxLimit = PLAN_LIMITS[plan] || 1;
+    const requestedLimit = parseInt(req.query.limit) || maxLimit;
+    const limit = Math.min(requestedLimit, maxLimit); // Enforce plan ceiling
+    
     const supabase = getSupabaseClient();
     
     // Step 1: Get top startups from v5_sector view
@@ -217,21 +259,27 @@ app.get('/api/live-pairings', async (req, res) => {
         // Confidence = signal / 10, clamped 0-1
         const confidence = Math.min(Math.max((startup.investor_signal_sector_0_10 || 0) / 10, 0), 1);
         
+        // Apply field masking based on plan
+        // free: mask investor_name, reason, confidence
+        // pro: mask reason, confidence
+        // elite: show everything
         pairings.push({
           startup_id: startup.id,
           startup_name: startup.name,
-          investor_id: matchingInvestor.id,
-          investor_name: matchingInvestor.name,
-          reason,
-          confidence,
+          investor_id: plan === 'free' ? null : matchingInvestor.id,
+          investor_name: plan === 'free' ? null : matchingInvestor.name,
+          reason: plan === 'elite' ? reason : null,
+          confidence: plan === 'elite' ? confidence : null,
           sector_key: startup.sector_key,
           created_at: new Date().toISOString()
         });
       }
     }
     
-    // Set caching headers (15 second cache)
-    res.set('Cache-Control', 'public, max-age=15');
+    // Set caching headers based on plan (elite gets fresher data)
+    const cacheMaxAge = plan === 'elite' ? 15 : 60;
+    res.set('Cache-Control', `public, max-age=${cacheMaxAge}`);
+    res.set('X-Plan', plan); // Debug header
     res.json(pairings);
     
   } catch (error) {

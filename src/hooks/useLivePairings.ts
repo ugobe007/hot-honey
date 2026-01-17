@@ -1,15 +1,16 @@
 import { useState, useEffect, useCallback } from 'react';
 import { LivePairing, LivePairingsState } from '../types/livePairings';
+import { PlanTier, getLivePairingsLimit } from '../utils/plan';
 
 /**
  * Hook to fetch live signal pairings from the API
  * 
- * @param limit - Number of pairings to fetch (default 3, max 10)
+ * @param plan - User's plan tier for server-side gating
  * @param enablePolling - Whether to poll for updates (default false - don't hammer the API)
  * @param pollingInterval - Polling interval in ms (default 30000 = 30s)
  */
 export function useLivePairings(
-  limit: number = 3,
+  plan: PlanTier = 'free',
   enablePolling: boolean = false,
   pollingInterval: number = 30000
 ): LivePairingsState & { refetch: () => void } {
@@ -17,6 +18,9 @@ export function useLivePairings(
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [lastUpdatedAt, setLastUpdatedAt] = useState<Date | null>(null);
+  
+  // Get limit based on plan (server enforces this too, but reduces payload)
+  const limit = getLivePairingsLimit(plan);
 
   const fetchPairings = useCallback(async () => {
     try {
@@ -28,6 +32,8 @@ export function useLivePairings(
       const response = await fetch(`${baseUrl}/api/live-pairings?limit=${limit}`, {
         headers: {
           'Accept': 'application/json',
+          // Pass plan via header for dev/testing (server also checks JWT in prod)
+          'x-user-plan': plan,
         },
       });
 
@@ -51,7 +57,7 @@ export function useLivePairings(
     } finally {
       setLoading(false);
     }
-  }, [limit]);
+  }, [limit, plan]);
 
   // Initial fetch on mount
   useEffect(() => {

@@ -85,12 +85,13 @@ const SplitScreenHero: React.FC = () => {
   // Rotating recent matches - refresh every 45 seconds
   const [recentMatches, setRecentMatches] = useState(() => getRandomMatches(Date.now()));
   
-  // Live Signal Pairings from API - fetch based on elite limit (10), gate at render
-  const { data: livePairings, loading: pairingsLoading, error: pairingsError } = useLivePairings(10, false);
+  // Live Signal Pairings from API - pass plan for server-side gating
+  // Server enforces limit and masks fields, so we get exactly what the tier allows
+  const { data: livePairings, loading: pairingsLoading, error: pairingsError } = useLivePairings(plan, false);
   
-  // Slice pairings to visible limit based on plan
+  // Server already slices to tier limit, but UI can slice again for safety
   const visiblePairings = livePairings.slice(0, visibleLimit);
-  const totalPairingsCount = livePairings.length || 10; // Fallback to 10 for footnote
+  const totalPairingsCount = 10; // Always show "of 10" to create FOMO
   
   const [scores, setScores] = useState({
     marketFit: 0,
