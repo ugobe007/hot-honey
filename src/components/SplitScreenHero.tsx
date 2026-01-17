@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Lock } from 'lucide-react';
 import { markUrlSubmitted } from '../lib/routeGuards';
 import { useLivePairings } from '../hooks/useLivePairings';
+import { getPlan, getLivePairingsLimit, getPlanVisibility, getUpgradeCTA, getPlanFootnote, PlanTier } from '../utils/plan';
+import { useAuth } from '../contexts/AuthContext';
 
 // Pool of recent matches for rotation - credible variety
 const MATCH_POOL = [
@@ -57,8 +59,15 @@ const getRandomMatches = (seed: number) => {
 
 const SplitScreenHero: React.FC = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [url, setUrl] = useState('');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  
+  // Get user's plan for pricing gate
+  const plan: PlanTier = getPlan(user as any);
+  const visibleLimit = getLivePairingsLimit(plan);
+  const visibility = getPlanVisibility(plan);
+  const upgradeCTA = getUpgradeCTA(plan);
   
   // Input interaction state (for glow system)
   const [isFocused, setIsFocused] = useState(false);
@@ -76,8 +85,12 @@ const SplitScreenHero: React.FC = () => {
   // Rotating recent matches - refresh every 45 seconds
   const [recentMatches, setRecentMatches] = useState(() => getRandomMatches(Date.now()));
   
-  // Live Signal Pairings from API (no polling - single fetch on mount)
-  const { data: livePairings, loading: pairingsLoading, error: pairingsError } = useLivePairings(3, false);
+  // Live Signal Pairings from API - fetch based on elite limit (10), gate at render
+  const { data: livePairings, loading: pairingsLoading, error: pairingsError } = useLivePairings(10, false);
+  
+  // Slice pairings to visible limit based on plan
+  const visiblePairings = livePairings.slice(0, visibleLimit);
+  const totalPairingsCount = livePairings.length || 10; // Fallback to 10 for footnote
   
   const [scores, setScores] = useState({
     marketFit: 0,
@@ -324,33 +337,56 @@ const SplitScreenHero: React.FC = () => {
           </div>
         </div>
 
-        {/* LIVE SIGNAL PAIRINGS - real data from API */}
+        {/* LIVE SIGNAL PAIRINGS - real data from API with pricing gate */}
         <div className={`mb-10 transition-all duration-700 ${showPairings ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
           <div className="h-px bg-gray-800/60 mb-6"></div>
           <div className="flex items-baseline justify-between mb-4">
-            <p className="text-[9px] text-gray-600 uppercase tracking-[0.2em] font-mono">Live Signal Pairings</p>
+            <div className="flex items-center gap-3">
+              <p className="text-[9px] text-gray-600 uppercase tracking-[0.2em] font-mono">Live Signal Pairings</p>
+              {upgradeCTA.show && (
+                <Link 
+                  to="/pricing" 
+                  className="text-[10px] text-amber-500/80 hover:text-amber-400 font-mono transition-colors flex items-center gap-1"
+                >
+                  <Lock className="w-3 h-3" />
+                  {upgradeCTA.text}
+                </Link>
+              )}
+            </div>
             <p className="text-[10px] text-gray-600 font-mono">Generated from current market signals · Updating continuously</p>
           </div>
           <div className="space-y-0">
-            {/* Header row */}
-            <div className="grid grid-cols-[1fr_auto_1fr_auto_1fr] gap-x-8 py-2 text-[11px] text-gray-600 border-b border-gray-800/40 font-mono">
+            {/* Header row - show confidence column for elite */}
+            <div className={`grid ${visibility.showConfidence ? 'grid-cols-[1fr_auto_1fr_auto_1fr_auto_80px]' : 'grid-cols-[1fr_auto_1fr_auto_1fr]'} gap-x-8 py-2 text-[11px] text-gray-600 border-b border-gray-800/40 font-mono`}>
               <span>Startup Signal</span>
               <span></span>
               <span>Investor Signal</span>
               <span className="text-gray-800">|</span>
               <span>Reason</span>
+              {visibility.showConfidence && (
+                <>
+                  <span className="text-gray-800">|</span>
+                  <span>Confidence</span>
+                </>
+              )}
             </div>
             
-            {/* Loading state: skeleton rows */}
+            {/* Loading state: skeleton rows based on visibleLimit */}
             {pairingsLoading && (
               <>
-                {[1, 2, 3].map((i) => (
-                  <div key={i} className="grid grid-cols-[1fr_auto_1fr_auto_1fr] gap-x-8 py-3 border-b border-gray-800/30 font-mono animate-pulse">
+                {Array.from({ length: visibleLimit }).map((_, i) => (
+                  <div key={i} className={`grid ${visibility.showConfidence ? 'grid-cols-[1fr_auto_1fr_auto_1fr_auto_80px]' : 'grid-cols-[1fr_auto_1fr_auto_1fr]'} gap-x-8 py-3 border-b border-gray-800/30 font-mono animate-pulse`}>
                     <span className="h-4 bg-gray-800/40 rounded w-32"></span>
                     <span className="text-gray-700">→</span>
                     <span className="h-4 bg-amber-500/20 rounded w-24"></span>
                     <span className="text-gray-800">|</span>
                     <span className="h-4 bg-gray-800/30 rounded w-28"></span>
+                    {visibility.showConfidence && (
+                      <>
+                        <span className="text-gray-800">|</span>
+                        <span className="h-4 bg-gray-800/30 rounded w-12"></span>
+                      </>
+                    )}
                   </div>
                 ))}
               </>
@@ -370,23 +406,73 @@ const SplitScreenHero: React.FC = () => {
               </div>
             )}
             
-            {/* Success state: real data rows */}
-            {!pairingsLoading && livePairings.length > 0 && livePairings.map((pairing, index) => (
+            {/* Success state: real data rows with pricing gate */}
+            {!pairingsLoading && visiblePairings.length > 0 && visiblePairings.map((pairing, index) => (
               <div 
                 key={`${pairing.startup_id}-${pairing.investor_id}`} 
-                className={`grid grid-cols-[1fr_auto_1fr_auto_1fr] gap-x-8 py-3 font-mono ${index < livePairings.length - 1 ? 'border-b border-gray-800/30' : ''}`}
+                className={`grid ${visibility.showConfidence ? 'grid-cols-[1fr_auto_1fr_auto_1fr_auto_80px]' : 'grid-cols-[1fr_auto_1fr_auto_1fr]'} gap-x-8 py-3 font-mono ${index < visiblePairings.length - 1 ? 'border-b border-gray-800/30' : ''}`}
               >
+                {/* Startup name - always visible */}
                 <span className="text-base text-gray-300 truncate" title={pairing.startup_name}>
                   {pairing.startup_name}
                 </span>
                 <span className="text-gray-700">→</span>
-                <span className="text-base text-amber-500 truncate" title={pairing.investor_name}>
-                  {pairing.investor_name}
-                </span>
+                
+                {/* Investor name - gated for free users */}
+                {visibility.showInvestorName ? (
+                  <span className="text-base text-amber-500 truncate" title={pairing.investor_name}>
+                    {pairing.investor_name}
+                  </span>
+                ) : (
+                  <span className="text-base truncate flex items-center gap-2">
+                    <span className="text-amber-500/40 blur-sm select-none">████████</span>
+                    <Link to="/pricing" className="text-[10px] text-amber-500/70 hover:text-amber-400 flex items-center gap-1 whitespace-nowrap">
+                      <Lock className="w-3 h-3" />
+                      <span>Unlock</span>
+                    </Link>
+                  </span>
+                )}
+                
                 <span className="text-gray-800">|</span>
-                <span className="text-sm text-gray-500">{pairing.reason}</span>
+                
+                {/* Reason - gated for free and pro users */}
+                {visibility.showReason ? (
+                  <span className="text-sm text-gray-500">{pairing.reason}</span>
+                ) : plan === 'pro' ? (
+                  <span className="text-sm text-gray-600 italic">Signal detected</span>
+                ) : (
+                  <span className="text-sm flex items-center gap-2">
+                    <span className="text-gray-600/40 blur-sm select-none">████████</span>
+                    <Lock className="w-3 h-3 text-gray-700" />
+                  </span>
+                )}
+                
+                {/* Confidence - elite only */}
+                {visibility.showConfidence && (
+                  <>
+                    <span className="text-gray-800">|</span>
+                    <span className="text-sm text-cyan-400/80">{Math.round((pairing.confidence || 0) * 100)}%</span>
+                  </>
+                )}
               </div>
             ))}
+            
+            {/* Footnote showing plan limits */}
+            {!pairingsLoading && visiblePairings.length > 0 && (
+              <div className="pt-3 flex items-center justify-between">
+                <p className="text-[10px] text-gray-600 font-mono">
+                  {getPlanFootnote(plan, totalPairingsCount)}
+                </p>
+                {upgradeCTA.show && (
+                  <Link 
+                    to="/pricing" 
+                    className="text-[10px] text-amber-500/60 hover:text-amber-400 font-mono transition-colors"
+                  >
+                    See all →
+                  </Link>
+                )}
+              </div>
+            )}
           </div>
         </div>
 
