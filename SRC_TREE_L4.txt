@@ -1,0 +1,264 @@
+src
+├── App.css
+├── App.tsx
+├── components
+│   ├── ActivityFeed.tsx
+│   ├── ActivityTicker.tsx
+│   ├── admin
+│   │   └── AgentDashboard.tsx
+│   ├── AdminLayout.tsx
+│   ├── AdminNavBar.tsx
+│   ├── AdminRouteWrapper.tsx
+│   ├── AlgorithmComparisonDemo.tsx
+│   ├── BonusCard.tsx
+│   ├── BrandMark.tsx
+│   ├── charts
+│   │   ├── GODScoreTrendChart.tsx
+│   │   ├── InferenceDataCoverageChart.tsx
+│   │   ├── InferenceImpactChart.tsx
+│   │   └── MatchQualityChart.tsx
+│   ├── CommandCenter.tsx
+│   ├── Dashboard.tsx
+│   ├── DataQualityBadge.tsx
+│   ├── EducationalMatchModal.tsx
+│   ├── EnhancedInvestorCard.tsx
+│   ├── EnhancedStartupCard.tsx
+│   ├── ErrorBoundary.tsx
+│   ├── FirePointsWidget.tsx
+│   ├── FlameIcon.tsx
+│   ├── FloatingNav.tsx
+│   ├── FloatingSearch.tsx
+│   ├── FrontPageNew.tsx
+│   ├── GetMatchedButton.tsx
+│   ├── GetMatchedPopup.tsx
+│   ├── GODScoreDemo.tsx
+│   ├── HamburgerMenu.tsx
+│   ├── HoneypotIcon.tsx
+│   ├── HotMatchPopup.tsx
+│   ├── HotMoneyBanner.tsx
+│   ├── HotMoneyVotingFlow.tsx
+│   ├── HowItWorksModal 2.tsx
+│   ├── HowItWorksModal.tsx
+│   ├── InlineSearchBar.tsx
+│   ├── InvestorCard.tsx
+│   ├── LiveMatchDemo.tsx
+│   ├── LogoDropdownMenu.tsx
+│   ├── MatchAnalyticsDashboard.tsx
+│   ├── MatchCard.tsx
+│   ├── MatchConfidenceBadge.tsx
+│   ├── MatchFilterPanel.tsx
+│   ├── MatchingEngine.tsx
+│   ├── MatchingEngine.tsx.backup
+│   ├── MatchingEngine.tsx.bak
+│   ├── MatchInsightsPanel.tsx
+│   ├── MatchNotifications.tsx
+│   ├── MatchScoreBreakdown.tsx
+│   ├── NavBar.css
+│   ├── NavBar.tsx
+│   ├── NewsUpdate.tsx
+│   ├── NotificationBell.tsx
+│   ├── oracle
+│   │   └── OracleHeader.tsx
+│   ├── ProfessionalNav.tsx
+│   ├── RequestIntroModal.tsx
+│   ├── ScriptsControlPanel.tsx
+│   ├── ShareMatchModal.tsx
+│   ├── SharePortfolioModal.tsx
+│   ├── ShareSignalsModal.tsx
+│   ├── SmartSearchBar.tsx
+│   ├── SocialSignalsDashboard.tsx
+│   ├── SplitScreenHero.tsx
+│   ├── StartupCard.css
+│   ├── StartupCard.tsx
+│   ├── StartupCardOfficial.tsx
+│   ├── StartupUploader.tsx
+│   ├── StartupVotePopup.tsx
+│   ├── StartupVotingCard.tsx
+│   ├── SyndicateForm.tsx
+│   ├── TemplateCompletionWidget.tsx
+│   ├── TransparencyPanel.tsx
+│   ├── TrendingAnalytics.tsx
+│   ├── UploadDocuments.tsx
+│   ├── UrlSubmission.tsx
+│   ├── UserActivityStats.tsx
+│   ├── ValuePropPanels.tsx
+│   ├── VCFirmCard.tsx
+│   ├── VCInfoPopup.tsx
+│   ├── VotePage.tsx
+│   ├── VoteTransparency.tsx
+│   ├── voting.tsx
+│   ├── WatchMagicDemo.tsx
+│   └── WelcomeModal.tsx
+├── config
+│   ├── adminConfig.ts
+│   └── routes.ts
+├── contexts
+│   └── AuthContext.tsx
+├── data
+│   ├── investorData.ts
+│   ├── startupCards.ts
+│   └── startupData.ts
+├── hooks
+│   ├── useAuth.ts
+│   ├── useNotifications.ts
+│   ├── useReactions.ts
+│   └── useVotes.ts
+├── index.css
+├── lib
+│   ├── activityLogger.ts
+│   ├── aiResearch.ts
+│   ├── analytics.ts
+│   ├── api.ts
+│   ├── apiConfig.ts
+│   ├── crawlers
+│   │   ├── fundingCrawlers.ts
+│   │   ├── investorCrawlers.ts
+│   │   ├── orchestrator.ts
+│   │   └── types.ts
+│   ├── database.types.ts
+│   ├── investorEnrichmentService.ts
+│   ├── investorMatchService.ts
+│   ├── investorNewsService.ts
+│   ├── investors
+│   │   └── index.ts
+│   ├── investorService.ts
+│   ├── matchingService.ts
+│   ├── mongodb.ts
+│   ├── openaiDataService.ts
+│   ├── routeGuards.tsx
+│   ├── savedMatches.ts
+│   ├── savedMatchesService.ts
+│   ├── startupResolver.ts
+│   ├── stripe.ts
+│   ├── supabase.ts
+│   └── voteService.ts
+├── main.tsx
+├── pages
+│   ├── _archived
+│   │   ├── ActivityTracker.tsx
+│   │   ├── DealsPage.tsx
+│   │   ├── GreenTechExample.tsx
+│   │   ├── Home.tsx
+│   │   ├── LocalStorageDebug.tsx
+│   │   ├── LocalStorageViewer.tsx
+│   │   ├── ProcessUploads.tsx
+│   │   ├── StartupProcessor.tsx
+│   │   ├── StartupReview.tsx
+│   │   ├── TalentMatchingHub.tsx
+│   │   ├── TalentMatchingPage.tsx
+│   │   └── UserManagement.tsx
+│   ├── About.tsx
+│   ├── AdminAnalytics.tsx
+│   ├── AdminInstructions.tsx
+│   ├── AdminReview.tsx
+│   ├── AIIntelligenceDashboard.tsx
+│   ├── AILogsPage.tsx
+│   ├── Analytics.tsx
+│   ├── BulkUpload.tsx
+│   ├── CheckoutPage.tsx
+│   ├── Contact.tsx
+│   ├── ControlCenter.tsx
+│   ├── DatabaseDiagnostic.tsx
+│   ├── DataIntelligence.tsx
+│   ├── Deals.css
+│   ├── Deals.tsx
+│   ├── DealsPage.css
+│   ├── DiagnosticPage.tsx
+│   ├── DiscoveredInvestors.tsx
+│   ├── DiscoveredStartups.tsx
+│   ├── DocumentUpload.tsx
+│   ├── EditInvestorPage.tsx
+│   ├── EditStartups.tsx
+│   ├── Feed.tsx
+│   ├── FundingForecasts.tsx
+│   ├── GetMatchedPage.tsx
+│   ├── GODScoresPage.tsx
+│   ├── GODSettingsPage.tsx
+│   ├── HowItWorksPage.tsx
+│   ├── IndustryRankingsPage.tsx
+│   ├── InstantMatches.tsx
+│   ├── InvestorEnrichmentPage.tsx
+│   ├── InvestorMatches.tsx
+│   ├── InvestorProfile.tsx
+│   ├── InvestorSignup.tsx
+│   ├── InvestorsPage.tsx
+│   ├── InvestorToolsPage.tsx
+│   ├── InviteAccept.tsx
+│   ├── InviteInvestorPage.tsx
+│   ├── LandingPage.tsx
+│   ├── LiveDemo.tsx
+│   ├── Login.tsx
+│   ├── MarketIntelligenceDashboard.tsx
+│   ├── MarketTrends.tsx
+│   ├── MasterNavigation.tsx
+│   ├── MatchingEngineAdmin.tsx
+│   ├── MatchReviewPage.tsx
+│   ├── MetricsDashboard.tsx
+│   ├── MigrateLocalStorage.tsx
+│   ├── MigrateStartupData.tsx
+│   ├── MLDashboard.tsx
+│   ├── PipelineMonitor.tsx
+│   ├── PortfolioPage.tsx
+│   ├── PricingPage.tsx
+│   ├── Privacy.tsx
+│   ├── ProfilePage.tsx
+│   ├── QuickAddInvestor.tsx
+│   ├── RSSManager.tsx
+│   ├── SavedMatches.tsx
+│   ├── ScraperManagementPage.tsx
+│   ├── ScriptsControlPage.tsx
+│   ├── ServiceDetailPage.tsx
+│   ├── ServicesPage.tsx
+│   ├── Settings.tsx
+│   ├── SetupPage.tsx
+│   ├── SharedPortfolio.tsx
+│   ├── SharedSignalView.tsx
+│   ├── SignalConfirmation.tsx
+│   ├── SignupFounder.tsx
+│   ├── StartupBenchmarksDashboard.tsx
+│   ├── StartupDetail.css
+│   ├── StartupDetail.tsx
+│   ├── StartupMatches.tsx
+│   ├── StartupToolsPage.tsx
+│   ├── StrategiesPage.tsx
+│   ├── Submit.tsx
+│   ├── SubscriptionSuccessPage.tsx
+│   ├── SyncStartups.tsx
+│   ├── SystemHealthDashboard.tsx
+│   ├── TemplateSequentialFlow.tsx
+│   ├── TierMatchingAdmin.tsx
+│   ├── TrendingPage.tsx
+│   ├── UnifiedAdminDashboard.tsx
+│   ├── UploadPage.tsx
+│   ├── UrlMatchPage.tsx
+│   ├── ValuePage.tsx
+│   └── WhyPythhExists.tsx
+├── PortfolioPage.css
+├── services
+│   ├── api.ts
+│   ├── index.ts
+│   ├── matchingHelpers.ts
+│   ├── matchingService.ts
+│   ├── semanticMatchingService.ts
+│   └── systemStatus.ts
+├── store
+│   └── portfolioStore.ts
+├── store.ts
+├── styles
+│   └── colors.ts
+├── types
+│   ├── database.types.ts
+│   ├── gamification.ts
+│   └── index.ts
+├── types.ts
+├── utils
+│   ├── activityGenerator.ts
+│   ├── adminAuth.ts
+│   ├── firePointsManager.ts
+│   ├── investorAdapters.ts
+│   ├── normalizeUrl.ts
+│   ├── startupAdapters.ts
+│   └── voteAnalytics.ts
+└── vite-env.d.ts
+
+19 directories, 243 files

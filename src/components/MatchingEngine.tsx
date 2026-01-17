@@ -13,6 +13,7 @@ import StartupVotePopup from './StartupVotePopup';
 import VCInfoPopup from './VCInfoPopup';
 import MatchScoreBreakdown from './MatchScoreBreakdown';
 import ShareMatchModal from './ShareMatchModal';
+import SplitScreenHero from './SplitScreenHero';
 import ValuePropPanels from './ValuePropPanels';
 import LogoDropdownMenu from './LogoDropdownMenu';
 import OracleHeader from './oracle/OracleHeader';
@@ -847,6 +848,7 @@ export default function MatchingEngine() {
       </div>
 
       {/* Match results will go here - SplitScreenHero removed, belongs on landing page only */}
+      <SplitScreenHero />
 
     </div>
   );

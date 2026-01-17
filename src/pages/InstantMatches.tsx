@@ -25,12 +25,6 @@ import {
   Brain,
   ExternalLink,
   ChevronRight,
-  Lightbulb,
-  FileText,
-  Users,
-  Briefcase,
-  MapPin,
-  BarChart3,
   AlertCircle
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
@@ -104,12 +98,21 @@ export default function InstantMatches() {
   const [similarStartups, setSimilarStartups] = useState<SimilarStartup[]>([]);
   const [error, setError] = useState<string | null>(null);
 
-  // Run analysis on mount
+  // Run analysis on mount - reset state when URL changes
   useEffect(() => {
     if (!urlParam) {
       navigate('/match');
       return;
     }
+    
+    // Reset all state when URL changes (deterministic refresh)
+    setStartup(null);
+    setMatches([]);
+    setSimilarStartups([]);
+    setError(null);
+    setIsAnalyzing(true);
+    setAnalysisStep(0);
+    
     analyzeAndMatch();
   }, [urlParam]);
 
@@ -530,34 +533,6 @@ export default function InstantMatches() {
           </Link>
         )}
         <p className="text-xs text-gray-600 text-center -mt-2 mb-4">No pitch deck. No spam. No intros sent.</p>
-
-        {/* QUICK ACTIONS: Founders Toolkit + Similar Companies */}
-        <div className="flex flex-wrap gap-3 mb-6">
-          <Link
-            to="/services"
-            className="flex items-center gap-2 px-4 py-2.5 bg-violet-500/10 border border-violet-500/30 hover:border-violet-400 hover:bg-violet-500/20 rounded-lg transition-all group"
-          >
-            <Lightbulb className="w-4 h-4 text-violet-400" />
-            <span className="text-sm font-medium text-violet-300 group-hover:text-violet-200">Founders Toolkit</span>
-            <ChevronRight className="w-4 h-4 text-violet-500 group-hover:translate-x-0.5 transition-transform" />
-          </Link>
-          <Link
-            to="/trending"
-            className="flex items-center gap-2 px-4 py-2.5 bg-cyan-500/10 border border-cyan-500/30 hover:border-cyan-400 hover:bg-cyan-500/20 rounded-lg transition-all group"
-          >
-            <Users className="w-4 h-4 text-cyan-400" />
-            <span className="text-sm font-medium text-cyan-300 group-hover:text-cyan-200">Similar Startups</span>
-            <ChevronRight className="w-4 h-4 text-cyan-500 group-hover:translate-x-0.5 transition-transform" />
-          </Link>
-          <Link
-            to="/strategies"
-            className="flex items-center gap-2 px-4 py-2.5 bg-amber-500/10 border border-amber-500/30 hover:border-amber-400 hover:bg-amber-500/20 rounded-lg transition-all group"
-          >
-            <FileText className="w-4 h-4 text-amber-400" />
-            <span className="text-sm font-medium text-amber-300 group-hover:text-amber-200">Fundraising Guides</span>
-            <ChevronRight className="w-4 h-4 text-amber-500 group-hover:translate-x-0.5 transition-transform" />
-          </Link>
-        </div>
 
         {/* GOD SCORE EXPLANATION */}
         <div className="mb-6 p-4 bg-gradient-to-r from-amber-500/5 via-[#0f0f0f] to-violet-500/5 border border-amber-500/20 rounded-xl">

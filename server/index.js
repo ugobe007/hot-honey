@@ -192,6 +192,10 @@ app.use('/api/talent', talentRouter);
 const marketIntelligenceRouter = require('./routes/marketIntelligence');
 app.use('/api/market-intelligence', marketIntelligenceRouter);
 
+// Intelligence API routes (Pythh Brain v1 - read-only)
+const intelligenceRouter = require('./routes/intelligence');
+app.use('/api', intelligenceRouter);
+
 // Helper function to spawn automation scripts
 function spawnAutomationScript(scriptName, description) {
   const { spawn } = require('child_process');

@@ -41,6 +41,15 @@ const eventQueue: QueuedEvent[] = [];
 let flushTimeout: ReturnType<typeof setTimeout> | null = null;
 let isFlushing = false;
 
+// Circuit breaker state
+let consecutiveFailures = 0;
+let analyticsDisabled = false;
+const MAX_CONSECUTIVE_FAILURES = 2; // Disable after 2 consecutive failures
+
+// Throttle state - prevent same event firing twice in 10s
+const lastEventTimes: Map<EventName, number> = new Map();
+const THROTTLE_MS = 10000; // 10 seconds
+
 // IDs for funnel stitching
 const ANON_ID_KEY = 'pyth_anon_id';
 const SESSION_ID_KEY = 'pyth_session_id';
@@ -72,6 +81,19 @@ function getSessionId(): string {
  * Track an analytics event
  */
 export function trackEvent(name: EventName, data: EventData = {}): void {
+  // Circuit breaker: don't track if disabled
+  if (analyticsDisabled) {
+    return;
+  }
+
+  // Throttle: don't fire same event twice in 10s
+  const now = Date.now();
+  const lastTime = lastEventTimes.get(name) || 0;
+  if (now - lastTime < THROTTLE_MS) {
+    return; // Skip duplicate event within throttle window
+  }
+  lastEventTimes.set(name, now);
+
   const anon_id = getAnonId();
   const session_id = getSessionId();
 
@@ -138,19 +160,35 @@ async function flushEvents(): Promise<void> {
 
     if (error) throw error;
 
-    // Success: remove flushed events
+    // Success: remove flushed events and reset failure count
     eventQueue.splice(0, events.length);
+    consecutiveFailures = 0;
   } catch (error) {
-    // Keep queue (don't drop events). Try again soon.
+    // Circuit breaker: track consecutive failures
+    consecutiveFailures++;
+    
+    if (consecutiveFailures >= MAX_CONSECUTIVE_FAILURES) {
+      // Disable analytics to prevent spam
+      analyticsDisabled = true;
+      // Clear queue to free memory
+      eventQueue.length = 0;
+      if (process.env.NODE_ENV === 'development') {
+        // eslint-disable-next-line no-console
+        console.warn('[pyth.analytics] Circuit breaker tripped - analytics disabled after', consecutiveFailures, 'failures');
+      }
+      return; // Don't retry
+    }
+
+    // Keep queue (don't drop events). Try again soon with backoff.
     if (process.env.NODE_ENV === 'development') {
       // eslint-disable-next-line no-console
-      console.warn('[pyth.analytics] Failed to flush events:', error);
+      console.warn('[pyth.analytics] Failed to flush events (attempt', consecutiveFailures + '):', error);
     }
-    // Backoff retry (5s)
+    // Backoff retry (5s * failure count)
     if (!flushTimeout) {
       flushTimeout = setTimeout(() => {
         void flushEvents();
-      }, 5000);
+      }, 5000 * consecutiveFailures);
     }
   } finally {
     isFlushing = false;
