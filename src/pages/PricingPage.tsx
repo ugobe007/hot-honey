@@ -23,7 +23,6 @@ import {
 } from 'lucide-react';
 import { TierName } from '../lib/stripe';
 import LogoDropdownMenu from '../components/LogoDropdownMenu';
-import BrandMark from '../components/BrandMark';
 
 export default function PricingPage() {
   const navigate = useNavigate();
@@ -42,13 +41,8 @@ export default function PricingPage() {
       </div>
 
       <LogoDropdownMenu />
-      
-      {/* Brand Mark */}
-      <div className="fixed top-5 left-5 z-40">
-        <BrandMark />
-      </div>
 
-      <div className="relative z-10 container mx-auto px-6 pt-28 pb-16">
+      <div className="relative z-10 container mx-auto px-6 pt-20 pb-16">
         {/* Header - Page Title from Spec */}
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">

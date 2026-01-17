@@ -69,24 +69,10 @@ export default function InvestorsPage() {
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-[#9400cd]/5 rounded-full blur-3xl animate-pulse"></div>
       </div>
 
-      {/* Logo Dropdown Menu */}
+      {/* Logo Dropdown Menu (includes fixed header) */}
       <LogoDropdownMenu />
 
-      {/* Home Button */}
-      <div className="fixed top-6 left-1/2 transform -translate-x-1/2 z-40">
-        <button
-          onClick={() => navigate('/')}
-          className="px-4 py-2 rounded-full bg-gradient-to-b from-slate-300 via-slate-200 to-slate-400 text-slate-800 font-medium text-sm flex items-center gap-2 shadow-lg hover:from-slate-400 hover:via-slate-300 hover:to-slate-500 transition-all cursor-pointer"
-          style={{
-            boxShadow: '0 4px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.8), inset 0 -1px 0 rgba(0,0,0,0.2)',
-            textShadow: '0 1px 1px rgba(255,255,255,0.8)'
-          }}>
-          <span>🏠</span>
-          <span>Home</span>
-        </button>
-      </div>
-
-      <div className="max-w-7xl mx-auto pt-24 sm:pt-28 relative z-10">
+      <div className="max-w-7xl mx-auto pt-20 relative z-10">
         {/* Loading State */}
         {loading && (
           <div className="flex items-center justify-center min-h-[60vh]">

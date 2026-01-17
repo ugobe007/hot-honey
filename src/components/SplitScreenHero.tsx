@@ -181,10 +181,8 @@ const SplitScreenHero: React.FC = () => {
           Check My Investor Signals →
         </p>
 
-        {/* ONE CONTRAST BAND - behind command + readout */}
+        {/* COMMAND BAR + READOUT wrapper */}
         <div className="relative">
-          <div className="absolute -inset-x-8 -inset-y-4 bg-gradient-to-b from-gray-900/30 via-gray-800/15 to-transparent pointer-events-none"></div>
-          
           {/* COMMAND BAR - instrument, not form */}
           <div className={`relative mb-3 transition-all duration-700 ${showCommand ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
             {!isAnalyzing ? (

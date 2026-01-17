@@ -425,34 +425,10 @@ export default function TrendingPage() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-orange-500/10 to-amber-500/10 rounded-full blur-3xl"></div>
       </div>
 
-      {/* Logo Dropdown Menu */}
+      {/* Logo Dropdown Menu (includes fixed header) */}
       <LogoDropdownMenu />
 
-      {/* Navigation Buttons - Top Right */}
-      <div className="fixed top-6 right-8 z-50 flex items-center gap-3">
-        <button
-          onClick={() => setShowHowItWorks(true)}
-          className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-purple-600/60 to-indigo-600/60 hover:from-purple-500 hover:to-indigo-500 text-white font-semibold rounded-xl transition-all border border-purple-400/50"
-        >
-          <FlameIcon variant={3} size="sm" />
-          How It Works
-        </button>
-        <Link 
-          to="/why" 
-          className="px-5 py-2.5 bg-gradient-to-r from-slate-600/60 to-gray-600/60 hover:from-slate-500 hover:to-gray-500 text-white font-semibold rounded-xl transition-all border border-slate-400/50"
-        >
-          About
-        </Link>
-        <Link 
-          to="/get-matched" 
-          className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold rounded-xl transition-all shadow-lg"
-        >
-          <Sparkles className="w-4 h-4" />
-          Get Matched
-        </Link>
-      </div>
-
-      <div className="relative z-10 container mx-auto px-6 pt-28 pb-16">
+      <div className="relative z-10 container mx-auto px-6 pt-20 pb-16">
         {/* Header */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-500/20 to-red-500/20 border border-orange-500/30 rounded-full mb-4">

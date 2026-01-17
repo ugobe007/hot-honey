@@ -9,7 +9,6 @@ import {
   Lock,
   Cpu,
   Home,
-  ArrowLeft,
   LogIn,
   LogOut,
   Sliders,
@@ -173,43 +172,42 @@ export default function LogoDropdownMenu({ onPythClick, externalOpen, onOpenChan
 
   return (
     <>
-      {/* Minimal top nav: back + home - hidden on Oracle Gate (OracleHeader handles nav) */}
-      {!isOracleMode && (
-        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-40 max-w-[95vw]">
-          <div className="flex items-center gap-1.5 px-2 py-1.5 bg-black/35 backdrop-blur-md rounded-full border border-white/10">
-            <button
-              onClick={() => navigate(-1)}
-              className="flex items-center gap-1 px-2 py-1 rounded-full text-gray-500 hover:text-gray-200 transition-all"
-            >
-              <ArrowLeft className="w-3.5 h-3.5" />
-              <span className="text-xs hidden sm:inline">Back</span>
-            </button>
 
-            <Link
-              to="/"
-              className="flex items-center justify-center w-7 h-7 rounded-full text-gray-500 hover:text-white transition-all"
-            >
-              <Home className="w-4 h-4" />
+      {/* Header bar with logo + hamburger - hidden on Oracle Gate (OracleHeader provides its own) */}
+      {!isOracleMode && (
+        <div className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0a]/80 backdrop-blur-md border-b border-white/5">
+          <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
+            {/* Logo (left side) */}
+            <Link to="/" className="group flex items-baseline gap-2">
+              <span className="text-sm font-semibold tracking-wide text-white/90 group-hover:text-white">
+                pythh.ai
+              </span>
+              <span className="text-xs tracking-[0.25em] text-white/40 group-hover:text-white/60 hidden sm:inline">
+                SIGNAL SCIENCE
+              </span>
             </Link>
-          </div>
-        </div>
-      )}
 
-      {/* Drawer button - hidden on Oracle Gate (OracleHeader provides trigger) */}
-      {!isOracleMode && (
-        <div ref={menuRef} className="fixed top-4 left-3 z-50">
-          <button
-            onClick={() => (isOpen ? handleClose() : handleOpen())}
-            className="p-2.5 rounded-lg bg-black/25 hover:bg-black/45 backdrop-blur-md
-                       border border-white/10 hover:border-white/15 transition-all"
-            aria-label="System Menu"
-          >
-            <div className="flex flex-col gap-1.5 w-5">
-              <div className="h-0.5 rounded-full bg-gray-600" />
-              <div className="h-0.5 rounded-full bg-gray-600" />
-              <div className="h-0.5 rounded-full bg-gray-600" />
+            {/* Right side: Sign in + Hamburger */}
+            <div className="flex items-center gap-3">
+              <Link
+                to="/login"
+                className="rounded-full border border-white/10 bg-transparent px-4 py-2 text-sm font-medium text-white/70 hover:bg-white/5 hover:text-white transition"
+              >
+                Sign in
+              </Link>
+              <button
+                onClick={() => (isOpen ? handleClose() : handleOpen())}
+                className="rounded-xl border border-white/10 bg-white/5 p-2 text-white/80 hover:bg-white/10 hover:text-white transition"
+                aria-label="Open menu"
+              >
+                <div className="flex flex-col gap-1 w-[18px]">
+                  <div className="h-0.5 rounded-full bg-current" />
+                  <div className="h-0.5 rounded-full bg-current" />
+                  <div className="h-0.5 rounded-full bg-current" />
+                </div>
+              </button>
             </div>
-          </button>
+          </div>
         </div>
       )}
 
@@ -226,10 +224,10 @@ export default function LogoDropdownMenu({ onPythClick, externalOpen, onOpenChan
             className="absolute inset-0 bg-black/55 backdrop-blur-sm"
           />
 
-          {/* Panel - positioned within the fixed container, z-index higher than overlay */}
+          {/* Panel - positioned from the right side */}
           <div
             ref={menuRef}
-            className={`absolute ${isOracleMode ? 'right-4 top-4' : 'left-4 top-16'} w-[320px] z-10 rounded-2xl border border-white/10 bg-[#0a0a0a]/95 shadow-2xl overflow-hidden`}
+            className="absolute right-4 top-4 w-[320px] z-10 rounded-2xl border border-white/10 bg-[#0a0a0a]/95 shadow-2xl overflow-hidden"
           >
             {/* Header - Brand lockup */}
             <div className="px-4 py-4 border-b border-white/10">

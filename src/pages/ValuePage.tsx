@@ -23,12 +23,15 @@ import {
   FileText,
   Crown
 } from 'lucide-react';
+import LogoDropdownMenu from '../components/LogoDropdownMenu';
 
 export default function ValuePage() {
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white">
+      <LogoDropdownMenu />
+      
       {/* Hero */}
-      <div className="border-b border-white/10">
+      <div className="border-b border-white/10 pt-14">
         <div className="max-w-4xl mx-auto px-4 py-16 text-center">
           <div className="text-xs text-violet-400 uppercase tracking-[0.25em] mb-4 font-mono">
             WHAT YOU GET

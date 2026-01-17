@@ -8,21 +8,15 @@
 
 import { Link } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, Brain, Target, Zap, TrendingUp } from 'lucide-react';
-import BrandMark from '../components/BrandMark';
 import LogoDropdownMenu from '../components/LogoDropdownMenu';
 
 export default function WhyPythhExists() {
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
       <LogoDropdownMenu />
-      
-      {/* Brand mark */}
-      <div className="fixed top-5 left-5 z-40">
-        <BrandMark />
-      </div>
 
       {/* Content */}
-      <div className="max-w-3xl mx-auto px-6 pt-28 pb-20">
+      <div className="max-w-3xl mx-auto px-6 pt-20 pb-20">
         {/* Back */}
         <Link 
           to="/"

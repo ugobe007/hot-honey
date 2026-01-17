@@ -120,14 +120,10 @@ const App: React.FC = () => {
     }
   }, [location.pathname, location.search]);
 
-  // Hide nav on Oracle surfaces
-  const isOracleGate = ['/', '/match', '/get-matched', '/login', '/pricing', '/checkout'].includes(location.pathname);
-
   return (
     <AuthProvider>
       <div className="min-h-screen bg-[#0a0a0a]">
-        {/* System Drawer - Hidden on Oracle Gate */}
-        {!isOracleGate && <LogoDropdownMenu />}
+        {/* LogoDropdownMenu is now rendered by each page that needs it */}
         
         <main>
           <Routes>

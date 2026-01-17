@@ -250,7 +250,7 @@ export default function ScraperManagementPage() {
     <div className="min-h-screen bg-gradient-to-br from-[#0f0729] via-[#1a0f3a] to-[#2d1558] text-white">
       <LogoDropdownMenu />
       
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto px-4 pt-20 pb-8">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
