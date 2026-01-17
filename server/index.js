@@ -399,6 +399,175 @@ app.get('/api/trending', async (req, res) => {
   }
 });
 
+// Plan limits for investor matches endpoint
+const MATCH_LIMITS = { free: 3, pro: 10, elite: 50 };
+
+// ============================================================
+// GET /api/matches - Startup → Investor matches with tier gating
+// Core conversion endpoint - the page people pay for
+// ============================================================
+app.get('/api/matches', async (req, res) => {
+  try {
+    const startupId = req.query.startup_id;
+    if (!startupId) {
+      return res.status(400).json({ error: 'startup_id is required' });
+    }
+    
+    // Determine plan and enforce limit
+    const plan = await getPlanFromRequest(req);
+    const maxLimit = MATCH_LIMITS[plan] || 3;
+    const requestedLimit = parseInt(req.query.limit) || maxLimit;
+    const limit = Math.min(Math.max(requestedLimit, 1), maxLimit, 50); // Double clamp
+    
+    const supabase = getSupabaseClient();
+    
+    // Step 1: Get startup details for context
+    const { data: startup, error: startupError } = await supabase
+      .from('startup_uploads')
+      .select('id, name, sectors, stage, tagline')
+      .eq('id', startupId)
+      .single();
+    
+    if (startupError || !startup) {
+      console.error('[matches] Startup not found:', startupId, startupError);
+      return res.status(404).json({ error: 'Startup not found' });
+    }
+    
+    // Step 2: Get pre-computed matches from startup_investor_matches
+    // This is the SSOT for matches - calculated by match-regenerator.js
+    const { data: matchData, error: matchError } = await supabase
+      .from('startup_investor_matches')
+      .select('investor_id, match_score, confidence_level, reasoning, why_you_match, fit_analysis')
+      .eq('startup_id', startupId)
+      .gte('match_score', 20) // Quality floor
+      .order('match_score', { ascending: false })
+      .limit(limit);
+    
+    if (matchError) {
+      console.error('[matches] Match query error:', matchError);
+      return res.status(500).json({ error: 'Failed to fetch matches' });
+    }
+    
+    // Step 3: Get total count (for "X more matches" CTA)
+    const { count: totalMatches } = await supabase
+      .from('startup_investor_matches')
+      .select('id', { count: 'exact', head: true })
+      .eq('startup_id', startupId)
+      .gte('match_score', 20);
+    
+    // Step 4: Get investor details for matched investors
+    const investorIds = (matchData || []).map(m => m.investor_id).filter(Boolean);
+    let investors = [];
+    if (investorIds.length > 0) {
+      const { data: investorData } = await supabase
+        .from('investors')
+        .select('id, name, firm, photo_url, linkedin_url, sectors, stage, check_size_min, check_size_max, type, notable_investments, investment_thesis')
+        .in('id', investorIds);
+      investors = investorData || [];
+    }
+    
+    const investorMap = new Map(investors.map(inv => [inv.id, inv]));
+    
+    // Step 5: Apply field masking based on plan
+    // free: mask investor_name (show photo/firm hint), hide reason/confidence
+    // pro: show investor_name + firm, limited reasons, hide confidence
+    // elite: show everything including reason + confidence + dimensions
+    const maskedMatches = (matchData || []).map(m => {
+      const investor = investorMap.get(m.investor_id) || {};
+      
+      // Base fields (all tiers) - always include score + firm hint
+      const base = {
+        investor_id: m.investor_id,
+        match_score: m.match_score,
+        // Firm is always shown (hint for free users)
+        firm: investor.firm || null,
+        // Photo always shown (visual hook for free tier)
+        photo_url: investor.photo_url || null,
+        // Sector key for sorting/filtering
+        sectors: investor.sectors || [],
+        // Stage for filtering
+        stage: investor.stage || [],
+        // Type (VC/Angel/etc)
+        type: investor.type || null,
+      };
+      
+      if (plan === 'free') {
+        // Free: Show logo + firm, mask name. No reasons/confidence.
+        return {
+          ...base,
+          investor_name: null, // MASKED - upgrade to reveal
+          investor_name_masked: true,
+          linkedin_url: null, // Hidden
+          check_size_min: null,
+          check_size_max: null,
+          notable_investments: null,
+          reasoning: null,
+          confidence_level: null,
+          why_you_match: null,
+          fit_analysis: null,
+        };
+      }
+      
+      if (plan === 'pro') {
+        // Pro: Show name + firm + check size. Hide detailed reasoning/confidence.
+        return {
+          ...base,
+          investor_name: investor.name || 'Unknown Investor',
+          investor_name_masked: false,
+          linkedin_url: investor.linkedin_url || null,
+          check_size_min: investor.check_size_min || null,
+          check_size_max: investor.check_size_max || null,
+          notable_investments: investor.notable_investments || null,
+          reasoning: null, // MASKED - upgrade to elite
+          confidence_level: null,
+          why_you_match: null,
+          fit_analysis: null,
+        };
+      }
+      
+      // Elite: Everything
+      return {
+        ...base,
+        investor_name: investor.name || 'Unknown Investor',
+        investor_name_masked: false,
+        linkedin_url: investor.linkedin_url || null,
+        check_size_min: investor.check_size_min || null,
+        check_size_max: investor.check_size_max || null,
+        notable_investments: investor.notable_investments || null,
+        investment_thesis: investor.investment_thesis || null,
+        reasoning: m.reasoning || null,
+        confidence_level: m.confidence_level || null,
+        why_you_match: m.why_you_match || null,
+        fit_analysis: m.fit_analysis || null,
+      };
+    });
+    
+    // Set caching headers (shorter for elite - more frequent updates)
+    const cacheMaxAge = plan === 'elite' ? 60 : 300;
+    res.set('Cache-Control', `private, max-age=${cacheMaxAge}`);
+    res.set('X-Plan', plan);
+    
+    res.json({
+      plan,
+      startup: {
+        id: startup.id,
+        name: startup.name,
+        sectors: startup.sectors,
+        stage: startup.stage,
+        tagline: startup.tagline,
+      },
+      limit,
+      showing: maskedMatches.length,
+      total: totalMatches || maskedMatches.length,
+      data: maskedMatches,
+    });
+    
+  } catch (error) {
+    console.error('[matches] Error:', error);
+    res.status(500).json({ error: error.message || 'Internal server error' });
+  }
+});
+
 // API info endpoint
 app.get('/api', (req, res) => {
   res.json({
@@ -409,6 +578,7 @@ app.get('/api', (req, res) => {
       'GET /api',
       'GET /api/live-pairings',
       'GET /api/trending',
+      'GET /api/matches?startup_id=...&limit=',
       'POST /upload',
       'POST /syndicate',
       'POST /api/syndicates',

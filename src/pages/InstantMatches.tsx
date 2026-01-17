@@ -2,13 +2,13 @@
  * INSTANT MATCHES PAGE
  * ====================
  * Shows instant investor matches after URL submission
- * - Top 3 matches fully visible with WHY MATCHED reasoning
- * - Similar companies in space
- * - Founders Toolkit CTA
- * - 50+ more matches blurred until signup
+ * NOW WITH TIER GATING:
+ * - Free: top 3, masked names (show firm/logo), no reasons
+ * - Pro: top 10, full names, no reasons
+ * - Elite: top 50, full names + reasons + confidence + export
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 import { 
   Loader2, 
@@ -25,12 +25,17 @@ import {
   Brain,
   ExternalLink,
   ChevronRight,
-  AlertCircle
+  AlertCircle,
+  Download,
+  Crown,
+  Eye,
+  EyeOff
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { resolveStartupFromUrl, ResolveResult } from '../lib/startupResolver';
-import { getInvestorMatchesForStartup, InvestorMatch as ServiceInvestorMatch } from '../lib/investorMatchService';
 import { useAuth } from '../contexts/AuthContext';
+import { useMatches, InvestorMatch as GatedInvestorMatch, formatCheckSize, getScoreStyle } from '../hooks/useMatches';
+import { getPlan, getMatchVisibility, getMatchUpgradeCTA, getMatchFootnote, PlanTier } from '../utils/plan';
 
 interface AnalyzedStartup {
   id?: string;
@@ -44,21 +49,7 @@ interface AnalyzedStartup {
   signals?: string[]; // What we detected (e.g., "Has Revenue", "Ex-Google team")
 }
 
-interface InvestorMatch {
-  id: string;
-  name: string;
-  firm?: string;
-  sectors?: string[];
-  stage?: string[];
-  check_size_min?: number;
-  check_size_max?: number;
-  match_score: number;
-  type?: string;
-  notable_investments?: string[];
-  website?: string;
-  reasoning?: string[];
-}
-
+// Legacy interface kept for similar startups
 interface SimilarStartup {
   id: string;
   name: string;
@@ -90,13 +81,30 @@ export default function InstantMatches() {
   const { user } = useAuth();
   const isLoggedIn = !!user;
   const urlParam = searchParams.get('url') || '';
+  const allMatchesRef = useRef<HTMLDivElement>(null);
   
+  // Analysis state (resolving startup from URL)
   const [isAnalyzing, setIsAnalyzing] = useState(true);
   const [analysisStep, setAnalysisStep] = useState(0);
   const [startup, setStartup] = useState<AnalyzedStartup | null>(null);
-  const [matches, setMatches] = useState<InvestorMatch[]>([]);
+  const [startupId, setStartupId] = useState<string | null>(null);
   const [similarStartups, setSimilarStartups] = useState<SimilarStartup[]>([]);
   const [error, setError] = useState<string | null>(null);
+  
+  // Get plan tier for UI decisions
+  const plan = getPlan(user);
+  const visibility = getMatchVisibility(plan);
+  
+  // Use gated matches hook (fetches from /api/matches when startupId is set)
+  const { 
+    matches: gatedMatches, 
+    loading: matchesLoading, 
+    error: matchesError,
+    plan: serverPlan,
+    showing,
+    total,
+    upgradeCTA
+  } = useMatches(startupId);
 
   // Run analysis on mount - reset state when URL changes
   useEffect(() => {
@@ -107,7 +115,7 @@ export default function InstantMatches() {
     
     // Reset all state when URL changes (deterministic refresh)
     setStartup(null);
-    setMatches([]);
+    setStartupId(null);
     setSimilarStartups([]);
     setError(null);
     setIsAnalyzing(true);
@@ -136,11 +144,12 @@ export default function InstantMatches() {
 
   const analyzeAndMatch = async () => {
     try {
-      // Use the proper startup resolver (same as UrlMatchPage)
+      // Use the proper startup resolver to create/find the startup record
       // This handles: existing startups, LinkedIn/Crunchbase URLs, and creates new records
       // waitForEnrichment: true = waits for inference engine to calculate real GOD score
       console.log('[matches] url:', urlParam);
       console.log('[matches] session:', user?.email || 'not logged in');
+      console.log('[matches] plan:', plan);
       const result = await resolveStartupFromUrl(urlParam, { waitForEnrichment: true });
 
       if (!result) {
@@ -166,36 +175,12 @@ export default function InstantMatches() {
       };
       setStartup(resolvedStartup);
 
-      // Get investor matches using the proper service
-      // This checks pre-calculated matches first, falls back to real-time scoring
-      const investorMatches = await getInvestorMatchesForStartup(
-        result.startup.id,
-        result.startup,
-        { limit: 53, minScore: 20 }
-      );
+      // Set startupId to trigger the useMatches hook
+      // The hook will fetch gated matches from /api/matches with proper tier enforcement
+      setStartupId(result.startup.id);
+      console.log('[matches] Set startupId, useMatches will fetch gated data');
 
-      // Convert to our InvestorMatch interface
-      const formattedMatches: InvestorMatch[] = investorMatches.map((m: ServiceInvestorMatch) => ({
-        id: m.investor_id,
-        name: m.investor_name,
-        firm: m.firm,
-        sectors: m.sectors,
-        stage: m.stage,
-        check_size_min: m.check_size_min,
-        check_size_max: m.check_size_max,
-        match_score: m.score,
-        type: m.type,
-        notable_investments: m.notable_investments,
-        website: m.linkedin_url, // Use linkedin as website fallback
-        reasoning: m.reasons
-      }));
-      
-      setMatches(formattedMatches);
-      console.log('[matches] count:', formattedMatches.length);
-      console.log('[matches] top3:', formattedMatches.slice(0, 3).map(m => m.name));
-      console.log('[InstantMatches] Got', formattedMatches.length, 'matches');
-
-      // Fetch similar startups in same sectors
+      // Fetch similar startups in same sectors (not gated)
       const startupSectors = result.startup.sectors || ['Technology'];
       if (startupSectors.length > 0) {
         const { data: similar } = await supabase
@@ -291,8 +276,8 @@ export default function InstantMatches() {
     return 'text-gray-400 bg-gray-500/20 border-gray-500/30';
   };
 
-  // Loading state
-  if (isAnalyzing) {
+  // Loading state - wait for both startup resolution AND match fetching
+  if (isAnalyzing || matchesLoading) {
     const currentStep = ANALYSIS_STEPS[analysisStep];
     const CurrentIcon = currentStep.icon;
     const isBrainStep = currentStep.isBrain;
@@ -364,7 +349,7 @@ export default function InstantMatches() {
             <span className="text-2xl">❌</span>
           </div>
           <h2 className="text-xl font-semibold text-white mb-2">Analysis Failed</h2>
-          <p className="text-gray-400 mb-6">{error}</p>
+          <p className="text-gray-400 mb-6">{error || matchesError}</p>
           <Link
             to="/match"
             className="inline-flex items-center gap-2 px-6 py-3 bg-violet-600 hover:bg-violet-500 text-white font-medium rounded-lg transition-colors"
@@ -376,11 +361,13 @@ export default function InstantMatches() {
     );
   }
 
-  const topMatches = matches.slice(0, 3);
+  // Use gated matches from server
+  const matches = gatedMatches;
+  const displayPlan = serverPlan || plan;
 
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
-      {/* Header */}
+      {/* Header with plan badge */}
       <div className="border-b border-gray-800 bg-[#0f0f0f]">
         <div className="max-w-6xl mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
@@ -395,9 +382,27 @@ export default function InstantMatches() {
                   Your Investor Matches
                 </h1>
                 <p className="text-sm text-gray-400">
-                  {matches.length} investors matched to your startup
+                  {getMatchFootnote(displayPlan, showing, total)}
                 </p>
               </div>
+            </div>
+            {/* Plan badge */}
+            <div className="flex items-center gap-2">
+              {displayPlan === 'elite' && (
+                <span className="px-3 py-1 text-xs bg-gradient-to-r from-amber-500/20 to-orange-500/20 text-amber-400 rounded-full border border-amber-500/30 flex items-center gap-1">
+                  <Crown className="w-3 h-3" /> Elite
+                </span>
+              )}
+              {displayPlan === 'pro' && (
+                <span className="px-3 py-1 text-xs bg-cyan-500/20 text-cyan-400 rounded-full border border-cyan-500/30">
+                  Pro
+                </span>
+              )}
+              {displayPlan === 'free' && (
+                <span className="px-3 py-1 text-xs bg-gray-500/20 text-gray-400 rounded-full border border-gray-500/30">
+                  Free Preview
+                </span>
+              )}
             </div>
           </div>
         </div>
@@ -557,118 +562,227 @@ export default function InstantMatches() {
           </div>
         </div>
 
-        {/* TOP 3 MATCHES - FULLY VISIBLE */}
-        <div className="mb-6">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-8 h-8 rounded-lg bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center">
-              <Star className="w-4 h-4 text-emerald-400" />
+        {/* MATCHES LIST - Tier-gated */}
+        <div className="mb-6" ref={allMatchesRef}>
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center">
+                <Star className="w-4 h-4 text-emerald-400" />
+              </div>
+              <h3 className="text-lg font-semibold text-white">
+                {displayPlan === 'elite' ? 'All Matches' : displayPlan === 'pro' ? 'Top 10 Matches' : 'Top 3 Matches'}
+              </h3>
+              <span className={`px-2 py-0.5 text-[10px] rounded-full border uppercase ${
+                displayPlan === 'elite' 
+                  ? 'bg-amber-500/20 text-amber-400 border-amber-500/30' 
+                  : displayPlan === 'pro'
+                    ? 'bg-cyan-500/20 text-cyan-400 border-cyan-500/30'
+                    : 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'
+              }`}>
+                {displayPlan === 'free' ? 'Free Preview' : displayPlan}
+              </span>
             </div>
-            <h3 className="text-lg font-semibold text-white">Your Top 3 Matches</h3>
-            <span className="px-2 py-0.5 text-[10px] bg-emerald-500/20 text-emerald-400 rounded-full border border-emerald-500/30 uppercase">
-              Free Preview
-            </span>
+            {/* Export button - Elite only */}
+            {displayPlan === 'elite' && visibility.canExport && (
+              <button 
+                className="flex items-center gap-2 px-3 py-1.5 text-xs bg-amber-500/20 text-amber-400 rounded-lg border border-amber-500/30 hover:bg-amber-500/30 transition-colors"
+                onClick={() => {
+                  // CSV export
+                  const csv = matches.map(m => 
+                    `"${m.investor_name || ''}","${m.firm || ''}","${m.match_score}","${(m.sectors || []).join(';')}","${m.linkedin_url || ''}"`
+                  ).join('\n');
+                  const blob = new Blob([`Name,Firm,Score,Sectors,LinkedIn\n${csv}`], { type: 'text/csv' });
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement('a');
+                  a.href = url;
+                  a.download = `matches-${startup?.name || 'export'}.csv`;
+                  a.click();
+                }}
+              >
+                <Download className="w-3.5 h-3.5" />
+                Export CSV
+              </button>
+            )}
           </div>
 
           <div className="grid gap-3">
-            {topMatches.map((match, index) => (
-              <Link 
-                key={match.id}
-                to={`/investor/${match.id}`}
-                className="block p-4 bg-gradient-to-r from-[#0f0f0f] via-[#131313] to-[#0f0f0f] border border-gray-700/50 hover:border-violet-500/50 rounded-xl transition-all hover:shadow-lg hover:shadow-violet-500/10 cursor-pointer"
-              >
-                <div className="flex items-start justify-between">
-                  <div className="flex items-start gap-3">
-                    {/* Rank badge */}
-                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold shrink-0 ${
-                      index === 0 ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' :
-                      index === 1 ? 'bg-gray-400/20 text-gray-300 border border-gray-400/30' :
-                      'bg-orange-700/20 text-orange-400 border border-orange-700/30'
-                    }`}>
-                      #{index + 1}
-                    </div>
-                    
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1">
-                        <h4 className="text-base font-semibold text-white">{match.name}</h4>
-                        {match.website && (
-                          <ExternalLink className="w-3.5 h-3.5 text-gray-500" />
+            {matches.map((match, index) => {
+              const isMasked = match.investor_name_masked;
+              const displayName = isMasked 
+                ? (match.firm ? `Investor at ${match.firm}` : `Investor #${index + 1}`) 
+                : (match.investor_name || 'Unknown Investor');
+              
+              return (
+                <div 
+                  key={match.investor_id}
+                  className={`p-4 bg-gradient-to-r from-[#0f0f0f] via-[#131313] to-[#0f0f0f] border rounded-xl transition-all ${
+                    isMasked 
+                      ? 'border-gray-700/30 cursor-default' 
+                      : 'border-gray-700/50 hover:border-violet-500/50 hover:shadow-lg hover:shadow-violet-500/10'
+                  }`}
+                >
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-start gap-3">
+                      {/* Rank badge + Photo */}
+                      <div className="relative">
+                        <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-sm font-bold shrink-0 overflow-hidden ${
+                          index === 0 ? 'bg-amber-500/20 border border-amber-500/30' :
+                          index === 1 ? 'bg-gray-400/20 border border-gray-400/30' :
+                          index === 2 ? 'bg-orange-700/20 border border-orange-700/30' :
+                          'bg-violet-500/20 border border-violet-500/30'
+                        }`}>
+                          {match.photo_url ? (
+                            <img src={match.photo_url} alt="" className="w-full h-full object-cover" />
+                          ) : (
+                            <span className={`${
+                              index === 0 ? 'text-amber-400' :
+                              index === 1 ? 'text-gray-300' :
+                              index === 2 ? 'text-orange-400' :
+                              'text-violet-400'
+                            }`}>#{index + 1}</span>
+                          )}
+                        </div>
+                        {/* Masked indicator */}
+                        {isMasked && (
+                          <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-amber-500/80 rounded-full flex items-center justify-center">
+                            <EyeOff className="w-2.5 h-2.5 text-black" />
+                          </div>
                         )}
                       </div>
                       
-                      <div className="flex flex-wrap items-center gap-3 text-sm text-gray-400 mb-3">
-                        {match.type && (
-                          <span className="flex items-center gap-1">
-                            <Building2 className="w-3.5 h-3.5" />
-                            {match.type}
-                          </span>
-                        )}
-                        <span className="flex items-center gap-1">
-                          <Target className="w-3.5 h-3.5" />
-                          {formatCheckSize(match.check_size_min, match.check_size_max)}
-                        </span>
-                        {match.stage && match.stage.length > 0 && (
-                          <span className="flex items-center gap-1">
-                            <TrendingUp className="w-3.5 h-3.5" />
-                            {Array.isArray(match.stage) ? match.stage.slice(0, 2).join(', ') : match.stage}
-                          </span>
-                        )}
-                      </div>
-
-                      {/* Sectors */}
-                      {match.sectors && match.sectors.length > 0 && (
-                        <div className="flex flex-wrap gap-1.5">
-                          {match.sectors.slice(0, 4).map((sector, i) => (
-                            <span key={i} className="px-2 py-0.5 text-[10px] bg-gray-800 text-gray-400 rounded-full">
-                              {sector}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
+                          <h4 className={`text-base font-semibold ${isMasked ? 'text-gray-400' : 'text-white'}`}>
+                            {displayName}
+                          </h4>
+                          {isMasked && (
+                            <span className="px-1.5 py-0.5 text-[9px] bg-amber-500/20 text-amber-400 rounded border border-amber-500/30">
+                              Upgrade to reveal
                             </span>
-                          ))}
+                          )}
+                          {!isMasked && match.linkedin_url && (
+                            <a href={match.linkedin_url} target="_blank" rel="noopener noreferrer" onClick={e => e.stopPropagation()}>
+                              <ExternalLink className="w-3.5 h-3.5 text-gray-500 hover:text-cyan-400" />
+                            </a>
+                          )}
                         </div>
-                      )}
+                        
+                        {/* Firm name (always visible) */}
+                        {match.firm && (
+                          <p className="text-sm text-gray-400 mb-2">{match.firm}</p>
+                        )}
+                        
+                        <div className="flex flex-wrap items-center gap-3 text-sm text-gray-400 mb-3">
+                          {match.type && (
+                            <span className="flex items-center gap-1">
+                              <Building2 className="w-3.5 h-3.5" />
+                              {match.type}
+                            </span>
+                          )}
+                          {/* Check size - hidden for free */}
+                          {visibility.showCheckSize && (match.check_size_min || match.check_size_max) && (
+                            <span className="flex items-center gap-1">
+                              <Target className="w-3.5 h-3.5" />
+                              {formatCheckSize(match.check_size_min, match.check_size_max)}
+                            </span>
+                          )}
+                          {match.stage && match.stage.length > 0 && (
+                            <span className="flex items-center gap-1">
+                              <TrendingUp className="w-3.5 h-3.5" />
+                              {Array.isArray(match.stage) ? match.stage.slice(0, 2).join(', ') : match.stage}
+                            </span>
+                          )}
+                        </div>
 
-                      {/* WHY THIS MATCH - Reasoning */}
-                      {match.reasoning && match.reasoning.length > 0 && (
-                        <div className="mt-3 p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-lg">
-                          <div className="flex items-center gap-1.5 mb-2">
-                            <Zap className="w-3.5 h-3.5 text-emerald-400" />
-                            <span className="text-[10px] font-semibold text-emerald-400 uppercase tracking-wider">Why This Match</span>
-                          </div>
-                          <div className="flex flex-wrap gap-2">
-                            {match.reasoning.map((reason, i) => (
-                              <span key={i} className="text-xs text-emerald-300/90">
-                                {reason}
+                        {/* Sectors */}
+                        {match.sectors && match.sectors.length > 0 && (
+                          <div className="flex flex-wrap gap-1.5">
+                            {match.sectors.slice(0, 4).map((sector, i) => (
+                              <span key={i} className="px-2 py-0.5 text-[10px] bg-gray-800 text-gray-400 rounded-full">
+                                {sector}
                               </span>
                             ))}
                           </div>
-                          {match.match_score >= 85 && (
-                            <p className="text-[10px] text-emerald-500/80 mt-2 border-t border-emerald-500/20 pt-2">
-                              Aligns more strongly than 90%+ of comparable startups
-                            </p>
-                          )}
-                        </div>
-                      )}
+                        )}
 
-                      {/* Notable investments */}
-                      {match.notable_investments && match.notable_investments.length > 0 && (
-                        <p className="mt-1.5 text-[11px] text-gray-500">
-                          Portfolio: {Array.isArray(match.notable_investments) 
-                            ? match.notable_investments.slice(0, 3).join(', ')
-                            : match.notable_investments}
-                        </p>
-                      )}
+                        {/* WHY THIS MATCH - Elite only */}
+                        {visibility.showReason && match.reasoning && (
+                          <div className="mt-3 p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-lg">
+                            <div className="flex items-center gap-1.5 mb-2">
+                              <Zap className="w-3.5 h-3.5 text-emerald-400" />
+                              <span className="text-[10px] font-semibold text-emerald-400 uppercase tracking-wider">Why This Match</span>
+                              {visibility.showConfidence && match.confidence_level && (
+                                <span className={`ml-2 px-1.5 py-0.5 text-[9px] rounded ${
+                                  match.confidence_level === 'high' ? 'bg-emerald-500/20 text-emerald-400' :
+                                  match.confidence_level === 'medium' ? 'bg-amber-500/20 text-amber-400' :
+                                  'bg-gray-500/20 text-gray-400'
+                                }`}>
+                                  {match.confidence_level} confidence
+                                </span>
+                              )}
+                            </div>
+                            <p className="text-xs text-emerald-300/90">{match.reasoning}</p>
+                            {match.match_score >= 85 && (
+                              <p className="text-[10px] text-emerald-500/80 mt-2 border-t border-emerald-500/20 pt-2">
+                                Aligns more strongly than 90%+ of comparable startups
+                              </p>
+                            )}
+                          </div>
+                        )}
+                        
+                        {/* Reason locked indicator - Pro tier */}
+                        {displayPlan === 'pro' && !visibility.showReason && (
+                          <div className="mt-3 p-2 bg-amber-500/10 border border-amber-500/20 rounded-lg flex items-center gap-2">
+                            <Lock className="w-3.5 h-3.5 text-amber-400" />
+                            <span className="text-[10px] text-amber-400">Match reasoning available in Elite</span>
+                          </div>
+                        )}
+
+                        {/* Notable investments - Pro+ */}
+                        {visibility.showNotableInvestments && match.notable_investments && match.notable_investments.length > 0 && (
+                          <p className="mt-1.5 text-[11px] text-gray-500">
+                            Portfolio: {Array.isArray(match.notable_investments) 
+                              ? match.notable_investments.slice(0, 3).join(', ')
+                              : match.notable_investments}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Match score */}
+                    <div className={`px-2.5 py-1.5 rounded-lg border shrink-0 ${getScoreStyle(match.match_score)}`}>
+                      <div className="text-lg font-bold">{match.match_score}%</div>
+                      <div className="text-[8px] uppercase tracking-wider opacity-70">Match</div>
+                      <div className="text-[7px] text-gray-500 mt-0.5 opacity-80">thesis alignment</div>
                     </div>
                   </div>
-
-                  {/* Match score */}
-                  <div className={`px-2.5 py-1.5 rounded-lg border shrink-0 ${getScoreColor(match.match_score)}`}>
-                    <div className="text-lg font-bold">{match.match_score}%</div>
-                    <div className="text-[8px] uppercase tracking-wider opacity-70">Match</div>
-                    <div className="text-[7px] text-gray-500 mt-0.5 opacity-80">thesis alignment</div>
-                  </div>
                 </div>
-              </Link>
-            ))}
+              );
+            })}
           </div>
         </div>
+
+        {/* UPGRADE CTA - Only if not elite */}
+        {upgradeCTA.show && (
+          <div className="mb-6 p-5 bg-gradient-to-r from-amber-600/10 via-[#0f0f0f] to-violet-600/10 border border-amber-500/40 rounded-xl">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 rounded-lg bg-amber-500/20 border border-amber-500/30 flex items-center justify-center">
+                <Crown className="w-5 h-5 text-amber-400" />
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-white">{upgradeCTA.text}</h3>
+                <p className="text-sm text-gray-400">{upgradeCTA.subtext}</p>
+              </div>
+            </div>
+            <Link
+              to="/pricing"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-black font-semibold rounded-lg transition-all text-sm"
+            >
+              Upgrade Now
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        )}
 
         {/* Bottom CTA */}
         <div className="mt-8 p-6 bg-gradient-to-r from-violet-600/10 via-[#0f0f0f] to-cyan-600/10 border border-violet-500/20 rounded-xl text-center">

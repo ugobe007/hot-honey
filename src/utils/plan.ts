@@ -161,3 +161,118 @@ export function getPlanFootnote(plan: PlanTier, totalCount: number): string {
       return `Showing ${showing} of ${totalCount} live pairings.`;
   }
 }
+
+// ============================================================
+// INVESTOR MATCH GATING (Prompt 10)
+// ============================================================
+
+/**
+ * Get the visible limit for investor matches based on plan
+ * - free: 3 matches (preview)
+ * - pro: 10 matches
+ * - elite: 50 matches (full list)
+ */
+export function getMatchesLimit(plan: PlanTier): number {
+  switch (plan) {
+    case 'elite': return 50;
+    case 'pro': return 10;
+    case 'free':
+    default: return 3;
+  }
+}
+
+/**
+ * Get field visibility rules for investor matches
+ * - free: mask investor_name (show logo/firm hint), hide reason/confidence
+ * - pro: show investor_name + firm, hide reason/confidence
+ * - elite: show everything including reason + confidence + dimension contributions
+ */
+export function getMatchVisibility(plan: PlanTier): {
+  showInvestorName: boolean;
+  showFirm: boolean;
+  showReason: boolean;
+  showConfidence: boolean;
+  showDimensions: boolean;
+  showCheckSize: boolean;
+  showNotableInvestments: boolean;
+  canExport: boolean;
+} {
+  switch (plan) {
+    case 'elite':
+      return {
+        showInvestorName: true,
+        showFirm: true,
+        showReason: true,
+        showConfidence: true,
+        showDimensions: true,
+        showCheckSize: true,
+        showNotableInvestments: true,
+        canExport: true,
+      };
+    case 'pro':
+      return {
+        showInvestorName: true,
+        showFirm: true,
+        showReason: false,
+        showConfidence: false,
+        showDimensions: false,
+        showCheckSize: true,
+        showNotableInvestments: true,
+        canExport: false,
+      };
+    case 'free':
+    default:
+      return {
+        showInvestorName: false, // Show logo but mask name
+        showFirm: true, // Show firm name (hint)
+        showReason: false,
+        showConfidence: false,
+        showDimensions: false,
+        showCheckSize: false,
+        showNotableInvestments: false,
+        canExport: false,
+      };
+  }
+}
+
+/**
+ * Get upgrade CTA text for matches page
+ */
+export function getMatchUpgradeCTA(plan: PlanTier, totalMatches: number): {
+  text: string;
+  subtext: string;
+  show: boolean;
+} {
+  switch (plan) {
+    case 'elite':
+      return { text: '', subtext: '', show: false };
+    case 'pro':
+      return {
+        text: 'Unlock Elite Reasoning',
+        subtext: `See why each investor matches + confidence scores`,
+        show: true,
+      };
+    case 'free':
+    default:
+      return {
+        text: 'Unlock Full Matches',
+        subtext: `${totalMatches - 3}+ more investors waiting`,
+        show: totalMatches > 3,
+      };
+  }
+}
+
+/**
+ * Get footnote for matches page
+ */
+export function getMatchFootnote(plan: PlanTier, showing: number, total: number): string {
+  switch (plan) {
+    case 'elite':
+      return `Showing all ${showing} matches. Export available.`;
+    case 'pro':
+      return `Showing ${showing} of ${total}. Upgrade to Elite for reasons + confidence.`;
+    case 'free':
+    default:
+      return `Showing ${showing} of ${total} matches. Names hidden.`;
+  }
+}
