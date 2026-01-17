@@ -120,10 +120,13 @@ app.get('/api/health', (req, res) => {
 });
 
 // ============================================================
-// Helper: Extract plan from request (JWT claims or header)
-// Priority: Authorization Bearer JWT > x-user-plan header > 'free'
+// Helper: Extract plan from request (JWT verified or dev header)
+// PRODUCTION: Only trust verified JWT via Supabase auth.getUser()
+// DEV/STAGING: Allow x-user-plan header for testing
 // ============================================================
-function getPlanFromRequest(req) {
+const IS_PRODUCTION = process.env.NODE_ENV === 'production' || process.env.FLY_APP_NAME;
+
+async function getPlanFromRequest(req) {
   const validPlans = ['free', 'pro', 'elite'];
   
   // Try JWT first (Authorization: Bearer <token>)
@@ -131,24 +134,35 @@ function getPlanFromRequest(req) {
   if (authHeader?.startsWith('Bearer ')) {
     try {
       const token = authHeader.slice(7);
-      // Decode JWT payload (no verification - Supabase handles that)
-      const payload = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
-      const plan = payload?.user_metadata?.plan || payload?.app_metadata?.plan;
-      if (plan && validPlans.includes(plan)) {
-        return plan;
+      const supabase = getSupabaseClient();
+      
+      // SECURE: Use Supabase auth.getUser() to verify token signature
+      const { data: { user }, error } = await supabase.auth.getUser(token);
+      
+      if (!error && user) {
+        // Read plan from verified user metadata
+        const plan = user.user_metadata?.plan || user.app_metadata?.plan;
+        if (plan && validPlans.includes(plan)) {
+          return plan;
+        }
       }
+      // Token invalid or no plan set - fall through
     } catch (e) {
-      // JWT decode failed, continue to fallbacks
+      console.error('[getPlanFromRequest] JWT verification error:', e.message);
+      // Continue to fallbacks
     }
   }
   
-  // Try x-user-plan header (for dev/testing)
-  const headerPlan = req.headers['x-user-plan'];
-  if (headerPlan && validPlans.includes(headerPlan)) {
-    return headerPlan;
+  // DEV ONLY: Allow x-user-plan header for testing (NEVER in production)
+  if (!IS_PRODUCTION) {
+    const headerPlan = req.headers['x-user-plan'];
+    if (headerPlan && validPlans.includes(headerPlan)) {
+      console.log('[getPlanFromRequest] DEV MODE: Using x-user-plan header:', headerPlan);
+      return headerPlan;
+    }
   }
   
-  // Default: free
+  // Default: free (unverified users get free tier)
   return 'free';
 }
 
@@ -162,11 +176,12 @@ const PLAN_LIMITS = { free: 1, pro: 3, elite: 10 };
 // ============================================================
 app.get('/api/live-pairings', async (req, res) => {
   try {
-    // Determine plan and enforce limit
-    const plan = getPlanFromRequest(req);
+    // Determine plan and enforce limit (await - async JWT verification)
+    const plan = await getPlanFromRequest(req);
     const maxLimit = PLAN_LIMITS[plan] || 1;
     const requestedLimit = parseInt(req.query.limit) || maxLimit;
-    const limit = Math.min(requestedLimit, maxLimit); // Enforce plan ceiling
+    // Double clamp: enforce plan ceiling AND absolute max of 10
+    const limit = Math.min(Math.max(requestedLimit, 1), maxLimit, 10);
     
     const supabase = getSupabaseClient();
     
@@ -288,6 +303,102 @@ app.get('/api/live-pairings', async (req, res) => {
   }
 });
 
+// Plan limits for trending/sector endpoint
+const TRENDING_LIMITS = { free: 3, pro: 10, elite: 50 };
+
+// ============================================================
+// GET /api/trending - Sector/Trending data with tier gating
+// Returns startups with sector signals, gated by plan
+// ============================================================
+app.get('/api/trending', async (req, res) => {
+  try {
+    // Determine plan and enforce limit
+    const plan = await getPlanFromRequest(req);
+    const maxLimit = TRENDING_LIMITS[plan] || 3;
+    const requestedLimit = parseInt(req.query.limit) || maxLimit;
+    const limit = Math.min(Math.max(requestedLimit, 1), maxLimit, 50);
+    const sector = req.query.sector || null; // Optional sector filter
+    
+    const supabase = getSupabaseClient();
+    
+    // Query startup_intel_v5_sector view with sector filter
+    // Available columns: investor_signal_sector_0_10, investor_state_sector, sector_quantile,
+    // sector_momentum_0_10, sector_evidence_0_10, sector_narrative_0_10, primary_reason, risk_flag
+    let query = supabase
+      .from('startup_intel_v5_sector')
+      .select('id, name, sector_key, investor_signal_sector_0_10, investor_state_sector, sector_quantile, sector_momentum_0_10, sector_evidence_0_10, sector_narrative_0_10, primary_reason, risk_flag')
+      .not('sector_key', 'is', null)
+      .not('investor_state_sector', 'is', null);
+    
+    if (sector) {
+      query = query.ilike('sector_key', `%${sector}%`);
+    }
+    
+    const { data: startups, error } = await query
+      .order('investor_signal_sector_0_10', { ascending: false })
+      .limit(limit);
+    
+    if (error) {
+      console.error('[trending] Query error:', error);
+      return res.status(500).json({ error: 'Failed to fetch trending data' });
+    }
+    
+    // Apply field masking based on plan
+    // free: name + sector + state only; hide all scores/reasons
+    // pro: show investor_signal_sector_0_10 + state; hide sector scores + reasons
+    // elite: show everything including sector_quantile, momentum, evidence, narrative, reason, risk
+    const maskedStartups = (startups || []).map(s => {
+      // Base fields (all tiers)
+      const base = {
+        id: s.id,
+        name: s.name,
+        sector_key: s.sector_key,
+        investor_state_sector: s.investor_state_sector, // hot/warm/watch/cold
+      };
+      
+      if (plan === 'free') {
+        // Free: Only state, no scores
+        return base;
+      }
+      
+      if (plan === 'pro') {
+        // Pro: Add global signal score
+        return {
+          ...base,
+          investor_signal_sector_0_10: s.investor_signal_sector_0_10,
+        };
+      }
+      
+      // Elite: Everything
+      return {
+        ...base,
+        investor_signal_sector_0_10: s.investor_signal_sector_0_10,
+        sector_quantile: s.sector_quantile,
+        sector_momentum_0_10: s.sector_momentum_0_10,
+        sector_evidence_0_10: s.sector_evidence_0_10,
+        sector_narrative_0_10: s.sector_narrative_0_10,
+        primary_reason: s.primary_reason,
+        risk_flag: s.risk_flag,
+      };
+    });
+    
+    // Set caching headers based on plan
+    const cacheMaxAge = plan === 'elite' ? 30 : 120;
+    res.set('Cache-Control', `public, max-age=${cacheMaxAge}`);
+    res.set('X-Plan', plan);
+    res.json({
+      plan,
+      limit,
+      total: maskedStartups.length,
+      data: maskedStartups,
+    });
+    
+  } catch (error) {
+    console.error('[trending] Error:', error);
+    res.status(500).json({ error: error.message || 'Internal server error' });
+  }
+});
+
 // API info endpoint
 app.get('/api', (req, res) => {
   res.json({
@@ -296,6 +407,8 @@ app.get('/api', (req, res) => {
     endpoints: [
       'GET /api/health',
       'GET /api',
+      'GET /api/live-pairings',
+      'GET /api/trending',
       'POST /upload',
       'POST /syndicate',
       'POST /api/syndicates',

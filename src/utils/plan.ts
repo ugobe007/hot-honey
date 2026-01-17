@@ -60,7 +60,19 @@ export function getLivePairingsLimit(plan: PlanTier): number {
 }
 
 /**
- * Get field visibility rules for a given plan
+ * Get the visible limit for trending/sector data based on plan
+ */
+export function getTrendingLimit(plan: PlanTier): number {
+  switch (plan) {
+    case 'elite': return 50;
+    case 'pro': return 10;
+    case 'free':
+    default: return 3;
+  }
+}
+
+/**
+ * Get field visibility rules for live pairings
  */
 export function getPlanVisibility(plan: PlanTier): {
   showInvestorName: boolean;
@@ -75,6 +87,45 @@ export function getPlanVisibility(plan: PlanTier): {
     case 'free':
     default:
       return { showInvestorName: false, showReason: false, showConfidence: false };
+  }
+}
+
+/**
+ * Get field visibility rules for trending/sector data
+ */
+export function getTrendingVisibility(plan: PlanTier): {
+  showSignalScore: boolean;
+  showSectorRank: boolean;
+  showSectorScores: boolean;
+  showReason: boolean;
+  showRiskFlag: boolean;
+} {
+  switch (plan) {
+    case 'elite':
+      return {
+        showSignalScore: true,
+        showSectorRank: true,
+        showSectorScores: true,
+        showReason: true,
+        showRiskFlag: true,
+      };
+    case 'pro':
+      return {
+        showSignalScore: true,
+        showSectorRank: false,
+        showSectorScores: false,
+        showReason: false,
+        showRiskFlag: false,
+      };
+    case 'free':
+    default:
+      return {
+        showSignalScore: false,
+        showSectorRank: false,
+        showSectorScores: false,
+        showReason: false,
+        showRiskFlag: false,
+      };
   }
 }
 
