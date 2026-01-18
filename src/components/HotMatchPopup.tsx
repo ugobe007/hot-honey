@@ -383,7 +383,7 @@ export default function HotMatchPopup({ isOpen, onClose, onGetMatched }: HotMatc
                 "This is not a novelty. This is the <span className="text-white font-semibold">future of fundraising</span>."
               </p>
               <p className="text-cyan-400 font-bold">
-                [pyth] ai: Where Oracle meets Algorithm. 🔥
+                [pyth] ai: Signal intelligence for fundraising. 🔥
               </p>
             </div>
           </div>
@@ -449,7 +449,7 @@ export default function HotMatchPopup({ isOpen, onClose, onGetMatched }: HotMatc
         {/* Footer */}
         <div className="px-8 pb-6 pt-4 border-t border-white/10">
           <p className="text-xs text-gray-500 italic text-center max-w-xl mx-auto">
-            [pyth] ai serves as an advanced matching system that predicts outcomes from data, similar to Pythia, the oracle of truth.
+            Pythh reads investor signals so founders don't have to guess.
           </p>
         </div>
       </div>

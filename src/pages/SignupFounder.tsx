@@ -11,8 +11,11 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { supabase } from '../lib/supabase';
 import { Mail, Lock, ArrowLeft, Eye, EyeOff, CheckCircle } from 'lucide-react';
 import BrandMark from '../components/BrandMark';
+import { getPendingInvite, acceptInvite } from '../lib/referral';
+import { trackEvent } from '../lib/analytics';
 
 export default function SignupFounder() {
   const navigate = useNavigate();
@@ -36,8 +39,51 @@ export default function SignupFounder() {
     setError('');
     
     try {
-      // Create account with role = founder
-      // Note: In production, this would call Supabase auth
+      // Create Supabase auth user
+      const { data, error: authError } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: { 
+            name: email.split('@')[0],
+            role: 'founder'
+          }
+        }
+      });
+      
+      if (authError) {
+        // If user already exists, try to sign in instead
+        if (authError.message.includes('already registered')) {
+          const { error: signInError } = await supabase.auth.signInWithPassword({
+            email,
+            password
+          });
+          if (signInError) throw signInError;
+        } else {
+          throw authError;
+        }
+      }
+      
+      console.log('[SignupFounder] User created:', data?.user?.id);
+      
+      // Check for pending invite and accept it
+      const pendingInvite = getPendingInvite();
+      if (pendingInvite) {
+        try {
+          const result = await acceptInvite(pendingInvite.token);
+          if (result.success) {
+            console.log('[SignupFounder] Invite accepted:', result);
+            trackEvent('invite_accepted', { 
+              token: pendingInvite.token,
+              inviter_rewarded: result.inviter_rewarded 
+            });
+          }
+        } catch (inviteErr) {
+          console.error('[SignupFounder] Invite acceptance failed:', inviteErr);
+        }
+      }
+      
+      // Also update localStorage auth for backward compatibility
       login(email, password);
       
       // Navigate to signal confirmation with context
@@ -45,8 +91,9 @@ export default function SignupFounder() {
         ? `/signal-confirmation?url=${encodeURIComponent(startupUrl)}&matches=${matchCount}`
         : '/signal-confirmation';
       navigate(confirmationUrl);
-    } catch (err) {
-      setError('Unable to create account. Please try again.');
+    } catch (err: any) {
+      console.error('[SignupFounder] Error:', err);
+      setError(err.message || 'Unable to create account. Please try again.');
     } finally {
       setIsLoading(false);
     }

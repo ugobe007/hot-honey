@@ -29,13 +29,20 @@ import {
   Download,
   Crown,
   Eye,
-  EyeOff
+  EyeOff,
+  FileText,
+  Share2,
+  Copy,
+  Check
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { resolveStartupFromUrl, ResolveResult } from '../lib/startupResolver';
 import { useAuth } from '../contexts/AuthContext';
 import { useMatches, InvestorMatch as GatedInvestorMatch, formatCheckSize, getScoreStyle } from '../hooks/useMatches';
 import { getPlan, getMatchVisibility, getMatchUpgradeCTA, getMatchFootnote, PlanTier } from '../utils/plan';
+import { analytics } from '../analytics';
+import UpgradeModal from '../components/UpgradeModal';
+import { UpgradeMoment } from '../lib/upgradeMoments';
 
 interface AnalyzedStartup {
   id?: string;
@@ -74,6 +81,215 @@ const ANALYSIS_STEPS = [
   { icon: Zap, text: 'Calculating GOD Score...', duration: 2000, isBrain: true },
   { icon: Sparkles, text: 'Finding investor matches...', duration: 1500, isBrain: false },
 ];
+
+// API base URL
+const API_BASE = import.meta.env.VITE_API_URL || 
+  (import.meta.env.DEV ? 'http://localhost:3002' : '');
+
+// Get auth headers for API calls
+async function getAuthHeaders(): Promise<HeadersInit> {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (session?.access_token) {
+    return {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${session.access_token}`
+    };
+  }
+  return { 'Content-Type': 'application/json' };
+}
+
+// Elite-only action buttons: Export CSV, Deal Memo, Share
+function EliteActionsBar({ startupId, startupName }: { startupId: string; startupName: string }) {
+  const [exportLoading, setExportLoading] = useState(false);
+  const [memoLoading, setMemoLoading] = useState(false);
+  const [shareLoading, setShareLoading] = useState(false);
+  const [copyState, setCopyState] = useState<'idle' | 'memo' | 'share'>('idle');
+  const [toast, setToast] = useState<string | null>(null);
+  const [upgradeModal, setUpgradeModal] = useState<{ open: boolean; moment: UpgradeMoment }>({
+    open: false,
+    moment: 'export_csv'
+  });
+  
+  // Show toast for 3 seconds
+  const showToast = (message: string) => {
+    setToast(message);
+    setTimeout(() => setToast(null), 3000);
+  };
+  
+  // Export CSV - triggers download from server
+  const handleExportCSV = async () => {
+    setExportLoading(true);
+    try {
+      const headers = await getAuthHeaders();
+      const url = `${API_BASE}/api/matches/export.csv?startup_id=${startupId}&limit=50`;
+      
+      const response = await fetch(url, { headers });
+      if (!response.ok) {
+        if (response.status === 403) {
+          setUpgradeModal({ open: true, moment: 'export_csv' });
+          return;
+        }
+        throw new Error('Export failed');
+      }
+      
+      // Download the CSV
+      const blob = await response.blob();
+      const downloadUrl = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = downloadUrl;
+      a.download = `matches-${startupName.replace(/[^a-z0-9]/gi, '_')}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(downloadUrl);
+      
+      showToast('✅ CSV downloaded');
+      analytics.exportCSVClicked(startupId || undefined);
+    } catch (err) {
+      console.error('Export error:', err);
+      showToast('❌ Export failed');
+    } finally {
+      setExportLoading(false);
+    }
+  };
+  
+  // Copy Deal Memo to clipboard
+  const handleCopyMemo = async () => {
+    setMemoLoading(true);
+    try {
+      const headers = await getAuthHeaders();
+      const url = `${API_BASE}/api/matches/memo?startup_id=${startupId}`;
+      
+      const response = await fetch(url, { headers });
+      if (!response.ok) {
+        if (response.status === 403) {
+          setUpgradeModal({ open: true, moment: 'deal_memo' });
+          return;
+        }
+        throw new Error('Memo failed');
+      }
+      
+      const { memo } = await response.json();
+      await navigator.clipboard.writeText(memo);
+      setCopyState('memo');
+      setTimeout(() => setCopyState('idle'), 2000);
+      showToast('✅ Deal Memo copied to clipboard');
+      analytics.dealMemoCopied(startupId || undefined);
+    } catch (err) {
+      console.error('Memo error:', err);
+      showToast('❌ Failed to copy memo');
+    } finally {
+      setMemoLoading(false);
+    }
+  };
+  
+  // Create share link and copy to clipboard
+  const handleShare = async () => {
+    setShareLoading(true);
+    try {
+      const headers = await getAuthHeaders();
+      const response = await fetch(`${API_BASE}/api/share/matches`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({ startup_id: startupId, limit: 10 })
+      });
+      
+      if (!response.ok) {
+        if (response.status === 403) {
+          setUpgradeModal({ open: true, moment: 'share_matches' });
+          return;
+        }
+        const data = await response.json();
+        if (data.error?.includes('table not found')) {
+          showToast('⚠️ Share feature coming soon');
+          return;
+        }
+        throw new Error('Share failed');
+      }
+      
+      const { url, share_id } = await response.json();
+      await navigator.clipboard.writeText(url);
+      setCopyState('share');
+      setTimeout(() => setCopyState('idle'), 2000);
+      showToast('✅ Share link copied (expires in 7 days)');
+      analytics.shareCreated(share_id || startupId || 'unknown');
+    } catch (err) {
+      console.error('Share error:', err);
+      showToast('❌ Failed to create share link');
+    } finally {
+      setShareLoading(false);
+    }
+  };
+  
+  return (
+    <>
+    <div className="flex items-center gap-2 relative">
+      {/* Export CSV */}
+      <button 
+        onClick={handleExportCSV}
+        disabled={exportLoading}
+        className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs bg-amber-500/20 text-amber-400 rounded-lg border border-amber-500/30 hover:bg-amber-500/30 transition-colors disabled:opacity-50"
+        title="Export all matches to CSV"
+      >
+        {exportLoading ? (
+          <Loader2 className="w-3.5 h-3.5 animate-spin" />
+        ) : (
+          <Download className="w-3.5 h-3.5" />
+        )}
+        <span className="hidden sm:inline">CSV</span>
+      </button>
+      
+      {/* Deal Memo */}
+      <button 
+        onClick={handleCopyMemo}
+        disabled={memoLoading}
+        className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs bg-violet-500/20 text-violet-400 rounded-lg border border-violet-500/30 hover:bg-violet-500/30 transition-colors disabled:opacity-50"
+        title="Copy investor-ready deal memo"
+      >
+        {memoLoading ? (
+          <Loader2 className="w-3.5 h-3.5 animate-spin" />
+        ) : copyState === 'memo' ? (
+          <Check className="w-3.5 h-3.5" />
+        ) : (
+          <FileText className="w-3.5 h-3.5" />
+        )}
+        <span className="hidden sm:inline">Memo</span>
+      </button>
+      
+      {/* Share Link */}
+      <button 
+        onClick={handleShare}
+        disabled={shareLoading}
+        className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs bg-cyan-500/20 text-cyan-400 rounded-lg border border-cyan-500/30 hover:bg-cyan-500/30 transition-colors disabled:opacity-50"
+        title="Create shareable link (7-day expiry)"
+      >
+        {shareLoading ? (
+          <Loader2 className="w-3.5 h-3.5 animate-spin" />
+        ) : copyState === 'share' ? (
+          <Check className="w-3.5 h-3.5" />
+        ) : (
+          <Share2 className="w-3.5 h-3.5" />
+        )}
+        <span className="hidden sm:inline">Share</span>
+      </button>
+      
+      {/* Toast notification */}
+      {toast && (
+        <div className="absolute top-full right-0 mt-2 px-3 py-2 bg-gray-800 text-white text-xs rounded-lg shadow-lg whitespace-nowrap z-50 animate-fade-in">
+          {toast}
+        </div>
+      )}
+    </div>
+    
+    {/* Upgrade Modal */}
+    <UpgradeModal
+      moment={upgradeModal.moment}
+      open={upgradeModal.open}
+      onClose={() => setUpgradeModal({ ...upgradeModal, open: false })}
+    />
+    </>
+  );
+}
 
 export default function InstantMatches() {
   const [searchParams] = useSearchParams();
@@ -207,6 +423,9 @@ export default function InstantMatches() {
       await new Promise(resolve => setTimeout(resolve, 500));
       setIsAnalyzing(false);
       
+      // Track matches page view with startup ID
+      analytics.matchesPageViewed(result.startup.id);
+      
     } catch (err) {
       console.error('Analysis error:', err);
       setError('Failed to analyze. Please try again.');
@@ -314,9 +533,9 @@ export default function InstantMatches() {
           </h2>
           <p className="text-gray-400 text-sm mb-6">
             {isBrainStep ? (
-              <span className="text-violet-400">🧠 Pyth Inference Engine analyzing <span className="text-cyan-400 font-medium">{urlParam}</span></span>
+              <span className="text-violet-400">Finding investors for <span className="text-cyan-400 font-medium">{urlParam}</span></span>
             ) : (
-              <>Analyzing <span className="text-cyan-400 font-medium">{urlParam}</span></>
+              <>Checking <span className="text-cyan-400 font-medium">{urlParam}</span></>
             )}
           </p>
 
@@ -379,10 +598,10 @@ export default function InstantMatches() {
               <div>
                 <h1 className="text-xl font-bold text-white flex items-center gap-2">
                   <Sparkles className="w-5 h-5 text-violet-400" />
-                  Your Investor Matches
+                  Your investor discovery snapshot
                 </h1>
                 <p className="text-sm text-gray-400">
-                  {getMatchFootnote(displayPlan, showing, total)}
+                  This isn't a score. It's a read on how investors typically discover startups like yours.
                 </p>
               </div>
             </div>
@@ -442,18 +661,29 @@ export default function InstantMatches() {
                 </div>
               </div>
               
-              {/* Right: GOD Score */}
+              {/* Right: Discovery Status (replaces GOD Score) */}
               {startup.total_god_score && (
-                <div className="text-center md:text-right shrink-0">
-                  <div className="text-4xl font-black bg-gradient-to-r from-violet-400 via-cyan-400 to-emerald-400 bg-clip-text text-transparent">
-                    {startup.total_god_score}
+                <div className="text-center md:text-right shrink-0 min-w-[160px]">
+                  {/* Discovery Status Pill */}
+                  <div className={`inline-block px-4 py-2 rounded-full text-sm font-semibold mb-2 ${
+                    startup.total_god_score >= 70 
+                      ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' 
+                      : startup.total_god_score >= 50 
+                        ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
+                        : 'bg-gray-500/20 text-gray-400 border border-gray-500/30'
+                  }`}>
+                    {startup.total_god_score >= 70 
+                      ? "You're actively appearing" 
+                      : startup.total_god_score >= 50 
+                        ? "You're starting to surface"
+                        : "You're not circulating yet"}
                   </div>
-                  <div className="text-xs text-gray-400 uppercase tracking-wider">GOD Score™</div>
-                  <div className="text-[10px] text-gray-500 mt-1 max-w-[140px]">
-                    {startup.total_god_score >= 75 ? 'Top tier — exceptional alignment' :
-                     startup.total_god_score >= 60 ? 'Strong signals, early momentum' :
-                     startup.total_god_score >= 45 ? 'Above average for stage' :
-                     'Building momentum'}
+                  <div className="text-xs text-gray-500 mt-1 max-w-[160px]">
+                    in investor discovery
+                  </div>
+                  {/* GOD number only, no explanation */}
+                  <div className="text-lg font-bold text-gray-600 mt-2">
+                    GOD: {startup.total_god_score}
                   </div>
                 </div>
               )}
@@ -539,25 +769,72 @@ export default function InstantMatches() {
         )}
         <p className="text-xs text-gray-600 text-center -mt-2 mb-4">No pitch deck. No spam. No intros sent.</p>
 
-        {/* GOD SCORE EXPLANATION */}
-        <div className="mb-6 p-4 bg-gradient-to-r from-amber-500/5 via-[#0f0f0f] to-violet-500/5 border border-amber-500/20 rounded-xl">
+        {/* WHAT THIS MEANS FOR YOU - Dynamic copy based on backend state */}
+        <div className="mb-6 p-4 bg-gradient-to-r from-violet-500/5 via-[#0f0f0f] to-cyan-500/5 border border-violet-500/20 rounded-xl">
           <div className="flex items-start gap-3">
-            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-500/20 to-violet-500/20 border border-amber-500/30 flex items-center justify-center shrink-0">
-              <Brain className="w-5 h-5 text-amber-400" />
+            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-violet-500/20 to-cyan-500/20 border border-violet-500/30 flex items-center justify-center shrink-0">
+              <Brain className="w-5 h-5 text-violet-400" />
             </div>
             <div>
-              <h3 className="text-sm font-bold text-white mb-1 flex items-center gap-2">
-                Why These Matches Are Precise
-                <span className="px-2 py-0.5 text-[9px] bg-amber-500/20 text-amber-400 rounded-full uppercase">Oracle Mode</span>
+              <h3 className="text-sm font-bold text-white mb-2">
+                What this means for you
               </h3>
-              <p className="text-xs text-gray-400 leading-relaxed">
-                Our <span className="text-amber-400 font-semibold">GOD Algorithm</span> analyzed 50+ data points including your sector, stage, traction signals, team composition, and market positioning. 
-                We then cross-referenced against <span className="text-cyan-400 font-semibold">3,000+ investors</span> using their actual investment history, portfolio patterns, check sizes, and stated thesis—not just keywords. 
-                Each match score reflects <span className="text-emerald-400 font-semibold">real alignment probability</span> based on what these investors have actually funded.
+              <p className="text-sm text-gray-300 leading-relaxed">
+                {startup && startup.total_god_score ? (
+                  startup.total_god_score >= 70 ? (
+                    <>You're appearing in investor discovery. Attention is real — but fragile without reinforcement.</>
+                  ) : startup.total_god_score >= 50 ? (
+                    <>Investors tend to notice teams like yours when early proof or external signals become visible.</>
+                  ) : (
+                    <>Startups like yours are often discovered quietly before customer traction. Silence here is normal — until independent validation appears.</>
+                  )
+                ) : (
+                  <>We're reading the signals. Your discovery status will update as data comes in.</>
+                )}
               </p>
-              <p className="text-[10px] text-gray-500 mt-2 flex items-center gap-1">
-                <span>⏱</span> Investor behavior updates daily — matches change as signals evolve
-              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* WHAT CHANGES INVESTOR ATTENTION - Two-column static layout */}
+        <div className="mb-6 p-4 bg-[#0f0f0f] border border-gray-800 rounded-xl">
+          <h3 className="text-sm font-bold text-white mb-4">What changes investor attention</h3>
+          <div className="grid md:grid-cols-2 gap-6">
+            {/* Left: To increase discovery */}
+            <div>
+              <p className="text-xs text-emerald-400 uppercase tracking-wider mb-2 font-semibold">To increase discovery</p>
+              <ul className="space-y-2 text-sm text-gray-400">
+                <li className="flex items-start gap-2">
+                  <span className="text-emerald-500 mt-0.5">•</span>
+                  Independent validation (pilot, audit, partnership)
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-emerald-500 mt-0.5">•</span>
+                  Clear technical proof
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-emerald-500 mt-0.5">•</span>
+                  Consistent forward motion
+                </li>
+              </ul>
+            </div>
+            {/* Right: What weakens discovery */}
+            <div>
+              <p className="text-xs text-red-400 uppercase tracking-wider mb-2 font-semibold">What weakens discovery</p>
+              <ul className="space-y-2 text-sm text-gray-400">
+                <li className="flex items-start gap-2">
+                  <span className="text-red-500 mt-0.5">•</span>
+                  Prolonged silence
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-red-500 mt-0.5">•</span>
+                  Capital without follow-through
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-red-500 mt-0.5">•</span>
+                  Key technical or founder departures
+                </li>
+              </ul>
             </div>
           </div>
         </div>
@@ -582,26 +859,9 @@ export default function InstantMatches() {
                 {displayPlan === 'free' ? 'Free Preview' : displayPlan}
               </span>
             </div>
-            {/* Export button - Elite only */}
-            {displayPlan === 'elite' && visibility.canExport && (
-              <button 
-                className="flex items-center gap-2 px-3 py-1.5 text-xs bg-amber-500/20 text-amber-400 rounded-lg border border-amber-500/30 hover:bg-amber-500/30 transition-colors"
-                onClick={() => {
-                  // CSV export
-                  const csv = matches.map(m => 
-                    `"${m.investor_name || ''}","${m.firm || ''}","${m.match_score}","${(m.sectors || []).join(';')}","${m.linkedin_url || ''}"`
-                  ).join('\n');
-                  const blob = new Blob([`Name,Firm,Score,Sectors,LinkedIn\n${csv}`], { type: 'text/csv' });
-                  const url = URL.createObjectURL(blob);
-                  const a = document.createElement('a');
-                  a.href = url;
-                  a.download = `matches-${startup?.name || 'export'}.csv`;
-                  a.click();
-                }}
-              >
-                <Download className="w-3.5 h-3.5" />
-                Export CSV
-              </button>
+            {/* Elite-only action buttons */}
+            {displayPlan === 'elite' && visibility.canExport && startupId && (
+              <EliteActionsBar startupId={startupId} startupName={startup?.name || 'startup'} />
             )}
           </div>
 

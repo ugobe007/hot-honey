@@ -1,45 +1,119 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { supabase } from '../lib/supabase';
+import type { User as SupabaseUser } from '@supabase/supabase-js';
 
 interface User {
+  id?: string;  // Supabase user ID
   email: string;
   name: string;
   isAdmin: boolean;
 }
 
+interface Profile {
+  id: string;
+  email: string;
+  plan: 'free' | 'pro' | 'elite';
+  role?: string;
+  email_alerts_enabled?: boolean;
+  digest_enabled?: boolean;
+  timezone?: string;
+}
+
 interface AuthContextType {
   user: User | null;
+  profile: Profile | null;
   isLoggedIn: boolean;
   login: (email: string, password: string) => void;
   logout: () => void;
   updateUser: (updates: Partial<User>) => void;
+  refreshProfile: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+// Admin emails list
+const ADMIN_EMAILS = [
+  'aabramson@comunicano.com',
+  'ugobe07@gmail.com',
+  'ugobe1@mac.com'
+];
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
+  const [profile, setProfile] = useState<Profile | null>(null);
 
-  // Load user from localStorage on mount
+  // Load user from localStorage AND Supabase on mount
   useEffect(() => {
+    // First check localStorage for backward compat
     const savedUser = localStorage.getItem('currentUser');
     if (savedUser) {
       setUser(JSON.parse(savedUser));
     }
+    
+    // Then check Supabase session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user) {
+        syncUserFromSupabase(session.user);
+        loadProfile(session.user.id);
+      }
+    });
+    
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) {
+        syncUserFromSupabase(session.user);
+        loadProfile(session.user.id);
+      } else {
+        // Don't clear localStorage user - keep backward compat
+      }
+    });
+    
+    return () => subscription.unsubscribe();
   }, []);
 
+  const syncUserFromSupabase = (supabaseUser: SupabaseUser) => {
+    const email = supabaseUser.email || '';
+    const newUser: User = {
+      id: supabaseUser.id,
+      email,
+      name: supabaseUser.user_metadata?.name || email.split('@')[0],
+      isAdmin: ADMIN_EMAILS.includes(email.toLowerCase()) || email.includes('admin')
+    };
+    setUser(newUser);
+    localStorage.setItem('currentUser', JSON.stringify(newUser));
+    localStorage.setItem('isLoggedIn', 'true');
+  };
+
+  const loadProfile = async (userId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .single();
+      
+      if (data && !error) {
+        setProfile(data as Profile);
+      }
+    } catch (err) {
+      console.error('[AuthContext] Failed to load profile:', err);
+    }
+  };
+
+  const refreshProfile = async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session?.user) {
+      await loadProfile(session.user.id);
+    }
+  };
+
   const login = (email: string, password: string) => {
-    // Admin emails: aabramson@comunicano.com, ugobe07@gmail.com, ugobe1@mac.com
-    const ADMIN_EMAILS = [
-      'aabramson@comunicano.com',
-      'ugobe07@gmail.com',
-      'ugobe1@mac.com'
-    ];
-    
-    // Simple demo login - in production, validate against backend
+    // This is now mainly for backward compatibility
+    // Real auth happens in Login.tsx via supabase.auth.signIn
     const newUser: User = {
       email,
       name: email.split('@')[0],
-      isAdmin: ADMIN_EMAILS.includes(email.toLowerCase()) || email.includes('admin'), // Make admin if email is in admin list or contains 'admin'
+      isAdmin: ADMIN_EMAILS.includes(email.toLowerCase()) || email.includes('admin'),
     };
     
     setUser(newUser);
@@ -47,8 +121,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.setItem('isLoggedIn', 'true');
   };
 
-  const logout = () => {
+  const logout = async () => {
+    // Sign out from Supabase
+    await supabase.auth.signOut();
+    
+    // Clear local state
     setUser(null);
+    setProfile(null);
     localStorage.removeItem('currentUser');
     localStorage.removeItem('isLoggedIn');
   };
@@ -64,10 +143,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   return (
     <AuthContext.Provider value={{ 
       user, 
+      profile,
       isLoggedIn: !!user, 
       login, 
       logout,
-      updateUser 
+      updateUser,
+      refreshProfile
     }}>
       {children}
     </AuthContext.Provider>

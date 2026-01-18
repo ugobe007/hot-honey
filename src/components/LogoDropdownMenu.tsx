@@ -232,14 +232,14 @@ export default function LogoDropdownMenu({ onPythClick, externalOpen, onOpenChan
             {/* Header - Brand lockup */}
             <div className="px-4 py-4 border-b border-white/10">
               <div className="text-xs tracking-[0.25em] text-white/40">PYTHH.AI</div>
-              <div className="text-sm font-semibold text-white/90">Signal Science</div>
-              <div className="text-xs text-white/45 mt-1">Demo-first. Benefits-first.</div>
+              <div className="text-sm font-semibold text-white/90">Find my investors</div>
+              <div className="text-xs text-white/45 mt-1">Investor discovery for founders</div>
             </div>
 
             <div className="p-2 max-h-[72vh] overflow-y-auto space-y-1">
               {/* DEMO FIRST - Before anything else */}
-              <MenuItem to="/" label="Live Demo" sub="See the oracle work in 10 seconds" onClose={handleClose} />
-              <MenuItem to="/how-it-works" label="How it works" sub="GOD scoring + signals + matching engine" onClose={handleClose} />
+              <MenuItem to="/" label="Home" sub="Find your investor matches" onClose={handleClose} />
+              <MenuItem to="/how-it-works" label="How it works" sub="GOD scoring + investor matching" onClose={handleClose} />
               <MenuItem to="/value" label="What you get" sub="Free vs paid features" onClose={handleClose} />
 
               <div className="h-px bg-white/10 my-2" />
@@ -267,7 +267,7 @@ export default function LogoDropdownMenu({ onPythClick, externalOpen, onOpenChan
                   className="w-full text-left rounded-xl px-4 py-3 hover:bg-white/5 transition"
                 >
                   <div className="text-sm font-semibold text-white/90">What is Pythh?</div>
-                  <div className="text-xs text-white/45 mt-0.5">The oracle behind investor timing</div>
+                  <div className="text-xs text-white/45 mt-0.5">How investor discovery works</div>
                 </button>
               )}
 

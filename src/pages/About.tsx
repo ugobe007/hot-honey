@@ -58,18 +58,18 @@ export default function About() {
           </div>
           
           <p>
-            We built Pyth to read these signatures — not to replace human judgment, but to extend it. 
+            We built Pythh to read these signatures — not to replace human judgment, but to extend it. 
             To surface alignment earlier. To reduce missed opportunities on both sides of the table.
           </p>
           
           <p>
-            The name comes from the Oracle of Delphi. The Pythia didn't predict outcomes — 
-            she interpreted patterns others couldn't yet see.
+            The name comes from the Greek word for inquiry — a system designed to ask better questions 
+            about who's truly ready to invest and who's ready to be invested in.
           </p>
           
           <div className="my-10 py-6 border-l-2 border-gray-700 pl-6">
             <p className="text-gray-500 italic">
-              Not prophecy. Probability perfected.
+              Not prediction. Pattern recognition.
             </p>
           </div>
           

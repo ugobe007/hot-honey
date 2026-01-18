@@ -3,6 +3,10 @@ import { Link } from 'react-router-dom';
 import startupData from '../data/startupData';
 import { getTrendingStartups, getTopVotedStartups, getRecentlyApprovedStartups } from '../utils/voteAnalytics';
 import UserActivityStats from '../components/UserActivityStats';
+import ActivationBanner from '../components/ActivationBanner';
+import InviteButton from '../components/InviteButton';
+import InviteModal from '../components/InviteModal';
+import { useWatchlist } from '../hooks/useWatchlist';
 
 interface ActivityEvent {
   id: string;
@@ -18,6 +22,8 @@ interface ActivityEvent {
 const Feed: React.FC = () => {
   const [activities, setActivities] = useState<ActivityEvent[]>([]);
   const [filter, setFilter] = useState<'all' | 'new' | 'trending' | 'approved' | 'funding'>('all');
+  const [inviteModalOpen, setInviteModalOpen] = useState(false);
+  const { watchlistIds } = useWatchlist();
 
   useEffect(() => {
     generateActivities();
@@ -238,18 +244,24 @@ const Feed: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-purple-800 to-indigo-900 py-8 px-4">
+      {/* Invite Modal */}
+      <InviteModal isOpen={inviteModalOpen} onClose={() => setInviteModalOpen(false)} />
+      
       {/* Header */}
       <div className="max-w-4xl mx-auto mb-8">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-4xl font-bold text-white">
             📡 Activity Feed
           </h1>
-          <Link 
-            to="/"
-            className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-all border border-white/20"
-          >
-            ← Back to Home
-          </Link>
+          <div className="flex items-center gap-3">
+            <InviteButton onClick={() => setInviteModalOpen(true)} variant="nav" />
+            <Link 
+              to="/"
+              className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-all border border-white/20"
+            >
+              ← Back to Home
+            </Link>
+          </div>
         </div>
 
         {/* Filters */}
@@ -312,8 +324,13 @@ const Feed: React.FC = () => {
         <UserActivityStats />
       </div>
 
+      {/* Activation Banner - shows until user watches their first startup */}
+      <div className="max-w-4xl mx-auto">
+        <ActivationBanner watchlistCount={watchlistIds.length} />
+      </div>
+
       {/* Activity Timeline */}
-      <div className="max-w-4xl mx-auto space-y-4">
+      <div className="max-w-4xl mx-auto space-y-4" data-startup-list>
         {filteredActivities.length === 0 ? (
           <div className="text-center py-12 bg-white/10 backdrop-blur-md rounded-xl border border-white/20">
             <div className="text-6xl mb-4">📭</div>

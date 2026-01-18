@@ -6,28 +6,24 @@ import { useLivePairings } from '../hooks/useLivePairings';
 import { getPlan, getLivePairingsLimit, getPlanVisibility, getUpgradeCTA, getPlanFootnote, PlanTier } from '../utils/plan';
 import { useAuth } from '../contexts/AuthContext';
 
-// Pool of recent matches for rotation - credible variety
-const MATCH_POOL = [
-  { startup: 'AI Infrastructure', investor: 'Sequoia', highlight: true },
-  { startup: 'Climate Analytics', investor: 'Khosla', highlight: false },
-  { startup: 'FinTech API', investor: 'Ribbit', highlight: false },
-  { startup: 'Developer Tools', investor: 'Greylock', highlight: true },
-  { startup: 'Healthcare ML', investor: 'GV', highlight: false },
-  { startup: 'Supply Chain AI', investor: 'Founders Fund', highlight: false },
-  { startup: 'EdTech Platform', investor: 'Reach Capital', highlight: true },
-  { startup: 'Cybersecurity', investor: 'Accel', highlight: false },
-  { startup: 'Robotics', investor: 'Lux Capital', highlight: true },
-  { startup: 'Clean Energy', investor: 'Breakthrough', highlight: false },
-  { startup: 'PropTech', investor: 'Fifth Wall', highlight: false },
-  { startup: 'Biotech AI', investor: 'a16z Bio', highlight: true },
-  { startup: 'Gaming Infra', investor: 'Makers Fund', highlight: false },
-  { startup: 'MarketingTech', investor: 'Insight', highlight: false },
-  { startup: 'Construction AI', investor: 'Brick & Mortar', highlight: true },
-  { startup: 'AgTech Sensors', investor: 'Acre VP', highlight: false },
-  { startup: 'Space Data', investor: 'Seraphim', highlight: true },
-  { startup: 'NeuroTech', investor: 'Khosla', highlight: false },
-  { startup: 'Legal AI', investor: 'GV', highlight: false },
-  { startup: 'Music Tech', investor: 'Index', highlight: true },
+// Pool of anonymized feed items - mixed positive/negative signals per spec
+// REQUIRED FORMAT: No names, no logos, no links. Mix positive + negative. GOD appears with no explanation.
+const FEED_POOL = [
+  { text: 'Seed robotics startup matched to 2 deep-tech funds', score: 81, positive: true },
+  { text: 'Capital-heavy startup losing investor attention', score: null, positive: false },
+  { text: 'Climate startup resurfacing after new technical validation', score: 74, positive: true },
+  { text: 'AI infra startup flagged for agent-first adoption', score: 88, positive: true },
+  { text: 'B2B SaaS company showing prolonged silence', score: null, positive: false },
+  { text: 'FinTech startup matched to 3 sector specialists', score: 72, positive: true },
+  { text: 'Healthcare ML company gaining momentum', score: 79, positive: true },
+  { text: 'Developer tools startup with founder departure signal', score: null, positive: false },
+  { text: 'Supply chain startup matched to logistics-focused fund', score: 67, positive: true },
+  { text: 'EdTech platform showing consistent forward motion', score: 71, positive: true },
+  { text: 'Cybersecurity startup weakening — capital without follow-through', score: null, positive: false },
+  { text: 'Clean energy startup actively appearing in discovery', score: 85, positive: true },
+  { text: 'PropTech company surfacing after pilot announcement', score: 69, positive: true },
+  { text: 'Biotech AI startup matched to 4 life science investors', score: 82, positive: true },
+  { text: 'Gaming infrastructure startup not yet circulating', score: null, positive: false },
 ];
 
 // Generate time strings that look recent
@@ -36,8 +32,8 @@ const getRecentTimes = () => {
   return times.slice(0, 3);
 };
 
-// Get 3 random matches from pool (deterministic per seed)
-const getRandomMatches = (seed: number) => {
+// Get 3 random feed items from pool (deterministic per seed)
+const getRandomFeedItems = (seed: number) => {
   // deterministic pseudo-random generator (mulberry32)
   const mulberry32 = (a: number) => () => {
     let t = (a += 0x6D2B79F5);
@@ -47,13 +43,12 @@ const getRandomMatches = (seed: number) => {
   };
 
   const rand = mulberry32(seed);
-  const shuffled = [...MATCH_POOL].sort(() => rand() - 0.5);
+  const shuffled = [...FEED_POOL].sort(() => rand() - 0.5);
   const times = getRecentTimes();
 
-  return shuffled.slice(0, 3).map((m, i) => ({
-    ...m,
+  return shuffled.slice(0, 3).map((item, i) => ({
+    ...item,
     time: times[i],
-    highlight: i === 0,
   }));
 };
 
@@ -82,8 +77,8 @@ const SplitScreenHero: React.FC = () => {
   const [showReadout, setShowReadout] = useState(false);
   const [showPairings, setShowPairings] = useState(false);
   
-  // Rotating recent matches - refresh every 45 seconds
-  const [recentMatches, setRecentMatches] = useState(() => getRandomMatches(Date.now()));
+  // Rotating feed items - refresh every 45 seconds
+  const [feedItems, setFeedItems] = useState(() => getRandomFeedItems(Date.now()));
   
   // Live Signal Pairings from API - pass plan for server-side gating
   // Server enforces limit and masks fields, so we get exactly what the tier allows
@@ -120,10 +115,10 @@ const SplitScreenHero: React.FC = () => {
     setTimeout(() => setShowPairings(true), 1400);
   }, []);
 
-  // Rotate recent matches every 45 seconds
+  // Rotate feed items every 45 seconds
   useEffect(() => {
     const interval = setInterval(() => {
-      setRecentMatches(getRandomMatches(Date.now()));
+      setFeedItems(getRandomFeedItems(Date.now()));
     }, 45000);
     return () => clearInterval(interval);
   }, []);
@@ -184,19 +179,20 @@ const SplitScreenHero: React.FC = () => {
       {/* Main content with vertical spine */}
       <div className="relative z-10 flex-1 flex flex-col justify-center max-w-[1100px] mx-auto w-full px-8 sm:px-12 py-8">
         
-        {/* HEADLINE - Category flag, large and quiet */}
+        {/* HEADLINE - Core Promise: "Find my investors." */}
         <h1 className={`text-5xl sm:text-6xl md:text-7xl font-bold text-white tracking-tight mb-4 transition-all duration-700 ${showHeadline ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-          Signal Science.
+          Find my investors.
         </h1>
         
-        {/* SUBHEADLINE - Lower contrast, let it breathe */}
-        <p className={`text-xl text-gray-500 mb-10 transition-all duration-700 delay-100 ${showHeadline ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-          Timing is everything.
+        {/* SUBHEADLINE - Founder-first clarity */}
+        <p className={`text-xl text-gray-400 mb-10 max-w-lg transition-all duration-700 delay-100 ${showHeadline ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+          Some startups already have investor attention.<br />
+          Pythh helps you see if you're one of them — and what to do next.
         </p>
         
         {/* PRIMARY CTA LABEL - Above the input */}
         <p className={`text-sm text-gray-400 mb-4 transition-all duration-700 delay-150 ${showCommand ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-          Check My Investor Signals →
+          Enter your startup URL
         </p>
 
         {/* COMMAND BAR + READOUT wrapper */}
@@ -264,7 +260,7 @@ const SplitScreenHero: React.FC = () => {
                     type="submit"
                     className="group px-10 py-5 bg-gradient-to-b from-amber-500 to-amber-600 text-black text-sm font-bold font-mono tracking-wide whitespace-nowrap relative z-10 transition-shadow duration-200 hover:shadow-[0_0_0_1px_rgba(56,189,248,0.35),0_0_24px_rgba(168,85,247,0.25)] active:shadow-[0_0_0_1px_rgba(56,189,248,0.55),0_0_32px_rgba(168,85,247,0.35)]"
                   >
-                    SCAN →
+                    Find my investors
                   </button>
                 </div>
               </form>
@@ -279,7 +275,7 @@ const SplitScreenHero: React.FC = () => {
                 }}
               >
                 <Loader2 className="w-4 h-4 animate-spin text-cyan-400" />
-                <span className="text-sm text-cyan-400 font-mono">Analyzing signals...</span>
+                <span className="text-sm text-cyan-400 font-mono">Finding your investors...</span>
               </div>
             )}
           </div>
@@ -307,43 +303,39 @@ const SplitScreenHero: React.FC = () => {
             No pitch deck • No warm intro • Just signals
           </p>
 
-          {/* SYSTEM READOUT + RECENT MATCH PROOF */}
+          {/* LIVE FEED - Anonymized, mixed positive/negative signals */}
           <div className={`flex gap-12 mb-10 transition-all duration-700 ${showReadout ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-            {/* SYSTEM READOUT - left side */}
             <div className="flex-1">
-              <p className="text-xs text-gray-400 uppercase tracking-[0.2em] mb-5 font-mono">System Readout</p>
+              <p className="text-[9px] text-gray-600 uppercase tracking-[0.2em] mb-4 font-mono">Investor matching happening now</p>
               <div className="space-y-3">
-                <ScoreBar label="Market Fit" value={scores.marketFit} />
-                <ScoreBar label="Stage Readiness" value={scores.stageReadiness} />
-                <ScoreBar label="Capital Velocity" value={scores.capitalVelocity} />
-                <ScoreBar label="Geographic Reach" value={scores.geographicReach} />
-                <ScoreBar label="Thesis Convergence" value={scores.thesisConvergence} />
-              </div>
-            </div>
-            
-            {/* EXAMPLE MATCH PROOF - right side, rotating 3 rows (terminal feel, not casino) */}
-            <div className="w-56 flex-shrink-0">
-              <p className="text-[9px] text-gray-600 uppercase tracking-[0.2em] mb-4 font-mono">Example Matches</p>
-              <div className="space-y-2">
-                {recentMatches.map((match, i) => (
-                  <div key={`${match.startup}-${match.investor}`} className="font-mono transition-opacity duration-500">
-                    <p className={`text-sm ${match.highlight ? 'text-amber-500' : 'text-gray-500'}`}>
-                      {match.startup} <span className="text-gray-700">→</span> <span className={match.highlight ? 'text-amber-400' : 'text-gray-400'}>{match.investor}</span>
+                {feedItems.map((item, i) => (
+                  <div key={`${item.text}-${i}`} className="font-mono transition-opacity duration-500">
+                    <p className={`text-sm ${item.positive ? 'text-gray-400' : 'text-gray-500'}`}>
+                      • {item.text}
+                      {item.score && <span className="text-amber-500 ml-2">(GOD: {item.score})</span>}
+                      {!item.positive && <span className="text-red-400/60 ml-2">↓</span>}
                     </p>
-                    <p className="text-[10px] text-gray-600">{match.time}</p>
+                    <p className="text-[10px] text-gray-600 ml-2">{item.time}</p>
                   </div>
                 ))}
               </div>
+              {/* Line under feed per spec */}
+              <p className="text-xs text-gray-500 mt-4 italic">
+                This is how discovery happens before pitch decks.
+              </p>
             </div>
           </div>
         </div>
 
-        {/* LIVE SIGNAL PAIRINGS - real data from API with pricing gate */}
-        <div className={`mb-10 transition-all duration-700 ${showPairings ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+        {/* INVESTOR MATCHING HAPPENING NOW - real data from API with pricing gate */}
+        <div 
+          data-tour-id="signal-pairings"
+          className={`mb-10 transition-all duration-700 ${showPairings ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+        >
           <div className="h-px bg-gray-800/60 mb-6"></div>
           <div className="flex items-baseline justify-between mb-4">
             <div className="flex items-center gap-3">
-              <p className="text-[9px] text-gray-600 uppercase tracking-[0.2em] font-mono">Live Signal Pairings</p>
+              <p className="text-[9px] text-gray-600 uppercase tracking-[0.2em] font-mono">Investor matching happening now</p>
               {upgradeCTA.show && (
                 <Link 
                   to="/pricing" 
@@ -354,7 +346,7 @@ const SplitScreenHero: React.FC = () => {
                 </Link>
               )}
             </div>
-            <p className="text-[10px] text-gray-600 font-mono">Generated from current market signals · Updating continuously</p>
+            <p className="text-[10px] text-gray-600 font-mono">This is how discovery happens before pitch decks.</p>
           </div>
           <div className="space-y-0">
             {/* Header row - show confidence column for elite */}
@@ -477,11 +469,20 @@ const SplitScreenHero: React.FC = () => {
           </div>
         </div>
 
-        {/* INVESTOR HOOK - reverse FOMO, one line only */}
+        {/* FOUNDERS' TRUST LINE + INVESTOR HOOK */}
         <div className={`mt-6 transition-all duration-500 ${showPairings ? 'opacity-100' : 'opacity-0'}`}>
-          <p className="text-sm text-gray-400 mb-2">
-            Investors use Pythh to detect momentum before rounds are obvious.
+          {/* Trust line - small but visible */}
+          <p className="text-xs text-gray-500 mb-4 italic">
+            Pythh doesn't help you raise money.<br />
+            It helps you avoid wasting time raising money.
           </p>
+          
+          {/* Ongoing value line */}
+          <p className="text-xs text-gray-600 mb-4">
+            Investor attention changes. Pythh updates as it does.
+          </p>
+          
+          {/* Investor hook */}
           <Link to="/investor/signup" className="text-[11px] text-gray-600 hover:text-amber-500/80 transition-colors font-mono">
             I'm an Investor →
           </Link>

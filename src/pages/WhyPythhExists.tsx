@@ -23,7 +23,7 @@ export default function WhyPythhExists() {
           className="inline-flex items-center gap-2 text-gray-500 hover:text-white transition-colors text-sm mb-12"
         >
           <ArrowLeft className="w-4 h-4" />
-          Back to Oracle
+          Back
         </Link>
 
         {/* Header */}
@@ -58,10 +58,6 @@ export default function WhyPythhExists() {
                 It gives founders better information before conversations begin.
               </p>
             </div>
-
-            <p>
-              The name comes from the Oracle of Delphi — not as prophecy, but as pattern recognition.
-            </p>
 
             <p className="text-amber-400 font-semibold">
               Not certainty. Probability.
@@ -161,7 +157,7 @@ export default function WhyPythhExists() {
             to="/"
             className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-white font-semibold rounded-xl transition-all shadow-lg shadow-amber-500/20"
           >
-            Try the Oracle
+            Find my investors
             <ArrowRight className="w-5 h-5" />
           </Link>
           <p className="text-gray-600 text-xs mt-4">

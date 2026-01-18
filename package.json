@@ -53,7 +53,13 @@
     "github:enrich": "node scripts/data-collection/github-enricher.js",
     "ml:train": "node run-ml-training.js",
     "ml:train:scheduler": "node scripts/cron/ml-training-scheduler.js",
-    "ml:train:daemon": "node scripts/cron/ml-training-scheduler.js --daemon"
+    "ml:train:daemon": "node scripts/cron/ml-training-scheduler.js --daemon",
+    "pce:website": "tsx scripts/pce/websiteSnapshotAndDetect.ts",
+    "pce:human": "tsx scripts/pce/humanSignalAndMaterialize.ts",
+    "pce:customer": "tsx scripts/pce/customerProofAndMaterialize.ts",
+    "pce:capital": "tsx scripts/pce/capitalSignalAndMaterialize.ts",
+    "pce:market:event": "tsx scripts/pce/marketEventUpsert.ts",
+    "pce:market:link": "tsx scripts/pce/marketLinkAndMaterialize.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.71.2",
@@ -89,6 +95,7 @@
     "rss-parser": "^3.13.0",
     "sentiment": "^5.0.2",
     "stagehand": "^1.0.1",
+    "stripe": "^20.2.0",
     "zod": "^4.2.1",
     "zustand": "^5.0.6"
   },

@@ -4,3 +4,19 @@ VITE_SUPABASE_URL=https://unkpogyhhjbvxxjvmxlt.supabase.co
 SUPABASE_URL=https://unkpogyhhjbvxxjvmxlt.supabase.co
 SUPABASE_SERVICE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVua3BvZ3loaGpidnh4anZteGx0Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MTE1OTAzNSwiZXhwIjoyMDc2NzM1MDM1fQ.MYfYe8wDL1MYac1NHq2WkjFH27-eFUDi3Xn1hD5rLFA
 
+# ============================================================
+# EMAIL ALERTS (Prompt 16) - Resend Integration
+# ============================================================
+# Get your API key at https://resend.com/api-keys
+RESEND_API_KEY=re_xxxxxxxxxxxxxxxxxxxx
+
+# From address for email alerts (must be verified in Resend)
+EMAIL_FROM=Pythh Alerts <alerts@pythh.ai>
+
+# Base URL for email links (unsubscribe, view startup)
+APP_BASE_URL=https://hot-honey.fly.dev
+
+# Secret key for signing unsubscribe links (HMAC SHA256)
+# Generate with: openssl rand -hex 32
+EMAIL_SECRET=your-random-secret-key-change-in-production
+

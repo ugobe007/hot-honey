@@ -1,0 +1,66 @@
+# ============================================================
+# STRIPE BILLING CONFIGURATION
+# Add these to your .env file
+# ============================================================
+
+# Stripe API Keys (from https://dashboard.stripe.com/apikeys)
+# IMPORTANT: Use test keys for development, live keys for production
+STRIPE_SECRET_KEY=sk_test_xxx   # Server-side secret key
+STRIPE_WEBHOOK_SECRET=whsec_xxx # From Stripe Dashboard > Webhooks
+
+# Stripe Price IDs (from https://dashboard.stripe.com/products)
+# Create products in Stripe Dashboard:
+#   1. Pro Plan - $99/month
+#   2. Elite Plan - $399/month
+# Then copy the price IDs here
+STRIPE_PRICE_PRO_MONTHLY=price_xxx    # Pro $99/mo
+STRIPE_PRICE_ELITE_MONTHLY=price_xxx  # Elite $399/mo
+
+# Optional: Custom redirect URLs (defaults work for most cases)
+# STRIPE_SUCCESS_URL=https://yourapp.com/billing/success?session_id={CHECKOUT_SESSION_ID}
+# STRIPE_CANCEL_URL=https://yourapp.com/pricing
+# STRIPE_PORTAL_RETURN_URL=https://yourapp.com/settings
+
+# ============================================================
+# SETUP INSTRUCTIONS
+# ============================================================
+#
+# 1. CREATE STRIPE ACCOUNT
+#    Go to https://stripe.com and create/login to your account
+#
+# 2. CREATE PRODUCTS & PRICES
+#    Dashboard > Products > Add Product
+#    - Name: "Pro Plan"
+#    - Pricing: $99/month, recurring
+#    - Copy the Price ID (starts with price_)
+#    
+#    - Name: "Elite Plan"  
+#    - Pricing: $399/month, recurring
+#    - Copy the Price ID
+#
+# 3. GET API KEYS
+#    Dashboard > Developers > API Keys
+#    - Copy "Secret key" → STRIPE_SECRET_KEY
+#
+# 4. SET UP WEBHOOK
+#    Dashboard > Developers > Webhooks > Add endpoint
+#    - URL: https://yourapp.com/api/billing/webhook
+#    - Events to send:
+#      • checkout.session.completed
+#      • customer.subscription.updated
+#      • customer.subscription.deleted
+#      • invoice.payment_failed
+#    - Copy "Signing secret" → STRIPE_WEBHOOK_SECRET
+#
+# 5. FOR LOCAL TESTING (use Stripe CLI)
+#    brew install stripe/stripe-cli/stripe
+#    stripe login
+#    stripe listen --forward-to localhost:3002/api/billing/webhook
+#    (Copy the webhook signing secret it shows)
+#
+# 6. RUN DATABASE MIGRATION
+#    Go to Supabase Dashboard > SQL Editor > New Query
+#    Paste contents of: migrations/001_create_profiles_table.sql
+#    Click "Run"
+#
+# ============================================================

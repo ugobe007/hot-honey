@@ -35,7 +35,7 @@ export default function HowItWorksPage() {
             THE MECHANICS
           </div>
           <h1 className="text-4xl md:text-5xl font-bold mb-6">
-            How the <span className="text-cyan-400">Oracle</span> works
+            How <span className="text-cyan-400">Pythh</span> works
           </h1>
           <p className="text-xl text-gray-400 max-w-2xl mx-auto">
             Enter a URL. Get matched investors. No pitch deck, no intros, no gatekeepers.

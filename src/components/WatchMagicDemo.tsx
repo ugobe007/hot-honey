@@ -191,7 +191,7 @@ export default function WatchMagicDemo({ isOpen, onClose }: Props) {
                   Watch the Magic
                 </h2>
                 <p className="text-gray-400">AI-powered matching in real-time</p>
-                <p className="text-xs text-gray-500 mt-1 italic">Advanced pattern recognition, like Pythia—predicting outcomes from data.</p>
+                <p className="text-xs text-gray-500 mt-1 italic">Signal intelligence for fundraising — pattern recognition at scale.</p>
               </div>
             </div>
             <div className="flex items-center gap-4">

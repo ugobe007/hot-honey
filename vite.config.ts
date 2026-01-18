@@ -22,6 +22,30 @@ export default defineConfig({
   build: {
     // Ensure no HMR in production
     sourcemap: false, // Disable sourcemaps for production
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          // Vendor chunks - split heavy libraries
+          if (id.includes('node_modules')) {
+            if (id.includes('react-dom') || id.includes('react-router')) {
+              return 'vendor-react';
+            }
+            if (id.includes('@supabase')) {
+              return 'vendor-supabase';
+            }
+            if (id.includes('recharts') || id.includes('d3-')) {
+              return 'vendor-charts';
+            }
+            if (id.includes('stripe')) {
+              return 'vendor-stripe';
+            }
+            if (id.includes('lucide-react')) {
+              return 'vendor-icons';
+            }
+          }
+        },
+      },
+    },
   },
   optimizeDeps: {
     exclude: ['pdfjs-dist']

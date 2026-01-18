@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { supabase } from '../lib/supabase';
 import { Mail, Lock, ArrowLeft, Sparkles, Eye, EyeOff } from 'lucide-react';
 
 export default function Login() {
@@ -18,21 +19,49 @@ export default function Login() {
     setError('');
     
     try {
-      // AuthContext.login is synchronous, but we'll handle it as async for future compatibility
+      // First try Supabase auth
+      const { data, error: authError } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      });
+      
+      if (authError) {
+        // If user doesn't exist, sign them up
+        if (authError.message.includes('Invalid login credentials')) {
+          const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+            email,
+            password,
+            options: {
+              data: { name: email.split('@')[0] }
+            }
+          });
+          
+          if (signUpError) throw signUpError;
+          
+          // Profile is auto-created by database trigger
+          console.log('[Login] Created new user:', signUpData.user?.id);
+        } else {
+          throw authError;
+        }
+      } else {
+        console.log('[Login] Signed in:', data.user?.id);
+      }
+      
+      // Also update localStorage auth for backward compatibility
       login(email, password);
       
       // Check if admin and redirect accordingly
       const isAdmin = email.includes('admin') || email.includes('ugobe');
       if (isAdmin) {
-        navigate('/admin'); // Redirect to main admin dashboard
+        navigate('/admin');
       } else {
-        // Check if there's a redirect parameter in the URL
         const params = new URLSearchParams(window.location.search);
         const redirect = params.get('redirect');
         navigate(redirect || '/');
       }
-    } catch (err) {
-      setError('Invalid email or password');
+    } catch (err: any) {
+      console.error('[Login] Error:', err);
+      setError(err.message || 'Invalid email or password');
     } finally {
       setIsLoading(false);
     }

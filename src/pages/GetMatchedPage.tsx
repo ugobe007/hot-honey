@@ -784,7 +784,7 @@ export default function GetMatchedPage() {
       <div className="relative z-10 container mx-auto px-4 py-8 mt-16 border-t border-slate-800/50">
         <div className="text-center">
           <p className="text-sm text-slate-500 italic max-w-2xl mx-auto">
-            [pyth] ai serves as an advanced matching system that predicts outcomes from data, similar to Pythia, the oracle of truth.
+            Pythh reads investor signals so founders don't have to guess.
           </p>
         </div>
       </div>
