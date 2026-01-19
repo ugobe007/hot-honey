@@ -146,15 +146,15 @@ const App: React.FC = () => {
   return (
     <AuthProvider>
       <div className="min-h-screen bg-[#0a0a0a]">
-        {/* Onboarding modal - shows for new users (lazy) */}
-        <Suspense fallback={null}>
+        {/* Onboarding modal - temporarily disabled for debugging */}
+        {/* <Suspense fallback={null}>
           <OnboardingModal />
-        </Suspense>
+        </Suspense> */}
         
-        {/* Tooltip tour - contextual feature hints (lazy) */}
-        <Suspense fallback={null}>
+        {/* Tooltip tour - temporarily disabled for debugging */}
+        {/* <Suspense fallback={null}>
           <TooltipTour />
-        </Suspense>
+        </Suspense> */}
         
         <main>
           <Suspense fallback={<PageLoader />}>
