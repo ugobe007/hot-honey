@@ -186,8 +186,8 @@ const SplitScreenHero: React.FC = () => {
         
         {/* SUBHEADLINE - Founder-first clarity */}
         <p className={`text-xl text-gray-400 mb-10 max-w-lg transition-all duration-700 delay-100 ${showHeadline ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-          Some startups already have investor attention.<br />
-          Pythh helps you see if you're one of them — and what to do next.
+          Pythh finds investors that align with your thesis<br />
+          ...and next steps.
         </p>
         
         {/* PRIMARY CTA LABEL - Above the input */}
